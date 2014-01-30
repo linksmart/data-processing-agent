@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" immediate="true" name="eu.ebbits.pwal.impl.driver.wsn">
+   <implementation class="eu.ebbits.pwal.impl.driver.wsn.WSNDriverImpl"/>
+   <reference cardinality="1..1" interface="eu.ebbits.pwal.api.PWAL" name="PWAL" policy="static"/>
+   <reference cardinality="1..1" interface="eu.ebbits.pwal.api.PWALDriverPort" name="PWALDriverPort" policy="static"/>
+   <service>
+      <provide interface="eu.ebbits.pwal.api.driver.wsn.WSNDriver"/>
+   </service>
+</scr:component>

@@ -1,0 +1,51 @@
+package eu.ebbits.pwal.impl.driver.wsn;
+
+import org.osgi.service.component.ComponentContext;
+
+import eu.ebbits.pwal.api.annotations.PWALServiceAnnotation;
+import eu.ebbits.pwal.impl.driver.PWALServicesDelegateImpl;
+import eu.ebbits.pwal.impl.driver.wsn.client.ProxyDecoder;
+
+public class WSNServicesDelegate extends PWALServicesDelegateImpl {
+    private ProxyDecoder proxyDecoder = null;
+    
+    /**
+     * Constructor of the delegate
+     * 
+     *    @param driver - <code>WSNDriverImpl</code> that uses the delegate
+     */
+    public WSNServicesDelegate(WSNDriverImpl driver) {
+        super(driver);
+    }
+
+    @Override
+    public void init(ComponentContext context) {
+        proxyDecoder = new ProxyDecoder();
+    }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updatePWALServicesCollection() {
+        // TODO Auto-generated method stub    
+    }
+    
+    @PWALServiceAnnotation (exposed = true)
+    public void setSamplingRate(byte[] payloadData){
+        proxyDecoder.decode(payloadData);
+    }
+    
+    @PWALServiceAnnotation (exposed = true)
+    public void startSampling(byte[] payloadData){
+        proxyDecoder.decode(payloadData);
+    }
+    
+    @PWALServiceAnnotation (exposed = true)
+    public void stopSampling(byte[] payloadData){
+        proxyDecoder.decode(payloadData);
+    }
+}

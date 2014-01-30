@@ -1,0 +1,17 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+
+public class OPCXML_DataAccessServerNotReachable extends OPCXML_DataAccessMessage {
+
+	public OPCXML_DataAccessServerNotReachable(String msg) {
+		super(msg);
+		this.setInnerMessage(msg);
+	}
+
+	public OPCXML_DataAccessServerNotReachable(String url, Exception e) {
+		super(url + e.toString());
+		this.setInnerException(e);
+		this.setInnerMessage(url);
+	}
+
+}

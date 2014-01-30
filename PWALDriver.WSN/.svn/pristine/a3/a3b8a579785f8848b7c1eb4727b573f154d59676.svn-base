@@ -1,0 +1,75 @@
+package eu.ebbits.pwal.impl.driver.wsn.client;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+
+public class CommandSender {
+	int TX_PORT_WSN = 7731;
+	private static short TYPE_CONTROL_PAYLOAD = 192; //0xc0
+	public boolean sendControlCommand(InetAddress nodeAddress, short seq_no, short command, short data_1, short data_2, short data_3) {
+		DatagramSocket socket = null;
+		try {
+			socket = new DatagramSocket();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		//create the payload
+		byte[] payload = new byte[12];
+		int i=0; //index to the next byte to be filled
+		//filling up the payload
+		FormatDecoder.Encode16U(payload, i, TYPE_CONTROL_PAYLOAD, false);
+		i += 2;
+		FormatDecoder.Encode16U(payload, i, seq_no, false);
+		i += 2;
+		FormatDecoder.Encode16U(payload, i, command, false);
+		i += 2;
+		FormatDecoder.Encode16U(payload, i, data_1, false);
+		i += 2;
+		FormatDecoder.Encode16U(payload, i, data_2, false);
+		i += 2;
+		FormatDecoder.Encode16U(payload, i, data_3, false);
+		i += 2;
+
+		DatagramPacket packet = new DatagramPacket(payload, payload.length, nodeAddress, TX_PORT_WSN);
+
+		try {
+			socket.send(packet);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		/*
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		 */
+
+		socket.close();
+		System.out.println("Sent ControlCommand to "+nodeAddress.getHostName()+" on port "+TX_PORT_WSN);
+		return true;
+	}
+}

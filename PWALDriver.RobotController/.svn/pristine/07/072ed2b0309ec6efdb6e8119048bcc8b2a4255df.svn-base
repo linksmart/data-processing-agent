@@ -1,0 +1,32 @@
+package eu.ebbits.pwal.impl.driver.robotcontroller;
+
+import org.osgi.service.component.ComponentContext;
+
+import eu.ebbits.pwal.impl.driver.PWALEventsDelegateImpl;
+
+public class RobotControllerEventsDelegate extends PWALEventsDelegateImpl {
+
+    public RobotControllerEventsDelegate(RobotControllerDriverImpl driver) {
+        super(driver);
+        // TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public void init(ComponentContext context) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updatePWALEventsCollection() {
+        // TODO Auto-generated method stub
+        
+    }
+
+}

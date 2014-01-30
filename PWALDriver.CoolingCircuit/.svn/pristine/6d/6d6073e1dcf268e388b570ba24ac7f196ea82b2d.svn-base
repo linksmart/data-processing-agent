@@ -1,0 +1,59 @@
+package eu.ebbits.pwal.impl.driver.coolingcircuit;
+
+import org.osgi.service.component.ComponentContext;
+
+import eu.ebbits.pwal.api.annotations.PWALEventAnnotation;
+import eu.ebbits.pwal.impl.driver.PWALEventsDelegateImpl;
+
+/**
+ * Events delegate. CoolingCircuitDriver does not currently support PWALEvents.
+ * 
+ * Copyright (c) 2010-2013 the ebbits project. All Rights Reserved.
+ *
+ * @author     FIT
+ * @version    %I%, %G%
+ * @see        eu.ebbits.pwal.api.driver.PWALDriver
+ */
+
+public class CoolingCircuitEventsDelegate extends PWALEventsDelegateImpl {
+
+
+    public CoolingCircuitEventsDelegate(CoolingCircuitDriverImpl driver) {
+        super(driver);
+        // TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public void init(ComponentContext context) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updatePWALEventsCollection() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void registerPWALEvents() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @PWALEventAnnotation(exposed = true)
+    public void updateTemperature(float degreesCelsius) {
+        //FIXME Implement this
+    }
+
+    @PWALEventAnnotation(exposed = true)
+    public void updateWaterFlow(float lpm) {
+        //FIXME Implement this
+    }
+}

@@ -1,0 +1,95 @@
+package eu.ebbits.pwal.impl.driver.robotcontroller;
+
+import java.io.IOException;
+import org.osgi.service.component.ComponentContext;
+
+import eu.ebbits.pwal.api.driver.PWALEventsDelegate;
+import eu.ebbits.pwal.api.driver.PWALServicesDelegate;
+import eu.ebbits.pwal.api.driver.PWALVariablesDelegate;
+import eu.ebbits.pwal.api.driver.robotcontroller.RobotControllerDriver;
+import eu.ebbits.pwal.impl.driver.PWALDriverImpl;
+import eu.ebbits.pwal.impl.driver.robotcontroller.client.RobotControllerClient;
+
+/**
+ * Implementation of the PWAL Driver for the robot controller used in M24 demo, updated for the PWAL 2.0.
+ *
+ * Copyright (c) 2010-2013 the ebbits project. All Rights Reserved.
+ *
+ * @author	ISMB
+ * @version	%I%, %G%
+ * @since	M36demo 1.0
+ * 
+ */
+public class RobotControllerDriverImpl extends PWALDriverImpl implements RobotControllerDriver {
+
+	/** Client to control the robot **/
+	public RobotControllerClient client;
+
+	public void init(ComponentContext context) {
+		this.client = new RobotControllerClient();
+	}
+
+	@Override
+	public void run() {
+		try {
+			this.client.openConnection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void stop() {
+		try {
+			client.closeConnection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		super.stop();
+	}
+
+	/**
+	 * @return the host
+	 */
+	public String getHost() {
+		return this.client.getHost();
+	}
+
+	/**
+	 * @param host the host to set
+	 */
+	public void setHost(String host) {
+		this.client.setHost(host);
+	}
+
+	/**
+	 * @return the port
+	 */
+	public int getPort() {
+		return this.client.getPort();
+	}
+
+	/**
+	 * @param port the port to set
+	 */
+	public void setPort(Integer port) {
+		this.client.setPort(port);
+	}
+	
+	@Override
+	protected PWALVariablesDelegate initVariablesDelegate() {
+		return (PWALVariablesDelegate) new RobotControllerVariablesDelegate(this);
+	}
+
+	@Override
+	protected PWALServicesDelegate initServicesDelegate() {
+		return (PWALServicesDelegate) new RobotControllerServicesDelegate(this);
+	}
+
+	@Override
+	protected PWALEventsDelegate initEventsDelegate() {
+		return (PWALEventsDelegate) new RobotControllerEventsDelegate(this);
+	}
+}

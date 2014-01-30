@@ -1,0 +1,112 @@
+package eu.ebbits.pwal.impl.driver.robotcontroller.client;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
+/**
+ * Implementation of the robot controller client used to control the robot controller.
+ * 
+ * Copyright (c) 2010-2013 the ebbits project. All Rights Reserved.
+ *
+ * @author	ISMB
+ * @version	%I%, %G%
+ * @since	M36demo 1.0
+ *
+ */
+public class RobotControllerClient {
+
+	private static final String QUIT_COMMAND = "Quit";
+	private static final int SOCKET_TIMEOUT = 1000;
+
+	private Socket client = null;
+	private String host = "129.100.1.57";
+	private int port = 9000;
+	private BufferedReader controllerIn = null;
+	private PrintWriter controllerOut = null;
+
+	/**
+	 * @return the host
+	 */
+	public String getHost() {
+		return host;
+	}
+
+	/**
+	 * @param host the host to set
+	 */
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	/**
+	 * @return the port
+	 */
+	public int getPort() {
+		return port;
+	}
+
+	/**
+	 * @param port the port to set
+	 */
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public void openConnection() throws UnknownHostException, IOException {
+		client = new Socket(host, port);
+//		LOG.debug("Trying " + InetAddress.getByName(host).getHostAddress() + ":" + port + "...");
+		
+		if (client.isConnected() && !client.isClosed()) {
+			client.setSoTimeout(SOCKET_TIMEOUT);
+			client.setTcpNoDelay(false);
+
+//			LOG.debug("Connected to " + client.getRemoteSocketAddress() + ".");
+			controllerIn =
+					new BufferedReader(new InputStreamReader(client.getInputStream()));
+				
+			while ((controllerIn != null) && (controllerIn.ready())) {
+				//LOG.debug(serverInput.readLine());
+				controllerIn.readLine();
+			}
+
+			controllerOut =
+					new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true);
+		}
+	}
+
+	synchronized public String sendRobotControllerCommand(String command)
+			throws IOException, SocketException, UnknownHostException {
+		if ( (command == null) || (command.isEmpty()) || (command.equalsIgnoreCase("quit")) || 
+				(client == null) || (!client.isConnected()) || (client.isClosed()) ||
+				(controllerIn == null) || (controllerOut == null) )
+			return null;
+
+		//LOG.debug("Client: " + command);
+		controllerOut.println(command);
+
+		String response = "";
+		do {
+			response = response + " " + controllerIn.readLine();
+		} while (controllerIn.ready());
+
+		//LOG.debug("Server: " + response);
+		return response.trim();
+	}
+
+		public void closeConnection() throws IOException {
+			if (controllerOut != null) {
+				controllerOut.println(QUIT_COMMAND);
+				controllerOut.close();
+			}
+			if (controllerIn != null)
+				controllerIn.close();
+			if (client != null)
+				client.close();
+		}
+}

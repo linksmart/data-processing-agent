@@ -1,0 +1,14 @@
+package eu.ebbits.pwal.impl.driver.llrpreader.adaptor;
+
+import org.llrp.ltk.types.LLRPMessage;
+
+import eu.ebbits.pwal.impl.driver.llrpreader.org.fosstrak.llrp.client.MessageHandler;
+
+public class FullHandler implements MessageHandler {
+    
+    @Override
+    public void handle(String adaptorName, String readerName,
+            LLRPMessage msg) {
+//           System.out.println(String.format("received message ** %s ** from adapter: %s, reader: %s", msg.getName(), adapter, reader));
+    }
+}

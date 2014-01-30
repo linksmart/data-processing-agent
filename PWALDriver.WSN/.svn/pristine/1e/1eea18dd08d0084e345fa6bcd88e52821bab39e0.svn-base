@@ -1,0 +1,80 @@
+package eu.ebbits.pwal.impl.driver.wsn.client;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+
+import org.apache.log4j.Logger;
+
+public class CommandSender {
+    private static final int TX_PORT_WSN = 7731;
+    private static final short TYPE_CONTROL_PAYLOAD = 192; //0xc0
+    
+    private Logger log = Logger.getLogger(this.getClass().getName());
+    
+    public boolean sendControlCommand(InetAddress nodeAddress, short seqNo, short command, short data1, short data2, short data3) {
+        DatagramSocket socket = null;
+        try {
+            socket = new DatagramSocket();
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        //create the payload
+        byte[] payload = new byte[12];
+        int i=0; //index to the next byte to be filled
+        //filling up the payload
+        FormatDecoder.encode16U(payload, i, TYPE_CONTROL_PAYLOAD, false);
+        i += 2;
+        FormatDecoder.encode16U(payload, i, seqNo, false);
+        i += 2;
+        FormatDecoder.encode16U(payload, i, command, false);
+        i += 2;
+        FormatDecoder.encode16U(payload, i, data1, false);
+        i += 2;
+        FormatDecoder.encode16U(payload, i, data2, false);
+        i += 2;
+        FormatDecoder.encode16U(payload, i, data3, false);
+        i += 2;
+
+        DatagramPacket packet = new DatagramPacket(payload, payload.length, nodeAddress, TX_PORT_WSN);
+
+        try {
+            socket.send(packet);
+        } catch (IOException e1) {
+            log.error(e1.getStackTrace());
+        }
+        /*
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+         */
+
+        socket.close();
+        log.info("Sent ControlCommand to "+nodeAddress.getHostName()+" on port "+TX_PORT_WSN);
+        return true;
+    }
+}

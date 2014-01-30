@@ -1,0 +1,402 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+public class ItemValue extends ADBBeanImplementation {
+	/* This type was generated from the piece of schema that had
+		 name = ItemValue
+		 Namespace URI = http://opcfoundation.org/webservices/XMLDA/1.0/
+		 Namespace Prefix = ns1
+	 */
+	
+	private static final String NAME = ItemValue.class.getSimpleName();
+
+	protected String getClassName() {
+		return this.getClass().getSimpleName();
+	}
+
+	protected String localItemName;
+	
+	protected String localItemPath;
+	
+	
+	/**
+	 * field for DiagnosticInfo
+	 */
+
+
+	protected String localDiagnosticInfo ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localDiagnosticInfoTracker = false ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return String
+	 */
+	public  String getDiagnosticInfo() {
+		return localDiagnosticInfo;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param DiagnosticInfo
+	 */
+	public void setDiagnosticInfo(String param) {
+
+		if (param != null) {
+			//update the setting tracker
+			localDiagnosticInfoTracker = true;
+		} else {
+			localDiagnosticInfoTracker = false;
+
+		}
+
+		this.localDiagnosticInfo=param;
+
+
+	}
+
+
+	/**
+	 * field for Value
+	 */
+
+
+	protected org.apache.axiom.om.OMElement localValue ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localValueTracker = false ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return org.apache.axiom.om.OMElement
+	 */
+	public  org.apache.axiom.om.OMElement getValue() {
+		return localValue;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param Value
+	 */
+	public void setValue(org.apache.axiom.om.OMElement param) {
+
+		if (param != null) {
+			//update the setting tracker
+			localValueTracker = true;
+		} else {
+			localValueTracker = false;
+
+		}
+
+		this.localValue=param;
+
+
+	}
+
+
+	/**
+	 * field for Quality
+	 */
+
+
+	protected OPCQuality localQuality ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localQualityTracker = false ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return OPCQuality
+	 */
+	public  OPCQuality getQuality() {
+		return localQuality;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param Quality
+	 */
+	public void setQuality(OPCQuality param) {
+
+		if (param != null) {
+			//update the setting tracker
+			localQualityTracker = true;
+		} else {
+			localQualityTracker = false;
+
+		}
+
+		this.localQuality=param;
+
+
+	}
+
+
+	/**
+	 * field for ClientItemHandle
+	 * This was an Attribute!
+	 */
+	protected String localClientItemHandle ;
+
+
+	/**
+	 * field for Timestamp
+	 * This was an Attribute!
+	 */
+
+
+	protected java.util.Calendar localTimestamp ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return java.util.Calendar
+	 */
+	public  java.util.Calendar getTimestamp() {
+		return localTimestamp;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param Timestamp
+	 */
+	public void setTimestamp(java.util.Calendar param) {
+
+		this.localTimestamp=param;
+
+
+	}
+
+
+	/**
+	 * field for ResultID
+	 * This was an Attribute!
+	 */
+	protected javax.xml.namespace.QName localResultID ;
+
+
+
+	/**
+	 * field for ValueTypeQualifier
+	 * This was an Attribute!
+	 */
+	protected javax.xml.namespace.QName localValueTypeQualifier ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return javax.xml.namespace.QName
+	 */
+	public  javax.xml.namespace.QName getValueTypeQualifier() {
+		return localValueTypeQualifier;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param ValueTypeQualifier
+	 */
+	public void setValueTypeQualifier(javax.xml.namespace.QName param) {
+		this.localValueTypeQualifier=param;
+	}
+
+
+	protected void writeAttributes(org.apache.axiom.om.OMFactory factory,org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter, String prefix, String namespace) 
+			throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
+		writeAttribute("", "ItemPath", localItemPath, xmlWriter);
+		writeAttribute("", "ItemName", localItemName, xmlWriter);
+		writeAttribute("", "ClientItemHandle", localClientItemHandle, xmlWriter);
+		if (localTimestamp != null) {
+			writeAttribute("",
+					"Timestamp",
+					org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTimestamp), xmlWriter);
+		}
+		writeQNameAttribute("", "ResultID", localResultID, xmlWriter);
+		writeQNameAttribute("", "ValueTypeQualifier", localValueTypeQualifier, xmlWriter);
+		writeAttributeWithNamespace(localDiagnosticInfoTracker,localDiagnosticInfo,"DiagnosticInfo",xmlWriter);
+		writeAttributeWithNamespace(localValueTracker,localValue,"Value",xmlWriter);
+		serializeAttribute(localQualityTracker,localQuality,"Quality",factory,xmlWriter);
+		xmlWriter.writeEndElement();
+	}
+
+
+	/**
+	 * databinding method to get an XML representation of this object
+	 *
+	 */
+	public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName)
+			throws org.apache.axis2.databinding.ADBException{
+
+		java.util.ArrayList<Object> elementList = new java.util.ArrayList<Object>();
+		java.util.ArrayList<Object> attribList = new java.util.ArrayList<Object>();
+
+		addItem(localDiagnosticInfoTracker,localDiagnosticInfo,"DiagnosticInfo",elementList);
+		addItem(localValueTracker,localValue,"Value",elementList);
+		addItem(localQualityTracker,localQuality,"Quality",elementList);
+		attribList.add(new javax.xml.namespace.QName("","ItemPath"));
+		attribList.add(localItemPath);
+		attribList.add(new javax.xml.namespace.QName("","ItemName"));
+		attribList.add(localItemName);
+		attribList.add(new javax.xml.namespace.QName("","ClientItemHandle"));
+		attribList.add(localClientItemHandle);
+		attribList.add(new javax.xml.namespace.QName("","Timestamp"));
+		attribList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTimestamp));
+		attribList.add(new javax.xml.namespace.QName("","ResultID"));
+		attribList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localResultID));
+		attribList.add(new javax.xml.namespace.QName("","ValueTypeQualifier"));
+		attribList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localValueTypeQualifier));
+		return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
+	}
+
+
+
+	/**
+	 *  Factory class that keeps the parse method
+	 */
+	public static class Factory extends GenericFactory {
+
+		/**
+		 * static method to create the object
+		 * Precondition:  If this object is an element, the current or next start element starts this object and any intervening reader events are ignorable
+		 *			 If this object is not an element, it is a complex type and the reader is at the event just after the outer start element
+		 * Postcondition: If this object is an element, the reader is positioned at its end element
+		 *			 If this object is a complex type, the reader is positioned at the end element of its outer element
+		 */
+		public static ItemValue parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+			ItemValue object =
+					new ItemValue();
+
+			String prefix ="";
+			String namespaceuri ="";
+			try {
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				ItemValue result = (ItemValue) checkADBBeanType(NAME,reader); 
+				if(result!=null) {
+					return result;
+				}
+
+
+				// Note all attributes that were handled. Used to differ normal attributes
+				// from anyAttributes.
+				java.util.Vector<String> handledAttributes = new java.util.Vector<String>();
+
+				// handle attribute "ItemPath"
+				handleItemPath(reader.getAttributeValue(null,"ItemPath"),object,handledAttributes);
+
+				// handle attribute "ItemName"
+				handleItemName(reader.getAttributeValue(null,"ItemName"),object,handledAttributes);
+				
+				
+				// handle attribute "ClientItemHandle"
+				handleClientItemHandle(reader.getAttributeValue(null,"ClientItemHandle"),object,handledAttributes);
+
+				// handle attribute "Timestamp"
+				String tempAttribTimestamp = reader.getAttributeValue(null,"Timestamp");
+				if (tempAttribTimestamp!=null) {
+					object.setTimestamp(
+							org.apache.axis2.databinding.utils.ConverterUtil.convertToDateTime(tempAttribTimestamp));
+				}
+				handledAttributes.add("Timestamp");
+
+				// handle attribute "ResultID"
+				handleResultID(reader.getAttributeValue(null,"ResultID"),object,handledAttributes,reader);
+
+				// handle attribute "ValueTypeQualifier"
+				String tempAttribValueTypeQualifier = reader.getAttributeValue(null,"ValueTypeQualifier");
+
+				if (tempAttribValueTypeQualifier!=null) {
+					int index = tempAttribValueTypeQualifier.indexOf(":");
+					if(index > -1) {
+						prefix = tempAttribValueTypeQualifier.substring(0,index);
+					} else {
+						// i.e this is in default namesace
+						prefix = "";
+					}
+					namespaceuri = reader.getNamespaceURI(prefix);
+					object.setValueTypeQualifier(
+							org.apache.axis2.databinding.utils.ConverterUtil.convertToQName(tempAttribValueTypeQualifier,namespaceuri));
+				}
+				handledAttributes.add("ValueTypeQualifier");
+
+				reader.next();
+
+				while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","DiagnosticInfo").equals(reader.getName())) {
+
+					String content = reader.getElementText();
+
+					object.setDiagnosticInfo(
+							org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+
+					reader.next();
+
+				}  // End of if for expected property start element
+
+				else {
+
+				}
+
+
+				while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+
+				if (reader.isStartElement()) {
+
+					object.setValue(createOMElement(reader));
+
+					reader.next(); 
+
+				}  // End of if for expected property start element
+
+				else {
+
+				}
+
+
+				while (!reader.isStartElement() && !reader.isEndElement()) { 
+					reader.next();
+				}
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","Quality").equals(reader.getName())) {
+
+					object.setQuality(OPCQuality.Factory.parse(reader));
+
+					reader.next();
+
+				}  // End of if for expected property start element
+
+				checkUnexpectedStartElements(reader);
+
+			} catch (javax.xml.stream.XMLStreamException e) {
+				throw new java.lang.Exception(e);
+			}
+
+			return object;
+		}
+
+	}//end of factory class
+}

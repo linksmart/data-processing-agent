@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: PWALDriver.RobotController
+Bundle-SymbolicName: eu.ebbits.pwal.api.driver.robotcontroller
+Bundle-Version: 0.2.0
+Export-Package: eu.ebbits.pwal.api.driver.robotcontroller
+Import-Package: org.apache.log4j,
+ org.osgi.framework,
+ org.osgi.service.component

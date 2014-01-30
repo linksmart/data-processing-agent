@@ -1,0 +1,15 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+public class SimpleFactory {
+	
+	protected static String getNamespaceURI(javax.xml.stream.XMLStreamReader reader, String content) {
+		String prefix = "";
+		String namespaceuri = "";
+		if (content.indexOf(":") > 0) {
+			// this seems to be a Qname so find the namespace and send
+			prefix = content.substring(0, content.indexOf(":"));
+			namespaceuri = reader.getNamespaceURI(prefix);
+		} 
+		return namespaceuri;
+	}
+}

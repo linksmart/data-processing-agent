@@ -1,0 +1,257 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+public class ReadRequestItem  extends ItemNameADBBeanImplementation {
+	/* This type was generated from the piece of schema that had
+		 name = ReadRequestItem
+		 Namespace URI = http://opcfoundation.org/webservices/XMLDA/1.0/
+		 Namespace Prefix = ns1
+	 */
+
+	private static final String NAME = ReadRequestItem.class.getSimpleName();
+	
+	protected String getClassName() {
+		return this.getClass().getSimpleName();
+	}
+
+
+	/**
+	 * field for ReqType
+	 * This was an Attribute!
+	 */
+
+
+	protected javax.xml.namespace.QName localReqType ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return javax.xml.namespace.QName
+	 */
+	public  javax.xml.namespace.QName getReqType() {
+		return localReqType;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param ReqType
+	 */
+	public void setReqType(javax.xml.namespace.QName param) {
+
+		this.localReqType=param;
+
+
+	}
+
+
+
+
+	/**
+	 * field for ClientItemHandle
+	 * This was an Attribute!
+	 */
+
+
+	protected String localClientItemHandle ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return String
+	 */
+	public  String getClientItemHandle() {
+		return localClientItemHandle;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param ClientItemHandle
+	 */
+	public void setClientItemHandle(String param) {
+
+		this.localClientItemHandle=param;
+
+
+	}
+
+
+	/**
+	 * field for MaxAge
+	 * This was an Attribute!
+	 */
+
+
+	protected int localMaxAge ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return int
+	 */
+	public  int getMaxAge() {
+		return localMaxAge;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param MaxAge
+	 */
+	public void setMaxAge(int param) {
+
+		this.localMaxAge=param;
+
+
+	}
+
+
+	/**
+	 *
+	 * @param parentQName
+	 * @param factory
+	 * @return org.apache.axiom.om.OMElement
+	 */
+	public org.apache.axiom.om.OMElement getOMElement (
+			final javax.xml.namespace.QName parentQName,
+			final org.apache.axiom.om.OMFactory factory) throws org.apache.axis2.databinding.ADBException{
+
+
+
+		org.apache.axiom.om.OMDataSource dataSource =
+				new org.apache.axis2.databinding.ADBDataSource(this,parentQName) {
+
+			public void serialize(org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
+				ReadRequestItem.this.serialize(parentQName,factory,xmlWriter);
+			}
+		};
+		return new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(
+				parentQName,factory,dataSource);
+
+	}
+
+
+	protected void writeAttributes(org.apache.axiom.om.OMFactory factory,org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter, String prefix, String namespace) 
+			throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
+		if (localItemPath != null) {
+			writeAttribute("",
+					"ItemPath",
+					org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localItemPath), xmlWriter);
+		}
+		if (localReqType != null) {
+			writeQNameAttribute("",
+					"ReqType",
+					localReqType, xmlWriter);
+		}
+		if (localItemName != null) {
+			writeAttribute("",
+					"ItemName",
+					org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localItemName), xmlWriter);
+		}
+		if (localClientItemHandle != null) {
+			writeAttribute("",
+					"ClientItemHandle",
+					org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localClientItemHandle), xmlWriter);
+		}
+		if (localMaxAge!=java.lang.Integer.MIN_VALUE) {
+			writeAttribute("",
+					"MaxAge",
+					org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localMaxAge), xmlWriter);
+		}
+		xmlWriter.writeEndElement();
+	}
+
+
+	/**
+	 * databinding method to get an XML representation of this object
+	 *
+	 */
+	public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName)
+			throws org.apache.axis2.databinding.ADBException{
+
+		java.util.ArrayList<Object> elementList = new java.util.ArrayList<Object>();
+		java.util.ArrayList<Object> attribList = new java.util.ArrayList<Object>();
+
+		attribList.add(new javax.xml.namespace.QName("","ItemPath"));
+		attribList.add(localItemPath);
+		attribList.add(new javax.xml.namespace.QName("","ReqType"));
+		attribList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localReqType));
+		attribList.add(new javax.xml.namespace.QName("","ItemName"));
+		attribList.add(localItemName);
+		attribList.add(new javax.xml.namespace.QName("","ClientItemHandle"));
+		attribList.add(localClientItemHandle);
+		attribList.add(new javax.xml.namespace.QName("","MaxAge"));
+		attribList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localMaxAge));
+		return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
+	}
+
+
+
+	/**
+	 *  Factory class that keeps the parse method
+	 */
+	public static class Factory extends GenericFactory {
+
+		/**
+		 * static method to create the object
+		 * Precondition:  If this object is an element, the current or next start element starts this object and any intervening reader events are ignorable
+		 *			 If this object is not an element, it is a complex type and the reader is at the event just after the outer start element
+		 * Postcondition: If this object is an element, the reader is positioned at its end element
+		 *			 If this object is a complex type, the reader is positioned at the end element of its outer element
+		 */
+		public static ReadRequestItem parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+			ReadRequestItem object =
+					new ReadRequestItem();
+
+			String prefix ="";
+			String namespaceuri ="";
+			try {
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				ReadRequestItem result = (ReadRequestItem) checkADBBeanType(NAME,reader); 
+				if(result!=null) {
+					return result;
+				}
+
+
+
+				// Note all attributes that were handled. Used to differ normal attributes
+				// from anyAttributes.
+				java.util.Vector<String> handledAttributes = new java.util.Vector<String>();
+
+				// handle attribute "ItemPath"
+				handleItemPath(reader.getAttributeValue(null,"ItemPath"),object,handledAttributes);
+
+				// handle attribute "ReqType"
+				handleReqType(reader.getAttributeValue(null,"ReqType"),object,handledAttributes,reader);
+
+				// handle attribute "ItemName"
+				handleItemName(reader.getAttributeValue(null,"ItemName"),object,handledAttributes);
+
+				// handle attribute "ClientItemHandle"
+				handleClientItemHandle(reader.getAttributeValue(null,"ClientItemHandle"),object,handledAttributes);
+
+				// handle attribute "MaxAge"
+				handleMaxAge(reader.getAttributeValue(null,"MaxAge"),object,handledAttributes);
+
+				reader.next();
+
+			} catch (javax.xml.stream.XMLStreamException e) {
+				throw new java.lang.Exception(e);
+			}
+
+			return object;
+		}
+
+	}//end of factory class
+
+
+
+}
+
+

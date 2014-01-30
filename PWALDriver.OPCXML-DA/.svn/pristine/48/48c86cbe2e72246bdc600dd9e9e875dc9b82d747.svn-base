@@ -1,0 +1,97 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
+
+public abstract class SerializableADBBeanImplementation extends ADBBeanImplementation {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8475901585198439753L;
+
+	public void serialize(final javax.xml.namespace.QName parentQName,
+			final org.apache.axiom.om.OMFactory factory,
+			org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter)
+					throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
+		serialize(parentQName,factory,xmlWriter,false);
+	}
+
+	public void serialize(final javax.xml.namespace.QName parentQName,
+			final org.apache.axiom.om.OMFactory factory,
+			org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter,
+			boolean serializeType)
+					throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
+
+		String prefix = null;
+		String namespace = null;
+		prefix = parentQName.getPrefix();
+		namespace = parentQName.getNamespaceURI();
+
+		if ((namespace != null) && (namespace.trim().length() > 0)) {
+			String writerPrefix = xmlWriter.getPrefix(namespace);
+			if (writerPrefix != null) {
+				xmlWriter.writeStartElement(namespace, parentQName.getLocalPart());
+			} else {
+				if (prefix == null) {
+					prefix = generatePrefix(namespace);
+				}
+
+				xmlWriter.writeStartElement(prefix, parentQName.getLocalPart(), namespace);
+				xmlWriter.writeNamespace(prefix, namespace);
+				xmlWriter.setPrefix(prefix, namespace);
+			}
+		} else {
+			xmlWriter.writeStartElement(parentQName.getLocalPart());
+		}
+
+		if (serializeType) {
+			String namespacePrefix = registerPrefix(xmlWriter,"http://opcfoundation.org/webservices/XMLDA/1.0/");
+			if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)) {
+				writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
+						namespacePrefix+":"+getClassName(),
+						xmlWriter);
+			} else {
+				writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
+						getClassName(),
+						xmlWriter);
+			}
+		}
+		writeAttributes(factory,xmlWriter,prefix,namespace);
+	}
+	
+	
+	protected static SerializableADBBeanImplementation checkADBBeanType (String name, 
+																		javax.xml.stream.XMLStreamReader reader) 
+																				throws Exception {
+		if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","type")!=null) {
+			String fullTypeName = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance",
+					"type");
+			if (fullTypeName!=null) {
+				String nsPrefix = null;
+				if (fullTypeName.indexOf(":") > -1) {
+					nsPrefix = fullTypeName.substring(0,fullTypeName.indexOf(":"));
+				}
+				nsPrefix = nsPrefix==null?"":nsPrefix;
+
+				String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
+
+				if (!name.equals(type)) {
+					//find namespace for the prefix
+					String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
+					return (SerializableADBBeanImplementation)ExtensionMapper.getTypeObject(
+							nsUri,type,reader);
+				}
+			}
+		}
+		return null;
+	}
+
+	
+	protected abstract void writeAttributes(org.apache.axiom.om.OMFactory factory,
+											org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter, 
+											String prefix, 
+											String namespace) 
+													throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException;
+}

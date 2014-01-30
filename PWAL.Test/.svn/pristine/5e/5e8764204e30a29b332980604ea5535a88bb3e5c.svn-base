@@ -1,0 +1,240 @@
+package eu.ebbits.pwal.impl.driver.test;
+
+import org.osgi.service.component.ComponentContext;
+
+import eu.ebbits.pwal.api.annotations.PWALEventAnnotation;
+import eu.ebbits.pwal.api.model.PWALControlEvent;
+import eu.ebbits.pwal.api.model.PWALEvent;
+import eu.ebbits.pwal.api.model.PWALVariable;
+import eu.ebbits.pwal.impl.driver.PWALEventsDelegateImpl;
+
+/**
+ * 
+ * This package is imagined as part of the new ebbits DDK: it will thus undergo significant modifications in the ebbits iterative process. 
+ * it will be thus documented during the final release after all needed adapters are available.
+ * 
+ * Copyright (c) 2010-2012 the ebbits project. All Rights Reserved.
+ *
+ * @author	 ISMB
+ * @version	%I%, %G%
+ * @see	    eu.ebbits.pwal.impl.driver.PWALDriverImpl
+ * @since	  PWAL 0.1.0
+ */
+
+public class TestEventsDelegate extends PWALEventsDelegateImpl {
+
+	//TODO maybe we can modify the PWALService annotation to provide other information about the methods themselves ! e.g. we should check with requirements to decide which annotations are better with this.
+	// FIXME for instance we should annotate whether this is mutable or not! At the moment, though, we don't consider mutable drivers
+	
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_MyVoidServiceWithNoArguments=0;
+
+	public TestEventsDelegate(TestDriver dummyDriver) {
+		super(dummyDriver);
+	}
+
+
+	/** Simple method to be used for tests */
+	@PWALEventAnnotation (exposed = true)
+	synchronized public void MyVoidServiceWithNoArguments() {
+		calls_MyVoidServiceWithNoArguments++;
+		
+		//TODO proably there is a way to do this automatically, using Reflection... At the moment I am building event 
+		PWALEvent e = new PWALEvent(this.getMethodNameByReflection());
+		
+		this.sendEvent(e);
+	}
+
+
+
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_MyIntServiceWithNoArguments=0;
+	
+	/** Simple method to be used for tests */
+	@PWALEventAnnotation (exposed = true)
+	synchronized public void MyIntServiceWithNoArguments() {
+		calls_MyIntServiceWithNoArguments++;
+
+		//TODO proably there is a way to do this automatically, using Reflection... At the moment I am building event 
+		PWALEvent e = new PWALEvent(this.getMethodNameByReflection());
+		
+		this.sendEvent(e);
+	}
+
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_MyIntServiceWithOneArguments=0;
+	
+	/** Simple method to be used for tests */
+	@PWALEventAnnotation (exposed = true)
+	synchronized public void MyIntServiceWithOneArguments(int a) {
+		calls_MyIntServiceWithOneArguments++;
+
+		//TODO proably there is a way to do this automatically, using Reflection... At the moment I am building event 
+		PWALEvent e = new PWALEvent(this.getMethodNameByReflection());
+		
+		PWALVariable v_a = new PWALVariable("a", a);
+		e.addVariable(v_a);
+		///end of the trick
+		
+		this.sendEvent(e);
+	}
+	
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_MyIntServiceWithTwoArguments=0;
+
+	/** Simple method to be used for tests */
+	@PWALEventAnnotation (exposed = true)
+	synchronized public void MyIntServiceWithTwoArguments(int a, int b) {
+		calls_MyIntServiceWithTwoArguments++;
+
+		//TODO proably there is a way to do this automatically, using Reflection... At the moment I am building event 
+		PWALEvent e = new PWALEvent(this.getMethodNameByReflection());
+		
+		PWALVariable v_a = new PWALVariable("a", a);
+		e.addVariable(v_a);
+
+		PWALVariable v_b = new PWALVariable("b", b);
+		e.addVariable(v_b);
+		
+		///end of the trick
+		
+		this.sendEvent(e);
+	}
+	
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_MyIntServiceWithThreeArguments=0;
+
+	/** Simple method to be used for tests */
+	@PWALEventAnnotation (exposed = true)
+	synchronized public void MyIntServiceWithThreeArguments(int a,int b, int c) {
+		calls_MyIntServiceWithThreeArguments++;
+		
+		//TODO proably there is a way to do this automatically, using Reflection... At the moment I am building event 
+		PWALEvent e = new PWALEvent(this.getMethodNameByReflection());
+		
+		PWALVariable v_a = new PWALVariable("a", a);
+		e.addVariable(v_a);
+
+		PWALVariable v_b = new PWALVariable("b", b);
+		e.addVariable(v_b);
+		
+		PWALVariable v_c = new PWALVariable("c", c);
+		e.addVariable(v_c);
+		
+		this.sendEvent(e);
+	}
+	
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_MyFloatServiceWithThreeArguments=0;
+
+	
+	/** Simple method to be used for tests */
+	@PWALEventAnnotation (exposed = true)
+	synchronized public void MyFloatServiceWithThreeArguments(double d, double e, double f) {
+		calls_MyFloatServiceWithThreeArguments++;
+		
+		//TODO proably there is a way to do this automatically, using Reflection... At the moment I am building event 
+		PWALEvent ev = new PWALEvent(this.getMethodNameByReflection());
+		
+		PWALVariable v_d = new PWALVariable("d", d);
+		ev.addVariable(v_d);
+
+		PWALVariable v_e = new PWALVariable("e", e);
+		ev.addVariable(v_e);
+		
+		PWALVariable v_f = new PWALVariable("f", f);
+		ev.addVariable(v_f);
+		///end of the trick
+		
+		this.sendEvent(ev);
+	}
+	
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_MyServiceWithEvenAnArray=0;
+
+	/** Simple method to be used for tests */
+	@PWALEventAnnotation (exposed = true)
+	synchronized public void MyServiceWithEvenAnArray(int [] argarray) {
+		calls_MyServiceWithEvenAnArray++;
+		int [] ret = new int[argarray.length]; 
+		
+		int j=0;
+		for (int v : argarray) {
+			ret[j++] = 2*v;
+		}
+		
+		//TODO proably there is a way to do this automatically, using Reflection... At the moment I am building event 
+		PWALEvent e = new PWALEvent(this.getMethodNameByReflection());
+		
+		PWALVariable v_argarray = new PWALVariable("argarray", argarray);
+		e.addVariable(v_argarray);
+		
+		///end of the trick
+		
+		this.sendEvent(e);
+	}
+	
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_ThisMethodShallNotPass=0;
+
+	/** Simple method to be used for tests: it should not be exposed externally */
+	@PWALEventAnnotation (exposed = false)
+	synchronized public void ThisMethodShallNotPass() {
+		calls_ThisMethodShallNotPass++;
+		
+	}
+
+	/** Internal variable just to count the calls to the relative method */
+	public int calls_ThisMethodShallNotPassEither=0;
+
+	/** Simple method to be used for tests: it should not be exposed externally */
+	synchronized public void ThisMethodShallNotPassEither() {
+		calls_ThisMethodShallNotPassEither++;
+		
+	}
+
+	public void my_gen_debug() {
+		this.signalDebugEvent(new PWALControlEvent(PWALControlEvent.ControlEventType.DEFAULT_DEBUG));
+		
+	}
+	
+	public void my_gen_info() {
+		this.signalInfoEvent(new PWALControlEvent(PWALControlEvent.ControlEventType.DEFAULT_INFO));
+		
+	}
+
+	public void my_gen_warning() {
+		this.signalWarningEvent(new PWALControlEvent(PWALControlEvent.ControlEventType.DEFAULT_WARNING));
+		
+	}
+
+	public void my_gen_error() {
+		this.signalErrorEvent(new PWALControlEvent(PWALControlEvent.ControlEventType.DEFAULT_ERROR));
+		
+	}
+	
+	public void my_gen_critical() {
+		this.signalCriticalEvent(new PWALControlEvent(PWALControlEvent.ControlEventType.DEFAULT_CRITICAL));
+		
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void updatePWALEventsCollection() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void init(ComponentContext context) {
+		// TODO Auto-generated method stub
+		
+	}
+}

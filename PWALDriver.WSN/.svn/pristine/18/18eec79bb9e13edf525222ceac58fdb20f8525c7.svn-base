@@ -1,0 +1,131 @@
+package eu.ebbits.pwal.impl.driver.wsn.client;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+public class ProxyDecoder {
+
+	private static short TYPE_CONTROL_PAYLOAD = 192; //0xc0
+	private static short COMMAND_SET_RATE = 193; //0xc1
+	private static short COMMAND_STOP = 194; //0xc2
+	//private static short COMMAND_GET_RATE = 195; //0xc3
+	private static short COMMAND_START = 196; //0xc4
+	CommandSender commandSender;
+
+	public void decode(byte[] payload_data) {
+		//short[] data = new short[payload_length];
+		int type = 0;
+		short seq_no = 0;
+		short command = 0;
+		short data_1 = 0;
+		short data_2 = 0;
+		short data_3 = 0;
+		InetAddress nodeAddress = null;
+		byte[] nodeAddressByte = new byte[16];
+
+		System.out.println();
+		System.out.println("Received from proxy");
+
+		/*
+		//convert the payload bytes to short
+		for (int i=0;i<payload_length;i++) {
+			data[i] = (short) payload_data[i];
+		}
+		 */
+
+		//packet type identification
+		type = FormatDecoder.Decode16U(payload_data, 0, false);
+		if(type==TYPE_CONTROL_PAYLOAD){
+			System.out.println("Received TYPE_CONTROL_PAYLOAD");
+			/*
+			seq_no  = encode16(data[2], data[3]);
+			command = encode16(data[4], data[5]);
+			data_1  = encode16(data[6], data[7]);
+			data_2  = encode16(data[8], data[9]);
+			data_3  = encode16(data[10], data[11]);
+			 */
+			seq_no  = (short)FormatDecoder.Decode16U(payload_data, 2, false);
+			command = (short)FormatDecoder.Decode16U(payload_data, 4, false);
+			data_1  = (short)FormatDecoder.Decode16U(payload_data, 6, false);
+			data_2  = (short)FormatDecoder.Decode16U(payload_data, 8, false);
+			data_3  = (short)FormatDecoder.Decode16U(payload_data, 10, false);
+			//getting none_addr
+			int ii = 12; //index to nodeAddress
+			for(int cc=0;cc<nodeAddressByte.length;cc++){
+				nodeAddressByte[cc] = payload_data[ii];
+				ii++;
+			}
+			try {
+				nodeAddress = InetAddress.getByAddress(nodeAddressByte); //got the sensor node IP address
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+			if(command==COMMAND_SET_RATE){
+				System.out.println("Received COMMAND_SET_RATE to "+data_1+", to node "+nodeAddress.getHostAddress());
+				commandSender = new CommandSender();
+				commandSender.sendControlCommand(nodeAddress, seq_no, COMMAND_SET_RATE, data_1, data_2, data_3);
+			}
+			else if(command==COMMAND_START){
+				System.out.println("Received COMMAND_START, to node "+nodeAddress.getHostAddress());
+				commandSender = new CommandSender();
+				commandSender.sendControlCommand(nodeAddress, seq_no, COMMAND_START, data_1, data_2, data_3);
+			}
+			else if(command==COMMAND_STOP){
+				System.out.println("Received COMMAND_STOP, to node "+nodeAddress.getHostAddress());
+				commandSender = new CommandSender();
+				commandSender.sendControlCommand(nodeAddress, seq_no, COMMAND_STOP, data_1, data_2, data_3);
+			}
+		}
+		else System.out.println("Unknown packet type");
+	}
+
+	//Hussein: methods to create a variable from raw bytes
+
+	/** @name encode16
+	 * @brief Method to create a 16-bit integer from 2 received bytes.
+	 * @param b1 The first byte.
+	 * @param b2 The second byte.
+	 * @return The created 16-bit integer.
+	 */
+	/*
+	private static short encode16(short b1, short b2){
+		short ret = 0;
+		if(b2>=0){ //positive number
+			if(b1<0) b1=(short) (b1+256);
+			ret = (short) (b1 + b2*256);
+		}
+		else { //negative number
+			if(b1>=0) b1=(short) (b1-256);
+			ret = (short) (b1 + (b2+1)*256);
+		}
+		return ret;
+	}
+	 */
+
+	/** @name encode32
+	 * @brief Method to create a 32-bit integer from 4 received bytes.
+	 * @param b1 The first byte.
+	 * @param b2 The second byte.
+	 * @param b3 The third byte.
+	 * @param b4 The fourth byte.
+	 * @return The created 32-bit integer.
+	 */
+	/*
+	private static int encode32(short b1, short b2, short b3, short b4){
+		int ret = 0;
+		if(b4>=0){ //positive number
+			if(b1<0) b1=(short) (b1+256);
+			if(b2<0) b2=(short) (b2+256);
+			if(b3<0) b3=(short) (b3+256);
+			ret = (int) (b1 + b2*256 + b3*256*256 + b4*256*256*256);
+		}
+		else { //negative number
+			if(b1>=0) b1=(short) (b1-256);
+			if(b2>=0) b2=(short) (b2-256);
+			if(b3>=0) b3=(short) (b3-256);
+			ret = (int) (b1 + (b2+1)*256 + (b3+1)*256*256 + (b3+1)*256*256*256);
+		}
+		return ret;
+	}
+	 */
+}

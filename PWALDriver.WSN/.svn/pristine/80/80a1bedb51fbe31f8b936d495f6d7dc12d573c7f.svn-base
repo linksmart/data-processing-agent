@@ -1,0 +1,80 @@
+/** @file UDPSend.java
+ * @author Hussein Khaleel
+ */
+
+package eu.ebbits.pwal.impl.driver.wsn.client;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+
+/**
+ * @name UDPSend
+ * @brief The class that implements the sending of UDP packets.
+ *
+ */
+public class UDPSend {
+	/**
+	 * @name sendControlPacket
+	 * @brief The method that establishes the UDP transmission socket,
+	 *        forms the UDP packet payload, and transmits the packet.
+	 * @param address Destination address.
+	 * @param tx_port Destination port.
+	 * @param type The payload type identification.
+	 * @param seq_no The packet's sequence number.
+	 * @param command The identifier of the control command sent to the sensor node.
+	 * @param data_1 Field specifying a parameter, as required by the command.
+	 * @param data_2 Field specifying a parameter, as required by the command.
+	 * @param data_3 Field specifying a parameter, as required by the command.
+	 * @throws InterruptedException 
+	 * @throws IOException 
+	 */
+	public boolean sendControlPacket(InetAddress address, int tx_port, short type, short seq_no,
+			short command, short data_1, short data_2, short data_3) throws InterruptedException, IOException {
+
+		int port = tx_port;
+		DatagramSocket socket = null;
+		try {
+			socket = new DatagramSocket(port);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		//create the payload
+		byte[] payload = new byte[12];
+		int i=0; //index to the next byte to be filled
+
+		//filling up the payload
+		FormatDecoder.Encode16U(payload, i, type, false);
+		i += 2;
+		//payload[i]=type;
+		//i+=1;
+		FormatDecoder.Encode16U(payload, i, seq_no, false);
+		i += 2;
+		FormatDecoder.Encode16U(payload, i, command, false);
+		i += 2;
+		//payload[i]=command;
+		//i+=1;
+		FormatDecoder.Encode16U(payload, i, data_1, false);
+		i += 2;
+		FormatDecoder.Encode16U(payload, i, data_2, false);
+		i += 2;
+		FormatDecoder.Encode16U(payload, i, data_3, false);
+
+		DatagramPacket packet = new DatagramPacket(payload, payload.length, address, port);
+		
+		socket.send(packet);
+		Thread.sleep(100);
+		socket.send(packet);
+		Thread.sleep(100);
+		socket.send(packet);
+		Thread.sleep(100);
+		
+		socket.close();
+		System.out.println("(2)sent to "+address.getHostName()+" on port "+port);
+		return true;
+	}
+}

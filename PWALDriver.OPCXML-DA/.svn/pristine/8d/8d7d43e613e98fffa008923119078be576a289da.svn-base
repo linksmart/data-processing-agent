@@ -1,0 +1,11 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+import eu.ebbits.pwal.api.model.PWALControlEvent;
+
+public class OPCXML_DataAccessMessage extends PWALControlEvent {
+
+	public OPCXML_DataAccessMessage(String msg) {
+		super(msg);
+	}
+
+}

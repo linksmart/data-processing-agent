@@ -1,0 +1,36 @@
+package eu.ebbits.pwal.api.driver.device.coolingcircuit;
+
+/**
+ * Interface to access the CoolingCircuit via ArduinoSerial.
+ */
+public interface CoolingCircuit {
+	/**
+	 * @param id
+	 * @param speed
+	 *		  (from 0..127)
+	 */
+	void setPump(int id, byte speed);
+
+	/**
+	 * Gets the latest temperature value
+	 * 
+	 * @return the latest temperature in degrees Celsius, as a float
+	 */
+	float getTemperature(int id);
+
+	/**
+	 * Gets the latest water flow value
+	 * 
+	 * @return the latest water flow value in lpm, as a float
+	 */
+	float getWaterFlow(int id);
+
+
+	/**
+	 * Add a CoolingCircuitListener
+	 * 
+	 * @param listener
+	 *		  the Listener to add
+	 */
+	void addListener(CoolingCircuitListener listener);
+}

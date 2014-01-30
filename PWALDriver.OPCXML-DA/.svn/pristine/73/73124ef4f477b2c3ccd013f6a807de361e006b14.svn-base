@@ -1,0 +1,763 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+public class SubscriptionPolledRefreshResponse extends SerializableADBBeanImplementation {
+
+	public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
+			"http://opcfoundation.org/webservices/XMLDA/1.0/",
+			"SubscriptionPolledRefreshResponse",
+			"ns1");
+
+	private static final String NAME = SubscriptionPolledRefreshResponse.class.getSimpleName();
+	
+	protected String getClassName() {
+		return this.getClass().getSimpleName();
+	}
+
+	/**
+	 * field for SubscriptionPolledRefreshResult
+	 */
+
+
+	protected ReplyBase localSubscriptionPolledRefreshResult ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localSubscriptionPolledRefreshResultTracker = false ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return ReplyBase
+	 */
+	public  ReplyBase getSubscriptionPolledRefreshResult() {
+		return localSubscriptionPolledRefreshResult;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param SubscriptionPolledRefreshResult
+	 */
+	public void setSubscriptionPolledRefreshResult(ReplyBase param) {
+
+		if (param != null) {
+			//update the setting tracker
+			localSubscriptionPolledRefreshResultTracker = true;
+		} else {
+			localSubscriptionPolledRefreshResultTracker = false;
+
+		}
+
+		this.localSubscriptionPolledRefreshResult=param;
+
+
+	}
+
+
+	/**
+	 * field for InvalidServerSubHandles
+	 * This was an Array!
+	 */
+
+
+	protected String[] localInvalidServerSubHandles ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localInvalidServerSubHandlesTracker = false ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return String[]
+	 */
+	public  String[] getInvalidServerSubHandles() {
+		return localInvalidServerSubHandles;
+	}
+
+
+
+
+
+
+	/**
+	 * validate the array for InvalidServerSubHandles
+	 */
+	protected void validateInvalidServerSubHandles(String[] param) {
+
+	}
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param InvalidServerSubHandles
+	 */
+	public void setInvalidServerSubHandles(String[] param) {
+		String[] invalidServerSubHandlesToUse = param.clone();
+		
+		validateInvalidServerSubHandles(invalidServerSubHandlesToUse);
+
+
+		if (invalidServerSubHandlesToUse != null) {
+			//update the setting tracker
+			localInvalidServerSubHandlesTracker = true;
+		} else {
+			localInvalidServerSubHandlesTracker = false;
+
+		}
+
+		this.localInvalidServerSubHandles=invalidServerSubHandlesToUse;
+	}
+
+
+
+	/**
+	 * Auto generated add method for the array for convenience
+	 * @param param String
+	 */
+	public void addInvalidServerSubHandles(String param) {
+		if (localInvalidServerSubHandles == null) {
+			localInvalidServerSubHandles = new String[]{};
+		}
+
+
+		//update the setting tracker
+		localInvalidServerSubHandlesTracker = true;
+
+
+		java.util.List list =
+				org.apache.axis2.databinding.utils.ConverterUtil.toList(localInvalidServerSubHandles);
+		list.add(param);
+		this.localInvalidServerSubHandles =
+				(String[])list.toArray(
+						new String[list.size()]);
+
+	}
+
+
+	/**
+	 * field for RItemList
+	 * This was an Array!
+	 */
+
+
+	protected SubscribePolledRefreshReplyItemList[] localRItemList ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localRItemListTracker = false ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return SubscribePolledRefreshReplyItemList[]
+	 */
+	public  SubscribePolledRefreshReplyItemList[] getRItemList() {
+		return localRItemList;
+	}
+
+
+
+
+
+
+	/**
+	 * validate the array for RItemList
+	 */
+	protected void validateRItemList(SubscribePolledRefreshReplyItemList[] param) {
+
+	}
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param RItemList
+	 */
+	public void setRItemList(SubscribePolledRefreshReplyItemList[] param) {
+		SubscribePolledRefreshReplyItemList[] rItemIlistToUse = param.clone();
+		
+		validateRItemList(rItemIlistToUse);
+
+
+		if (rItemIlistToUse != null) {
+			//update the setting tracker
+			localRItemListTracker = true;
+		} else {
+			localRItemListTracker = false;
+
+		}
+
+		this.localRItemList=rItemIlistToUse;
+	}
+
+
+
+	/**
+	 * Auto generated add method for the array for convenience
+	 * @param param SubscribePolledRefreshReplyItemList
+	 */
+	public void addRItemList(SubscribePolledRefreshReplyItemList param) {
+		if (localRItemList == null) {
+			localRItemList = new SubscribePolledRefreshReplyItemList[]{};
+		}
+
+
+		//update the setting tracker
+		localRItemListTracker = true;
+
+
+		java.util.List list =
+				org.apache.axis2.databinding.utils.ConverterUtil.toList(localRItemList);
+		list.add(param);
+		this.localRItemList =
+				(SubscribePolledRefreshReplyItemList[])list.toArray(
+						new SubscribePolledRefreshReplyItemList[list.size()]);
+
+	}
+
+
+	/**
+	 * field for Errors
+	 * This was an Array!
+	 */
+
+
+	protected OPCError[] localErrors ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localErrorsTracker = false ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return OPCError[]
+	 */
+	public  OPCError[] getErrors() {
+		return localErrors;
+	}
+
+
+
+
+
+
+	/**
+	 * validate the array for Errors
+	 */
+	protected void validateErrors(OPCError[] param) {
+
+	}
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param Errors
+	 */
+	public void setErrors(OPCError[] param) {
+		OPCError[] errorsToUse = param.clone();
+		
+		validateErrors(errorsToUse);
+
+
+		if (errorsToUse != null) {
+			//update the setting tracker
+			localErrorsTracker = true;
+		} else {
+			localErrorsTracker = false;
+
+		}
+
+		this.localErrors=errorsToUse;
+	}
+
+
+
+	/**
+	 * Auto generated add method for the array for convenience
+	 * @param param OPCError
+	 */
+	public void addErrors(OPCError param) {
+		if (localErrors == null) {
+			localErrors = new OPCError[]{};
+		}
+
+
+		//update the setting tracker
+		localErrorsTracker = true;
+
+
+		java.util.List list =
+				org.apache.axis2.databinding.utils.ConverterUtil.toList(localErrors);
+		list.add(param);
+		this.localErrors =
+				(OPCError[])list.toArray(
+						new OPCError[list.size()]);
+
+	}
+
+
+	/**
+	 * field for DataBufferOverflow
+	 * This was an Attribute!
+	 */
+
+
+	protected boolean localDataBufferOverflow ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return boolean
+	 */
+	public  boolean getDataBufferOverflow() {
+		return localDataBufferOverflow;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param DataBufferOverflow
+	 */
+	public void setDataBufferOverflow(boolean param) {
+
+		this.localDataBufferOverflow=param;
+
+
+	}
+
+
+	/**
+	 *
+	 * @param parentQName
+	 * @param factory
+	 * @return org.apache.axiom.om.OMElement
+	 */
+	public org.apache.axiom.om.OMElement getOMElement (
+			final javax.xml.namespace.QName parentQName,
+			final org.apache.axiom.om.OMFactory factory) throws org.apache.axis2.databinding.ADBException{
+
+
+
+		org.apache.axiom.om.OMDataSource dataSource =
+				new org.apache.axis2.databinding.ADBDataSource(this,MY_QNAME) {
+
+			public void serialize(org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
+				SubscriptionPolledRefreshResponse.this.serialize(MY_QNAME,factory,xmlWriter);
+			}
+		};
+		return new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(
+				MY_QNAME,factory,dataSource);
+
+	}
+
+
+	protected void writeAttributes(org.apache.axiom.om.OMFactory factory,org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter, String prefix, String namespace) 
+			throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
+		writeAttribute("",
+				"DataBufferOverflow",
+				org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDataBufferOverflow), xmlWriter);
+		if (localSubscriptionPolledRefreshResultTracker) {
+			if (localSubscriptionPolledRefreshResult==null) {
+				throw new org.apache.axis2.databinding.ADBException("SubscriptionPolledRefreshResult cannot be null!!");
+			}
+			localSubscriptionPolledRefreshResult.serialize(new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","SubscriptionPolledRefreshResult"),
+					factory,xmlWriter);
+		} if (localInvalidServerSubHandlesTracker) {
+			if (localInvalidServerSubHandles!=null) {
+				namespace = "http://opcfoundation.org/webservices/XMLDA/1.0/";
+				boolean emptyNamespace = namespace == null || namespace.length() == 0;
+				prefix =  emptyNamespace ? null : xmlWriter.getPrefix(namespace);
+				for (int i = 0;i < localInvalidServerSubHandles.length;i++) {
+					if (localInvalidServerSubHandles[i] != null) {
+						if (!emptyNamespace) {
+							if (prefix == null) {
+								String prefix2 = generatePrefix(namespace);
+								xmlWriter.writeStartElement(prefix2,"InvalidServerSubHandles", namespace);
+								xmlWriter.writeNamespace(prefix2, namespace);
+								xmlWriter.setPrefix(prefix2, namespace);
+							} else {
+								xmlWriter.writeStartElement(namespace,"InvalidServerSubHandles");
+							}
+						} else {
+							xmlWriter.writeStartElement("InvalidServerSubHandles");
+						}
+						xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localInvalidServerSubHandles[i]));
+						xmlWriter.writeEndElement();
+					} else {
+						// we have to do nothing since minOccurs is zero
+					}
+				}
+			} else {
+				throw new org.apache.axis2.databinding.ADBException("InvalidServerSubHandles cannot be null!!");
+			}
+		} if (localRItemListTracker) {
+			if (localRItemList!=null) {
+				for (int i = 0;i < localRItemList.length;i++) {
+					if (localRItemList[i] != null) {
+						localRItemList[i].serialize(new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","RItemList"),
+								factory,xmlWriter);
+					} else {
+						// we don't have to do any thing since minOccures is zero
+					}
+				}
+			} else {
+				throw new org.apache.axis2.databinding.ADBException("RItemList cannot be null!!");
+			}
+		} if (localErrorsTracker) {
+			if (localErrors!=null) {
+				for (int i = 0;i < localErrors.length;i++) {
+					if (localErrors[i] != null) {
+						localErrors[i].serialize(new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","Errors"),
+								factory,xmlWriter);
+					} else {
+						// we don't have to do any thing since minOccures is zero
+					}
+				}
+			} else {
+				throw new org.apache.axis2.databinding.ADBException("Errors cannot be null!!");
+			}
+		}
+		xmlWriter.writeEndElement();
+	}
+
+	
+	/**
+	 * databinding method to get an XML representation of this object
+	 *
+	 */
+	public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName)
+			throws org.apache.axis2.databinding.ADBException{
+
+
+
+		java.util.ArrayList elementList = new java.util.ArrayList();
+		java.util.ArrayList attribList = new java.util.ArrayList();
+
+		if (localSubscriptionPolledRefreshResultTracker) {
+			elementList.add(new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/",
+					"SubscriptionPolledRefreshResult"));
+
+
+			if (localSubscriptionPolledRefreshResult==null) {
+				throw new org.apache.axis2.databinding.ADBException("SubscriptionPolledRefreshResult cannot be null!!");
+			}
+			elementList.add(localSubscriptionPolledRefreshResult);
+		} if (localInvalidServerSubHandlesTracker) {
+			if (localInvalidServerSubHandles!=null) {
+				for (int i = 0;i < localInvalidServerSubHandles.length;i++) {
+
+					if (localInvalidServerSubHandles[i] != null) {
+						elementList.add(new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/",
+								"InvalidServerSubHandles"));
+						elementList.add(
+								org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localInvalidServerSubHandles[i]));
+					} else {
+
+						// have to do nothing
+
+					}
+
+
+				}
+			} else {
+
+				throw new org.apache.axis2.databinding.ADBException("InvalidServerSubHandles cannot be null!!");
+
+			}
+
+		} if (localRItemListTracker) {
+			if (localRItemList!=null) {
+				for (int i = 0;i < localRItemList.length;i++) {
+
+					if (localRItemList[i] != null) {
+						elementList.add(new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/",
+								"RItemList"));
+						elementList.add(localRItemList[i]);
+					} else {
+
+						// nothing to do
+
+					}
+
+				}
+			} else {
+
+				throw new org.apache.axis2.databinding.ADBException("RItemList cannot be null!!");
+
+			}
+
+		} if (localErrorsTracker) {
+			if (localErrors!=null) {
+				for (int i = 0;i < localErrors.length;i++) {
+
+					if (localErrors[i] != null) {
+						elementList.add(new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/",
+								"Errors"));
+						elementList.add(localErrors[i]);
+					} else {
+
+						// nothing to do
+
+					}
+
+				}
+			} else {
+
+				throw new org.apache.axis2.databinding.ADBException("Errors cannot be null!!");
+
+			}
+
+		}
+		attribList.add(
+				new javax.xml.namespace.QName("","DataBufferOverflow"));
+
+		attribList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDataBufferOverflow));
+
+
+		return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
+
+
+
+	}
+
+
+
+	/**
+	 *  Factory class that keeps the parse method
+	 */
+	public static class Factory{
+
+
+
+
+		/**
+		 * static method to create the object
+		 * Precondition:  If this object is an element, the current or next start element starts this object and any intervening reader events are ignorable
+		 *			 If this object is not an element, it is a complex type and the reader is at the event just after the outer start element
+		 * Postcondition: If this object is an element, the reader is positioned at its end element
+		 *			 If this object is a complex type, the reader is positioned at the end element of its outer element
+		 */
+		public static SubscriptionPolledRefreshResponse parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+			SubscriptionPolledRefreshResponse object =
+					new SubscriptionPolledRefreshResponse();
+
+			try {
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				SubscriptionPolledRefreshResponse result = (SubscriptionPolledRefreshResponse) checkADBBeanType(NAME,reader); 
+				if(result!=null) {
+					return result;
+				}
+
+
+
+				// Note all attributes that were handled. Used to differ normal attributes
+				// from anyAttributes.
+				java.util.Vector<String> handledAttributes = new java.util.Vector<String>();
+
+				// handle attribute "DataBufferOverflow"
+				String tempAttribDataBufferOverflow = reader.getAttributeValue(null,"DataBufferOverflow");
+
+				if (tempAttribDataBufferOverflow!=null) {
+					object.setDataBufferOverflow(
+							org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(tempAttribDataBufferOverflow));
+				} else {
+					throw new org.apache.axis2.databinding.ADBException("Required attribute DataBufferOverflow is missing");
+				}
+				handledAttributes.add("DataBufferOverflow");
+
+				reader.next();
+
+				java.util.ArrayList list2 = new java.util.ArrayList();
+
+				java.util.ArrayList list3 = new java.util.ArrayList();
+
+				java.util.ArrayList list4 = new java.util.ArrayList();
+
+
+				while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","SubscriptionPolledRefreshResult").equals(reader.getName())) {
+
+					object.setSubscriptionPolledRefreshResult(ReplyBase.Factory.parse(reader));
+
+					reader.next();
+
+				}  // End of if for expected property start element
+
+				else {
+
+				}
+
+
+				while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","InvalidServerSubHandles").equals(reader.getName())) {
+
+
+
+					// Process the array and step past its final element's end.
+					list2.add(reader.getElementText());
+
+					//loop until we find a start element that is not part of this array
+					boolean loopDone2 = false;
+					while(!loopDone2) {
+						// Ensure we are at the EndElement
+						while (!reader.isEndElement()) {
+							reader.next();
+						}
+						// Step out of this element
+						reader.next();
+						// Step to next element event.
+						while (!reader.isStartElement() && !reader.isEndElement())
+							reader.next();
+						if (reader.isEndElement()) {
+							//two continuous end elements means we are exiting the xml structure
+							loopDone2 = true;
+						} else {
+							if (new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","InvalidServerSubHandles").equals(reader.getName())) {
+								list2.add(reader.getElementText());
+
+							}else{
+								loopDone2 = true;
+							}
+						}
+					}
+					// call the converter utility  to convert and set the array
+
+					object.setInvalidServerSubHandles((String[])
+							list2.toArray(new String[list2.size()]));
+
+				}  // End of if for expected property start element
+
+				else {
+
+				}
+
+
+				while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","RItemList").equals(reader.getName())) {
+
+
+
+					// Process the array and step past its final element's end.
+					list3.add(SubscribePolledRefreshReplyItemList.Factory.parse(reader));
+
+					//loop until we find a start element that is not part of this array
+					boolean loopDone3 = false;
+					while(!loopDone3) {
+						// We should be at the end element, but make sure
+						while (!reader.isEndElement())
+							reader.next();
+						// Step out of this element
+						reader.next();
+						// Step to next element event.
+						while (!reader.isStartElement() && !reader.isEndElement())
+							reader.next();
+						if (reader.isEndElement()) {
+							//two continuous end elements means we are exiting the xml structure
+							loopDone3 = true;
+						} else {
+							if (new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","RItemList").equals(reader.getName())) {
+								list3.add(SubscribePolledRefreshReplyItemList.Factory.parse(reader));
+
+							}else{
+								loopDone3 = true;
+							}
+						}
+					}
+					// call the converter utility  to convert and set the array
+
+					object.setRItemList((SubscribePolledRefreshReplyItemList[])
+							org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+									SubscribePolledRefreshReplyItemList.class,
+									list3));
+
+				}  // End of if for expected property start element
+
+				else {
+
+				}
+
+
+				while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","Errors").equals(reader.getName())) {
+
+
+
+					// Process the array and step past its final element's end.
+					list4.add(OPCError.Factory.parse(reader));
+
+					//loop until we find a start element that is not part of this array
+					boolean loopDone4 = false;
+					while(!loopDone4) {
+						// We should be at the end element, but make sure
+						while (!reader.isEndElement())
+							reader.next();
+						// Step out of this element
+						reader.next();
+						// Step to next element event.
+						while (!reader.isStartElement() && !reader.isEndElement())
+							reader.next();
+						if (reader.isEndElement()) {
+							//two continuous end elements means we are exiting the xml structure
+							loopDone4 = true;
+						} else {
+							if (new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","Errors").equals(reader.getName())) {
+								list4.add(OPCError.Factory.parse(reader));
+
+							}else{
+								loopDone4 = true;
+							}
+						}
+					}
+					// call the converter utility  to convert and set the array
+
+					object.setErrors((OPCError[])
+							org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+									OPCError.class,
+									list4));
+
+				}  // End of if for expected property start element
+
+				else {
+
+				}
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				if (reader.isStartElement())
+					// A start element we are not expecting indicates a trailing invalid property
+					throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
+
+
+
+
+			} catch (javax.xml.stream.XMLStreamException e) {
+				throw new java.lang.Exception(e);
+			}
+
+			return object;
+		}
+
+	}//end of factory class
+
+
+
+}

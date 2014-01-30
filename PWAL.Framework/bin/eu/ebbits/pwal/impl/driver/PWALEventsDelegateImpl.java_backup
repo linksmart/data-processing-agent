@@ -1,0 +1,111 @@
+package eu.ebbits.pwal.impl.driver;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import eu.ebbits.pwal.api.annotations.PWALEventAnnotation;
+import eu.ebbits.pwal.api.driver.PWALDelegateSubscriber;
+import eu.ebbits.pwal.api.driver.PWALEventsDelegate;
+import eu.ebbits.pwal.api.driver.PWALEventsDelegateSubscriber;
+import eu.ebbits.pwal.api.model.PWALEvent;
+
+/**
+ * This package is imagined as part of the new ebbits DDK: it will thus undergo significant modifications in the ebbits iterative process. 
+ * it will be thus documented during the final release after all needed adapters are available.
+ * 
+ * Copyright (c) 2010-2013 the ebbits project. All Rights Reserved.
+ *
+ * @author     ISMB
+ * @version    %I%, %G%
+ * @see        eu.ebbits.pwal.impl.driver.PWALDriverImpl
+ * @since      PWAL 0.1.0
+ */
+public abstract class PWALEventsDelegateImpl extends PWALDelegateImpl implements PWALEventsDelegate {
+
+    protected Map<String, PWALEvent> events;
+//    protected Collection<PWALEventsDelegateSubscriber> subscribers;
+    
+    public PWALEventsDelegateImpl(PWALDriverImpl driver) {
+        super(driver);
+        this.events = new HashMap<String, PWALEvent>();
+//        this.subscribers = new HashSet<PWALEventsDelegateSubscriber>();
+        this.registerPWALEvents();
+    }
+
+    public void registerPWALEvents() {
+        for (Method m : this.getClass().getMethods()) {
+            PWALEventAnnotation a = m.getAnnotation(PWALEventAnnotation.class);
+            if(a != null) {
+                if(a.exposed())
+                    this.events.put(m.getName(), new PWALEvent(m));
+            }
+        }
+    }
+
+    /**
+     * Getter of the property <tt>events</tt>
+     * @return  Returns the events.
+     */
+    public PWALEvent getPWALEvent(String eventName) {
+        return events.get(eventName);
+    }
+    
+    public Collection<PWALEvent> getPWALEvents(Collection<String> eventsName) {
+        if (!eventsName.isEmpty()) {
+            Collection<PWALEvent> events = new HashSet<PWALEvent>();
+            for(String eventName : eventsName) {
+                events.add(this.getPWALEvent(eventName));
+            }
+            return events;
+        } else {
+            return null;
+        }
+    }
+    
+    @Override
+    public int getPWALEventsCollectionSize() {
+        return this.events.size();
+    }
+
+    @Override
+    public Collection<PWALEvent> getPWALEventsCollection() {
+        return this.events.values();
+    }
+
+    //FIXME stessa cosa che non i ServiceDelegate, ma al contrario. Serve un subscrber fuori dal PWAL
+    //FIXME aggiungere interfaccia di controllo START/STOP/Notifiche ecc..
+    
+/*    
+    synchronized public void subscribe(PWALEventsDelegateSubscriber sub) {
+        this.subscribers.add(sub);
+    }
+
+    synchronized public void unsubscribe(PWALEventsDelegateSubscriber sub) {
+        this.subscribers.remove(sub);
+        
+    }
+
+    synchronized public boolean isSubscribed(PWALEventsDelegateSubscriber sub) {
+        return this.subscribers.contains(sub);
+    }
+*/
+    //FIXME this works, but we must enforce strictly that there are not 2 events with the same name!!!
+    //FIXME we should also check whether this is scalable and code runs efficiently enough
+    synchronized public void sendEvent(PWALEvent e) {
+        for (PWALDelegateSubscriber s : this.subscribers) {
+            ((PWALEventsDelegateSubscriber) s).eventReceived(e);
+        }
+    }
+
+    //could this be done automatically ?
+    //see http://stackoverflow.com/questions/442747/getting-the-name-of-the-current-executing-method-java#442773
+    //see http://www.java2s.com/Tutorial/Java/0125__Reflection/Getmethodmyparameters.htm
+    protected String getMethodNameByReflection() {
+        final int depth=2;
+        final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+        return ste[depth].getMethodName();
+    }
+}

@@ -1,0 +1,206 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+public class ReadResponse  extends ADBBeanImplementation {
+
+	public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
+			"http://opcfoundation.org/webservices/XMLDA/1.0/",
+			"ReadResponse",
+			"ns1");
+
+	private static final String NAME = ReadResponse.class.getSimpleName();
+	
+	protected String getClassName() {
+		return this.getClass().getSimpleName();
+	}
+
+	/**
+	 * field for ReadResult
+	 */
+
+
+	protected ReplyBase localReadResult ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localReadResultTracker = false ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return ReplyBase
+	 */
+	public  ReplyBase getReadResult() {
+		return localReadResult;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param ReadResult
+	 */
+	public void setReadResult(ReplyBase param) {
+
+		if (param != null) {
+			//update the setting tracker
+			localReadResultTracker = true;
+		} else {
+			localReadResultTracker = false;
+
+		}
+
+		this.localReadResult=param;
+
+
+	}
+
+
+	/**
+	 * field for RItemList
+	 */
+	protected ReplyItemList localRItemList;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localRItemListTracker = false ;
+
+	/**
+	 * Auto generated getter method
+	 * @return ReplyItemList
+	 */
+	public  ReplyItemList getRItemList() {
+		return localRItemList;
+	}
+
+
+	/**
+	 * field for Errors
+	 * This was an Array!
+	 */
+	protected OPCError[] localErrors ;
+
+	/*  This tracker boolean wil be used to detect whether the user called the set method
+	 *   for this attribute. It will be used to determine whether to include this field
+	 *   in the serialized XML
+	 */
+	protected boolean localErrorsTracker = false ;
+
+	protected void writeAttributes(org.apache.axiom.om.OMFactory factory,org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter, String prefix, String namespace) 
+			throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
+		serializeAttribute(localReadResultTracker,localReadResult,"ReadResult",factory,xmlWriter);
+		serializeAttribute(localRItemListTracker,localRItemList,"RItemList",factory,xmlWriter);
+		serializeAttributes(localErrorsTracker,localErrors,"Errors",factory,xmlWriter);
+		xmlWriter.writeEndElement();
+	}
+
+
+	/**
+	 * databinding method to get an XML representation of this object
+	 *
+	 */
+	public javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName qName)
+			throws org.apache.axis2.databinding.ADBException{
+
+
+		java.util.ArrayList<Object> elementList = new java.util.ArrayList<Object>();
+		java.util.ArrayList<Object> attribList = new java.util.ArrayList<Object>();
+
+		addItem(localReadResultTracker,localReadResult,"ReadResult",elementList);
+		addItem(localRItemListTracker,localRItemList,"RItemList",elementList);
+		addItems(localErrorsTracker,localErrors,"Errors",elementList);
+		return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
+	}
+
+
+
+	/**
+	 *  Factory class that keeps the parse method
+	 */
+	public static class Factory extends GenericFactory {
+
+		/**
+		 * static method to create the object
+		 * Precondition:  If this object is an element, the current or next start element starts this object and any intervening reader events are ignorable
+		 *			 If this object is not an element, it is a complex type and the reader is at the event just after the outer start element
+		 * Postcondition: If this object is an element, the reader is positioned at its end element
+		 *			 If this object is a complex type, the reader is positioned at the end element of its outer element
+		 */
+		public static ReadResponse parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+			ReadResponse object =
+					new ReadResponse();
+
+			try {
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				ReadResponse result = (ReadResponse) checkADBBeanType(NAME,reader); 
+				if(result!=null) {
+					return result;
+				}
+
+
+				reader.next();
+
+				java.util.ArrayList<Object> list3 = new java.util.ArrayList<Object>();
+
+				while (!reader.isStartElement() && !reader.isEndElement()) {
+					reader.next();
+				}
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","ReadResult").equals(reader.getName())) {
+					object.setReadResult(ReplyBase.Factory.parse(reader));
+					reader.next();
+				}  // End of if for expected property start element
+
+				while (!reader.isStartElement() && !reader.isEndElement()) {
+					reader.next();
+				}
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","RItemList").equals(reader.getName())) {
+					object.setRItemList(ReplyItemList.Factory.parse(reader));
+					reader.next();
+				}  // End of if for expected property start element
+
+				while (!reader.isStartElement() && !reader.isEndElement()) {
+					reader.next();
+				}
+
+				if (reader.isStartElement() && new javax.xml.namespace.QName("http://opcfoundation.org/webservices/XMLDA/1.0/","Errors").equals(reader.getName())) {
+
+					// Process the array and step past its final element's end.
+					list3.add(OPCError.Factory.parse(reader));
+
+					//loop until we find a start element that is not part of this array
+					boolean loopDone3 = false;
+					while(!loopDone3) {
+						loopDone3 = findStartElementNotPartOfTheArray("Errors",reader);
+						if(!loopDone3)
+							list3.add(OPCError.Factory.parse(reader));
+					}
+					// call the converter utility  to convert and set the array
+
+					object.setErrors((OPCError[])
+							org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+									OPCError.class,
+									list3));
+
+				}  // End of if for expected property start element
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				if (reader.isStartElement())
+					// A start element we are not expecting indicates a trailing invalid property
+					throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
+			} catch (javax.xml.stream.XMLStreamException e) {
+				throw new java.lang.Exception(e);
+			}
+			return object;
+		}
+	}//end of factory class
+}

@@ -1,0 +1,53 @@
+package eu.ebbits.pwal.impl.driver.opcxmlda.stub;
+
+public abstract class ItemNameADBBeanImplementation extends
+		ItemPathADBBeanImplementation {
+
+	
+	protected String localItemPath ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return String
+	 */
+	public  String getItemPath() {
+		return localItemPath;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param ItemPath
+	 */
+	public void setItemPath(String param) {
+		this.localItemPath=param;
+	}
+
+
+	/**
+	 * field for ItemName
+	 * This was an Attribute!
+	 */
+	protected String localItemName ;
+
+
+	/**
+	 * Auto generated getter method
+	 * @return String
+	 */
+	public  String getItemName() {
+		return localItemName;
+	}
+
+
+
+	/**
+	 * Auto generated setter method
+	 * @param param ItemName
+	 */
+	public void setItemName(String param) {
+		this.localItemName=param;
+	}
+}
