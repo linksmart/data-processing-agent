@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="PWALDriver.OPCXML-DA">
-	   <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-	   <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-	   <property name="java-output-path" value="/PWALDriver.OPCXML-DA/bin"/>
-	   <property name="context-root" value="PWALDriver.OPCXML-DA"/>
-    </wb-module>
-</project-modules>

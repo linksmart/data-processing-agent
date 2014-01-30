@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="eu.ebbits.pwal.impl.driver.robotcontroller">
-   <implementation class="eu.ebbits.pwal.impl.driver.robotcontroller.RobotControllerDriverImpl"/>
-</scr:component>

@@ -1,6 +1,0 @@
-var searchData=
-[
-  ['write',['write',['../classeu_1_1ebbits_1_1pwal_1_1impl_1_1driver_1_1opcxmlda_1_1stub_1_1_o_p_c_x_m_l___data_access_client.html#a5c96314562951fd9fee5ac8183c52082',1,'eu.ebbits.pwal.impl.driver.opcxmlda.stub.OPCXML_DataAccessClient.write(String variablepath, double valued, OPCXML_DataAccessNumericTypes type)'],['../classeu_1_1ebbits_1_1pwal_1_1impl_1_1driver_1_1opcxmlda_1_1stub_1_1_o_p_c_x_m_l___data_access_client.html#ae8762c0ecf5d1698d2c262597915652b',1,'eu.ebbits.pwal.impl.driver.opcxmlda.stub.OPCXML_DataAccessClient.write(String variablepath[], double valued[], OPCXML_DataAccessNumericTypes type[])'],['../classeu_1_1ebbits_1_1pwal_1_1impl_1_1driver_1_1opcxmlda_1_1stub_1_1_o_p_c_x_m_l___data_access_stub.html#a32d274bf9628960b0f9aca6d51538bcd',1,'eu.ebbits.pwal.impl.driver.opcxmlda.stub.OPCXML_DataAccessStub.write()']]],
-  ['write_5fold',['write_old',['../classeu_1_1ebbits_1_1pwal_1_1impl_1_1driver_1_1opcxmlda_1_1stub_1_1_o_p_c_x_m_l___data_access_client.html#af43a7f21ba7966157d25034bf85f200c',1,'eu::ebbits::pwal::impl::driver::opcxmlda::stub::OPCXML_DataAccessClient']]],
-  ['writenow',['writeNow',['../classeu_1_1ebbits_1_1pwal_1_1impl_1_1driver_1_1opcxmlda_1_1_o_p_c_variables_delegate.html#a0bcefc4a04b08a380d0ac330bb6028c4',1,'eu::ebbits::pwal::impl::driver::opcxmlda::OPCVariablesDelegate']]]
-];
