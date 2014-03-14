@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="PWAL" class="it.ismb.pertlab.pwal.PwalImpl">
+    	<constructor-arg>
+    		<list value-type="it.ismb.pertlab.pwal.api.Device">
+    			<ref bean="thermometerFakeDriver"/>
+    			<ref bean="oxygenFakeDriver"/>
+    		</list>
+    	</constructor-arg>
+    </bean>
+	<bean id="thermometerFakeDriver" class="it.ismb.pertlab.pwal.termometer_driver.ThermometerFakeDriver"/>
+	<bean id="oxygenFakeDriver" class="it.ismb.pertlab.pwal.driver.oxygenmeter_driver.OxygenFakeDriver"/>
+</beans>
