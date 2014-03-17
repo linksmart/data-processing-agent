@@ -1,6 +1,6 @@
 package it.ismb.pertlab.termometer_driver;
 
-import it.ismb.pertlab.pwal.termometer_driver.ThermometerFakeDriver;
+import it.ismb.pertlab.pwal.manager.termometer.ThermometerFakeDriver;
 
 import org.junit.Test;
 

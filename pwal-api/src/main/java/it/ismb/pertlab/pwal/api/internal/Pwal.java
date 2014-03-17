@@ -1,4 +1,6 @@
-package it.ismb.pertlab.pwal.api;
+package it.ismb.pertlab.pwal.api.internal;
+
+import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 
 import java.util.Collection;
 

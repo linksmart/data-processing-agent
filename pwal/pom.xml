@@ -48,14 +48,34 @@
     	<version>4.0.2.RELEASE</version>
     </dependency>
     <dependency>
-    	<groupId>it.ismb.pertlab.pwal.driver</groupId>
-    	<artifactId>oxygen-fake-driver</artifactId>
+    	<groupId>it.ismb.pertlab.pwal.manager</groupId>
+    	<artifactId>oxygen-fake-manager</artifactId>
     	<version>0.0.1</version>
     </dependency>
     <dependency>
-    	<groupId>it.ismb.pertlab.pwal.driver</groupId>
-    	<artifactId>BluetoothThermometerDriver</artifactId>
-    	<version>0.0.1</version>
+    	<groupId>ch.qos.logback</groupId>
+    	<artifactId>logback-core</artifactId>
+    	<version>1.0.9</version>
     </dependency>
+    	<dependency>
+		<groupId>ch.qos.logback</groupId>
+		<artifactId>logback-classic</artifactId>
+		<version>1.0.9</version>
+	</dependency>
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>jcl-over-slf4j</artifactId>
+    	<version>1.7.2</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>slf4j-api</artifactId>
+    	<version>1.7.2</version>
+    </dependency>
+<!--     <dependency> -->
+<!--     	<groupId>it.ismb.pertlab.pwal.driver</groupId> -->
+<!--     	<artifactId>BluetoothThermometerDriver</artifactId> -->
+<!--     	<version>0.0.1</version> -->
+<!--     </dependency> -->
   </dependencies>
 </project>

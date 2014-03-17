@@ -1,9 +1,9 @@
 package it.ismb.pertlab.pwal;
 
-import it.ismb.pertlab.pwal.api.Device;
-import it.ismb.pertlab.pwal.api.OxyMeter;
-import it.ismb.pertlab.pwal.api.Pwal;
-import it.ismb.pertlab.pwal.api.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
+import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.internal.Pwal;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

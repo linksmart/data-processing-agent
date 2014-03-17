@@ -1,4 +1,4 @@
-package it.ismb.pertlab.pwal.api;
+package it.ismb.pertlab.pwal.api.devices.interfaces;
 
 public interface Device {
 	

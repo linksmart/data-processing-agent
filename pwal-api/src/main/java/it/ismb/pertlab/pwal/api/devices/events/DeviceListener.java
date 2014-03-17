@@ -1,4 +1,6 @@
-package it.ismb.pertlab.pwal.api;
+package it.ismb.pertlab.pwal.api.devices.events;
+
+import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 
 public interface DeviceListener {
 	
