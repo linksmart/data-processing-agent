@@ -9,9 +9,11 @@
     		<list value-type="it.ismb.pertlab.pwal.api.Device">
     			<ref bean="thermometerFakeDriver"/>
     			<ref bean="oxygenFakeDriver"/>
+    			<ref bean="bluetoothThermometerDriver"/>
     		</list>
     	</constructor-arg>
     </bean>
 	<bean id="thermometerFakeDriver" class="it.ismb.pertlab.pwal.termometer_driver.ThermometerFakeDriver"/>
 	<bean id="oxygenFakeDriver" class="it.ismb.pertlab.pwal.driver.oxygenmeter_driver.OxygenFakeDriver"/>
+	<bean id="bluetoothThermometerDriver" class="it.ismb.pertlab.pwal.driver.thermometer_driver.BluetoothThermometerDriver"/>
 </beans>
