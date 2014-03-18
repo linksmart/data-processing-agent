@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1394372378553
+Build-Jdk: 1.6.0_45
+Built-By: atalla
+Bundle-Activator: it.ismb.pert.pwal.driver.osgi.Activator
+Bundle-Category: OSGi-tutorial
+Bundle-ManifestVersion: 2
+Bundle-Name: pwal-udp-base-driver
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-SymbolicName: pwal-udp-base-driver
+Bundle-Vendor: ISMB
+Bundle-Version: 0.0.1
+Created-By: Apache Maven Bundle Plugin
+Export-Package: it.ismb.pert.pwal.driver.api;version="0.0.1"
+Import-Package: it.ismb.pert.pwal.driver.api;version="[0.0,1)",org.eclip
+ se.osgi.framework.console;version="[1.0,2)",org.osgi.framework;version=
+ "1.5.0",org.osgi.service.device;version="[1.1,2)"
+Tool: Bnd-1.50.0
