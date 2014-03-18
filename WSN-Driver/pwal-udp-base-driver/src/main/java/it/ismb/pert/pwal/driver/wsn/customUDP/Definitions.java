@@ -6,7 +6,7 @@ public  class Definitions {
 	public static final byte REQ_SENSORS 	= 	(byte) 0xB1;
 	public static final byte REQ_DATA	 	= 	(byte) 0xDD;
 	//#########################################;
-	public static final byte SENSOR_ALL 		=	(byte) 0xC0;
+	public static final byte SENSOR_ALL 	=	(byte) 0xC0;
 	public static final byte SENSOR_TEMP 	=	(byte) 0xC1;
 	public static final byte SENSOR_ACCEL 	=	(byte) 0xC2;
 	public static final byte ACK_PAYLOAD 	=	(byte) 0xA1;

@@ -25,16 +25,17 @@ import java.util.logging.Logger;
 
 
 public class AUDPBaseDriver implements IUDPBaseDriver {	
-	
 	Queues queues = Queues.getInstance();
 	Queue<IMessage> OQueue = queues.OQueue;
-	Queue<IMessage> IQueue = queues.IQueue;
-	
-	private final int m_port =7731; 
+	Queue<IMessage> IQueue = queues.IQueue;	
+	private final int m_port	=	7731; 
 	private final static Logger  LOGGER = Logger.getLogger( AUDPBaseDriver.class.getName() );
+	
+	
 	public AUDPBaseDriver() {
 	// infinity looping thread in order to monitor if there are any Message to be sent to the WSN. 
-	new Thread(){
+	
+		new Thread(){
 			DatagramPacket request;			
 			public void run(){ 
 				while(true){		
