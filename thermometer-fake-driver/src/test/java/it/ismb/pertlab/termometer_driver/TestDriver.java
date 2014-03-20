@@ -1,6 +1,6 @@
 package it.ismb.pertlab.termometer_driver;
 
-import it.ismb.pertlab.pwal.manager.termometer.ThermometerFakeDriver;
+import it.ismb.pertlab.pwal.manager.thermometer.ThermometerFakeManager;
 
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ public class TestDriver {
 	@Test
 	public void testThread()
 	{
-		ThermometerFakeDriver d=new ThermometerFakeDriver();
+		ThermometerFakeManager d=new ThermometerFakeManager();
 		d.start();
 		
 		try {

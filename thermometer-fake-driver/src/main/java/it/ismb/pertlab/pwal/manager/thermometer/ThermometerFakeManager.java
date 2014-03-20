@@ -1,21 +1,20 @@
-package it.ismb.pertlab.pwal.manager.termometer;
+package it.ismb.pertlab.pwal.manager.thermometer;
 
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
-import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.manager.thermometer.device.ThermometerFakeDevice;
 
-public class ThermometerFakeDriver extends DevicesManager implements Thermometer {
+public class ThermometerFakeManager extends DevicesManager{
 
 	private String id;
-	private final String type="pwal:Thermometer";
 
 	@Override
 	public void run() {
 		log.info("Thermometer manager stared.");
 		while(!t.isInterrupted())
-		{
-				try {
-				ThermometerFakeDriver term = new ThermometerFakeDriver();
+		{	
+			try {
+				ThermometerFakeDevice term = new ThermometerFakeDevice();
 				this.devicesDiscovered.put(this.generateId(), term);
 				for (DeviceListener l : this.deviceListener) {
 					l.notifyDeviceAdded(term);
@@ -26,6 +25,7 @@ public class ThermometerFakeDriver extends DevicesManager implements Thermometer
 				for (DeviceListener l : this.deviceListener) {
 					l.notifyDeviceRemoved(term);
 				}
+				Thread.sleep(5000);
 			}
 			catch (InterruptedException e) {
 				t.interrupt();
@@ -41,16 +41,6 @@ public class ThermometerFakeDriver extends DevicesManager implements Thermometer
 	@Override
 	public String getId() {
 		return id;
-	}
-
-	@Override
-	public String getType() {
-		return this.type;
-	}
-
-	@Override
-	public Double getTemperature() {
-		return ((25-16)*Math.random())+16;
 	}
 	
 }

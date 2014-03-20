@@ -19,4 +19,11 @@ public interface Pwal {
 	 * @return a list of subclass of Device (see the device taxonomy) 
 	 */
 	Collection<Device> listDevices();
+	
+	/**
+	 * Provides devices of a given type (e.g. pwal:Temperature)
+	 * @param type
+	 * @return
+	 */
+	Collection<Device> getDevicesByType(String type);
 }

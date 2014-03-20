@@ -22,6 +22,7 @@ public class OxygenmeterFakeManager extends DevicesManager {
 				for (DeviceListener l : this.deviceListener) {
 					l.notifyDeviceRemoved(device);
 				}
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				t.interrupt();
 			}

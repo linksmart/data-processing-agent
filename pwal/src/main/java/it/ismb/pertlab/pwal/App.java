@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 
 import org.springframework.context.ApplicationContext;
@@ -19,10 +20,11 @@ public class App
         System.out.println( "Pwal start" );
         ApplicationContext ctx=new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
         Pwal p=(Pwal) ctx.getBean("PWAL");
+
         for(Device d:p.listDevices())
         {
         	System.out.println(d.getId()+" "+d.getType());
-        	if(d.getType().equals("pwal:Thermometer"))
+        	if(d.getType().equals(DeviceType.THERMOMETER))
         	{
         		Thermometer t=(Thermometer) d;
         		System.out.println("This is a thermometer: temp="+t.getTemperature());
