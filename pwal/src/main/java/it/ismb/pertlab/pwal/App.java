@@ -1,5 +1,7 @@
 package it.ismb.pertlab.pwal;
 
+import java.util.Scanner;
+
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
@@ -20,7 +22,8 @@ public class App
         System.out.println( "Pwal start" );
         ApplicationContext ctx=new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
         Pwal p=(Pwal) ctx.getBean("PWAL");
-
+        Scanner input = new Scanner(System.in);
+        String inputString=input.nextLine();
         for(Device d:p.listDevices())
         {
         	System.out.println(d.getId()+" "+d.getType());
