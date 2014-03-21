@@ -23,21 +23,34 @@ public class App
         ApplicationContext ctx=new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
         Pwal p=(Pwal) ctx.getBean("PWAL");
         Scanner input = new Scanner(System.in);
-        
-        while(!input.nextLine().equals("exit"))
+        String command;
+        do
         {
-	        for(Device d:p.listDevices())
-	        {
-	        	System.out.println(d.getId()+" "+d.getType());
-	        	if(d.getType().equals(DeviceType.THERMOMETER))
-	        	{
-	        		Thermometer t=(Thermometer) d;
-	        		System.out.println("This is a thermometer: temp="+t.getTemperature());
-	        	}else if(d.getType().equals("pwal:Oxymeter")){
-	        		OxyMeter om=(OxyMeter)d;
-	        		System.out.println("This is an oxymeter: saturation="+om.getSaturation());
-	        	}
-	        }
-        }
+        	command=input.nextLine();
+        	switch(command){
+        		case "L":
+        			System.out.println("Devices list:");
+        			int i=0;
+        			for(Device d:p.listDevices())
+        		    {
+			        	System.out.println((i++)+") id: "+d.getId()+" type: "+d.getType());
+        		    }
+        			break;
+        		case "Q":
+        			System.out.println("Inserisci l'indice da interrogare:");
+        			command=input.nextLine();
+        			Device de=(Device)p.listDevices().toArray()[Integer.parseInt(command)];
+        			if(de.getType().equals(DeviceType.THERMOMETER))
+        			{
+        				Thermometer t=(Thermometer) de;
+                		System.out.println("This is a thermometer id="+de.getId()+"  temp="+t.getTemperature());
+        			}else if(de.getType().equals(DeviceType.OXYGEN_METER)){
+                		OxyMeter om=(OxyMeter)de;
+                		System.out.println("This is an oxymeter: saturation="+om.getSaturation());
+        			}
+        			break;
+        	}
+
+        }while(!command.equals("exit"));
     }
 }
