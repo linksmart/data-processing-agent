@@ -23,18 +23,21 @@ public class App
         ApplicationContext ctx=new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
         Pwal p=(Pwal) ctx.getBean("PWAL");
         Scanner input = new Scanner(System.in);
-        String inputString=input.nextLine();
-        for(Device d:p.listDevices())
+        
+        while(!input.nextLine().equals("exit"))
         {
-        	System.out.println(d.getId()+" "+d.getType());
-        	if(d.getType().equals(DeviceType.THERMOMETER))
-        	{
-        		Thermometer t=(Thermometer) d;
-        		System.out.println("This is a thermometer: temp="+t.getTemperature());
-        	}else if(d.getType().equals("pwal:Oxymeter")){
-        		OxyMeter om=(OxyMeter)d;
-        		System.out.println("This is an oxymeter: saturation="+om.getSaturation());
-        	}
+	        for(Device d:p.listDevices())
+	        {
+	        	System.out.println(d.getId()+" "+d.getType());
+	        	if(d.getType().equals(DeviceType.THERMOMETER))
+	        	{
+	        		Thermometer t=(Thermometer) d;
+	        		System.out.println("This is a thermometer: temp="+t.getTemperature());
+	        	}else if(d.getType().equals("pwal:Oxymeter")){
+	        		OxyMeter om=(OxyMeter)d;
+	        		System.out.println("This is an oxymeter: saturation="+om.getSaturation());
+	        	}
+	        }
         }
     }
 }

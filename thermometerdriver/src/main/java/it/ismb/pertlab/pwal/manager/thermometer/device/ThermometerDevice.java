@@ -33,6 +33,8 @@ public class ThermometerDevice implements Thermometer {
 	private String id;
 	private final String type="pwal:Thermometer";
 	private DevicesManager parent;
+	
+	private StreamConnection con;
 
 	private String connectionUrl;
 	
@@ -54,6 +56,12 @@ public class ThermometerDevice implements Thermometer {
 	public ThermometerDevice(String connectionUrl)
 	{
 		this.connectionUrl=connectionUrl;
+		try {
+			connectToDevice();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -71,14 +79,15 @@ public class ThermometerDevice implements Thermometer {
 		return this.type;
 	}
 	
-	private StreamConnection connectToDevice() throws IOException {
-		return (StreamConnection)Connector.open(connectionUrl);
+	private void connectToDevice() throws IOException {
+		this.con = (StreamConnection)Connector.open(connectionUrl);
+		this.out = con.openDataOutputStream();
+		this.in = con.openDataInputStream();
 	}
 	
 	@Override
 	public Double getTemperature() {
 		try {
-			connectToDevice();
 			boolean error = false;
 			String timestamp = "";
 			// This first call, activates the thermometer
@@ -193,6 +202,7 @@ public class ThermometerDevice implements Thermometer {
 //       				synchronized(parent) {
 //       					parent.notify();
 //       				}
+	       			this.con.close();
 	       			return Double.valueOf(stringThermoValue);
 	        	}
 	    	}

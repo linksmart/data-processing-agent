@@ -51,7 +51,7 @@ public class PwalImpl implements Pwal, DeviceListener {
 
 	@Override
 	public void notifyDeviceAdded(Device newDevice) {
-		newDevice.setId(this.generateId());
+//		newDevice.setId(this.generateId());
 		log.info("New PWAL device added: id {} type {}.", newDevice.getId(), newDevice.getType());
 		this.devices.put(newDevice.getId(), newDevice);
 	}

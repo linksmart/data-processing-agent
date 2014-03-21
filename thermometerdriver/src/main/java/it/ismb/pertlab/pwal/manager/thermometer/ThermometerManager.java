@@ -48,42 +48,25 @@ public class ThermometerManager extends DevicesManager implements DiscoveryListe
 	
 	@Override
 	public void run() {
-		try {
-			discover();
-			searchServices();
-		} catch (Exception e) {
-			log.error("Error:",e);
+		while(!t.isInterrupted())
+		{
+			try
+			{
+				try
+				{
+					discover();
+					searchServices();
+				}
+				catch (Exception e) {
+					log.error("Error:",e);
+				}
+				Thread.sleep(30000);
+			}
+			catch (InterruptedException e) {
+				log.debug("Interrupt received! Bye...");
+				t.interrupt();
+			}
 		}
-//		log.info("Thermometer manager started");
-//		running = true;
-//		while(!t.isInterrupted())
-//		{
-//			try {
-//				StreamConnection conn = connectToDevice();
-//				ThermometerDevice device = new ThermometerDevice(this, conn.openDataOutputStream(), conn.openDataInputStream());
-//				this.devicesDiscovered.put(this.generateId(), device);
-//				for (DeviceListener l : this.deviceListener) {
-//					l.notifyDeviceAdded(device);
-//				}
-//				synchronized(this) {
-//					this.wait();
-//				}
-//				try {
-//					conn.close();
-//				} catch (IOException e) {
-//					log.error("Error closing the connection.", e);
-//		    	}
-//				this.devicesDiscovered.remove(device);
-//				for (DeviceListener l : this.deviceListener) {
-//					l.notifyDeviceRemoved(device);
-//				}
-//			} catch (InterruptedException e) {
-//				t.interrupt();
-//			} catch (IOException e) {
-//				log.error("error opening the connected bluetooth device ", e);
-//			}
-//		}
-//		running = false;
 	}
 	
 	private void searchServices() throws IOException, InterruptedException {
@@ -123,33 +106,34 @@ public class ThermometerManager extends DevicesManager implements DiscoveryListe
 	 * 
 	 * @return connection open;
 	 */
-	private StreamConnection connectToDevice() {
-		boolean error;
-		StreamConnection conn = null;
-		do {
-			error=false;
-			try {
-				// Connects to the thermometer
-				conn = (StreamConnection)Connector.open("btspp://"+MAC_ADDRESS+":1;");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {	}
-			} catch (IOException e) {
-				// The device will not be always discoverable
-				// it is available only when a measure is done
-				error=true;
-			}
-			try {
-				Thread.sleep(6000);
-			} catch (InterruptedException e1) {	}		
-		} while (error && running);
-		return conn;
-	}
+//	private StreamConnection connectToDevice() {
+//		boolean error;
+//		StreamConnection conn = null;
+//		do {
+//			error=false;
+//			try {
+//				// Connects to the thermometer
+//				conn = (StreamConnection)Connector.open("btspp://"+MAC_ADDRESS+":1;");
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {	}
+//			} catch (IOException e) {
+//				// The device will not be always discoverable
+//				// it is available only when a measure is done
+//				error=true;
+//			}
+//			try {
+//				Thread.sleep(6000);
+//			} catch (InterruptedException e1) {	}		
+//		} while (error && running);
+//		return conn;
+//	}
 
 	@Override
 	public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
 		try {
 			log.debug("Device discovered: name="+btDevice.getFriendlyName(false)+" address="+btDevice.getBluetoothAddress()+" class="+cod.getServiceClasses());
+//			this.searchServices(btDevice);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,6 +184,7 @@ public class ThermometerManager extends DevicesManager implements DiscoveryListe
 
 	@Override
 	public void serviceSearchCompleted(int transID, int respCode) {
+		log.info("Search services completed!");
 		synchronized (servicesSearchLock) {
 			servicesSearchLock.notify();
 		}

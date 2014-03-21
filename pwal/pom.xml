@@ -83,11 +83,6 @@
   		<version>0.0.1</version>
   	</dependency>
   	<dependency>
-  		<groupId>it.ismb.pertlab.pwal.driver</groupId>
-  		<artifactId>BluetoothThermometerDriver</artifactId>
-  		<version>0.0.1</version>
-  	</dependency>
-  	<dependency>
   		<groupId>it.ismb.pertlab.pwal</groupId>
   		<artifactId>thermometerdriver</artifactId>
   		<version>0.0.1</version>
