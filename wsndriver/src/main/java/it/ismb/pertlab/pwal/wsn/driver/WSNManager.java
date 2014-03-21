@@ -37,7 +37,7 @@ public class WSNManager extends DevicesManager{
 			while(!t.isInterrupted())
 			{
 				udplistener.receive(receivePacket);
-				log.debug("MSG received from "+receivePacket.getAddress()+" payload="+bytesToHex( receivePacket.getData() ));
+				log.info("MSG received from "+receivePacket.getAddress()+" payload="+bytesToHex( receivePacket.getData() ));
 				IMessage m_data = new Response(receivePacket.getAddress().getHostAddress());
 				byte [] payload = Arrays.copyOf(receivePacket.getData(), receivePacket.getLength());
 				m_data.setPayload(payload);
@@ -46,26 +46,21 @@ public class WSNManager extends DevicesManager{
 				{
 				
 					case Definitions.REQ_DISC:
-						log.info("Received a REQ_DISC from "+ m_data.getSrcAddress());
-						log.debug("payload: ["+	bytesToHex( payload ) +"]");
+						log.debug("Received a REQ_DISC from "+ m_data.getSrcAddress()+" payload: "+	bytesToHex( payload ) );
 						//send back an ack
 						sendMessage(Definitions.ACK_DISC_PACK, m_data.getSrcAddress());
 						//I will receive an ACK_DISC_ACK
-//						DatagramPacket ACK  = new DatagramPacket(Definitions.ACK_DISC_PACK, 4, receivePacket.getAddress(), 7731);
-//						udplistener.send(ACK);
-						log.debug("Sent an acknowledgement to Sensor,  ["+	bytesToHex( Definitions.ACK_DISC_PACK ) +"]");
-						//discoverSensorsType();
+						log.debug("Sent ACT_DISC to "+m_data.getSrcAddress()+" payload: "+bytesToHex( Definitions.ACK_DISC_PACK ));
 						break;
 					case Definitions.ACK_DISC_ACK:
-						log.info("Received ACK_DISC_ACK from "+m_data.getSrcAddress());
-						log.debug("payload: ["+	bytesToHex( payload ) +"]");
-						IQueue.add(m_data);
+						log.debug("Received ACK_DISC_ACK from "+m_data.getSrcAddress()+ " payload: "+ bytesToHex( payload ));
+						//IQueue.add(m_data);
 						//send a request for a sensors type list
 						sendMessage(new byte[]{Definitions.REQ_SENSORS,0x00,0x00,0x00}, m_data.getSrcAddress());
-//						DatagramPacket req_sensors  = new DatagramPacket(new byte[]{Definitions.REQ_SENSORS,0x00,0x00,0x00}, 4, receivePacket.getAddress(), 7731);
-//						udplistener.send(req_sensors);	
+						log.debug("Sent REQ_SENSORS to "+m_data.getSrcAddress()+" payload "+bytesToHex(new byte[]{Definitions.REQ_SENSORS,0x00,0x00,0x00}));
 						break;
 					case Definitions.REQ_SENSORS:
+						log.debug("Received REQ_SENSORS from "+m_data.getSrcAddress()+" payload: "+bytesToHex(payload));
 						registerSensorsType(m_data);
 						break;
 					default:
@@ -92,11 +87,17 @@ public class WSNManager extends DevicesManager{
 		}
 	}
 	
+	/**
+	 * Process the response to a REQ_SENSORS from which get a list of the sensors
+	 * configured in for a certain node of the WSN.
+	 * This method is responsible to parse the response, create the pwal sensors
+	 * and notify the discovery to the pwal. 
+	 * 
+	 * If a new type of sensor wants to be added to the WSN managed by this Manager,
+	 * it is needed to create a new case in the main switch for parsing the new type.
+	 */
 	private void registerSensorsType(IMessage msg) throws Exception
 	{
-
-//		log.debug("waiting for sensors type configured");
-//		udplistener.receive(receivePacket);
 		byte[] response=msg.getPayload();
 		//byte[0]->id richiesta
 		//byte[1]->num sens presenti
@@ -125,6 +126,10 @@ public class WSNManager extends DevicesManager{
 						l.notifyDeviceAdded(as);
 					}					
 					devicesDiscovered.put(as.getId(), as);
+					break;
+				case Definitions.SENSOR_LIGHT:
+					break;
+				case Definitions.SENSOR_HUMIDITY:
 					break;
 				default:
 					break;

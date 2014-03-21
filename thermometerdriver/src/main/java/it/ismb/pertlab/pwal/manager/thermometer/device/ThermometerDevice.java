@@ -7,6 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.microedition.io.Connector;
+import javax.microedition.io.StreamConnection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +22,7 @@ import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
  */
 public class ThermometerDevice implements Thermometer {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ThermometerDevice.class);
+	private static final Logger log = LoggerFactory.getLogger(ThermometerDevice.class);
 	
 	// max timeout (msec) to consider as "new" a measure
 	private static final int MAX_TIME_DIFFERENCE = 180000; 
@@ -30,6 +33,8 @@ public class ThermometerDevice implements Thermometer {
 	private String id;
 	private final String type="pwal:Thermometer";
 	private DevicesManager parent;
+
+	private String connectionUrl;
 	
 	/**
 	 * Constructor of the Device
@@ -46,6 +51,11 @@ public class ThermometerDevice implements Thermometer {
 		this.in = in;
 	}
 	
+	public ThermometerDevice(String connectionUrl)
+	{
+		this.connectionUrl=connectionUrl;
+	}
+	
 	@Override
 	public String getId() {
 		return this.id;
@@ -60,15 +70,21 @@ public class ThermometerDevice implements Thermometer {
 	public String getType() {
 		return this.type;
 	}
-
+	
+	private StreamConnection connectToDevice() throws IOException {
+		return (StreamConnection)Connector.open(connectionUrl);
+	}
+	
 	@Override
 	public Double getTemperature() {
 		try {
+			connectToDevice();
 			boolean error = false;
 			String timestamp = "";
 			// This first call, activates the thermometer
 			byte [] activate = {0x51, 0x25, 0x0, 0x0, 0x0, 0x0, (byte) 0xA3, 0x19 };
-	    	out.write (activate);
+	    	log.debug("going to activate the thermometer, send: "+getHex(activate));
+			out.write (activate);
 	    	Thread.sleep(1500);
 	    	out.flush();
 	    	int bytesRead = 0, totalBytesRead = 0;
@@ -76,12 +92,14 @@ public class ThermometerDevice implements Thermometer {
 			byte [] getTimestamp = {0x51, 0x25, 0x0, 0x0, 0x0, 0x0, (byte) 0xA3, 0x19 };
 			byte[] timestampBytes = null;
 	    	do {
+	    		log.debug("going to get the timestamp, send: "+getHex(getTimestamp));
 	        	out.write (getTimestamp);
 	        	Thread.sleep(1500);
 	        	out.flush();
 	        	timestampBytes= new byte[1024];
 				bytesRead = in.read(timestampBytes);
-				if(bytesRead>0 && bytesRead<8) {
+				log.debug("...receiving "+getHex(timestampBytes));
+				if(bytesRead>0 && bytesRead<=8) {
 					totalBytesRead+=bytesRead;
 				} else if(bytesRead<0) {
 					error=true;
@@ -96,16 +114,16 @@ public class ThermometerDevice implements Thermometer {
 					timestampBytes[7]==checksum(timestampBytes)) {
 					timestamp=decodeTimestamp(timestampBytes);
 				} else {
-					LOG.warn("DriverTaiDoc: Received "+bytesRead+" bytes, but I don't know what they are.");
+					log.warn("DriverTaiDoc: Received "+bytesRead+" bytes, but I don't know what they are.");
 					error=true;
 				}
 			} else {
-				LOG.warn("DriverTaiDoc: I was waiting for 8 bytes, but I received "+bytesRead+" bytes");
+				log.warn("DriverTaiDoc: I was waiting for 8 bytes, but I received "+bytesRead+" bytes");
 				error = true;
 			}
 			if(!error) {
 	   			if(Math.abs(Long.parseLong(timestamp)-Long.parseLong(getTimestamp()))>MAX_TIME_DIFFERENCE) {
-	   				LOG.warn("DriverTaidoc: Measure just received but refused for: internal clock disaligned.");
+	   				log.warn("DriverTaidoc: Measure just received but refused for: internal clock disaligned.");
 					// Try to set the clock of the instrument
 					byte [] timeToSet = getTimeToSet();
 					byte [] setTime = new byte [8]; 
@@ -166,24 +184,24 @@ public class ThermometerDevice implements Thermometer {
 	       				builder.insert(2,".");
 	       			} else {
 	       				// In case of errors return 0.0 as temperature
-	       				synchronized(parent) {
-	       					parent.notify();
-	       				}
+//	       				synchronized(parent) {
+//	       					parent.notify();
+//	       				}
 	       				return Double.valueOf(0.0);
 	       			}
 	       			stringThermoValue = builder.toString();
-       				synchronized(parent) {
-       					parent.notify();
-       				}
+//       				synchronized(parent) {
+//       					parent.notify();
+//       				}
 	       			return Double.valueOf(stringThermoValue);
 	        	}
 	    	}
-		} catch (IOException | InterruptedException e) {
-			LOG.error("Error reading the temperature", e);
+		} catch (Exception e) {
+			log.error("Error reading the temperature", e);
 		}
-		synchronized(parent) {
-			parent.notify();
-		}
+//		synchronized(parent) {
+//			parent.notify();
+//		}
 		return Double.valueOf(0.0);
 	}
 	

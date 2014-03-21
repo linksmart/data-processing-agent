@@ -10,7 +10,8 @@
 <!--     			<ref bean="thermometerFakeManager"/>  -->
 <!--     			<ref bean="oxygenFakeManager"/> -->
 <!--     			<ref bean="bluetoothThermometerDriver"/> -->
-				<ref bean="wsnManager"/>
+<!-- 				<ref bean="wsnManager"/> -->
+				<ref bean="bluetoothManager"/>
     		</list>
     	</constructor-arg>
     </bean>
@@ -18,4 +19,11 @@
 	<bean id="oxygenFakeManager" class="it.ismb.pertlab.pwal.manager.oxygenmeter.OxygenmeterFakeManager"/>
 <!-- 	<bean id="bluetoothThermometerDriver" class="it.ismb.pertlab.pwal.driver.thermometer_driver.BluetoothThermometerDriver"/> -->
 	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/>
+	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.thermometer.ThermometerManager">
+		<constructor-arg>
+			<map>
+				<entry key="00123EFF29DB" value="it.ismb.pertlab.pwal.manager.thermometer.device.ThermometerDevice"/>
+			</map>
+		</constructor-arg>
+	</bean>
 </beans>
