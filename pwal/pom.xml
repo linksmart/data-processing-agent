@@ -84,7 +84,7 @@
   	</dependency>
   	<dependency>
   		<groupId>it.ismb.pertlab.pwal</groupId>
-  		<artifactId>thermometerdriver</artifactId>
+  		<artifactId>bluetoothmanager</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   </dependencies>
