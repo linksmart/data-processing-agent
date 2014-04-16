@@ -24,6 +24,18 @@
 #include "dev/temperature-sensor.h"
 #include "board.h"
 
+#ifdef EXT_ULTRA
+/*
+ * Includes for External Ultrasound sensor
+ */
+//Include ADC to read GPIO values
+#include "hal/error.h"
+#include "hal/hal.h"
+#include "hal/micro/cortexm3/stm32w108/regs.h"
+#include "hal/micro/adc.h"
+#endif
+
+
 //Includes for DEBUG PRINT
 #define DEBUG DEBUG_PRINT
 #include "net/uip-debug.h"
@@ -66,7 +78,9 @@
 #define SENSOR_HUMIDITY	0xC4
 #endif
 
-
+#ifdef EXT_ULTRA
+#define SENSOR_ULSOUND	0xC5
+#endif
 /*---------------------------------------------------------------------------*/
 // Process Received payload from PC
 typedef struct _received_payload_t {

@@ -5,8 +5,17 @@
  *      Author: "Prabhakaran Kasinathan"
  */
 #include "contiki.h"
+
+/*
+ * If you have connected external Ultrasound sensor
+ * #define EXT_ULTRA
+ */
+#define EXT_ULTRA
+
+
 //Custom Headers Includes / Defines / Functions
 #include "stm-sensor.h"
+
 
 /*
  * Definitions for UDP Connections
@@ -35,7 +44,7 @@ AUTOSTART_PROCESSES(&wsn_driver_process);
 /*---------------------------------------------------------------------------*/
 /*
  * Send Data packet
-*/
+ */
 static void send_packet (payload_data_t *payload, uint8_t len) {
 	//send the udp packet
 
@@ -56,7 +65,7 @@ static void send_packet (payload_data_t *payload, uint8_t len) {
 /*---------------------------------------------------------------------------*/
 /*
  * Send Ack Packet
-*/
+ */
 static void send_ack(uint8_t seq_no) {
 	//send the udp packet
 	uint8_t ack_dis[1];
@@ -67,15 +76,45 @@ static void send_ack(uint8_t seq_no) {
 }
 /*---------------------------------------------------------------------------*/
 /*
+ * Function: Get distance reading from LV-MaxSonar®-EZ and return distance in Inch
+ * ADC channel: ADC1
+ * GPIO PIN: PortB(21)
+ */
+
+int read_ultrasound_ext(void){
+
+	static uint16_t ADCvalue;
+	static int16_t raw_volt_value; // ADC's Raw Volt Value in 16 unsigned bits
+	static int16_t VI=5859; //http://www.maxbotix.com/articles/016.htm [(Vcc/512)=VI] 0.005859
+	static int16_t volt_calibrated;
+	static int16_t RI;
+	static int16_t RI_decimal;
+
+	/*
+	 * The following function is responsible to intialize proper registers in STM32
+	 */
+
+	halStartAdcConversion(ADC_USER_APP2,ADC_REF_INT,ADC_SOURCE_ADC1_VREF2,ADC_CONVERSION_TIME_US_4096);
+	halReadAdcBlocking(ADC_USER_APP2, &ADCvalue);
+
+	// Add offset if needed: to calibrate the temperature: halConvertValueToVolts(ADCvalue)+SUPPLYOFFSET
+	raw_volt_value = halConvertValueToVolts(ADCvalue);
+	volt_calibrated = ((raw_volt_value+100)); //100 is offset
+	RI = (volt_calibrated*1000)/ VI ; // [(Vm/VI)=RI]
+	//PRINTF("%d.%d",RI/10,RI-(RI/10)*10);
+	return RI;
+}
+/*---------------------------------------------------------------------------*/
+/*
  * Get Temperature readings
  */
 int read_temperature(void)
 {
-    unsigned int temp = temperature_sensor.value(0);
-
-    //printf("Temp: %d.%d �C  \r",temp/10,temp-(temp/10)*10);
-    //printf("(X,Y,Z): (%d,%d,%d) mg      \r",acc_sensor.value(ACC_X_AXIS),acc_sensor.value(ACC_Y_AXIS),acc_sensor.value(ACC_Z_AXIS));
-    return (temp/10);
+	unsigned int temp = temperature_sensor.value(0);
+	//printf("\n Size of Int:",sizeof(int));
+	//printf("Temp: %d.%d �C  \r",temp/10,temp-(temp/10)*10);
+	//printf("(X,Y,Z): (%d,%d,%d) mg      \r",acc_sensor.value(ACC_X_AXIS),acc_sensor.value(ACC_Y_AXIS),acc_sensor.value(ACC_Z_AXIS));
+	return (temp/10)-6;
 }
 /*---------------------------------------------------------------------------*/
 /*
@@ -103,9 +142,32 @@ void request_sensors(){
 	data_payload.type = (uint8_t *) REQ_SENSORS;
 	data_payload.data[index] = (uint8_t *) SENSOR_TEMP;	index++;
 	data_payload.data[index] = (uint8_t *) SENSOR_ACCEL;index++;
+#ifdef EXT_ULTRA
+	data_payload.data[index] = (uint8_t *) SENSOR_ULSOUND;index++;
+#endif
 	data_payload.pay_len = index;
 
 	//uip_udp_packet_sendto(udp_client_conn, &data_payload, index, &pc_ipaddr, UIP_HTONS(UDP_REMOTE_PORT));
+	send_packet(&data_payload,index);
+}
+/*---------------------------------------------------------------------------*/
+/*
+ * get_ultrasound()
+ */
+void get_ultrasound(){
+	PRINTF("\n Requested inch distance");
+	uint8_t index=0;
+	b32_t inch;
+	inch.value = read_ultrasound_ext();
+	PRINTF("\n inch: %d",inch.value);
+
+	data_payload.type = SENSOR_ULSOUND;
+	data_payload.data[index] = inch.byte[3]; index++;
+	data_payload.data[index] = inch.byte[2]; index++;
+	data_payload.data[index] = inch.byte[1]; index++;
+	data_payload.data[index] = inch.byte[0]; index++;
+	data_payload.pay_len = (uint8_t *) index;
+
 	send_packet(&data_payload,index);
 }
 /*---------------------------------------------------------------------------*/
@@ -205,7 +267,7 @@ void get_all_sensors(){
 	data_payload.data[index] = zaxis.byte[0];index++;
 
 	data_payload.pay_len = (uint8_t *) index;
-
+	//printf("\n TEMP: %d",temp.value);
 	//uip_udp_packet_sendto(udp_client_conn, &data_payload, index, &pc_ipaddr, UIP_HTONS(UDP_REMOTE_PORT));
 	send_packet(&data_payload,index);
 }
@@ -248,6 +310,11 @@ static void tcpip_handler(void) {
 			case SENSOR_ACCEL:
 				get_accel();
 				break;
+#ifdef EXT_ULTRA
+			case SENSOR_ULSOUND:
+				get_ultrasound();
+				break;
+#endif
 			default:
 				break;
 			}
@@ -279,22 +346,22 @@ static void set_global_address(void)
 /*---------------------------------------------------------------------------*/
 static void print_local_addresses(void)
 {
-  int i;
-  uint8_t state;
+	int i;
+	uint8_t state;
 
-  PRINTF("Client IPv6 addresses: ");
-  for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
-    state = uip_ds6_if.addr_list[i].state;
-    if(uip_ds6_if.addr_list[i].isused &&
-       (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) {
-      PRINT6ADDR(&uip_ds6_if.addr_list[i].ipaddr);
-      PRINTF("\n");
-      /* hack to make address "final" */
-      if (state == ADDR_TENTATIVE) {
-	uip_ds6_if.addr_list[i].state = ADDR_PREFERRED;
-      }
-    }
-  }
+	PRINTF("Client IPv6 addresses: ");
+	for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
+		state = uip_ds6_if.addr_list[i].state;
+		if(uip_ds6_if.addr_list[i].isused &&
+				(state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) {
+			PRINT6ADDR(&uip_ds6_if.addr_list[i].ipaddr);
+			PRINTF("\n");
+			/* hack to make address "final" */
+			if (state == ADDR_TENTATIVE) {
+				uip_ds6_if.addr_list[i].state = ADDR_PREFERRED;
+			}
+		}
+	}
 }
 
 
@@ -320,57 +387,73 @@ PROCESS_THREAD(discovery_process, ev, data){
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(wsn_driver_process, ev, data)
 {
-  static struct etimer wait_timer;
+	static struct etimer wait_timer;
 
-  PROCESS_BEGIN();
-  // TURN off RDC tp enable packet reception at all-time : (more energy consumption)
-  NETSTACK_MAC.off(1);
+	PROCESS_BEGIN();
+	// TURN off RDC tp enable packet reception at all-time : (more energy consumption)
+	NETSTACK_MAC.off(1);
 
-  PROCESS_PAUSE();
+	PROCESS_PAUSE();
 
-  leds_on(LEDS_RED);
-  /*
-   * Standard Procedure to Create UDP Connection with Server
-   * This is a UDP Client Process:
-   */
-  set_global_address();
+	leds_on(LEDS_RED);
+	/*
+	 * Standard Procedure to Create UDP Connection with Server
+	 * This is a UDP Client Process:
+	 */
+	set_global_address();
 
-  PRINTF("UDP client process started\n");
+	PRINTF("UDP client process started\n");
 
-  print_local_addresses();
+	print_local_addresses();
 
-  /* receive connection from any (0) host */
-  udp_client_conn = udp_new(NULL, UIP_HTONS(0), NULL);
-  udp_bind(udp_client_conn, UIP_HTONS(UDP_LOCAL_PORT));
+	/* receive connection from any (0) host */
+	udp_client_conn = udp_new(NULL, UIP_HTONS(0), NULL);
+	udp_bind(udp_client_conn, UIP_HTONS(UDP_LOCAL_PORT));
 
-  /*
-   * Activate Sensors: Should Be moved to Activate Sensors Functions:
-   */
-  SENSORS_ACTIVATE(acc_sensor);
-  SENSORS_ACTIVATE(temperature_sensor);
-  SENSORS_ACTIVATE(button_sensor);
-  boardPrintStringDescription();
-  printf(" \n Initializing All Sensors \r\n");
-  // Standard Procedure
-  leds_off(LEDS_RED);
+#ifdef EXT_ULTRA
+	/*
+	 * External Ultrasound sensor activation
+	 */
+	//Init HAL
+	halInternalInitAdc();
+	halAdcSetRange(TRUE);
+	//PB6 to Analog mode
+	halGpioConfig(PORTB_PIN(6), GPIOCFG_ANALOG);
+	//Calibrate
+	halAdcCalibrate(ADC_USER_APP2);
+#endif
 
-  process_start(&discovery_process,NULL);
+	/*
+	 * Activate Sensors: Should Be moved to Activate Sensors Functions:
+	 */
+	SENSORS_ACTIVATE(acc_sensor);
+	SENSORS_ACTIVATE(temperature_sensor);
+	SENSORS_ACTIVATE(button_sensor);
 
-  while(1) {
-	  PROCESS_YIELD(); // waits until something happens
+	boardPrintStringDescription();
 
-	  if(ev == tcpip_event) { //occurs when a packet is received
-		  tcpip_handler(); //execute this function
-	  }
+	//printf(" \n Initializing All Sensors \r\n");
+	// Standard Procedure
+	leds_off(LEDS_RED);
+	//printf("\n Size of int %d, float %d , long double %d,",sizeof(int),sizeof(float),sizeof(double));
+	//process_start(&discovery_process,NULL);
 
-	  /*
-	   * Testing
-	  PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event && data == &button_sensor);
-	  leds_toggle(LEDS_RED);
-	  //get_temperature();
-	  get_all_sensors();
-	  */
-  }
-  PROCESS_END();
+	while(1) {
+		PROCESS_YIELD(); // waits until something happens
+
+		if(ev == tcpip_event) { //occurs when a packet is received
+			tcpip_handler(); //execute this function
+		}
+
+		/*
+		 * Testing
+		 */
+		PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event && data == &button_sensor);
+		leds_toggle(LEDS_RED);
+		get_ultrasound();
+		//get_all_sensors();
+
+	}
+	PROCESS_END();
 }
 
