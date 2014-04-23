@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, ISMB. pervasive technologies.
+ * Copyright (c) 2010, ISMB, Pervasive Technologies
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,10 +32,11 @@
 
 /**
  * \file
- *         A very simple Contiki application showing how to use the ultrasound sensor
+ *         A very simple Contiki application showing how to use the Ultrasound
  *			sensor.
  * \author
  *         Prabhakaran Kasinathan <kasinathan@ismb.it>
+ *
  */
 
 #include "contiki.h"
@@ -55,15 +56,15 @@
 #include "hal/micro/adc.h"
 
 /*
- * Function: Get Temperature from PT100 and return Temp in *c
+ * Function: Get inch value from Ultrasound sensor and return Temp in *c
  * ADC channel: ADC1
  * GPIO PIN: PortB(21)
  */
 
-unsigned int get_temperature_ext(void){
+unsigned int get_ultrasound_ext(void){
 	 static uint16_t ADCvalue;
 	 static int16_t raw_volt_value; // ADC's Raw Volt Value in 16 unsigned bits
-	 static int16_t VI=5859; //http://www.maxbotix.com/articles/016.htm [(Vcc/512)=VI] 0.005859
+	 static int16_t VI=5859; //http://www.maxbotix.com/articles/016.htm [it is read as 3 volt(Vcc/512)=VI] 0.005859
 	 static int16_t volt_calibrated;
 	 static int16_t RI;
 	 static int16_t RI_decimal;
@@ -84,7 +85,7 @@ unsigned int get_temperature_ext(void){
 
 }
 /*---------------------------------------------------------------------------*/
-PROCESS(temp_process, "ultrasound process");
+PROCESS(ultra_process, "ultrasound process");
 AUTOSTART_PROCESSES(&ultra_process);
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(ultra_process, ev, data)
@@ -92,13 +93,13 @@ PROCESS_THREAD(ultra_process, ev, data)
   static struct etimer etimer;
   
   PROCESS_BEGIN();
-	//Init HAL
-	halInternalInitAdc();
-	halAdcSetRange(TRUE);
-	//PB6 to Analog mode
-	halGpioConfig(PORTB_PIN(6), GPIOCFG_ANALOG);
-	//Calibrate
-	halAdcCalibrate(ADC_USER_APP2);
+  //Init HAL
+  halInternalInitAdc();
+  halAdcSetRange(TRUE);
+  //PB6 to Analog mode
+  halGpioConfig(PORTB_PIN(6), GPIOCFG_ANALOG);
+  //Calibrate
+  halAdcCalibrate(ADC_USER_APP2);
 	
   boardPrintStringDescription();
   printf("Starting measuring ultrasound sensor\r\n");
@@ -108,7 +109,7 @@ PROCESS_THREAD(ultra_process, ev, data)
     
     PROCESS_WAIT_UNTIL(etimer_expired(&etimer));
     
-    unsigned int temp = get_temperature_ext();
+    unsigned int RI = get_ultrasound_ext();
     printf("%d.%d",RI/10,RI-(RI/10)*10);
   }
   
