@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, STMicroelectronics.
+ * Copyright (c) 2010, ISMB. pervasive technologies.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,11 +32,10 @@
 
 /**
  * \file
- *         A very simple Contiki application showing how to use the temperature
+ *         A very simple Contiki application showing how to use the ultrasound sensor
  *			sensor.
  * \author
- *         Salvatore Pitrulli <salvopitru@users.sourceforge.net>
- *
+ *         Prabhakaran Kasinathan <kasinathan@ismb.it>
  */
 
 #include "contiki.h"
