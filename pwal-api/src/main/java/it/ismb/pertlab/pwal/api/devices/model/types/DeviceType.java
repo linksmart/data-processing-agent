@@ -8,5 +8,7 @@ public class DeviceType {
 	public static final String ACCELEROMETER = "pwal:Accelerometer";
 	public static final String LIGHT_SENSOR = "pwal:LightSensor";
 	public static final String HUMIDITY_SENSOR = "pwal:HumiditySensor";
+	public static final String DISTANCE_SENSOR = "pwal:DistanceSensor";
+	public static final String SEMAPHORE = "pwal:Semaphore";
 	
 }

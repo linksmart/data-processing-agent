@@ -7,22 +7,28 @@
     <bean id="PWAL" class="it.ismb.pertlab.pwal.PwalImpl">
     	<constructor-arg>
     		<list value-type="it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager">
-<!--     			<ref bean="thermometerFakeManager"/>  -->
-<!--     			<ref bean="oxygenFakeManager"/> -->
-<!--     			<ref bean="bluetoothThermometerDriver"/> -->
-				<ref bean="wsnManager"/>
+<!-- 				<ref bean="wsnManager"/> -->
 <!-- 				<ref bean="bluetoothManager"/> -->
+				<ref bean="serialManager"/>
     		</list>
     	</constructor-arg>
     </bean>
- 	<bean id="thermometerFakeManager" class="it.ismb.pertlab.pwal.manager.thermometer.ThermometerFakeManager"/> 
-	<bean id="oxygenFakeManager" class="it.ismb.pertlab.pwal.manager.oxygenmeter.OxygenmeterFakeManager"/>
-<!-- 	<bean id="bluetoothThermometerDriver" class="it.ismb.pertlab.pwal.driver.thermometer_driver.BluetoothThermometerDriver"/> -->
-	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/>
-	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.thermometer.ThermometerManager">
+<!-- 	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/> -->
+<!-- 	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.thermometer.ThermometerManager"> -->
+<!-- 		<constructor-arg> -->
+<!-- 			<map> -->
+<!-- 				<entry key="00123EFF29DB" value="it.ismb.pertlab.pwal.manager.bluetooth.device.ThermometerDevice"/> -->
+<!-- 			</map> -->
+<!-- 		</constructor-arg> -->
+<!-- 	</bean> -->
+	<bean id="serialManager" class="it.ismb.pertlab.pwal.serialmanager.SerialManager">
+		<constructor-arg type="java.lang.String" value="/dev/ttyACM0"/>
 		<constructor-arg>
 			<map>
-				<entry key="00123EFF29DB" value="it.ismb.pertlab.pwal.manager.thermometer.device.ThermometerDevice"/>
+				<!-- List of sensors that can be provided by this serial device -->
+				<!-- key=sensor_id value=device_type -->
+				<entry key="ULTRASOUND1" value="it.ismb.pertlab.pwal.manager.serial.device.UltrasoundDistanceSensor"/>
+				<entry key="SEMAPHORE1" value="it.ismb.pertlab.pwal.manager.serial.device.ArduinoSemaphore"/>
 			</map>
 		</constructor-arg>
 	</bean>

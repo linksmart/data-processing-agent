@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
+import it.ismb.pertlab.pwal.api.devices.model.Semaphore;
+import it.ismb.pertlab.pwal.api.devices.model.Semaphore.State;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
@@ -47,6 +49,17 @@ public class App
         			}else if(de.getType().equals(DeviceType.OXYGEN_METER)){
                 		OxyMeter om=(OxyMeter)de;
                 		System.out.println("This is an oxymeter: saturation="+om.getSaturation());
+        			}else if(de.getType().equals(DeviceType.SEMAPHORE)){
+        				System.out.println("Digita state per interrogare il semaforo o GREEN, YELLOW, RED per forzare il valore");
+        				command=input.nextLine();
+        				Semaphore s=(Semaphore) de;
+        				if(command.equals("state"))
+        				{
+        					System.out.println("Stato del semaforo: "+s.getState());
+        				}else{
+        					s.setState(State.valueOf(command));
+        				}
+        				
         			}
         			break;
         	}

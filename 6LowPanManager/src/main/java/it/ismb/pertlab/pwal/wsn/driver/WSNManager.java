@@ -157,15 +157,15 @@ public class WSNManager extends DevicesManager{
 	
 	public void dispatchMessage(IMessage data)
 	{
+		//get the type of the sensor who has generated the response
+		byte type=data.getPayload()[0];
+		String pwalType=Definitions.getCorresponsidngDeviceType(type);
+
 		//searching the correct sensor
 		for(Device d:super.devicesDiscovered.values())
 		{
 			WSNBaseDevice bd=(WSNBaseDevice) d;
-			
-			//get the type of the sensor who has generated the response
-			byte type=data.getPayload()[0];
-			String pwalType=Definitions.getCorresponsidngDeviceType(type);
-			
+				
 			log.debug("Searching the correct sensor for device "+bd.getAddress()+" and type "+pwalType);
 			if(bd.getAddress().equals(data.getSrcAddress()) && d.getType().equals(pwalType))
 			{
