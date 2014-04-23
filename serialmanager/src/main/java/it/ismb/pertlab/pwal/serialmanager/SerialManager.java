@@ -37,7 +37,7 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 		try {
 			port= new SerialPort(portString);
 			port.openPort();
-	    	port.setParams(9600,
+	    	port.setParams(115200,
 	    		    SerialPort.DATABITS_8,
 	    		    SerialPort.STOPBITS_1,
 	    		    SerialPort.PARITY_NONE);
@@ -125,7 +125,7 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 				byte[] bl=justread.getBytes();
 				for(int i=0; i<bl.length; i++)
 				{
-					log.debug("put message in the queue: "+(char)bl[i]);
+					//log.debug("put message in the queue: "+(char)bl[i]);
 					queue.put(bl[i]);
 				}
             }
@@ -160,6 +160,10 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 				return;
 			}
 			BaseSerialDevice d=(BaseSerialDevice) devicesDiscovered.get(data[0]);
+			if(d==null)
+			{
+				return;
+			}
 			String payload="";
 			for(int i=1; i<data.length; i++)
 				payload+=data[i];
