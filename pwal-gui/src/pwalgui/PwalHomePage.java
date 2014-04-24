@@ -10,60 +10,87 @@ import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.application.AbstractEntryPoint;
 import org.eclipse.rap.rwt.template.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 public class PwalHomePage extends AbstractEntryPoint {
-	
+
 	static Pwal p=null;
-	
-    @Override
-    protected void createContents(Composite parent) {
-    	
-    	
-    	/*
-    	 * Create Layout for PWAL 
-    	 */
-    	RowLayout parentLayout = new RowLayout();
-    	parentLayout.marginLeft = 5;
-    	parentLayout.marginTop = 5;
-    	parentLayout.marginRight = 5;
-    	parentLayout.marginBottom = 5;
-        parent.setLayout( parentLayout );
-        
-        /*
-         * Create PWAL instance only once, to avoid Serial Port Manager error
-         */
-    	if(PwalHomePage.p == null)
-    	{
-    		ApplicationContext c=new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
-    		PwalHomePage.p=(Pwal) c.getBean("PWAL");
-    	}
-    	
-    	/*
-    	 * Access the PWAL devices and display them somehow
-    	 */
-    	for(Device d:p.listDevices())
-    	{
-    		d.getId();
-        	if(d.getType().equals(DeviceType.THERMOMETER))
-        	{
-        		Thermometer term=(Thermometer) d;
-            	//Text t = new Text(parent, SWT.BOLD);
-            	//t.setText("\n"+d.getId()+" "+d.getType()+" "+term.getTemperature());        		
-        	}else if(d.getType().equals(DeviceType.ACCELEROMETER)){
-        		Accelerometer a=(Accelerometer) d;
-        	}
-    	}
-    	
-    	  /*	
+
+	/*
+	 * Layout defines
+	 * (non-Javadoc)
+	 * @see org.eclipse.rap.rwt.application.AbstractEntryPoint#createContents(org.eclipse.swt.widgets.Composite)
+	 */
+	private Composite header;
+	private Composite body;
+	private Tree tree;
+	private Composite exampleParent;
+	private Color backgroundColor;
+
+	@Override
+	protected void createContents(Composite parent) {
+
+
+		/*
+		 * Create Layout for PWAL 
+		 */
+		parent.setLayout( new FormLayout() );
+		backgroundColor = new Color( parent.getDisplay(), 0x31, 0x61, 0x9C );
+		header = new Composite( parent, SWT.NONE );
+		header.setBackground( backgroundColor );
+		header.setBackgroundMode( SWT.INHERIT_DEFAULT );
+		header.setLayoutData( createLayoutDataForHeader() );
+		Label label = new Label( header, SWT.NONE );
+		label.setText( "Physical World Adaptation Layer:PWAL" );
+		label.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_WHITE ) );
+		label.setBounds( 40, 30, 500, 30 );
+		
+		body = new Composite( header, SWT.NONE );
+		body.setLayoutData(createLayoutDataForHeader());
+		
+		//createPwalInstance();
+		
+		if(PwalHomePage.p == null)
+		{
+			ApplicationContext c=new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
+			PwalHomePage.p=(Pwal) c.getBean("PWAL");
+		}
+		
+
+		/*
+		 * Access the PWAL devices and display them somehow
+		 */
+		for(Device d:p.listDevices())
+		{
+			d.getId();
+			if(d.getType().equals(DeviceType.THERMOMETER))
+			{
+				Thermometer term=(Thermometer) d;
+				Label t = new Label(body, SWT.NONE);
+				t.setText("\n"+d.getId()+" "+d.getType()+" "+term.getTemperature());  
+				
+			}else if(d.getType().equals(DeviceType.ACCELEROMETER)){
+				Accelerometer a=(Accelerometer) d;
+				Text t = new Text(body, SWT.NONE);
+				t.setText("\n"+d.getId()+" "+d.getType()+" x,y,z"+a.getXAcceleration()+a.getYAcceleration()+a.getZAcceleration());   
+			}
+		}
+
+		/*	
     	Table table = new Table( parent, SWT.FULL_SELECTION );
     	new TableColumn( table, SWT.NONE ); // important
     	Template template = new Template();
@@ -73,7 +100,30 @@ public class PwalHomePage extends AbstractEntryPoint {
     	table.setData( RWT.ROW_TEMPLATE, template );
     	TableItem item = new TableItem( table, SWT.NONE );
     	item.setText( 0, "Data in the first column" );
-    	*/
-    }
+		 */
+	}
+	
+	/*
+	 * Create PWAL instance
+	 */
+	private void createPwalInstance(){
+
+		/*
+		 * Create PWAL instance only once, to avoid Serial Port Manager error
+		 */
+		
+	}
+
+	/*
+	 * Header Layout 
+	 */
+	private FormData createLayoutDataForHeader() {
+		FormData layoutData = new FormData();
+		layoutData.left = new FormAttachment( 0, 0 );
+		layoutData.right = new FormAttachment( 100, 0 );
+		layoutData.top = new FormAttachment( 0, 0 );
+		layoutData.height = 80;
+		return layoutData;
+	}
 
 }

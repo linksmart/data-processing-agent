@@ -13,7 +13,7 @@ public class PwalApplication implements ApplicationConfiguration {
 
     public void configure(Application application) {
         Map<String, String> properties = new HashMap<String, String>();
-        properties.put(WebClient.PAGE_TITLE, "Physical World Abstraction Layer (PWAL)");
+        properties.put(WebClient.PAGE_TITLE, "PWAL");
         application.addEntryPoint("/PWAL", PwalHomePage.class, properties);
         application.addStyleSheet( RWT.DEFAULT_THEME_ID, "theme/theme.css" );
     }
