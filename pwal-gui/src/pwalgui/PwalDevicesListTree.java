@@ -1,11 +1,8 @@
 package pwalgui;
 
-import org.eclipse.rap.examples.ExampleUtil;
-import org.eclipse.rap.examples.IExamplePage;
-import org.eclipse.swt.widgets.Composite;
 
-public class PwalDevicesListTree implements IExamplePage {
-
+public class PwalDevicesListTree {//implements IExamplePage {
+/*
 	@Override
 	public void createControl(Composite parent) {
 		// TODO Auto-generated method stub
@@ -15,7 +12,7 @@ public class PwalDevicesListTree implements IExamplePage {
 		
 	}
 	
-	
+	*/
 	
 
 }
