@@ -49,8 +49,6 @@ public class PwalHomePage extends AbstractEntryPoint {
 	 * @see org.eclipse.rap.rwt.application.AbstractEntryPoint#createContents(org.eclipse.swt.widgets.Composite)
 	 */
 	private Composite header;
-	private Composite body;
-	private Tree tree;
 	private Composite exampleParent;
 	private Color backgroundColor;
 	private Color backgroundColor1;
@@ -118,7 +116,6 @@ public class PwalHomePage extends AbstractEntryPoint {
 			}
 
 		}
-
 
 	}
 
