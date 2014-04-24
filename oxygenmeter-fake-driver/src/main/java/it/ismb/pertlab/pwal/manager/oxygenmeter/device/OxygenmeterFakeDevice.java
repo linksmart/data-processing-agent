@@ -1,11 +1,14 @@
 package it.ismb.pertlab.pwal.manager.oxygenmeter.device;
 
+import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 
 public class OxygenmeterFakeDevice implements OxyMeter {
 
 	private String id;
+	private String updatedAt;
+	private Location location;
 	private final String type=DeviceType.OXYGEN_METER;
 	
 	@Override
@@ -28,4 +31,23 @@ public class OxygenmeterFakeDevice implements OxyMeter {
 		return (int) (((100-95)*Math.random())+95);
 	}
 
+	@Override
+	public String getUpdatedAt() {
+		return updatedAt;
+	}
+
+	@Override
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public Location getLocation() {
+		return location;
+	}
+
+	@Override
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 }

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 
 /**
@@ -31,6 +32,8 @@ public class ThermometerDevice implements Thermometer {
 	private DataOutputStream out = null;
 	private DataInputStream in = null;
 	private String id;
+	private String updatedAt;
+	private Location location;
 	private final String type="pwal:Thermometer";
 	private DevicesManager parent;
 	
@@ -303,5 +306,26 @@ public class ThermometerDevice implements Thermometer {
 	         .append(HEXES.charAt((b & 0x0F)));
 	    }
 	    return hex.toString();
+	}
+	
+	
+	@Override
+	public String getUpdatedAt() {
+		return updatedAt;
+	}
+
+	@Override
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public Location getLocation() {
+		return location;
+	}
+
+	@Override
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 }

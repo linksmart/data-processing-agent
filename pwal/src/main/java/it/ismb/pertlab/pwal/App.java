@@ -3,7 +3,10 @@ package it.ismb.pertlab.pwal;
 import java.util.Scanner;
 
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.model.HumiditySensor;
+import it.ismb.pertlab.pwal.api.devices.model.LightSensor;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
+import it.ismb.pertlab.pwal.api.devices.model.PressureSensor;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
@@ -47,6 +50,15 @@ public class App
         			}else if(de.getType().equals(DeviceType.OXYGEN_METER)){
                 		OxyMeter om=(OxyMeter)de;
                 		System.out.println("This is an oxymeter: saturation="+om.getSaturation());
+        			} else if(de.getType().equals(DeviceType.HUMIDITY_SENSOR)) {
+        				HumiditySensor hs = (HumiditySensor) de;
+        				System.out.println("This is an humidity sensor: humidity="+hs.getHumidity());
+        			} else if(de.getType().equals(DeviceType.LIGHT_SENSOR)) {
+        				LightSensor ls = (LightSensor) de;
+        				System.out.println("This is a light sensor: light="+ls.getLight());
+        			} else if(de.getType().equals(DeviceType.PRESSURE_SENSOR)) {
+        				PressureSensor ps = (PressureSensor) de;
+        				System.out.println("This is a pressure sensor: pressure="+ps.getPressure());
         			}
         			break;
         	}

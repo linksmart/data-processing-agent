@@ -1,5 +1,7 @@
 package it.ismb.pertlab.pwal.api.devices.interfaces;
 
+import it.ismb.pertlab.pwal.api.devices.model.Location;
+
 public interface Device {
 	
 	/**
@@ -14,4 +16,31 @@ public interface Device {
 	 * Points the device taxonomy (es. Thermometer)
 	 */
 	String getType();
+	/**
+	 * Returns the time when the current value has been
+	 * updated the last time
+	 * 
+	 * @return last update
+	 */
+	String getUpdatedAt();
+	/**
+	 * Sets the last time when the current value has been updated
+	 * 
+	 * @param updatedAt
+	 *             time to set
+	 */
+	void setUpdatedAt(String updatedAt);
+	/**
+	 * Returns the location of the device
+	 * 
+	 * @return the location of the device
+	 */
+	Location getLocation();
+	/**
+	 * Sets the location of the device
+	 * 
+	 * @param location
+	 *             location to set
+	 */
+	void setLocation(Location location);
 }

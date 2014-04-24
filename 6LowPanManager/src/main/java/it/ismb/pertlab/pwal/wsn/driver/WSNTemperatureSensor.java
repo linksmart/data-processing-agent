@@ -1,5 +1,6 @@
 package it.ismb.pertlab.pwal.wsn.driver;
 
+import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.wsn.driver.customUDP.Definitions;
@@ -10,6 +11,8 @@ import java.util.Arrays;
 public class WSNTemperatureSensor extends WSNBaseDevice implements Thermometer{
 
 	private String id;
+	private String updatedAt;
+	private Location location;
 	private Double temperature;
 	
 	@Override
@@ -53,5 +56,25 @@ public class WSNTemperatureSensor extends WSNBaseDevice implements Thermometer{
 	private int getInt(byte [] payload, int start, int end){
 		ByteBuffer buf =  ByteBuffer.wrap(Arrays.copyOfRange( payload,  start, end) ); // big-endian by default
 		return buf.getInt();
+	}
+	
+	@Override
+	public String getUpdatedAt() {
+		return updatedAt;
+	}
+
+	@Override
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public Location getLocation() {
+		return location;
+	}
+
+	@Override
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 }
