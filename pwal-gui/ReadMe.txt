@@ -16,3 +16,8 @@ In the upcoming dialog confirm the default values, which starts the target insta
 3. Import the PWAL-GUI from git
 
 Run the file pwal-gui.launch -> run as -> pwal-gui
+
+-------
+Note:
+-------
+Eclipse browser will show 404 NOT found error, don't panic, just refresh the page once
