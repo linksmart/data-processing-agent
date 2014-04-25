@@ -51,15 +51,23 @@ public class PwalImpl implements Pwal, DeviceListener {
 
 	@Override
 	public void notifyDeviceAdded(Device newDevice) {
-//		newDevice.setId(this.generateId());
-		log.info("New PWAL device added: id {} type {}.", newDevice.getId(), newDevice.getType());
-		this.devices.put(newDevice.getId(), newDevice);
+		String generatedId = this.generateId();
+		log.info("New PWAL device added: generated id {} type {}.", generatedId, newDevice.getType());
+		this.devices.put(generatedId, newDevice);
 	}
 
 	@Override
 	public void notifyDeviceRemoved(Device removedDevice) {
-		log.info("New PWAL device removed: id {} type {}.", removedDevice.getId(), removedDevice.getType());
-		this.devices.remove(removedDevice);
+		String removedDeviceId = null;
+		for (String k : this.devices.keySet()) {
+			Device d = this.devices.get(k);
+			if(d.getId().equals(removedDevice.getId()))
+			{
+				log.info("New PWAL device removed: id {} type {}.", removedDeviceId, removedDevice.getType());
+				this.devices.remove(removedDeviceId);
+				return;
+			}
+		}
 	}
 
 	@Override
@@ -79,5 +87,4 @@ public class PwalImpl implements Pwal, DeviceListener {
 		}
 		return res;
 	}
-
 }

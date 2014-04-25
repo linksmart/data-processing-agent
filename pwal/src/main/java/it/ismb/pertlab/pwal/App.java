@@ -5,8 +5,10 @@ import java.util.Scanner;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore;
+import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore.State;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 
@@ -42,15 +44,17 @@ public class App
         			System.out.println("Inserisci l'indice da interrogare:");
         			command=input.nextLine();
         			Device de=(Device)p.listDevices().toArray()[Integer.parseInt(command)];
-        			if(de.getType().equals(DeviceType.THERMOMETER))
-        			{
-        				Thermometer t=(Thermometer) de;
-                		System.out.println("This is a thermometer id="+de.getId()+"  temp="+t.getTemperature());
-        			}else if(de.getType().equals(DeviceType.OXYGEN_METER)){
+        			switch (de.getType()) {
+					case DeviceType.THERMOMETER:
+						Thermometer t=(Thermometer) de;
+                		System.out.println("This is a thermometer id="+de.getId()+"  temp="+t.getTemperature());						
+						break;
+					case DeviceType.OXYGEN_METER:
                 		OxyMeter om=(OxyMeter)de;
                 		System.out.println("This is an oxymeter: saturation="+om.getSaturation());
-        			}else if(de.getType().equals(DeviceType.SEMAPHORE)){
-        				System.out.println("Digita state per interrogare il semaforo o GREEN, YELLOW, RED per forzare il valore");
+						break;
+					case DeviceType.SEMAPHORE:
+		 				System.out.println("Digita state per interrogare il semaforo o GREEN, YELLOW, RED per forzare il valore");
         				command=input.nextLine();
         				Semaphore s=(Semaphore) de;
         				if(command.equals("state"))
@@ -59,11 +63,35 @@ public class App
         				}else{
         					s.setState(State.valueOf(command));
         				}
-        				
-        			}
-        			break;
+						break;
+					case DeviceType.VEHICLE_COUNTER:
+						VehicleCounter vc = (VehicleCounter)de;
+						System.out.println("This is a Vehicle counter sensor. "
+								+ "Id: "+ vc.getId()
+								+ ", Latitude: " + vc.getLatitude()
+								+ ", Longitude: " + vc.getLongitude()
+								+ ", NetworkType: " + vc.getNetworkType()
+								+ ", Count: " + vc.getCount()
+								+ ", Occupancy: " + vc.getOccupancy() + "%");
+						break;
+					case DeviceType.VEHICLE_SPEED:
+						VehicleSpeed vs = (VehicleSpeed)de;
+						System.out.println("This is a Vehicle speed sensor. "
+								+ "Id: "+ vs.getId()
+								+ ", Latitude: " + vs.getLatitude()
+								+ ", Longitude: " + vs.getLongitude()
+								+ ", AverageSpeed: " + vs.getAverageSpeed()
+								+ ", NetworkType: " + vs.getNetworkType()
+								+ ", Count: " + vs.getCount()
+								+ ", MedianSpeed: " + vs.getMedianSpeed()
+								+ ", Occupancy: " + vs.getOccupancy() + "%");
+						break;
+					default:
+						break;
+					}
         	}
 
         }while(!command.equals("exit"));
+        input.close();
     }
 }

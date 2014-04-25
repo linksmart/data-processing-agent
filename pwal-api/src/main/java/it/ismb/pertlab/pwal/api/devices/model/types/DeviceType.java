@@ -10,5 +10,6 @@ public class DeviceType {
 	public static final String HUMIDITY_SENSOR = "pwal:HumiditySensor";
 	public static final String DISTANCE_SENSOR = "pwal:DistanceSensor";
 	public static final String SEMAPHORE = "pwal:Semaphore";
-	
+	public static final String VEHICLE_SPEED = "pwal:VehicleSpeed";
+	public static final String VEHICLE_COUNTER = "pwal:VehicleCounter";
 }
