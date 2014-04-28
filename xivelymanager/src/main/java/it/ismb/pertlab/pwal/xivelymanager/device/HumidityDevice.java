@@ -9,7 +9,9 @@ import com.xively.client.model.Datastream;
 
 import it.ismb.pertlab.pwal.api.devices.model.HumiditySensor;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.xivelymanager.utils.Utils;
 
 /**
  * Class used to drive an humidity sensor via xively
@@ -22,6 +24,7 @@ public class HumidityDevice implements HumiditySensor {
 	private String id;
 	private String updatedAt;
 	private Location location;
+	private Unit unit;
 	private final String type=DeviceType.HUMIDITY_SENSOR;
 	private DatastreamRequester req;
 	private String streamId;
@@ -76,12 +79,27 @@ public class HumidityDevice implements HumiditySensor {
 		this.location = location;
 	}
 
+	@Override
+	public Unit getUnit() {
+		return unit;
+	}
+
+
+	@Override
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 	
 	@Override
 	public Double getHumidity() {
 		Datastream stream = req.get(streamId);
 		if(stream.getValue()!=null) {
-			this.setUpdatedAt(stream.getUpdatedAt());
+			if(stream.getUpdatedAt()!=null) {
+				this.setUpdatedAt(stream.getUpdatedAt());
+			}
+			if(stream.getUnit()!=null) {
+				this.setUnit(Utils.convertUnit(stream.getUnit()));
+			}
 			LOG.info("Humidity value for "+stream.getId()+
 					" "+stream.getValue()+
 					((stream.getUnit()!=null) ? " "+stream.getUnit().getSymbol() : "") +

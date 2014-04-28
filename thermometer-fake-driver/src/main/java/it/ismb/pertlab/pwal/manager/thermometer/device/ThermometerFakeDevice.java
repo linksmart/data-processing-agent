@@ -2,6 +2,7 @@ package it.ismb.pertlab.pwal.manager.thermometer.device;
 
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 
 public class ThermometerFakeDevice implements Thermometer{
@@ -9,6 +10,7 @@ public class ThermometerFakeDevice implements Thermometer{
 	private String id;
 	private String updatedAt;
 	private Location location;
+	private Unit unit;
 	
 	@Override
 	public String getId() {
@@ -49,4 +51,14 @@ public class ThermometerFakeDevice implements Thermometer{
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+
+	@Override
+	public Unit getUnit() {
+		return unit;
+	}
+
+	@Override
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}	
 }

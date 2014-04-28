@@ -9,7 +9,9 @@ import com.xively.client.model.Datastream;
 
 import it.ismb.pertlab.pwal.api.devices.model.LightSensor;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.xivelymanager.utils.Utils;
 
 /**
  * Class used to drive a light sensor via xively
@@ -22,6 +24,7 @@ public class LightDevice implements LightSensor {
 	private String id;
 	private String updatedAt;
 	private Location location;
+	private Unit unit;
 	private final String type = DeviceType.LIGHT_SENSOR;
 	private DatastreamRequester req;
 	private String streamId;
@@ -77,12 +80,27 @@ public class LightDevice implements LightSensor {
 		this.location = location;
 	}
 
+	@Override
+	public Unit getUnit() {
+		return unit;
+	}
+
+
+	@Override
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 	
 	@Override
 	public Double getLight() {
 		Datastream stream = req.get(streamId);
 		if(stream.getValue()!=null) {
-			this.setUpdatedAt(stream.getUpdatedAt());
+			if(stream.getUpdatedAt()!=null) {
+				this.setUpdatedAt(stream.getUpdatedAt());
+			}
+			if(stream.getUnit()!=null) {
+				this.setUnit(Utils.convertUnit(stream.getUnit()));
+			}
 			LOG.info("Light value for "+stream.getId()+
 					" "+stream.getValue()+
 					((stream.getUnit()!=null) ? " "+stream.getUnit().getSymbol() : "") +

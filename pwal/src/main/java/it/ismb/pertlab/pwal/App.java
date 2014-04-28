@@ -46,19 +46,29 @@ public class App
         			if(de.getType().equals(DeviceType.THERMOMETER))
         			{
         				Thermometer t=(Thermometer) de;
-                		System.out.println("This is a thermometer id="+de.getId()+"  temp="+t.getTemperature());
+                		System.out.println("This is a thermometer id="+t.getId()+"  temp="+t.getTemperature()
+                				+ " " + (t.getUnit()==null ? "" : t.getUnit().getSymbol())
+                				+ (t.getUpdatedAt()==null ? "" : " updated at "+ t.getUpdatedAt()));
         			}else if(de.getType().equals(DeviceType.OXYGEN_METER)){
                 		OxyMeter om=(OxyMeter)de;
-                		System.out.println("This is an oxymeter: saturation="+om.getSaturation());
+                		System.out.println("This is an oxymeter: saturation="+om.getSaturation()
+                				+ " " + (om.getUnit()==null ? "" : om.getUnit().getSymbol())
+                				+ (om.getUpdatedAt()==null ? "" : " updated at "+ om.getUpdatedAt()));
         			} else if(de.getType().equals(DeviceType.HUMIDITY_SENSOR)) {
         				HumiditySensor hs = (HumiditySensor) de;
-        				System.out.println("This is an humidity sensor: humidity="+hs.getHumidity());
+        				System.out.println("This is an humidity sensor: humidity="+hs.getHumidity()
+                				+ " " + (hs.getUnit()==null ? "" : hs.getUnit().getSymbol())
+                				+ (hs.getUpdatedAt()==null ? "" : " updated at "+ hs.getUpdatedAt()));
         			} else if(de.getType().equals(DeviceType.LIGHT_SENSOR)) {
         				LightSensor ls = (LightSensor) de;
-        				System.out.println("This is a light sensor: light="+ls.getLight());
+        				System.out.println("This is a light sensor: light="+ls.getLight()
+                				+ " " + (ls.getUnit()==null ? "" : ls.getUnit().getSymbol())
+                				+ (ls.getUpdatedAt()==null ? "" : " updated at "+ ls.getUpdatedAt()));
         			} else if(de.getType().equals(DeviceType.PRESSURE_SENSOR)) {
         				PressureSensor ps = (PressureSensor) de;
-        				System.out.println("This is a pressure sensor: pressure="+ps.getPressure());
+        				System.out.println("This is a pressure sensor: pressure="+ps.getPressure()
+                				+ " " + (ps.getUnit()==null ? "" : ps.getUnit().getSymbol())
+                				+ (ps.getUpdatedAt()==null ? "" : " updated at "+ ps.getUpdatedAt()));
         			}
         			break;
         	}

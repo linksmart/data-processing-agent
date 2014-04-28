@@ -56,11 +56,11 @@ public final class Utils {
 	 * by the xivley library in the it.ismb.pertlab.pwal.api.devices.model.Unit used by the PWAL model
 	 * 
 	 * @param unit
-	 *             the location parsed by the xively library 
+	 *             the unit parsed by the xively library 
 	 *             
 	 * @return the unit to be used in the PWAL
 	 */
-	public static it.ismb.pertlab.pwal.api.devices.model.Unit convertLocation(Unit unit) {
+	public static it.ismb.pertlab.pwal.api.devices.model.Unit convertUnit(Unit unit) {
 		it.ismb.pertlab.pwal.api.devices.model.Unit result = new it.ismb.pertlab.pwal.api.devices.model.Unit();
 		result.setSymbol(unit.getLabel()==null ? "" : unit.getSymbol().toString());
 		result.setType(unit.getUnitType()==null ? "" : unit.getUnitType().toString());

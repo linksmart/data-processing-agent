@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 
 /**
  * Class used to drive a Taidoc td-1261
@@ -34,6 +35,7 @@ public class ThermometerDevice implements Thermometer {
 	private String id;
 	private String updatedAt;
 	private Location location;
+	private Unit unit;
 	private final String type="pwal:Thermometer";
 	private DevicesManager parent;
 	
@@ -327,5 +329,15 @@ public class ThermometerDevice implements Thermometer {
 	@Override
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	@Override
+	public Unit getUnit() {
+		return unit;
+	}
+
+	@Override
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 }

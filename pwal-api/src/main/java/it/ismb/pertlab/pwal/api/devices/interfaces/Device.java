@@ -1,6 +1,7 @@
 package it.ismb.pertlab.pwal.api.devices.interfaces;
 
 import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 
 public interface Device {
 	
@@ -43,4 +44,17 @@ public interface Device {
 	 *             location to set
 	 */
 	void setLocation(Location location);
+	/**
+	 * Returns the unit of the measure done by the device
+	 * 
+	 * @return the unit of the measure
+	 */
+	Unit getUnit();
+	/**
+	 * Sets the unit of the measure done by the device
+	 * 
+	 * @param 
+	 * 				the unit to set
+	 */
+	void setUnit(Unit unit);
 }

@@ -2,6 +2,7 @@ package it.ismb.pertlab.pwal.wsn.driver;
 
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.wsn.driver.customUDP.Definitions;
 
@@ -13,6 +14,7 @@ public class WSNTemperatureSensor extends WSNBaseDevice implements Thermometer{
 	private String id;
 	private String updatedAt;
 	private Location location;
+	private Unit unit;
 	private Double temperature;
 	
 	@Override
@@ -76,5 +78,17 @@ public class WSNTemperatureSensor extends WSNBaseDevice implements Thermometer{
 	@Override
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	@Override
+	public Unit getUnit() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUnit(Unit unit) {
+		// TODO Auto-generated method stub
+		
 	}
 }

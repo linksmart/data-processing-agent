@@ -9,8 +9,9 @@ import com.xively.client.model.Datastream;
 
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.PressureSensor;
-import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.xivelymanager.utils.Utils;
 
 /**
  * Class used to drive a thermometer via xively
@@ -23,6 +24,7 @@ public class PressureDevice implements PressureSensor {
 	private String id;
 	private String updatedAt;
 	private Location location;
+	private Unit unit;
 	private final String type = DeviceType.PRESSURE_SENSOR;
 	private DatastreamRequester req;
 	private String streamId;
@@ -78,12 +80,27 @@ public class PressureDevice implements PressureSensor {
 		this.location = location;
 	}
 
+	@Override
+	public Unit getUnit() {
+		return unit;
+	}
+
+
+	@Override
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 	
 	@Override
 	public Double getPressure() {
 		Datastream stream = req.get(streamId);
 		if(stream.getValue()!=null) {
-			this.setUpdatedAt(stream.getUpdatedAt());
+			if(stream.getUpdatedAt()!=null) {
+				this.setUpdatedAt(stream.getUpdatedAt());
+			}
+			if(stream.getUnit()!=null) {
+				this.setUnit(Utils.convertUnit(stream.getUnit()));
+			}
 			LOG.info("Pressure value for "+stream.getId()+
 					" "+stream.getValue()+
 					((stream.getUnit()!=null) ? " "+stream.getUnit().getSymbol() : "") +

@@ -9,8 +9,10 @@ import com.xively.client.model.Datastream;
 
 import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.xivelymanager.utils.AccelerationAxis;
+import it.ismb.pertlab.pwal.xivelymanager.utils.Utils;
 
 /**
  * Class used to drive an acceleremoter via xively
@@ -23,6 +25,7 @@ public class AccelerometerDevice implements Accelerometer {
 	private String id;
 	private String updatedAt;
 	private Location location;
+	private Unit unit;
 	private final String type = DeviceType.ACCELEROMETER;
 	private DatastreamRequester req;
 	private String [] streamIds;
@@ -35,7 +38,6 @@ public class AccelerometerDevice implements Accelerometer {
 	 * 
 	 */
 	public AccelerometerDevice(Integer feedID) {
-		
 		req = XivelyService.instance().datastream(feedID);
 		id = feedID+streamIds[0];
 	}
@@ -134,7 +136,12 @@ public class AccelerometerDevice implements Accelerometer {
 	private Double getAcceleration(AccelerationAxis axis) {
 		Datastream stream = req.get(streamIds[axis.ordinal()]);
 		if(stream.getValue()!=null) {
-			this.setUpdatedAt(stream.getUpdatedAt());
+			if(stream.getUpdatedAt()!=null) {
+				this.setUpdatedAt(stream.getUpdatedAt());
+			}
+			if(stream.getUnit()!=null) {
+				this.setUnit(Utils.convertUnit(stream.getUnit()));
+			}
 			LOG.info("value of acceleration on axis "+axis.name()+" for "+stream.getId()+
 					" "+stream.getValue()+
 					((stream.getUnit()!=null) ? " "+stream.getUnit().getSymbol() : "") +
@@ -144,5 +151,17 @@ public class AccelerometerDevice implements Accelerometer {
 			LOG.error("Current value of acceleration on axis "+axis.name()+" for "+stream.getId()+" not available");
 			return 0.0;
 		}
+	}
+
+
+	@Override
+	public Unit getUnit() {
+		return unit;
+	}
+
+
+	@Override
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}	
 }

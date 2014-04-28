@@ -2,6 +2,7 @@ package it.ismb.pertlab.pwal.manager.oxygenmeter.device;
 
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 
 public class OxygenmeterFakeDevice implements OxyMeter {
@@ -9,6 +10,7 @@ public class OxygenmeterFakeDevice implements OxyMeter {
 	private String id;
 	private String updatedAt;
 	private Location location;
+	private Unit unit;
 	private final String type=DeviceType.OXYGEN_METER;
 	
 	@Override
@@ -49,5 +51,15 @@ public class OxygenmeterFakeDevice implements OxyMeter {
 	@Override
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	@Override
+	public Unit getUnit() {
+		return unit;
+	}
+
+	@Override
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 }

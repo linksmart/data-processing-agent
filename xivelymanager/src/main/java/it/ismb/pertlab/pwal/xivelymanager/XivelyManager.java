@@ -44,9 +44,6 @@ public class XivelyManager extends DevicesManager {
 		}
 	}
 	
-	
-	
-	
 	@Override
 	public void run() {
 		while(!t.isInterrupted()) {
