@@ -41,7 +41,7 @@ import ch.qos.logback.core.Context;
 
 public class PwalHomePage extends AbstractEntryPoint {
 
-	static Pwal p=null;
+	private static Pwal p=null;
 
 	/*
 	 * Layout defines
