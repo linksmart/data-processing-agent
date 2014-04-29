@@ -108,11 +108,11 @@ public class PwalHomePage extends AbstractEntryPoint {
 			if(d.getType().equals(DeviceType.THERMOMETER))
 			{
 				Thermometer temp=(Thermometer) d;
-				l1.setText("\n Sensor: "+d.getId()+" "+d.getType()+" :"+temp.getTemperature()+" C");  
+				l1.setText("\n Sensor:"+d.getId()+"\t|"+d.getType()+" :"+temp.getTemperature()+" C");  
 
 			} else if(d.getType().equals(DeviceType.ACCELEROMETER)){
 				Accelerometer a=(Accelerometer) d;
-				l2.setText("\n Sensor:"+d.getId()+" "+d.getType()+" x,y,z"+a.getXAcceleration()+a.getYAcceleration()+a.getZAcceleration());   
+				l2.setText("\n Sensor:"+d.getId()+"\t|"+d.getType()+" x,y,z"+a.getXAcceleration()+a.getYAcceleration()+a.getZAcceleration());   
 			}
 
 		}
