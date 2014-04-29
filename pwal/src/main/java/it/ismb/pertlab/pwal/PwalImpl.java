@@ -40,8 +40,8 @@ public class PwalImpl implements Pwal, DeviceListener {
 		return devices.get(id);
 	}
 
-	public Collection<Device> listDevices() {
-		return devices.values();
+	public HashMap<String, Device> getDevicesMap() {
+		return devices;
 	}
 	
 	private String generateId()

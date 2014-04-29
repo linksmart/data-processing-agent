@@ -1,6 +1,7 @@
 package it.ismb.pertlab.pwal.smartsantander.datamodel.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SmartSantanderTrafficIntensityJson {
 
@@ -12,8 +13,10 @@ public class SmartSantanderTrafficIntensityJson {
 	Double occupancy;
 	Double count;
 	@JsonIgnore
+	@JsonProperty("median_speed")
 	Double median_speed;
 	@JsonIgnore
+	@JsonProperty("average_speed")
 	Double average_speed;
 	
 	public String getNodeId() {

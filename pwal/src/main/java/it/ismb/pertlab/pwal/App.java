@@ -35,15 +35,15 @@ public class App
         		case "L":
         			System.out.println("Devices list:");
         			int i=0;
-        			for(Device d:p.listDevices())
-        		    {
-			        	System.out.println((i++)+") id: "+d.getId()+" type: "+d.getType());
-        		    }
+        			for (String k : p.getDevicesMap().keySet()) {
+						Device d = p.getDevice(k);
+						System.out.println((i++)+") pwalId: "+ k +" id: "+d.getId()+" type: "+d.getType());
+					}
         			break;
         		case "Q":
         			System.out.println("Inserisci l'indice da interrogare:");
         			command=input.nextLine();
-        			Device de=(Device)p.listDevices().toArray()[Integer.parseInt(command)];
+        			Device de=(Device)p.getDevicesMap().values().toArray()[Integer.parseInt(command)];
         			switch (de.getType()) {
 					case DeviceType.THERMOMETER:
 						Thermometer t=(Thermometer) de;
@@ -80,10 +80,10 @@ public class App
 								+ "Id: "+ vs.getId()
 								+ ", Latitude: " + vs.getLatitude()
 								+ ", Longitude: " + vs.getLongitude()
-								+ ", AverageSpeed: " + vs.getAverageSpeed()
+								+ ", AverageSpeed: " + vs.getAverageSpeed() + "Km/h"
 								+ ", NetworkType: " + vs.getNetworkType()
 								+ ", Count: " + vs.getCount()
-								+ ", MedianSpeed: " + vs.getMedianSpeed()
+								+ ", MedianSpeed: " + vs.getMedianSpeed() + "Km/h"
 								+ ", Occupancy: " + vs.getOccupancy() + "%");
 						break;
 					default:

@@ -49,11 +49,16 @@ public class SmartSantanderManager extends DevicesManager
 					}
 				}
 				//Removing devices no more available. Separate cycle to avoid collection changing while ciclying on it
-				log.debug("Removing no more present devices...");
-				for (Device device : toBeRemoved) {
-					log.debug("Removing {}.",device);
-					this.devicesDiscovered.remove(device);
+				log.info("Removing no more present devices...");
+				if(toBeRemoved.size() != 0)
+				{
+					for (Device device : toBeRemoved) {
+						log.debug("Removing {}.",device);
+						this.devicesDiscovered.remove(device);
+					}
 				}
+				else
+					log.info("No device removed since last devices list request.");
 				
 				for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes) {
 					switch (smartSantanderSingleNodeJson.getType()) {

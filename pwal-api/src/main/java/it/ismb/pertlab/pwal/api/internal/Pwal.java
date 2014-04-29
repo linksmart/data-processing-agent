@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal.api.internal;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 public interface Pwal {
 
@@ -18,7 +19,7 @@ public interface Pwal {
 	 * 
 	 * @return a list of subclass of Device (see the device taxonomy) 
 	 */
-	Collection<Device> listDevices();
+	HashMap<String, Device> getDevicesMap();
 	
 	/**
 	 * Provides devices of a given type (e.g. pwal:Temperature)
