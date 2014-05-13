@@ -61,30 +61,33 @@ public class SmartSantanderManager extends DevicesManager
 					log.info("No device removed since last devices list request.");
 				
 				for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes) {
-					switch (smartSantanderSingleNodeJson.getType()) {
-					case SmartSantaderDeviceTypes.VEHICLE_COUNTER:
-						SmartSantanderVehicleCounterDevice vehicleCounter = new SmartSantanderVehicleCounterDevice(this.restClient);
-						vehicleCounter.setId(smartSantanderSingleNodeJson.getNodeId());
-						vehicleCounter.setLatitude(smartSantanderSingleNodeJson.getLatitude());
-						vehicleCounter.setLongitude(smartSantanderSingleNodeJson.getLongitude());
-						this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleCounter);
-						for (DeviceListener l : deviceListener) {
-							l.notifyDeviceAdded(vehicleCounter);
+					if(!this.devicesDiscovered.containsKey(smartSantanderSingleNodeJson.getNodeId()))
+					{
+						switch (smartSantanderSingleNodeJson.getType()) {
+						case SmartSantaderDeviceTypes.VEHICLE_COUNTER:
+							SmartSantanderVehicleCounterDevice vehicleCounter = new SmartSantanderVehicleCounterDevice(this.restClient);
+							vehicleCounter.setId(smartSantanderSingleNodeJson.getNodeId());
+							vehicleCounter.setLatitude(smartSantanderSingleNodeJson.getLatitude());
+							vehicleCounter.setLongitude(smartSantanderSingleNodeJson.getLongitude());
+							this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleCounter);
+							for (DeviceListener l : deviceListener) {
+								l.notifyDeviceAdded(vehicleCounter);
+							}
+							break;
+						case SmartSantaderDeviceTypes.VEHICLE_SPEED:
+							SmartSantanderVehicleSpeedDevice vehicleSpeed = new SmartSantanderVehicleSpeedDevice(this.restClient);
+							vehicleSpeed.setId(smartSantanderSingleNodeJson.getNodeId());
+							vehicleSpeed.setLatitude(smartSantanderSingleNodeJson.getLatitude());
+							vehicleSpeed.setLongitude(smartSantanderSingleNodeJson.getLongitude());
+							devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleSpeed);
+							for (DeviceListener l : deviceListener) {
+								l.notifyDeviceAdded(vehicleSpeed);
+							}
+							break;
+						default:
+							log.error("I don't know the hell is {}. Unknown type, sorry.", smartSantanderSingleNodeJson.getType());
+							break;
 						}
-						break;
-					case SmartSantaderDeviceTypes.VEHICLE_SPEED:
-						SmartSantanderVehicleSpeedDevice vehicleSpeed = new SmartSantanderVehicleSpeedDevice(this.restClient);
-						vehicleSpeed.setId(smartSantanderSingleNodeJson.getNodeId());
-						vehicleSpeed.setLatitude(smartSantanderSingleNodeJson.getLatitude());
-						vehicleSpeed.setLongitude(smartSantanderSingleNodeJson.getLongitude());
-						devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleSpeed);
-						for (DeviceListener l : deviceListener) {
-							l.notifyDeviceAdded(vehicleSpeed);
-						}
-						break;
-					default:
-						log.error("I don't know the hell is {}. Unknown type, sorry.", smartSantanderSingleNodeJson.getType());
-						break;
 					}
 				}
 			}
