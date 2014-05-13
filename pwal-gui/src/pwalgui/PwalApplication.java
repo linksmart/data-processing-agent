@@ -15,6 +15,7 @@ public class PwalApplication implements ApplicationConfiguration {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(WebClient.PAGE_TITLE, "PWAL");
         application.addEntryPoint("/PWAL", PwalHomePage.class, properties);
+        application.addEntryPoint("/", PwalDevicesListTree.class, properties);
         application.addStyleSheet( RWT.DEFAULT_THEME_ID, "theme/theme.css" );
     }
 
