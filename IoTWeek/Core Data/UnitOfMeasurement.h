@@ -2,7 +2,7 @@
 //  UnitOfMeasurement.h
 //  IoTWeek
 //
-//  Created by Thomas Gilbert on 14/05/14.
+//  Created by Thomas Gilbert on 15/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
@@ -13,8 +13,8 @@
 
 @interface UnitOfMeasurement : NSManagedObject
 
-@property (nonatomic, retain) NSString * cnTypeId;
 @property (nonatomic, retain) NSString * cnProperty;
+@property (nonatomic, retain) NSString * cnTypeId;
 @property (nonatomic, retain) Properties *cnProperties;
 
 @end

@@ -2,7 +2,7 @@
 //  UnitOfMeasurement.m
 //  IoTWeek
 //
-//  Created by Thomas Gilbert on 14/05/14.
+//  Created by Thomas Gilbert on 15/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
@@ -12,8 +12,8 @@
 
 @implementation UnitOfMeasurement
 
-@dynamic cnTypeId;
 @dynamic cnProperty;
+@dynamic cnTypeId;
 @dynamic cnProperties;
 
 @end

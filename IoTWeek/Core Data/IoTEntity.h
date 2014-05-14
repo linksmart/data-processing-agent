@@ -2,7 +2,7 @@
 //  IoTEntity.h
 //  IoTWeek
 //
-//  Created by Thomas Gilbert on 14/05/14.
+//  Created by Thomas Gilbert on 15/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
@@ -19,16 +19,16 @@
 @property (nonatomic, retain) NSString * cnMeta;
 @property (nonatomic, retain) NSString * cnName;
 @property (nonatomic, retain) NSString * cnPrefix;
-@property (nonatomic, retain) NSSet *cnProperties;
+@property (nonatomic, retain) NSSet *cnProperty;
 @property (nonatomic, retain) NSSet *cnTypeOf;
 @end
 
 @interface IoTEntity (CoreDataGeneratedAccessors)
 
-- (void)addCnPropertiesObject:(Properties *)value;
-- (void)removeCnPropertiesObject:(Properties *)value;
-- (void)addCnProperties:(NSSet *)values;
-- (void)removeCnProperties:(NSSet *)values;
+- (void)addCnPropertyObject:(Properties *)value;
+- (void)removeCnPropertyObject:(Properties *)value;
+- (void)addCnProperty:(NSSet *)values;
+- (void)removeCnProperty:(NSSet *)values;
 
 - (void)addCnTypeOfObject:(TypeOf *)value;
 - (void)removeCnTypeOfObject:(TypeOf *)value;
