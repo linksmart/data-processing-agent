@@ -45,4 +45,33 @@ public class UltrasoundDistanceSensor extends BaseSerialDevice implements Distan
 	public String getType() {
 		return DeviceType.DISTANCE_SENSOR;
 	}
+
+	@Override
+	public Double getLatitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLatitude(Double latitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Double getLongitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLongitude(Double longitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getNetworkType() {
+		return manager.getNetworkType();
+	}
 }

@@ -35,15 +35,14 @@ public class App
         		case "L":
         			System.out.println("Devices list:");
         			int i=0;
-        			for (String k : p.getDevicesMap().keySet()) {
-						Device d = p.getDevice(k);
-						System.out.println((i++)+") pwalId: "+ k +" id: "+d.getId()+" type: "+d.getType());
+        			for (Device k : p.getDevicesList()) {
+						System.out.println((i++)+") pwalId: "+ k.getPwalId() +" id: "+k.getId()+" type: "+k.getType());
 					}
         			break;
         		case "Q":
         			System.out.println("Inserisci l'indice da interrogare:");
         			command=input.nextLine();
-        			Device de=(Device)p.getDevicesMap().values().toArray()[Integer.parseInt(command)];
+        			Device de=(Device)p.getDevicesList().toArray()[Integer.parseInt(command)];
         			switch (de.getType()) {
 					case DeviceType.THERMOMETER:
 						Thermometer t=(Thermometer) de;

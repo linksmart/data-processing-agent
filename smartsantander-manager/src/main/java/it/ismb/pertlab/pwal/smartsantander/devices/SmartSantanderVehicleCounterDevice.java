@@ -1,7 +1,6 @@
 package it.ismb.pertlab.pwal.smartsantander.devices;
 
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
-import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
 import it.ismb.pertlab.pwal.smartsantander.restclient.SmartSantanderRestClient;
@@ -9,16 +8,20 @@ import it.ismb.pertlab.pwal.smartsantander.restclient.SmartSantanderRestClient;
 public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
 
 	String id;
+	String pwalId;
 	String type = DeviceType.VEHICLE_COUNTER;
-	String networkType = DeviceNetworkType.SMARTSANTANDER;
+	String networkType;
 	Double latitude;
 	Double longitude;
 	String dateLastMeasurement;
 	SmartSantanderRestClient restClient;
+	SmartSantanderTrafficIntensityJson measure;
 	
-	public SmartSantanderVehicleCounterDevice(SmartSantanderRestClient restClient)
+	public SmartSantanderVehicleCounterDevice(SmartSantanderRestClient restClient, String networkType)
 	{
 		this.restClient = restClient;
+		this.networkType = networkType;
+		this.measure = new SmartSantanderTrafficIntensityJson();
 	}
 	
 	public String getId() {
@@ -73,5 +76,15 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
 			return measure.getDate();
 		else
 			return null;
+	}
+
+	@Override
+	public String getPwalId() {
+		return pwalId;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId = pwalId;
 	}
 }

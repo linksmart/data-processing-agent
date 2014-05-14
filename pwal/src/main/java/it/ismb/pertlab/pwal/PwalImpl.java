@@ -1,10 +1,13 @@
 package it.ismb.pertlab.pwal;
 
+import it.ismb.pertlab.pwal.api.devices.enums.DeviceManagerStatus;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
+import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,34 +19,38 @@ import org.slf4j.LoggerFactory;
 
 public class PwalImpl implements Pwal, DeviceListener {
 
-	private HashMap<String, Device> devices;
+	private List<Device> devicesList;
 	private HashMap<String, DevicesManager> devicesManagers;
+	private List<PWALDeviceListener> pwalDeviceListeners;
 
 	private static final Logger log=LoggerFactory.getLogger(PwalImpl.class);
 
 	
-	public PwalImpl(List<DevicesManager> devices)
+	public PwalImpl(List<DevicesManager> devicesManager)
 	{
-		this.devices=new HashMap<>();
+		this.devicesList= new ArrayList<>();
+		this.pwalDeviceListeners = new ArrayList<>();
 		this.devicesManagers = new HashMap<>();
-		for(DevicesManager d : devices)
+		for(DevicesManager d : devicesManager)
 		{
-			d.setId(generateId());
+			d.setId(this.generateId());
+			d.setStatus(DeviceManagerStatus.STOPPED);
 			this.devicesManagers.put(d.getId(), d);
 			d.addDeviceListener(this);
-			DevicesManager driver=(DevicesManager) d;
-			driver.start();
+//			d.start();
+//			driver.start();
+			this.startDeviceManager(d.getId());
 		}
 	}
 	
 	public Device getDevice(String id) {
-		return devices.get(id);
+		for (Device d : this.devicesList) {
+			if(d.getPwalId().equals(id))
+				return d;
+		}
+		return null;
 	}
 
-	public HashMap<String, Device> getDevicesMap() {
-		return devices;
-	}
-	
 	private String generateId()
 	{
 		return UUID.randomUUID().toString();
@@ -52,39 +59,83 @@ public class PwalImpl implements Pwal, DeviceListener {
 	@Override
 	public void notifyDeviceAdded(Device newDevice) {
 		String generatedId = this.generateId();
+		newDevice.setPwalId(generatedId);
 		log.info("New PWAL device added: generated id {} type {}.", generatedId, newDevice.getType());
-		this.devices.put(generatedId, newDevice);
+		this.devicesList.add(newDevice);
 	}
 
 	@Override
 	public void notifyDeviceRemoved(Device removedDevice) {
-		String removedDeviceId = null;
-		for (String k : this.devices.keySet()) {
-			Device d = this.devices.get(k);
-			if(d.getId().equals(removedDevice.getId()))
+		int index = 0;
+		for (Device d : this.devicesList) {
+			if(d.getPwalId().equals(removedDevice.getPwalId()))
 			{
-				log.info("New PWAL device removed: id {} type {}.", removedDeviceId, removedDevice.getType());
-				this.devices.remove(removedDeviceId);
-				return;
+					this.devicesList.remove(index);
+					log.info("New PWAL device removed: id {} type {}.", removedDevice.getPwalId(), removedDevice.getType());
+					break;
 			}
+			index++;
 		}
 	}
 
 	@Override
 	public Collection<Device> getDevicesByType(String type) {
-		LinkedList<Device> res=new LinkedList<Device>();
+		List<Device> result = new LinkedList<>();
 		if(type==null || type.length()==0)
 		{
-			return res;
+			return result;
 		}
-		
-		for(Device d:devices.values())
+				for(Device d:this.devicesList)
 		{
 			if(type.equals(d.getType()))
 			{
-				res.add(d);
+				result.add(d);
 			}
 		}
-		return res;
+		return result;
+	}
+
+	@Override
+	public Collection<Device> getDevicesList() {
+		return this.devicesList;
+	}
+
+	@Override
+	public Collection<DevicesManager> getDevicesManagerList() {
+		return this.devicesManagers.values();
+	}
+
+	@Override
+	public Boolean startDeviceManager(String deviceManagerName) {
+		this.devicesManagers.get(deviceManagerName).start();
+		if(this.devicesManagers.get(deviceManagerName).getStatus().equals(DeviceManagerStatus.STARTED))
+		{
+			log.debug("Device manager {} successfully started", deviceManagerName);
+			return true;
+		}
+		log.error("Device manager {} has not been started", deviceManagerName);
+		return false;
+	}
+
+	@Override
+	public Boolean stopDeviceManager(String deviceManagerName) {
+		this.devicesManagers.get(deviceManagerName).stop();
+		if(this.devicesManagers.get(deviceManagerName).getStatus().equals(DeviceManagerStatus.STOPPED))
+		{
+			log.debug("Device manager {} successfully stopped", deviceManagerName);
+			return true;
+		}
+		log.error("Device manager {} has not been stopped", deviceManagerName);
+		return false;
+	}
+
+	@Override
+	public void addPwalDeviceListener(PWALDeviceListener listener) {
+		this.pwalDeviceListeners.add(listener);
+	}
+
+	@Override
+	public void removePwalDeviceListener(PWALDeviceListener listener) {
+		this.pwalDeviceListeners.remove(listener);
 	}
 }

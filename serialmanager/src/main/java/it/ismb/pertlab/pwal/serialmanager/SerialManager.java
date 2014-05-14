@@ -3,9 +3,13 @@ package it.ismb.pertlab.pwal.serialmanager;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -20,52 +24,62 @@ import jssc.SerialPortException;
  */
 public class SerialManager extends DevicesManager implements SerialPortEventListener{
 
-	private SerialPort port=null;
-	private ArrayBlockingQueue<Byte> queue=new ArrayBlockingQueue<Byte>(2048);
-	private String portString;
+	//Map< port string, port object>
+	private Map<String,SerialPort> ports=new HashMap<>();
+	//Map< port string, queue>
+	private Map<String, ArrayBlockingQueue<Byte>> queue=new HashMap<>();
+	//Map< port string, queue thread>
+	private Map<String, MessageQueue> queueThreads=new HashMap<>();
+	//Map< port, lista di id >
+	private Map<String, List<String>> idsPort;
+	//Map< device id, object class name>
 	private Map<String,String> configuredDevices;
 	
-	public SerialManager(String portString, Map<String,String> props)
+	//portString is a comma separated string containing the list of ports to be opened
+	public SerialManager(String portStrings, Map<String,String> props)
 	{
-		this.portString=portString;
+		String[] ports=portStrings.split(",");
+		idsPort=new HashMap<>();
+		for(String port:ports)
+		{
+			idsPort.put(port.trim(), new LinkedList<String>());
+			queue.put(port, new ArrayBlockingQueue<Byte>(2048));
+			queueThreads.put(port, new MessageQueue(queue.get(port), this));
+			queueThreads.get(port).start();
+		}
 		configuredDevices=props;
+		
 	}
 	
 	@Override
 	public void run() {
 		discoverDevice();
-		try {
-			port= new SerialPort(portString);
-			port.openPort();
-	    	port.setParams(115200,
-	    		    SerialPort.DATABITS_8,
-	    		    SerialPort.STOPBITS_1,
-	    		    SerialPort.PARITY_NONE);
-	    	port.addEventListener(this);
-	    	
-		} catch (SerialPortException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	StringBuffer ret=new StringBuffer();
-    	
-    	while(true)
-    	{
-    		try {
-    			Byte b=queue.take();
-				ret.append((char)b.byteValue());
-				if(b.byteValue()=='\n')
-				{
-					dispatchMessage(ret.toString());
-					ret=new StringBuffer();
-				}
-				
-			} catch (InterruptedException e) {
+		for(String port:idsPort.keySet())
+		{
+			try {
+				ports.put(port, new SerialPort(port));
+				SerialPort portObject=ports.get(port);
+				portObject.openPort();
+		    	portObject.setParams(115200,
+		    		    SerialPort.DATABITS_8,
+		    		    SerialPort.STOPBITS_1,
+		    		    SerialPort.PARITY_NONE);
+		    	portObject.addEventListener(this);
+		    	
+			} catch (SerialPortException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    	}
+		}
+		
+		synchronized (this) {
+	    	try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+		}
 	}
 	
 	private void discoverDevice()
@@ -112,12 +126,13 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 		
 	}
 	
+	
 	@Override
 	public void serialEvent(SerialPortEvent arg0) {
 		
 		if(arg0.isRXCHAR()){//If data is available
 			try {
-				String justread=port.readString();
+				String justread=ports.get(arg0.getPortName()).readString();
 				if(justread==null)
 				{
 					return;
@@ -126,10 +141,10 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 				for(int i=0; i<bl.length; i++)
 				{
 					//log.debug("put message in the queue: "+(char)bl[i]);
-					queue.put(bl[i]);
+					queueThreads.get(arg0.getPortName()).put(bl[i]);
 				}
             }
-            catch (SerialPortException | InterruptedException ex) {
+            catch (SerialPortException ex) {
             	System.out.println(ex);
             }
         }else if(arg0.isCTS()){//If CTS line has changed state
@@ -150,7 +165,7 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
         }
 	}
 	
-	private void dispatchMessage(String cs)
+	public void dispatchMessage(String cs)
 	{
 		try{
 			log.debug("going to dispatch message: "+cs);
@@ -173,13 +188,31 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 		}
 	}
 
-	public void sendCommand(String string) {
+	public void sendCommand(String deviceId, String string) {
 		try {
-			port.writeString(string);
+			//get all the port
+			for(String port:idsPort.keySet())
+			{
+				List<String> ids=idsPort.get(port);
+				for(String id:ids)
+				{
+					if(id.equals(deviceId))
+					{
+						ports.get(port).writeString(string);
+						break;
+					}
+				}
+			}
+			
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String getNetworkType() {
+		return DeviceNetworkType.SERIAL;
 	}
 
 }

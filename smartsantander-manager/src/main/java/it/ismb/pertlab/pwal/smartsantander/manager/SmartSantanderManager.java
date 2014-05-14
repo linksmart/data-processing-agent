@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal.smartsantander.manager;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderSingleNodeJson;
 import it.ismb.pertlab.pwal.smartsantander.devices.SmartSantanderVehicleCounterDevice;
 import it.ismb.pertlab.pwal.smartsantander.devices.SmartSantanderVehicleSpeedDevice;
@@ -65,7 +66,7 @@ public class SmartSantanderManager extends DevicesManager
 					{
 						switch (smartSantanderSingleNodeJson.getType()) {
 						case SmartSantaderDeviceTypes.VEHICLE_COUNTER:
-							SmartSantanderVehicleCounterDevice vehicleCounter = new SmartSantanderVehicleCounterDevice(this.restClient);
+							SmartSantanderVehicleCounterDevice vehicleCounter = new SmartSantanderVehicleCounterDevice(this.restClient, this.getNetworkType());
 							vehicleCounter.setId(smartSantanderSingleNodeJson.getNodeId());
 							vehicleCounter.setLatitude(smartSantanderSingleNodeJson.getLatitude());
 							vehicleCounter.setLongitude(smartSantanderSingleNodeJson.getLongitude());
@@ -75,7 +76,7 @@ public class SmartSantanderManager extends DevicesManager
 							}
 							break;
 						case SmartSantaderDeviceTypes.VEHICLE_SPEED:
-							SmartSantanderVehicleSpeedDevice vehicleSpeed = new SmartSantanderVehicleSpeedDevice(this.restClient);
+							SmartSantanderVehicleSpeedDevice vehicleSpeed = new SmartSantanderVehicleSpeedDevice(this.restClient, this.getNetworkType());
 							vehicleSpeed.setId(smartSantanderSingleNodeJson.getNodeId());
 							vehicleSpeed.setLatitude(smartSantanderSingleNodeJson.getLatitude());
 							vehicleSpeed.setLongitude(smartSantanderSingleNodeJson.getLongitude());
@@ -101,7 +102,13 @@ public class SmartSantanderManager extends DevicesManager
 				Thread.sleep(60000);
 			} catch (InterruptedException e) {
 				log.error("Exception: ", e);
+				t.interrupt();
 			}
 		}
+	}
+
+	@Override
+	public String getNetworkType() {
+		return DeviceNetworkType.SMARTSANTANDER;
 	}
 }

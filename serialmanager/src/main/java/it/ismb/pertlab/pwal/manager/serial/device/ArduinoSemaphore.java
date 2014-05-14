@@ -61,7 +61,36 @@ public class ArduinoSemaphore extends BaseSerialDevice implements Semaphore{
 
 	@Override
 	public void setState(State state) {
-		manager.sendCommand(state.name());
+		manager.sendCommand(this.id,state.name());
+	}
+
+	@Override
+	public Double getLatitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLatitude(Double latitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Double getLongitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLongitude(Double longitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getNetworkType() {
+		return manager.getNetworkType();
 	}
 
 }
