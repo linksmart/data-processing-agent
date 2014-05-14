@@ -15,13 +15,23 @@
 		E9F70E461923E7D5007485B3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E451923E7D5007485B3 /* AppDelegate.m */; };
 		E9F70E491923E7D5007485B3 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9F70E471923E7D5007485B3 /* Main_iPhone.storyboard */; };
 		E9F70E4C1923E7D5007485B3 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9F70E4A1923E7D5007485B3 /* Main_iPad.storyboard */; };
-		E9F70E4F1923E7D5007485B3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E4E1923E7D5007485B3 /* ViewController.m */; };
 		E9F70E511923E7D5007485B3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9F70E501923E7D5007485B3 /* Images.xcassets */; };
 		E9F70E581923E7D5007485B3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F70E571923E7D5007485B3 /* XCTest.framework */; };
 		E9F70E591923E7D5007485B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F70E351923E7D5007485B3 /* Foundation.framework */; };
 		E9F70E5A1923E7D5007485B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F70E391923E7D5007485B3 /* UIKit.framework */; };
 		E9F70E621923E7D5007485B3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9F70E601923E7D5007485B3 /* InfoPlist.strings */; };
 		E9F70E641923E7D5007485B3 /* IoTWeekTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E631923E7D5007485B3 /* IoTWeekTests.m */; };
+		E9F70E6F1923E893007485B3 /* CNetModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E6D1923E893007485B3 /* CNetModel.xcdatamodeld */; };
+		E9F70E8B1923EC0F007485B3 /* UnitOfMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E8A1923EC0F007485B3 /* UnitOfMeasurement.m */; };
+		E9F70E8E1923EC0F007485B3 /* IoTEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E8D1923EC0F007485B3 /* IoTEntity.m */; };
+		E9F70E911923EC0F007485B3 /* TypeOf.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E901923EC0F007485B3 /* TypeOf.m */; };
+		E9F70E941923EC0F007485B3 /* Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E931923EC0F007485B3 /* Properties.m */; };
+		E9F70E971923ED33007485B3 /* IoTEntity+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E961923ED33007485B3 /* IoTEntity+Load.m */; };
+		E9F70E9A1923F850007485B3 /* AppDelegate+Context.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E991923F850007485B3 /* AppDelegate+Context.m */; };
+		E9F70E9F1924047F007485B3 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70E9E1924047F007485B3 /* CoreDataTableViewController.m */; };
+		E9F70EA3192404D3007485B3 /* IoTEntitiesCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70EA2192404D3007485B3 /* IoTEntitiesCDTVC.m */; };
+		E9F70EA619240AD6007485B3 /* TypeOf+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70EA519240AD6007485B3 /* TypeOf+Load.m */; };
+		E9F70EA919240E83007485B3 /* Properties+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F70EA819240E83007485B3 /* Properties+Load.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,14 +57,34 @@
 		E9F70E451923E7D5007485B3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		E9F70E481923E7D5007485B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		E9F70E4B1923E7D5007485B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		E9F70E4D1923E7D5007485B3 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		E9F70E4E1923E7D5007485B3 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E9F70E501923E7D5007485B3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E9F70E561923E7D5007485B3 /* IoTWeekTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IoTWeekTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9F70E571923E7D5007485B3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		E9F70E5F1923E7D5007485B3 /* IoTWeekTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IoTWeekTests-Info.plist"; sourceTree = "<group>"; };
 		E9F70E611923E7D5007485B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E9F70E631923E7D5007485B3 /* IoTWeekTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IoTWeekTests.m; sourceTree = "<group>"; };
+		E9F70E6E1923E893007485B3 /* CNetModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CNetModel.xcdatamodel; sourceTree = "<group>"; };
+		E9F70E891923EC0F007485B3 /* UnitOfMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnitOfMeasurement.h; path = "Core Data/UnitOfMeasurement.h"; sourceTree = "<group>"; };
+		E9F70E8A1923EC0F007485B3 /* UnitOfMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnitOfMeasurement.m; path = "Core Data/UnitOfMeasurement.m"; sourceTree = "<group>"; };
+		E9F70E8C1923EC0F007485B3 /* IoTEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTEntity.h; path = "Core Data/IoTEntity.h"; sourceTree = "<group>"; };
+		E9F70E8D1923EC0F007485B3 /* IoTEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTEntity.m; path = "Core Data/IoTEntity.m"; sourceTree = "<group>"; };
+		E9F70E8F1923EC0F007485B3 /* TypeOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TypeOf.h; path = "Core Data/TypeOf.h"; sourceTree = "<group>"; };
+		E9F70E901923EC0F007485B3 /* TypeOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TypeOf.m; path = "Core Data/TypeOf.m"; sourceTree = "<group>"; };
+		E9F70E921923EC0F007485B3 /* Properties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Properties.h; path = "Core Data/Properties.h"; sourceTree = "<group>"; };
+		E9F70E931923EC0F007485B3 /* Properties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Properties.m; path = "Core Data/Properties.m"; sourceTree = "<group>"; };
+		E9F70E951923ED33007485B3 /* IoTEntity+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IoTEntity+Load.h"; path = "Core Data/IoTEntity+Load.h"; sourceTree = "<group>"; };
+		E9F70E961923ED33007485B3 /* IoTEntity+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IoTEntity+Load.m"; path = "Core Data/IoTEntity+Load.m"; sourceTree = "<group>"; };
+		E9F70E981923F850007485B3 /* AppDelegate+Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Context.h"; sourceTree = "<group>"; };
+		E9F70E991923F850007485B3 /* AppDelegate+Context.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Context.m"; sourceTree = "<group>"; };
+		E9F70E9C1923FD75007485B3 /* DatabaseAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatabaseAvailability.h; sourceTree = "<group>"; };
+		E9F70E9D1924047F007485B3 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
+		E9F70E9E1924047F007485B3 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		E9F70EA1192404D3007485B3 /* IoTEntitiesCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoTEntitiesCDTVC.h; sourceTree = "<group>"; };
+		E9F70EA2192404D3007485B3 /* IoTEntitiesCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IoTEntitiesCDTVC.m; sourceTree = "<group>"; };
+		E9F70EA419240AD6007485B3 /* TypeOf+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TypeOf+Load.h"; sourceTree = "<group>"; };
+		E9F70EA519240AD6007485B3 /* TypeOf+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TypeOf+Load.m"; sourceTree = "<group>"; };
+		E9F70EA719240E83007485B3 /* Properties+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Properties+Load.h"; sourceTree = "<group>"; };
+		E9F70EA819240E83007485B3 /* Properties+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Properties+Load.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,13 +144,12 @@
 		E9F70E3B1923E7D5007485B3 /* IoTWeek */ = {
 			isa = PBXGroup;
 			children = (
-				E9F70E441923E7D5007485B3 /* AppDelegate.h */,
-				E9F70E451923E7D5007485B3 /* AppDelegate.m */,
+				E9F70E9B1923F857007485B3 /* AppDelegate */,
 				E9F70E471923E7D5007485B3 /* Main_iPhone.storyboard */,
 				E9F70E4A1923E7D5007485B3 /* Main_iPad.storyboard */,
-				E9F70E4D1923E7D5007485B3 /* ViewController.h */,
-				E9F70E4E1923E7D5007485B3 /* ViewController.m */,
 				E9F70E501923E7D5007485B3 /* Images.xcassets */,
+				E9F70EA019240484007485B3 /* ViewControllers */,
+				E9F70E701923E89A007485B3 /* Core Data */,
 				E9F70E3C1923E7D5007485B3 /* Supporting Files */,
 			);
 			path = IoTWeek;
@@ -153,6 +182,51 @@
 				E9F70E601923E7D5007485B3 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E9F70E701923E89A007485B3 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				E9F70E6D1923E893007485B3 /* CNetModel.xcdatamodeld */,
+				E9F70E891923EC0F007485B3 /* UnitOfMeasurement.h */,
+				E9F70E8A1923EC0F007485B3 /* UnitOfMeasurement.m */,
+				E9F70E8C1923EC0F007485B3 /* IoTEntity.h */,
+				E9F70E8D1923EC0F007485B3 /* IoTEntity.m */,
+				E9F70E951923ED33007485B3 /* IoTEntity+Load.h */,
+				E9F70E961923ED33007485B3 /* IoTEntity+Load.m */,
+				E9F70E8F1923EC0F007485B3 /* TypeOf.h */,
+				E9F70E901923EC0F007485B3 /* TypeOf.m */,
+				E9F70EA419240AD6007485B3 /* TypeOf+Load.h */,
+				E9F70EA519240AD6007485B3 /* TypeOf+Load.m */,
+				E9F70E921923EC0F007485B3 /* Properties.h */,
+				E9F70E931923EC0F007485B3 /* Properties.m */,
+				E9F70EA719240E83007485B3 /* Properties+Load.h */,
+				E9F70EA819240E83007485B3 /* Properties+Load.m */,
+			);
+			name = "Core Data";
+			sourceTree = "<group>";
+		};
+		E9F70E9B1923F857007485B3 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				E9F70E441923E7D5007485B3 /* AppDelegate.h */,
+				E9F70E451923E7D5007485B3 /* AppDelegate.m */,
+				E9F70E981923F850007485B3 /* AppDelegate+Context.h */,
+				E9F70E991923F850007485B3 /* AppDelegate+Context.m */,
+				E9F70E9C1923FD75007485B3 /* DatabaseAvailability.h */,
+			);
+			name = AppDelegate;
+			sourceTree = "<group>";
+		};
+		E9F70EA019240484007485B3 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				E9F70E9D1924047F007485B3 /* CoreDataTableViewController.h */,
+				E9F70E9E1924047F007485B3 /* CoreDataTableViewController.m */,
+				E9F70EA1192404D3007485B3 /* IoTEntitiesCDTVC.h */,
+				E9F70EA2192404D3007485B3 /* IoTEntitiesCDTVC.m */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +276,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = ITAdvice;
 				TargetAttributes = {
+					E9F70E311923E7D5007485B3 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					E9F70E551923E7D5007485B3 = {
 						TestTargetID = E9F70E311923E7D5007485B3;
 					};
@@ -253,9 +334,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9F70E4F1923E7D5007485B3 /* ViewController.m in Sources */,
+				E9F70E8B1923EC0F007485B3 /* UnitOfMeasurement.m in Sources */,
+				E9F70EA3192404D3007485B3 /* IoTEntitiesCDTVC.m in Sources */,
+				E9F70E9F1924047F007485B3 /* CoreDataTableViewController.m in Sources */,
+				E9F70EA919240E83007485B3 /* Properties+Load.m in Sources */,
+				E9F70E911923EC0F007485B3 /* TypeOf.m in Sources */,
+				E9F70E6F1923E893007485B3 /* CNetModel.xcdatamodeld in Sources */,
+				E9F70E971923ED33007485B3 /* IoTEntity+Load.m in Sources */,
+				E9F70E941923EC0F007485B3 /* Properties.m in Sources */,
+				E9F70E9A1923F850007485B3 /* AppDelegate+Context.m in Sources */,
 				E9F70E461923E7D5007485B3 /* AppDelegate.m in Sources */,
 				E9F70E421923E7D5007485B3 /* main.m in Sources */,
+				E9F70E8E1923EC0F007485B3 /* IoTEntity.m in Sources */,
+				E9F70EA619240AD6007485B3 /* TypeOf+Load.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +571,20 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E9F70E6D1923E893007485B3 /* CNetModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E9F70E6E1923E893007485B3 /* CNetModel.xcdatamodel */,
+			);
+			currentVersion = E9F70E6E1923E893007485B3 /* CNetModel.xcdatamodel */;
+			name = CNetModel.xcdatamodeld;
+			path = "Core Data/CNetModel.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E9F70E2A1923E7D5007485B3 /* Project object */;
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C1021" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="IoTEntity" representedClassName="IoTEntity" syncable="YES">
+        <attribute name="cnAbout" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnBase" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnMeta" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnPrefix" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cnProperties" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Properties" inverseName="cnIoTEntity" inverseEntity="Properties" syncable="YES"/>
+        <relationship name="cnTypeOf" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TypeOf" inverseName="cnIoTEntity" inverseEntity="TypeOf" syncable="YES"/>
+    </entity>
+    <entity name="Properties" representedClassName="Properties" syncable="YES">
+        <attribute name="cnAbout" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnDataType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnMeta" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnPrefix" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cnIoTEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IoTEntity" inverseName="cnProperties" inverseEntity="IoTEntity" syncable="YES"/>
+        <relationship name="cnTypeOf" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TypeOf" inverseName="cnProperties" inverseEntity="TypeOf" syncable="YES"/>
+        <relationship name="cnUnitOfMeasurement" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UnitOfMeasurement" inverseName="cnProperties" inverseEntity="UnitOfMeasurement" syncable="YES"/>
+    </entity>
+    <entity name="TypeOf" representedClassName="TypeOf" syncable="YES">
+        <attribute name="cnValue" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cnIoTEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IoTEntity" inverseName="cnTypeOf" inverseEntity="IoTEntity" syncable="YES"/>
+        <relationship name="cnProperties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Properties" inverseName="cnTypeOf" inverseEntity="Properties" syncable="YES"/>
+    </entity>
+    <entity name="UnitOfMeasurement" representedClassName="UnitOfMeasurement" syncable="YES">
+        <attribute name="cnProperty" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cnTypeId" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cnProperties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Properties" inverseName="cnUnitOfMeasurement" inverseEntity="Properties" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="IoTEntity" positionX="-243" positionY="-19" width="128" height="163"/>
+        <element name="TypeOf" positionX="-29" positionY="209" width="128" height="88"/>
+        <element name="Properties" positionX="196" positionY="-27" width="128" height="178"/>
+        <element name="UnitOfMeasurement" positionX="232" positionY="-207" width="128" height="88"/>
+    </elements>
+</model>
