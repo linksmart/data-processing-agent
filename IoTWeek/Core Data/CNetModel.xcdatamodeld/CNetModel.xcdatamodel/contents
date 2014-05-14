@@ -7,34 +7,34 @@
         <attribute name="cnMeta" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnPrefix" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="cnProperties" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Properties" inverseName="cnIoTEntity" inverseEntity="Properties" syncable="YES"/>
+        <relationship name="cnProperty" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Property" inverseName="cnIoTEntity" inverseEntity="Property" syncable="YES"/>
         <relationship name="cnTypeOf" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TypeOf" inverseName="cnIoTEntity" inverseEntity="TypeOf" syncable="YES"/>
     </entity>
-    <entity name="Properties" representedClassName="Properties" syncable="YES">
+    <entity name="Property" representedClassName="Properties" syncable="YES">
         <attribute name="cnAbout" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnDataType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnMeta" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnPrefix" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="cnIoTEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IoTEntity" inverseName="cnProperties" inverseEntity="IoTEntity" syncable="YES"/>
+        <relationship name="cnIoTEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IoTEntity" inverseName="cnProperty" inverseEntity="IoTEntity" syncable="YES"/>
         <relationship name="cnTypeOf" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TypeOf" inverseName="cnProperties" inverseEntity="TypeOf" syncable="YES"/>
         <relationship name="cnUnitOfMeasurement" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UnitOfMeasurement" inverseName="cnProperties" inverseEntity="UnitOfMeasurement" syncable="YES"/>
     </entity>
     <entity name="TypeOf" representedClassName="TypeOf" syncable="YES">
         <attribute name="cnValue" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="cnIoTEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IoTEntity" inverseName="cnTypeOf" inverseEntity="IoTEntity" syncable="YES"/>
-        <relationship name="cnProperties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Properties" inverseName="cnTypeOf" inverseEntity="Properties" syncable="YES"/>
+        <relationship name="cnProperties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Property" inverseName="cnTypeOf" inverseEntity="Property" syncable="YES"/>
     </entity>
     <entity name="UnitOfMeasurement" representedClassName="UnitOfMeasurement" syncable="YES">
         <attribute name="cnProperty" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnTypeId" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="cnProperties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Properties" inverseName="cnUnitOfMeasurement" inverseEntity="Properties" syncable="YES"/>
+        <relationship name="cnProperties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Property" inverseName="cnUnitOfMeasurement" inverseEntity="Property" syncable="YES"/>
     </entity>
     <elements>
-        <element name="IoTEntity" positionX="-243" positionY="-19" width="128" height="163"/>
+        <element name="IoTEntity" positionX="-243" positionY="-19" width="128" height="165"/>
+        <element name="Property" positionX="153" positionY="-27" width="128" height="180"/>
         <element name="TypeOf" positionX="-29" positionY="209" width="128" height="88"/>
-        <element name="Properties" positionX="196" positionY="-27" width="128" height="178"/>
         <element name="UnitOfMeasurement" positionX="232" positionY="-207" width="128" height="88"/>
     </elements>
 </model>
