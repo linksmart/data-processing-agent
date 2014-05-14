@@ -31,6 +31,7 @@ public class ThermometerDevice implements Thermometer {
 	private DataOutputStream out = null;
 	private DataInputStream in = null;
 	private String id;
+	private String pwalId;
 	private final String type="pwal:Thermometer";
 	private DevicesManager parent;
 	
@@ -303,5 +304,44 @@ public class ThermometerDevice implements Thermometer {
 	         .append(HEXES.charAt((b & 0x0F)));
 	    }
 	    return hex.toString();
+	}
+
+	@Override
+	public String getPwalId() {
+		return pwalId;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId=pwalId;
+	}
+
+	@Override
+	public Double getLatitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLatitude(Double latitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Double getLongitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLongitude(Double longitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getNetworkType() {
+		return parent.getNetworkType();
 	}
 }
