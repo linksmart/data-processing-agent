@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class IoTEntity, Properties;
+@class IoTEntity, Property;
 
 @interface TypeOf : NSManagedObject
 
 @property (nonatomic, retain) NSString * cnValue;
 @property (nonatomic, retain) IoTEntity *cnIoTEntity;
-@property (nonatomic, retain) Properties *cnProperties;
+@property (nonatomic, retain) Property *cnProperties;
 
 @end

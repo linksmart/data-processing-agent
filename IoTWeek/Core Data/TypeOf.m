@@ -8,7 +8,7 @@
 
 #import "TypeOf.h"
 #import "IoTEntity.h"
-#import "Properties.h"
+#import "Property.h"
 
 
 @implementation TypeOf

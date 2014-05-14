@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Properties, TypeOf;
+@class Property, TypeOf;
 
 @interface IoTEntity : NSManagedObject
 
@@ -25,8 +25,8 @@
 
 @interface IoTEntity (CoreDataGeneratedAccessors)
 
-- (void)addCnPropertyObject:(Properties *)value;
-- (void)removeCnPropertyObject:(Properties *)value;
+- (void)addCnPropertyObject:(Property *)value;
+- (void)removeCnPropertyObject:(Property *)value;
 - (void)addCnProperty:(NSSet *)values;
 - (void)removeCnProperty:(NSSet *)values;
 

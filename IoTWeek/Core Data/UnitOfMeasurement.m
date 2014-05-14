@@ -7,7 +7,7 @@
 //
 
 #import "UnitOfMeasurement.h"
-#import "Properties.h"
+#import "Property.h"
 
 
 @implementation UnitOfMeasurement

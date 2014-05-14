@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
-#import "Properties.h"
+#import "Property.h"
 
-@interface Properties (Load)
+@interface Property (Load)
 
-+(Properties *)propertiesWithDefinition:(NSDictionary *)propertiesDictionary
++(Property *)propertyWithDefinition:(NSDictionary *)propertyDictionary
                   forIoTEntityWithAbout:(NSString *)iotEntityAbout
                   usingManagedContext:(NSManagedObjectContext *)context;
 
@@ -18,7 +18,7 @@
          forIoTEntityWithAbout:(NSString *)iotEntityAbout
            usingManagedContext:(NSManagedObjectContext *)context;
 
-+ (Properties *)PropertiesWithAbout:(NSString *)propertiesAbout
++ (Property *)propertyWithAbout:(NSString *)propertyAbout
               forIoTEntityWithAbout:(NSString *)iotEntityAbout
               usingManagedContext:(NSManagedObjectContext *)context;
 

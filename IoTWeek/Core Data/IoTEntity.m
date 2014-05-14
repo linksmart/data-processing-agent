@@ -7,7 +7,7 @@
 //
 
 #import "IoTEntity.h"
-#import "Properties.h"
+#import "Property.h"
 #import "TypeOf.h"
 
 

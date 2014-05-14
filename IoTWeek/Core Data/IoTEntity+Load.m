@@ -8,7 +8,7 @@
 
 #import "IoTEntity+Load.h"
 #import "TypeOf+Load.h"
-#import "Properties+Load.h"
+#import "Property+Load.h"
 
 @implementation IoTEntity (Load)
 
@@ -23,6 +23,8 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
+    
+// TODO: Move these stupid assignments elsewhere
     if (!matches || error || ([matches count] > 1)) {
         // handle error
     } else if ([matches count]) {
@@ -69,7 +71,7 @@
         IoTEntity *newEntity = [self iotEntityWithDefinition:iotEntity usingManagedContext:context];
         
         NSArray *properties = [iotEntity valueForKeyPath:@"Properties"];
-        [Properties loadPropertiesFromArray:properties forIoTEntityWithAbout:newEntity.cnAbout usingManagedContext:context];
+        [Property loadPropertiesFromArray:properties forIoTEntityWithAbout:newEntity.cnAbout usingManagedContext:context];
         
         NSArray *typeOf = [iotEntity valueForKeyPath:@"TypeOf"];
         [TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forIoTEntityWithAbout:newEntity.cnAbout];

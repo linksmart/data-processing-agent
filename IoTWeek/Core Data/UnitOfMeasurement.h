@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Properties;
+@class Property;
 
 @interface UnitOfMeasurement : NSManagedObject
 
 @property (nonatomic, retain) NSString * cnProperty;
 @property (nonatomic, retain) NSString * cnTypeId;
-@property (nonatomic, retain) Properties *cnProperties;
+@property (nonatomic, retain) Property *cnProperties;
 
 @end

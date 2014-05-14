@@ -10,7 +10,7 @@
         <relationship name="cnProperty" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Property" inverseName="cnIoTEntity" inverseEntity="Property" syncable="YES"/>
         <relationship name="cnTypeOf" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TypeOf" inverseName="cnIoTEntity" inverseEntity="TypeOf" syncable="YES"/>
     </entity>
-    <entity name="Property" representedClassName="Properties" syncable="YES">
+    <entity name="Property" representedClassName="Property" syncable="YES">
         <attribute name="cnAbout" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnDataType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cnDescription" optional="YES" attributeType="String" syncable="YES"/>
@@ -33,7 +33,7 @@
     </entity>
     <elements>
         <element name="IoTEntity" positionX="-243" positionY="-19" width="128" height="165"/>
-        <element name="Property" positionX="153" positionY="-27" width="128" height="180"/>
+        <element name="Property" positionX="153" positionY="-27" width="128" height="178"/>
         <element name="TypeOf" positionX="-29" positionY="209" width="128" height="88"/>
         <element name="UnitOfMeasurement" positionX="232" positionY="-207" width="128" height="88"/>
     </elements>

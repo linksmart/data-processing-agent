@@ -80,7 +80,7 @@
     IoTEntity *iotEntity = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     cell.textLabel.text = iotEntity.cnName;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d properties", (int)[iotEntity.cnProperties count]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d properties", (int)[iotEntity.cnProperty count]];
     
     return cell;
 }

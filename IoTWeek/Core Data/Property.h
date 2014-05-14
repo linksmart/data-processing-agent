@@ -1,5 +1,5 @@
 //
-//  Properties.h
+//  Property.h
 //  IoTWeek
 //
 //  Created by Thomas Gilbert on 15/05/14.
@@ -11,7 +11,7 @@
 
 @class IoTEntity, TypeOf, UnitOfMeasurement;
 
-@interface Properties : NSManagedObject
+@interface Property : NSManagedObject
 
 @property (nonatomic, retain) NSString * cnAbout;
 @property (nonatomic, retain) NSString * cnDataType;
@@ -24,7 +24,7 @@
 @property (nonatomic, retain) NSSet *cnUnitOfMeasurement;
 @end
 
-@interface Properties (CoreDataGeneratedAccessors)
+@interface Property (CoreDataGeneratedAccessors)
 
 - (void)addCnTypeOfObject:(TypeOf *)value;
 - (void)removeCnTypeOfObject:(TypeOf *)value;

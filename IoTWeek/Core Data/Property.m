@@ -1,18 +1,18 @@
 //
-//  Properties.m
+//  Property.m
 //  IoTWeek
 //
 //  Created by Thomas Gilbert on 15/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
-#import "Properties.h"
+#import "Property.h"
 #import "IoTEntity.h"
 #import "TypeOf.h"
 #import "UnitOfMeasurement.h"
 
 
-@implementation Properties
+@implementation Property
 
 @dynamic cnAbout;
 @dynamic cnDataType;

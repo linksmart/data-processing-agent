@@ -6,77 +6,79 @@
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
-#import "Properties+Load.h"
+#import "Property+Load.h"
 #include "IoTEntity+Load.h"
 
-@implementation Properties (Load)
+@implementation Property (Load)
 
-+(Properties *)propertiesWithDefinition:(NSDictionary *)propertiesDictionary
++(Property *)propertyWithDefinition:(NSDictionary *)propertyDictionary
                   forIoTEntityWithAbout:(NSString *)iotEntityAbout
                     usingManagedContext:(NSManagedObjectContext *)context
 {
-    Properties *properties = nil;
+    Property *property = nil;
     
     IoTEntity *iotEntity = [IoTEntity iotEntityWithAbout:iotEntityAbout usingManagedContext:context];
     if (!iotEntity)
         return nil;
     
-    NSString *permId = propertiesDictionary[@"About"]; // Permanent Id is globally unique
+    NSString *permId = propertyDictionary[@"About"]; // Permanent Id is globally unique
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Properties"];
     request.predicate = [NSPredicate predicateWithFormat:@"cnAbout = %@ AND cnIoTEntity.cnAbout = %@", permId, iotEntityAbout];
     
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
+// TODO: Move these stupid assignments elsewhere
+    
     if (!matches || error || ([matches count] > 1)) {
         // handle error
     } else if ([matches count]) {
         // Use existing object, and update attributes
-        properties = [matches firstObject];
+        property = [matches firstObject];
         
-        properties.cnAbout = permId;
-        properties.cnDataType = [propertiesDictionary valueForKeyPath:@"DataType"];
+        property.cnAbout = permId;
+        property.cnDataType = [propertyDictionary valueForKeyPath:@"DataType"];
         
-        NSString *description = [propertiesDictionary valueForKeyPath:@"Description"];
+        NSString *description = [propertyDictionary valueForKeyPath:@"Description"];
         if (![description isKindOfClass:[NSNull class]])
-            properties.cnDescription = description;
+            property.cnDescription = description;
         
-        id meta = [propertiesDictionary valueForKeyPath:@"Meta"];
+        id meta = [propertyDictionary valueForKeyPath:@"Meta"];
         if ([meta isKindOfClass:[NSString class]])
-            properties.cnMeta = meta;
+            property.cnMeta = meta;
         
-        id name =[propertiesDictionary valueForKeyPath:@"Name"];
+        id name =[propertyDictionary valueForKeyPath:@"Name"];
         if ([name isKindOfClass:[NSString class]])
-            properties.cnName = name;
+            property.cnName = name;
         
-        properties.cnPrefix = [propertiesDictionary valueForKeyPath:@"Prefix"];
+        property.cnPrefix = [propertyDictionary valueForKeyPath:@"Prefix"];
         
     } else {
-        properties = [NSEntityDescription insertNewObjectForEntityForName:@"Properties"
+        property = [NSEntityDescription insertNewObjectForEntityForName:@"Properties"
                                                   inManagedObjectContext:context];
-        NSLog(@"NewProp: %@",[propertiesDictionary valueForKeyPath:@"Name"] );
+        NSLog(@"NewProp: %@",[propertyDictionary valueForKeyPath:@"Name"] );
 
-        properties.cnAbout = permId;
-        properties.cnDataType = [propertiesDictionary valueForKeyPath:@"DataType"];
+        property.cnAbout = permId;
+        property.cnDataType = [propertyDictionary valueForKeyPath:@"DataType"];
         
-        NSString *description = [propertiesDictionary valueForKeyPath:@"Description"];
+        NSString *description = [propertyDictionary valueForKeyPath:@"Description"];
         if (![description isKindOfClass:[NSNull class]])
-            properties.cnDescription = description;
+            property.cnDescription = description;
         
-        id meta = [propertiesDictionary valueForKeyPath:@"Meta"];
+        id meta = [propertyDictionary valueForKeyPath:@"Meta"];
         if ([meta isKindOfClass:[NSString class]])
-            properties.cnMeta = meta;
+            property.cnMeta = meta;
         
-        id name =[propertiesDictionary valueForKeyPath:@"Name"];
+        id name =[propertyDictionary valueForKeyPath:@"Name"];
         if ([name isKindOfClass:[NSString class]])
-            properties.cnName = name;
+            property.cnName = name;
         
-        properties.cnPrefix = [propertiesDictionary valueForKeyPath:@"Prefix"];
+        property.cnPrefix = [propertyDictionary valueForKeyPath:@"Prefix"];
         
-        properties.cnIoTEntity = iotEntity;
+        property.cnIoTEntity = iotEntity;
     }
     
-    return nil;
+    return property;
 }
 
 +(void)loadPropertiesFromArray:(NSArray *)properties
@@ -84,16 +86,16 @@
            usingManagedContext:(NSManagedObjectContext *)context
 {
     for (NSDictionary *property in properties) {
-        [self propertiesWithDefinition:property forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
+        [self propertyWithDefinition:property forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
     }
 
 }
 
-+ (Properties *)PropertiesWithAbout:(NSString *)propertiesAbout
++ (Property *)propertyWithAbout:(NSString *)propertyAbout
               forIoTEntityWithAbout:(NSString *)iotEntityAbout
                 usingManagedContext:(NSManagedObjectContext *)context
 {
-    Properties *properties = nil;
+    Property *property = nil;
     return nil;
 }
 
