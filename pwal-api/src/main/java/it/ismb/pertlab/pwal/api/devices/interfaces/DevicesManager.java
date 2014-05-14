@@ -47,4 +47,6 @@ public abstract class DevicesManager implements Runnable{
 	{
 		return UUID.randomUUID().toString();
 	}
+	
+	public abstract String getNetworkType();
 }
