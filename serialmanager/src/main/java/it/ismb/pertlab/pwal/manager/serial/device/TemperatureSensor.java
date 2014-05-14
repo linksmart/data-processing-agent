@@ -8,6 +8,7 @@ import it.ismb.pertlab.pwal.serialmanager.SerialManager;
 public class TemperatureSensor extends BaseSerialDevice implements Thermometer{
 
 	private String id;
+	private String pwalId;
 	private SerialManager sm;
 	private Double temp;
 	
@@ -68,6 +69,15 @@ public class TemperatureSensor extends BaseSerialDevice implements Thermometer{
 	@Override
 	public String getNetworkType() {
 		return sm.getNetworkType();
+	}
+	@Override
+	public String getPwalId() {
+		return pwalId;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId=pwalId;
 	}
 
 }

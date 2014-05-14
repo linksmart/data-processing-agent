@@ -12,6 +12,7 @@ public class ArduinoSemaphore extends BaseSerialDevice implements Semaphore{
 	
 	protected static final Logger log=LoggerFactory.getLogger(ArduinoSemaphore.class);
 	private String id;
+	private String pwalId;
 	private Semaphore.State state;
 	private SerialManager manager;
 	
@@ -91,6 +92,16 @@ public class ArduinoSemaphore extends BaseSerialDevice implements Semaphore{
 	@Override
 	public String getNetworkType() {
 		return manager.getNetworkType();
+	}
+
+	@Override
+	public String getPwalId() {
+		return pwalId;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId=pwalId;
 	}
 
 }

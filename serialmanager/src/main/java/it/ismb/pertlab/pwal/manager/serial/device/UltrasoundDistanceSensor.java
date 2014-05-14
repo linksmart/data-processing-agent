@@ -8,6 +8,7 @@ import it.ismb.pertlab.pwal.serialmanager.SerialManager;
 public class UltrasoundDistanceSensor extends BaseSerialDevice implements DistanceSensor{
 
 	private String id;
+	private String pwalId;
 	//for future use
 	private SerialManager manager;
 	private Double distanceInch;
@@ -73,5 +74,15 @@ public class UltrasoundDistanceSensor extends BaseSerialDevice implements Distan
 	@Override
 	public String getNetworkType() {
 		return manager.getNetworkType();
+	}
+	
+	@Override
+	public String getPwalId() {
+		return pwalId;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId=pwalId;
 	}
 }
