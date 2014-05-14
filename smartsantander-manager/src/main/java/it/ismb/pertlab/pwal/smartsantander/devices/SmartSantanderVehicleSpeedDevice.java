@@ -8,7 +8,8 @@ import it.ismb.pertlab.pwal.smartsantander.restclient.SmartSantanderRestClient;
 
 public class SmartSantanderVehicleSpeedDevice implements VehicleSpeed {
 
-	String id; 
+	String id;
+	String pwalId;
 	String type = DeviceType.VEHICLE_SPEED;
 	String networkType = DeviceNetworkType.SMARTSANTANDER;
 	Double latitude;
@@ -16,8 +17,9 @@ public class SmartSantanderVehicleSpeedDevice implements VehicleSpeed {
 	String dateLastMeasurement;
 	SmartSantanderRestClient restClient;
 	
-	public SmartSantanderVehicleSpeedDevice(SmartSantanderRestClient restClient) {
+	public SmartSantanderVehicleSpeedDevice(SmartSantanderRestClient restClient, String networkType) {
 		this.restClient = restClient;
+		this.networkType = networkType;
 	}
 	
 	public String getId() {
@@ -90,5 +92,15 @@ public class SmartSantanderVehicleSpeedDevice implements VehicleSpeed {
 			return measure.getDate();
 		else
 			return null;
+	}
+
+	@Override
+	public String getPwalId() {
+		return this.pwalId;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId = pwalId;
 	}
 }

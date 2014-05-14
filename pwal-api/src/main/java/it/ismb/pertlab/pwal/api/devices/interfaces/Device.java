@@ -3,11 +3,19 @@ package it.ismb.pertlab.pwal.api.devices.interfaces;
 public interface Device {
 	
 	/**
-	 * The identification inside the PWAL
+	 * The identification given by the PWAL
+	 */
+	String getPwalId();
+	/**
+	 * The identification given by the PWAL
+	 */
+	void setPwalId(String pwalId);
+	/**
+	 * The identification inside the PWAL manager
 	 */
 	String getId();
 	/**
-	 * The identification inside the PWAL
+	 * The identification inside the PWAL manager
 	 */
 	void setId(String id);
 	/**
