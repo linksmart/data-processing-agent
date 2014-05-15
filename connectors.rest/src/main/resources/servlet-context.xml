@@ -23,6 +23,6 @@
 	</beans:bean>
 
 	<!-- auto detection of a controller -->
-	 <context:component-scan base-package="it.ismb.pertlab.pwal.connectors.rest" /> 
+	 <context:component-scan base-package="it.ismb.pertlab.pwal.connectors" /> 
 	
 </beans:beans>
