@@ -22,7 +22,7 @@
         return nil;
     
     NSString *permId = propertyDictionary[@"About"]; // Permanent Id is globally unique
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Properties"];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Property"];
     request.predicate = [NSPredicate predicateWithFormat:@"cnAbout = %@ AND cnIoTEntity.cnAbout = %@", permId, iotEntityAbout];
     
     NSError *error;
@@ -54,7 +54,7 @@
         property.cnPrefix = [propertyDictionary valueForKeyPath:@"Prefix"];
         
     } else {
-        property = [NSEntityDescription insertNewObjectForEntityForName:@"Properties"
+        property = [NSEntityDescription insertNewObjectForEntityForName:@"Property"
                                                   inManagedObjectContext:context];
         NSLog(@"NewProp: %@",[propertyDictionary valueForKeyPath:@"Name"] );
 
