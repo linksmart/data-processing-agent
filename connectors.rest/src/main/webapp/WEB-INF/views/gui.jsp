@@ -3,6 +3,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
 <html>
 <head>
 <title>PWAL</title>
@@ -88,7 +89,7 @@
 				This is <strong>PWAL</strong>, an invisible translation layer
 				between the physical world of constrained devices and the Internet.
 			</h1>
-<c:out		value="${msg}" ></c:out>
+
 
 		</div>
 	</section>
@@ -102,39 +103,12 @@
 			</header>
 
 			<p>This log shows the devices attached and detached.</p>
+			<br>
+			<h2>${devlist}</h2>
+			<br>
+			<h2>${temp}</h2>
 
-			<div id="log-table">
-				<table width="59%" border="1">
-				<tr>
-				   <th> Sensor Type</th>
-				   <th> Sensor Value</th>
-				</tr>
-					<%
-						int cols = 2;
-						int rows =2;
-						String[][] value = new String[rows][cols];
-						value[0][0]="0.0";
-						value[0][1]="0.1";
-						value[1][0]="1.0";
-						value[1][1]="1.1";
-						
-						for(int i=0;i<2;i++){
-					
-					%>
-					<tr>
-					<%		for(int j=0;j<2;j++){ %>
-						<td><%=value[i][j]%></td>
-					
-					<%
-
-					}
-						}
-					
-					%>
-					</tr>
-				</table>
-				
-			</div>
+			<div id="log-table"></div>
 
 		</div>
 	</section>
@@ -144,10 +118,19 @@
 		<div class="container">
 
 			<header>
-				<h2>Sensor Devices List</h2>
+				<h1>Sensor Devices List</h1>
 			</header>
 
 
+			<div>
+				<table>
+					<tr>
+						<th>ID</th>
+					</tr>
+
+				</table>
+
+			</div>
 
 
 		</div>
