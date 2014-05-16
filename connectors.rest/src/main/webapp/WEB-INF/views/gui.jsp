@@ -51,18 +51,20 @@
 			<li><a href="#contact" id="contact-link"
 				class="skel-panels-ignoreHref"><span class="fa fa-envelope">Contact</span></a></li>
 		</ul>
+		
 		</nav>
 
 	</div>
 
 	<div class="bottom">
-
+			<a href="http://www.ismb.it" class="image centered" ><img src="resources/images/ismb_page.png"
+			alt="ismb logo" height ="100" width="200" /></a>
 		<!-- Social Icons -->
-		<ul class="icons a">
-			<li><a href="http://www.ismb.it" class="fa fa-external-link" target="_blank"><span>ISMB</span></a></li>
- 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<li><a href="http://www.ismb.it/en/PeRT" class="fa fa-external-link" target="_blank"><span>Pervasive Technologies</span></a></li>
-		</ul>
+<!-- 		<ul class="icons a"> -->
+<!-- 			<li><a href="http://www.ismb.it" class="fa fa-external-link" target="_blank"><span>ISMB</span></a></li> -->
+<!--  			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+<!-- 			<li><a href="http://www.ismb.it/en/PeRT" class="fa fa-external-link" target="_blank"><span>Pervasive Technologies</span></a></li> -->
+<!-- 		</ul> -->
 
 	</div>
 
@@ -75,16 +77,16 @@
 	<section id="top" class="one">
 	<div class="container">
 
-		<a href="http://ineedchemicalx.deviantart.com/art/Moonscape-381829905"
-			class="image featured"><img src="resources/images/pic01.jpg"
-			alt="" /></a>
 
-		<header>
-		<h2 class="alt">
-			This is <strong>PWAL</strong>, an invisible translation layer between the physical world
+		<a href="#top" class="image centered" ><img src="resources/images/pwalLOGO.jpg"
+			alt="PWAL logo" height ="300" width="200" /></a>
+		
+		<h1> This is <strong>PWAL</strong>, an invisible translation layer between the physical world
 			of constrained devices and the Internet.
-		</h2>
-		</header>
+			
+		</h1>
+
+		
 	</div>
 	</section>
 
@@ -142,15 +144,6 @@
 <!-- 	</div> -->
 
 <!-- </div> -->
-<div id="footer">
-
-	<!-- Copyright -->
-	<div class="copyright">
-		<p>&copy; 2014 ISMB, Pervasive Technologies. All rights reserved.</p>
-		<ul class="menu">
-			<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-		</ul>
-	</div>
 
 </div>
 
