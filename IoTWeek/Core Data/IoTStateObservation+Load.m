@@ -17,36 +17,35 @@
                       usingManagedContext:(NSManagedObjectContext *)context
 {
     Property *property = [Property propertyWithAbout:propertiesAbout forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
-    property.cnIoTStateObservation = nil;
-
-    NSLog(@"Count %lu", [iotStateObservations count]);
-}
-
-
-
-
-
-
-+ (void)loadIoTStateObservationFromArray:(NSArray *)iotStateObservation
-                intoManagedObjectContext:(NSManagedObjectContext *)context
-                  forPropertiesWithAbout:(NSString *)propertiesAbout
-                   forIoTEntityWithAbout:(NSString *)iotEntityAbout
-{
-    Property *property = [Property propertyWithAbout:propertiesAbout forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
-    property.cnIoTStateObservation = nil;
     
-    NSMutableSet *iotStateObservations = [[NSMutableSet alloc] init];
+    // Reset observations. We cannot track specific measurements
+    // so we have to reset each time.
+    // but dont do this, if we have are overwriting data 'prpper' fetched
+    
+    // TODO: Do something else here!
+    NSMutableSet *iotStateObservationSet = [[NSMutableSet alloc] init];
+    
+    if ([property.cnIoTStateObservation count] == 1)
+        property.cnIoTStateObservation = nil;
+    else if ([property.cnIoTStateObservation count] > 1)
+        return;
     
     for (NSString *observation in iotStateObservations) {
         IoTStateObservation *myObservation = [NSEntityDescription insertNewObjectForEntityForName:@"IoTStateObservation"
-                                                       inManagedObjectContext:context];
+                                                                           inManagedObjectContext:context];
         
-        myObservation.cnValue = [iotStateObservation valueForKeyPath:@"Value"];;
+        NSDateFormatter *dateFor = [[NSDateFormatter alloc] init];
+        [dateFor setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
-        [iotStateObservations addObject:myObservation];
+        // TODO: Ask if we couldnt get timezone info as well. That'd be great.
+        myObservation.cnValue = [observation valueForKeyPath:@"Value"];
+        myObservation.cnResultTime = [dateFor dateFromString:[observation valueForKeyPath:@"ResultTime"]];
+        myObservation.cnPhenomenonTime = [dateFor dateFromString:[observation valueForKeyPath:@"PhenomenonTime"]];
+        
+        [iotStateObservationSet addObject:myObservation];
     }
     
-    property.cnIoTStateObservation = iotStateObservations;
+    property.cnIoTStateObservation = iotStateObservationSet;
 }
 
 @end

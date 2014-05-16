@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B2B92C6819262B41009E4E3D /* IoTStateObservationCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */; };
 		E90DCD2619257BAE0071CF4D /* PropertiesCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */; };
 		E90DCD2919257E810071CF4D /* IoTStateObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2819257E810071CF4D /* IoTStateObservation.m */; };
 		E90DCD2C19257E810071CF4D /* Property.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2B19257E810071CF4D /* Property.m */; };
@@ -49,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B2B92C6619262B41009E4E3D /* IoTStateObservationCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoTStateObservationCDTVC.h; sourceTree = "<group>"; };
+		B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IoTStateObservationCDTVC.m; sourceTree = "<group>"; };
 		E90DCD2419257BAE0071CF4D /* PropertiesCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertiesCDTVC.h; sourceTree = "<group>"; };
 		E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertiesCDTVC.m; sourceTree = "<group>"; };
 		E90DCD2719257E810071CF4D /* IoTStateObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTStateObservation.h; path = "Core Data/IoTStateObservation.h"; sourceTree = "<group>"; };
@@ -237,14 +240,16 @@
 		E9F70EA019240484007485B3 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				E9E0492C192578EA00473E27 /* SettingsVC.h */,
-				E9E0492D192578EA00473E27 /* SettingsVC.m */,
 				E9F70E9D1924047F007485B3 /* CoreDataTableViewController.h */,
 				E9F70E9E1924047F007485B3 /* CoreDataTableViewController.m */,
 				E9F70EA1192404D3007485B3 /* IoTEntitiesCDTVC.h */,
 				E9F70EA2192404D3007485B3 /* IoTEntitiesCDTVC.m */,
 				E90DCD2419257BAE0071CF4D /* PropertiesCDTVC.h */,
 				E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */,
+				B2B92C6619262B41009E4E3D /* IoTStateObservationCDTVC.h */,
+				B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */,
+				E9E0492C192578EA00473E27 /* SettingsVC.h */,
+				E9E0492D192578EA00473E27 /* SettingsVC.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -364,6 +369,7 @@
 				E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */,
 				E90DCD2F19257E810071CF4D /* UnitOfMeasurement.m in Sources */,
 				E90DCD2919257E810071CF4D /* IoTStateObservation.m in Sources */,
+				B2B92C6819262B41009E4E3D /* IoTStateObservationCDTVC.m in Sources */,
 				E90DCD3219257E810071CF4D /* TypeOf.m in Sources */,
 				E90DCD2C19257E810071CF4D /* Property.m in Sources */,
 				E9BB2FF819242ACF00E21913 /* TypeOf+Load.m in Sources */,

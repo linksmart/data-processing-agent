@@ -8,6 +8,8 @@
 
 #import "PropertiesCDTVC.h"
 #import "Property+Load.h"
+#import "IoTStateObservationCDTVC.h"
+#import "ioTStateObservation+Load.h"
 
 @interface PropertiesCDTVC ()
 
@@ -47,11 +49,66 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Property Cell"];
     
     Property *property = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"IoTStateObservation"];
+    request.predicate = [NSPredicate predicateWithFormat:@"cnProperty.cnAbout = %@ AND cnProperty.cnIoTEntity.cnAbout = %@", property.cnAbout, property.cnIoTEntity.cnAbout];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"cnPhenomenonTime"
+                                                              ascending:NO
+                                                               selector:@selector(localizedStandardCompare:)]];
+    [request setFetchLimit:1];
+
+    
+    NSError *error;
+    NSArray *matches = [property.managedObjectContext executeFetchRequest:request error:&error];
+    
+    IoTStateObservation *latestMeasurement;
+    
+    if (!matches || error ) {
+        // handle error
+    } else if ([matches count]) {
+        latestMeasurement = [matches firstObject];
+    }
+    
     cell.textLabel.text = property.cnName;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Observations: %d", (int)[property.cnIoTStateObservation count]];;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Latest: %@", latestMeasurement.cnValue];
     
     return cell;
 }
 
+#pragma mark - Navigation
+
+- (void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifer fromIndexPath:(NSIndexPath *)indexPath
+{
+    Property *property = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    if ([vc isKindOfClass:[IoTStateObservationCDTVC class]]) {
+        IoTStateObservationCDTVC *isoCDTVC = (IoTStateObservationCDTVC *)vc;
+        isoCDTVC.propery = property;
+    }
+}
+
+// boilerplate
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = nil;
+    if ([sender isKindOfClass:[UITableViewCell class]]) {
+        indexPath = [self.tableView indexPathForCell:sender];
+    }
+    [self prepareViewController:segue.destinationViewController
+                       forSegue:segue.identifier
+                  fromIndexPath:indexPath];
+}
+
+// boilerplate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id detailvc = [self.splitViewController.viewControllers lastObject];
+    if ([detailvc isKindOfClass:[UINavigationController class]]) {
+        detailvc = [((UINavigationController *)detailvc).viewControllers firstObject];
+        [self prepareViewController:detailvc
+                           forSegue:nil
+                      fromIndexPath:indexPath];
+    }
+}
 
 @end
