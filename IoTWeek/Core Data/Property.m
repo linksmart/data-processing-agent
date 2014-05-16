@@ -2,12 +2,13 @@
 //  Property.m
 //  IoTWeek
 //
-//  Created by Thomas Gilbert on 15/05/14.
+//  Created by Thomas Gilbert on 16/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
 #import "Property.h"
 #import "IoTEntity.h"
+#import "IoTStateObservation.h"
 #import "TypeOf.h"
 #import "UnitOfMeasurement.h"
 
@@ -23,5 +24,6 @@
 @dynamic cnIoTEntity;
 @dynamic cnTypeOf;
 @dynamic cnUnitOfMeasurement;
+@dynamic cnIoTStateObservation;
 
 @end

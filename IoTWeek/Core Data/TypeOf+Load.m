@@ -8,6 +8,7 @@
 
 #import "TypeOf+Load.h"
 #import "IoTEntity+Load.h"
+#import "Property+Load.h"
 
 @implementation TypeOf (Load)
 
@@ -37,7 +38,19 @@
      forPropertiesWithAbout:(NSString *)propertiesAbout
       forIoTEntityWithAbout:(NSString *)iotEntityAbout
 {
+    Property *property = [Property propertyWithAbout:propertiesAbout forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
+    property.cnTypeOf = nil;
     
+    NSMutableSet *typesOf = [[NSMutableSet alloc] init];
+    
+    for (NSString *type in typeOf) {
+        TypeOf *myType = [NSEntityDescription insertNewObjectForEntityForName:@"TypeOf"
+                                                       inManagedObjectContext:context];
+        myType.cnValue = type;
+        [typesOf addObject:myType];
+    }
+    
+    property.cnTypeOf = typesOf;
 }
 
 @end

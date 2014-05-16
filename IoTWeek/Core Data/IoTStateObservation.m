@@ -1,20 +1,20 @@
 //
-//  TypeOf.m
+//  IoTStateObservation.m
 //  IoTWeek
 //
 //  Created by Thomas Gilbert on 16/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
-#import "TypeOf.h"
-#import "IoTEntity.h"
+#import "IoTStateObservation.h"
 #import "Property.h"
 
 
-@implementation TypeOf
+@implementation IoTStateObservation
 
 @dynamic cnValue;
-@dynamic cnIoTEntity;
-@dynamic cnProperties;
+@dynamic cnPhenomenonTime;
+@dynamic cnResultTime;
+@dynamic cnProperty;
 
 @end

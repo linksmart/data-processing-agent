@@ -2,14 +2,14 @@
 //  Property.h
 //  IoTWeek
 //
-//  Created by Thomas Gilbert on 15/05/14.
+//  Created by Thomas Gilbert on 16/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class IoTEntity, TypeOf, UnitOfMeasurement;
+@class IoTEntity, IoTStateObservation, TypeOf, UnitOfMeasurement;
 
 @interface Property : NSManagedObject
 
@@ -21,7 +21,8 @@
 @property (nonatomic, retain) NSString * cnPrefix;
 @property (nonatomic, retain) IoTEntity *cnIoTEntity;
 @property (nonatomic, retain) NSSet *cnTypeOf;
-@property (nonatomic, retain) NSSet *cnUnitOfMeasurement;
+@property (nonatomic, retain) UnitOfMeasurement *cnUnitOfMeasurement;
+@property (nonatomic, retain) NSSet *cnIoTStateObservation;
 @end
 
 @interface Property (CoreDataGeneratedAccessors)
@@ -31,9 +32,9 @@
 - (void)addCnTypeOf:(NSSet *)values;
 - (void)removeCnTypeOf:(NSSet *)values;
 
-- (void)addCnUnitOfMeasurementObject:(UnitOfMeasurement *)value;
-- (void)removeCnUnitOfMeasurementObject:(UnitOfMeasurement *)value;
-- (void)addCnUnitOfMeasurement:(NSSet *)values;
-- (void)removeCnUnitOfMeasurement:(NSSet *)values;
+- (void)addCnIoTStateObservationObject:(IoTStateObservation *)value;
+- (void)removeCnIoTStateObservationObject:(IoTStateObservation *)value;
+- (void)addCnIoTStateObservation:(NSSet *)values;
+- (void)removeCnIoTStateObservation:(NSSet *)values;
 
 @end

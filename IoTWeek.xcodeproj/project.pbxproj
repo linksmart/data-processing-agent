@@ -7,12 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E90DCD2619257BAE0071CF4D /* PropertiesCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */; };
+		E90DCD2919257E810071CF4D /* IoTStateObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2819257E810071CF4D /* IoTStateObservation.m */; };
+		E90DCD2C19257E810071CF4D /* Property.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2B19257E810071CF4D /* Property.m */; };
+		E90DCD2F19257E810071CF4D /* UnitOfMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2E19257E810071CF4D /* UnitOfMeasurement.m */; };
+		E90DCD3219257E810071CF4D /* TypeOf.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD3119257E810071CF4D /* TypeOf.m */; };
+		E90DCD3519257E810071CF4D /* IoTEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD3419257E810071CF4D /* IoTEntity.m */; };
+		E90DCD38192581A40071CF4D /* IoTStateObservation+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */; };
 		E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB2FF419242ACF00E21913 /* Property+Load.m */; };
 		E9BB2FF819242ACF00E21913 /* TypeOf+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB2FF619242ACF00E21913 /* TypeOf+Load.m */; };
-		E9BB300719242C5000E21913 /* Property.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB300619242C5000E21913 /* Property.m */; };
-		E9BB300A19242C5000E21913 /* IoTEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB300919242C5000E21913 /* IoTEntity.m */; };
-		E9BB300D19242C5000E21913 /* TypeOf.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB300C19242C5000E21913 /* TypeOf.m */; };
-		E9BB301019242C5000E21913 /* UnitOfMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB300F19242C5000E21913 /* UnitOfMeasurement.m */; };
+		E9E0492E192578EA00473E27 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E9E0492D192578EA00473E27 /* SettingsVC.m */; };
 		E9F70E361923E7D5007485B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F70E351923E7D5007485B3 /* Foundation.framework */; };
 		E9F70E381923E7D5007485B3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F70E371923E7D5007485B3 /* CoreGraphics.framework */; };
 		E9F70E3A1923E7D5007485B3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F70E391923E7D5007485B3 /* UIKit.framework */; };
@@ -45,18 +49,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E90DCD2419257BAE0071CF4D /* PropertiesCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertiesCDTVC.h; sourceTree = "<group>"; };
+		E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertiesCDTVC.m; sourceTree = "<group>"; };
+		E90DCD2719257E810071CF4D /* IoTStateObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTStateObservation.h; path = "Core Data/IoTStateObservation.h"; sourceTree = "<group>"; };
+		E90DCD2819257E810071CF4D /* IoTStateObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTStateObservation.m; path = "Core Data/IoTStateObservation.m"; sourceTree = "<group>"; };
+		E90DCD2A19257E810071CF4D /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Property.h; path = "Core Data/Property.h"; sourceTree = "<group>"; };
+		E90DCD2B19257E810071CF4D /* Property.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Property.m; path = "Core Data/Property.m"; sourceTree = "<group>"; };
+		E90DCD2D19257E810071CF4D /* UnitOfMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnitOfMeasurement.h; path = "Core Data/UnitOfMeasurement.h"; sourceTree = "<group>"; };
+		E90DCD2E19257E810071CF4D /* UnitOfMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnitOfMeasurement.m; path = "Core Data/UnitOfMeasurement.m"; sourceTree = "<group>"; };
+		E90DCD3019257E810071CF4D /* TypeOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TypeOf.h; path = "Core Data/TypeOf.h"; sourceTree = "<group>"; };
+		E90DCD3119257E810071CF4D /* TypeOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TypeOf.m; path = "Core Data/TypeOf.m"; sourceTree = "<group>"; };
+		E90DCD3319257E810071CF4D /* IoTEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTEntity.h; path = "Core Data/IoTEntity.h"; sourceTree = "<group>"; };
+		E90DCD3419257E810071CF4D /* IoTEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTEntity.m; path = "Core Data/IoTEntity.m"; sourceTree = "<group>"; };
+		E90DCD36192581A40071CF4D /* IoTStateObservation+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IoTStateObservation+Load.h"; path = "Core Data/IoTStateObservation+Load.h"; sourceTree = "<group>"; };
+		E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IoTStateObservation+Load.m"; path = "Core Data/IoTStateObservation+Load.m"; sourceTree = "<group>"; };
 		E9BB2FF319242ACF00E21913 /* Property+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Property+Load.h"; path = "Core Data/Property+Load.h"; sourceTree = "<group>"; };
 		E9BB2FF419242ACF00E21913 /* Property+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Property+Load.m"; path = "Core Data/Property+Load.m"; sourceTree = "<group>"; };
 		E9BB2FF519242ACF00E21913 /* TypeOf+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TypeOf+Load.h"; path = "Core Data/TypeOf+Load.h"; sourceTree = "<group>"; };
 		E9BB2FF619242ACF00E21913 /* TypeOf+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TypeOf+Load.m"; path = "Core Data/TypeOf+Load.m"; sourceTree = "<group>"; };
-		E9BB300519242C5000E21913 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Property.h; path = "Core Data/Property.h"; sourceTree = "<group>"; };
-		E9BB300619242C5000E21913 /* Property.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Property.m; path = "Core Data/Property.m"; sourceTree = "<group>"; };
-		E9BB300819242C5000E21913 /* IoTEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTEntity.h; path = "Core Data/IoTEntity.h"; sourceTree = "<group>"; };
-		E9BB300919242C5000E21913 /* IoTEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTEntity.m; path = "Core Data/IoTEntity.m"; sourceTree = "<group>"; };
-		E9BB300B19242C5000E21913 /* TypeOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TypeOf.h; path = "Core Data/TypeOf.h"; sourceTree = "<group>"; };
-		E9BB300C19242C5000E21913 /* TypeOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TypeOf.m; path = "Core Data/TypeOf.m"; sourceTree = "<group>"; };
-		E9BB300E19242C5000E21913 /* UnitOfMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnitOfMeasurement.h; path = "Core Data/UnitOfMeasurement.h"; sourceTree = "<group>"; };
-		E9BB300F19242C5000E21913 /* UnitOfMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnitOfMeasurement.m; path = "Core Data/UnitOfMeasurement.m"; sourceTree = "<group>"; };
+		E9E0492C192578EA00473E27 /* SettingsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsVC.h; sourceTree = "<group>"; };
+		E9E0492D192578EA00473E27 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsVC.m; sourceTree = "<group>"; };
 		E9F70E321923E7D5007485B3 /* IoTWeek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IoTWeek.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9F70E351923E7D5007485B3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E9F70E371923E7D5007485B3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -188,14 +200,18 @@
 			isa = PBXGroup;
 			children = (
 				E9F70E6D1923E893007485B3 /* CNetModel.xcdatamodeld */,
-				E9BB300E19242C5000E21913 /* UnitOfMeasurement.h */,
-				E9BB300F19242C5000E21913 /* UnitOfMeasurement.m */,
-				E9BB300B19242C5000E21913 /* TypeOf.h */,
-				E9BB300C19242C5000E21913 /* TypeOf.m */,
-				E9BB300819242C5000E21913 /* IoTEntity.h */,
-				E9BB300919242C5000E21913 /* IoTEntity.m */,
-				E9BB300519242C5000E21913 /* Property.h */,
-				E9BB300619242C5000E21913 /* Property.m */,
+				E90DCD3319257E810071CF4D /* IoTEntity.h */,
+				E90DCD3419257E810071CF4D /* IoTEntity.m */,
+				E90DCD3019257E810071CF4D /* TypeOf.h */,
+				E90DCD3119257E810071CF4D /* TypeOf.m */,
+				E90DCD2D19257E810071CF4D /* UnitOfMeasurement.h */,
+				E90DCD2E19257E810071CF4D /* UnitOfMeasurement.m */,
+				E90DCD2A19257E810071CF4D /* Property.h */,
+				E90DCD2B19257E810071CF4D /* Property.m */,
+				E90DCD2719257E810071CF4D /* IoTStateObservation.h */,
+				E90DCD2819257E810071CF4D /* IoTStateObservation.m */,
+				E90DCD36192581A40071CF4D /* IoTStateObservation+Load.h */,
+				E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */,
 				E9BB2FF319242ACF00E21913 /* Property+Load.h */,
 				E9BB2FF419242ACF00E21913 /* Property+Load.m */,
 				E9BB2FF519242ACF00E21913 /* TypeOf+Load.h */,
@@ -221,10 +237,14 @@
 		E9F70EA019240484007485B3 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				E9E0492C192578EA00473E27 /* SettingsVC.h */,
+				E9E0492D192578EA00473E27 /* SettingsVC.m */,
 				E9F70E9D1924047F007485B3 /* CoreDataTableViewController.h */,
 				E9F70E9E1924047F007485B3 /* CoreDataTableViewController.m */,
 				E9F70EA1192404D3007485B3 /* IoTEntitiesCDTVC.h */,
 				E9F70EA2192404D3007485B3 /* IoTEntitiesCDTVC.m */,
+				E90DCD2419257BAE0071CF4D /* PropertiesCDTVC.h */,
+				E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -334,19 +354,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9BB300D19242C5000E21913 /* TypeOf.m in Sources */,
 				E9F70EA3192404D3007485B3 /* IoTEntitiesCDTVC.m in Sources */,
-				E9BB300A19242C5000E21913 /* IoTEntity.m in Sources */,
+				E90DCD2619257BAE0071CF4D /* PropertiesCDTVC.m in Sources */,
+				E90DCD38192581A40071CF4D /* IoTStateObservation+Load.m in Sources */,
+				E9E0492E192578EA00473E27 /* SettingsVC.m in Sources */,
 				E9F70E9F1924047F007485B3 /* CoreDataTableViewController.m in Sources */,
 				E9F70E6F1923E893007485B3 /* CNetModel.xcdatamodeld in Sources */,
 				E9F70E971923ED33007485B3 /* IoTEntity+Load.m in Sources */,
 				E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */,
+				E90DCD2F19257E810071CF4D /* UnitOfMeasurement.m in Sources */,
+				E90DCD2919257E810071CF4D /* IoTStateObservation.m in Sources */,
+				E90DCD3219257E810071CF4D /* TypeOf.m in Sources */,
+				E90DCD2C19257E810071CF4D /* Property.m in Sources */,
 				E9BB2FF819242ACF00E21913 /* TypeOf+Load.m in Sources */,
 				E9F70E9A1923F850007485B3 /* AppDelegate+Context.m in Sources */,
 				E9F70E461923E7D5007485B3 /* AppDelegate.m in Sources */,
-				E9BB301019242C5000E21913 /* UnitOfMeasurement.m in Sources */,
-				E9BB300719242C5000E21913 /* Property.m in Sources */,
 				E9F70E421923E7D5007485B3 /* main.m in Sources */,
+				E90DCD3519257E810071CF4D /* IoTEntity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

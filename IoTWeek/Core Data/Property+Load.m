@@ -8,6 +8,8 @@
 
 #import "Property+Load.h"
 #include "IoTEntity+Load.h"
+#include "IoTStateObservation+Load.h"
+#import "TypeOf+Load.h"
 
 @implementation Property (Load)
 
@@ -86,9 +88,14 @@
            usingManagedContext:(NSManagedObjectContext *)context
 {
     for (NSDictionary *property in properties) {
-        [self propertyWithDefinition:property forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
+        Property *newProperty = [self propertyWithDefinition:property forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
+        
+        NSArray *iotStateObservations = [property valueForKeyPath:@"IoTStateObservation"];
+        [IoTStateObservation loadIoTStateObservationsFromArray:iotStateObservations forIoTEntityWithAbout:iotEntityAbout forPropertiesWithAbout:newProperty.cnAbout usingManagedContext:context];
+        
+        NSArray *typeOf = [property valueForKeyPath:@"TypeOf"];
+        [TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forPropertiesWithAbout:newProperty.cnAbout forIoTEntityWithAbout:iotEntityAbout];
     }
-
 }
 
 + (Property *)propertyWithAbout:(NSString *)propertyAbout
@@ -96,7 +103,25 @@
                 usingManagedContext:(NSManagedObjectContext *)context
 {
     Property *property = nil;
-    return nil;
+    
+    if ([propertyAbout length] && [iotEntityAbout length]) {
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Property"];
+        request.predicate = [NSPredicate predicateWithFormat:@"cnAbout = %@ AND cnIoTEntity.cnAbout = %@", propertyAbout, iotEntityAbout];
+        
+        NSError *error;
+        NSArray *matches = [context executeFetchRequest:request error:&error];
+        
+        if (!matches || ([matches count] > 1)) {
+            // handle error
+        } else if (![matches count]) {
+            // if none found
+            return nil;
+        } else {
+            property = [matches lastObject];
+        }
+    }
+    
+    return property;
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "IoTEntitiesCDTVC.h"
 #import "DatabaseAvailability.h"
 #import "IoTEntity+Load.h"
+#import "PropertiesCDTVC.h"
 
 @interface IoTEntitiesCDTVC ()
 
@@ -30,8 +31,10 @@
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(removeRandomObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
+    UIBarButtonItem *removeRandom = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(removeRandomObject:)];
+    UIBarButtonItem *uploadLocation = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(uploadLocation:)];
+    
+    self.navigationItem.rightBarButtonItems = @[uploadLocation, removeRandom];
     self.debug = YES;
 }
 
@@ -51,6 +54,11 @@
     }
     
     
+}
+
+- (void)uploadLocation:(id)sender
+{
+    NSLog(@"Upload location");
 }
 
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
@@ -80,9 +88,46 @@
     IoTEntity *iotEntity = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     cell.textLabel.text = iotEntity.cnName;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d properties", (int)[iotEntity.cnProperty count]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Properties: %d", (int)[iotEntity.cnProperty count]];
     
     return cell;
+}
+
+#pragma mark - Navigation
+
+- (void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifer fromIndexPath:(NSIndexPath *)indexPath
+{
+    IoTEntity *iotEntity = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+    if ([vc isKindOfClass:[PropertiesCDTVC class]]) {
+        PropertiesCDTVC *pCDTVS =
+        (PropertiesCDTVC *)vc;
+        pCDTVS.iotEntity = iotEntity;
+    }
+}
+
+// boilerplate
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = nil;
+    if ([sender isKindOfClass:[UITableViewCell class]]) {
+        indexPath = [self.tableView indexPathForCell:sender];
+    }
+    [self prepareViewController:segue.destinationViewController
+                       forSegue:segue.identifier
+                  fromIndexPath:indexPath];
+}
+
+// boilerplate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id detailvc = [self.splitViewController.viewControllers lastObject];
+    if ([detailvc isKindOfClass:[UINavigationController class]]) {
+        detailvc = [((UINavigationController *)detailvc).viewControllers firstObject];
+        [self prepareViewController:detailvc
+                           forSegue:nil
+                      fromIndexPath:indexPath];
+    }
 }
 
 @end
