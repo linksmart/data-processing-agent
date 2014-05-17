@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B2AB31471926DEC10092E849 /* IoTStateObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB31461926DEC10092E849 /* IoTStateObservation.m */; };
+		B2AB314A1926DEC20092E849 /* Property.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB31491926DEC20092E849 /* Property.m */; };
+		B2AB314D1926DEC20092E849 /* IoTEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB314C1926DEC20092E849 /* IoTEntity.m */; };
+		B2AB31501926DEC20092E849 /* UnitOfMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB314F1926DEC20092E849 /* UnitOfMeasurement.m */; };
+		B2AB31531926DEC20092E849 /* TypeOf.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB31521926DEC20092E849 /* TypeOf.m */; };
 		B2B92C6819262B41009E4E3D /* IoTStateObservationCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */; };
 		E90DCD2619257BAE0071CF4D /* PropertiesCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */; };
-		E90DCD2919257E810071CF4D /* IoTStateObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2819257E810071CF4D /* IoTStateObservation.m */; };
-		E90DCD2C19257E810071CF4D /* Property.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2B19257E810071CF4D /* Property.m */; };
-		E90DCD2F19257E810071CF4D /* UnitOfMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2E19257E810071CF4D /* UnitOfMeasurement.m */; };
-		E90DCD3219257E810071CF4D /* TypeOf.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD3119257E810071CF4D /* TypeOf.m */; };
-		E90DCD3519257E810071CF4D /* IoTEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD3419257E810071CF4D /* IoTEntity.m */; };
 		E90DCD38192581A40071CF4D /* IoTStateObservation+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */; };
 		E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB2FF419242ACF00E21913 /* Property+Load.m */; };
 		E9BB2FF819242ACF00E21913 /* TypeOf+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB2FF619242ACF00E21913 /* TypeOf+Load.m */; };
@@ -50,20 +50,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B2AB31451926DEC10092E849 /* IoTStateObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTStateObservation.h; path = "Core Data/IoTStateObservation.h"; sourceTree = "<group>"; };
+		B2AB31461926DEC10092E849 /* IoTStateObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTStateObservation.m; path = "Core Data/IoTStateObservation.m"; sourceTree = "<group>"; };
+		B2AB31481926DEC20092E849 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Property.h; path = "Core Data/Property.h"; sourceTree = "<group>"; };
+		B2AB31491926DEC20092E849 /* Property.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Property.m; path = "Core Data/Property.m"; sourceTree = "<group>"; };
+		B2AB314B1926DEC20092E849 /* IoTEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTEntity.h; path = "Core Data/IoTEntity.h"; sourceTree = "<group>"; };
+		B2AB314C1926DEC20092E849 /* IoTEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTEntity.m; path = "Core Data/IoTEntity.m"; sourceTree = "<group>"; };
+		B2AB314E1926DEC20092E849 /* UnitOfMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnitOfMeasurement.h; path = "Core Data/UnitOfMeasurement.h"; sourceTree = "<group>"; };
+		B2AB314F1926DEC20092E849 /* UnitOfMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnitOfMeasurement.m; path = "Core Data/UnitOfMeasurement.m"; sourceTree = "<group>"; };
+		B2AB31511926DEC20092E849 /* TypeOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TypeOf.h; path = "Core Data/TypeOf.h"; sourceTree = "<group>"; };
+		B2AB31521926DEC20092E849 /* TypeOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TypeOf.m; path = "Core Data/TypeOf.m"; sourceTree = "<group>"; };
 		B2B92C6619262B41009E4E3D /* IoTStateObservationCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoTStateObservationCDTVC.h; sourceTree = "<group>"; };
 		B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IoTStateObservationCDTVC.m; sourceTree = "<group>"; };
 		E90DCD2419257BAE0071CF4D /* PropertiesCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertiesCDTVC.h; sourceTree = "<group>"; };
 		E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertiesCDTVC.m; sourceTree = "<group>"; };
-		E90DCD2719257E810071CF4D /* IoTStateObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTStateObservation.h; path = "Core Data/IoTStateObservation.h"; sourceTree = "<group>"; };
-		E90DCD2819257E810071CF4D /* IoTStateObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTStateObservation.m; path = "Core Data/IoTStateObservation.m"; sourceTree = "<group>"; };
-		E90DCD2A19257E810071CF4D /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Property.h; path = "Core Data/Property.h"; sourceTree = "<group>"; };
-		E90DCD2B19257E810071CF4D /* Property.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Property.m; path = "Core Data/Property.m"; sourceTree = "<group>"; };
-		E90DCD2D19257E810071CF4D /* UnitOfMeasurement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnitOfMeasurement.h; path = "Core Data/UnitOfMeasurement.h"; sourceTree = "<group>"; };
-		E90DCD2E19257E810071CF4D /* UnitOfMeasurement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnitOfMeasurement.m; path = "Core Data/UnitOfMeasurement.m"; sourceTree = "<group>"; };
-		E90DCD3019257E810071CF4D /* TypeOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TypeOf.h; path = "Core Data/TypeOf.h"; sourceTree = "<group>"; };
-		E90DCD3119257E810071CF4D /* TypeOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TypeOf.m; path = "Core Data/TypeOf.m"; sourceTree = "<group>"; };
-		E90DCD3319257E810071CF4D /* IoTEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTEntity.h; path = "Core Data/IoTEntity.h"; sourceTree = "<group>"; };
-		E90DCD3419257E810071CF4D /* IoTEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTEntity.m; path = "Core Data/IoTEntity.m"; sourceTree = "<group>"; };
 		E90DCD36192581A40071CF4D /* IoTStateObservation+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IoTStateObservation+Load.h"; path = "Core Data/IoTStateObservation+Load.h"; sourceTree = "<group>"; };
 		E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IoTStateObservation+Load.m"; path = "Core Data/IoTStateObservation+Load.m"; sourceTree = "<group>"; };
 		E9BB2FF319242ACF00E21913 /* Property+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Property+Load.h"; path = "Core Data/Property+Load.h"; sourceTree = "<group>"; };
@@ -203,16 +203,16 @@
 			isa = PBXGroup;
 			children = (
 				E9F70E6D1923E893007485B3 /* CNetModel.xcdatamodeld */,
-				E90DCD3319257E810071CF4D /* IoTEntity.h */,
-				E90DCD3419257E810071CF4D /* IoTEntity.m */,
-				E90DCD3019257E810071CF4D /* TypeOf.h */,
-				E90DCD3119257E810071CF4D /* TypeOf.m */,
-				E90DCD2D19257E810071CF4D /* UnitOfMeasurement.h */,
-				E90DCD2E19257E810071CF4D /* UnitOfMeasurement.m */,
-				E90DCD2A19257E810071CF4D /* Property.h */,
-				E90DCD2B19257E810071CF4D /* Property.m */,
-				E90DCD2719257E810071CF4D /* IoTStateObservation.h */,
-				E90DCD2819257E810071CF4D /* IoTStateObservation.m */,
+				B2AB31511926DEC20092E849 /* TypeOf.h */,
+				B2AB31521926DEC20092E849 /* TypeOf.m */,
+				B2AB314E1926DEC20092E849 /* UnitOfMeasurement.h */,
+				B2AB314F1926DEC20092E849 /* UnitOfMeasurement.m */,
+				B2AB314B1926DEC20092E849 /* IoTEntity.h */,
+				B2AB314C1926DEC20092E849 /* IoTEntity.m */,
+				B2AB31481926DEC20092E849 /* Property.h */,
+				B2AB31491926DEC20092E849 /* Property.m */,
+				B2AB31451926DEC10092E849 /* IoTStateObservation.h */,
+				B2AB31461926DEC10092E849 /* IoTStateObservation.m */,
 				E90DCD36192581A40071CF4D /* IoTStateObservation+Load.h */,
 				E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */,
 				E9BB2FF319242ACF00E21913 /* Property+Load.h */,
@@ -302,6 +302,7 @@
 				ORGANIZATIONNAME = ITAdvice;
 				TargetAttributes = {
 					E9F70E311923E7D5007485B3 = {
+						DevelopmentTeam = 5S5HLXNZY8;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -360,23 +361,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9F70EA3192404D3007485B3 /* IoTEntitiesCDTVC.m in Sources */,
+				B2AB31501926DEC20092E849 /* UnitOfMeasurement.m in Sources */,
 				E90DCD2619257BAE0071CF4D /* PropertiesCDTVC.m in Sources */,
 				E90DCD38192581A40071CF4D /* IoTStateObservation+Load.m in Sources */,
 				E9E0492E192578EA00473E27 /* SettingsVC.m in Sources */,
 				E9F70E9F1924047F007485B3 /* CoreDataTableViewController.m in Sources */,
 				E9F70E6F1923E893007485B3 /* CNetModel.xcdatamodeld in Sources */,
+				B2AB314D1926DEC20092E849 /* IoTEntity.m in Sources */,
+				B2AB314A1926DEC20092E849 /* Property.m in Sources */,
 				E9F70E971923ED33007485B3 /* IoTEntity+Load.m in Sources */,
 				E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */,
-				E90DCD2F19257E810071CF4D /* UnitOfMeasurement.m in Sources */,
-				E90DCD2919257E810071CF4D /* IoTStateObservation.m in Sources */,
+				B2AB31471926DEC10092E849 /* IoTStateObservation.m in Sources */,
+				B2AB31531926DEC20092E849 /* TypeOf.m in Sources */,
 				B2B92C6819262B41009E4E3D /* IoTStateObservationCDTVC.m in Sources */,
-				E90DCD3219257E810071CF4D /* TypeOf.m in Sources */,
-				E90DCD2C19257E810071CF4D /* Property.m in Sources */,
 				E9BB2FF819242ACF00E21913 /* TypeOf+Load.m in Sources */,
 				E9F70E9A1923F850007485B3 /* AppDelegate+Context.m in Sources */,
 				E9F70E461923E7D5007485B3 /* AppDelegate.m in Sources */,
 				E9F70E421923E7D5007485B3 /* main.m in Sources */,
-				E90DCD3519257E810071CF4D /* IoTEntity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,10 +512,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IoTWeek/IoTWeek-Prefix.pch";
 				INFOPLIST_FILE = "IoTWeek/IoTWeek-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -524,10 +528,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IoTWeek/IoTWeek-Prefix.pch";
 				INFOPLIST_FILE = "IoTWeek/IoTWeek-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

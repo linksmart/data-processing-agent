@@ -34,18 +34,24 @@
         IoTStateObservation *myObservation = [NSEntityDescription insertNewObjectForEntityForName:@"IoTStateObservation"
                                                                            inManagedObjectContext:context];
         
-        NSDateFormatter *dateFor = [[NSDateFormatter alloc] init];
-        [dateFor setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        //NSDateFormatter *dateFor = [[NSDateFormatter alloc] init];
+        //[dateFor setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
-        // TODO: Ask if we couldnt get timezone info as well. That'd be great.
         myObservation.cnValue = [observation valueForKeyPath:@"Value"];
-        myObservation.cnResultTime = [dateFor dateFromString:[observation valueForKeyPath:@"ResultTime"]];
-        myObservation.cnPhenomenonTime = [dateFor dateFromString:[observation valueForKeyPath:@"PhenomenonTime"]];
+        myObservation.cnResultTime = [observation valueForKeyPath:@"ResultTime"];//[dateFor dateFromString:[observation valueForKeyPath:@"ResultTime"]];
+        myObservation.cnPhenomenonTime = [observation valueForKeyPath:@"PhenomenonTime"]; // [dateFor dateFromString:[observation valueForKeyPath:@"PhenomenonTime"]];
+        
+        NSLog(@"Loading phoenomeontime: %@", [observation valueForKeyPath:@"PhenomenonTime"]);
         
         [iotStateObservationSet addObject:myObservation];
     }
     
     property.cnIoTStateObservation = iotStateObservationSet;
+    
+    NSError *error;
+    [context save:&error];
+    if (error)
+        abort();
 }
 
 @end

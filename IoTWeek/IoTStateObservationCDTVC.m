@@ -52,6 +52,8 @@
         NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities/%@/Properties/%@/observations", self.propery.cnIoTEntity.cnAbout, self.propery.cnAbout];
         NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
         
+        NSLog(@"TheURL: %@", [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]);
+        
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
         [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         
@@ -93,7 +95,7 @@
     
     IoTStateObservation *iotStateObservation = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = iotStateObservation.cnValue;
-    cell.detailTextLabel.text = [iotStateObservation.cnPhenomenonTime description];
+    cell.detailTextLabel.text = iotStateObservation.cnPhenomenonTime;
     
     return cell;
 }

@@ -72,6 +72,14 @@
         
         NSArray *properties = [iotEntity valueForKeyPath:@"Properties"];
         [Property loadPropertiesFromArray:properties forIoTEntityWithAbout:newEntity.cnAbout usingManagedContext:context];
+
+        // Important note, we tidy up after us here... Perhaps typeOf should be considered a classification.... In fact
+        // lets implement that instead. ( Given time )
+        for (id types in newEntity.cnTypeOf) {
+            if ([types isKindOfClass:[NSManagedObject class]]) {
+                [context deleteObject:types];
+            }
+        }
         
         NSArray *typeOf = [iotEntity valueForKeyPath:@"TypeOf"];
         [TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forIoTEntityWithAbout:newEntity.cnAbout];

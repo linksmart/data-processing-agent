@@ -2,7 +2,7 @@
 //  Property.h
 //  IoTWeek
 //
-//  Created by Thomas Gilbert on 16/05/14.
+//  Created by Thomas Barrie Juel Gilbert on 17/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
@@ -20,21 +20,21 @@
 @property (nonatomic, retain) NSString * cnName;
 @property (nonatomic, retain) NSString * cnPrefix;
 @property (nonatomic, retain) IoTEntity *cnIoTEntity;
+@property (nonatomic, retain) NSSet *cnIoTStateObservation;
 @property (nonatomic, retain) NSSet *cnTypeOf;
 @property (nonatomic, retain) UnitOfMeasurement *cnUnitOfMeasurement;
-@property (nonatomic, retain) NSSet *cnIoTStateObservation;
 @end
 
 @interface Property (CoreDataGeneratedAccessors)
-
-- (void)addCnTypeOfObject:(TypeOf *)value;
-- (void)removeCnTypeOfObject:(TypeOf *)value;
-- (void)addCnTypeOf:(NSSet *)values;
-- (void)removeCnTypeOf:(NSSet *)values;
 
 - (void)addCnIoTStateObservationObject:(IoTStateObservation *)value;
 - (void)removeCnIoTStateObservationObject:(IoTStateObservation *)value;
 - (void)addCnIoTStateObservation:(NSSet *)values;
 - (void)removeCnIoTStateObservation:(NSSet *)values;
+
+- (void)addCnTypeOfObject:(TypeOf *)value;
+- (void)removeCnTypeOfObject:(TypeOf *)value;
+- (void)addCnTypeOf:(NSSet *)values;
+- (void)removeCnTypeOf:(NSSet *)values;
 
 @end
