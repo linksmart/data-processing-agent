@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B2AB31471926DEC10092E849 /* IoTStateObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB31461926DEC10092E849 /* IoTStateObservation.m */; };
+		B202FE1B1926E3950008679B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B202FE1A1926E3950008679B /* MapKit.framework */; };
+		B20376A719273EBB0086CEDD /* IoTStateObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = B20376A619273EBB0086CEDD /* IoTStateObservation.m */; };
+		B27172CC1929F0B600CD999B /* IoTStateObservation+Load in Resources */ = {isa = PBXBuildFile; fileRef = B27172CB1929F0B600CD999B /* IoTStateObservation+Load */; };
 		B2AB314A1926DEC20092E849 /* Property.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB31491926DEC20092E849 /* Property.m */; };
 		B2AB314D1926DEC20092E849 /* IoTEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB314C1926DEC20092E849 /* IoTEntity.m */; };
 		B2AB31501926DEC20092E849 /* UnitOfMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB314F1926DEC20092E849 /* UnitOfMeasurement.m */; };
@@ -50,8 +52,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B2AB31451926DEC10092E849 /* IoTStateObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTStateObservation.h; path = "Core Data/IoTStateObservation.h"; sourceTree = "<group>"; };
-		B2AB31461926DEC10092E849 /* IoTStateObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTStateObservation.m; path = "Core Data/IoTStateObservation.m"; sourceTree = "<group>"; };
+		B202FE1A1926E3950008679B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		B20376A519273EBB0086CEDD /* IoTStateObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTStateObservation.h; path = "Core Data/IoTStateObservation.h"; sourceTree = "<group>"; };
+		B20376A619273EBB0086CEDD /* IoTStateObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTStateObservation.m; path = "Core Data/IoTStateObservation.m"; sourceTree = "<group>"; };
+		B27172CB1929F0B600CD999B /* IoTStateObservation+Load */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "IoTStateObservation+Load"; path = "Core Data/IoTStateObservation+Load"; sourceTree = "<group>"; };
 		B2AB31481926DEC20092E849 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Property.h; path = "Core Data/Property.h"; sourceTree = "<group>"; };
 		B2AB31491926DEC20092E849 /* Property.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Property.m; path = "Core Data/Property.m"; sourceTree = "<group>"; };
 		B2AB314B1926DEC20092E849 /* IoTEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTEntity.h; path = "Core Data/IoTEntity.h"; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 			files = (
 				E9F70E381923E7D5007485B3 /* CoreGraphics.framework in Frameworks */,
 				E9F70E3A1923E7D5007485B3 /* UIKit.framework in Frameworks */,
+				B202FE1B1926E3950008679B /* MapKit.framework in Frameworks */,
 				E9F70E361923E7D5007485B3 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -148,6 +153,7 @@
 		E9F70E341923E7D5007485B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B202FE1A1926E3950008679B /* MapKit.framework */,
 				E9F70E351923E7D5007485B3 /* Foundation.framework */,
 				E9F70E371923E7D5007485B3 /* CoreGraphics.framework */,
 				E9F70E391923E7D5007485B3 /* UIKit.framework */,
@@ -203,6 +209,8 @@
 			isa = PBXGroup;
 			children = (
 				E9F70E6D1923E893007485B3 /* CNetModel.xcdatamodeld */,
+				B20376A519273EBB0086CEDD /* IoTStateObservation.h */,
+				B20376A619273EBB0086CEDD /* IoTStateObservation.m */,
 				B2AB31511926DEC20092E849 /* TypeOf.h */,
 				B2AB31521926DEC20092E849 /* TypeOf.m */,
 				B2AB314E1926DEC20092E849 /* UnitOfMeasurement.h */,
@@ -211,10 +219,9 @@
 				B2AB314C1926DEC20092E849 /* IoTEntity.m */,
 				B2AB31481926DEC20092E849 /* Property.h */,
 				B2AB31491926DEC20092E849 /* Property.m */,
-				B2AB31451926DEC10092E849 /* IoTStateObservation.h */,
-				B2AB31461926DEC10092E849 /* IoTStateObservation.m */,
 				E90DCD36192581A40071CF4D /* IoTStateObservation+Load.h */,
 				E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */,
+				B27172CB1929F0B600CD999B /* IoTStateObservation+Load */,
 				E9BB2FF319242ACF00E21913 /* Property+Load.h */,
 				E9BB2FF419242ACF00E21913 /* Property+Load.m */,
 				E9BB2FF519242ACF00E21913 /* TypeOf+Load.h */,
@@ -307,6 +314,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.iOS = {
+								enabled = 1;
+							};
 						};
 					};
 					E9F70E551923E7D5007485B3 = {
@@ -342,6 +352,7 @@
 				E9F70E511923E7D5007485B3 /* Images.xcassets in Resources */,
 				E9F70E491923E7D5007485B3 /* Main_iPhone.storyboard in Resources */,
 				E9F70E401923E7D5007485B3 /* InfoPlist.strings in Resources */,
+				B27172CC1929F0B600CD999B /* IoTStateObservation+Load in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,7 +382,7 @@
 				B2AB314A1926DEC20092E849 /* Property.m in Sources */,
 				E9F70E971923ED33007485B3 /* IoTEntity+Load.m in Sources */,
 				E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */,
-				B2AB31471926DEC10092E849 /* IoTStateObservation.m in Sources */,
+				B20376A719273EBB0086CEDD /* IoTStateObservation.m in Sources */,
 				B2AB31531926DEC20092E849 /* TypeOf.m in Sources */,
 				B2B92C6819262B41009E4E3D /* IoTStateObservationCDTVC.m in Sources */,
 				E9BB2FF819242ACF00E21913 /* TypeOf+Load.m in Sources */,

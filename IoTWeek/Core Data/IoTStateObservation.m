@@ -15,6 +15,7 @@
 @dynamic cnPhenomenonTime;
 @dynamic cnResultTime;
 @dynamic cnValue;
+@dynamic testdate;
 @dynamic cnProperty;
 
 @end

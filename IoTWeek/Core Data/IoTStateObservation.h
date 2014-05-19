@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSString * cnPhenomenonTime;
 @property (nonatomic, retain) NSString * cnResultTime;
 @property (nonatomic, retain) NSString * cnValue;
+@property (nonatomic, retain) NSDate * testdate;
 @property (nonatomic, retain) Property *cnProperty;
 
 @end

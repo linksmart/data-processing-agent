@@ -156,7 +156,7 @@
         NSArray *iotEntities = [self iotEntitiesAtURL:localFile];
         [context performBlock:^{
             [IoTEntity loadIoTEntitiesFromArray:iotEntities usingManagedContext:context];
-            [context save:NULL];
+            //[context save:NULL];
             if (whenDone) whenDone();
         }];
     } else {

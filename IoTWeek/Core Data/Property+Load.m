@@ -91,8 +91,8 @@
         Property *newProperty = [self propertyWithDefinition:property forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
         
         // TODO: Initial load of observations removed.... Just for testing
-        //NSArray *iotStateObservations = [property valueForKeyPath:@"IoTStateObservation"];
-        //[IoTStateObservation loadIoTStateObservationsFromArray:iotStateObservations forIoTEntityWithAbout:iotEntityAbout forPropertiesWithAbout:newProperty.cnAbout usingManagedContext:context];
+        NSArray *iotStateObservations = [property valueForKeyPath:@"IoTStateObservation"];
+        [IoTStateObservation loadIoTStateObservationsFromArray:iotStateObservations forIoTEntityWithAbout:iotEntityAbout forPropertiesWithAbout:newProperty.cnAbout usingManagedContext:context];
         
         
         // Important note, we tidy up after us here... Perhaps typeOf should be considered a classification.... In fact
