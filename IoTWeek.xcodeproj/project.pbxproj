@@ -14,6 +14,7 @@
 		B2AB31501926DEC20092E849 /* UnitOfMeasurement.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB314F1926DEC20092E849 /* UnitOfMeasurement.m */; };
 		B2AB31531926DEC20092E849 /* TypeOf.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AB31521926DEC20092E849 /* TypeOf.m */; };
 		B2B92C6819262B41009E4E3D /* IoTStateObservationCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */; };
+		B2EF9524192D527700ED2664 /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EF9523192D527700ED2664 /* ImageViewController.m */; };
 		E90DCD2619257BAE0071CF4D /* PropertiesCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */; };
 		E90DCD38192581A40071CF4D /* IoTStateObservation+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */; };
 		E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB2FF419242ACF00E21913 /* Property+Load.m */; };
@@ -64,6 +65,8 @@
 		B2AB31521926DEC20092E849 /* TypeOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TypeOf.m; path = "Core Data/TypeOf.m"; sourceTree = "<group>"; };
 		B2B92C6619262B41009E4E3D /* IoTStateObservationCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoTStateObservationCDTVC.h; sourceTree = "<group>"; };
 		B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IoTStateObservationCDTVC.m; sourceTree = "<group>"; };
+		B2EF9522192D527700ED2664 /* ImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewController.h; sourceTree = "<group>"; };
+		B2EF9523192D527700ED2664 /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewController.m; sourceTree = "<group>"; };
 		E90DCD2419257BAE0071CF4D /* PropertiesCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertiesCDTVC.h; sourceTree = "<group>"; };
 		E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertiesCDTVC.m; sourceTree = "<group>"; };
 		E90DCD36192581A40071CF4D /* IoTStateObservation+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IoTStateObservation+Load.h"; path = "Core Data/IoTStateObservation+Load.h"; sourceTree = "<group>"; };
@@ -252,6 +255,8 @@
 				E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */,
 				B2B92C6619262B41009E4E3D /* IoTStateObservationCDTVC.h */,
 				B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */,
+				B2EF9522192D527700ED2664 /* ImageViewController.h */,
+				B2EF9523192D527700ED2664 /* ImageViewController.m */,
 				E9E0492C192578EA00473E27 /* SettingsVC.h */,
 				E9E0492D192578EA00473E27 /* SettingsVC.m */,
 			);
@@ -375,6 +380,7 @@
 				E9F70E9F1924047F007485B3 /* CoreDataTableViewController.m in Sources */,
 				E9F70E6F1923E893007485B3 /* CNetModel.xcdatamodeld in Sources */,
 				B2AB314D1926DEC20092E849 /* IoTEntity.m in Sources */,
+				B2EF9524192D527700ED2664 /* ImageViewController.m in Sources */,
 				B2AB314A1926DEC20092E849 /* Property.m in Sources */,
 				E9F70E971923ED33007485B3 /* IoTEntity+Load.m in Sources */,
 				E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */,

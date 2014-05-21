@@ -109,11 +109,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTStateObservation Cell" textLabel="wyC-bd-hd6" detailTextLabel="olh-KO-cpb" style="IBUITableViewCellStyleSubtitle" id="lBt-VX-iCH">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTStateObservation Cell" textLabel="wyC-bd-hd6" detailTextLabel="olh-KO-cpb" style="IBUITableViewCellStyleSubtitle" id="lBt-VX-iCH">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lBt-VX-iCH" id="xnt-QG-A4Z">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Observation Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wyC-bd-hd6">
@@ -132,6 +132,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="ZV9-yP-kiO" kind="push" identifier="ImageViewSegue" id="QRv-z6-eUU"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -262,6 +265,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GqM-Oc-9Wa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="84" y="468"/>
+        </scene>
+        <!--Image View Controller-->
+        <scene sceneID="x3p-PX-BVO">
+            <objects>
+                <viewController id="ZV9-yP-kiO" customClass="ImageViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jgh-GZ-7NT"/>
+                        <viewControllerLayoutGuide type="bottom" id="TO0-m8-1y4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gA4-lJ-9Jz">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oxt-t3-3ht">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="oxt-t3-3ht" firstAttribute="leading" secondItem="gA4-lJ-9Jz" secondAttribute="leading" id="6ie-vY-3gw"/>
+                            <constraint firstAttribute="bottom" secondItem="oxt-t3-3ht" secondAttribute="bottom" id="mDQ-To-Qn4"/>
+                            <constraint firstAttribute="trailing" secondItem="oxt-t3-3ht" secondAttribute="trailing" id="ncn-Im-ghc"/>
+                            <constraint firstItem="oxt-t3-3ht" firstAttribute="top" secondItem="gA4-lJ-9Jz" secondAttribute="top" id="qiS-qv-HVF"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ajw-BE-u5N"/>
+                    <connections>
+                        <outlet property="scrollView" destination="oxt-t3-3ht" id="yNa-Pm-etB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="C7i-uM-83N" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2712" y="-5"/>
         </scene>
     </scenes>
     <resources>

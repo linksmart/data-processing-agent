@@ -10,6 +10,7 @@
 #import "Property+Load.h"
 #import "IoTEntity+Load.h"
 #import "IoTStateObservation+Load.h"
+#import "ImageViewController.h"
 
 @interface IoTStateObservationCDTVC ()
 
@@ -47,6 +48,8 @@
 
 - (void)startDownloadingMeasurements
 {
+    // We must do our best to escape the URL, as it may contain
+    // any random characters. The funny bit os the 'about' part.
     if (self.propery)
     {
         NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities/%@/Properties/%@/observations", self.propery.cnIoTEntity.cnAbout, self.propery.cnAbout];
@@ -57,11 +60,7 @@
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
         [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         
-        // another configuration option is backgroundSessionConfiguration (multitasking API required though)
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-        
-        // create the session without specifying a queue to run completion handler on (thus, not main queue)
-        // we also don't specify a delegate (since completion handler is all we need)
         NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
         
         NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request
@@ -82,6 +81,8 @@
                                                                                                      forIoTEntityWithAbout:self.propery.cnIoTEntity.cnAbout
                                                                                                     forPropertiesWithAbout:self.propery.cnAbout
                                                                                                        usingManagedContext:self.propery.managedObjectContext];
+                                                                    // No need to explicitly save here...
+                                                                    // [self.propery.managedObjectContext save:NULL];
                                                                 });
                                                             }
                                                         }];
@@ -98,6 +99,42 @@
     cell.detailTextLabel.text = iotStateObservation.cnPhenomenonTime;
     
     return cell;
+}
+
+#pragma mark - Navigation
+
+- (void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifer fromIndexPath:(NSIndexPath *)indexPath
+{
+    IoTStateObservation *iotStateObservation = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    if ([vc isKindOfClass:[ImageViewController class]]) {
+        ImageViewController *ivc = (ImageViewController *)vc;
+        ivc.imageData = [[NSData alloc] initWithBase64EncodedString:iotStateObservation.cnValue options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    }
+}
+
+// boilerplate
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = nil;
+    if ([sender isKindOfClass:[UITableViewCell class]]) {
+        indexPath = [self.tableView indexPathForCell:sender];
+    }
+    [self prepareViewController:segue.destinationViewController
+                       forSegue:segue.identifier
+                  fromIndexPath:indexPath];
+}
+
+// boilerplate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id detailvc = [self.splitViewController.viewControllers lastObject];
+    if ([detailvc isKindOfClass:[UINavigationController class]]) {
+        detailvc = [((UINavigationController *)detailvc).viewControllers firstObject];
+        [self prepareViewController:detailvc
+                           forSegue:nil
+                      fromIndexPath:indexPath];
+    }
 }
 
 @end
