@@ -62,6 +62,16 @@ public class Gui {
 		return "gui#sensors";
 	}
 	
+	@RequestMapping(value="log", method=RequestMethod.GET)
+	@ResponseBody
+	public String loadlog(Model model)
+	{
+		ArrayList<DeviceLogger> loglist = pwal.getDeviceLogList();
+		
+		model.addAttribute("loglist", loglist);
+		
+		return "gui";
+	}
 	
 	
 }

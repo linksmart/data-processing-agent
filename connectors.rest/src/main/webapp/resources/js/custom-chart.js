@@ -1,4 +1,29 @@
 /* Custom functions that help in getting remote data and drawing a chart to a div */
+/*
+ * @author Prabhakaran Kasinthan
+ */
+
+var id; // global ID to clear SetInterval
+
+//table-reload function
+function ajax_interval(divId) {
+	clearInterval(id);
+    id1=setInterval(reload_table, 1000);
+
+}
+
+function getLogTable(url, divID){
+	clearInterval(id);
+	$.ajax({
+        url : url,
+        success : function(data) {
+ 
+        }
+    });
+	id=setInterval(getLogTable, 3000);
+	
+}
+
 
 function createNewLineChart(divId) {
     var chart = {

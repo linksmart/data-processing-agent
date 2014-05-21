@@ -42,6 +42,12 @@
 				getRemoteDataDrawChart(contextPath + '/linechart3',
 						createNewLineChart('chart3-container'));
 			});
+
+	$(document).ready( 
+			function() {
+				getLogTable(contextPath+'/log',"log-table");
+			});
+	
 </script>
 
 </head>
@@ -128,12 +134,13 @@
 			<p>This log shows the devices attached and detached.</p>
 
 			<div id="log-table">
-
+				
 				<table class="table default">
 					<tr>
 						<th>Time</th>
 						<th>Log Messages</th>
 					</tr>
+					<div id="log-update"> 
 					<c:if test="${not empty loglist}">
 						<c:forEach var="log" items="${loglist}">
 							<tr>
@@ -142,6 +149,7 @@
 							</tr>
 						</c:forEach>
 					</c:if>
+					</div>
 				</table>
 			</div>
 			<!-- 			<div id="chart1-container" -->

@@ -13,9 +13,8 @@ public class SeriesBean {
     private double[] data;
 
 
-    public SeriesBean(String name, String color, double[] data) {
+    public SeriesBean(String name, double[] data) {
       this.name = name;
-      this.color = color;
       this.data = data;
     }
 
