@@ -12,15 +12,23 @@
 
 @implementation IoTStateObservation (Load)
 
-+ (void)loadIoTStateObservationsFromArray:(NSArray *)iotStateObservations
-                    forIoTEntityWithAbout:(NSString *)iotEntityAbout
-                   forPropertiesWithAbout:(NSString *)propertiesAbout
-                      usingManagedContext:(NSManagedObjectContext *)context
++(IoTStateObservation *)iotStateObservationWithDefinition:(NSDictionary *)iotObservationDictionary
+                                    forIoTEntityWithAbout:(NSString *)iotEntityAbout
+                                   forPropertiesWithAbout:(NSString *)propertiesAbout
+                                      usingManagedContext:(NSManagedObjectContext *)context
 {
+    IoTStateObservation *iotStateObservation = nil;
+    
+    IoTEntity *iotEntity = [IoTEntity iotEntityWithAbout:iotEntityAbout usingManagedContext:context];
+    if (!iotEntity)
+        return nil;
+    
     Property *property = [Property propertyWithAbout:propertiesAbout forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
+    if (!property)
+        return nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"IoTStateObservation"];
-    request.predicate = [NSPredicate predicateWithFormat:@"cnProperty.cnAbout = %@ AND cnProperty.cnIoTEntity.cnAbout = %@ AND cnPhenomenonTime = %@ AND cnResultTime = %@", property.cnAbout, property.cnIoTEntity.cnAbout, [observation valueForKeyPath:@"PhenomenonTime"], ];
+    request.predicate = [NSPredicate predicateWithFormat:@"cnProperty.cnAbout = %@ AND cnProperty.cnIoTEntity.cnAbout = %@ AND cnPhenomenonTime = %@ AND cnResultTime = %@", property.cnAbout, property.cnIoTEntity.cnAbout, [iotObservationDictionary valueForKeyPath:@"PhenomenonTime"], [iotObservationDictionary valueForKeyPath:@"ResultTime"]];
     
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
@@ -31,42 +39,31 @@
         // handle error
     } else if ([matches count]) {
         // Use existing object, and update attributes
-        property = [matches firstObject];
+        iotStateObservation = [matches firstObject];
         
-        property.cnAbout = permId;
-        property.cnDataType = [propertyDictionary valueForKeyPath:@"DataType"];
-    
-    // TODO: Do something else here!
-    NSMutableSet *iotStateObservationSet = [[NSMutableSet alloc] init];
-    
-    if ([property.cnIoTStateObservation count] == 1)
-        property.cnIoTStateObservation = nil;
-    //else if ([property.cnIoTStateObservation count] > 1)
-    //    return;
-    
-    for (NSString *observation in iotStateObservations) {
-        IoTStateObservation *myObservation = [NSEntityDescription insertNewObjectForEntityForName:@"IoTStateObservation"
-                                                                           inManagedObjectContext:context];
+        iotStateObservation.cnValue = [iotObservationDictionary valueForKeyPath:@"Value"];
+    } else {
+        iotStateObservation = [NSEntityDescription insertNewObjectForEntityForName:@"IoTStateObservation"
+                                                 inManagedObjectContext:context];
         
-        //NSDateFormatter *dateFor = [[NSDateFormatter alloc] init];
-        //[dateFor setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        iotStateObservation.cnPhenomenonTime = [iotObservationDictionary valueForKeyPath:@"PhenomenonTime"];
+        iotStateObservation.cnResultTime = [iotObservationDictionary valueForKeyPath:@"ResultTime"];
+        iotStateObservation.cnValue = [iotObservationDictionary valueForKeyPath:@"Value"];
         
-        myObservation.cnValue = [observation valueForKeyPath:@"Value"];
-        myObservation.cnResultTime = [observation valueForKeyPath:@"ResultTime"];//[dateFor dateFromString:[observation valueForKeyPath:@"ResultTime"]];
-        myObservation.cnPhenomenonTime = [observation valueForKeyPath:@"PhenomenonTime"]; // [dateFor dateFromString:[observation valueForKeyPath:@"PhenomenonTime"]];
-        myObservation.testdate = [NSDate date];
-        
-        // NSLog(@"Loading phoenomeontime: %@", [observation valueForKeyPath:@"PhenomenonTime"]);
-        
-        [iotStateObservationSet addObject:myObservation];
+        iotStateObservation.cnProperty = property;
     }
     
-    property.cnIoTStateObservation = iotStateObservationSet;
-    
-    NSError *error;
-    [context save:&error];
-    if (error)
-        abort();
+    return iotStateObservation;
+}
+
++ (void)loadIoTStateObservationsFromArray:(NSArray *)iotStateObservations
+                    forIoTEntityWithAbout:(NSString *)iotEntityAbout
+                   forPropertiesWithAbout:(NSString *)propertiesAbout
+                      usingManagedContext:(NSManagedObjectContext *)context
+{
+    for (NSDictionary *iotStateObservation in iotStateObservations) {
+        [self iotStateObservationWithDefinition:iotStateObservation forIoTEntityWithAbout:iotEntityAbout forPropertiesWithAbout:propertiesAbout usingManagedContext:context];
+    }
 }
 
 -(void)setTestdate:(NSDate *)testdate

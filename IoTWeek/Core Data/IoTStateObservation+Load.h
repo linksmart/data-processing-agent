@@ -10,6 +10,11 @@
 
 @interface IoTStateObservation (Load)
 
++(IoTStateObservation *)iotStateObservationWithDefinition:(NSDictionary *)iotObservationDictionary
+                         forIoTEntityWithAbout:(NSString *)iotEntityAbout
+                        forPropertiesWithAbout:(NSString *)propertiesAbout
+                           usingManagedContext:(NSManagedObjectContext *)context;
+
 + (void)loadIoTStateObservationsFromArray:(NSArray *)iotStateObservations
                     forIoTEntityWithAbout:(NSString *)iotEntityAbout
                    forPropertiesWithAbout:(NSString *)propertiesAbout
