@@ -389,6 +389,7 @@
 			{
 				width: 100%;
 				text-align: left;
+				border:1px solid black;
 			}
 			
 				table.default tbody tr:nth-child(2n+2)

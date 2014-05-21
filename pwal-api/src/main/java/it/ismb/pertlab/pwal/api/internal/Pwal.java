@@ -1,9 +1,11 @@
 package it.ismb.pertlab.pwal.api.internal;
 
+import it.ismb.pertlab.pwal.api.devices.events.DeviceLogger;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public interface Pwal {
@@ -21,6 +23,12 @@ public interface Pwal {
 	 * @return a list of subclasses of Device (see the device taxonomy) 
 	 */
 	Collection<Device> getDevicesList();
+	
+	/**
+	 * Provides Log of devices attached or removed in the form of an ArrayList
+	 * @return ArrayList
+	 */
+	ArrayList<DeviceLogger> getDeviceLogList();
 	
 	/**
 	 * Provides devices of a given type (e.g. pwal:Temperature)

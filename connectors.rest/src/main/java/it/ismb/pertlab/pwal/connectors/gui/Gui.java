@@ -1,8 +1,13 @@
 package it.ismb.pertlab.pwal.connectors.gui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
+import it.ismb.pertlab.pwal.api.devices.events.DeviceLogger;
+import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +26,34 @@ public class Gui {
 	@RequestMapping(value="gui", method=RequestMethod.GET)
 	public String renderTheGui(Model model)
 	{
-		model.addAttribute("devlist", pwal.getDevicesList());
-		model.addAttribute("temp", pwal.getDevicesByType("Thermometer"));
-		System.err.println( pwal.getDevicesList());
+		Collection<Device> devlist = pwal.getDevicesList();
+		ArrayList<DeviceLogger> loglist = pwal.getDeviceLogList();
+		
+		for (Device d: devlist)
+		{
+		    //System.out.println(itr.next());
+		    System.err.println("\n"+d.getId()+" "+d.getType()+ " "+d.getNetworkType()+"\n");
+		}
+		
+		for (DeviceLogger listlog : loglist){
+			System.err.println("\n Log "+listlog.Date+"Msg:"+listlog.LogMsg+"\n");
+		}
+		
+		model.addAttribute("devlist", devlist);
+		model.addAttribute("loglist", loglist);
+		
 		return "gui";
+	}
+	
+	@RequestMapping(value="gui#sensor", method=RequestMethod.GET)
+	@ResponseBody
+	public String loadsensors(Model model)
+	{
+		Collection<Device> devlist = pwal.getDevicesList();
+		
+		model.addAttribute("devlist", devlist);
+		
+		return "gui#sensors";
 	}
 	
 	@RequestMapping(value="logInfo", method=RequestMethod.GET)

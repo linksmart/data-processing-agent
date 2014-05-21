@@ -1,30 +1,39 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <title>PWAL</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
-<link
-	href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600"
-	rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600"
+	  rel="stylesheet" type="text/css" />
 <!--[if lte IE 8]><script src="resources/js/html5shiv.js"></script><![endif]-->
 <script src="resources/js/jquery.min.js"></script>
 <script src="resources/js/skel.min.js"></script>
 <script src="resources/js/skel-panels.min.js"></script>
 <script src="resources/js/init.js"></script>
 
+<!-- Highcharts -->
+<script type="text/javascript" src="<c:url value="/resources/js/custom-chart.js" />"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/highcharts-all.js" />"></script>
+<!-- CSS -->
 <link rel="stylesheet" type="text/css" href="resources/css/style.css" />
-<link rel="stylesheet" type="text/css"
-	href="resources/css/style-wide.css" />
-<link rel="stylesheet" type="text/css"
-	href="resources/css/skel-noscript.css" />
+<link rel="stylesheet" type="text/css" href="resources/css/style-wide.css" />
+<link rel="stylesheet" type="text/css" href="resources/css/skel-noscript.css" />
 
+<script type="text/javascript">
+        var contextPath = '<c:out value="${pageContext.request.contextPath}"/>';
+        $(document).ready(function() {
+            getRemoteDataDrawChart(contextPath + '/linechart1', createNewLineChart('chart1-container'));
+            getRemoteDataDrawChart(contextPath + '/linechart2', createNewLineChart('chart2-container'));
+            getRemoteDataDrawChart(contextPath + '/linechart3', createNewLineChart('chart3-container'));
+        });
+ </script>
 
 </head>
 
@@ -57,8 +66,9 @@
 
 	</div>
 
+
 	<div class="bottom">
-		<a href="http://www.ismb.it" class="image centered"><img
+		<a href="http://www.ismb.it" class="image centered" target="_blank"><img
 			src="resources/images/ismb_page.png" alt="ismb logo" height="100"
 			width="200" /></a>
 		<!-- Social Icons -->
@@ -85,30 +95,43 @@
 				src="resources/images/pwalLOGO.jpg" alt="PWAL logo" height="300"
 				width="200" /></a>
 
-			<h1>
+			<h1>	
 				This is <strong>PWAL</strong>, an invisible translation layer
 				between the physical world of constrained devices and the Internet.
 			</h1>
 
-
+			<div id="chart3-container"
+				style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 		</div>
 	</section>
 
 	<!-- Logging Information -->
 	<section id="log" class="two">
 		<div class="container">
-
 			<header>
 				<h2>Log information</h2>
 			</header>
-
 			<p>This log shows the devices attached and detached.</p>
-			<br>
-			<h2>${devlist}</h2>
-			<br>
-			<h2>${temp}</h2>
 
-			<div id="log-table"></div>
+			<div id="log-table">
+				<c:if test="${not empty loglist}">
+					<c:forEach var="log" items="${loglist}">
+						<table class="table default">
+							<tr>
+								<th>Time</th>
+								<th>Log Messages</th>
+							</tr>
+							<tr>
+								<td>${log.date}</td>
+								<td>${log.logMsg}</td>
+							</tr>
+						</table>
+					</c:forEach>
+				</c:if>
+
+			</div>
+			<div id="chart1-container"
+				style="min-width: 300px; max-width: 500px; height: 300px; margin: 0 auto"></div>
 
 		</div>
 	</section>
@@ -121,17 +144,31 @@
 				<h1>Sensor Devices List</h1>
 			</header>
 
+			<form action="#sensors">
+				<button type="submit">Load Devices</button>
+			</form>
 
 			<div>
-				<table>
-					<tr>
-						<th>ID</th>
-					</tr>
-
-				</table>
+				<c:if test="${not empty devlist}">
+					<c:forEach var="listValue" items="${devlist}">
+						<table class="table default">
+							<tr>
+								<th>Device Type</th>
+								<th>Device ID</th>
+								<th>Network Type</th>
+							</tr>
+							<tr>
+								<td>${listValue.id}</td>
+								<td>${listValue.type}</td>
+								<td>${listValue.networkType}</td>
+							</tr>
+						</table>
+					</c:forEach>
+				</c:if>
 
 			</div>
-
+			<div id="chart2-container"
+				style="min-width: 300px; max-width: 500px; height: 300px; margin: 0 auto"></div>
 
 		</div>
 	</section>
