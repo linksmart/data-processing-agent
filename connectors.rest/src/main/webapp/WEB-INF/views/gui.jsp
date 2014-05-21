@@ -10,8 +10,9 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
-<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600"
-	  rel="stylesheet" type="text/css" />
+<link
+	href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600"
+	rel="stylesheet" type="text/css" />
 <!--[if lte IE 8]><script src="resources/js/html5shiv.js"></script><![endif]-->
 <script src="resources/js/jquery.min.js"></script>
 <script src="resources/js/skel.min.js"></script>
@@ -19,21 +20,29 @@
 <script src="resources/js/init.js"></script>
 
 <!-- Highcharts -->
-<script type="text/javascript" src="<c:url value="/resources/js/custom-chart.js" />"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/highcharts-all.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/custom-chart.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/highcharts-all.js" />"></script>
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" href="resources/css/style.css" />
-<link rel="stylesheet" type="text/css" href="resources/css/style-wide.css" />
-<link rel="stylesheet" type="text/css" href="resources/css/skel-noscript.css" />
+<link rel="stylesheet" type="text/css"
+	href="resources/css/style-wide.css" />
+<link rel="stylesheet" type="text/css"
+	href="resources/css/skel-noscript.css" />
 
 <script type="text/javascript">
-        var contextPath = '<c:out value="${pageContext.request.contextPath}"/>';
-        $(document).ready(function() {
-            getRemoteDataDrawChart(contextPath + '/linechart1', createNewLineChart('chart1-container'));
-            getRemoteDataDrawChart(contextPath + '/linechart2', createNewLineChart('chart2-container'));
-            getRemoteDataDrawChart(contextPath + '/linechart3', createNewLineChart('chart3-container'));
-        });
- </script>
+	var contextPath = '<c:out value="${pageContext.request.contextPath}"/>';
+	$(document).ready(
+			function() {
+				getRemoteDataDrawChart(contextPath + '/temperature',
+						createNewLineChart('temperature-container'));
+				getRemoteDataDrawChart(contextPath + '/linechart2',
+						createNewLineChart('chart2-container'));
+				getRemoteDataDrawChart(contextPath + '/linechart3',
+						createNewLineChart('chart3-container'));
+			});
+</script>
 
 </head>
 
@@ -95,12 +104,17 @@
 				src="resources/images/pwalLOGO.jpg" alt="PWAL logo" height="300"
 				width="200" /></a>
 
-			<h1>	
+			<h1>
 				This is <strong>PWAL</strong>, an invisible translation layer
 				between the physical world of constrained devices and the Internet.
 			</h1>
 
-			<div id="chart3-container"
+			<form action="<c:url value="${contextPath}/gui#sensor"/>">
+				<button type="submit">Load Devices</button>
+			</form>
+			<%-- 			<input type="button"  onclick="<c:url value="${pageContext.request.contextPath}/sensor"/>" value="sensor" > --%>
+
+			<div id="temperature-container"
 				style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 		</div>
 	</section>
@@ -114,24 +128,24 @@
 			<p>This log shows the devices attached and detached.</p>
 
 			<div id="log-table">
-				<c:if test="${not empty loglist}">
-					<c:forEach var="log" items="${loglist}">
-						<table class="table default">
-							<tr>
-								<th>Time</th>
-								<th>Log Messages</th>
-							</tr>
+
+				<table class="table default">
+					<tr>
+						<th>Time</th>
+						<th>Log Messages</th>
+					</tr>
+					<c:if test="${not empty loglist}">
+						<c:forEach var="log" items="${loglist}">
 							<tr>
 								<td>${log.date}</td>
 								<td>${log.logMsg}</td>
 							</tr>
-						</table>
-					</c:forEach>
-				</c:if>
-
+						</c:forEach>
+					</c:if>
+				</table>
 			</div>
-			<div id="chart1-container"
-				style="min-width: 300px; max-width: 500px; height: 300px; margin: 0 auto"></div>
+			<!-- 			<div id="chart1-container" -->
+			<!-- 				style="min-width: 300px; max-width: 500px; height: 300px; margin: 0 auto"></div> -->
 
 		</div>
 	</section>
@@ -144,31 +158,30 @@
 				<h1>Sensor Devices List</h1>
 			</header>
 
-			<form action="#sensors">
-				<button type="submit">Load Devices</button>
-			</form>
+
 
 			<div>
-				<c:if test="${not empty devlist}">
-					<c:forEach var="listValue" items="${devlist}">
-						<table class="table default">
-							<tr>
-								<th>Device Type</th>
-								<th>Device ID</th>
-								<th>Network Type</th>
-							</tr>
+
+				<table class="table default">
+					<tr>
+						<th>Device Type</th>
+						<th>Device ID</th>
+						<th>Network Type</th>
+					</tr>
+					<c:if test="${not empty devlist}">
+						<c:forEach var="listValue" items="${devlist}">
 							<tr>
 								<td>${listValue.id}</td>
 								<td>${listValue.type}</td>
 								<td>${listValue.networkType}</td>
 							</tr>
-						</table>
-					</c:forEach>
-				</c:if>
 
+						</c:forEach>
+					</c:if>
+				</table>
 			</div>
-			<div id="chart2-container"
-				style="min-width: 300px; max-width: 500px; height: 300px; margin: 0 auto"></div>
+			<!-- 			<div id="chart2-container" -->
+			<!-- 				style="min-width: 300px; max-width: 500px; height: 300px; margin: 0 auto"></div> -->
 
 		</div>
 	</section>
@@ -178,10 +191,8 @@
 		<div class="container">
 
 			<header>
-				<h2>Contact</h2>
+				<h2>Contact US : <a href="mailto:pert@ismb.it"> pert@ismb.it </a></h2>
 			</header>
-
-			<p>Interested ? Please contact us.</p>
 
 		</div>
 	</section>

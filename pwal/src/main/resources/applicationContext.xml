@@ -30,8 +30,8 @@
 <!-- 				List of sensors that can be provided by this serial device -->
 <!-- 				key=sensor_id value=device_type -->
 				<entry key="1" value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor"/>
-<!-- 				<entry key="ULTRASOUND1" value="it.ismb.pertlab.pwal.manager.serial.device.UltrasoundDistanceSensor"/> -->
-<!-- 				<entry key="SEMAPHORE1" value="it.ismb.pertlab.pwal.manager.serial.device.ArduinoSemaphore"/> -->
+				<entry key="2" value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor"/>
+<!-- 				<entry key="3" value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor"/> -->
 			</map>
 		</constructor-arg>
 	</bean>

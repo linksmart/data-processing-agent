@@ -24,7 +24,7 @@ public class PwalImpl implements Pwal, DeviceListener {
 	private List<Device> devicesList;
 	private HashMap<String, DevicesManager> devicesManagers;
 	private List<PWALDeviceListener> pwalDeviceListeners;
-	private static SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+	private static SimpleDateFormat sdf = new SimpleDateFormat("d-MMM-yyyy HH:mm:ss");
 	private ArrayList<DeviceLogger> pwalDeviceLoggerList;
 	private static int maxlogsize =20;
 	

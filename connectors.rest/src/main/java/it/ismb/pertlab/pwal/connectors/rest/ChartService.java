@@ -2,15 +2,32 @@ package it.ismb.pertlab.pwal.connectors.rest;
 
 import com.sample.highcharts.bean.DataBean;
 import com.sample.highcharts.bean.SeriesBean;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.ismb.pertlab.pwal.PwalImpl;
+import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 @Service
 public class ChartService {
 
+	@Autowired
+	private PwalImpl pwal;
+	
+	private static SimpleDateFormat sdf = new SimpleDateFormat("d-MMM-yyyy HH:mm:ss");
+	
     public DataBean getLineChartData1() {
         List<SeriesBean> list = new ArrayList<SeriesBean>();
         list.add(new SeriesBean("Tokyo", "#3366cc", new double[] {7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6}));
@@ -19,6 +36,29 @@ public class ChartService {
 
         String[] categories = new String[] {"9 Jan '13", "8 Feb '13","5 Mar '13","12 Apr '13","14 May '13","21 Jun '13","30 Jul '13","8 Aug '13","5 Sep '13","17 Oct '13","23 Nov '13","5 Dec '13"};
         return new DataBean("chart1-container", "LineChart Title", "Y Values (%)", "Run Dates", Arrays.asList(categories), list);
+    }
+    
+    public DataBean getTemperaturelineChartData(){
+    	List<SeriesBean> list = new ArrayList<SeriesBean>();
+    	List<Device> tempDevList = new ArrayList<Device>();
+    	Collection<Device> devList= pwal.getDevicesList();
+    	
+    	String[] categories=null;
+    	
+    	for(Device d:devList){
+    		if(DeviceType.THERMOMETER.equals(d.getType() )){
+    			tempDevList.add(d);
+    			Thermometer t=(Thermometer) d;
+				t.getTemperature();
+    			list.add(new SeriesBean(t.getType(), "#76FF32", new double [] {t.getTemperature()}));
+    			categories= new String[] {sdf.format(System.currentTimeMillis())};
+    		}
+    	}
+    	if(categories.length>0){
+    	return new DataBean("temperature-container", "Temperature Sensor", "Degree Celcius", "Time", Arrays.asList(categories), list);
+    	}
+    	
+    	else return null;
     }
 
     public DataBean getLineChartData2() {
@@ -31,7 +71,7 @@ public class ChartService {
         return new DataBean("chart2-container", "LineChart Title", "Y Values (%)", "Run Dates", Arrays.asList(categories), list);
     }
 
-
+    
 
     public DataBean getLineChartData3() {
         List<SeriesBean> list = new ArrayList<SeriesBean>();

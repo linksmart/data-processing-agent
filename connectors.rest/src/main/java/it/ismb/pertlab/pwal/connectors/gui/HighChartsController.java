@@ -22,10 +22,10 @@ public class HighChartsController {
         return "gui";
     }
 
-    @RequestMapping(value="/linechart1", method=RequestMethod.GET)
+    @RequestMapping(value="/temperature", method=RequestMethod.GET)
     @ResponseBody
     public DataBean showLineChart1() {
-        return chartService.getLineChartData1();
+        return chartService.getTemperaturelineChartData();
     }
 
     @RequestMapping(value="/linechart2", method=RequestMethod.GET)

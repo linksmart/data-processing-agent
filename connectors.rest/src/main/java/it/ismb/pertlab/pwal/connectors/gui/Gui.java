@@ -8,6 +8,8 @@ import java.util.List;
 
 import it.ismb.pertlab.pwal.api.devices.events.DeviceLogger;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,12 @@ public class Gui {
 		
 		for (Device d: devlist)
 		{
-		    //System.out.println(itr.next());
-		    System.err.println("\n"+d.getId()+" "+d.getType()+ " "+d.getNetworkType()+"\n");
+			if(DeviceType.THERMOMETER.equals(d.getType() )){
+				Thermometer t=(Thermometer) d;
+				t.getTemperature();
+				 //System.out.println(itr.next());
+			    System.err.println("\n"+t.getId()+" "+t.getType()+ " "+t.getNetworkType()+"\n" +t.getTemperature());
+			}
 		}
 		
 		for (DeviceLogger listlog : loglist){
@@ -45,7 +51,7 @@ public class Gui {
 		return "gui";
 	}
 	
-	@RequestMapping(value="gui#sensor", method=RequestMethod.GET)
+	@RequestMapping(value="sensor", method=RequestMethod.GET)
 	@ResponseBody
 	public String loadsensors(Model model)
 	{
@@ -54,12 +60,6 @@ public class Gui {
 		model.addAttribute("devlist", devlist);
 		
 		return "gui#sensors";
-	}
-	
-	@RequestMapping(value="logInfo", method=RequestMethod.GET)
-	public @ResponseBody List<String> getLogInfo()
-	{
-		return Arrays.asList("gui","GUI","fdsfd");
 	}
 	
 	
