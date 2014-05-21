@@ -1,8 +1,5 @@
 package it.ismb.pertlab.pwal.connectors.rest;
 
-import com.sample.highcharts.bean.DataBean;
-import com.sample.highcharts.bean.SeriesBean;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +7,8 @@ import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.highcharts.bean.DataBean;
+import it.ismb.pertlab.pwal.highcharts.bean.SeriesBean;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;

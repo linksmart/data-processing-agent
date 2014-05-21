@@ -1,4 +1,4 @@
-package com.sample.highcharts.bean;
+package it.ismb.pertlab.pwal.highcharts.bean;
 
 
 import org.codehaus.jackson.map.annotate.JsonRootName;
