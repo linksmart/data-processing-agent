@@ -61,8 +61,11 @@
                    forPropertiesWithAbout:(NSString *)propertiesAbout
                       usingManagedContext:(NSManagedObjectContext *)context
 {
-    for (NSDictionary *iotStateObservation in iotStateObservations) {
-        [self iotStateObservationWithDefinition:iotStateObservation forIoTEntityWithAbout:iotEntityAbout forPropertiesWithAbout:propertiesAbout usingManagedContext:context];
+    if (![iotStateObservations isKindOfClass:[NSNull class]])
+    {
+        for (NSDictionary *iotStateObservation in iotStateObservations) {
+            [self iotStateObservationWithDefinition:iotStateObservation forIoTEntityWithAbout:iotEntityAbout forPropertiesWithAbout:propertiesAbout usingManagedContext:context];
+        }
     }
 }
 
