@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 
 /**
  * Class used to drive a Taidoc td-1261
@@ -32,6 +34,9 @@ public class ThermometerDevice implements Thermometer {
 	private DataInputStream in = null;
 	private String id;
 	private String pwalId;
+	private String updatedAt;
+	private Location location;
+	private Unit unit;
 	private final String type="pwal:Thermometer";
 	private DevicesManager parent;
 	
@@ -305,43 +310,35 @@ public class ThermometerDevice implements Thermometer {
 	    }
 	    return hex.toString();
 	}
-
+	
+	
 	@Override
-	public String getPwalId() {
-		return pwalId;
+	public String getUpdatedAt() {
+		return updatedAt;
 	}
 
 	@Override
-	public void setPwalId(String pwalId) {
-		this.pwalId=pwalId;
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	@Override
-	public Double getLatitude() {
-		// TODO Auto-generated method stub
-		return null;
+	public Location getLocation() {
+		return location;
 	}
 
 	@Override
-	public void setLatitude(Double latitude) {
-		// TODO Auto-generated method stub
-		
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 	@Override
-	public Double getLongitude() {
-		// TODO Auto-generated method stub
-		return null;
+	public Unit getUnit() {
+		return unit;
 	}
 
 	@Override
-	public void setLongitude(Double longitude) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getNetworkType() {
-		return parent.getNetworkType();
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 }

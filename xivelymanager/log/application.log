@@ -1,0 +1,215 @@
+2014-04-04 14:04:53,996 27    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json
+2014-04-04 14:05:33,013 25    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json
+2014-04-04 14:06:51,407 11    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json
+2014-04-04 14:09:33,624 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json
+2014-04-04 14:10:31,693 8     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json
+2014-04-04 14:12:27,199 22    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json
+2014-04-04 14:23:12,356 11    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json
+2014-04-04 15:37:31,165 23    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=1000.0&lon=137.5&distance_unit=m&lat=37.5
+2014-04-04 15:37:38,394 7252  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 15:43:22,456 154   INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=1000.0&lon=137.5&distance_unit=m&lat=37.5
+2014-04-04 15:43:36,605 14303 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 15:44:57,301 12    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=10.0&lon=137.5&distance_unit=m&lat=37.5
+2014-04-04 15:45:16,148 9     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=10.0&lon=137.5&distance_unit=m&lat=37.5
+2014-04-04 15:45:18,198 2059  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 15:45:39,585 9     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=100.0&lon=137.5&distance_unit=m&lat=37.5
+2014-04-04 15:45:41,897 2321  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 15:48:25,439 7     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/56340272.json
+2014-04-04 15:48:26,996 1564  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 15:54:31,464 11    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/56340272.json
+2014-04-04 15:54:33,515 2062  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 15:56:24,801 9     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/56340272.json
+2014-04-04 15:56:26,705 1913  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 15:59:19,783 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/56340272.json
+2014-04-04 15:59:21,910 2137  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 16:18:54,678 9     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1921231717.json
+2014-04-04 16:18:56,487 1818  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 16:24:37,339 12    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1921231717.json
+2014-04-04 16:24:39,389 2062  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 16:24:51,958 9     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1921231717.json
+2014-04-04 16:24:53,609 1660  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 16:25:30,628 12    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1921231717.json
+2014-04-04 16:25:32,483 1867  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 16:26:38,262 15    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1921231717.json
+2014-04-04 16:26:40,193 1946  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 16:27:04,885 8     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1921231717.json
+2014-04-04 16:27:06,684 1807  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 16:28:50,517 22    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=100.0&lon=137.5&distance_unit=m&lat=37.5
+2014-04-04 16:29:48,562 22    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json
+2014-04-04 16:29:52,752 4212  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [403]
+2014-04-04 16:39:10,547 20    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196.json
+2014-04-04 16:39:14,736 4209  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [403]
+2014-04-04 16:40:26,173 9     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196.json
+2014-04-04 16:40:28,102 1938  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [403]
+2014-04-04 16:42:40,213 18    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196.json
+2014-04-04 16:42:44,413 4218  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [403]
+2014-04-04 16:44:11,714 22    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196.json
+2014-04-04 16:44:15,664 3972  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [403]
+2014-04-04 16:50:02,804 20    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196.json
+2014-04-04 16:50:06,447 3663  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [403]
+2014-04-04 16:50:59,119 9     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196.json
+2014-04-04 16:51:01,278 2168  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:11:15,662 22    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=5.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:11:19,884 4244  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:12:29,112 21    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=5.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:12:33,115 4024  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:14:33,410 21    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=5.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:14:36,929 3540  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:24:49,797 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=5.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:24:51,592 1805  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:25:20,036 11    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:25:22,090 2065  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:28:15,267 7     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=10.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:28:16,738 1478  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:28:56,972 17    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:28:58,981 2026  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:29:12,339 15384 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196.json
+2014-04-04 17:29:12,755 15800 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:30:20,840 11    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:30:22,518 1689  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:30:37,995 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:30:39,906 1921  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:31:21,796 9     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:31:23,551 1764  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:32:36,902 12    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:32:38,973 2083  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:33:14,841 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:33:16,548 1717  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:33:45,827 11    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:33:47,547 1731  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 17:53:24,202 12    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0763&distance_unit=kms&lat=45.5172
+2014-04-04 17:53:26,181 1991  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-04 18:20:46,538 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?distance=15.0&lon=8.0&distance_unit=kms&lat=45.5
+2014-04-04 18:20:48,935 2407  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 11:31:01,154 17    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?user=codavide
+2014-04-05 11:31:05,136 3999  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 11:35:15,251 11    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?user=codavide
+2014-04-05 11:35:17,204 1964  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 11:38:22,094 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?dinstance_units=kms&lon=8.0&dinstance=10&user=codavide&lat=45.51
+2014-04-05 11:38:23,888 1804  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 11:41:23,227 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?dinstance_units=kms&lon=8.0&dinstance=10.0&user=codavide&lat=45.51
+2014-04-05 11:41:25,000 1783  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 11:46:44,301 10    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?dinstance_units=kms&lon=8.0&dinstance=10.0&user=codavide&lat=45.51
+2014-04-05 11:46:45,971 1680  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 11:48:59,212 22    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?dinstance_units=kms&lon=8.0&dinstance=10.0&user=codavide&lat=45.51
+2014-04-05 11:49:03,558 4368  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 11:49:41,839 7     INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds.json?user=codavide
+2014-04-05 11:49:43,449 1617  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:33:39,702 2092  INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity/datapoints
+2014-04-05 13:33:43,686 6076  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [403]
+2014-04-05 13:35:06,408 1795  INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity/datapoints
+2014-04-05 13:35:09,613 5000  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:35:09,636 5023  INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity/datapoints/2014/04/05%2013:34:58.json
+2014-04-05 13:35:09,912 5299  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [400]
+2014-04-05 13:42:39,494 2190  INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity/datapoints
+2014-04-05 13:42:43,865 6561  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:42:43,891 6587  INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity/datapoints/2014/04/05%2013:42:03.json
+2014-04-05 13:42:44,175 6871  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [400]
+2014-04-05 13:47:33,255 11    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:47:35,121 1877  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:47:47,329 22    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:47:51,498 4191  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:49:01,795 21    INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:49:06,518 4744  INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:49:11,713 9939  INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:49:12,254 10480 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:49:49,576 47802 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:49:49,937 48163 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:49:59,217 57443 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:49:59,770 57996 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:50:26,073 84299 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:50:26,364 84590 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:50:26,370 84596 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:50:26,731 84957 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:50:36,735 94961 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:50:37,129 95355 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:50:37,134 95360 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:50:37,568 95794 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:50:47,571 105797 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:50:48,001 106227 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:50:48,006 106232 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:50:48,717 106943 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:50:58,719 116945 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:50:59,047 117273 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:50:59,051 117277 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:50:59,472 117698 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:09,476 127702 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:51:09,876 128102 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:09,882 128108 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:51:10,274 128500 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:20,276 138502 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:51:20,657 138883 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:20,662 138888 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:51:21,156 139382 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:31,159 149385 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:51:31,577 149803 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:31,582 149808 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:51:32,060 150286 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:42,063 160289 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:51:42,452 160678 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:42,457 160683 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:51:42,841 161067 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:52,844 171070 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:51:53,154 171380 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:51:53,159 171385 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:51:53,616 171842 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:03,680 181906 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:52:04,089 182315 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:04,093 182319 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:52:04,480 182706 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:14,482 192708 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:52:14,877 193103 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:14,883 193109 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:52:15,553 193779 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:25,555 203781 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:52:25,846 204072 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:25,851 204077 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:52:26,389 204615 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:36,392 214618 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:52:36,788 215014 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:36,793 215019 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:52:37,153 215379 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:47,156 225382 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:52:47,588 225814 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:47,621 225847 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:52:47,984 226210 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:57,988 236214 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:52:58,432 236658 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:52:58,436 236662 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:52:58,940 237166 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:08,943 247169 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:53:09,253 247479 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:09,258 247484 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:53:09,722 247948 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:19,724 257950 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:53:20,154 258380 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:20,158 258384 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:53:20,640 258866 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:30,643 268869 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:53:31,077 269303 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:31,081 269307 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:53:31,587 269813 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:41,590 279816 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:53:42,090 280316 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:42,094 280320 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:53:42,414 280640 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:52,416 290642 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:53:52,718 290944 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:53:52,756 290982 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:53:53,188 291414 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:54:03,191 301417 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:54:03,585 301811 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:54:03,589 301815 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:54:03,987 302213 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:54:13,989 312215 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:54:14,382 312608 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:54:14,387 312613 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:54:14,810 313036 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:54:24,813 323039 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:54:25,136 323362 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:54:25,141 323367 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:54:25,647 323873 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:54:35,651 333877 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity.json
+2014-04-05 13:54:36,041 334267 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-04-05 13:54:36,045 334271 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1440608196/datastreams/humidity
+2014-04-05 13:54:36,555 334781 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]

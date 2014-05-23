@@ -4,5 +4,5 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 
 public interface LightSensor extends Device{
 
-	Integer getLight();
+	Double getLight();
 }

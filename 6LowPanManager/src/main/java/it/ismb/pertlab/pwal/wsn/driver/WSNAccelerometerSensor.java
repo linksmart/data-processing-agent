@@ -1,11 +1,16 @@
 package it.ismb.pertlab.pwal.wsn.driver;
 
 import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
+import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 
 public class WSNAccelerometerSensor extends WSNBaseDevice implements Accelerometer{
 	private String pwalId;
 	private String id;
+	private String updatedAt;
+	private Location location;
+	private Unit unit;
 	private Double xAcceleration;
 	private Double yAcceleration;
 	private Double zAcceleration;
@@ -47,42 +52,33 @@ public class WSNAccelerometerSensor extends WSNBaseDevice implements Acceleromet
 	}
 
 	@Override
-	public String getPwalId() {
-		return pwalId;
+	public String getUpdatedAt() {
+		return updatedAt;
 	}
 
 	@Override
-	public void setPwalId(String pwalId) {
-		this.pwalId=pwalId;
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	@Override
-	public Double getLatitude() {
-		// TODO Auto-generated method stub
-		return null;
+	public Location getLocation() {
+		return location;
 	}
 
 	@Override
-	public void setLatitude(Double latitude) {
-		// TODO Auto-generated method stub
-		
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 	@Override
-	public Double getLongitude() {
-		// TODO Auto-generated method stub
-		return null;
+	public Unit getUnit() {
+		return unit;
 	}
 
 	@Override
-	public void setLongitude(Double longitude) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getNetworkType() {
-		return getManager().getNetworkType();
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 
 }
