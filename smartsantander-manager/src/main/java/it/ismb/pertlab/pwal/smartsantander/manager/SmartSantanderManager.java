@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal.smartsantander.manager;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderSingleNodeJson;
 import it.ismb.pertlab.pwal.smartsantander.devices.SmartSantanderVehicleCounterDevice;
@@ -68,8 +69,10 @@ public class SmartSantanderManager extends DevicesManager
 						case SmartSantaderDeviceTypes.VEHICLE_COUNTER:
 							SmartSantanderVehicleCounterDevice vehicleCounter = new SmartSantanderVehicleCounterDevice(this.restClient, this.getNetworkType());
 							vehicleCounter.setId(smartSantanderSingleNodeJson.getNodeId());
-							vehicleCounter.setLatitude(smartSantanderSingleNodeJson.getLatitude());
-							vehicleCounter.setLongitude(smartSantanderSingleNodeJson.getLongitude());
+							Location location=new Location();
+							location.setLat(smartSantanderSingleNodeJson.getLatitude());
+							location.setLon(smartSantanderSingleNodeJson.getLongitude());
+							vehicleCounter.setLocation(location);
 							this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleCounter);
 							for (DeviceListener l : deviceListener) {
 								l.notifyDeviceAdded(vehicleCounter);
@@ -78,8 +81,10 @@ public class SmartSantanderManager extends DevicesManager
 						case SmartSantaderDeviceTypes.VEHICLE_SPEED:
 							SmartSantanderVehicleSpeedDevice vehicleSpeed = new SmartSantanderVehicleSpeedDevice(this.restClient, this.getNetworkType());
 							vehicleSpeed.setId(smartSantanderSingleNodeJson.getNodeId());
-							vehicleSpeed.setLatitude(smartSantanderSingleNodeJson.getLatitude());
-							vehicleSpeed.setLongitude(smartSantanderSingleNodeJson.getLongitude());
+							Location location2=new Location();
+							location2.setLat(smartSantanderSingleNodeJson.getLatitude());
+							location2.setLon(smartSantanderSingleNodeJson.getLongitude());
+							vehicleSpeed.setLocation(location2);
 							devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleSpeed);
 							for (DeviceListener l : deviceListener) {
 								l.notifyDeviceAdded(vehicleSpeed);

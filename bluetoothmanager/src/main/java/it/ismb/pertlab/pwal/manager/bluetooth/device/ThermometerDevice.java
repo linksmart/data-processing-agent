@@ -355,30 +355,6 @@ public class ThermometerDevice implements Thermometer {
 	}
 
 	@Override
-	public Double getLatitude() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setLatitude(Double latitude) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Double getLongitude() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setLongitude(Double longitude) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public String getNetworkType() {
 		// TODO Auto-generated method stub
 		return null;

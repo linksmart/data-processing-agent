@@ -68,8 +68,8 @@ public class App
 						VehicleCounter vc = (VehicleCounter)de;
 						System.out.println("This is a Vehicle counter sensor. "
 								+ "Id: "+ vc.getId()
-								+ ", Latitude: " + vc.getLatitude()
-								+ ", Longitude: " + vc.getLongitude()
+								+ ", Latitude: " + vc.getLocation().getLat()
+								+ ", Longitude: " + vc.getLocation().getLon()
 								+ ", NetworkType: " + vc.getNetworkType()
 								+ ", Count: " + vc.getCount()
 								+ ", Occupancy: " + vc.getOccupancy() + "%");
@@ -78,9 +78,8 @@ public class App
 						VehicleSpeed vs = (VehicleSpeed)de;
 						System.out.println("This is a Vehicle speed sensor. "
 								+ "Id: "+ vs.getId()
-								+ ", Latitude: " + vs.getLatitude()
-								+ ", Longitude: " + vs.getLongitude()
-								+ ", AverageSpeed: " + vs.getAverageSpeed() + "Km/h"
+								+ ", Latitude: " + vs.getLocation().getLat()
+								+ ", Longitude: " + vs.getLocation().getLon()								+ ", AverageSpeed: " + vs.getAverageSpeed() + "Km/h"
 								+ ", NetworkType: " + vs.getNetworkType()
 								+ ", Count: " + vs.getCount()
 								+ ", MedianSpeed: " + vs.getMedianSpeed() + "Km/h"

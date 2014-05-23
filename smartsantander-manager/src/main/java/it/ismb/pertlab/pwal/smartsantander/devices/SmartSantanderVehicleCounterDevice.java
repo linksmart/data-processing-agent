@@ -13,8 +13,7 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
 	String pwalId;
 	String type = DeviceType.VEHICLE_COUNTER;
 	String networkType;
-	Double latitude;
-	Double longitude;
+	Location location;
 	String dateLastMeasurement;
 	SmartSantanderRestClient restClient;
 	SmartSantanderTrafficIntensityJson measure;
@@ -54,22 +53,6 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
 			return -1.0;	
 	}
 
-	public Double getLatitude() {
-		return this.latitude;
-	}
-
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
-
-	public Double getLongitude() {
-		return this.longitude;
-	}
-
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
-	}
-
 	public String getNetworkType() {
 		return this.networkType;
 	}
@@ -106,14 +89,12 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
 
 	@Override
 	public Location getLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		return location;
 	}
 
 	@Override
 	public void setLocation(Location location) {
-		// TODO Auto-generated method stub
-		
+		this.location=location;
 	}
 
 	@Override
