@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal.manager.bluetooth;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.manager.bluetooth.profiles.SerialPortProfileDevice;
 
 import java.io.DataInputStream;
@@ -195,5 +196,10 @@ public class BluetoothManager extends DevicesManager implements DiscoveryListene
 		synchronized (discoveryLock) {
 			discoveryLock.notify();
 		}
+	}
+
+	@Override
+	public String getNetworkType() {
+		return DeviceNetworkType.BLUETOOTH;
 	}
 }

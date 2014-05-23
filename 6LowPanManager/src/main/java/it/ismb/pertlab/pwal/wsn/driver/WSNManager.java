@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal.wsn.driver;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.wsn.driver.api.IMessage;
 import it.ismb.pertlab.pwal.wsn.driver.api.Response;
 import it.ismb.pertlab.pwal.wsn.driver.customUDP.Definitions;
@@ -189,5 +190,10 @@ public class WSNManager extends DevicesManager{
 	        hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 	    }
 	    return new String(hexChars);
+	}
+
+	@Override
+	public String getNetworkType() {
+		return DeviceNetworkType.SIXLOWPAN;
 	}
 }

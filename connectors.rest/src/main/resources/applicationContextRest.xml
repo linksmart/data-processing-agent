@@ -11,4 +11,6 @@
 		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 		
 		<import resource="classpath:applicationContext.xml"/>
+
 </beans>
+

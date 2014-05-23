@@ -10,6 +10,7 @@ import java.util.Arrays;
 public class WSNTemperatureSensor extends WSNBaseDevice implements Thermometer{
 
 	private String id;
+	private String pwalId;
 	private Double temperature;
 	
 	@Override
@@ -53,5 +54,44 @@ public class WSNTemperatureSensor extends WSNBaseDevice implements Thermometer{
 	private int getInt(byte [] payload, int start, int end){
 		ByteBuffer buf =  ByteBuffer.wrap(Arrays.copyOfRange( payload,  start, end) ); // big-endian by default
 		return buf.getInt();
+	}
+
+	@Override
+	public String getPwalId() {
+		return pwalId;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId=pwalId;
+	}
+
+	@Override
+	public Double getLatitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLatitude(Double latitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Double getLongitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLongitude(Double longitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getNetworkType() {
+		return getManager().getNetworkType();
 	}
 }
