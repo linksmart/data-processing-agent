@@ -10,6 +10,7 @@ import com.xively.client.model.Datastream;
 import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.xivelymanager.utils.AccelerationAxis;
 import it.ismb.pertlab.pwal.xivelymanager.utils.Utils;
@@ -22,6 +23,7 @@ public class AccelerometerDevice implements Accelerometer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AccelerometerDevice.class);
 	
+	private String pwalId;
 	private String id;
 	private String updatedAt;
 	private Location location;
@@ -163,5 +165,23 @@ public class AccelerometerDevice implements Accelerometer {
 	@Override
 	public void setUnit(Unit unit) {
 		this.unit = unit;
+	}
+
+
+	@Override
+	public String getPwalId() {
+		return pwalId;
+	}
+
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId=pwalId;
+	}
+
+
+	@Override
+	public String getNetworkType() {
+		return DeviceNetworkType.XIVELY;
 	}	
 }

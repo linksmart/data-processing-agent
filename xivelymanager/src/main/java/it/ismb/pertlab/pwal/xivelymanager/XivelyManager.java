@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal.xivelymanager;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.xivelymanager.device.HumidityDevice;
 import it.ismb.pertlab.pwal.xivelymanager.device.LightDevice;
 import it.ismb.pertlab.pwal.xivelymanager.device.PressureDevice;
@@ -196,6 +197,11 @@ public class XivelyManager extends DevicesManager {
 				}
 			}	
 		}		
+	}
+
+	@Override
+	public String getNetworkType() {
+		return DeviceNetworkType.XIVELY;
 	}
 
 }

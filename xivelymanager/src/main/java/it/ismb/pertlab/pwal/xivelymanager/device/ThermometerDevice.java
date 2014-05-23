@@ -10,6 +10,7 @@ import com.xively.client.model.Datastream;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.xivelymanager.utils.Utils;
 
@@ -21,6 +22,7 @@ public class ThermometerDevice implements Thermometer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ThermometerDevice.class);
 	
+	private String pwalId;
 	private String id;
 	private String updatedAt;
 	private Location location;
@@ -110,5 +112,23 @@ public class ThermometerDevice implements Thermometer {
 			LOG.error("Current value for "+stream.getId()+" not available");
 			return 0.0;
 		}
+	}
+	
+	@Override
+	public String getPwalId() {
+		return pwalId;
+	}
+
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId=pwalId;
+	}
+
+
+	@Override
+	public String getNetworkType() {
+		return DeviceNetworkType.XIVELY;
 	}	
+
 }

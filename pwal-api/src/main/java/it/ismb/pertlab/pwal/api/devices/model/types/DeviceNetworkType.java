@@ -6,4 +6,5 @@ public class DeviceNetworkType {
 	public static final String BLUETOOTH="pwal:Bluetooth";
 	public static final String SERIAL="pwal:Serial";
 	public static final String SMARTSANTANDER="pwal:SmartSantander";
+	public static final String XIVELY="pwal:Xively";
 }
