@@ -1,6 +1,8 @@
 package it.ismb.pertlab.pwal.manager.serial.device;
 
 import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
+import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.WaterPump;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.serialmanager.BaseSerialDevice;
@@ -97,6 +99,42 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeter, W
 	@Override
 	public Integer getFlow() {
 		return this.flow;
+	}
+
+	@Override
+	public String getUpdatedAt() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUpdatedAt(String updatedAt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Location getLocation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLocation(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Unit getUnit() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUnit(Unit unit) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

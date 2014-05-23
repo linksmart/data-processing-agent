@@ -27,3 +27,6 @@ local.properties
 .buildpath
 
 target
+
+/.project
+/.classpath

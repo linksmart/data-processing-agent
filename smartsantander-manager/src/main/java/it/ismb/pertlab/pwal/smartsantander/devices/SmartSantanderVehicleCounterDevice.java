@@ -1,5 +1,7 @@
 package it.ismb.pertlab.pwal.smartsantander.devices;
 
+import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
@@ -88,5 +90,41 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
 	@Override
 	public void setPwalId(String pwalId) {
 		this.pwalId = pwalId;
+	}
+
+	@Override
+	public String getUpdatedAt() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUpdatedAt(String updatedAt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Location getLocation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLocation(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Unit getUnit() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUnit(Unit unit) {
+		// TODO Auto-generated method stub
+		
 	}
 }

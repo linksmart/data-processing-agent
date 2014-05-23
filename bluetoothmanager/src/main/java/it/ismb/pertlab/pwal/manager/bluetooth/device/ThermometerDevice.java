@@ -1,5 +1,10 @@
 package it.ismb.pertlab.pwal.manager.bluetooth.device;
 
+import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,11 +17,6 @@ import javax.microedition.io.StreamConnection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
-import it.ismb.pertlab.pwal.api.devices.model.Location;
-import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
-import it.ismb.pertlab.pwal.api.devices.model.Unit;
 
 /**
  * Class used to drive a Taidoc td-1261
@@ -340,5 +340,47 @@ public class ThermometerDevice implements Thermometer {
 	@Override
 	public void setUnit(Unit unit) {
 		this.unit = unit;
+	}
+
+	@Override
+	public String getPwalId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Double getLatitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLatitude(Double latitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Double getLongitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLongitude(Double longitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getNetworkType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

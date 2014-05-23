@@ -81,4 +81,44 @@ public class WSNAccelerometerSensor extends WSNBaseDevice implements Acceleromet
 		this.unit = unit;
 	}
 
+	@Override
+	public String getPwalId() {
+		return this.pwalId;
+	}
+
+	@Override
+	public void setPwalId(String pwalId) {
+		this.pwalId=pwalId;
+	}
+
+	@Override
+	public Double getLatitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLatitude(Double latitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Double getLongitude() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLongitude(Double longitude) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getNetworkType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

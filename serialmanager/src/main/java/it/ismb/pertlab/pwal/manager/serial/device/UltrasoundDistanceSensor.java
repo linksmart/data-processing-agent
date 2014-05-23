@@ -1,6 +1,8 @@
 package it.ismb.pertlab.pwal.manager.serial.device;
 
 import it.ismb.pertlab.pwal.api.devices.model.DistanceSensor;
+import it.ismb.pertlab.pwal.api.devices.model.Location;
+import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.serialmanager.BaseSerialDevice;
 import it.ismb.pertlab.pwal.serialmanager.SerialManager;
@@ -84,5 +86,41 @@ public class UltrasoundDistanceSensor extends BaseSerialDevice implements Distan
 	@Override
 	public void setPwalId(String pwalId) {
 		this.pwalId=pwalId;
+	}
+
+	@Override
+	public String getUpdatedAt() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUpdatedAt(String updatedAt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Location getLocation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLocation(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Unit getUnit() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setUnit(Unit unit) {
+		// TODO Auto-generated method stub
+		
 	}
 }
