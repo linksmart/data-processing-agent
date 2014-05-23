@@ -103,5 +103,4 @@ public class ArduinoSemaphore extends BaseSerialDevice implements Semaphore{
 	public void setPwalId(String pwalId) {
 		this.pwalId=pwalId;
 	}
-
 }

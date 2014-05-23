@@ -2,11 +2,13 @@ package it.ismb.pertlab.pwal;
 
 import it.ismb.pertlab.pwal.api.devices.enums.DeviceManagerStatus;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
+import it.ismb.pertlab.pwal.api.devices.events.DeviceLogger;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,7 +24,10 @@ public class PwalImpl implements Pwal, DeviceListener {
 	private List<Device> devicesList;
 	private HashMap<String, DevicesManager> devicesManagers;
 	private List<PWALDeviceListener> pwalDeviceListeners;
-
+	private static SimpleDateFormat sdf = new SimpleDateFormat("d-MMM-yyyy HH:mm:ss");
+	private ArrayList<DeviceLogger> pwalDeviceLoggerList;
+	private static int maxlogsize =20;
+	
 	private static final Logger log=LoggerFactory.getLogger(PwalImpl.class);
 
 	
@@ -31,14 +36,15 @@ public class PwalImpl implements Pwal, DeviceListener {
 		this.devicesList= new ArrayList<>();
 		this.pwalDeviceListeners = new ArrayList<>();
 		this.devicesManagers = new HashMap<>();
+
+		this.pwalDeviceLoggerList = new ArrayList<>();
+		
 		for(DevicesManager d : devicesManager)
 		{
 			d.setId(this.generateId());
 			d.setStatus(DeviceManagerStatus.STOPPED);
 			this.devicesManagers.put(d.getId(), d);
 			d.addDeviceListener(this);
-//			d.start();
-//			driver.start();
 			this.startDeviceManager(d.getId());
 		}
 	}
@@ -61,6 +67,12 @@ public class PwalImpl implements Pwal, DeviceListener {
 		String generatedId = this.generateId();
 		newDevice.setPwalId(generatedId);
 		log.info("New PWAL device added: generated id {} type {}.", generatedId, newDevice.getType());
+		
+		String LogMsg="New PWAL device added: generated Id:"+generatedId+"; type:"+ newDevice.getType();
+		pwalDeviceLoggerList.add(0, new DeviceLogger(sdf.format(System.currentTimeMillis()), LogMsg ));
+		if(pwalDeviceLoggerList.size()>maxlogsize) {
+			pwalDeviceLoggerList.remove(pwalDeviceLoggerList.size() -1);
+		}
 		this.devicesList.add(newDevice);
 	}
 
@@ -72,6 +84,12 @@ public class PwalImpl implements Pwal, DeviceListener {
 			{
 					this.devicesList.remove(index);
 					log.info("New PWAL device removed: id {} type {}.", removedDevice.getPwalId(), removedDevice.getType());
+					
+					String LogMsg="PWAL device Removed: Id: "+removedDevice.getPwalId()+";type:"+ removedDevice.getType();
+					pwalDeviceLoggerList.add(0, new DeviceLogger(sdf.format(System.currentTimeMillis()), LogMsg ));
+					if(pwalDeviceLoggerList.size()>maxlogsize) {
+						pwalDeviceLoggerList.remove(pwalDeviceLoggerList.size() -1);
+					}
 					break;
 			}
 			index++;
@@ -100,6 +118,7 @@ public class PwalImpl implements Pwal, DeviceListener {
 		return this.devicesList;
 	}
 
+	
 	@Override
 	public Collection<DevicesManager> getDevicesManagerList() {
 		return this.devicesManagers.values();
@@ -137,5 +156,10 @@ public class PwalImpl implements Pwal, DeviceListener {
 	@Override
 	public void removePwalDeviceListener(PWALDeviceListener listener) {
 		this.pwalDeviceListeners.remove(listener);
+	}
+
+	@Override
+	public ArrayList<DeviceLogger> getDeviceLogList() {
+		return this.pwalDeviceLoggerList;
 	}
 }

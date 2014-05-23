@@ -1,9 +1,5 @@
 package it.ismb.pertlab.pwal.serialmanager;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.TooManyListenersException;
-
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;

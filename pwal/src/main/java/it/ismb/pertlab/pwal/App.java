@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal;
 import java.util.Scanner;
 
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
@@ -84,6 +85,14 @@ public class App
 								+ ", Count: " + vs.getCount()
 								+ ", MedianSpeed: " + vs.getMedianSpeed() + "Km/h"
 								+ ", Occupancy: " + vs.getOccupancy() + "%");
+						break;
+					case DeviceType.FILL_LEVEL_SENSOR:
+						FillLevel fl = (FillLevel)de;
+						System.out.println("This is a fill level sensor"
+								+ "Id: " + fl.getId()
+								+ ", NetworkType " + fl.getNetworkType()
+								+ ", Level:" +fl.getLevel() 
+								+ ", Depth: " + fl.getDepth());
 						break;
 					default:
 						break;
