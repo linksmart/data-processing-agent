@@ -13,7 +13,9 @@
 <!-- 				<ref bean="wsnManager"/> -->
 <!-- 				<ref bean="bluetoothManager"/> -->
 <!-- 				<ref bean="serialManager"/> -->
-				<ref bean="SmartSantanderManager" />
+<!-- 				<ref bean="SmartSantanderManager" /> -->
+					<ref bean="xivelyManager"/>
+
     		</list>
     	</constructor-arg>
     </bean>
@@ -38,4 +40,5 @@
 			</map>
 		</constructor-arg>
 	</bean>
+	<bean id="xivelyManager" class="it.ismb.pertlab.pwal.xivelymanager.XivelyManager"/>
 </beans>

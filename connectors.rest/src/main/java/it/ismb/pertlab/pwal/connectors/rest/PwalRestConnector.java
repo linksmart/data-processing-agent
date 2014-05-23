@@ -4,10 +4,7 @@ import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
-import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
 import it.ismb.pertlab.pwal.api.devices.model.WaterPump;
-import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
-import it.ismb.pertlab.pwal.manager.serial.device.FlowMeterSensorFit;
 
 import java.util.Collection;
 import java.util.LinkedList;

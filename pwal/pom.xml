@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.0.2.RELEASE</version>
+			<version>4.0.5.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -107,6 +107,16 @@
 			<groupId>it.ismb.pertlab.pwal</groupId>
 			<artifactId>serialmanager</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>it.ismb.pert.pwal</groupId>
+			<artifactId>smartsantander-manager</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>it.ismb.pertlab.pwal</groupId>
+			<artifactId>xivelymanager</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 
