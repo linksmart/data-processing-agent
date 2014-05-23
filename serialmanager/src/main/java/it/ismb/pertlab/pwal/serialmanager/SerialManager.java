@@ -7,8 +7,8 @@ import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -42,7 +42,9 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 		idsPort=new HashMap<>();
 		for(String port:ports)
 		{
-			idsPort.put(port.trim(), new LinkedList<String>());
+//			idsPort.put(port.trim(), new LinkedList<String>());
+			idsPort.put(port.trim(), Arrays.asList(props.keySet().toArray(new String[]{})));
+
 			queue.put(port, new ArrayBlockingQueue<Byte>(2048));
 			queueThreads.put(port, new MessageQueue(queue.get(port), this));
 			queueThreads.get(port).start();
@@ -60,7 +62,7 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 				ports.put(port, new SerialPort(port));
 				SerialPort portObject=ports.get(port);
 				portObject.openPort();
-		    	portObject.setParams(115200,
+		    	portObject.setParams(9600,
 		    		    SerialPort.DATABITS_8,
 		    		    SerialPort.STOPBITS_1,
 		    		    SerialPort.PARITY_NONE);

@@ -37,8 +37,6 @@ public class PwalImpl implements Pwal, DeviceListener {
 			d.setStatus(DeviceManagerStatus.STOPPED);
 			this.devicesManagers.put(d.getId(), d);
 			d.addDeviceListener(this);
-//			d.start();
-//			driver.start();
 			this.startDeviceManager(d.getId());
 		}
 	}

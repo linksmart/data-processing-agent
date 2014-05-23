@@ -2,6 +2,7 @@ package it.ismb.pertlab.pwal.manager.thermometer;
 
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.manager.thermometer.device.ThermometerFakeDevice;
 
 public class ThermometerFakeManager extends DevicesManager{
@@ -41,6 +42,11 @@ public class ThermometerFakeManager extends DevicesManager{
 	@Override
 	public String getId() {
 		return id;
+	}
+
+	@Override
+	public String getNetworkType() {
+		return DeviceNetworkType.SERIAL;
 	}
 	
 }

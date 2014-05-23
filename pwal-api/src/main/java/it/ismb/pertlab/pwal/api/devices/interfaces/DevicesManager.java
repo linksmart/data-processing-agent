@@ -3,11 +3,9 @@ package it.ismb.pertlab.pwal.api.devices.interfaces;
 import it.ismb.pertlab.pwal.api.devices.enums.DeviceManagerStatus;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;

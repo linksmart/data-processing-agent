@@ -37,7 +37,11 @@
     	<artifactId>pwal-api</artifactId>
     	<version>0.0.1</version>
     </dependency>
-
+	 <dependency>
+		<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+		<version>1.7.1</version>
+	  </dependency>
     <dependency>
     	<groupId>org.scream3r</groupId>
     	<artifactId>jssc</artifactId>

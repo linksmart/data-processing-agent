@@ -12,4 +12,7 @@ public class DeviceType {
 	public static final String SEMAPHORE = "pwal:Semaphore";
 	public static final String VEHICLE_SPEED = "pwal:VehicleSpeed";
 	public static final String VEHICLE_COUNTER = "pwal:VehicleCounter";
+	public static final String FILL_LEVEL_SENSOR = "pwal:FillLevelSensor";
+	public static final String FLOW_METER_SENSOR = "pwal:FlowMeterSensor";
+	public static final String WATER_PUMP = "pwal:WaterPump";
 }

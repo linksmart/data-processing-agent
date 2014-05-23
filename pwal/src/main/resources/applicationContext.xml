@@ -9,7 +9,7 @@
     		<list value-type="it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager">
 <!-- 				<ref bean="wsnManager"/> -->
 <!-- 				<ref bean="bluetoothManager"/> -->
-<!-- 				<ref bean="serialManager"/> -->
+				<ref bean="serialManager"/>
 				<ref bean="SmartSantanderManager" />
     		</list>
     	</constructor-arg>
@@ -23,16 +23,17 @@
 <!-- 			</map> -->
 <!-- 		</constructor-arg> -->
 <!-- 	</bean> -->
-<!-- 	<bean id="serialManager" class="it.ismb.pertlab.pwal.serialmanager.SerialManager"> -->
-<!-- 		<constructor-arg type="java.lang.String" value="/dev/ttyACM0"/> -->
-<!-- 		<constructor-arg> -->
-<!-- 			<map> -->
+	<bean id="serialManager" class="it.ismb.pertlab.pwal.serialmanager.SerialManager">
+		<constructor-arg type="java.lang.String" value="COM10"/>
+		<constructor-arg>
+			<map>
 <!-- 				List of sensors that can be provided by this serial device -->
 <!-- 				key=sensor_id value=device_type -->
-<!-- 				<entry key="1" value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor"/> -->
+<!-- 				<entry key="idFillLevelSensor" value="it.ismb.pertlab.pwal.manager.serial.device.FillLevelSensorFit"/> -->
+			    <entry key="idFlowSensor" value="it.ismb.pertlab.pwal.manager.serial.device.FlowMeterSensorFit"/>
 <!-- 				<entry key="ULTRASOUND1" value="it.ismb.pertlab.pwal.manager.serial.device.UltrasoundDistanceSensor"/> -->
 <!-- 				<entry key="SEMAPHORE1" value="it.ismb.pertlab.pwal.manager.serial.device.ArduinoSemaphore"/> -->
-<!-- 			</map> -->
-<!-- 		</constructor-arg> -->
-<!-- 	</bean> -->
+			</map>
+		</constructor-arg>
+	</bean>
 </beans>

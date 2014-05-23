@@ -4,6 +4,10 @@ import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
+import it.ismb.pertlab.pwal.api.devices.model.WaterPump;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.manager.serial.device.FlowMeterSensorFit;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -110,6 +114,22 @@ public class PwalRestConnector implements PWALDeviceListener {
 		return pwal.getDevicesManagerList();
 	}
 
+	@RequestMapping(value="setpumpspeed", method=RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseEntity<?> changeValues(@RequestParam(value = "deviceId") String deviceId, 
+																 @RequestParam(value = "speed") String speed)
+	{
+		log.info("Searching for water pump");
+		for (Device device : pwal.getDevicesList()) {
+			if(device.getPwalId().equals(deviceId))
+			{
+				log.info("Water pump found!");
+				((WaterPump)device).setVelocity(Double.parseDouble(speed));
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+	
 	/**
 	 * This resource retrieves device manager details
 	 * @param deviceManagerId is the id of the required device manager
