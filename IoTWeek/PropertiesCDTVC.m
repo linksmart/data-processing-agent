@@ -53,8 +53,7 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"IoTStateObservation"];
     request.predicate = [NSPredicate predicateWithFormat:@"cnProperty.cnAbout = %@ AND cnProperty.cnIoTEntity.cnAbout = %@", property.cnAbout, property.cnIoTEntity.cnAbout];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"cnPhenomenonTime"
-                                                              ascending:NO
-                                                               selector:@selector(localizedStandardCompare:)]];
+                                                              ascending:NO]];
     [request setFetchLimit:1];
 
     

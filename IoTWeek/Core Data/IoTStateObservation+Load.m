@@ -19,9 +19,6 @@
 {
     IoTStateObservation *iotStateObservation = nil;
     
-    if (!iotStateObservation)
-        return nil;
-    
     IoTEntity *iotEntity = [IoTEntity iotEntityWithAbout:iotEntityAbout usingManagedContext:context];
     if (!iotEntity)
         return nil;
