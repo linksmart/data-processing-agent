@@ -81,7 +81,7 @@
                                                                                                     forPropertiesWithAbout:self.propery.cnAbout
                                                                                                        usingManagedContext:self.propery.managedObjectContext];
                                                                     // No need to explicitly save here...
-                                                                    // [self.propery.managedObjectContext save:NULL];
+                                                                    [self.propery.managedObjectContext save:NULL];
                                                                 });
                                                             }
                                                         }];
@@ -95,7 +95,7 @@
     
     IoTStateObservation *iotStateObservation = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = iotStateObservation.cnValue;
-    cell.detailTextLabel.text = [[IoTStateObservation iotStateObservationDateFormatter] stringFromDate:iotStateObservation.cnPhenomenonTime];
+    cell.detailTextLabel.text = [[self dateTimeDisplayFormatter] stringFromDate:iotStateObservation.cnPhenomenonTime];
     
     return cell;
 }
@@ -134,6 +134,17 @@
                            forSegue:nil
                       fromIndexPath:indexPath];
     }
+}
+
+// Datetime display
+
+-(NSDateFormatter *)dateTimeDisplayFormatter
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    return dateFormatter;
 }
 
 @end

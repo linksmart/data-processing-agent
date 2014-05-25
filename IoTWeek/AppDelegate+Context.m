@@ -84,12 +84,12 @@
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
          
          */
-         //abort();
+         abort();
         // Okay, delete and try again
         
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-        return [self createPersistentStoreCoordinator];
+        //NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        //[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
+        //return [self createPersistentStoreCoordinator];
     }
     
     return persistentStoreCoordinator;
