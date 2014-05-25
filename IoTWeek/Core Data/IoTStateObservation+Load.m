@@ -19,6 +19,9 @@
 {
     IoTStateObservation *iotStateObservation = nil;
     
+    if (!iotStateObservation)
+        return nil;
+    
     IoTEntity *iotEntity = [IoTEntity iotEntityWithAbout:iotEntityAbout usingManagedContext:context];
     if (!iotEntity)
         return nil;
@@ -28,27 +31,26 @@
         return nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"IoTStateObservation"];
-    request.predicate = [NSPredicate predicateWithFormat:@"cnProperty.cnAbout = %@ AND cnProperty.cnIoTEntity.cnAbout = %@ AND cnPhenomenonTime = %@ AND cnResultTime = %@", property.cnAbout, property.cnIoTEntity.cnAbout, [iotObservationDictionary valueForKeyPath:@"PhenomenonTime"], [iotObservationDictionary valueForKeyPath:@"ResultTime"]];
+    request.predicate = [NSPredicate predicateWithFormat:@"cnProperty.cnAbout = %@ AND cnProperty.cnIoTEntity.cnAbout = %@ AND cnPhenomenonTime = %@ AND cnResultTime = %@", property.cnAbout, property.cnIoTEntity.cnAbout, [self parsePhenomenonTime:iotObservationDictionary], [self parseResultTime:iotObservationDictionary]];
     
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
-    // TODO: Move these stupid assignments elsewhere
-    
+    // Remember, there can be only one match. The request is on the unique key.
     if (!matches || error || ([matches count] > 1)) {
         // handle error
     } else if ([matches count]) {
         // Use existing object, and update attributes
         iotStateObservation = [matches firstObject];
         
-        iotStateObservation.cnValue = [iotObservationDictionary valueForKeyPath:@"Value"];
+        iotStateObservation.cnValue = [self parseValue:iotObservationDictionary];
     } else {
         iotStateObservation = [NSEntityDescription insertNewObjectForEntityForName:@"IoTStateObservation"
                                                  inManagedObjectContext:context];
         
-        iotStateObservation.cnPhenomenonTime = [iotObservationDictionary valueForKeyPath:@"PhenomenonTime"];
-        iotStateObservation.cnResultTime = [iotObservationDictionary valueForKeyPath:@"ResultTime"];
-        iotStateObservation.cnValue = [iotObservationDictionary valueForKeyPath:@"Value"];
+        iotStateObservation.cnPhenomenonTime = [self parsePhenomenonTime:iotObservationDictionary];
+        iotStateObservation.cnResultTime = [self parseResultTime:iotObservationDictionary];
+        iotStateObservation.cnValue = [self parseValue:iotObservationDictionary];
         
         iotStateObservation.cnProperty = property;
     }
@@ -69,12 +71,24 @@
     }
 }
 
--(void)setTestdate:(NSDate *)testdate
++(NSDate *)parsePhenomenonTime:(NSDictionary *)iotStateObservationDictionary{
+    return [[self iotStateObservationDateFormatter] dateFromString:[iotStateObservationDictionary valueForKeyPath:@"PhenomenonTime"]];
+}
+
++(NSDate *)parseResultTime:(NSDictionary *)iotStateObservationDictionary{
+    return [[self iotStateObservationDateFormatter] dateFromString:[iotStateObservationDictionary valueForKeyPath:@"ResultTime"]];
+}
+
++(NSString *)parseValue:(NSDictionary *)iotStateObservationDictionary{
+    return [iotStateObservationDictionary valueForKeyPath:@"Value"];
+}
+
++(NSDateFormatter *)iotStateObservationDateFormatter
 {
     NSDateFormatter *dateFor = [[NSDateFormatter alloc] init];
-    [dateFor setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFor setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
     
-    NSLog(@"Datetest: %@", [dateFor stringFromDate:testdate]);
+    return dateFor;
 }
 
 @end

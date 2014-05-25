@@ -2,7 +2,7 @@
 //  IoTStateObservation.h
 //  IoTWeek
 //
-//  Created by Thomas Barrie Juel Gilbert on 17/05/14.
+//  Created by Thomas Barrie Juel Gilbert on 25/05/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
@@ -13,10 +13,9 @@
 
 @interface IoTStateObservation : NSManagedObject
 
-@property (nonatomic, retain) NSString * cnPhenomenonTime;
-@property (nonatomic, retain) NSString * cnResultTime;
+@property (nonatomic, retain) NSDate * cnPhenomenonTime;
+@property (nonatomic, retain) NSDate * cnResultTime;
 @property (nonatomic, retain) NSString * cnValue;
-@property (nonatomic, retain) NSDate * testdate;
 @property (nonatomic, retain) Property *cnProperty;
 
 @end

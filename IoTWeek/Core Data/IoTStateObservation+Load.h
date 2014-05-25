@@ -20,4 +20,6 @@
                    forPropertiesWithAbout:(NSString *)propertiesAbout
                       usingManagedContext:(NSManagedObjectContext *)context;
 
++(NSDateFormatter *)iotStateObservationDateFormatter;
+
 @end

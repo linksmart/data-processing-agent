@@ -96,7 +96,7 @@
     
     IoTStateObservation *iotStateObservation = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = iotStateObservation.cnValue;
-    cell.detailTextLabel.text = iotStateObservation.cnPhenomenonTime;
+    cell.detailTextLabel.text = [[IoTStateObservation iotStateObservationDateFormatter] stringFromDate:iotStateObservation.cnPhenomenonTime];
     
     return cell;
 }
