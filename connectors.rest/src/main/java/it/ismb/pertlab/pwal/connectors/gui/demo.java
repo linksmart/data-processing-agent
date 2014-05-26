@@ -48,7 +48,7 @@ public class demo {
 		return "demo";
 	}
 	
-	@RequestMapping(value="sensor", method=RequestMethod.GET)
+	@RequestMapping(value="demosensor", method=RequestMethod.GET)
 	@ResponseBody
 	public String loadsensors(Model model)
 	{
@@ -59,7 +59,7 @@ public class demo {
 		return "demo#sensors";
 	}
 	
-	@RequestMapping(value="log", method=RequestMethod.GET)
+	@RequestMapping(value="demolog", method=RequestMethod.GET)
 	@ResponseBody
 	public String loadlog(Model model)
 	{
