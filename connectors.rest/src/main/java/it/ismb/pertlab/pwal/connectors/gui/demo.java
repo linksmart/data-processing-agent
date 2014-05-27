@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import it.ismb.pertlab.pwal.api.devices.events.DeviceLogger;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
@@ -36,6 +37,13 @@ public class demo {
 				 //System.out.println(itr.next());
 			    System.err.println("\n"+t.getId()+" "+t.getType()+ " "+t.getNetworkType()+"\n" +t.getTemperature());
 			}
+			
+			if(DeviceType.ACCELEROMETER.equals(d.getType() )){
+				Accelerometer t=(Accelerometer) d;
+				 //System.out.println(itr.next());
+			    System.err.println("\n"+t.getId()+" "+t.getType()+ " "+t.getNetworkType()+"\n" +t.getXAcceleration()+t.getYAcceleration()+t.getZAcceleration());
+			}
+			
 		}
 		
 		for (DeviceLogger listlog : loglist){

@@ -27,18 +27,18 @@ public class HighChartsController {
         return chartService.getTemperaturelineChartData();
     }
 
-    @RequestMapping(value="/tempsplinechart2", method=RequestMethod.GET)
+    @RequestMapping(value="/tempsplinechart", method=RequestMethod.GET)
     @ResponseBody
     public DataBean showSplineChart1() {
         return chartService.getTemperatureSplineChartData();
     }
 
 
-//    @RequestMapping(value="/linechart3", method=RequestMethod.GET)
-//    @ResponseBody
-//    public DataBean showLineChart3() {
-//        return chartService.getLineChartData3();
-//    }
+    @RequestMapping(value="/accel3dchart", method=RequestMethod.GET)
+    @ResponseBody
+    public DataBean showLineChart3() {
+        return chartService.getAccel3DChartData();
+    }
 
 
 }

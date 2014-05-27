@@ -49,10 +49,120 @@
 
 <script type="text/javascript">
 	var contextPath = '<c:out value="${pageContext.request.contextPath}"/>';
+
+	function load_Accel(divId){
+		clearInterval(id);
+		var c;
+		var url = (contextPath + '/accel3dchart');
+				
+		function updateAccel() {
+		  $.getJSON(url, function(data) {
+		  				
+					console.debug(c.series);
+					//create series if are not there
+					if(c.series.length == 0)
+					{
+						for(var i=0;i<data.length;i++)
+						{
+							c.addSeries({"name":data[i].name,"data":data.series[i]});
+							
+						}
+					}
+					
+					
+					else{
+			
+						for(var i=0;i<data.length;i++)
+						{
+							var found=false;
+							for(var j=0;j<c.series.length;j++)
+							{
+								if(c.series[j].name==data[i].name)
+								    {
+									found=true;						
+									c.series[j].setData(data[i].value);	
+								    }
+		                                                    
+		                            //console.debug("Found",found);
+		                            //console.debug("Name",c.series[j].name); 
+										
+		                    }
+		                                        
+		                                        //I need to add a new serie
+							if(found==false)
+							 {
+								c.addSeries({"name":data[i].name,"data":data[i].value});
+								i--; //retry adding the point
+							 }
+		                                        
+						}
+						
+						if(c.series.length != data.length)
+						{
+								load_Accel();							
+						}
+					}		    
+				});							
+		}  
+			
+					 
+		  $.getJSON(url, function(data) {
+		    var options = {
+		    	 chart: {
+		            renderTo: divId,
+		            polar: true,
+			        type: 'line', 
+					zoomType:'y',
+					events:{
+		                 load: function() {
+		                	 	updateAccel();
+		                     id=setInterval(updateAccel, 3000);
+		                    }
+		               }
+
+		        },
+				
+				pane: {
+			    	size: '95%'
+			    },
+				
+		        xAxis: {
+			        categories: ['z-Axis', 'y-Axis', 'x-Axis'],
+			        tickmarkPlacement: 'off',
+			        lineWidth: 0
+			    },
+			        
+			    yAxis: {
+			        gridLineInterpolation: 'polygon',
+			        lineWidth: 0,
+			        min: -255,
+		            max: 255
+			    },
+			    
+			    tooltip: {
+			    	shared: true,
+			        pointFormat: '<span style="color:{series.color}">{series.name}: <b>Accel:{point.y:,.0f}</b><br/>'
+			    },
+			    
+			    legend: {
+			        align: 'right',
+			        verticalAlign: 'top',
+			        y: 70,
+			        layout: 'vertical'
+			    },   
+		          
+		        series: []
+		    };
+		
+			c = new Highcharts.Chart(options);
+		    });
+	}
+
+// For spline Graphs	
 	function load_sensor(divId) {
 		var id1;
 		clearInterval(id1);
-		var url1 = (contextPath + '/tempsplinechart2');
+		var url1 = (contextPath + '/tempsplinechart');
 		var c;
 
 		function updateSensor() {
@@ -162,14 +272,25 @@
 			</div>
 
 			<script>
-				load_sensor('pwal:Thermometer');
+			//	load_sensor('pwal:Thermometer');
 			</script>
 			<div class="row">
 				<!-- This is for each device list -->
 				<c:if test="${not empty devlist}">
 					<c:forEach var="listValue" items="${devlist}">
 						<div class="span4 bg-green padding20 text-center">
-							<div id="${listValue.type}">${listValue.type}</div>
+							<div id="${listValue.type}">
+								${listValue.type}
+								<br>
+								<c:if test="${listValue.type == 'pwal:Thermometer'}">
+								<input id="clickMe" type="button" value="Get Graph" onclick="load_sensor('${listValue.type}');" />
+								</c:if>
+								
+								<c:if test="${listValue.type == 'pwal:Accelerometer'}">
+								<input id="clickMe" type="button" value="Get Graph" onclick="load_Accel('${listValue.type}');" />
+								</c:if>
+								
+							</div>
 						</div>
 					</c:forEach>
 				</c:if>
@@ -184,8 +305,8 @@
 					<c:if test="${not empty devlist}">
 						<c:forEach var="listValue" items="${devlist}">
 							<tr>
-								<td>${listValue.id}</td>
 								<td>${listValue.type}</td>
+								<td>${listValue.id}</td>
 								<td>${listValue.networkType}</td>
 							</tr>
 
