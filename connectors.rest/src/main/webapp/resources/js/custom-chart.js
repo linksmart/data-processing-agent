@@ -161,147 +161,6 @@ function getBaseChart() {
 }//function end
 
 
-function createNewSplineChart(divId) {
-	var chart = {
-			options: {
-				chart: {
-					renderTo: divId
-				}
-			}
-	};
-	chart = jQuery.extend(true, {}, getBaseSplineChart(), chart);
-	chart.init(chart.options);
-	return chart;
-}
-
-
-function getBaseSplineChart() {
-
-	var baseChart = {
-			highchart: null,
-			defaults: {
-
-				chart: {
-					renderTo: null,
-					shadow: true,
-					borderColor: '#ebba95',
-					borderWidth: 2,
-					defaultSeriesType: 'line',
-					width: 400,
-					height: 250,
-					type: 'spline',
-					animation: Highcharts.svg, // don't animate in old IE
-					marginRight: 10
-				},
-				credits: {
-					enabled: false
-				},
-				exporting: {
-					enabled: false
-				},
-				title: {
-					text: null,
-					x: -20,
-					style: {
-						color: '#3366cc',
-						fontWeight: 'bold',
-						fontSize: '16px',
-						fontFamily: 'Trebuchet MS, Verdana, sans-serif'
-					}
-				},
-				xAxis: {
-					categories: [],
-					gridLineDashStyle: 'dot',
-					gridLineColor: '#197f07',
-					gridLineWidth: 1,
-					tickColor: '#ff40ff',
-					tickWidth: 2,
-					title: {
-						text: null,
-						style: {
-							color: '#3366cc',
-							fontWeight: 'bold',
-							fontSize: '12px',
-							fontFamily: 'Trebuchet MS, Verdana, sans-serif'
-						}
-					},
-					labels: {
-						rotation: -25,
-						align: 'right',
-						style: {
-							color: '#3366cc',
-							fontWeight: 'normal',
-							fontSize: '9px',
-							fontFamily: 'Trebuchet MS, Verdana, sans-serif'
-						}
-					}
-				},
-				yAxis: {
-					min: 0,
-					gridLineWidth: 1,
-					gridLineColor: '#197F07',
-					gridLineDashStyle: 'dot',
-					title: {
-						text: null,
-						style: {
-							color: '#3366cc',
-							fontWeight: 'bold',
-							fontSize: '12px',
-							fontFamily: 'Trebuchet MS, Verdana, sans-serif'
-						}
-					},
-					labels: {
-						style: {
-							color: '#3366cc',
-							fontSize: '12px',
-							fontFamily: 'Trebuchet MS, Verdana, sans-serif'
-						}
-					},
-					plotLines: [{
-						value: 0,
-						width: 1
-					}]
-				},
-				tooltip: {
-					crosshairs: true,
-					formatter: function() {
-						return '<b>'+ this.series.name +'</b><br/>'+
-						this.x +': '+ this.y;
-					}
-				},
-				legend: {
-					layout: 'horizontal',
-					backgroundColor: '#ffffff',
-					align: 'center',
-					verticalAlign: 'top',
-					borderWidth: 1,
-					shadow: true,
-					style: {
-						color: '#3366cc',
-						fontWeight: 'bold',
-						fontSize: '9px',
-						fontFamily: 'Trebuchet MS, Verdana, sans-serif'
-					}
-				},
-				series: []
-
-			},
-
-			// here you'll merge the defaults with the object options
-			init: function(options) {
-				this.highchart = jQuery.extend({}, this.defaults, options);
-			},
-
-			create: function() {
-				new Highcharts.Chart(this.highchart);
-			}
-			
-
-	};
-	return baseChart;
-}//function end
-
-
 function getRemoteDataDrawChart(url, linechart) {
 
 	$.ajax({
@@ -350,87 +209,206 @@ function getRemoteDataDrawChart(url, linechart) {
 } //function end
 
 
+var GlobalcontextPath;
 
+function getContextPath(contextPath){
+	GlobalcontextPath = contextPath;
+}
 
-
-function getRemoteSplineDataDrawChart(url, splinechart) {
-
+//For spline Graphs	
+function load_sensor(divId) {
+	var id1;
+	clearInterval(id1);
+	var url1 = (contextPath + '/tempsplinechart');
 	var c;
-	
+
 	function updateSensor() {
-		c= splinechart.highchart;
-		$.getJSON(url, function(data) {
-			console.debug(c.series.length);
+		$.getJSON(url1, function(data) {
 			if (c.series.length == 0) {
-				console.debug("first loop");
+
 				for (var i = 0; i < data.series.length; i++) {
-					console.debug("add series loop");
+
 					c.addSeries({
 						"name" : data.series[i].name,
-						"data" : data.series[i].data
+						"data" : []
 					});
 
 				}
 			}
 
+			var series = c.series[0];
+			var shift = series.data.length > 5;
+
 			for (var j = 0; j < c.series.length; j++) {
 
 				if (c.series[j].name == data.series[j].name) {
-					c.series[j].addPoint(data.series[j].data, true, true);
+					c.series[j].addPoint(data.series[j].data, true, shift);
 				}
 			}
 		});
 	}
 
-
-
-
-
-	$.ajax({
-		url: url,
-		dataType: 'json',
-		success: function(data) {
-
-			var categories = data.categories;
-			var title = data.title;
-			var yTitle = data.yAxisTitle;
-			var xTitle = data.xAxisTitle;
-			var divId =  data.divId;
-
-			//populate the splinechart options (highchart)
-			splinechart.highchart.xAxis.categories = categories;
-			splinechart.highchart.title.text = title;
-			splinechart.highchart.yAxis.title.text = yTitle;
-			splinechart.highchart.xAxis.title.text = xTitle;
-			splinechart.highchart.chart.renderTo = divId;
-
-			$.each(data.series, function(i, seriesItem) {
-				console.log(seriesItem) ;
-				var series = {
-						data: []
-				};
-				series.name = seriesItem.name;
-				series.color = seriesItem.color;
-
-				$.each(seriesItem.data, function(j, seriesItemData) {
-					console.log("Data (" + j +"): "+seriesItemData) ;
-					series.data.push(parseFloat(seriesItemData));
-				});
-
-				splinechart.highchart.series[i] = series;
-			});
-
-			//draw the chart
-			splinechart.create();
-		},
-		error: function (xhr, ajaxOptions, thrownError) {
-			alert(xhr.status);
-			alert(thrownError);
-		},
-		cache: false
+	Highcharts.setOptions({
+		global : {
+			useUTC : false
+		}
 	});
-	
-	setInterval(updateSensor, 3000);
 
-} //function end
+	$.getJSON(url1, function(data) {
+		var options = {
+				chart : {
+					renderTo : divId,
+					type : 'spline',
+					animation : Highcharts.svg,
+					zoomType : 'x',
+					events : {
+						load : function() {
+							updateSensor();
+							id1 = setInterval(updateSensor, 3000);
+						}
+					}
 
+				},
+
+				title : {
+					text : data.title
+				},
+				xAxis : {
+					title : {
+						text : data.xAxisTitle
+					},
+					type : 'datetime',
+					labels : {
+						formatter : function() {
+							return new Date(this.value).toLocaleTimeString();
+						}
+
+					}
+				},
+				yAxis : {
+					title : {
+						text : data.yAxisTitle
+					},
+					labels : {
+						formatter : function() {
+							return this.value + '';
+						}
+					}
+				},
+
+				series : []
+		};
+
+		c = new Highcharts.Chart(options);
+
+	});
+
+}
+
+function load_Accel(divId){
+	clearInterval(id);
+	var c;
+	var url = (GlobalcontextPath + '/accel3dchart');
+
+	function updateAccel() {
+		$.getJSON(url, function(data) {
+
+			console.debug(c.series);
+			//create series if are not there
+			if(c.series.length == 0)
+			{
+				for(var i=0;i<data.length;i++)
+				{
+					c.addSeries({"name":data[i].name,"data":data.series[i]});
+
+				}
+			}
+
+
+			else{
+
+				for(var i=0;i<data.length;i++)
+				{
+					var found=false;
+					for(var j=0;j<c.series.length;j++)
+					{
+						if(c.series[j].name==data[i].name)
+						{
+							found=true;						
+							c.series[j].setData(data[i].value);	
+						}
+
+						//console.debug("Found",found);
+						//console.debug("Name",c.series[j].name); 
+
+					}
+
+					//I need to add a new serie
+					if(found==false)
+					{
+						c.addSeries({"name":data[i].name,"data":data[i].value});
+						i--; //retry adding the point
+					}
+
+				}
+
+				if(c.series.length != data.length)
+				{
+					load_Accel();							
+				}
+			}		    
+		});							
+	}  
+
+
+	$.getJSON(url, function(data) {
+		var options = {
+				chart: {
+					renderTo: divId,
+					polar: true,
+					type: 'line', 
+					zoomType:'y',
+					events:{
+						load: function() {
+							updateAccel();
+							id=setInterval(updateAccel, 3000);
+						}
+					}
+
+				},
+
+				pane: {
+					size: '95%'
+				},
+
+				xAxis: {
+					categories: ['z-Axis', 'y-Axis', 'x-Axis'],
+					tickmarkPlacement: 'off',
+					lineWidth: 0
+				},
+
+				yAxis: {
+					gridLineInterpolation: 'polygon',
+					lineWidth: 0,
+					min: -255,
+					max: 255
+				},
+
+				tooltip: {
+					shared: true,
+					pointFormat: '<span style="color:{series.color}">{series.name}: <b>Accel:{point.y:,.0f}</b><br/>'
+				},
+
+				legend: {
+					align: 'right',
+					verticalAlign: 'top',
+					y: 70,
+					layout: 'vertical'
+				},   
+
+				series: []
+		};
+
+		c = new Highcharts.Chart(options);
+	});
+}
