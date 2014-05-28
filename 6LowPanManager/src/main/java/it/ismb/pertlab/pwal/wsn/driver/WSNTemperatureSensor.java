@@ -3,6 +3,7 @@ package it.ismb.pertlab.pwal.wsn.driver;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.wsn.driver.customUDP.Definitions;
 
@@ -105,7 +106,6 @@ public class WSNTemperatureSensor extends WSNBaseDevice implements Thermometer{
 
 	@Override
 	public String getNetworkType() {
-		// TODO Auto-generated method stub
-		return null;
+		return DeviceNetworkType.SIXLOWPAN;
 	}
 }

@@ -106,7 +106,7 @@ public class ChartService {
 		}
 		
 		if(categories.length>0){
-			return new DataBean("pwal:Accelerometer", "Temperature Sensor", "Degree Celcius", "Time", Arrays.asList(categories), list);
+			return new DataBean("pwal:Accelerometer", "Accelerometer Sensor", "Null", "Null", Arrays.asList(categories), list);
 		}
 		else return null;
 	}
