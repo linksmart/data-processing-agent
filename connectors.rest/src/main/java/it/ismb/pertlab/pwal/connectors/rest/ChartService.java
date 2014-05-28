@@ -94,12 +94,13 @@ public class ChartService {
 		List<Device> accelDevList = new ArrayList<Device>();
 		Collection<Device> devList= pwal.getDevicesList();
 		long[] categories=null;
+		
 		for(Device d:devList){
 			if(DeviceType.ACCELEROMETER.equals(d.getType() )){
 				accelDevList.add(d);
 				Accelerometer a=(Accelerometer) d;
 
-				list.add(new SeriesBean(a.getType(),  new double [] {a.getXAcceleration(),a.getYAcceleration(), a.getZAcceleration()}));
+				list.add(new SeriesBean(a.getType(),  new double [] {a.getXAcceleration(),a.getYAcceleration(),a.getZAcceleration()}));
 				categories= new long[] {System.currentTimeMillis()};
 			}
 		}

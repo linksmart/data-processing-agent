@@ -313,13 +313,13 @@ function load_Accel(divId){
 	function updateAccel() {
 		$.getJSON(url, function(data) {
 
-			console.debug(c.series);
+			console.debug(c.series.length);
 			//create series if are not there
 			if(c.series.length == 0)
 			{
-				for(var i=0;i<data.length;i++)
+				for(var i=0;i<data.series.length;i++)
 				{
-					c.addSeries({"name":data[i].name,"data":data.series[i]});
+					c.addSeries({"name":data.series[i].name,"data":[]});
 
 				}
 			}
@@ -327,15 +327,15 @@ function load_Accel(divId){
 
 			else{
 
-				for(var i=0;i<data.length;i++)
+				for(var i=0;i<data.series.length;i++)
 				{
 					var found=false;
 					for(var j=0;j<c.series.length;j++)
 					{
-						if(c.series[j].name==data[i].name)
+						if(c.series[j].name==data.series[i].name)
 						{
 							found=true;						
-							c.series[j].setData(data[i].value);	
+							c.series[j].setData(data.series[i].data);	
 						}
 
 						//console.debug("Found",found);
@@ -346,16 +346,12 @@ function load_Accel(divId){
 					//I need to add a new serie
 					if(found==false)
 					{
-						c.addSeries({"name":data[i].name,"data":data[i].value});
+						c.addSeries({"name":data.series[i].name,"data":data.series[i].data});
 						i--; //retry adding the point
 					}
 
 				}
 
-				if(c.series.length != data.length)
-				{
-					load_Accel();							
-				}
 			}		    
 		});							
 	}  
@@ -378,20 +374,26 @@ function load_Accel(divId){
 				},
 
 				pane: {
-					size: '95%'
+					size: '75%'
 				},
-
+				
+				title : {
+					text : data.title
+				},
+				
 				xAxis: {
-					categories: ['z-Axis', 'y-Axis', 'x-Axis'],
+
+					categories: ['x-Axis', 'y-Axis', 'z-Axis'],
 					tickmarkPlacement: 'off',
 					lineWidth: 0
 				},
 
 				yAxis: {
+
 					gridLineInterpolation: 'polygon',
 					lineWidth: 0,
-					min: -255,
-					max: 255
+					min: -1000,
+					max: 1000
 				},
 
 				tooltip: {
@@ -400,7 +402,7 @@ function load_Accel(divId){
 				},
 
 				legend: {
-					align: 'right',
+					align: 'center',
 					verticalAlign: 'top',
 					y: 70,
 					layout: 'vertical'

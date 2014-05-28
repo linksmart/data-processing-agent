@@ -41,7 +41,7 @@ public class demo {
 			if(DeviceType.ACCELEROMETER.equals(d.getType() )){
 				Accelerometer t=(Accelerometer) d;
 				 //System.out.println(itr.next());
-			    System.err.println("\n"+t.getId()+" "+t.getType()+ " "+t.getNetworkType()+"\n" +t.getXAcceleration()+t.getYAcceleration()+t.getZAcceleration());
+			    System.err.println("\n"+t.getId()+" "+t.getType()+ " "+t.getNetworkType()+"\n x:" +t.getXAcceleration()+" y:"+t.getYAcceleration()+" z:"+t.getZAcceleration());
 			}
 			
 		}
