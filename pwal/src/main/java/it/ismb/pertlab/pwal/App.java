@@ -5,6 +5,7 @@ import java.util.Scanner;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
+import it.ismb.pertlab.pwal.api.devices.model.Resistance;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore.State;
@@ -93,6 +94,10 @@ public class App
 								+ ", Level:" +fl.getLevel() 
 								+ ", Depth: " + fl.getDepth());
 						break;
+					case DeviceType.RESISTANCE:
+						Resistance r=(Resistance) de;
+						System.out.println("This is a resistance"
+								+" ohm: "+r.getOhm());
 					default:
 						break;
 					}
