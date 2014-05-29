@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
+import it.ismb.pertlab.pwal.api.devices.model.DistanceSensor;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.highcharts.bean.DataBean;
@@ -88,6 +89,31 @@ public class ChartService {
 		else return null;
 	}
 
+	public DataBean getDistanceSplineChartData(){
+		List<SeriesBean> list = new ArrayList<SeriesBean>();
+		List<Device> distDevList = new ArrayList<Device>();
+		Collection<Device> devList= pwal.getDevicesList();
+
+		long[] categories=null;
+
+
+		for(Device d:devList){
+			if(DeviceType.DISTANCE_SENSOR.equals(d.getType() )){
+				distDevList.add(d);
+				DistanceSensor t=(DistanceSensor) d;
+
+				list.add(new SeriesBean(t.getType(),  new double [] {System.currentTimeMillis(),t.getDistanceInch()}));
+				categories= new long[] {System.currentTimeMillis()};
+			}
+		}
+
+		if(categories.length>0){
+			return new DataBean("pwal:DistanceSensor", "Distance Sensor", "Distance in Inch (less=full)", "Time", Arrays.asList(categories), list);
+		}
+
+		else return null;
+	} 
+	
 	public DataBean getAccel3DChartData(){
 
 		List<SeriesBean> list = new ArrayList<SeriesBean>();

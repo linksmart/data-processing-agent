@@ -132,6 +132,17 @@ public class WSNManager extends DevicesManager{
 					break;
 				case Definitions.SENSOR_HUMIDITY:
 					break;
+				case Definitions.SENSOR_DISTANCE:
+					WSNUltraSoundDistanceSensor ds=new WSNUltraSoundDistanceSensor();
+					ds.setId(super.generateId());
+					ds.setAddress(msg.getSrcAddress());
+					ds.setManager(this);
+					for(DeviceListener l:deviceListener)
+					{
+						l.notifyDeviceAdded(ds);
+					}					
+					devicesDiscovered.put(ds.getId(), ds);
+					break;
 				default:
 					break;
 				

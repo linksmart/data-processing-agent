@@ -81,7 +81,12 @@
 								${listValue.type} <br>
 								<c:if test="${listValue.type == 'pwal:Thermometer'}">
 									<input id="clickMe" type="button" value="Get Graph"
-										onclick="load_sensor('${listValue.type}');" />
+										onclick="load_tempsensor('${listValue.type}');" />
+								</c:if>
+								
+								<c:if test="${listValue.type == 'pwal:DistanceSensor'}">
+									<input id="clickMe" type="button" value="Get Graph"
+										onclick="load_distsensor('${listValue.type}');" />
 								</c:if>
 
 								<c:if test="${listValue.type == 'pwal:Accelerometer'}">

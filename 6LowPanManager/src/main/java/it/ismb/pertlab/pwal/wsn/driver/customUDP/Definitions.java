@@ -15,6 +15,8 @@ public  class Definitions {
 	public static final byte SENSOR_ACCEL 	=	(byte) 0xC2;
 	public static final byte SENSOR_LIGHT 	= 	(byte) 0xC3;
 	public static final byte SENSOR_HUMIDITY= 	(byte) 0xC4;
+	public static final byte SENSOR_DISTANCE= 	(byte) 0xC5;
+	
 	
 	//#########################################;
 	// DISCOVERY BROADCAST MSG FROM SENSOR (0):
@@ -36,6 +38,8 @@ public  class Definitions {
 				return DeviceType.LIGHT_SENSOR;
 			case Definitions.SENSOR_HUMIDITY:
 				return DeviceType.HUMIDITY_SENSOR;
+			case Definitions.SENSOR_DISTANCE:
+				return DeviceType.DISTANCE_SENSOR;
 		}
 		return null;
 	}

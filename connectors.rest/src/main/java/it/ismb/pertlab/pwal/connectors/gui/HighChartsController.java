@@ -32,6 +32,12 @@ public class HighChartsController {
     public DataBean showSplineChart1() {
         return chartService.getTemperatureSplineChartData();
     }
+    
+    @RequestMapping(value="/distancesplinechart", method=RequestMethod.GET)
+    @ResponseBody
+    public DataBean showSplineChart2() {
+        return chartService.getDistanceSplineChartData();
+    }
 
 
     @RequestMapping(value="/accel3dchart", method=RequestMethod.GET)
