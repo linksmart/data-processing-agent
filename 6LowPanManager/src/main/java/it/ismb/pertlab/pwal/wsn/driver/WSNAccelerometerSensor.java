@@ -11,6 +11,8 @@ import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.wsn.driver.customUDP.Definitions;
 
 public class WSNAccelerometerSensor extends WSNBaseDevice implements Accelerometer{
+	
+	//TODO: Last 2 bytes of z axis data is missing
 	private String pwalId;
 	private String id;
 	private String updatedAt;

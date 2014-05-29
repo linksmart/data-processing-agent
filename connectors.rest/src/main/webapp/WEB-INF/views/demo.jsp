@@ -46,7 +46,6 @@
 	$(document).ready(function() {
 		getContextPath(contextPath);
 	});
-	
 </script>
 
 
@@ -75,27 +74,45 @@
 			<div class="row">
 				<!-- This is for each device list -->
 				<c:if test="${not empty devlist}">
+
+					<c:set var="temp" value="false" />
+					<c:set var="accel" value="false" />
+					<c:set var="dist" value="false" />
 					<c:forEach var="listValue" items="${devlist}">
-						<div class="span4 bg-green padding20 text-center">
-							<div id="${listValue.type}">
-								${listValue.type} <br>
-								<c:if test="${listValue.type == 'pwal:Thermometer'}">
-									<input id="clickMe" type="button" value="Get Graph"
-										onclick="load_tempsensor('${listValue.type}');" />
-								</c:if>
-								
-								<c:if test="${listValue.type == 'pwal:DistanceSensor'}">
-									<input id="clickMe" type="button" value="Get Graph"
-										onclick="load_distsensor('${listValue.type}');" />
-								</c:if>
 
-								<c:if test="${listValue.type == 'pwal:Accelerometer'}">
-									<input id="clickMe" type="button" value="Get Graph"
-										onclick="load_Accel('${listValue.type}');" />
-								</c:if>
+						<c:if
+							test="${listValue.type == 'pwal:Thermometer' || listValue.type == 'pwal:DistanceSensor' || listValue.type == 'pwal:Accelerometer' }">
+							<div class="span4 bg-green padding20 text-center">
 
+								<div id="${listValue.type}">
+									${listValue.type} <br>
+
+									<c:if
+										test="${listValue.type == 'pwal:Thermometer' && temp eq false}">
+										<c:set var="temp" value="true" />
+										<input id="clickMe" type="button" value="Get Graph"
+											onclick="load_tempsensor('${listValue.type}');" />
+									</c:if>
+
+									<c:if
+										test="${listValue.type == 'pwal:DistanceSensor' && dist eq false}">
+										<c:set var="dist" value="true" />
+										<img src="<c:url value="/resources/images/Dustbin.jpg" />" alt="Dustbin" width="110" height="90">
+										<input id="clickMe" type="button" value="Get Graph"
+											onclick="load_distsensor('${listValue.type}');" />
+									</c:if>
+
+									<c:if
+										test="${listValue.type == 'pwal:Accelerometer' && accel eq false}">
+										<c:set var="accel" value="true" />
+										<input id="clickMe" type="button" value="Get Graph"
+											onclick="load_Accel('${listValue.type}');" />
+									</c:if>
+
+								</div>
 							</div>
-						</div>
+						</c:if>
+
 					</c:forEach>
 				</c:if>
 			</div>

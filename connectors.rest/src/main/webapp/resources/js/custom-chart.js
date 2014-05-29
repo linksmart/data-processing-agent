@@ -258,9 +258,10 @@ function load_distsensor(divId) {
 		var options = {
 				chart : {
 					renderTo : divId,
-					type : 'spline',
+					type : 'area',
 					animation : Highcharts.svg,
 					zoomType : 'x',
+					plotBackgroundImage: 'resources/images/Dustbin.jpg',
 					events : {
 						load : function() {
 							updateSensor();
@@ -289,6 +290,8 @@ function load_distsensor(divId) {
 					title : {
 						text : data.yAxisTitle
 					},
+					min: 0,
+			        max: 35,
 					labels : {
 						formatter : function() {
 							return this.value + '';

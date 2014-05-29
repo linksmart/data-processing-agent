@@ -13,13 +13,13 @@
 				<ref bean="wsnManager"/>
 <!-- 				<ref bean="bluetoothManager"/> -->
 <!-- 				<ref bean="serialManager"/> -->
-<!-- 				<ref bean="SmartSantanderManager" /> -->
+				<ref bean="SmartSantanderManager" />
 <!-- 					<ref bean="xivelyManager"/> -->
 
     		</list>
     	</constructor-arg>
     </bean>
-<!--     <bean id="SmartSantanderManager" class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager"/> -->
+    <bean id="SmartSantanderManager" class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager"/>
 	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/>
 <!-- 	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.thermometer.ThermometerManager"> -->
 <!-- 		<constructor-arg> -->
@@ -29,7 +29,7 @@
 <!-- 		</constructor-arg> -->
 <!-- 	</bean> -->
 	<bean id="serialManager" class="it.ismb.pertlab.pwal.serialmanager.SerialManager">
-		<constructor-arg type="java.lang.String" value="/dev/ttyACM0"/>
+		<constructor-arg type="java.lang.String" value="/dev/ttyACM1"/>
 		<constructor-arg>
 			<map>
 <!-- 				List of sensors that can be provided by this serial device -->

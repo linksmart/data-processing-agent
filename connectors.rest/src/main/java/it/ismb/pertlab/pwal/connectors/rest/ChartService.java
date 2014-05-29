@@ -93,6 +93,9 @@ public class ChartService {
 		List<SeriesBean> list = new ArrayList<SeriesBean>();
 		List<Device> distDevList = new ArrayList<Device>();
 		Collection<Device> devList= pwal.getDevicesList();
+		
+		Double dustbin_inch=34.5;
+		Double fill_level;
 
 		long[] categories=null;
 
@@ -101,14 +104,14 @@ public class ChartService {
 			if(DeviceType.DISTANCE_SENSOR.equals(d.getType() )){
 				distDevList.add(d);
 				DistanceSensor t=(DistanceSensor) d;
-
-				list.add(new SeriesBean(t.getType(),  new double [] {System.currentTimeMillis(),t.getDistanceInch()}));
+				fill_level= dustbin_inch-t.getDistanceInch();
+				list.add(new SeriesBean(t.getType(),  new double [] {System.currentTimeMillis(),fill_level}));
 				categories= new long[] {System.currentTimeMillis()};
 			}
 		}
 
 		if(categories.length>0){
-			return new DataBean("pwal:DistanceSensor", "Distance Sensor", "Distance in Inch (less=full)", "Time", Arrays.asList(categories), list);
+			return new DataBean("pwal:DistanceSensor", "Distance Sensor", "Dustbin Fill Level", "Time", Arrays.asList(categories), list);
 		}
 
 		else return null;
