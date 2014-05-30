@@ -16,4 +16,5 @@ public class DeviceType {
 	public static final String FILL_LEVEL_SENSOR = "pwal:FillLevelSensor";
 	public static final String FLOW_METER_SENSOR = "pwal:FlowMeterSensor";
 	public static final String WATER_PUMP = "pwal:WaterPump";
+	public static final String RESISTANCE = "pwal:Resistance";
 }
