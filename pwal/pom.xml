@@ -103,6 +103,11 @@
 			<artifactId>xivelymanager</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>it.ismb.pertlab.pwal</groupId>
+			<artifactId>serialmanager</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 </project>

@@ -14,20 +14,20 @@
 <!-- 				<ref bean="bluetoothManager"/> -->
 <!-- 				<ref bean="serialManager"/> -->
 <!-- 				<ref bean="SmartSantanderManager" /> -->
-					<ref bean="xivelyManager"/>
+<!-- 					<ref bean="xivelyManager"/> -->
 
     		</list>
     	</constructor-arg>
     </bean>
     <bean id="SmartSantanderManager" class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager"/>
-<!-- 	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/> -->
-<!-- 	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.thermometer.ThermometerManager"> -->
-<!-- 		<constructor-arg> -->
-<!-- 			<map> -->
-<!-- 				<entry key="00123EFF29DB" value="it.ismb.pertlab.pwal.manager.bluetooth.device.ThermometerDevice"/> -->
-<!-- 			</map> -->
-<!-- 		</constructor-arg> -->
-<!-- 	</bean> -->
+	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/>
+	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.bluetooth.BluetoothManager">
+		<constructor-arg>
+			<map>
+				<entry key="00123EFF29DB" value="it.ismb.pertlab.pwal.manager.bluetooth.device.ThermometerDevice"/>
+			</map>
+		</constructor-arg>
+	</bean>
 	<bean id="serialManager" class="it.ismb.pertlab.pwal.serialmanager.SerialManager">
 		<constructor-arg type="java.lang.String" value="/dev/ttyACM0"/>
 		<constructor-arg>
