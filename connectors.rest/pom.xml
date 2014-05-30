@@ -4,7 +4,7 @@
 	<groupId>it.ismb.pertlab.pwal</groupId>
 	<artifactId>connectors.rest</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1</version>
+	<version>0.2.0</version>
 	<name>connectors.rest Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
