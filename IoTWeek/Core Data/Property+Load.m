@@ -58,7 +58,7 @@
     } else {
         property = [NSEntityDescription insertNewObjectForEntityForName:@"Property"
                                                   inManagedObjectContext:context];
-        NSLog(@"NewProp: %@",[propertyDictionary valueForKeyPath:@"Name"] );
+        // NSLog(@"NewProp: %@",[propertyDictionary valueForKeyPath:@"Name"] );
 
         property.cnAbout = permId;
         property.cnDataType = [propertyDictionary valueForKeyPath:@"DataType"];

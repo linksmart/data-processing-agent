@@ -22,7 +22,7 @@
 
 #define BACKGROUND_DOWNLOAD_SESSION @"IoTEntities Download"
 #define FOREGROUND_FETCH_INTERVAL (1*60/6) // 1 minutes
-#define BACKGROUND_FETCH_TIMEOUT (10)    // 10 seconds
+#define BACKGROUND_FETCH_TIMEOUT (20)      // 20 seconds
 
 
 @implementation AppDelegate
@@ -105,7 +105,7 @@
 {
     [self.downloadSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         if (![downloadTasks count]) {
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities"]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities?like=sensor"]];
             [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
             
             NSURLSessionDownloadTask *task = [self.downloadSession downloadTaskWithRequest:request];
@@ -156,7 +156,7 @@
         NSArray *iotEntities = [self iotEntitiesAtURL:localFile];
         [context performBlock:^{
             [IoTEntity loadIoTEntitiesFromArray:iotEntities usingManagedContext:context];
-            //[context save:NULL];
+            [context save:NULL];
             if (whenDone) whenDone();
         }];
     } else {

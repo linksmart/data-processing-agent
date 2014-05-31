@@ -77,7 +77,12 @@
 }
 
 +(NSString *)parseValue:(NSDictionary *)iotStateObservationDictionary{
-    return [iotStateObservationDictionary valueForKeyPath:@"Value"];
+    id value = [iotStateObservationDictionary valueForKeyPath:@"Value"];
+    
+    if (![value isKindOfClass:[NSNull class]])
+        return value;
+    else
+        return nil;
 }
 
 +(NSDateFormatter *)iotStateObservationDateFormatter

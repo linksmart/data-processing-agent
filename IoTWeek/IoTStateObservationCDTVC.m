@@ -51,7 +51,7 @@
     // any random characters. The funny bit os the 'about' part.
     if (self.propery)
     {
-        NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities/%@/Properties/%@/observations", self.propery.cnIoTEntity.cnAbout, self.propery.cnAbout];
+        NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities/%@/Properties/%@/observations?take=20", self.propery.cnIoTEntity.cnAbout, self.propery.cnAbout];
         NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
         
         NSLog(@"TheURL: %@", [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]);
