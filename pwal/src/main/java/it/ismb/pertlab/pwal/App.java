@@ -1,18 +1,18 @@
 package it.ismb.pertlab.pwal;
 
-import java.util.Scanner;
-
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Resistance;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore;
-import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore.State;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
+import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
+
+import java.util.Scanner;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -28,6 +28,8 @@ public class App
         System.out.println( "Pwal start" );
         ApplicationContext ctx=new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
         Pwal p=(Pwal) ctx.getBean("PWAL");
+//        CnetDataPusher cnet = new CnetDataPusher(5);
+//        p.addPwalDeviceListener(cnet);
         Scanner input = new Scanner(System.in);
         String command;
         do
