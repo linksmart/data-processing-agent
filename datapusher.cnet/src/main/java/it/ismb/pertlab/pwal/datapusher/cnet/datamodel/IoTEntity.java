@@ -8,8 +8,12 @@
 
 package it.ismb.pertlab.pwal.datapusher.cnet.datamodel;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -18,6 +22,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+
 import org.w3c.dom.Element;
 
 
@@ -319,5 +324,18 @@ public class IoTEntity {
         }
         return this.typeof;
     }
+    
+    public void toXml() {
+        try {
+            JAXBContext ctx = JAXBContext.newInstance(IoTEntity.class);
+            Marshaller marshaller = ctx.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(this, System.out);
+        }
+        catch (Exception
+                e) {
 
+                  //catch exception 
+        }
+    }
 }

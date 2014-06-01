@@ -19,6 +19,7 @@
     		</list>
     	</constructor-arg>
     </bean>
+   
     <bean id="SmartSantanderManager" class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager"/>
 <!-- 	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/> -->
 <!-- 	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.thermometer.ThermometerManager"> -->

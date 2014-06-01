@@ -18,7 +18,11 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+@Scope(value = "singleton")
 public class PwalImpl implements Pwal, DeviceListener {
 
 	private List<Device> devicesList;
@@ -30,7 +34,6 @@ public class PwalImpl implements Pwal, DeviceListener {
 	
 	private static final Logger log=LoggerFactory.getLogger(PwalImpl.class);
 
-	
 	public PwalImpl(List<DevicesManager> devicesManager)
 	{
 		this.devicesList= new ArrayList<>();
@@ -74,6 +77,9 @@ public class PwalImpl implements Pwal, DeviceListener {
 			pwalDeviceLoggerList.remove(pwalDeviceLoggerList.size() -1);
 		}
 		this.devicesList.add(newDevice);
+		for (PWALDeviceListener listener : this.pwalDeviceListeners) {
+			listener.notifyPWALDeviceAdded(newDevice);
+		}
 	}
 
 	@Override
@@ -93,6 +99,10 @@ public class PwalImpl implements Pwal, DeviceListener {
 					break;
 			}
 			index++;
+		}
+		
+		for (PWALDeviceListener listener : this.pwalDeviceListeners) {
+			listener.notifyPWALDeviceRemoved(removedDevice);
 		}
 	}
 
