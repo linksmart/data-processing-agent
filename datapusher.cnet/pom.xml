@@ -40,11 +40,6 @@
 
     <dependency>
     	<groupId>it.ismb.pertlab</groupId>
-    	<artifactId>pwal-api</artifactId>
-    	<version>0.0.1</version>
-    </dependency>
-    <dependency>
-    	<groupId>it.ismb.pertlab</groupId>
     	<artifactId>pwal</artifactId>
     	<version>0.0.1</version>
     </dependency>

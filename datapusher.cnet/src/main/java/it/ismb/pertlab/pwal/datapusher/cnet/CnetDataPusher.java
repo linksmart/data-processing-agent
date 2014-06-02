@@ -1,11 +1,9 @@
 package it.ismb.pertlab.pwal.datapusher.cnet;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.data.pusher.DataPusher;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.internal.Pwal;
 import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.IoTEntity;
 import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.IoTProperty;
 import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.Meta;
@@ -14,19 +12,26 @@ import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.TypedStringType;
 
 public class CnetDataPusher extends DataPusher implements PWALDeviceListener 
 {
+	private Pwal pwal;
 	
-	@Autowired
-	private PwalImpl pwal;
-	
+	public Pwal getPwal() {
+		return pwal;
+	}
+
+	public void setPwal(Pwal pwal) {
+		this.pwal = pwal;
+	}
+
 	private ObjectFactory objectFactory;
 	
 	public CnetDataPusher(int seconds) {
 		super(seconds);
 		this.objectFactory = new ObjectFactory();
-		if(this.pwal != null)
-			this.pwal.addPwalDeviceListener(this);
-		else
-			log.error("PWAL instance is NULL!!!!!!!!!!!");
+	}
+	
+	public void start()
+	{
+		this.pwal.addPwalDeviceListener(this);
 	}
 
 	@Override
