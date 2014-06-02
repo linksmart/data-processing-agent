@@ -23,7 +23,6 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
-    
 // TODO: Move these stupid assignments elsewhere
     if (!matches || error || ([matches count] > 1)) {
         // handle error
@@ -41,8 +40,13 @@
         if (![meta isKindOfClass:[NSNull class]])
             iotEntity.cnMeta = meta;
         
-        iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
-        iotEntity.cnPrefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
+        NSString *name = [iotEntityDictionary valueForKeyPath:@"Name"];
+        if (![name isKindOfClass:[NSNull class]])
+            iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
+        
+        NSString *prefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
+        if (![prefix isKindOfClass:[NSNull class]])
+            iotEntity.cnPrefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
         
     } else {
         iotEntity = [NSEntityDescription insertNewObjectForEntityForName:@"IoTEntity"
@@ -58,8 +62,18 @@
         if (![meta isKindOfClass:[NSNull class]])
             iotEntity.cnMeta = meta;
         
-        iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
-        iotEntity.cnPrefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
+        NSString *name = [iotEntityDictionary valueForKeyPath:@"Name"];
+        if (![name isKindOfClass:[NSNull class]])
+            iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
+        else
+            [context deleteObject:iotEntity];
+        // Hack!
+        
+        NSString *prefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
+        if (![prefix isKindOfClass:[NSNull class]])
+            iotEntity.cnPrefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
+
+        
     }
     
     return iotEntity;

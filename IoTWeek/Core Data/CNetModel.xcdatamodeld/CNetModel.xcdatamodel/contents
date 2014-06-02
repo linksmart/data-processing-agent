@@ -39,7 +39,7 @@
         <relationship name="cnProperties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Property" inverseName="cnUnitOfMeasurement" inverseEntity="Property" syncable="YES"/>
     </entity>
     <elements>
-        <element name="IoTEntity" positionX="-243" positionY="-19" width="128" height="165"/>
+        <element name="IoTEntity" positionX="-243" positionY="-19" width="128" height="163"/>
         <element name="IoTStateObservation" positionX="594" positionY="324" width="128" height="103"/>
         <element name="Property" positionX="225" positionY="99" width="128" height="193"/>
         <element name="TypeOf" positionX="-29" positionY="209" width="128" height="88"/>

@@ -105,7 +105,7 @@
 {
     [self.downloadSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         if (![downloadTasks count]) {
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities?like=sensor"]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities"]];
             [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
             
             NSURLSessionDownloadTask *task = [self.downloadSession downloadTaskWithRequest:request];

@@ -18,6 +18,12 @@
 {
     // Find specific IoTEntity Pid, remove existing types, and then run the below.
     
+    if ([typeOf isKindOfClass:[NSNull class]])
+        return;
+    
+    if (!typeOf || [typeOf count] == 0)
+        return;
+    
     IoTEntity *iotEntity = [IoTEntity iotEntityWithAbout:about usingManagedContext:context];
     iotEntity.cnTypeOf = nil;
     

@@ -9,7 +9,7 @@
             <objects>
                 <tableViewController id="Sfn-ie-IBl" customClass="IoTEntitiesCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="xLc-Dz-pTw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -57,7 +57,7 @@
             <objects>
                 <tableViewController id="mIO-6r-RGg" customClass="PropertiesCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="thD-sG-vG5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -105,7 +105,7 @@
             <objects>
                 <tableViewController id="iij-xD-dcK" customClass="IoTStateObservationCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="3a9-El-td4">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -176,7 +176,7 @@
                         <viewControllerLayoutGuide type="bottom" id="hlf-K0-3Nf"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="5o7-O5-Yeo">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -195,25 +195,28 @@
                         <viewControllerLayoutGuide type="bottom" id="AXZ-Bb-A5H"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Qzv-9N-Vrm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ALMANAC_FULL_LOGO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffm-fg-zQf">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ALMANAC_FULL_LOGO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffm-fg-zQf">
                                 <rect key="frame" x="20" y="20" width="280" height="195"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="195" id="7ZP-5p-xGc"/>
+                                </constraints>
                             </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-zz-N7g">
-                                <rect key="frame" x="20" y="223" width="280" height="158"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-zz-N7g">
+                                <rect key="frame" x="20" y="223" width="280" height="238"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DB8-LJ-dOT">
-                                <rect key="frame" x="107" y="389" width="106" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DB8-LJ-dOT">
+                                <rect key="frame" x="81" y="469" width="159" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Register device">
+                                <state key="normal" title="Register as new device">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -222,7 +225,19 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ffm-fg-zQf" firstAttribute="leading" secondItem="Qzv-9N-Vrm" secondAttribute="leading" constant="20" symbolic="YES" id="1fj-wB-k9e"/>
+                            <constraint firstItem="Ffm-fg-zQf" firstAttribute="top" secondItem="Qzv-9N-Vrm" secondAttribute="top" constant="20" symbolic="YES" id="4YI-ux-lhy"/>
+                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="centerX" secondItem="DB8-LJ-dOT" secondAttribute="centerX" id="8PP-sJ-kmA"/>
+                            <constraint firstAttribute="bottom" secondItem="DB8-LJ-dOT" secondAttribute="bottom" constant="20" symbolic="YES" id="AxF-rv-jjd"/>
+                            <constraint firstItem="Ffm-fg-zQf" firstAttribute="leading" secondItem="fZ5-zz-N7g" secondAttribute="leading" id="E5n-C4-7Iq"/>
+                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="top" secondItem="Ffm-fg-zQf" secondAttribute="bottom" constant="8" symbolic="YES" id="UUi-e1-c3s"/>
+                            <constraint firstAttribute="trailing" secondItem="Ffm-fg-zQf" secondAttribute="trailing" constant="20" symbolic="YES" id="ZEj-Z6-wK3"/>
+                            <constraint firstItem="DB8-LJ-dOT" firstAttribute="top" secondItem="fZ5-zz-N7g" secondAttribute="bottom" constant="8" symbolic="YES" id="ZJS-aq-DxQ"/>
+                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="trailing" secondItem="Ffm-fg-zQf" secondAttribute="trailing" id="wZ5-AV-PRQ"/>
+                        </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="Info" id="uMM-vu-QvZ"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A9R-dG-g7i" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -258,11 +273,11 @@
                         <viewControllerLayoutGuide type="bottom" id="TO0-m8-1y4"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gA4-lJ-9Jz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oxt-t3-3ht">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </scrollView>
                         </subviews>
@@ -290,6 +305,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>

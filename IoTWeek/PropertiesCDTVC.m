@@ -55,7 +55,6 @@
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"cnPhenomenonTime"
                                                               ascending:NO]];
     [request setFetchLimit:1];
-
     
     NSError *error;
     NSArray *matches = [property.managedObjectContext executeFetchRequest:request error:&error];
