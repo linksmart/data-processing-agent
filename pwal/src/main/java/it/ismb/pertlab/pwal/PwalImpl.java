@@ -18,11 +18,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-@Component
-@Scope(value = "singleton")
 public class PwalImpl implements Pwal, DeviceListener {
 
 	private List<Device> devicesList;

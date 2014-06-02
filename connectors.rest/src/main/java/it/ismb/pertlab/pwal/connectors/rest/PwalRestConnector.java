@@ -1,11 +1,11 @@
 package it.ismb.pertlab.pwal.connectors.rest;
 
-import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.WaterPump;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.api.internal.Pwal;
 import it.ismb.pertlab.pwal.connectors.datamodel.DeviceCommand;
 import it.ismb.pertlab.pwal.connectors.datamodel.DevicesManagerStatus;
 
@@ -34,7 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PwalRestConnector implements PWALDeviceListener {
 
 	@Autowired
-	private PwalImpl pwal;
+	private Pwal pwal;
+	
 	private static final Logger log=LoggerFactory.getLogger(PwalRestConnector.class);
 
 	/**
