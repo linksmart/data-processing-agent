@@ -80,23 +80,26 @@ sprites.Menu = function() {
         .setSize(335, 75)
         .setFontColor('#5b5b5b')
         .setFontSize(16)
+        .setMultiline(true)
         .setFontFamily('HelveticaNeue-Light')
-        .setPosition(-1 * this.dataButton.getSize().width, this.dataArrow.getPosition().y + this.dataArrow.getSize().height + 30)
-        .setText("EXEMPLARY APPLICATIONS");
+        .setPosition(-1 * this.dataButton.getSize().width, this.dataArrow.getPosition().y + this.dataArrow.getSize().height + 15)
+        .setText("EXEMPLARY\nAPPLICATIONS");
     this.virtualLabel.setAnchorPoint(0.5, 0)
         .setSize(335, 75)
         .setFontColor('#5b5b5b')
         .setFontSize(16)
+        .setMultiline(true)
         .setFontFamily('HelveticaNeue-Light')
-        .setPosition(0, this.virtualArrow.getPosition().y + this.virtualArrow.getSize().height + 30)
-        .setText("REGISTERED SERVICES");
+        .setPosition(0, this.virtualArrow.getPosition().y + this.virtualArrow.getSize().height + 15)
+        .setText("REGISTERED\nSERVICES");
     this.resLabel.setAnchorPoint(0.5, 0)
         .setSize(335, 75)
         .setFontColor('#5b5b5b')
         .setFontSize(16)
+        .setMultiline(true)
         .setFontFamily('HelveticaNeue-Light')
-        .setPosition(this.resButton.getSize().width, this.resArrow.getPosition().y + this.resArrow.getSize().height + 30)    
-        .setText("PHYSICAL RESOURCES OF SMART CITIES");
+        .setPosition(this.resButton.getSize().width, this.resArrow.getPosition().y + this.resArrow.getSize().height + 15)    
+        .setText("PHYSICAL RESOURCES\nOF SMART CITIES");
 
     this.resetState();
 }
@@ -111,6 +114,10 @@ sprites.Menu.prototype.resetState = function() {
     this.dataArrow.setOpacity(1);
     this.virtualArrow.setOpacity(1);
     this.resArrow.setOpacity(1);
+
+    this.dataLabel.setOpacity(1);
+    this.virtualLabel.setOpacity(1);
+    this.resLabel.setOpacity(1);
 };
 
 sprites.Menu.prototype.setDataSelectedState = function() {
@@ -121,6 +128,10 @@ sprites.Menu.prototype.setDataSelectedState = function() {
     this.dataArrow.setOpacity(1);
     this.virtualArrow.setOpacity(0);
     this.resArrow.setOpacity(0);
+
+    this.dataLabel.setOpacity(1);
+    this.virtualLabel.setOpacity(0);
+    this.resLabel.setOpacity(0);
 };
 
 sprites.Menu.prototype.setVirtualizationSelectedState = function() {
@@ -131,6 +142,10 @@ sprites.Menu.prototype.setVirtualizationSelectedState = function() {
     this.dataArrow.setOpacity(0);
     this.virtualArrow.setOpacity(1);
     this.resArrow.setOpacity(0);
+
+    this.dataLabel.setOpacity(0);
+    this.virtualLabel.setOpacity(1);
+    this.resLabel.setOpacity(0);
 };
 
 sprites.Menu.prototype.setResourcesSelectedState = function() {
@@ -141,4 +156,8 @@ sprites.Menu.prototype.setResourcesSelectedState = function() {
     this.dataArrow.setOpacity(0);
     this.virtualArrow.setOpacity(0);
     this.resArrow.setOpacity(1);
+
+    this.dataLabel.setOpacity(0);
+    this.virtualLabel.setOpacity(0);
+    this.resLabel.setOpacity(1);
 };

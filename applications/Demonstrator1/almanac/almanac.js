@@ -42,7 +42,7 @@ almanac.showHome = function() {
     if (!goog.isDef(almanac.homeScene)) {
         almanac.homeScene = new scenes.Home();
     };
-    almanac.director.replaceScene(almanac.homeScene, lime.transitions.Dissolve, 0.1);
+    almanac.director.replaceScene(almanac.homeScene);
     almanac.CURRENT_SCENE = 'home'
 }
 
@@ -53,7 +53,7 @@ almanac.showData = function() {
     if (!goog.isDef(almanac.dataScene)) {
         almanac.dataScene = new scenes.Data();
     };
-    almanac.director.replaceScene(almanac.dataScene, lime.transitions.Dissolve, 0.3);
+    almanac.director.replaceScene(almanac.dataScene);
     almanac.CURRENT_SCENE = 'data'
 }
 
@@ -64,7 +64,7 @@ almanac.showVirtualization = function() {
     if (!goog.isDef(almanac.virtualizationScene)) {
         almanac.virtualizationScene = new scenes.Virtualization();
     };
-    almanac.director.replaceScene(almanac.virtualizationScene, lime.transitions.Dissolve, 0.3);
+    almanac.director.replaceScene(almanac.virtualizationScene);
     almanac.CURRENT_SCENE = 'virtualization'
 }
 
@@ -75,7 +75,7 @@ almanac.showResources = function() {
     if (!goog.isDef(almanac.resourcesScene)) {
         almanac.resourcesScene = new scenes.Resources();
     };
-    almanac.director.replaceScene(almanac.resourcesScene, lime.transitions.Dissolve, 0.3);
+    almanac.director.replaceScene(almanac.resourcesScene);
     almanac.CURRENT_SCENE = 'resources'
 }
 

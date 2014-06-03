@@ -30,6 +30,24 @@ scenes.Virtualization = function() {
     menu.setAnchorPoint(0.5, 0).setPosition(almanac.SCREEN_WIDTH / 2.0, header.getSize().height);
     menu.setVirtualizationSelectedState();
     this.appendChild(menu);
+
+    var iconY = 440;
+    
+    var servicesIcon = new lime.Sprite();
+    servicesIcon.setFill('assets/Icon-Services.png')
+        .setAnchorPoint(0.5, 0.5)
+        .setSize(82, 82)
+        .setPosition(almanac.SCREEN_WIDTH/2, iconY);
+    var servicesLabel = new lime.Label()
+    servicesLabel.setAnchorPoint(0.5, 0)
+        .setMultiline(true)
+        .setPosition(0, servicesIcon.getSize().height - 30)
+        .setFontColor('#6fac53')
+        .setFontSize(20)
+        .setFontFamily('HelveticaNeue')
+        .setText("CNetCoffeeBrower\nMark's iPad\nSomething else\nand 5 more...");
+    servicesIcon.appendChild(servicesLabel);
+    this.appendChild(servicesIcon);
 }
 
 goog.inherits(scenes.Virtualization, lime.Scene);
