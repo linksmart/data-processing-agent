@@ -13,25 +13,18 @@ import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.TypedStringType;
 public class CnetDataPusher extends DataPusher implements PWALDeviceListener 
 {
 	private Pwal pwal;
-	
-	public Pwal getPwal() {
-		return pwal;
-	}
-
-	public void setPwal(Pwal pwal) {
-		this.pwal = pwal;
-	}
-
 	private ObjectFactory objectFactory;
 	
-	public CnetDataPusher(int seconds) {
-		super(seconds);
+	public CnetDataPusher(int seconds, Pwal pwal) {
+		super(seconds, pwal);
 		this.objectFactory = new ObjectFactory();
-	}
+		this.pwal = pwal;
+		this.pwal.addPwalDeviceListener(this);
+	}	
 	
 	public void start()
 	{
-		this.pwal.addPwalDeviceListener(this);
+		log.debug("Start method.");
 	}
 
 	@Override

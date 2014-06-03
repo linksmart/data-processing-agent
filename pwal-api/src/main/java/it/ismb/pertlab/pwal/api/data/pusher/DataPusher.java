@@ -1,5 +1,7 @@
 package it.ismb.pertlab.pwal.api.data.pusher;
 
+import it.ismb.pertlab.pwal.api.internal.Pwal;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,7 +16,7 @@ public abstract class DataPusher extends TimerTask {
 	
 	protected static final Logger log=LoggerFactory.getLogger(DataPusher.class);
 	
-	public DataPusher(int seconds)
+	public DataPusher(int seconds, Pwal pwal)
 	{
 		this.isRunning = false;
 		this.dataTimer = new Timer();
