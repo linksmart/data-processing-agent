@@ -64,6 +64,20 @@ scenes.Data = function() {
         .setText("Waste\nCapacity");
     wasteIcon.appendChild(wasteLabel);
     this.appendChild(wasteIcon);
+
+    var waterPlotContainer = new lime.Sprite();
+    waterPlotContainer.setAnchorPoint(0.5, 0.5)
+        .setFill('assets/Map-bg.png')
+        .setSize(330, 295)
+        .setPosition(310, 545);
+    this.appendChild(waterPlotContainer);
+
+    var wastePlotContainer = new lime.Sprite();
+    wastePlotContainer.setAnchorPoint(0.5, 0.5)
+        .setFill('assets/Map-bg.png')
+        .setSize(330, 295)
+        .setPosition(815, 545);
+    this.appendChild(wastePlotContainer);
 }
 
 goog.inherits(scenes.Data, lime.Scene);

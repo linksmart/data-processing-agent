@@ -64,6 +64,20 @@ scenes.Resources = function() {
         .setText("Santander");
     santanderIcon.appendChild(santanderLabel);
     this.appendChild(santanderIcon);
+
+    var londonMapContainer = new lime.Sprite();
+    londonMapContainer.setAnchorPoint(0.5, 0.5)
+        .setFill('assets/Map-bg.png')
+        .setSize(330, 295)
+        .setPosition(310, 545);
+    this.appendChild(londonMapContainer);
+
+    var santanderMapContainer = new lime.Sprite();
+    santanderMapContainer.setAnchorPoint(0.5, 0.5)
+        .setFill('assets/Map-bg.png')
+        .setSize(330, 295)
+        .setPosition(815, 545);
+    this.appendChild(santanderMapContainer);
 }
 
 goog.inherits(scenes.Resources, lime.Scene);
