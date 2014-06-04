@@ -88,7 +88,7 @@
 +(NSDateFormatter *)iotStateObservationDateFormatter
 {
     NSDateFormatter *dateFor = [[NSDateFormatter alloc] init];
-    [dateFor setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    [dateFor setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'"];
     
     return dateFor;
 }
