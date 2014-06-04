@@ -19,6 +19,7 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeter {
 	private String pwalId;
 	private SerialManager manager;
 	private Integer flow;
+	private Unit unit;
 	
 	public FlowMeterSensorFit(SerialManager manager)
 	{
@@ -103,14 +104,12 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeter {
 
 	@Override
 	public Unit getUnit() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.unit;
 	}
 
 	@Override
 	public void setUnit(Unit unit) {
-		// TODO Auto-generated method stub
-		
+		this.unit = unit;
 	}
 
 }

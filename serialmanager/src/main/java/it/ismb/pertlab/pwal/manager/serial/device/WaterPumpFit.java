@@ -20,6 +20,9 @@ public class WaterPumpFit implements WaterPump {
 	public WaterPumpFit(SerialManager manager)
 	{
 		this.manager = manager;
+		this.unit = new Unit();
+		this.unit.setSymbol("m^3");
+		this.unit.setValue("Cube meter");
 	}
 	
 	@Override
@@ -73,7 +76,6 @@ public class WaterPumpFit implements WaterPump {
 	@Override
 	public void setLocation(Location location) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

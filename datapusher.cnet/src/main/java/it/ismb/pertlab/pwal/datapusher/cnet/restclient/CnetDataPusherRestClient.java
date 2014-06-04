@@ -43,7 +43,7 @@ public class CnetDataPusherRestClient {
 		return null;
 	}
 	
-	public String pushNewIoTEntity(IoTEntity iotEntity)
+	public IoTEntity pushNewIoTEntity(IoTEntity iotEntity)
 	{
 		HttpHeaders h=new HttpHeaders();
 		h.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
@@ -56,7 +56,7 @@ public class CnetDataPusherRestClient {
 			response = (IoTEntity)r.getBody();
 			log.debug("Recevied xml response: ");
 			response.toXml();
-			return response.getAbout();
+			return response;
 		}
 		return null;
 	}
