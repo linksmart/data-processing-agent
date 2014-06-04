@@ -130,7 +130,7 @@ public class PwalRestConnector implements PWALDeviceListener {
 					log.info("Requested device type is: {}", device.getType());
 					try {
 						Method setVelocityMethod = ((WaterPump)device).getClass().getMethod(command.getMethodName(), Double.class);
-						setVelocityMethod.invoke(((WaterPump)device).getClass(), command.getParams().toArray()[0]);
+						setVelocityMethod.invoke(((WaterPump)device),Double.parseDouble((String) command.getParams().toArray()[0]));
 						return new ResponseEntity<>(HttpStatus.OK);
 					} catch (NoSuchMethodException | SecurityException e) {
 						log.error("Exception: ", e);

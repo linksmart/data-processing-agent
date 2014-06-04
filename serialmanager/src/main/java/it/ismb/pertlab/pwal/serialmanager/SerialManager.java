@@ -104,9 +104,13 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 				devicesDiscovered.put(deviceId, d);
 				for(DeviceListener l:deviceListener)
 				{
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						log.error("Exception: ", e);
+					}
 					l.notifyDeviceAdded(d);
 				}
-			
 				log.debug("Device discovered: id="+deviceId);
 			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
 				// TODO Auto-generated catch block
