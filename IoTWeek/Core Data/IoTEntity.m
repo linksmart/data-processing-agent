@@ -2,7 +2,7 @@
 //  IoTEntity.m
 //  IoTWeek
 //
-//  Created by Thomas Barrie Juel Gilbert on 25/05/14.
+//  Created by Thomas Barrie Juel Gilbert on 04/06/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
@@ -16,10 +16,10 @@
 @dynamic cnAbout;
 @dynamic cnBase;
 @dynamic cnDescription;
-@dynamic cnMeta;
 @dynamic cnName;
 @dynamic cnPrefix;
 @dynamic cnProperty;
 @dynamic cnTypeOf;
+@dynamic cnMeta;
 
 @end

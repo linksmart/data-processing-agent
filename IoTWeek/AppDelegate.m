@@ -47,7 +47,7 @@
         sessionConfig.allowsCellularAccess = NO;
         sessionConfig.timeoutIntervalForRequest = BACKGROUND_FETCH_TIMEOUT;
         NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities"]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"]];
         [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request
                                                         completionHandler:^(NSURL *localFile, NSURLResponse *response, NSError *error) {
@@ -105,7 +105,7 @@
 {
     [self.downloadSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         if (![downloadTasks count]) {
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb20140512/REST/IoTEntities"]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"]];
             [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
             
             NSURLSessionDownloadTask *task = [self.downloadSession downloadTaskWithRequest:request];

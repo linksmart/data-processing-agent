@@ -1,5 +1,5 @@
 //
-//  TypeOf.h
+//  Meta.h
 //  IoTWeek
 //
 //  Created by Thomas Barrie Juel Gilbert on 04/06/14.
@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class IoTEntity, Property;
+@class IoTEntity;
 
-@interface TypeOf : NSManagedObject
+@interface Meta : NSManagedObject
 
 @property (nonatomic, retain) NSString * cnValue;
+@property (nonatomic, retain) NSString * cnProperty;
 @property (nonatomic, retain) IoTEntity *cnIoTEntity;
-@property (nonatomic, retain) Property *cnProperties;
 
 @end

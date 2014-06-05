@@ -167,10 +167,10 @@
             </objects>
             <point key="canvasLocation" x="700" y="87"/>
         </scene>
-        <!--View Controller - Measure-->
+        <!--MeasureVC - Measure-->
         <scene sceneID="eMT-Li-wgX">
             <objects>
-                <viewController id="8sO-Us-4Rc" sceneMemberID="viewController">
+                <viewController id="8sO-Us-4Rc" customClass="MeasureVC" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="uXz-d4-hHu"/>
                         <viewControllerLayoutGuide type="bottom" id="hlf-K0-3Nf"/>
@@ -178,6 +178,25 @@
                     <view key="view" contentMode="scaleToFill" id="5o7-O5-Yeo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ms2-mP-CNu">
+                                <rect key="frame" x="51" y="114" width="219" height="164"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="Icon-Water">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="ConsumeWater:" destination="8sO-Us-4Rc" eventType="touchUpInside" id="agZ-v1-Ikk"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Pressing this botton consumes 6l of water. This is the same amount of water used to flush the toilet." translatesAutoresizingMaskIntoConstraints="NO" id="fxZ-Ib-icn">
+                                <rect key="frame" x="40" y="286" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Measure" id="BUZ-SD-ldR"/>
@@ -301,6 +320,7 @@
     </scenes>
     <resources>
         <image name="ALMANAC_FULL_LOGO" width="4949" height="3470"/>
+        <image name="Icon-Water" width="164" height="164"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

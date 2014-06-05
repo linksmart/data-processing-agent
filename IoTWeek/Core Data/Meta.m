@@ -1,19 +1,19 @@
 //
-//  UnitOfMeasurement.m
+//  Meta.m
 //  IoTWeek
 //
 //  Created by Thomas Barrie Juel Gilbert on 04/06/14.
 //  Copyright (c) 2014 ITAdvice. All rights reserved.
 //
 
-#import "UnitOfMeasurement.h"
-#import "Property.h"
+#import "Meta.h"
+#import "IoTEntity.h"
 
 
-@implementation UnitOfMeasurement
+@implementation Meta
 
+@dynamic cnValue;
 @dynamic cnProperty;
-@dynamic cnTypeId;
-@dynamic cnProperties;
+@dynamic cnIoTEntity;
 
 @end

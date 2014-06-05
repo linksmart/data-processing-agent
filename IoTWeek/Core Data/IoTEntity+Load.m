@@ -36,10 +36,6 @@
         if (![description isKindOfClass:[NSNull class]])
             iotEntity.cnDescription = description;
         
-        NSString *meta = [iotEntityDictionary valueForKeyPath:@"Meta"];
-        if (![meta isKindOfClass:[NSNull class]])
-            iotEntity.cnMeta = meta;
-        
         NSString *name = [iotEntityDictionary valueForKeyPath:@"Name"];
         if (![name isKindOfClass:[NSNull class]])
             iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
@@ -58,22 +54,17 @@
         if (![description isKindOfClass:[NSNull class]])
             iotEntity.cnDescription = description;
         
-        NSString *meta = [iotEntityDictionary valueForKeyPath:@"Meta"];
-        if (![meta isKindOfClass:[NSNull class]])
-            iotEntity.cnMeta = meta;
-        
         NSString *name = [iotEntityDictionary valueForKeyPath:@"Name"];
         if (![name isKindOfClass:[NSNull class]])
             iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
-        else
-            [context deleteObject:iotEntity];
-        // Hack!
+        // else
+        //     [context deleteObject:iotEntity];
+        // The above is a Hack - made so that IoTEntities without name are not saved!
+        // God knows how I am supposed to display an eneity without name in the UI.
         
         NSString *prefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
         if (![prefix isKindOfClass:[NSNull class]])
             iotEntity.cnPrefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
-
-        
     }
     
     return iotEntity;
@@ -124,6 +115,5 @@
     
     return iotEntity;
 }
-
 
 @end

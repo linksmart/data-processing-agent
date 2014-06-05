@@ -39,7 +39,10 @@
         property = [matches firstObject];
         
         property.cnAbout = permId;
-        property.cnDataType = [propertyDictionary valueForKeyPath:@"DataType"];
+        
+        id dataType = [propertyDictionary valueForKeyPath:@"DataType"];
+        if (![dataType isKindOfClass:[NSNull class]])
+            property.cnDataType = dataType;
         
         NSString *description = [propertyDictionary valueForKeyPath:@"Description"];
         if (![description isKindOfClass:[NSNull class]])
@@ -61,7 +64,10 @@
         // NSLog(@"NewProp: %@",[propertyDictionary valueForKeyPath:@"Name"] );
 
         property.cnAbout = permId;
-        property.cnDataType = [propertyDictionary valueForKeyPath:@"DataType"];
+        
+        id dataType = [propertyDictionary valueForKeyPath:@"DataType"];
+        if (![dataType isKindOfClass:[NSNull class]])
+            property.cnDataType = dataType;
         
         NSString *description = [propertyDictionary valueForKeyPath:@"Description"];
         if (![description isKindOfClass:[NSNull class]])
