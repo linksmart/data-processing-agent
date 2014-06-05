@@ -73,6 +73,7 @@ public class SmartSantanderManager extends DevicesManager
 							location.setLat(smartSantanderSingleNodeJson.getLatitude());
 							location.setLon(smartSantanderSingleNodeJson.getLongitude());
 							vehicleCounter.setLocation(location);
+							
 							this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleCounter);
 							for (DeviceListener l : deviceListener) {
 								l.notifyDeviceAdded(vehicleCounter);

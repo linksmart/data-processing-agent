@@ -5,7 +5,10 @@
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<import resource="classpath:applicationContext-pwal.xml"/>
-	<bean id="DataPusher" init-method="start" class="it.ismb.pertlab.pwal.datapusher.cnet.CnetDataPusher">
+	<bean id="DataPusher" class="it.ismb.pertlab.pwal.datapusher.cnet.CnetDataPusher">
+	<property name="serviceEndpoint">
+		<value>http://energyportal.cnet.se/StorageManagerMdb20140604/REST/IoTEntities/</value>
+	</property>
     	<constructor-arg >
     		<value type="int">5</value>
     	</constructor-arg>

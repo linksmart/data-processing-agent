@@ -36,7 +36,7 @@ public abstract class DataPusher extends TimerTask {
 			if(!this.isRunning)
 			{
 				log.info("Starting data pusher timer.");
-				this.getTimer().scheduleAtFixedRate(this, 0, this.seconds * 1000);
+				this.getTimer().scheduleAtFixedRate(this, this.seconds * 1000, this.seconds * 1000);
 				this.isRunning = true;
 			}
 			else

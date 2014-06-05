@@ -60,4 +60,18 @@ public class CnetDataPusherRestClient {
 		}
 		return null;
 	}
+	
+	public Boolean pushNewValues(IoTEntity iotEntity)
+	{
+		HttpHeaders h=new HttpHeaders();
+		h.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
+		HttpEntity<IoTEntity> entity=new HttpEntity<IoTEntity>(iotEntity,h);
+		log.debug("Contacting {} ",serviceEndpoint);
+		ResponseEntity<Void> r=template.exchange(serviceEndpoint, HttpMethod.POST, entity, Void.class);
+		if(r.getStatusCode().compareTo(HttpStatus.OK)==0)
+		{
+			return true;
+		}
+		return false;
+	}
 }

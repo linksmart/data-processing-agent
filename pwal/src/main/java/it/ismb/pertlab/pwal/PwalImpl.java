@@ -64,7 +64,21 @@ public class PwalImpl implements Pwal, DeviceListener {
 	@Override
 	public void notifyDeviceAdded(Device newDevice) {
 		String generatedId = this.generateId();
-		newDevice.setPwalId(generatedId);
+		//this is just a WORKAROUND for the IoT demo. fixed id to solve db sync
+		switch (newDevice.getId()) {
+		case "idFlowSensor":
+			newDevice.setPwalId("1fa71b84-f0c8-4bd6-91f8-4e69e073ece7");
+			break;
+		case "idFillLevelSensor":
+			newDevice.setPwalId("41fbcb5a-8e0e-460a-bcc0-ffd067793dbb");
+			break;
+		case "idWaterPump":
+			newDevice.setPwalId("2d66307c-6d7a-4687-a4fa-dc0893648bcd");
+			break;
+		default:
+			newDevice.setPwalId(generatedId);
+			break;
+		}
 		log.info("New PWAL device added: generated id {} type {}.", generatedId, newDevice.getType());
 		
 		String LogMsg="New PWAL device added: generated Id:"+generatedId+"; type:"+ newDevice.getType();
@@ -72,7 +86,10 @@ public class PwalImpl implements Pwal, DeviceListener {
 		if(pwalDeviceLoggerList.size()>maxlogsize) {
 			pwalDeviceLoggerList.remove(pwalDeviceLoggerList.size() -1);
 		}
-		this.devicesList.add(newDevice);
+		synchronized (this.devicesList) {
+			this.devicesList.add(newDevice);
+		}
+
 		for (PWALDeviceListener listener : this.pwalDeviceListeners) {
 			listener.notifyPWALDeviceAdded(newDevice);
 		}
