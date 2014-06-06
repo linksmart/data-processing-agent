@@ -12,12 +12,15 @@
 #import "AppDelegate+Context.h"
 #import "IoTEntity+Load.h"
 #import "DatabaseAvailability.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface AppDelegate() <NSURLSessionDownloadDelegate>
+@interface AppDelegate() <NSURLSessionDownloadDelegate, CLLocationManagerDelegate>
+
 @property (copy, nonatomic) void (^searchBackgroundURLSessionCompletionHandler)();
 @property (strong, nonatomic) NSURLSession *searchDownloadSession;
 @property (strong, nonatomic) NSTimer *searchForegroundFetchTimer;
 @property (strong, nonatomic) NSManagedObjectContext *iotEntityDatabaseContext;
+
 @end
 
 #define BACKGROUND_DOWNLOAD_SESSION @"IoTEntities Download"
@@ -36,8 +39,17 @@
 
     // Do an initial search, or not
     [self startSearchDownload];
-
+    
+    // Warm up GPS or other location services
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager startUpdatingLocation];
+    
     return YES;
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    
 }
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler

@@ -133,7 +133,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="ZV9-yP-kiO" kind="push" identifier="ImageViewSegue" id="QRv-z6-eUU"/>
+                                    <segue destination="NmN-p4-Ku6" kind="push" id="LDQ-NY-Csz"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -179,8 +179,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ms2-mP-CNu">
-                                <rect key="frame" x="51" y="114" width="219" height="164"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ms2-mP-CNu">
+                                <rect key="frame" x="51" y="90" width="219" height="164"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Icon-Water">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -189,8 +189,8 @@
                                     <action selector="ConsumeWater:" destination="8sO-Us-4Rc" eventType="touchUpInside" id="agZ-v1-Ikk"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Pressing this botton consumes 6l of water. This is the same amount of water used to flush the toilet." translatesAutoresizingMaskIntoConstraints="NO" id="fxZ-Ib-icn">
-                                <rect key="frame" x="40" y="286" width="240" height="128"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" editable="NO" text="Pressing this botton consumes 6l of water. This is the same amount of water used to flush the toilet." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxZ-Ib-icn">
+                                <rect key="frame" x="40" y="262" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -198,6 +198,13 @@
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ms2-mP-CNu" firstAttribute="top" secondItem="uXz-d4-hHu" secondAttribute="bottom" constant="70" id="AoU-5g-6lg"/>
+                            <constraint firstItem="ms2-mP-CNu" firstAttribute="centerX" secondItem="5o7-O5-Yeo" secondAttribute="centerX" id="beY-is-Z04"/>
+                            <constraint firstItem="fxZ-Ib-icn" firstAttribute="top" secondItem="ms2-mP-CNu" secondAttribute="bottom" constant="8" symbolic="YES" id="cUU-3f-q7k"/>
+                            <constraint firstItem="hlf-K0-3Nf" firstAttribute="top" secondItem="fxZ-Ib-icn" secondAttribute="bottom" constant="129" id="chv-ol-fIb"/>
+                            <constraint firstItem="fxZ-Ib-icn" firstAttribute="leading" secondItem="5o7-O5-Yeo" secondAttribute="leading" constant="40" id="yPI-dd-q8R"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Measure" id="BUZ-SD-ldR"/>
                 </viewController>
@@ -316,6 +323,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="C7i-uM-83N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2712" y="-5"/>
+        </scene>
+        <!--IoT Location Map View Controller-->
+        <scene sceneID="YEU-bq-KQt">
+            <objects>
+                <viewController id="NmN-p4-Ku6" customClass="IoTLocationMapViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ETl-H3-1sf"/>
+                        <viewControllerLayoutGuide type="bottom" id="OEi-AW-GYc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jfL-iy-T2m">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4dR-aB-e0p">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="4dR-aB-e0p" secondAttribute="bottom" id="Bxc-7I-u1M"/>
+                            <constraint firstItem="4dR-aB-e0p" firstAttribute="top" secondItem="jfL-iy-T2m" secondAttribute="top" id="Dv1-1c-IJK"/>
+                            <constraint firstAttribute="trailing" secondItem="4dR-aB-e0p" secondAttribute="trailing" id="Wsk-uN-ddT"/>
+                            <constraint firstItem="4dR-aB-e0p" firstAttribute="leading" secondItem="jfL-iy-T2m" secondAttribute="leading" id="o1s-Hg-kE8"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Xli-ps-Lhu"/>
+                    <connections>
+                        <outlet property="mapView" destination="4dR-aB-e0p" id="0W6-Ka-6jm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QNn-yQ-GbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2712" y="704"/>
         </scene>
     </scenes>
     <resources>

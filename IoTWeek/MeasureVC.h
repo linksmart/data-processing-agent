@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IoTEntity+Load.h"
 
 @interface MeasureVC : UIViewController
+
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 @end

@@ -30,8 +30,11 @@
     [userDefaults setObject:[locationProperty description] forKey:@"LocationPropertyId"];
     [userDefaults setObject:[cameraProperty description] forKey:@"CameraPropertyId"];
     
+    
     // Do post to server
     // not working yet though...
+    
+    
     
     [userDefaults synchronize];
 }

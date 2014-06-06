@@ -11,6 +11,7 @@
 #import "IoTEntity+Load.h"
 #import "IoTStateObservation+Load.h"
 #import "ImageViewController.h"
+#import "IoTLocationMapViewController.h"
 
 @interface IoTStateObservationCDTVC ()
 
@@ -102,6 +103,21 @@
 
 #pragma mark - Navigation
 
+-(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    
+    // Hacking away. Only segue if if the selected observation is a xs:geojson
+    NSIndexPath *indexPathForSelectedCell = [self.tableView indexPathForCell:sender];
+    
+    id iotStateObservation = [self.fetchedResultsController objectAtIndexPath:indexPathForSelectedCell];
+    
+    if ( [iotStateObservation isKindOfClass:[IoTStateObservation class] ] ) {
+        IoTStateObservation *selectedObservation = iotStateObservation;
+        if ([selectedObservation.cnProperty.cnDataType isEqual: @"xs:geojson"])
+            return YES;
+    }
+    return NO;
+}
+
 - (void)prepareViewController:(id)vc forSegue:(NSString *)segueIdentifer fromIndexPath:(NSIndexPath *)indexPath
 {
     IoTStateObservation *iotStateObservation = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -109,6 +125,10 @@
     if ([vc isKindOfClass:[ImageViewController class]]) {
         ImageViewController *ivc = (ImageViewController *)vc;
         ivc.imageData = [[NSData alloc] initWithBase64EncodedString:iotStateObservation.cnValue options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    }
+    else if ([vc isKindOfClass:[IoTLocationMapViewController class]]) {
+        IoTLocationMapViewController *ilmvc = (IoTLocationMapViewController *)vc;
+        ilmvc.iotStateobservation = iotStateObservation;
     }
 }
 

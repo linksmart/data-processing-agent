@@ -93,4 +93,14 @@
     return dateFor;
 }
 
+-(NSDictionary *)iotStateObservationAsJSON{
+    
+    NSString *phenomenonTime = [[IoTStateObservation iotStateObservationDateFormatter] stringFromDate:self.cnPhenomenonTime];
+    NSString *resultTime = [[IoTStateObservation iotStateObservationDateFormatter] stringFromDate:self.cnResultTime];
+    
+    return [NSDictionary dictionaryWithObjectsAndKeys:phenomenonTime,@"PhenomenonTime",
+                                                      resultTime,@"ResultTime",
+                                                      self.cnValue,@"Value", nil];
+}
+
 @end

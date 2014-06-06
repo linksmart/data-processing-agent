@@ -22,4 +22,6 @@
 
 +(NSDateFormatter *)iotStateObservationDateFormatter;
 
+-(NSDictionary *)iotStateObservationAsJSON;
+
 @end
