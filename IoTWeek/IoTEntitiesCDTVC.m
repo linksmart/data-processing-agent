@@ -67,11 +67,9 @@
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"IoTEntity"];
     request.predicate = nil;
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"cnAbout"
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"cnName"
                                                               ascending:YES
                                                                selector:@selector(localizedStandardCompare:)]];
-    
-    
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                         managedObjectContext:managedObjectContext
@@ -89,7 +87,7 @@
     
     if (iotEntity.cnName != nil )
         cell.textLabel.text = iotEntity.cnName;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Properties: %d", (int)[iotEntity.cnProperty count]];
+    // cell.detailTextLabel.text = [NSString stringWithFormat:@"Properties: %d", (int)[iotEntity.cnProperty count]];
     
     return cell;
 }

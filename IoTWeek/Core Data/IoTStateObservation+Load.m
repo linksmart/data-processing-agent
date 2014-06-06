@@ -40,7 +40,8 @@
         // Use existing object, and update attributes
         iotStateObservation = [matches firstObject];
         
-        iotStateObservation.cnValue = [self parseValue:iotObservationDictionary];
+        if ([self parseValue:iotObservationDictionary] && ![[self parseValue:iotObservationDictionary] isEqualToString:iotStateObservation.cnValue] )
+            iotStateObservation.cnValue = [self parseValue:iotObservationDictionary];
     } else {
         iotStateObservation = [NSEntityDescription insertNewObjectForEntityForName:@"IoTStateObservation"
                                                  inManagedObjectContext:context];

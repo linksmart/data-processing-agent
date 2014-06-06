@@ -23,32 +23,37 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
-// TODO: Move these stupid assignments elsewhere
+    // TODO: Move these stupid assignments elsewhere
     if (!matches || error || ([matches count] > 1)) {
         // handle error
     } else if ([matches count]) {
         // Use existing object, and update attributes
         iotEntity = [matches firstObject];
         
-        iotEntity.cnBase = [iotEntityDictionary valueForKeyPath:@"Base"];
+        NSString *base = [iotEntityDictionary valueForKeyPath:@"Base"];
+        if (![base isKindOfClass:[NSNull class]] && ![iotEntity.cnBase isEqualToString:base])
+            iotEntity.cnBase = base;
         
         NSString *description = [iotEntityDictionary valueForKeyPath:@"Description"];
-        if (![description isKindOfClass:[NSNull class]])
+        if (![description isKindOfClass:[NSNull class]] && ![iotEntity.cnDescription isEqualToString:description])
             iotEntity.cnDescription = description;
         
         NSString *name = [iotEntityDictionary valueForKeyPath:@"Name"];
-        if (![name isKindOfClass:[NSNull class]])
+        if (![name isKindOfClass:[NSNull class]] && ![iotEntity.cnName isEqualToString:name])
             iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
         
         NSString *prefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
-        if (![prefix isKindOfClass:[NSNull class]])
+        if (![prefix isKindOfClass:[NSNull class]] && ![iotEntity.cnPrefix isEqualToString:prefix])
             iotEntity.cnPrefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
         
     } else {
         iotEntity = [NSEntityDescription insertNewObjectForEntityForName:@"IoTEntity"
                                                   inManagedObjectContext:context];
         iotEntity.cnAbout = permId;
-        iotEntity.cnBase = [iotEntityDictionary valueForKeyPath:@"Base"];
+        
+        NSString *base = [iotEntityDictionary valueForKeyPath:@"Base"];
+        if (![base isKindOfClass:[NSNull class]] && ![iotEntity.cnBase isEqualToString:base])
+            iotEntity.cnBase = base;
         
         NSString *description = [iotEntityDictionary valueForKeyPath:@"Description"];
         if (![description isKindOfClass:[NSNull class]])
@@ -57,8 +62,8 @@
         NSString *name = [iotEntityDictionary valueForKeyPath:@"Name"];
         if (![name isKindOfClass:[NSNull class]])
             iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
-        // else
-        //     [context deleteObject:iotEntity];
+        else
+             [context deleteObject:iotEntity];
         // The above is a Hack - made so that IoTEntities without name are not saved!
         // God knows how I am supposed to display an eneity without name in the UI.
         
@@ -80,15 +85,15 @@
 
         // Important note, we tidy up after us here... Perhaps typeOf should be considered a classification.... In fact
         // lets implement that instead. ( Given time )
-        for (id types in newEntity.cnTypeOf) {
-            if ([types isKindOfClass:[NSManagedObject class]]) {
+        /*for (id types in newEntity.cnTypeOf) {
+        if ([types isKindOfClass:[NSManagedObject class]]) {
                 [context deleteObject:types];
             }
         }
         
         NSArray *typeOf = [iotEntity valueForKeyPath:@"TypeOf"];
         [TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forIoTEntityWithAbout:newEntity.cnAbout];
-    }
+    */}
 }
 
 + (IoTEntity *)iotEntityWithAbout:(NSString *)about

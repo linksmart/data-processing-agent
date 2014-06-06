@@ -86,7 +86,6 @@
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 
-    
     [userDefaults synchronize];
 }
 

@@ -30,12 +30,13 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
-// TODO: Move these stupid assignments elsewhere
+    // TODO: Move these stupid assignments elsewhere
     
     if (!matches || error || ([matches count] > 1)) {
         // handle error
     } else if ([matches count]) {
         // Use existing object, and update attributes
+        
         property = [matches firstObject];
         
         property.cnAbout = permId;
@@ -44,24 +45,21 @@
         if (![dataType isKindOfClass:[NSNull class]])
             property.cnDataType = dataType;
         
-        NSString *description = [propertyDictionary valueForKeyPath:@"Description"];
+        id description = [propertyDictionary valueForKeyPath:@"Description"];
         if (![description isKindOfClass:[NSNull class]])
             property.cnDescription = description;
         
-        id meta = [propertyDictionary valueForKeyPath:@"Meta"];
-        if ([meta isKindOfClass:[NSString class]])
-            property.cnMeta = meta;
-        
         id name =[propertyDictionary valueForKeyPath:@"Name"];
-        if ([name isKindOfClass:[NSString class]])
+        if ([name isKindOfClass:[NSString class]] && ![property.cnName isEqualToString:name])
             property.cnName = name;
         
-        property.cnPrefix = [propertyDictionary valueForKeyPath:@"Prefix"];
+        id prefix =[propertyDictionary valueForKeyPath:@"Prefix"];
+        if ([prefix isKindOfClass:[NSString class]] && ![property.cnPrefix isEqualToString:prefix])
+            property.cnPrefix = prefix;
         
     } else {
         property = [NSEntityDescription insertNewObjectForEntityForName:@"Property"
                                                   inManagedObjectContext:context];
-        // NSLog(@"NewProp: %@",[propertyDictionary valueForKeyPath:@"Name"] );
 
         property.cnAbout = permId;
         
@@ -69,21 +67,19 @@
         if (![dataType isKindOfClass:[NSNull class]])
             property.cnDataType = dataType;
         
-        NSString *description = [propertyDictionary valueForKeyPath:@"Description"];
+        id description = [propertyDictionary valueForKeyPath:@"Description"];
         if (![description isKindOfClass:[NSNull class]])
             property.cnDescription = description;
-        
-        id meta = [propertyDictionary valueForKeyPath:@"Meta"];
-        if ([meta isKindOfClass:[NSString class]])
-            property.cnMeta = meta;
         
         id name =[propertyDictionary valueForKeyPath:@"Name"];
         if ([name isKindOfClass:[NSString class]])
             property.cnName = name;
         
-        property.cnPrefix = [propertyDictionary valueForKeyPath:@"Prefix"];
+        id prefix =[propertyDictionary valueForKeyPath:@"Prefix"];
+        if ([prefix isKindOfClass:[NSString class]])
+            property.cnPrefix = prefix;
         
-        property.cnIoTEntity = iotEntity;
+        // property.cnIoTEntity = iotEntity;
     }
     
     return property;
@@ -99,7 +95,6 @@
         // TODO: Initial load of observations removed.... Just for testing
         NSArray *iotStateObservations = [property valueForKeyPath:@"IoTStateObservation"];
         [IoTStateObservation loadIoTStateObservationsFromArray:iotStateObservations forIoTEntityWithAbout:iotEntityAbout forPropertiesWithAbout:newProperty.cnAbout usingManagedContext:context];
-        
         
         // Important note, we tidy up after us here... Perhaps typeOf should be considered a classification.... In fact
         // lets implement that instead. ( Given time )
