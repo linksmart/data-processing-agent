@@ -43,7 +43,7 @@
     // Warm up GPS or other location services
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    [self.locationManager startUpdatingLocation];
+    [self.locationManager startMonitoringSignificantLocationChanges];
     
     return YES;
 }
