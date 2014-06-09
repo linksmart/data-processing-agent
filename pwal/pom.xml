@@ -113,6 +113,11 @@
 			<artifactId>xivelymanager</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>it.ismb.pertlab.pwal</groupId>
+			<artifactId>etsi-m2m-manager</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 
 </project>

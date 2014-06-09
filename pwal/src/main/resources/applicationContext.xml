@@ -13,9 +13,9 @@
 <!-- 				<ref bean="wsnManager"/> -->
 <!-- 				<ref bean="bluetoothManager"/> -->
 <!-- 				<ref bean="serialManager"/> -->
-				<ref bean="SmartSantanderManager" />
-<!-- 					<ref bean="xivelyManager"/>
- -->
+<!-- 				<ref bean="SmartSantanderManager" /> -->
+<!-- 					<ref bean="xivelyManager"/> -->
+ 					<ref bean="m2mManager"/>
     		</list>
     	</constructor-arg>
     </bean>
@@ -41,4 +41,7 @@
 		</constructor-arg>
 	</bean>
 	<bean id="xivelyManager" class="it.ismb.pertlab.pwal.xivelymanager.XivelyManager"/>
+	<bean id="m2mManager" class="it.ismb.pertlab.pwal.etsi_m2m_manager.EtsiM2MManager">
+		<constructor-arg value="http://m2mtilab.dtdns.net/etsi/almanac"/>
+	</bean>
 </beans>

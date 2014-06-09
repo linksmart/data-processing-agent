@@ -7,4 +7,5 @@ public class DeviceNetworkType {
 	public static final String SERIAL="pwal:Serial";
 	public static final String SMARTSANTANDER="pwal:SmartSantander";
 	public static final String XIVELY="pwal:Xively";
+	public static final String M2M="pwal:m2m";
 }
