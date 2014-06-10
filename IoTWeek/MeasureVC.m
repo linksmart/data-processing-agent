@@ -32,7 +32,6 @@
 
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    NSLog(@"MyLocation: %@", myCurrentlocation.description);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *deviceId = [[userDefaults objectForKey:@"DeviceId"] description];
     NSString *locationId = [[userDefaults objectForKey:@"LocationPropertyId"] description];
@@ -51,7 +50,7 @@
     IoTStateObservation *myLocatonObservation = [[IoTStateObservation alloc] initWithEntity:entity
                                                      insertIntoManagedObjectContext:nil];
 
-    myLocatonObservation.cnValue = [NSString stringWithFormat:@"%f %f", myCurrentlocation.coordinate.longitude, myCurrentlocation.coordinate.latitude];
+    myLocatonObservation.cnValue = nil;
     myLocatonObservation.cnPhenomenonTime = [NSDate date];
     myLocatonObservation.cnResultTime = [NSDate date];
     
@@ -64,8 +63,6 @@
     [request setHTTPBody:jsonData];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-
-    NSLog(@"MyLocation: %@", myCurrentlocation.description);
 }
 
 - (void)viewDidLoad

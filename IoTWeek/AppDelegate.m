@@ -107,6 +107,7 @@
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:jsonData];
         
+        // This is not the way to do it. Use the new NSURLSession stuff instead!
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:nil];
     }
 }

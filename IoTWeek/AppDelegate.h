@@ -19,4 +19,6 @@
 //Location stuff
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
+-(void)startSearchDownload;
+
 @end

@@ -10,6 +10,7 @@
 #import "DatabaseAvailability.h"
 #import "IoTEntity+Load.h"
 #import "PropertiesCDTVC.h"
+#import "AppDelegate.h"
 
 @interface IoTEntitiesCDTVC ()
 
@@ -32,7 +33,7 @@
     [super viewDidLoad];
     
     UIBarButtonItem *removeRandom = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(removeRandomObject:)];
-    UIBarButtonItem *uploadLocation = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(uploadLocation:)];
+    UIBarButtonItem *uploadLocation = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(uploadLocation:)];
     
     self.navigationItem.rightBarButtonItems = @[uploadLocation, removeRandom];
     self.debug = YES;
@@ -58,7 +59,9 @@
 
 - (void)uploadLocation:(id)sender
 {
-    NSLog(@"Upload location");
+    NSLog(@"Refresh");
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate startSearchDownload];
 }
 
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
@@ -99,8 +102,7 @@
     IoTEntity *iotEntity = [self.fetchedResultsController objectAtIndexPath:indexPath];
 
     if ([vc isKindOfClass:[PropertiesCDTVC class]]) {
-        PropertiesCDTVC *pCDTVS =
-        (PropertiesCDTVC *)vc;
+        PropertiesCDTVC *pCDTVS = (PropertiesCDTVC *)vc;
         pCDTVS.iotEntity = iotEntity;
     }
 }
