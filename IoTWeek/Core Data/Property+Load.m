@@ -79,9 +79,11 @@
         if ([prefix isKindOfClass:[NSString class]])
             property.cnPrefix = prefix;
         
-        // property.cnIoTEntity = iotEntity;
+        property.cnIoTEntity = iotEntity;
     }
     
+    // Debugging is easier with the line below.
+    // NSLog(@"Property: %@", property.cnName);
     return property;
 }
 
@@ -89,6 +91,9 @@
          forIoTEntityWithAbout:(NSString *)iotEntityAbout
            usingManagedContext:(NSManagedObjectContext *)context
 {
+    if ([properties isKindOfClass:[NSNull class]])
+        return;
+    
     for (NSDictionary *property in properties) {
         Property *newProperty = [self propertyWithDefinition:property forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
         
@@ -98,14 +103,14 @@
         
         // Important note, we tidy up after us here... Perhaps typeOf should be considered a classification.... In fact
         // lets implement that instead. ( Given time )
-        for (id types in newProperty.cnTypeOf) {
-            if ([types isKindOfClass:[NSManagedObject class]]) {
-                [context deleteObject:types];
-            }
-        }
+        //for (id types in newProperty.cnTypeOf) {
+        //    if ([types isKindOfClass:[NSManagedObject class]]) {
+        //        [context deleteObject:types];
+        //    }
+        //}
         
-        NSArray *typeOf = [property valueForKeyPath:@"TypeOf"];
-        [TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forPropertiesWithAbout:newProperty.cnAbout forIoTEntityWithAbout:iotEntityAbout];
+        //NSArray *typeOf = [property valueForKeyPath:@"TypeOf"];
+        //[TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forPropertiesWithAbout:newProperty.cnAbout forIoTEntityWithAbout:iotEntityAbout];
     }
 }
 

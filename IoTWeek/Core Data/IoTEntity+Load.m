@@ -72,6 +72,9 @@
             iotEntity.cnPrefix = [iotEntityDictionary valueForKeyPath:@"Prefix"];
     }
     
+    // Debugging the CNet stuff is easier with the line below.
+    // NSLog(@"IoTEntity: %@", iotEntity.cnName);
+    
     return iotEntity;
 }
 

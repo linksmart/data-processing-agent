@@ -21,7 +21,7 @@
 }
 
 - (IBAction)registerDevice:(UIButton *)sender {
-    NSUUID *deviceId = [NSUUID UUID];
+    NSUUID *deviceId = [UIDevice currentDevice].identifierForVendor;
     NSUUID *locationProperty = [NSUUID UUID];
     NSUUID *waterFlowProperty = [NSUUID UUID];
     

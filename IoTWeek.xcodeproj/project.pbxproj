@@ -340,7 +340,7 @@
 				ORGANIZATIONNAME = ITAdvice;
 				TargetAttributes = {
 					E9F70E311923E7D5007485B3 = {
-						DevelopmentTeam = 5S5HLXNZY8;
+						DevelopmentTeam = MS98VENSMS;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;

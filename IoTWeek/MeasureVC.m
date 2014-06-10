@@ -33,7 +33,9 @@
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate.locationManager startUpdatingLocation];
     CLLocation *myCurrentlocation = [appDelegate.locationManager location];
-
+    
+    NSLog(@"MyLocation: %@", myCurrentlocation.description);
+    
     NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities/90d17970e8c711e3ac100800200c9a66/Properties/cddf5b70e8c711e3ac100800200c9a66/observations"];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
     

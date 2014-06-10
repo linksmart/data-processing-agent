@@ -87,7 +87,7 @@
     
     if (iotEntity.cnName != nil )
         cell.textLabel.text = iotEntity.cnName;
-    // cell.detailTextLabel.text = [NSString stringWithFormat:@"Properties: %d", (int)[iotEntity.cnProperty count]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Properties: %d", (int)[iotEntity.cnProperty count]];
     
     return cell;
 }

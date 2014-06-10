@@ -24,7 +24,7 @@
 @end
 
 #define BACKGROUND_DOWNLOAD_SESSION @"IoTEntities Download"
-#define FOREGROUND_FETCH_INTERVAL (1*60/6) // 1 minutes
+#define FOREGROUND_FETCH_INTERVAL (1*60/12) // 1 minutes
 #define BACKGROUND_FETCH_TIMEOUT (20)      // 20 seconds
 
 
@@ -43,13 +43,13 @@
     // Warm up GPS or other location services
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    [self.locationManager startMonitoringSignificantLocationChanges];
+    [self.locationManager startUpdatingLocation];
     
     return YES;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    
+    NSLog(@"Location didUpdateLocations");
 }
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -59,9 +59,9 @@
         sessionConfig.allowsCellularAccess = NO;
         sessionConfig.timeoutIntervalForRequest = BACKGROUND_FETCH_TIMEOUT;
         NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-        //NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"]];
         
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost:8888/test.json"]];
+        //NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost:8888/test.json"]];
         
         [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request
@@ -120,8 +120,8 @@
 {
     [self.downloadSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         if (![downloadTasks count]) {
-            //NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"]];
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost:8888/test.json"]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"]];
+            //NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost:8888/test.json"]];
             
             [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
             
@@ -144,7 +144,7 @@
     if (!_searchDownloadSession) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            NSURLSessionConfiguration *urlSessionConfig = [NSURLSessionConfiguration backgroundSessionConfiguration:BACKGROUND_DOWNLOAD_SESSION];
+            NSURLSessionConfiguration *urlSessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:BACKGROUND_DOWNLOAD_SESSION];
             _searchDownloadSession = [NSURLSession sessionWithConfiguration:urlSessionConfig
                                                                    delegate:self
                                                               delegateQueue:nil];
