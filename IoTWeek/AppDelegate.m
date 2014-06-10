@@ -43,9 +43,25 @@
     // Warm up GPS or other location services
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    [self.locationManager startUpdatingLocation];
+    [self.locationManager startMonitoringSignificantLocationChanges];
     
     return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    NSLog(@"Locationmanager to Foreground");
+    [self.locationManager stopMonitoringSignificantLocationChanges];
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    NSLog(@"Locationmanager to Background");
+    // Need to stop regular updates first
+    [self.locationManager stopUpdatingLocation];
+    // Only monitor significant changes
+    [self.locationManager startMonitoringSignificantLocationChanges];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
@@ -144,7 +160,7 @@
     if (!_searchDownloadSession) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            NSURLSessionConfiguration *urlSessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:BACKGROUND_DOWNLOAD_SESSION];
+            NSURLSessionConfiguration *urlSessionConfig = [NSURLSessionConfiguration backgroundSessionConfiguration:BACKGROUND_DOWNLOAD_SESSION];
             _searchDownloadSession = [NSURLSession sessionWithConfiguration:urlSessionConfig
                                                                    delegate:self
                                                               delegateQueue:nil];
