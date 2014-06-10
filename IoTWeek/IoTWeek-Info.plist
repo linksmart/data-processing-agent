@@ -49,6 +49,10 @@
 		<string>MKDirectionsModeTaxi</string>
 		<string>MKDirectionsModeTrain</string>
 	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location info will be sent to ALMANC SCP</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location info will be sent to ALMANC SCP</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

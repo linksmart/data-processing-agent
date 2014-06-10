@@ -22,13 +22,13 @@
 
 - (IBAction)registerDevice:(UIButton *)sender {
     NSUUID *deviceId = [UIDevice currentDevice].identifierForVendor;
-    NSUUID *locationProperty = [NSUUID UUID];
-    NSUUID *waterFlowProperty = [NSUUID UUID];
+    NSString *locationProperty = [NSString stringWithFormat:@"%@%@", [deviceId UUIDString], @":location"];
+    NSString *waterFlowProperty = [NSString stringWithFormat:@"%@%@", [deviceId UUIDString], @":flow"];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:[deviceId UUIDString] forKey:@"DeviceId"];
-    [userDefaults setObject:[locationProperty UUIDString] forKey:@"LocationPropertyId"];
-    [userDefaults setObject:[waterFlowProperty UUIDString] forKey:@"WaterFlowPropertyId"];
+    [userDefaults setObject:[locationProperty description] forKey:@"LocationPropertyId"];
+    [userDefaults setObject:[waterFlowProperty description] forKey:@"WaterFlowPropertyId"];
     
     NSString *deviceName = [UIDevice currentDevice].name;
     NSString *systemVersion = [UIDevice currentDevice].systemVersion;
@@ -38,14 +38,14 @@
     
     NSDictionary *jsonDictionary = @{
                                      @"Prefix" : @"inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-                                     @"About" : [deviceId description],
+                                     @"About" : [deviceId UUIDString],
                                      @"Name"  : deviceName,
                                      @"Description" : @"Supercool device, that is better than yours",
                                      @"TypeOf" : @[[NSString stringWithFormat:@"%@ %@", localizedModel, systemVersion]],
                                      @"Properties" : @[
                                                         @{
                                                             @"Prefix" : @"almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-                                                            @"About" : [locationProperty UUIDString],
+                                                            @"About" : [locationProperty description],
                                                             @"TypeOf" : @[@"almanac:location"],
                                                             @"DataType" : @"xs:geojson",
                                                             @"Name" : @"Location of phone",
@@ -58,7 +58,7 @@
                                                         },
                                                         @{
                                                             @"Prefix" : @"almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-                                                            @"About" : [waterFlowProperty UUIDString],
+                                                            @"About" : [waterFlowProperty description],
                                                             @"TypeOf" : @[@"almanac:flow"],
                                                             @"DataType" : @"xs:double",
                                                             @"Name" : @"Toilet",
@@ -72,9 +72,6 @@
                                      };
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDictionary options:NSJSONWritingPrettyPrinted error:NULL];
-    
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-
     NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
 
@@ -84,7 +81,7 @@
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:jsonData];
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:nil];
 
     [userDefaults synchronize];
 }

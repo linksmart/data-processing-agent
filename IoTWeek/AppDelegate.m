@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "AppDelegate+Context.h"
 #import "IoTEntity+Load.h"
+#import "IotStateObservation+Load.h"
 #import "DatabaseAvailability.h"
 #import <CoreLocation/CoreLocation.h>
 
@@ -24,7 +25,7 @@
 @end
 
 #define BACKGROUND_DOWNLOAD_SESSION @"IoTEntities Download"
-#define FOREGROUND_FETCH_INTERVAL (1*60/12) // 1 minutes
+#define FOREGROUND_FETCH_INTERVAL (1*60) // 1 minutes
 #define BACKGROUND_FETCH_TIMEOUT (20)      // 20 seconds
 
 
@@ -42,9 +43,12 @@
     
     // Warm up GPS or other location services
     self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    [self.locationManager startMonitoringSignificantLocationChanges];
-    
+     // [self.locationManager requestWhenInUseAuthorization]; ONLY IOS8!!!! But important there
+    if ([CLLocationManager locationServicesEnabled])
+    {
+        self.locationManager.delegate = self;
+        [self.locationManager startMonitoringSignificantLocationChanges];
+    }
     return YES;
 }
 
@@ -52,6 +56,8 @@
 {
     NSLog(@"Locationmanager to Foreground");
     [self.locationManager stopMonitoringSignificantLocationChanges];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    self.locationManager.distanceFilter = 10;
     [self.locationManager startUpdatingLocation];
 }
 
@@ -60,16 +66,58 @@
     NSLog(@"Locationmanager to Background");
     // Need to stop regular updates first
     [self.locationManager stopUpdatingLocation];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+    self.locationManager.distanceFilter = 500;
     // Only monitor significant changes
     [self.locationManager startMonitoringSignificantLocationChanges];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     NSLog(@"Location didUpdateLocations");
+    CLLocation* myCurrentlocation = [locations lastObject];
+
+    if (myCurrentlocation) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *deviceId = [[userDefaults objectForKey:@"DeviceId"] description];
+        NSString *locationId = [[userDefaults objectForKey:@"LocationPropertyId"] description];
+        
+        NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities/%@/Properties/%@/observations", deviceId, locationId];
+        NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+        
+        // NSLog(@"TheURL: %@", [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]);
+        
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"IoTStateObservation"
+                                                  inManagedObjectContext:self.iotEntityDatabaseContext];
+        
+        IoTStateObservation *myLocatonObservation = [[IoTStateObservation alloc] initWithEntity:entity
+                                                                 insertIntoManagedObjectContext:nil];
+        
+        myLocatonObservation.cnValue = [NSString stringWithFormat:@"%f %f", myCurrentlocation.coordinate.longitude, myCurrentlocation.coordinate.latitude];
+        myLocatonObservation.cnPhenomenonTime = [NSDate date];
+        myLocatonObservation.cnResultTime = [NSDate date];
+        
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:myLocatonObservation.iotStateObservationAsJSON options:NSJSONWritingPrettyPrinted error:NULL];
+        
+        // NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setHTTPMethod:@"POST"];
+        [request setHTTPBody:jsonData];
+        
+        NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:nil];
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    NSLog(@"Location error %@",error.description);
 }
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    NSLog(@"Background fetch started");
     if (self.iotEntityDatabaseContext) {
         NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         sessionConfig.allowsCellularAccess = NO;

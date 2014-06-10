@@ -31,12 +31,13 @@
 - (IBAction)ConsumeWater:(id)sender {
 
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate.locationManager startUpdatingLocation];
-    CLLocation *myCurrentlocation = [appDelegate.locationManager location];
     
     NSLog(@"MyLocation: %@", myCurrentlocation.description);
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *deviceId = [[userDefaults objectForKey:@"DeviceId"] description];
+    NSString *locationId = [[userDefaults objectForKey:@"LocationPropertyId"] description];
     
-    NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities/90d17970e8c711e3ac100800200c9a66/Properties/cddf5b70e8c711e3ac100800200c9a66/observations"];
+    NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities/%@/Properties/%@/observations", deviceId, locationId];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
     
     NSLog(@"TheURL: %@", [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]);
@@ -64,7 +65,6 @@
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 
-    [appDelegate.locationManager stopUpdatingLocation];
     NSLog(@"MyLocation: %@", myCurrentlocation.description);
 }
 
