@@ -7,7 +7,6 @@ import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
 import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
-import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.ArrayOfIoTEntity;
@@ -20,18 +19,15 @@ import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.TypedStringType;
 import it.ismb.pertlab.pwal.datapusher.cnet.restclient.CnetDataPusherRestClient;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.joda.time.DateTime;
-import org.springframework.aop.interceptor.ConcurrencyThrottleInterceptor;
 
 public class CnetDataPusher extends DataPusher implements PWALDeviceListener 
 {
@@ -95,10 +91,10 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 					IoTEntity tosend = this.objectFactory.createIoTEntity();
 					tosend.setAbout(existingIoTEntity.getAbout());
 					for (IoTProperty p : existingIoTEntity.getIoTProperty()) {
+						Boolean isToSend = true;
 						IoTProperty iotPropertyToAdd = this.objectFactory.createIoTProperty();
 						IoTStateObservation observation = this.objectFactory.createIoTStateObservation();	
 						iotPropertyToAdd.setAbout(p.getAbout());
-						log.debug("Before:" + d.getType());
 						switch (d.getType()) {
 							case DeviceType.FILL_LEVEL_SENSOR:
 								FillLevel fl = (FillLevel)d;
@@ -106,13 +102,15 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								case "Depth values":
 									String depth = String.valueOf(fl.getDepth());
 									if(depth == null)
-										continue;
+									{
+										isToSend = false;
+									}
 									observation.setValue(depth);
 									break;
 								case "Level values":
 									String level = String.valueOf(fl.getLevel());
 									if(level == null)
-										continue;
+										isToSend = false;
 									observation.setValue(level);
 									break;
 								default:
@@ -123,7 +121,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								FlowMeter fm = (FlowMeter)d;
 								String flow = String.valueOf(fm.getFlow());
 								if(flow == null)
-									continue;
+									isToSend = false;
 								observation.setValue(flow);
 								break;
 							case DeviceType.VEHICLE_COUNTER:
@@ -131,10 +129,20 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								switch (p.getName()) {
 								case "Occupancy":
 									String occupancy = String.valueOf(counter.getOccupancy());
+									log.debug("Occupancy case: {}", occupancy);
+									if(occupancy.equals("-1.0"))
+									{
+										isToSend = false;
+										log.debug("Occupancy -1! non aggiungere!");
+									}
 									observation.setValue(occupancy);
 									break;
 								case "Number of vehicle":
 									String number = String.valueOf(counter.getCount());
+									log.debug("Number of vehicle case: {}", number);
+									if(number.equals("-1.0"))
+										log.debug("Number of vehicle -1! non aggiungere!");
+										isToSend = false;
 									observation.setValue(number);
 									break;
 								default:
@@ -147,14 +155,32 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								switch (p.getName()) {
 								case "Average speed":
 									String average = String.valueOf(speed.getAverageSpeed());
+									log.debug("Average speed case: {}", average);
+									if(average.equals("-1.0"))
+									{
+										log.debug("Average speed -1! non aggiungere!");
+										isToSend = false;
+									}
 									observation.setValue(average);
 									break;
 								case "Median speed":
 									String median = String.valueOf(speed.getMedianSpeed());
+									log.debug("Median speed case: {}", median);
+									if(median.equals("-1.0"))
+									{
+										log.debug("Median speed -1! non aggiungere!");
+										isToSend = false;
+									}
 									observation.setValue(median);
 									break;
 								case "Occupancy":
 									String occupancy = String.valueOf(speed.getOccupancy());
+									log.debug("Occupancy case: {}", occupancy);
+									if(occupancy.equals("-1.0"))
+									{
+										log.debug("Occupancy -1! non aggiungere!");
+										isToSend = false;
+									}
 									observation.setValue(occupancy);
 									break;
 								default:
@@ -168,12 +194,16 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 							observation.setPhenomenonTime(xmlCal);
 							observation.setResultTime(xmlCal);
 							iotPropertyToAdd.getIoTStateObservation().add(observation);
-							tosend.getIoTProperty().add(iotPropertyToAdd);
+							if(isToSend)
+							{
+								log.debug("IoTProperty {} da aggiungere!", iotPropertyToAdd.getName());
+								tosend.getIoTProperty().add(iotPropertyToAdd);
+							}
 						} catch (DatatypeConfigurationException e) {
 							log.error("DatatypeConfigurationException: ",e);
 						}
 					}
-					tosend.toXml();
+					//tosend.toXml();
 					this.cnetRestClient.pushNewValues(tosend);
 				}
 			}
@@ -245,7 +275,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 			case DeviceType.VEHICLE_COUNTER:
 				iotEntity.setAbout("SmartSantander-"+newDevice.getId());
 				IoTProperty occupancyProperty = this.objectFactory.createIoTProperty();
-				occupancyProperty.getTypeof().add("SmartSantader:VehicleCounterSensor:"+"GetCarOccupancy");
+				occupancyProperty.getTypeof().add("SmartSantander:VehicleCounterSensor:"+"GetCarOccupancy");
 				occupancyProperty.setName("Occupancy");
 				occupancyProperty.setDatatype("double");
 				occupancyProperty.setAbout(newDevice.getId() + occupancyProperty.getName());
@@ -255,7 +285,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 				iotEntity.getIoTProperty().add(occupancyProperty);
 				
 				IoTProperty carCountProperty = this.objectFactory.createIoTProperty();
-				carCountProperty.getTypeof().add("SmartSantader:VehicleCounterSensor:"+"GetCarCount");
+				carCountProperty.getTypeof().add("SmartSantander:VehicleCounterSensor:"+"GetCarCount");
 				carCountProperty.setName("Number of vehicle");
 				carCountProperty.setDatatype("double");
 				carCountProperty.setAbout(newDevice.getId() + carCountProperty.getName());
@@ -268,7 +298,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 			case DeviceType.VEHICLE_SPEED:
 				iotEntity.setAbout("SmartSantander-"+newDevice.getId());
 				IoTProperty averageSpeedProperty = this.objectFactory.createIoTProperty();
-				averageSpeedProperty.getTypeof().add("SmartSantader:VehicleCounterSensor:"+"GetAverageSpeed");
+				averageSpeedProperty.getTypeof().add("SmartSantander:VehicleSpeedSensor:"+"GetAverageSpeed");
 				averageSpeedProperty.setName("Average speed");
 				averageSpeedProperty.setDatatype("double");
 				averageSpeedProperty.setAbout(newDevice.getId() + averageSpeedProperty.getName());
@@ -277,7 +307,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 				averageSpeedProperty.setUnitOfMeasurement(asum);
 				iotEntity.getIoTProperty().add(averageSpeedProperty);
 				IoTProperty medianSpeedProperty = this.objectFactory.createIoTProperty();
-				medianSpeedProperty.getTypeof().add("SmartSantader:VehicleCounterSensor:"+"GetMedianSpeed");
+				medianSpeedProperty.getTypeof().add("SmartSantander:VehicleSpeedSensor:"+"GetMedianSpeed");
 				medianSpeedProperty.setName("Median speed");
 				medianSpeedProperty.setDatatype("double");
 				medianSpeedProperty.setAbout(newDevice.getId() + medianSpeedProperty.getName());
@@ -286,7 +316,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 				medianSpeedProperty.setUnitOfMeasurement(msum);
 				iotEntity.getIoTProperty().add(medianSpeedProperty);
 				IoTProperty occupancyProperty1 = this.objectFactory.createIoTProperty();
-				occupancyProperty1.getTypeof().add("SmartSantader:VehicleCounterSensor:"+"GetCarOccupancy");
+				occupancyProperty1.getTypeof().add("SmartSantander:VehicleSpeedSensor:"+"GetCarOccupancy");
 				occupancyProperty1.setName("Occupancy");
 				occupancyProperty1.setDatatype("double");
 				occupancyProperty1.setAbout(newDevice.getId() + occupancyProperty1.getName());
@@ -319,7 +349,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 				break;
 			}
 							
-			iotEntity.toXml();
+			//iotEntity.toXml();
 			IoTEntity deviceAbout = this.cnetRestClient.pushNewIoTEntity(iotEntity);
 			this.iotEntities.put(newDevice.getPwalId(), deviceAbout);
 			deviceAbout.toXml();

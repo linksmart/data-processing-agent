@@ -12,8 +12,8 @@
 <!--     			<ref bean="bluetoothThermometerDriver"/> -->
 <!-- 				<ref bean="wsnManager"/>
  --><!-- 				<ref bean="bluetoothManager"/> -->
-				 <ref bean="serialManager"/>
-				<!--<ref bean="SmartSantanderManager" />-->
+<!-- 				 <ref bean="serialManager"/>
+ -->				<ref bean="SmartSantanderManager" />
 <!-- 					<ref bean="xivelyManager"/> -->
 
     		</list>
