@@ -95,7 +95,7 @@
     
     IoTEntity *iotEntity = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if ( iotEntity.cnName != nil && ![iotEntity.cnName isEqualToString:@""])
+    if ( iotEntity.cnName != nil && ![iotEntity.cnName isEqualToString:@""] )
         cell.textLabel.text = iotEntity.cnName;
     else
         cell.textLabel.text = @"Unnamed resource";

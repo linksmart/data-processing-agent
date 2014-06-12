@@ -29,9 +29,6 @@
 }
 
 - (IBAction)ConsumeWater:(id)sender {
-
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *deviceId = [[userDefaults objectForKey:@"DeviceId"] description];
     NSString *flowId = [[userDefaults objectForKey:@"WaterFlowPropertyId"] description];
@@ -56,13 +53,13 @@
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:myLocatonObservation.iotStateObservationAsJSON options:NSJSONWritingPrettyPrinted error:NULL];
     
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    // NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:jsonData];
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:nil];
 }
 
 - (void)viewDidLoad

@@ -81,8 +81,10 @@
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:jsonData];
     
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:nil];
-
+    // NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:nil];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:nil];
+    
     [userDefaults synchronize];
 }
 

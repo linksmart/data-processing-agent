@@ -43,7 +43,7 @@
     
     // Warm up GPS or other location services
     self.locationManager = [[CLLocationManager alloc] init];
-     // [self.locationManager requestWhenInUseAuthorization]; ONLY IOS8!!!! But important there
+    // [self.locationManager requestWhenInUseAuthorization]; // ONLY IOS8!!!! But important there
     if ([CLLocationManager locationServicesEnabled])
     {
         self.locationManager.delegate = self;
@@ -81,6 +81,13 @@
         NSString *deviceId = [[userDefaults objectForKey:@"DeviceId"] description];
         NSString *locationId = [[userDefaults objectForKey:@"LocationPropertyId"] description];
         
+        // One should stop even looking for locations
+        // but if I only had a wee bit more time...
+        if ( deviceId == nil || [deviceId isEqualToString:@""] ) {
+            NSLog(@"Location found, but device not yet registered");
+            return;
+        }
+        
         NSString *urlString = [NSString stringWithFormat:@"http://p2.alapetite.dk:8080/dm/IoTEntities/%@/Properties/%@/observations", deviceId, locationId];
         NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
         
@@ -107,8 +114,7 @@
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:jsonData];
         
-        // This is not the way to do it. Use the new NSURLSession stuff instead!
-        NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:nil];
+        [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:nil];
     }
 }
 
