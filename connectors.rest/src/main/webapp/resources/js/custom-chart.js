@@ -308,6 +308,98 @@ function load_distsensor(divId) {
 
 }
 
+// for smart Santander Graph with request param URL
+
+//For spline Graphs	
+function load_vehiclesensor( devID) {
+	var id1;
+	clearInterval(id1);
+	var url1 = (contextPath + '/vehiclespeed/'+devID );
+	var c;
+
+	function updateSensor() {
+		$.getJSON(url1, function(data) {
+			if (c.series.length == 0) {
+
+				for (var i = 0; i < data.series.length; i++) {
+
+					c.addSeries({
+						"name" : data.series[i].name,
+						"data" : []
+					});
+
+				}
+			}
+
+			var series = c.series[0];
+			var shift = series.data.length > 5;
+
+			for (var j = 0; j < c.series.length; j++) {
+
+				if (c.series[j].name == data.series[j].name) {
+					c.series[j].addPoint(data.series[j].data, true, shift);
+				}
+			}
+		});
+	}
+
+	Highcharts.setOptions({
+		global : {
+			useUTC : false
+		}
+	});
+
+	$.getJSON(url1, function(data) {
+		var options = {
+				chart : {
+					renderTo : devID,
+					type : 'spline',
+					animation : Highcharts.svg,
+					zoomType : 'x',
+					events : {
+						load : function() {
+							updateSensor();
+							id1 = setInterval(updateSensor, 3000);
+						}
+					}
+
+				},
+
+				title : {
+					text : data.title
+				},
+				xAxis : {
+					title : {
+						text : data.xAxisTitle
+					},
+					type : 'datetime',
+					labels : {
+						formatter : function() {
+							return new Date(this.value).toLocaleTimeString();
+						}
+
+					}
+				},
+				yAxis : {
+					title : {
+						text : data.yAxisTitle
+					},
+					labels : {
+						formatter : function() {
+							return this.value + '';
+						}
+					}
+				},
+
+				series : []
+		};
+
+		c = new Highcharts.Chart(options);
+
+	});
+
+}
+
 //For spline Graphs	
 function load_tempsensor(divId) {
 	var id1;

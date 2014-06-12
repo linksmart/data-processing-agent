@@ -10,7 +10,7 @@
 		<value>http://energyportal.cnet.se/StorageManagerMdb20140604/REST/IoTEntities/</value>
 	</property>
     	<constructor-arg >
-    		<value type="int">5</value>
+    		<value type="int">60</value>
     	</constructor-arg>
     	<constructor-arg ref="PWAL"></constructor-arg>
 <!--     	<property name="pwal" ref="PWAL"></property> -->

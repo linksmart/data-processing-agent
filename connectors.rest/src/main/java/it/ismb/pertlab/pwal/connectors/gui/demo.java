@@ -78,4 +78,12 @@ public class demo {
 		return "demo#log";
 	}
 
+	private Collection<Device> removePwalReference(Collection<Device> source)
+	{
+		Collection<Device> destination = new ArrayList<>();
+		for (Device d : source) {
+
+		}
+		return destination;
+	}
 }

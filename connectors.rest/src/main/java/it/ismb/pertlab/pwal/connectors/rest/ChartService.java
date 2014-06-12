@@ -5,6 +5,7 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
 import it.ismb.pertlab.pwal.api.devices.model.DistanceSensor;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.highcharts.bean.DataBean;
 import it.ismb.pertlab.pwal.highcharts.bean.SeriesBean;
@@ -86,11 +87,51 @@ public class ChartService {
 		else return null;
 	}
 
+	public DataBean getSantanderSplineChartData(String devID){
+		List<SeriesBean> list = new ArrayList<SeriesBean>();
+		Collection<Device> devList= pwal.getDevicesList();
+		Double avgspeed, median;
+		String devtype = null;
+		long[] categories=null;
+		System.out.println("received: " + devID);
+		synchronized (pwal.getDevicesList()) {
+
+
+			for(Device d:devList){
+				if(DeviceType.VEHICLE_SPEED.equals(d.getType()) && d.getId().equals(devID)){
+
+					VehicleSpeed v = (VehicleSpeed) d;
+					devtype = v.getType();
+	
+					if(v.getAverageSpeed() == -1){
+						avgspeed =(double) 0;
+
+					} else avgspeed = v.getAverageSpeed();
+					
+					if(v.getMedianSpeed() == -1){
+						median =(double) 0;
+
+					} else median = v.getAverageSpeed();
+
+					list.add(new SeriesBean("Average Speed",  new double [] {System.currentTimeMillis(),avgspeed}));
+					list.add(new SeriesBean("Median Speed",  new double [] {System.currentTimeMillis(),median}));
+					categories= new long[] {System.currentTimeMillis()};
+				}
+			}
+		}
+
+		if(categories.length>0){
+			return new DataBean(devtype, "Vehicle Speed Sensor", "Km/h", "Time", Arrays.asList(categories), list);
+		}
+
+		else return null;
+	}
+
 	public DataBean getDistanceSplineChartData(){
 		List<SeriesBean> list = new ArrayList<SeriesBean>();
 		List<Device> distDevList = new ArrayList<Device>();
 		Collection<Device> devList= pwal.getDevicesList();
-		
+
 		Double dustbin_inch=34.5;
 		Double fill_level;
 
@@ -113,14 +154,14 @@ public class ChartService {
 
 		else return null;
 	} 
-	
+
 	public DataBean getAccel3DChartData(){
 
 		List<SeriesBean> list = new ArrayList<SeriesBean>();
 		List<Device> accelDevList = new ArrayList<Device>();
 		Collection<Device> devList= pwal.getDevicesList();
 		long[] categories=null;
-		
+
 		for(Device d:devList){
 			if(DeviceType.ACCELEROMETER.equals(d.getType() )){
 				accelDevList.add(d);
@@ -130,7 +171,7 @@ public class ChartService {
 				categories= new long[] {System.currentTimeMillis()};
 			}
 		}
-		
+
 		if(categories.length>0){
 			return new DataBean("pwal:Accelerometer", "Accelerometer Sensor", "Null", "Null", Arrays.asList(categories), list);
 		}

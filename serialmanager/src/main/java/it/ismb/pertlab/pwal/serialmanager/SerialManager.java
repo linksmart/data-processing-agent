@@ -6,6 +6,7 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -43,12 +44,13 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 	private InputStream input = null;
 	
 	//portString is a comma separated string containing the list of ports to be opened
-	public SerialManager(Map<String,String> props) throws IOException
+	public SerialManager(Map<String,String> props)
 	{
-		this.input = new FileInputStream(this.getClass().getClassLoader().getResource("config.props").getFile());
-		this.properties.load(this.input);
-		log.info("Properties file loaded.");
-		String portStrings = this.properties.getProperty("ports");
+//		this.input = new FileInputStream(this.getClass().getClassLoader().getResource("config.props").getFile());
+//		this.properties.load(this.input);
+//		log.info("Properties file loaded.");
+//		String portStrings = this.properties.getProperty("ports");
+		String portStrings = "COM8";
 		log.debug("Ports in config file are: {}",portStrings);
 		String[] ports=portStrings.split(",");
 		idsPort=new HashMap<>();

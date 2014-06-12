@@ -5,6 +5,7 @@ import it.ismb.pertlab.pwal.highcharts.bean.DataBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +28,12 @@ public class HighChartsController {
         return chartService.getTemperaturelineChartData();
     }
 
+    @RequestMapping(value="/vehiclespeed/{deviceId}", method=RequestMethod.GET)
+    @ResponseBody
+    public DataBean showAverageSpeed(@PathVariable String deviceId) {
+        return chartService.getSantanderSplineChartData(deviceId);
+    }
+    
     @RequestMapping(value="/tempsplinechart", method=RequestMethod.GET)
     @ResponseBody
     public DataBean showSplineChart1() {

@@ -204,7 +204,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 						}
 					}
 					//tosend.toXml();
-					this.cnetRestClient.pushNewValues(tosend);
+					//this.cnetRestClient.pushNewValues(tosend);
 				}
 			}
 		}
@@ -223,7 +223,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 			IoTEntity iotEntity = this.objectFactory.createIoTEntity();
 			iotEntity.getTypeof().add(newDevice.getType());
 			iotEntity.getPrefix().add("geo: http://www.georss.org/georss/ almanac:http://ns.inertia.eu/ontologies xs:XMLSchema");
-			iotEntity.setName(newDevice.getId()+ " ("+newDevice.getNetworkType().split(":")[1]+")");
+			iotEntity.setName(newDevice.getId()+ " ("+newDevice.getNetworkType()+")");
 			iotEntity.setAbout(newDevice.getPwalId());
 			
 			Meta networkTypeMeta = this.objectFactory.createMeta();
@@ -350,8 +350,10 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 			}
 							
 			//iotEntity.toXml();
-			IoTEntity deviceAbout = this.cnetRestClient.pushNewIoTEntity(iotEntity);
+//			IoTEntity deviceAbout = this.cnetRestClient.pushNewIoTEntity(iotEntity);
+			IoTEntity deviceAbout = new IoTEntity();
 			this.iotEntities.put(newDevice.getPwalId(), deviceAbout);
+			
 			deviceAbout.toXml();
 		}
 		else
