@@ -66,8 +66,8 @@
     NSLog(@"Locationmanager to Background");
     // Need to stop regular updates first
     [self.locationManager stopUpdatingLocation];
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
-    self.locationManager.distanceFilter = 200;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.distanceFilter = 500;
     // Only monitor significant changes
     [self.locationManager startMonitoringSignificantLocationChanges];
 }
@@ -141,6 +141,7 @@
                                                                 NSLog(@"Background fetch failed: %@", error.localizedDescription);
                                                                 completionHandler(UIBackgroundFetchResultNoData);
                                                             } else {
+                                                                NSLog(@"Background fetch success");
                                                                 [self loadIoTEntitiesFromLocalURL:localFile
                                                                                        intoContext:self.iotEntityDatabaseContext
                                                                                andThenExecuteBlock:^{
