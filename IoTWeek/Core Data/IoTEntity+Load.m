@@ -62,8 +62,8 @@
         NSString *name = [iotEntityDictionary valueForKeyPath:@"Name"];
         if (![name isKindOfClass:[NSNull class]])
             iotEntity.cnName = [iotEntityDictionary valueForKeyPath:@"Name"];
-        else
-             [context deleteObject:iotEntity];
+        // else
+        //     [context deleteObject:iotEntity];
         // The above is a Hack - made so that IoTEntities without name are not saved!
         // God knows how I am supposed to display an eneity without name in the UI.
         

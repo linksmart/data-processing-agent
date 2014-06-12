@@ -72,7 +72,7 @@
                                      };
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDictionary options:NSJSONWritingPrettyPrinted error:NULL];
-    NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"];
+    NSString *urlString = [NSString stringWithFormat:@"http://p2.alapetite.dk:8080/dm/IoTEntities"];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
 
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];

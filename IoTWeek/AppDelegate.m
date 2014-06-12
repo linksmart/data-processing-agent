@@ -56,8 +56,8 @@
 {
     NSLog(@"Locationmanager to Foreground");
     [self.locationManager stopMonitoringSignificantLocationChanges];
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    self.locationManager.distanceFilter = 10;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.distanceFilter = 5;
     [self.locationManager startUpdatingLocation];
 }
 
@@ -66,8 +66,8 @@
     NSLog(@"Locationmanager to Background");
     // Need to stop regular updates first
     [self.locationManager stopUpdatingLocation];
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-    self.locationManager.distanceFilter = 500;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+    self.locationManager.distanceFilter = 200;
     // Only monitor significant changes
     [self.locationManager startMonitoringSignificantLocationChanges];
 }
@@ -81,7 +81,7 @@
         NSString *deviceId = [[userDefaults objectForKey:@"DeviceId"] description];
         NSString *locationId = [[userDefaults objectForKey:@"LocationPropertyId"] description];
         
-        NSString *urlString = [NSString stringWithFormat:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities/%@/Properties/%@/observations", deviceId, locationId];
+        NSString *urlString = [NSString stringWithFormat:@"http://p2.alapetite.dk:8080/dm/IoTEntities/%@/Properties/%@/observations", deviceId, locationId];
         NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
         
         // NSLog(@"TheURL: %@", [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]);
@@ -124,7 +124,7 @@
         sessionConfig.allowsCellularAccess = NO;
         sessionConfig.timeoutIntervalForRequest = BACKGROUND_FETCH_TIMEOUT;
         NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://p2.alapetite.dk:8080/dm/IoTEntities"]];
         
         //NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost:8888/test.json"]];
         
@@ -185,7 +185,7 @@
 {
     [self.downloadSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         if (![downloadTasks count]) {
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities"]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://p2.alapetite.dk:8080/dm/IoTEntities"]];
             //NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost:8888/test.json"]];
             
             [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];

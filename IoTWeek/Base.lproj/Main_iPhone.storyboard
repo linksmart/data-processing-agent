@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="A7b-aI-N48">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.17" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="A7b-aI-N48">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.11"/>
     </dependencies>
     <scenes>
         <!--IoT EntitiesCDTVC-->
@@ -13,14 +13,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTEntity Cell" textLabel="Erj-6S-ekY" detailTextLabel="kBa-hG-m40" style="IBUITableViewCellStyleSubtitle" id="wQL-fj-vH6">
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTEntity Cell" textLabel="Erj-6S-ekY" detailTextLabel="kBa-hG-m40" style="IBUITableViewCellStyleSubtitle" id="wQL-fj-vH6">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wQL-fj-vH6" id="B1x-nS-txI">
                                     <rect key="frame" x="0.0" y="0.0" width="253" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Device name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Erj-6S-ekY">
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Erj-6S-ekY">
                                             <rect key="frame" x="15" y="3" width="105" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -61,7 +61,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Property Cell" textLabel="Pnx-QI-Pzk" detailTextLabel="OMx-El-aeR" style="IBUITableViewCellStyleSubtitle" id="Jni-c9-JER">
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Property Cell" textLabel="Pnx-QI-Pzk" detailTextLabel="OMx-El-aeR" style="IBUITableViewCellStyleSubtitle" id="Jni-c9-JER">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jni-c9-JER" id="lMO-Gw-q1E">
@@ -109,7 +109,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTStateObservation Cell" textLabel="wyC-bd-hd6" detailTextLabel="olh-KO-cpb" style="IBUITableViewCellStyleSubtitle" id="lBt-VX-iCH">
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTStateObservation Cell" textLabel="wyC-bd-hd6" detailTextLabel="olh-KO-cpb" style="IBUITableViewCellStyleSubtitle" id="lBt-VX-iCH">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lBt-VX-iCH" id="xnt-QG-A4Z">
@@ -152,7 +152,7 @@
         <scene sceneID="JOc-BD-PgE">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="t2A-gr-8xl" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="IoT Entities" id="0dd-pU-dJ7"/>
+                    <tabBarItem key="tabBarItem" title="IoT Entities" image="Research" id="0dd-pU-dJ7"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="c2t-Km-KUV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -167,7 +167,7 @@
             </objects>
             <point key="canvasLocation" x="700" y="87"/>
         </scene>
-        <!--MeasureVC-->
+        <!--MeasureVC - Send measurement-->
         <scene sceneID="eMT-Li-wgX">
             <objects>
                 <viewController id="8sO-Us-4Rc" customClass="MeasureVC" sceneMemberID="viewController">
@@ -179,7 +179,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ms2-mP-CNu">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ms2-mP-CNu">
                                 <rect key="frame" x="51" y="90" width="219" height="164"/>
                                 <state key="normal" image="Icon-Water">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -188,7 +188,7 @@
                                     <action selector="ConsumeWater:" destination="8sO-Us-4Rc" eventType="touchUpInside" id="agZ-v1-Ikk"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" editable="NO" text="Pressing this botton consumes 6l of water. This is the same amount of water used to flush the toilet." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxZ-Ib-icn">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Pressing this botton consumes 6l of water. This is the same amount of water used to flush the toilet." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxZ-Ib-icn">
                                 <rect key="frame" x="40" y="262" width="240" height="128"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -197,20 +197,22 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ms2-mP-CNu" firstAttribute="top" secondItem="uXz-d4-hHu" secondAttribute="bottom" constant="70" id="AoU-5g-6lg"/>
-                            <constraint firstItem="ms2-mP-CNu" firstAttribute="centerX" secondItem="5o7-O5-Yeo" secondAttribute="centerX" id="beY-is-Z04"/>
-                            <constraint firstItem="fxZ-Ib-icn" firstAttribute="top" secondItem="ms2-mP-CNu" secondAttribute="bottom" constant="8" symbolic="YES" id="cUU-3f-q7k"/>
-                            <constraint firstItem="hlf-K0-3Nf" firstAttribute="top" secondItem="fxZ-Ib-icn" secondAttribute="bottom" constant="129" id="chv-ol-fIb"/>
-                            <constraint firstItem="fxZ-Ib-icn" firstAttribute="leading" secondItem="5o7-O5-Yeo" secondAttribute="leading" constant="40" id="yPI-dd-q8R"/>
+                            <constraint firstItem="fxZ-Ib-icn" firstAttribute="leading" secondItem="5o7-O5-Yeo" secondAttribute="leading" constant="40" id="FQ7-oU-E56"/>
+                            <constraint firstItem="hlf-K0-3Nf" firstAttribute="top" secondItem="fxZ-Ib-icn" secondAttribute="bottom" constant="129" id="SUB-CT-RtU"/>
+                            <constraint firstItem="fxZ-Ib-icn" firstAttribute="centerX" secondItem="5o7-O5-Yeo" secondAttribute="centerX" id="ddS-cz-bWt"/>
+                            <constraint firstItem="ms2-mP-CNu" firstAttribute="leading" secondItem="5o7-O5-Yeo" secondAttribute="leading" constant="51" id="gO4-1T-1IE"/>
+                            <constraint firstItem="fxZ-Ib-icn" firstAttribute="centerX" secondItem="ms2-mP-CNu" secondAttribute="centerX" id="oNm-oe-Wcf"/>
+                            <constraint firstItem="fxZ-Ib-icn" firstAttribute="top" secondItem="ms2-mP-CNu" secondAttribute="bottom" constant="8" symbolic="YES" id="sj3-2v-DeU"/>
+                            <constraint firstItem="ms2-mP-CNu" firstAttribute="top" secondItem="uXz-d4-hHu" secondAttribute="bottom" constant="70" id="ty1-U7-IDa"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="downloads" id="BUZ-SD-ldR"/>
+                    <tabBarItem key="tabBarItem" title="Send measurement" image="Toilet" id="BUZ-SD-ldR"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="llT-BN-0QK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="700" y="758"/>
         </scene>
-        <!--SettingsVC-->
+        <!--SettingsVC - Register device-->
         <scene sceneID="Skf-Cf-WkO">
             <objects>
                 <viewController id="TVY-uy-QyL" customClass="SettingsVC" sceneMemberID="viewController">
@@ -219,7 +221,7 @@
                         <viewControllerLayoutGuide type="bottom" id="AXZ-Bb-A5H"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Qzv-9N-Vrm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ALMANAC_FULL_LOGO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffm-fg-zQf">
@@ -228,15 +230,15 @@
                                     <constraint firstAttribute="height" constant="195" id="7ZP-5p-xGc"/>
                                 </constraints>
                             </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-zz-N7g">
-                                <rect key="frame" x="20" y="223" width="280" height="238"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-zz-N7g">
+                                <rect key="frame" x="20" y="223" width="280" height="161"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <string key="text">The ALMANAC SCP collects information from several sources. Once you have registered your device with the platform - you will also be contributing the GPS measurements from your iPhone to the project.  Note that even in the background, your movement will be tracked.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DB8-LJ-dOT">
-                                <rect key="frame" x="81" y="469" width="159" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DB8-LJ-dOT">
+                                <rect key="frame" x="81" y="392" width="159" height="30"/>
                                 <state key="normal" title="Register as new device">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -250,7 +252,6 @@
                             <constraint firstItem="Ffm-fg-zQf" firstAttribute="leading" secondItem="Qzv-9N-Vrm" secondAttribute="leading" constant="20" symbolic="YES" id="1fj-wB-k9e"/>
                             <constraint firstItem="Ffm-fg-zQf" firstAttribute="top" secondItem="Qzv-9N-Vrm" secondAttribute="top" constant="20" symbolic="YES" id="4YI-ux-lhy"/>
                             <constraint firstItem="fZ5-zz-N7g" firstAttribute="centerX" secondItem="DB8-LJ-dOT" secondAttribute="centerX" id="8PP-sJ-kmA"/>
-                            <constraint firstAttribute="bottom" secondItem="DB8-LJ-dOT" secondAttribute="bottom" constant="20" symbolic="YES" id="AxF-rv-jjd"/>
                             <constraint firstItem="Ffm-fg-zQf" firstAttribute="leading" secondItem="fZ5-zz-N7g" secondAttribute="leading" id="E5n-C4-7Iq"/>
                             <constraint firstItem="fZ5-zz-N7g" firstAttribute="top" secondItem="Ffm-fg-zQf" secondAttribute="bottom" constant="8" symbolic="YES" id="UUi-e1-c3s"/>
                             <constraint firstAttribute="trailing" secondItem="Ffm-fg-zQf" secondAttribute="trailing" constant="20" symbolic="YES" id="ZEj-Z6-wK3"/>
@@ -258,8 +259,7 @@
                             <constraint firstItem="fZ5-zz-N7g" firstAttribute="trailing" secondItem="Ffm-fg-zQf" secondAttribute="trailing" id="wZ5-AV-PRQ"/>
                         </constraints>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <tabBarItem key="tabBarItem" systemItem="history" id="uMM-vu-QvZ"/>
+                    <tabBarItem key="tabBarItem" title="Register device" image="About" id="uMM-vu-QvZ"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A9R-dG-g7i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -354,7 +354,10 @@
     </scenes>
     <resources>
         <image name="ALMANAC_FULL_LOGO" width="4949" height="3470"/>
+        <image name="About" width="32" height="32"/>
         <image name="Icon-Water" width="164" height="164"/>
+        <image name="Research" width="32" height="32"/>
+        <image name="Toilet" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

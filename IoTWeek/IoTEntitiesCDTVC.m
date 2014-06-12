@@ -35,8 +35,17 @@
     UIBarButtonItem *removeRandom = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(removeRandomObject:)];
     UIBarButtonItem *uploadLocation = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(uploadLocation:)];
     
+    UIBarButtonItem *sortOrder = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(reverse:)];
+    
     self.navigationItem.rightBarButtonItems = @[uploadLocation, removeRandom];
+    
+    self.navigationItem.leftBarButtonItems = @[sortOrder];
     self.debug = YES;
+}
+
+- (void)reverse:(id)sender
+{
+    
 }
 
 - (void)removeRandomObject:(id)sender
@@ -53,8 +62,6 @@
         int r = arc4random() % [matches count];
         [self.managedObjectContext deleteObject:[matches objectAtIndex:r]];
     }
-    
-    
 }
 
 - (void)uploadLocation:(id)sender
@@ -71,7 +78,7 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"IoTEntity"];
     request.predicate = nil;
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"cnName"
-                                                              ascending:YES
+                                                              ascending:NO
                                                                selector:@selector(localizedStandardCompare:)]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
@@ -88,8 +95,11 @@
     
     IoTEntity *iotEntity = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if (iotEntity.cnName != nil )
+    if ( iotEntity.cnName != nil && ![iotEntity.cnName isEqualToString:@""])
         cell.textLabel.text = iotEntity.cnName;
+    else
+        cell.textLabel.text = @"Unnamed resource";
+    
     cell.detailTextLabel.text = [NSString stringWithFormat:@"Properties: %d", (int)[iotEntity.cnProperty count]];
     
     return cell;
