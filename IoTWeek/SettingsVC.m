@@ -23,7 +23,8 @@
 
 - (IBAction)registerDevice:(UIButton *)sender {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate.locationManager requestAlwaysAuthorization]; // ONLY IOS8!!!! But important there
+    if ([appDelegate.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)])
+        [appDelegate.locationManager requestAlwaysAuthorization]; // ONLY IOS8!!!! But important there
     
     NSUUID *deviceId = [UIDevice currentDevice].identifierForVendor;
     NSString *locationProperty = [NSString stringWithFormat:@"%@%@", [deviceId UUIDString], @":location"];
