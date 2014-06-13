@@ -81,8 +81,8 @@
 		$(hideButton).removeClass("offset4");
 		var chartDiv = document.getElementById(devId);
 		
-//		$(chartDiv).empty();
-		$('#'+devId).highcharts().destroy();
+		$(chartDiv).empty();
+//		$('#'+devId).highcharts().destroy();
 // 		for(var i=0;i<children.length;i++){
 // 			$(children[i]).destroy();
 // 		}
@@ -107,22 +107,24 @@
 
 	<div class="container">
 		<div class="main content clearfix">
+		<div class="grid fluid">
 			<div class="row span6 offset3">
-				<div class="tile quadro">
-					<div class="tile-content image">
+<!-- 				<div class="tile quadro bg-transparent"> -->
+<!-- 					<div class="tile-content image"> -->
 <!-- 						<div class="image-container"> -->
 <!-- 							<div class="image-container shadow">  -->
-								<img src='<c:url value="/resources/images/logoalmanac.jpg" />' />
+								<img class="span12" src='<c:url value="/resources/images/logoalmanac.jpg" />' />
 <!-- 							</div> -->
 <!-- 						</div> -->
-					</div>
+<!-- 					</div> -->
 					<!-- <div class="overlay-fluid">
 						Almanac
 					</div> -->
-				</div>
+<!-- 				</div> -->
 			</div>
 			<div class="row  span6 offset3">
 				<h2 class="fg-darkCyan">Smart City Resources Adptation Layer</h2>
+			</div>
 			</div>
 			<div class="tile-area no-padding clearfix">
 				<!-- This is for each device list -->
@@ -199,7 +201,7 @@
 				</div>
 			</div>
 			<div class="span 10 padding20 text-center ">
-				<table class="table default">
+				<table class="table striped">
 					<c:if test="${not empty devlist}">
 						<tr>
 							<th>Device Type</th>
@@ -221,7 +223,7 @@
 
 			<div class="span 10 padding20 text-center" id="log-table">
 
-				<table class="table default">
+				<table class="table striped">
 					<c:if test="${not empty loglist}">
 						<tr>
 							<th>Time</th>

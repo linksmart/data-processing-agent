@@ -204,7 +204,9 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 						}
 					}
 					//tosend.toXml();
-					//this.cnetRestClient.pushNewValues(tosend);
+					log.info("Sending data to the cloud...");
+					this.cnetRestClient.pushNewValues(tosend);
+					log.info("Data sent to the cloud.");
 				}
 			}
 		}
@@ -350,8 +352,10 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 			}
 							
 			//iotEntity.toXml();
-//			IoTEntity deviceAbout = this.cnetRestClient.pushNewIoTEntity(iotEntity);
-			IoTEntity deviceAbout = new IoTEntity();
+			log.info("Sending data to the cloud...");
+			IoTEntity deviceAbout = this.cnetRestClient.pushNewIoTEntity(iotEntity);
+			log.info("Data sent to the cloud.");
+			//IoTEntity deviceAbout = new IoTEntity();
 			this.iotEntities.put(newDevice.getPwalId(), deviceAbout);
 			
 			deviceAbout.toXml();
