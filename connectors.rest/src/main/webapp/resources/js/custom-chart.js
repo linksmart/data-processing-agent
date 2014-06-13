@@ -314,9 +314,22 @@ function load_distsensor(divId) {
 function load_vehiclesensor( devID) {
 	var id1;
 	clearInterval(id1);
-	var url1 = (contextPath + '/vehiclespeed/'+devID );
+	var url1 = (contextPath + '/smartsantander/'+devID );
 	var c;
-
+	var rootDiv=document.getElementById("tile-"+devID);
+	$(rootDiv).removeClass("double").addClass("quadro quadro-vertical");
+	
+	var chartDiv=document.getElementById(devID);
+	chartDiv.style.visibility = "visible";
+	
+	var showButton=document.getElementById("showchart-"+devID);
+	var hideButton=document.getElementById("hidechart-"+devID);
+	
+	showButton.style.visibility="hidden";
+	hideButton.style.visibility="visible";
+	
+	$(hideButton).addClass("offset4");
+	
 	function updateSensor() {
 		$.getJSON(url1, function(data) {
 			if (c.series.length == 0) {
@@ -394,8 +407,119 @@ function load_vehiclesensor( devID) {
 				series : []
 		};
 
-		c = new Highcharts.Chart(options);
+		c = new Highcharts.Chart(options);	
+	});
 
+}
+
+function load_vehiclecounter( devID) {
+	var id1;
+	clearInterval(id1);
+	var url1 = (contextPath + '/smartsantander/'+devID );
+	var c;
+	var rootDiv=document.getElementById("tile-"+devID);
+	$(rootDiv).removeClass("double").addClass("quadro quadro-vertical");
+	
+	var chartDiv=document.getElementById(devID);
+	chartDiv.style.visibility = "visible";
+	
+	var showButton=document.getElementById("showchart-"+devID);
+	var hideButton=document.getElementById("hidechart-"+devID);
+	
+	showButton.style.visibility="hidden";
+	hideButton.style.visibility="visible";
+	
+	$(hideButton).addClass("offset4");
+	
+	function updateSensor() {
+		$.getJSON(url1, function(data) {
+			if (c.series.length == 0) {
+
+				for (var i = 0; i < data.series.length; i++) {
+
+					c.addSeries({
+						"name" : data.series[i].name,
+						"data" : []
+					});
+
+				}
+			}
+
+			var series = c.series[0];
+			var shift = series.data.length > 5;
+
+			for (var j = 0; j < c.series.length; j++) {
+
+				if (c.series[j].name == data.series[j].name) {
+					c.series[j].addPoint(data.series[j].data, true, shift);
+				}
+			}
+		});
+	}
+
+	Highcharts.setOptions({
+		global : {
+			useUTC : false
+		}
+	});
+
+	$.getJSON(url1, function(data) {
+		var options = {
+				chart : {
+					renderTo : devID,
+					type : 'spline',
+					animation : Highcharts.svg,
+					zoomType : 'x',
+					events : {
+						load : function() {
+							updateSensor();
+							id1 = setInterval(updateSensor, 3000);
+						}
+					}
+
+				},
+
+				title : {
+					text : data.title
+				},
+				xAxis : {
+					title : {
+						text : data.xAxisTitle
+					},
+					type : 'datetime',
+					labels : {
+						formatter : function() {
+							return new Date(this.value).toLocaleTimeString();
+						}
+
+					}
+				},
+				yAxis : [{
+					title : {
+						text : "#"
+					},
+					labels : {
+						formatter : function() {
+							return this.value + '';
+						}
+					},
+					opposite: true
+				},
+				{
+					title: {
+						text: "%"
+					},
+					labels : {
+						formatter : function() {
+							return this.value + '';
+						}
+					}
+				}],
+
+				series : []
+		};
+
+		c = new Highcharts.Chart(options);	
 	});
 
 }

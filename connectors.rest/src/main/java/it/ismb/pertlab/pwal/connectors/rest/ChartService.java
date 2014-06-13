@@ -5,6 +5,7 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
 import it.ismb.pertlab.pwal.api.devices.model.DistanceSensor;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.highcharts.bean.DataBean;
@@ -90,33 +91,73 @@ public class ChartService {
 	public DataBean getSantanderSplineChartData(String devID){
 		List<SeriesBean> list = new ArrayList<SeriesBean>();
 		Collection<Device> devList= pwal.getDevicesList();
-		Double avgspeed, median;
+	
 		String devtype = null;
-		long[] categories=null;
+		long[] categories= new long[] {System.currentTimeMillis()};
 		System.out.println("received: " + devID);
 		synchronized (pwal.getDevicesList()) {
-
-
 			for(Device d:devList){
-				if(DeviceType.VEHICLE_SPEED.equals(d.getType()) && d.getId().equals(devID)){
+				switch (d.getType()) {
+				case DeviceType.VEHICLE_SPEED:
+					if(d.getId().equals(devID))
+					{
+						VehicleSpeed v = (VehicleSpeed) d;
+						devtype = v.getType();
+		
+						Double avgspeed = v.getAverageSpeed(); 
+						Double median = v.getMedianSpeed();
+						
+						if(v.getAverageSpeed() == -1){
+							avgspeed =(double) 0;
 
-					VehicleSpeed v = (VehicleSpeed) d;
-					devtype = v.getType();
-	
-					if(v.getAverageSpeed() == -1){
-						avgspeed =(double) 0;
+						} else avgspeed = v.getAverageSpeed();
+						
+						if(v.getMedianSpeed() == -1){
+							median =(double) 0;
 
-					} else avgspeed = v.getAverageSpeed();
-					
-					if(v.getMedianSpeed() == -1){
-						median =(double) 0;
+						} else median = v.getAverageSpeed();
 
-					} else median = v.getAverageSpeed();
-
-					list.add(new SeriesBean("Average Speed",  new double [] {System.currentTimeMillis(),avgspeed}));
-					list.add(new SeriesBean("Median Speed",  new double [] {System.currentTimeMillis(),median}));
-					categories= new long[] {System.currentTimeMillis()};
+						list.add(new SeriesBean("Average Speed",  new double [] {System.currentTimeMillis(),avgspeed}));
+						list.add(new SeriesBean("Median Speed",  new double [] {System.currentTimeMillis(),median}));
+					}
+					break;
+				case DeviceType.VEHICLE_COUNTER:
+					if(d.getId().equals(devID))
+					{
+						VehicleCounter c = (VehicleCounter)d;
+						devtype = c.getType();
+						
+						Double count = c.getCount();
+						Double occupancy = c.getOccupancy();
+						if(count == -1)
+							count = (double)0;
+						if(occupancy == -1)
+							occupancy = (double) 0;
+						list.add(new SeriesBean("Number of vehicle",  new double [] {System.currentTimeMillis(),count}));
+						list.add(new SeriesBean("Occupancy",  new double [] {System.currentTimeMillis(),occupancy}));
+					}
+				default:
+					break;
 				}
+//				if(DeviceType.VEHICLE_SPEED.equals(d.getType()) && d.getId().equals(devID)){
+//
+//					VehicleSpeed v = (VehicleSpeed) d;
+//					devtype = v.getType();
+//	
+//					if(v.getAverageSpeed() == -1){
+//						avgspeed =(double) 0;
+//
+//					} else avgspeed = v.getAverageSpeed();
+//					
+//					if(v.getMedianSpeed() == -1){
+//						median =(double) 0;
+//
+//					} else median = v.getAverageSpeed();
+//
+//					list.add(new SeriesBean("Average Speed",  new double [] {System.currentTimeMillis(),avgspeed}));
+//					list.add(new SeriesBean("Median Speed",  new double [] {System.currentTimeMillis(),median}));
+//					categories= new long[] {System.currentTimeMillis()};
+//				}
 			}
 		}
 

@@ -28,7 +28,7 @@ public class HighChartsController {
         return chartService.getTemperaturelineChartData();
     }
 
-    @RequestMapping(value="/vehiclespeed/{deviceId}", method=RequestMethod.GET)
+    @RequestMapping(value="/smartsantander/{deviceId}", method=RequestMethod.GET)
     @ResponseBody
     public DataBean showAverageSpeed(@PathVariable String deviceId) {
         return chartService.getSantanderSplineChartData(deviceId);
