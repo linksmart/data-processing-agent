@@ -54,7 +54,7 @@ goog.inherits(scenes.Virtualization, lime.Scene);
 
 scenes.Virtualization.prototype.loadData = function() {
     var localThis = this;
-    goog.net.XhrIo.send(almanac.DATA_BASE_URL + "/IoTEntities.json", function(e) {
+    goog.net.XhrIo.send(almanac.API_ENTITIES, function(e) {
         var xhr = e.target;
         var obj = xhr.getResponseJson();
         var arr = obj.IoTEntity
@@ -74,5 +74,7 @@ scenes.Virtualization.prototype.loadData = function() {
             row.setPosition(0, i*sprites.Row.DEFAULT_HEIGHT);
             localThis.scroll.appendChild(row);
         };
+    }, "GET", null, {
+        Accept: "application:json"
     });
 };

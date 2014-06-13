@@ -5,6 +5,9 @@ CACHE MANIFEST
 # Updated on: 2014-06-13 15:35:09
 
 app.js
+domready.js
+moment.min.js
+fixtures/IoTEntities.json
 assets/startup.jpg
 assets/startup_ipad.jpg
 assets/icon.png

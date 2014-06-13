@@ -12,7 +12,7 @@ goog.require('scenes.Virtualization');
 goog.require('scenes.Resources');
 
 
-almanac.DATA_BASE_URL = 'fixtures';
+almanac.API_ENTITIES = 'fixtures/IoTEntities.json'; //http://energyportal.cnet.se/StorageManagerMdb20140603/REST/IoTEntities';
 almanac.SCREEN_WIDTH = 1024 * 1;
 almanac.SCREEN_HEIGHT = 768 * 1;
 almanac.CURRENT_SCENE = '';
