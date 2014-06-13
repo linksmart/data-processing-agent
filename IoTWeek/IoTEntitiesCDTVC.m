@@ -35,7 +35,7 @@
     UIBarButtonItem *removeRandom = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(removeRandomObject:)];
     UIBarButtonItem *uploadLocation = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(uploadLocation:)];
     
-    UIBarButtonItem *sortOrder = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(reverse:)];
+    UIBarButtonItem *sortOrder = [[UIBarButtonItem alloc] initWithTitle:@"Sort" style:UIBarButtonItemStylePlain target:self action:@selector(reverse:)];
     
     self.navigationItem.rightBarButtonItems = @[uploadLocation, removeRandom];
     
@@ -45,7 +45,11 @@
 
 - (void)reverse:(id)sender
 {
-    
+    NSSortDescriptor *sortDescriptor = [self.fetchedResultsController.fetchRequest.sortDescriptors firstObject];
+    self.fetchedResultsController.fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"cnName"
+                                                                                                 ascending:!sortDescriptor.ascending
+                                                                                                  selector:@selector(localizedStandardCompare:)]];
+    [self performFetch];
 }
 
 - (void)removeRandomObject:(id)sender

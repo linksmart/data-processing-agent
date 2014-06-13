@@ -10,15 +10,15 @@
             <objects>
                 <tableViewController id="Sfn-ie-IBl" customClass="IoTEntitiesCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="xLc-Dz-pTw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTEntity Cell" textLabel="Erj-6S-ekY" detailTextLabel="kBa-hG-m40" style="IBUITableViewCellStyleSubtitle" id="wQL-fj-vH6">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTEntity Cell" textLabel="Erj-6S-ekY" detailTextLabel="kBa-hG-m40" style="IBUITableViewCellStyleSubtitle" id="wQL-fj-vH6">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wQL-fj-vH6" id="B1x-nS-txI">
-                                    <rect key="frame" x="0.0" y="0.0" width="253" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Erj-6S-ekY">
@@ -58,15 +58,15 @@
             <objects>
                 <tableViewController id="mIO-6r-RGg" customClass="PropertiesCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="thD-sG-vG5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Property Cell" textLabel="Pnx-QI-Pzk" detailTextLabel="OMx-El-aeR" style="IBUITableViewCellStyleSubtitle" id="Jni-c9-JER">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Property Cell" textLabel="Pnx-QI-Pzk" detailTextLabel="OMx-El-aeR" style="IBUITableViewCellStyleSubtitle" id="Jni-c9-JER">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jni-c9-JER" id="lMO-Gw-q1E">
-                                    <rect key="frame" x="0.0" y="0.0" width="253" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Property name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Pnx-QI-Pzk">
@@ -106,7 +106,7 @@
             <objects>
                 <tableViewController id="iij-xD-dcK" customClass="IoTStateObservationCDTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="3a9-El-td4">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -177,7 +177,7 @@
                         <viewControllerLayoutGuide type="bottom" id="hlf-K0-3Nf"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="5o7-O5-Yeo">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ms2-mP-CNu">
@@ -190,7 +190,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Pressing this botton consumes 6l of water. This is the same amount of water used to flush the toilet." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxZ-Ib-icn">
-                                <rect key="frame" x="40" y="262" width="240" height="40"/>
+                                <rect key="frame" x="40" y="262" width="240" height="128"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -222,7 +222,7 @@
                         <viewControllerLayoutGuide type="bottom" id="AXZ-Bb-A5H"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Qzv-9N-Vrm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ALMANAC_FULL_LOGO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffm-fg-zQf">
@@ -232,14 +232,17 @@
                                 </constraints>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-zz-N7g">
-                                <rect key="frame" x="20" y="223" width="280" height="161"/>
+                                <rect key="frame" x="20" y="223" width="280" height="156"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="156" id="gaq-A9-Qx0"/>
+                                </constraints>
                                 <string key="text">The ALMANAC SCP collects information from several sources. Once you have registered your device with the platform - you will also be contributing the GPS measurements from your iPhone to the project.  Note that even in the background, your movement will be tracked.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DB8-LJ-dOT">
-                                <rect key="frame" x="81" y="392" width="159" height="30"/>
+                                <rect key="frame" x="81" y="387" width="159" height="30"/>
                                 <state key="normal" title="Register as new device">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -252,13 +255,12 @@
                         <constraints>
                             <constraint firstItem="Ffm-fg-zQf" firstAttribute="leading" secondItem="Qzv-9N-Vrm" secondAttribute="leading" constant="20" symbolic="YES" id="1fj-wB-k9e"/>
                             <constraint firstItem="Ffm-fg-zQf" firstAttribute="top" secondItem="Qzv-9N-Vrm" secondAttribute="top" constant="20" symbolic="YES" id="4YI-ux-lhy"/>
-                            <constraint firstItem="Ffm-fg-zQf" firstAttribute="leading" secondItem="fZ5-zz-N7g" secondAttribute="leading" id="E5n-C4-7Iq"/>
-                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="top" secondItem="Ffm-fg-zQf" secondAttribute="bottom" constant="8" symbolic="YES" id="UUi-e1-c3s"/>
+                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="leading" secondItem="Ffm-fg-zQf" secondAttribute="leading" id="G8z-I8-t3L"/>
                             <constraint firstAttribute="trailing" secondItem="Ffm-fg-zQf" secondAttribute="trailing" constant="20" symbolic="YES" id="ZEj-Z6-wK3"/>
-                            <constraint firstItem="DB8-LJ-dOT" firstAttribute="top" secondItem="fZ5-zz-N7g" secondAttribute="bottom" constant="8" symbolic="YES" id="ZVI-bw-c31"/>
-                            <constraint firstItem="DB8-LJ-dOT" firstAttribute="centerX" secondItem="fZ5-zz-N7g" secondAttribute="centerX" id="h4p-18-E1B"/>
-                            <constraint firstItem="AXZ-Bb-A5H" firstAttribute="top" secondItem="DB8-LJ-dOT" secondAttribute="bottom" constant="9" id="nV0-J6-L8x"/>
-                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="trailing" secondItem="Ffm-fg-zQf" secondAttribute="trailing" id="wZ5-AV-PRQ"/>
+                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="trailing" secondItem="Ffm-fg-zQf" secondAttribute="trailing" id="pUf-Me-AqZ"/>
+                            <constraint firstItem="DB8-LJ-dOT" firstAttribute="top" secondItem="fZ5-zz-N7g" secondAttribute="bottom" constant="8" symbolic="YES" id="rgZ-la-Hkr"/>
+                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="top" secondItem="Ffm-fg-zQf" secondAttribute="bottom" constant="8" symbolic="YES" id="u3d-zy-P3U"/>
+                            <constraint firstItem="fZ5-zz-N7g" firstAttribute="centerX" secondItem="DB8-LJ-dOT" secondAttribute="centerX" id="xaA-WA-24H"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Register device" image="About" id="uMM-vu-QvZ"/>
@@ -296,11 +298,11 @@
                         <viewControllerLayoutGuide type="bottom" id="TO0-m8-1y4"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gA4-lJ-9Jz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oxt-t3-3ht">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -329,11 +331,11 @@
                         <viewControllerLayoutGuide type="bottom" id="OEi-AW-GYc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jfL-iy-T2m">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4dR-aB-e0p">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -364,6 +366,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>
