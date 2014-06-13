@@ -1,0 +1,32 @@
+CACHE MANIFEST
+
+# If you use more files you need to manually list them here.
+# Don't remove next line
+# Updated on: 2014-06-13 15:35:09
+
+app.js
+assets/startup.jpg
+assets/startup_ipad.jpg
+assets/icon.png
+assets/ArrowUp.png
+assets/Bg.jpg
+assets/Comp-AdaptResrc-Active.png
+assets/Comp-AdaptResrc-Passive.png
+assets/Comp-DataMngm-Active.png
+assets/Comp-DataMngm-Passive.png
+assets/Comp-Virt-Active.png
+assets/Comp-Virt-Passive.png
+assets/Icon-London.png
+assets/Icon-Santander.png
+assets/Icon-Services.png
+assets/Icon-Waste.png
+assets/Icon-Water.png
+assets/Logo-Almanac.png
+assets/Map-bg.png
+assets/Ribbon-OverviewBottom.png
+assets/icon.png
+assets/startup.jpg
+assets/startup_ipad.jpg
+
+NETWORK:
+*

@@ -15,12 +15,14 @@ goog.require('sprites.Menu');
 scenes.Resources = function() {
     goog.base(this);
 
+    /*
     var background = new lime.Sprite();
     background.setSize(almanac.SCREEN_WIDTH, almanac.SCREEN_HEIGHT)
         .setFill('assets/Bg.jpg')
         .setPosition(almanac.SCREEN_WIDTH / 2, almanac.SCREEN_HEIGHT / 2)
         .setAnchorPoint(0.5, 0.5);
     this.appendChild(background);
+    */
 
     var header = new sprites.Header();
     header.setPosition(almanac.SCREEN_WIDTH / 2.0, 60);
@@ -66,6 +68,7 @@ scenes.Resources = function() {
     this.appendChild(santanderIcon);
 
     var londonMapContainer = new lime.Sprite();
+    londonMapContainer.id = "londonMapContainer";
     londonMapContainer.setAnchorPoint(0.5, 0.5)
         .setFill('assets/Map-bg.png')
         .setSize(330, 295)
@@ -78,6 +81,24 @@ scenes.Resources = function() {
         .setSize(330, 295)
         .setPosition(815, 545);
     this.appendChild(santanderMapContainer);
+
+    var londonMap = document.createElement('div');
+    londonMap.id = 'londonMap';
+    londonMap.className = 'map';
+    londonMapContainer.appendChild(londonMap);
+
+    /*
+    var map = L.map('londonMap').setView([51.505, -0.09], 13);
+    L.tileLayer('http://{s}.tiles.mapbox.com/v3/oleksandr.idl1bk7k/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18
+    }).addTo(map);
+
+    console.debug(document.getElementById('londonMap'));
+    document.getElementById('londonMap').style['display'] = 'inline';
+    londonMapContainer.appendChild(document.getElementById('londonMap'));
+    console.debug(document.getElementById('londonMap'));
+    */
 }
 
 goog.inherits(scenes.Resources, lime.Scene);

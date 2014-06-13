@@ -4,15 +4,7 @@ goog.provide('almanac');
 
 //get requirements
 goog.require('lime.Director');
-goog.require('lime.Scene');
-goog.require('lime.Layer');
-goog.require('lime.Circle');
-goog.require('lime.Label');
-goog.require('lime.transitions.Dissolve');
-goog.require('lime.animation.Spawn');
-goog.require('lime.animation.FadeTo');
-goog.require('lime.animation.ScaleTo');
-goog.require('lime.animation.MoveTo');
+goog.require('lime.Renderer.DOM');
 
 goog.require('scenes.Home');
 goog.require('scenes.Data');
@@ -20,6 +12,7 @@ goog.require('scenes.Virtualization');
 goog.require('scenes.Resources');
 
 
+almanac.DATA_BASE_URL = 'fixtures';
 almanac.SCREEN_WIDTH = 1024 * 1;
 almanac.SCREEN_HEIGHT = 768 * 1;
 almanac.CURRENT_SCENE = '';
@@ -27,6 +20,7 @@ almanac.CURRENT_SCENE = '';
 // entrypoint
 almanac.start = function() {
     almanac.director = new lime.Director(document.body, almanac.SCREEN_WIDTH, almanac.SCREEN_HEIGHT);
+    almanac.director.setRenderer(lime.Renderer.DOM);
 
     // Prepare for mobile device
     almanac.director.makeMobileWebAppCapable();
@@ -66,6 +60,7 @@ almanac.showVirtualization = function() {
     };
     almanac.director.replaceScene(almanac.virtualizationScene);
     almanac.CURRENT_SCENE = 'virtualization'
+    almanac.virtualizationScene.loadData();
 }
 
 almanac.showResources = function() {

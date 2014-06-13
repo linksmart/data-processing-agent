@@ -2,16 +2,44 @@
 
 <html>
 <head>
-	<title>almanac</title>
+	<title>ALMANAC Demo Application</title>
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
   <style type="text/css" media="screen">
   body {
-    background: #000000;
+    background-color: transparent;
+    background-image: url('assets/Bg.jpg')
   }
+  .map { width: 320px; height:285px; display:none; };
   </style>
+  <script type="text/javascript" src="leaflet/leaflet.js"></script>
 	<script type="text/javascript" src="../closure/closure/goog/base.js"></script>
 	<script type="text/javascript" src="almanac.js"></script>
+  <script type="text/javascript" src="domready.js"></script>
+  <script type="text/javascript" src="d3js/d3.v3.min.js"></script>
+  <script type="text/javascript" src="moment.min.js"></script>
+  <script type="text/javascript">
+    //simple use case
+    DOM.ready( function(){
+      console.debug(document.getElementById('londonMap'));
+      /*
+      var map = L.map('londonMap').setView([51.505, -0.09], 13);
+      L.tileLayer('http://{s}.tiles.mapbox.com/v3/oleksandr.idl1bk7k/{z}/{x}/{y}.png', {
+          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          maxZoom: 18
+      }).addTo(map);
+      */
+    } );
+
+    function type(d) {
+      d.frequency = +d.frequency;
+      return d;
+    }
+  </script>
 </head>
 
-<body onload="almanac.start()"></body>
+<body onload="almanac.start()">
+<div id="londonMap1" class="map"></div>
+<div id="santanderMap1" class="map"></div>
+</body>
 
 </html>

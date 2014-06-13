@@ -1,0 +1,993 @@
+{
+  "IoTEntity" : [
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:1",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:43.000Z",
+              "ResultTime" : "2014-06-13T00:00:45.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:43.000Z",
+              "ResultTime" : "2014-06-13T00:00:45.000Z",
+              "Value" : "on"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "9",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:2",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:39.000Z",
+              "ResultTime" : "2014-06-13T00:00:43.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:39.000Z",
+              "ResultTime" : "2014-06-13T00:00:43.000Z",
+              "Value" : "on"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "6",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:3",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:37.000Z",
+              "ResultTime" : "2014-06-13T00:00:39.000Z",
+              "Value" : "3"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:37.000Z",
+              "ResultTime" : "2014-06-13T00:00:39.000Z",
+              "Value" : "on"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "2",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:4",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:39.000Z",
+              "ResultTime" : "2014-06-13T00:00:42.000Z",
+              "Value" : "10"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:39.000Z",
+              "ResultTime" : "2014-06-13T00:00:42.000Z",
+              "Value" : "on"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "5",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:5",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:39.000Z",
+              "ResultTime" : "2014-06-13T00:00:42.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:39.000Z",
+              "ResultTime" : "2014-06-13T00:00:42.000Z",
+              "Value" : "on"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "4",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:6",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:42.000Z",
+              "ResultTime" : "2014-06-13T00:00:44.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:42.000Z",
+              "ResultTime" : "2014-06-13T00:00:44.000Z",
+              "Value" : "on"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "8",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:7",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:36.000Z",
+              "ResultTime" : "2014-06-13T00:00:39.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:36.000Z",
+              "ResultTime" : "2014-06-13T00:00:39.000Z",
+              "Value" : "unknown"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "1",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:8",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:39.000Z",
+              "ResultTime" : "2014-06-13T00:00:42.000Z",
+              "Value" : "57"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:39.000Z",
+              "ResultTime" : "2014-06-13T00:00:42.000Z",
+              "Value" : "unknown"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "3",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "0C486748-CF2A-450C-BCF6-02AC1CB39A2D:9",
+      "TypeOf" : [
+        "inertia:PowerSwitch"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "PowerConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumption"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:42.000Z",
+              "ResultTime" : "2014-06-13T00:00:45.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "PowerConsumption",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : "inertia:UoM"
+          }
+        },
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "DeviceStatus",
+          "TypeOf" : [
+            "inertia:DeviceStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:00:42.000Z",
+              "ResultTime" : "2014-06-13T00:00:45.000Z",
+              "Value" : "on"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "DeviceStatus",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "7",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+      "About" : "27ce7a40dc7e11e39c1a0800200c9a66",
+      "TypeOf" : [
+        "almanac:DummySensorType"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
+          "About" : "425438e0dc7f11e39c1a0800200c9a66",
+          "TypeOf" : [
+            "almanac:dummy"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [],
+          "DataType" : "xs:int",
+          "Name" : "PROPERTY YAY",
+          "Description" : "Some property for my first device",
+          "UnitOfMeasurement" : {
+            "TypeId" : "Percent",
+            "property" : ""
+          }
+        }
+      ],
+      "Name" : "My first device",
+      "Description" : "Some test description"
+    },
+    {
+      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+      "About" : "90d17970e8c711e3ac100800200c9a66",
+      "TypeOf" : [
+        "almanac:smartphone"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
+          "About" : "cddf5b70e8c711e3ac100800200c9a66",
+          "TypeOf" : [
+            "almanac:location",
+            "almanac:flow"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-04T11:41:55.000Z",
+              "ResultTime" : "2014-06-04T11:41:57.000Z",
+              "Value" : "12.592068781216783 55.681550283065356"
+            }
+          ],
+          "DataType" : "xs:geojson",
+          "Name" : "Location of phone",
+          "Description" : "Location of the iPhone",
+          "UnitOfMeasurement" : {
+            "TypeId" : "Location",
+            "property" : ""
+          }
+        },
+        {
+          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
+          "About" : "0089fea0ec9611e3ac100800200c9a66",
+          "TypeOf" : [
+            "almanac:flow",
+            "almanac:location"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [],
+          "DataType" : "xs:double",
+          "Name" : "Lavatory",
+          "Description" : "Water consuming loo",
+          "UnitOfMeasurement" : {
+            "TypeId" : "Consumption m^3/s",
+            "property" : ""
+          }
+        }
+      ],
+      "Name" : "Thomas' iPhone",
+      "Description" : "A superclever smartphone"
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "D77EC6B0-F039-4734-925E-0A90CE7D1B5B:0005E8FA:Brightness",
+      "TypeOf" : [
+        "inertia:BrightnessSensor"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "0005E8FA:Brigthness",
+          "TypeOf" : [
+            ""
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T01:18:11.152Z",
+              "ResultTime" : "2014-06-13T01:18:11.544Z",
+              "Value" : "4"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "0005E8FA:Brigthness",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "BrightnessDevice",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "D77EC6B0-F039-4734-925E-0A90CE7D1B5B:0005E8FA:Motion",
+      "TypeOf" : [
+        "inertia:MotionSensor"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "0005E8FA:MotionSensor",
+          "TypeOf" : [
+            ""
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T04:47:18.719Z",
+              "ResultTime" : "2014-06-13T04:47:18.977Z",
+              "Value" : "Yes"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "0005E8FA:MotionSensor",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "MotionSensorDevice",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "D77EC6B0-F039-4734-925E-0A90CE7D1B5B:00843454:CO2",
+      "TypeOf" : [
+        "inertia:CO2Sensor"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "00843454:CO2Sensor",
+          "TypeOf" : [
+            ""
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:07:00.440Z",
+              "ResultTime" : "2014-06-13T00:07:00.784Z",
+              "Value" : "430"
+            }
+          ],
+          "DataType" : "xs:int",
+          "Name" : "00843454:CO2Sensor",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "CO2SensorDevice",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "D77EC6B0-F039-4734-925E-0A90CE7D1B5B:00843454:Thermometer",
+      "TypeOf" : [
+        "inertia:Thermometer"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "00843454:Thermometer",
+          "TypeOf" : [
+            ""
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T00:07:01.093Z",
+              "ResultTime" : "2014-06-13T00:07:01.330Z",
+              "Value" : "23,2"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "00843454:Thermometer",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "ThermometerDevice",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "D77EC6B0-F039-4734-925E-0A90CE7D1B5B:0181FDED",
+      "TypeOf" : [
+        "inertia:ContactSensor"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "0181FDED",
+          "TypeOf" : [
+            ""
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T04:47:10.099Z",
+              "ResultTime" : "2014-06-13T04:47:10.439Z",
+              "Value" : "OPEN"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "0181FDED",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "DoorDevice",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft",
+      "About" : "D77EC6B0-F039-4734-925E-0A90CE7D1B5B:99990001",
+      "TypeOf" : [
+        "inertia:AirQualitySensor"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertia:http://ns.inertia.eu/ontologies  linksmart:http://linksmart.org/Ontologies/1.0#Draft xs:XMLSchema",
+          "About" : "99990001",
+          "TypeOf" : [
+            ""
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-06-13T08:18:41.078Z",
+              "ResultTime" : "2014-06-13T08:18:41.080Z",
+              "Value" : "Moderate"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "99990001",
+          "Description" : null,
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "AirQualityDevice",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+      "About" : "FIllLevel:1",
+      "TypeOf" : [
+        "almanac:FillLevelSensor"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
+          "About" : "FillLevel",
+          "TypeOf" : [
+            "almanac:FillLevel"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-04-07T07:07:51.000Z",
+              "ResultTime" : "2014-04-07T07:08:25.000Z",
+              "Value" : "15"
+            }
+          ],
+          "DataType" : "xs:int",
+          "Name" : "FillLevel",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "Percent",
+            "property" : ""
+          }
+        }
+      ],
+      "Name" : "Test Fill Level Sensor",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+      "About" : "WaterFlow:1",
+      "TypeOf" : [
+        "almanac:WaterFlowSensor"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
+          "About" : "WaterFlow",
+          "TypeOf" : [
+            "almanac:WaterFlow"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-04-07T07:07:51.000Z",
+              "ResultTime" : "2014-04-07T07:08:25.000Z",
+              "Value" : "3"
+            }
+          ],
+          "DataType" : "xs:double",
+          "Name" : "WaterFlow",
+          "Description" : null,
+          "UnitOfMeasurement" : {
+            "TypeId" : "m3/s",
+            "property" : ""
+          }
+        }
+      ],
+      "Name" : "Test Water Flow Sensor",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+      "About" : "{06fc73d2-d6a5-11e3-afdc-1a514932ac01}",
+      "TypeOf" : [
+        "almanac:ImageSource"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema xmime:http://www.w3.org/2005/05/xmlmime",
+          "About" : "{06fc76ca-d6a5-11e3-afdc-1a514932ac01}",
+          "TypeOf" : [
+            "almanac:Image"
+          ],
+          "Meta" : {
+            "property" : "xmime:contentType",
+            "Value" : "image/gif"
+          },
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-05-13T12:33:51.000Z",
+              "ResultTime" : "2014-05-13T12:33:51.000Z",
+              "Value" : "R0lGODlhDwAPAKECAAAAzMzM///// wAAACwAAAAADwAPAAACIISPeQHsrZ5ModrLlN48CXF8m2iQ3YmmKqVlRtW4ML wWACH+H09wdGltaXplZCBieSBVbGVhZCBTbWFydFNhdmVyIQAAOw=="
+            }
+          ],
+          "DataType" : "xs:base64Binary",
+          "Name" : null,
+          "Description" : "Image data stream.",
+          "UnitOfMeasurement" : null
+        }
+      ],
+      "Name" : "Image data source, e.g. a camera",
+      "Description" : null
+    },
+    {
+      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+      "About" : "{4E462CD9-2E19-4B6F-B4DA-000F94ACF1EE}:CNetCoffeeBrewer",
+      "TypeOf" : [
+        "CoffeeBrewer"
+      ],
+      "Meta" : null,
+      "Properties" : [
+        {
+          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+          "About" : "UserFriendlyMessage",
+          "TypeOf" : [
+            "inertia:FreeText"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-05-28T09:30:50.000Z",
+              "ResultTime" : "2014-05-28T09:30:50.000Z",
+              "Value" : "No coffee brewing or being heated. There may be some left in the thermos."
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "UserFriendlyMessage",
+          "Description" : "",
+          "UnitOfMeasurement" : {
+            "TypeId" : null,
+            "property" : ""
+          }
+        },
+        {
+          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+          "About" : "CoffeBrewerOperationalStatus",
+          "TypeOf" : [
+            "inertia:CoffeMachineOperationalStatus"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-04-30T07:54:37.000Z",
+              "ResultTime" : "2014-04-30T07:54:37.000Z",
+              "Value" : "off"
+            }
+          ],
+          "DataType" : "xs:string",
+          "Name" : "CoffeBrewerOperationalStatus",
+          "Description" : "",
+          "UnitOfMeasurement" : {
+            "TypeId" : null,
+            "property" : ""
+          }
+        },
+        {
+          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+          "About" : "TurnedOnTime",
+          "TypeOf" : [
+            "inertia:DateTime"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-04-30T05:53:34.000Z",
+              "ResultTime" : "2014-04-30T05:53:34.000Z",
+              "Value" : "2014-04-30 07:53:34"
+            }
+          ],
+          "DataType" : "xs:datetime",
+          "Name" : "TurnedOnTime",
+          "Description" : "",
+          "UnitOfMeasurement" : {
+            "TypeId" : "Date",
+            "property" : ""
+          }
+        },
+        {
+          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+          "About" : "RemainingOperationalTime",
+          "TypeOf" : [
+            "inertia:Timespan"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-05-28T09:30:34.000Z",
+              "ResultTime" : "2014-05-28T09:30:34.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:decimal",
+          "Name" : "RemainingOperationalTime",
+          "Description" : "",
+          "UnitOfMeasurement" : {
+            "TypeId" : "s",
+            "property" : ""
+          }
+        },
+        {
+          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+          "About" : "PredictedEnergyConsumption",
+          "TypeOf" : [
+            "inertia:PowerConsumptionForecast"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-05-28T09:30:42.000Z",
+              "ResultTime" : "2014-05-28T09:30:42.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:decimal",
+          "Name" : "PredictedEnergyConsumption",
+          "Description" : "",
+          "UnitOfMeasurement" : {
+            "TypeId" : "Wh",
+            "property" : ""
+          }
+        },
+        {
+          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
+          "About" : "CurrentConsumption",
+          "TypeOf" : [
+            "inertia:Power"
+          ],
+          "Meta" : null,
+          "IoTStateObservation" : [
+            {
+              "PhenomenonTime" : "2014-04-30T07:54:43.000Z",
+              "ResultTime" : "2014-04-30T07:54:43.000Z",
+              "Value" : "0"
+            }
+          ],
+          "DataType" : "xs:decimal",
+          "Name" : "CurrentConsumption",
+          "Description" : "",
+          "UnitOfMeasurement" : {
+            "TypeId" : "W",
+            "property" : ""
+          }
+        }
+      ],
+      "Name" : "CoffeeBrewer_{4E462CD9-2E19-4B6F-B4DA-000F94ACF1EE}:CNetCoffeeBrewer",
+      "Description" : "Semantic Device"
+    }
+  ]
+}
