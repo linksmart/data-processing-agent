@@ -57,7 +57,7 @@
     NSLog(@"Locationmanager to Foreground");
     [self.locationManager stopMonitoringSignificantLocationChanges];
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    self.locationManager.distanceFilter = 5;
+    self.locationManager.distanceFilter = 10;
     [self.locationManager startUpdatingLocation];
 }
 
@@ -67,7 +67,6 @@
     // Need to stop regular updates first
     [self.locationManager stopUpdatingLocation];
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    self.locationManager.distanceFilter = 500;
     // Only monitor significant changes
     [self.locationManager startMonitoringSignificantLocationChanges];
 }
