@@ -50,7 +50,9 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 //		this.properties.load(this.input);
 //		log.info("Properties file loaded.");
 //		String portStrings = this.properties.getProperty("ports");
-		String portStrings = "COM8";
+		String portStrings = "COM13,COM6";
+//		String portStrings = "ttyACM0,ttyACM1";
+
 		log.debug("Ports in config file are: {}",portStrings);
 		String[] ports=portStrings.split(",");
 		idsPort=new HashMap<>();

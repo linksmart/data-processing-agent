@@ -4,6 +4,8 @@ import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
 import it.ismb.pertlab.pwal.api.devices.model.DistanceSensor;
+import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
+import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
@@ -135,6 +137,39 @@ public class ChartService {
 							occupancy = (double) 0;
 						list.add(new SeriesBean("Number of vehicle",  new double [] {System.currentTimeMillis(),count}));
 						list.add(new SeriesBean("Occupancy",  new double [] {System.currentTimeMillis(),occupancy}));
+					}
+				case DeviceType.FILL_LEVEL_SENSOR:
+					if(d.getId().equals(devID))
+					{
+						FillLevel fl = (FillLevel)d;
+						devtype = fl.getType();
+						
+						Integer level = fl.getLevel();
+						Integer depth = fl.getDepth();
+						
+						if(level == null)
+							level = 0;
+						if(depth == null)
+							depth = 0;
+						
+						list.add(new SeriesBean("Waste bin level",  new double [] {System.currentTimeMillis(),level}));
+						list.add(new SeriesBean("Waste bin depth",  new double [] {System.currentTimeMillis(),depth}));
+					}
+					break;
+				case DeviceType.FLOW_METER_SENSOR:
+					if(d.getId().equals(devID))
+					{
+						FlowMeter fm = (FlowMeter)d;
+						devtype = fm.getType();
+						
+						Integer flow = fm.getFlow();
+						if(flow != null)
+						{
+							String flowString = String.valueOf(flow);
+							Double flowDouble = Double.valueOf(flowString);
+							list.add(new SeriesBean("Flow",  new double [] {System.currentTimeMillis(),flowDouble / 10000}));
+						}
+						
 					}
 				default:
 					break;

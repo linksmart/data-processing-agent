@@ -63,7 +63,23 @@
 			console.log("it's a vehicle speed");
 			var element = document.getElementById("tile-"+devId);
 			$(element).addClass("bg-darkCyan");
-		}
+			break;
+		case "FillLevelSensor":
+			console.log("it's a vehicle counter");
+			var element = document.getElementById("tile-"+devId);
+			$(element).addClass("bg-lightGreen");
+			break;
+		case "FlowMeterSensor":
+			console.log("it's a vehicle counter");
+			var element = document.getElementById("tile-"+devId);
+			$(element).addClass("bg-lightBlue");
+			break;
+	case "WaterPump":
+		console.log("it's a vehicle counter");
+		var element = document.getElementById("tile-"+devId);
+		$(element).addClass("bg-darkBlue");
+		break;
+	}
 	}
 </script>
 
@@ -87,11 +103,54 @@
 // 			$(children[i]).destroy();
 // 		}
 		chartDiv.style.visibility = "hidden";
-		
-		
-
 	}
 </script>
+
+<script type="text/javascript">
+var speedPump = 0;
+
+function speedUp(devId)
+{
+	speedPump = speedPump + 30;
+	if(speedPump > 127)
+		speedPump = 127;
+	console.log("speedUp " + speedPump);
+
+	pushValue(speedPump, devId);
+}
+
+function speedDown(devId)
+{
+	speedPump = speedPump - 30;
+	if(speedPump <= 0)
+		speedPump = 0;
+	console.log("speedDown " + speedPump);
+
+	pushValue(speedPump, devId);
+}
+
+function pushValue(value, devId)
+{
+	var json = "{\"methodName\": \"setVelocity\",\"params\": [" + value + "]}";
+    $.ajax({
+        url: "/connectors.rest/devices/" + devId,
+        type: "POST",
+        data: json,
+        contentType: "application/json;",
+        dataType: "json",
+        success: function (result) {
+            switch (result) {
+                case true:
+                    console.log(result);
+                    break;
+                default:
+                	console.log(result);
+            }
+        }
+    });
+}
+</script>
+
 </head>
 
 <body class="metro">
@@ -142,7 +201,7 @@
 						<c:set var="dist" value="false" />
 						<c:forEach var="listValue" items="${devlist}">
 							<c:if
-								test="${listValue.type == 'Thermometer' || listValue.type == 'DistanceSensor' || listValue.type == 'Accelerometer'  || listValue.type == 'VehicleSpeed' || listValue.type == 'VehicleCounter' }">
+								test="${listValue.type == 'Thermometer' || listValue.type == 'DistanceSensor' || listValue.type == 'Accelerometer'  || listValue.type == 'VehicleSpeed' || listValue.type == 'VehicleCounter' || listValue.type == 'WaterPump' || listValue.type == 'FlowMeterSensor' || listValue.type == 'FillLevelSensor'}">
 								<div class="tile double" id="tile-${listValue.id }">
 <!-- 								<script type="text/javascript">colorTile('${listValue.id}','${listValue.type }')</script> -->
 									<div class="tile-content" >
@@ -186,6 +245,30 @@
 														<button id="showchart-${listValue.id }" class="small" onclick="load_vehiclecounter('${listValue.id}');">Show chart</button>
 													</div>
 												</c:if> 
+<%-- 												<c:if test="${listValue.type == 'WaterPump'}">  --%>
+<!-- 													<div class="grid fluid"> -->
+<!-- 														<div class="slider" data-role="slider" data-position="0" data-accuracy="0" data-colors="blue, red, yellow, green"> -->
+<!-- 														</div>	 -->
+<!-- 													</div> -->
+<%-- 												</c:if> --%>
+												<c:if test="${listValue.type == 'FlowMeterSensor'}"> 
+													<div class="grid fluid">
+														<button id="hidechart-${listValue.id }" class="small" onclick="resizeTile('${listValue.id}');" style="visibility: hidden">Close chart</button>
+														<button id="showchart-${listValue.id }" class="small" onclick="load_flowmeter('${listValue.id}');">Show chart</button>
+													</div>
+												</c:if>  
+												<c:if test="${listValue.type == 'FillLevelSensor'}"> 
+													<div class="grid fluid">
+														<button id="hidechart-${listValue.id }" class="small" onclick="resizeTile('${listValue.id}');" style="visibility: hidden">Close chart</button>
+														<button id="showchart-${listValue.id }" class="small" onclick="load_filllevel('${listValue.id}');">Show chart</button>
+													</div>
+												</c:if>  
+												<c:if test="${listValue.type == 'WaterPump'}"> 
+													<div class="grid fluid">
+														<button id="speeddown-${listValue.id }" class="small offset2" onclick="speedDown('${listValue.pwalId}');" >-</button>
+														<button id="speedup-${listValue.id }" class="small offset4" onclick="speedUp('${listValue.pwalId}');">+</button>
+													</div>
+												</c:if> 
 											</div>
 											<div class="row">
 												<div class="tile quadro triple-vertical bg-transparent" id="${listValue.id}"></div>
@@ -193,6 +276,7 @@
 										</div>									
 									</div>
 								</div>
+								
 								<script type="text/javascript">colorTile('${listValue.id}','${listValue.type }')</script> 
 							</c:if>
 	
@@ -241,6 +325,8 @@
 			</div>
 
 		</div>
+	</div>
+<!-- 	<div id="waterpump" onclick="changeWaterPumpSpeed(1000)" class="slider" data-animate="true" data-role="slider" data-position="0" data-accuracy="0" data-min="0" data-max="127" data-show-hint="true" data-colors="green"> -->
 	</div>
 </body>
 </html>

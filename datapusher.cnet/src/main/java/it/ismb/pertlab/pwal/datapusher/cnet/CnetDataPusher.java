@@ -40,7 +40,10 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 	private InputStream input = null;
 	
 //	private String serviceEndpoint = "http://192.168.0.115:8080/dm/IoTEntities";
-	private String serviceEndpoint = "http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities";
+//	private String serviceEndpoint = "http://energyportal.cnet.se/StorageManagerMdb/REST/IoTEntities";
+//	private String serviceEndpoint = "http://p2.alapetite.dk:8080/dm/IoTEntities";
+	private String serviceEndpoint = "http://192.168.1.31:8080/dm/IoTEntities";
+
 	
 	public CnetDataPusher(int seconds, Pwal pwal)  {
 		super(seconds, pwal);
@@ -101,17 +104,19 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								switch (p.getName()) {
 								case "Depth values":
 									String depth = String.valueOf(fl.getDepth());
-									if(depth == null)
+									if(depth != null && !depth.isEmpty() )
 									{
-										isToSend = false;
+										observation.setValue(depth);
 									}
-									observation.setValue(depth);
+									else
+										observation.setValue("0");
 									break;
 								case "Level values":
 									String level = String.valueOf(fl.getLevel());
-									if(level == null)
-										isToSend = false;
-									observation.setValue(level);
+									if(level != null && !level.isEmpty())
+										observation.setValue(level);
+									else
+										observation.setValue("0");
 									break;
 								default:
 									break;
@@ -120,9 +125,14 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 							case DeviceType.FLOW_METER_SENSOR:
 								FlowMeter fm = (FlowMeter)d;
 								String flow = String.valueOf(fm.getFlow());
-								if(flow == null)
-									isToSend = false;
-								observation.setValue(flow);
+								if(flow != null && !flow.isEmpty())
+								{
+									Double doubleflow=Double.parseDouble(flow);
+									doubleflow = doubleflow / 10000;
+									observation.setValue(flow);
+								}
+								else
+									observation.setValue("0");
 								break;
 							case DeviceType.VEHICLE_COUNTER:
 								VehicleCounter counter = (VehicleCounter)d;
@@ -130,20 +140,20 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								case "Occupancy":
 									String occupancy = String.valueOf(counter.getOccupancy());
 									log.debug("Occupancy case: {}", occupancy);
-									if(occupancy.equals("-1.0"))
+									if(!occupancy.equals("-1.0"))
 									{
-										isToSend = false;
-										log.debug("Occupancy -1! non aggiungere!");
+										observation.setValue(occupancy);
 									}
-									observation.setValue(occupancy);
+									else
+										observation.setValue("0");
 									break;
 								case "Number of vehicle":
 									String number = String.valueOf(counter.getCount());
 									log.debug("Number of vehicle case: {}", number);
-									if(number.equals("-1.0"))
-										log.debug("Number of vehicle -1! non aggiungere!");
-										isToSend = false;
-									observation.setValue(number);
+									if(!number.equals("-1.0"))
+										observation.setValue(number);
+									else
+										observation.setValue("0");
 									break;
 								default:
 									break;
@@ -156,32 +166,32 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								case "Average speed":
 									String average = String.valueOf(speed.getAverageSpeed());
 									log.debug("Average speed case: {}", average);
-									if(average.equals("-1.0"))
+									if(!average.equals("-1.0"))
 									{
-										log.debug("Average speed -1! non aggiungere!");
-										isToSend = false;
+										observation.setValue(average);
 									}
-									observation.setValue(average);
+									else
+										observation.setValue("0");
 									break;
 								case "Median speed":
 									String median = String.valueOf(speed.getMedianSpeed());
 									log.debug("Median speed case: {}", median);
-									if(median.equals("-1.0"))
+									if(!median.equals("-1.0"))
 									{
-										log.debug("Median speed -1! non aggiungere!");
-										isToSend = false;
+										observation.setValue(median);
 									}
-									observation.setValue(median);
+									else
+										observation.setValue("0");
 									break;
 								case "Occupancy":
 									String occupancy = String.valueOf(speed.getOccupancy());
 									log.debug("Occupancy case: {}", occupancy);
-									if(occupancy.equals("-1.0"))
+									if(!occupancy.equals("-1.0"))
 									{
-										log.debug("Occupancy -1! non aggiungere!");
-										isToSend = false;
+										observation.setValue(occupancy);
 									}
-									observation.setValue(occupancy);
+									else
+										observation.setValue("0");
 									break;
 								default:
 									break;
@@ -194,11 +204,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 							observation.setPhenomenonTime(xmlCal);
 							observation.setResultTime(xmlCal);
 							iotPropertyToAdd.getIoTStateObservation().add(observation);
-							if(isToSend)
-							{
-								log.debug("IoTProperty {} da aggiungere!", iotPropertyToAdd.getName());
-								tosend.getIoTProperty().add(iotPropertyToAdd);
-							}
+							tosend.getIoTProperty().add(iotPropertyToAdd);
 						} catch (DatatypeConfigurationException e) {
 							log.error("DatatypeConfigurationException: ",e);
 						}
