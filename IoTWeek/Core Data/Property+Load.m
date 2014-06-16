@@ -103,14 +103,14 @@
         
         // Important note, we tidy up after us here... Perhaps typeOf should be considered a classification.... In fact
         // lets implement that instead. ( Given time )
-        //for (id types in newProperty.cnTypeOf) {
-        //    if ([types isKindOfClass:[NSManagedObject class]]) {
-        //        [context deleteObject:types];
-        //    }
-        //}
+        for (id types in newProperty.cnTypeOf) {
+            if ([types isKindOfClass:[NSManagedObject class]]) {
+                [context deleteObject:types];
+            }
+        }
         
-        //NSArray *typeOf = [property valueForKeyPath:@"TypeOf"];
-        //[TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forPropertiesWithAbout:newProperty.cnAbout forIoTEntityWithAbout:iotEntityAbout];
+        NSArray *typeOf = [property valueForKeyPath:@"TypeOf"];
+        [TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forPropertiesWithAbout:newProperty.cnAbout forIoTEntityWithAbout:iotEntityAbout];
     }
 }
 
@@ -138,6 +138,21 @@
     }
     
     return property;
+}
+
+-(NSString*)description {
+    NSMutableString *returnString = [[NSMutableString alloc] init];
+    
+    [returnString appendFormat:@"Description: %@\r\n", self.cnDescription];
+    [returnString appendFormat:@"About: %@\r\n", self.cnAbout];
+    [returnString appendFormat:@"DataType: %@\r\n", self.cnDataType];
+    [returnString appendFormat:@"Prefix: %@\r\n", self.cnPrefix];
+    
+    for (TypeOf *typeOf in self.cnTypeOf) {
+        [returnString appendFormat:@"TypeOf: %@\r\n", typeOf.cnValue];
+    }
+    
+    return returnString;
 }
 
 @end

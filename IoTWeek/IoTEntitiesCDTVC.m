@@ -7,6 +7,7 @@
 //
 
 #import "IoTEntitiesCDTVC.h"
+#import "DetailDescriptionVC.h"
 #import "DatabaseAvailability.h"
 #import "IoTEntity+Load.h"
 #import "PropertiesCDTVC.h"
@@ -118,6 +119,9 @@
     if ([vc isKindOfClass:[PropertiesCDTVC class]]) {
         PropertiesCDTVC *pCDTVS = (PropertiesCDTVC *)vc;
         pCDTVS.iotEntity = iotEntity;
+    } else if ([vc isKindOfClass:[DetailDescriptionVC class]]) {
+        DetailDescriptionVC *iotentityDetailVC = (DetailDescriptionVC *)vc;
+        iotentityDetailVC.entity = iotEntity;
     }
 }
 
@@ -131,6 +135,10 @@
     [self prepareViewController:segue.destinationViewController
                        forSegue:segue.identifier
                   fromIndexPath:indexPath];
+}
+
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    
 }
 
 // boilerplate

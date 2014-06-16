@@ -88,7 +88,7 @@
 
         // Important note, we tidy up after us here... Perhaps typeOf should be considered a classification.... In fact
         // lets implement that instead. ( Given time )
-        /*for (id types in newEntity.cnTypeOf) {
+        for (id types in newEntity.cnTypeOf) {
         if ([types isKindOfClass:[NSManagedObject class]]) {
                 [context deleteObject:types];
             }
@@ -96,7 +96,7 @@
         
         NSArray *typeOf = [iotEntity valueForKeyPath:@"TypeOf"];
         [TypeOf loadTypeOfFromArray:typeOf intoManagedObjectContext:context forIoTEntityWithAbout:newEntity.cnAbout];
-    */}
+    }
 }
 
 + (IoTEntity *)iotEntityWithAbout:(NSString *)about
@@ -122,6 +122,29 @@
     }
     
     return iotEntity;
+}
+
+
+-(NSString*)description {
+    NSMutableString *returnString = [[NSMutableString alloc] init];
+    
+    [returnString appendFormat:@"Description: %@\r\n", self.cnDescription];
+    [returnString appendFormat:@"About: %@\r\n", self.cnAbout];
+    [returnString appendFormat:@"Base: %@\r\n", self.cnBase];
+    [returnString appendFormat:@"Prefix: %@\r\n", self.cnPrefix];
+    
+    for (TypeOf *typeOf in self.cnTypeOf) {
+        [returnString appendFormat:@"TypeOf: %@\r\n", typeOf.cnValue];
+    }
+    
+    int count = 0;
+    for (Property *property in self.cnProperty) {
+        count += property.cnIoTStateObservation.count;
+    }
+    
+    [returnString appendFormat:@"Total number of observations: %d\r\n", count];
+    
+    return returnString;
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "Property+Load.h"
 #import "IoTStateObservationCDTVC.h"
 #import "ioTStateObservation+Load.h"
+#import "DetailDescriptionVC.h"
 
 @interface PropertiesCDTVC ()
 
@@ -82,6 +83,9 @@
     if ([vc isKindOfClass:[IoTStateObservationCDTVC class]]) {
         IoTStateObservationCDTVC *isoCDTVC = (IoTStateObservationCDTVC *)vc;
         isoCDTVC.propery = property;
+    }  else if ([vc isKindOfClass:[DetailDescriptionVC class]]) {
+        DetailDescriptionVC *iotentityDetailVC = (DetailDescriptionVC *)vc;
+        iotentityDetailVC.entity = property;
     }
 }
 
