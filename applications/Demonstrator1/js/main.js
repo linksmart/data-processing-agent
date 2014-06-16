@@ -24,17 +24,6 @@ var Almanac = {
   SantanderMap: undefined
 }
 
-$(document).ready(function() {
-  console.debug(window.applicationCache);
-  if (window.applicationCache) {
-    applicationCache.addEventListener('updateready', function() {
-      if (confirm('An update is available. Reload now?')) {
-        window.location.reload();
-      }
-    });
-  }
-});
-
 //
 // Assigns custom navigation handlers to make sure
 // the app from the iPad's homescreen does not open new window
