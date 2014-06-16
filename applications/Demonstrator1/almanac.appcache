@@ -1,0 +1,47 @@
+CACHE MANIFEST
+# 2014-06-16:v3
+
+# Resources that require the user to be online.
+NETWORK:
+*
+
+# html files
+adaptation.html
+data.html
+index.html
+virtualization.html
+
+# css files
+css/main.css
+css/leaflet.css
+ 
+# js files
+js/main.js
+js/vendor/Chart.js
+js/vendor/images
+js/vendor/jquery-1.11.0.min.js
+js/vendor/leaflet.js
+js/vendor/moment.min.js
+
+# images
+js/vendor/images/layers-2x.png
+js/vendor/images/layers.png
+js/vendor/images/marker-icon-2x.png
+js/vendor/images/marker-icon.png
+js/vendor/images/marker-shadow.png
+img/ArrowUp.png
+img/Bg-Tile.jpg
+img/Comp-AdaptResrc-Active.png
+img/Comp-AdaptResrc-Passive.png
+img/Comp-DataMngm-Active.png
+img/Comp-DataMngm-Passive.png
+img/Comp-Virt-Active.png
+img/Comp-Virt-Passive.png
+img/Icon-London.png
+img/Icon-Santander.png
+img/Icon-Services.png
+img/Icon-Waste.png
+img/Icon-Water.png
+img/Logo-Almanac.png
+img/Map-bg.png
+img/Ribbon-OverviewBottom.png 

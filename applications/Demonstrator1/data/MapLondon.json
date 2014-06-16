@@ -1,1381 +1,411 @@
 {
-  "IoTEntity" : [
+  "type" : "FeatureCollection",
+  "features" : [
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "BC330868-AE8E-4A8C-9920-771C77A4DD89",
-      "TypeOf" : [
-        "iPhone Simulator 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "BC330868-AE8E-4A8C-9920-771C77A4DD89:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T16:25:54.526Z",
-              "ResultTime" : "2014-06-12T16:25:54.526Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "BC330868-AE8E-4A8C-9920-771C77A4DD89:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iPhone Simulator",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          10.181976,
+          56.112962
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Peters iPhone | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "3B0C3A8A-6700-4F80-956F-D3BC0748C05D",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "3B0C3A8A-6700-4F80-956F-D3BC0748C05D:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T20:24:06.604Z",
-              "ResultTime" : "2014-06-12T20:24:06.604Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "3B0C3A8A-6700-4F80-956F-D3BC0748C05D:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T20:23:50.131Z",
-              "ResultTime" : "2014-06-12T20:23:50.131Z",
-              "Value" : "9.753994 55.960752"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.756828,
+          55.962342
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Gitte Jul Gilbert’s iPhone | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "E3CFE564-EFD8-4839-BB69-89F1939DADE0",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "E3CFE564-EFD8-4839-BB69-89F1939DADE0:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T20:30:07.765Z",
-              "ResultTime" : "2014-06-12T20:30:07.765Z",
-              "Value" : "9.753852 55.960770"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "E3CFE564-EFD8-4839-BB69-89F1939DADE0:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Gitte Jul Gilbert’s iPhone",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -0.072353,
+          51.511095
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iPhone di Frost | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "25E59A9B-F472-4B61-B64A-61E9AD845515",
-      "TypeOf" : [
-        "iPhone Simulator 7.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "25E59A9B-F472-4B61-B64A-61E9AD845515:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T21:41:10.808Z",
-              "ResultTime" : "2014-06-12T21:41:10.808Z",
-              "Value" : "-122.032548 37.335256"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "25E59A9B-F472-4B61-B64A-61E9AD845515:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iPhone Simulator",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -122.032548,
+          37.335256
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iPhone Simulator | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "BB54D89A-3981-4990-AB6E-42976493F6BF",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "BB54D89A-3981-4990-AB6E-42976493F6BF:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T23:48:50.483Z",
-              "ResultTime" : "2014-06-12T23:48:50.483Z",
-              "Value" : "9.754000 55.960750"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "BB54D89A-3981-4990-AB6E-42976493F6BF:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753994,
+          55.960752
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "90d17970e8c711e3ac100800200c9a66",
-      "TypeOf" : [
-        "almanac:smartphone"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "cddf5b70e8c711e3ac100800200c9a66",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "0089fea0ec9611e3ac100800200c9a66",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Lavatory",
-          "Description" : "Water consuming loo",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Consumption",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "f0a1fd30ec9f11e3ac100800200c9a66",
-          "TypeOf" : [],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-07-20T11:41:00.100Z",
-              "ResultTime" : "2014-07-20T11:41:00.100Z",
-              "Value" : "12.592068781216783 55.681550283065356"
-            }
-          ],
-          "DataType" : null,
-          "Name" : null,
-          "Description" : null,
-          "UnitOfMeasurement" : null
-        }
-      ],
-      "Name" : "Thomas' iPhone",
-      "Description" : "A superclever smartphone"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753973,
+          55.960689
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Gitte Jul Gilbert’s iPhone | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "960BB394-FEB1-490B-82B8-24BEB0B59D5B",
-      "TypeOf" : [
-        "iPhone Simulator 7.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "960BB394-FEB1-490B-82B8-24BEB0B59D5B:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T23:22:33.637Z",
-              "ResultTime" : "2014-06-12T23:22:33.637Z",
-              "Value" : "-122.033696 37.334780"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "960BB394-FEB1-490B-82B8-24BEB0B59D5B:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T22:09:58.727Z",
-              "ResultTime" : "2014-06-12T22:09:58.727Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iPhone Simulator",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753928,
+          55.96077
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "3C0A15D1-1AC9-402B-BC5B-939475B3CF31",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "3C0A15D1-1AC9-402B-BC5B-939475B3CF31:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-12T22:12:32.612Z",
-              "ResultTime" : "2014-06-12T22:12:32.612Z",
-              "Value" : "9.753973 55.960689"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "3C0A15D1-1AC9-402B-BC5B-939475B3CF31:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Gitte Jul Gilbert’s iPhone",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753904,
+          55.960776
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "88ED3D7E-FD1D-41B3-8FA8-D56CD4AC9930",
-      "TypeOf" : [
-        "iPhone Simulator 7.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "88ED3D7E-FD1D-41B3-8FA8-D56CD4AC9930:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T01:50:46.959Z",
-              "ResultTime" : "2014-06-13T01:50:46.959Z",
-              "Value" : "-122.035294 37.334586"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "88ED3D7E-FD1D-41B3-8FA8-D56CD4AC9930:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iPhone Simulator",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.75389,
+          55.96079
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "4F2FB00E-48EA-49D8-B921-BA6EB7E85335",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "4F2FB00E-48EA-49D8-B921-BA6EB7E85335:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:01:32.614Z",
-              "ResultTime" : "2014-06-13T00:01:32.614Z",
-              "Value" : "9.753904 55.960776"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "4F2FB00E-48EA-49D8-B921-BA6EB7E85335:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -0.071062,
+          51.511669
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Thomas's iPhone | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "434E91FE-7667-4037-AEF3-53C088E2DDA7",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "434E91FE-7667-4037-AEF3-53C088E2DDA7:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:02:31.551Z",
-              "ResultTime" : "2014-06-13T00:02:31.551Z",
-              "Value" : "9.753928 55.960770"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "434E91FE-7667-4037-AEF3-53C088E2DDA7:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -122.035294,
+          37.334586
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iPhone Simulator | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "8AE222D6-6400-4DD1-9733-C756568A04CF",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "8AE222D6-6400-4DD1-9733-C756568A04CF:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:04:42.260Z",
-              "ResultTime" : "2014-06-13T00:04:42.260Z",
-              "Value" : "9.753844 55.960660"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "8AE222D6-6400-4DD1-9733-C756568A04CF:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753844,
+          55.96066
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "D4CA1A20-D767-4FEF-97EC-D22D22D72A06",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "D4CA1A20-D767-4FEF-97EC-D22D22D72A06:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:28:53.740Z",
-              "ResultTime" : "2014-06-13T00:28:53.740Z",
-              "Value" : "9.753943 55.960760"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "D4CA1A20-D767-4FEF-97EC-D22D22D72A06:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.754045,
+          55.960869
+        ]
+      },
+      "properties" : {
+        "description" : "A superclever smartphone | Location of the iPhone",
+        "name" : "Thomas' iPhone | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "F569CE90-1487-4B54-80DB-816DC116E870",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "F569CE90-1487-4B54-80DB-816DC116E870:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:29:50.661Z",
-              "ResultTime" : "2014-06-13T00:29:50.661Z",
-              "Value" : "9.753953 55.960766"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "F569CE90-1487-4B54-80DB-816DC116E870:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -122.045717,
+          37.334437
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iPhone Simulator | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "A6168F35-5F00-4036-B74E-863B128FC33D",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "A6168F35-5F00-4036-B74E-863B128FC33D:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:36:03.000Z",
-              "ResultTime" : "2014-06-13T00:36:03.000Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "A6168F35-5F00-4036-B74E-863B128FC33D:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:35:43.638Z",
-              "ResultTime" : "2014-06-13T00:35:43.638Z",
-              "Value" : "9.753938 55.960768"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          10.151969,
+          56.167152
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Raphael Dobers’s iPhone 5S | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "AFFBFFB3-46C0-462C-BAA7-667F32078840",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "AFFBFFB3-46C0-462C-BAA7-667F32078840:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:45:46.803Z",
-              "ResultTime" : "2014-06-13T00:45:46.803Z",
-              "Value" : "-122.408227 37.787359"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "AFFBFFB3-46C0-462C-BAA7-667F32078840:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Gitte Jul Gilbert’s iPhone",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -122.033696,
+          37.33478
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iPhone Simulator | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "678414DE-536B-4E6B-993B-1EFF63C23CA3",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "678414DE-536B-4E6B-993B-1EFF63C23CA3:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:53:26.782Z",
-              "ResultTime" : "2014-06-13T00:53:26.782Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "678414DE-536B-4E6B-993B-1EFF63C23CA3:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:53:14.308Z",
-              "ResultTime" : "2014-06-13T00:53:14.308Z",
-              "Value" : "9.753890 55.960790"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -0.071059,
+          51.51167
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iPad | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "B10DD86C-0CBF-4D29-A39C-25E7AE79B7E8",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "B10DD86C-0CBF-4D29-A39C-25E7AE79B7E8:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T00:55:06.888Z",
-              "ResultTime" : "2014-06-13T00:55:06.888Z",
-              "Value" : "9.753917 55.960783"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "B10DD86C-0CBF-4D29-A39C-25E7AE79B7E8:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          10.203369,
+          56.158515
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Raphael Dobers’s iPhone 5S | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "FBC4D2FE-7390-4282-843B-7FDD99C6C2B2",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "FBC4D2FE-7390-4282-843B-7FDD99C6C2B2:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T01:04:27.589Z",
-              "ResultTime" : "2014-06-13T01:04:27.589Z",
-              "Value" : "9.753924 55.960834"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "FBC4D2FE-7390-4282-843B-7FDD99C6C2B2:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T01:01:08.764Z",
-              "ResultTime" : "2014-06-13T01:01:08.764Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Gitte Jul Gilbert’s iPhone",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753938,
+          55.960768
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "149C6417-2392-468B-9DD0-0F04431B0BD5",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "149C6417-2392-468B-9DD0-0F04431B0BD5:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-16T07:18:30.942Z",
-              "ResultTime" : "2014-06-16T07:18:30.942Z",
-              "Value" : "10.170037 56.195700"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "149C6417-2392-468B-9DD0-0F04431B0BD5:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T01:09:39.329Z",
-              "ResultTime" : "2014-06-13T01:09:39.329Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Gitte Jul Gilbert’s iPhone",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -122.408227,
+          37.787359
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Gitte Jul Gilbert’s iPhone | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "910254D3-C211-47FA-8F2C-B5202BE54078",
-      "TypeOf" : [
-        "iPhone Simulator 7.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "910254D3-C211-47FA-8F2C-B5202BE54078:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-15T16:35:59.644Z",
-              "ResultTime" : "2014-06-15T16:35:59.644Z",
-              "Value" : "-122.034324 37.334676"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "910254D3-C211-47FA-8F2C-B5202BE54078:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T17:50:53.388Z",
-              "ResultTime" : "2014-06-13T17:50:53.388Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iPhone Simulator",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753917,
+          55.960783
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "D38AC348-AEC2-40D3-9FE7-954CB5FE3F46",
-      "TypeOf" : [
-        "iPhone 8.0"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "D38AC348-AEC2-40D3-9FE7-954CB5FE3F46:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T14:16:32.496Z",
-              "ResultTime" : "2014-06-13T14:16:32.496Z",
-              "Value" : "10.189114 56.172059"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "D38AC348-AEC2-40D3-9FE7-954CB5FE3F46:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T14:08:39.608Z",
-              "ResultTime" : "2014-06-13T14:08:39.608Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "iOs8rox",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.754,
+          55.96075
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "929153E6-8443-4701-855E-D8B053CE4F9B",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "929153E6-8443-4701-855E-D8B053CE4F9B:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T16:08:00.852Z",
-              "ResultTime" : "2014-06-13T16:08:00.852Z",
-              "Value" : "10.151969 56.167152"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "929153E6-8443-4701-855E-D8B053CE4F9B:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T14:08:54.396Z",
-              "ResultTime" : "2014-06-13T14:08:54.396Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Raphael Dobers’s iPhone 5S",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          10.189114,
+          56.172059
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "0C64C251-C5BB-4AFE-B4A2-B4925DDE6D80",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "0C64C251-C5BB-4AFE-B4A2-B4925DDE6D80:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-16T09:11:39.813Z",
-              "ResultTime" : "2014-06-16T09:11:39.813Z",
-              "Value" : "10.189774 56.170071"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
-          "About" : "0C64C251-C5BB-4AFE-B4A2-B4925DDE6D80:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Peters iPhone",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753943,
+          55.96076
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "A00F1304-6198-450C-AFC3-374829D5FCE9",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "A00F1304-6198-450C-AFC3-374829D5FCE9:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-16T09:47:45.071Z",
-              "ResultTime" : "2014-06-16T09:47:45.071Z",
-              "Value" : "10.189048 56.172026"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "A00F1304-6198-450C-AFC3-374829D5FCE9:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-13T17:26:07.421Z",
-              "ResultTime" : "2014-06-13T17:26:07.421Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Raphael Dobers’s iPhone 5S",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753852,
+          55.96077
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Gitte Jul Gilbert’s iPhone | Location of phone"
+      },
+      "type" : "Feature"
     },
     {
-      "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-      "About" : "801F1AA3-7674-4346-8738-E339500E868E",
-      "TypeOf" : [
-        "iPhone 7.1.1"
-      ],
-      "Meta" : null,
-      "Properties" : [
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "801F1AA3-7674-4346-8738-E339500E868E:location",
-          "TypeOf" : [
-            "almanac:location"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-16T08:38:47.968Z",
-              "ResultTime" : "2014-06-16T08:38:47.968Z",
-              "Value" : "-0.125355 51.519704"
-            }
-          ],
-          "DataType" : "xs:geojson",
-          "Name" : "Location of phone",
-          "Description" : "Location of the iPhone, based on GPS/WIFI/CELL",
-          "UnitOfMeasurement" : {
-            "TypeId" : "Location",
-            "property" : ""
-          }
-        },
-        {
-          "Prefix" : "inertiaontologies:http://ns.inertia.eu/ontologies xs:XMLSchema",
-          "About" : "801F1AA3-7674-4346-8738-E339500E868E:flow",
-          "TypeOf" : [
-            "almanac:flow"
-          ],
-          "Meta" : null,
-          "IoTStateObservation" : [
-            {
-              "PhenomenonTime" : "2014-06-14T18:43:20.244Z",
-              "ResultTime" : "2014-06-14T18:43:20.244Z",
-              "Value" : "0.003"
-            }
-          ],
-          "DataType" : "xs:double",
-          "Name" : "Toilet",
-          "Description" : "Toilet using water",
-          "UnitOfMeasurement" : {
-            "TypeId" : "m^3/s",
-            "property" : ""
-          }
-        }
-      ],
-      "Name" : "Thomas's iPhone",
-      "Description" : "Supercool device, that is better than yours"
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753953,
+          55.960766
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iOs8rox | Location of phone"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -122.032548,
+          37.335256
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "iPhone Simulator | Location of phone"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          9.753924,
+          55.960834
+        ]
+      },
+      "properties" : {
+        "description" : "Supercool device, that is better than yours | Location of the iPhone, based on GPS/WIFI/CELL",
+        "name" : "Gitte Jul Gilbert’s iPhone | Location of phone"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          12.4864,
+          55.6793
+        ]
+      },
+      "properties" : {
+        "description" : "Temperature in Vanløse, Denmark",
+        "name" : "Temperature Vanløse"
+      },
+      "type" : "Feature"
     }
   ]
 }

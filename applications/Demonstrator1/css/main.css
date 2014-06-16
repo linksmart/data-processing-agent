@@ -1,7 +1,8 @@
 body {
-    background-image: url(../img/Bg.jpg);
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    background-image: url(../img/Bg-Tile.jpg);
+    background-repeat: repeat;
     background-color: transparent;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     margin: 0px;
     padding: 5px;
     text-align: center;

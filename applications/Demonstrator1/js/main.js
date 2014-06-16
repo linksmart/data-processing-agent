@@ -1,4 +1,41 @@
 //
+// Global variables in their name space (I hate you JS)
+//
+var Almanac = {
+  //
+  // API endpoints
+  //
+
+  // limit the query to 15 elements out of UX considerations
+  waterConsumptionJsonAPI: "data/WastePlot.json",
+  // limit the query to 15 elements out of UX considerations
+  wasteCapacityJsonAPI: "data/WastePlot.json",
+  // A listing of services (IoTEntities) for the virtualization page
+  servicesJsonAPI: "data/IoTEntities.json",
+  // should conform to GeoJSON format
+  londonGeoJsonAPI: "data/MapLondon.json",
+  // should conform to GeoJSON format
+  santanderGeoJsonAPI: "data/MapLondon.json",
+
+  //
+  // Map objects
+  //
+  LondonMap: undefined,
+  SantanderMap: undefined
+}
+
+$(document).ready(function() {
+  console.debug(window.applicationCache);
+  if (window.applicationCache) {
+    applicationCache.addEventListener('updateready', function() {
+      if (confirm('An update is available. Reload now?')) {
+        window.location.reload();
+      }
+    });
+  }
+});
+
+//
 // Assigns custom navigation handlers to make sure
 // the app from the iPad's homescreen does not open new window
 // 
@@ -42,28 +79,28 @@ function InitDataPage() {
   console.debug("InitDataPage()");
   SetupNavigation();
 
-  $.getJSON("data/PlotExample.json", function(data) {
+  $.getJSON(Almanac.waterConsumptionJsonAPI, function(data) {
     var labels = new Array();
     var values = new Array();
-    $.each(data, function(i, item) {
-      var t = moment(item.created_at);
+    $.each(data.IoTStateObservation, function(i, item) {
+      var t = moment(item.PhenomenonTime);
       labels.push(t.format("MMMM Do, hh:mm"))
-      values.push(item.amount);
+      values.push(item.Value);
     });
-    createWaterChart(labels, values);
+    createWaterChart(labels.slice(1, 15).reverse(), values.slice(1, 15).reverse());
   }).fail(function(err) {
     alert("Failed to fetch data: " + err.statusText);
   });
 
-  $.getJSON("data/PlotExample.json", function(data) {
+  $.getJSON(Almanac.wasteCapacityJsonAPI, function(data) {
     var labels = new Array();
     var values = new Array();
-    $.each(data, function(i, item) {
-      var t = moment(item.created_at);
+    $.each(data.IoTStateObservation, function(i, item) {
+      var t = moment(item.PhenomenonTime);
       labels.push(t.format("MMMM Do, hh:mm"))
-      values.push(item.amount);
+      values.push(item.Value);
     });
-    createWasteChart(labels, values);
+    createWasteChart(labels.slice(1, 15).reverse(), values.slice(1, 15).reverse());
   }).fail(function(err) {
     alert("Failed to fetch data: " + err.statusText);
   });
@@ -76,7 +113,7 @@ function InitVirtualizationPage() {
   console.debug("InitVirtualizationPage()");
   SetupNavigation();
 
-  var jqxhr = $.getJSON("data/IoTEntities.json", function(data) {
+  var jqxhr = $.getJSON(Almanac.servicesJsonAPI, function(data) {
       $.each(data.IoTEntity, function(i, item) {
         //console.debug(i, item);
         var measured = item.Properties[0].IoTStateObservation[0];
@@ -107,37 +144,44 @@ function InitAdaptationPage() {
   createLondonMap();
   createSantanderMap();
 
-  $.getJSON("data/MapLondon.json", function(data) {
-    if (data.IoTEntity == undefined) {
+  $.getJSON(Almanac.londonGeoJsonAPI, function(data) {
+    if (data.features == undefined) {
       return;
     };
-    $.each(data.IoTEntity, function(i, item) {
-      $.each(item.Properties, function(i, p) {
-        if (p.DataType != "xs:geojson") {
-          return;
+    var layer = L.geoJson(data, {
+      style: function(feature) {
+        return {
+          color: feature.properties.color
         };
-        console.debug(p);
-      });
+      },
+      onEachFeature: function(feature, layer) {
+        layer.bindPopup(feature.properties.description);
+      }
     });
-    //var labels = new Array();
-    //var values = new Array();
-    /*
-    $.each(data, function(i, item) {
-      var t = moment(item.created_at);
-      labels.push(t.format("MMMM Do, hh:mm"))
-      values.push(item.amount);
-    });
-    */
+    layer.addTo(Almanac.LondonMap);
+    Almanac.LondonMap.fitBounds(layer.getBounds());
+
   }).fail(function(err) {
     alert("Failed to fetch data: " + err.statusText);
   });
 
-  $.getJSON("data/MapSantander.json", function(data) {
+  $.getJSON(Almanac.santanderGeoJsonAPI, function(data) {
     if (data.IoTEntity == undefined) {
       return;
     };
-    $.each(data.IoTEntity, function(i, item) {
+    var layer = L.geoJson(data, {
+      style: function(feature) {
+        return {
+          color: feature.properties.color
+        };
+      },
+      onEachFeature: function(feature, layer) {
+        layer.bindPopup(feature.properties.description);
+      }
     });
+    layer.addTo(Almanac.SantanderMap);
+    Almanac.SantanderMap.fitBounds(layer.getBounds());
+
   }).fail(function(err) {
     alert("Failed to fetch data: " + err.statusText);
   });
@@ -236,11 +280,11 @@ function createWasteChart(labels, data) {
 // http://leafletjs.com/examples.html
 // 
 function createLondonMap() {
-  var map = L.map('londonMap').setView([51.505, -0.09], 9);
+  Almanac.LondonMap = L.map('londonMap').setView([51.505, -0.09], 11);
   L.tileLayer('http://{s}.tiles.mapbox.com/v3/oleksandr.idl1bk7k/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18
-  }).addTo(map);
+  }).addTo(Almanac.LondonMap);
 }
 
 //
@@ -248,9 +292,9 @@ function createLondonMap() {
 // http://leafletjs.com/examples.html
 // 
 function createSantanderMap() {
-  var map = L.map('santanderMap').setView([43.462778, -3.805], 9);
+  Almanac.SantanderMap = L.map('santanderMap').setView([43.462778, -3.805], 11);
   L.tileLayer('http://{s}.tiles.mapbox.com/v3/oleksandr.idl1bk7k/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18
-  }).addTo(map);
+  }).addTo(Almanac.SantanderMap);
 }
