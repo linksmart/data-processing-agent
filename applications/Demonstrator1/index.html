@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Almanac Demo Application</title>
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <div id="header">
+            <a class="mainBtn" href="index.html"></a>
+        </div>
+        <ul class="navigation">
+            <li><a class="dataMgmtBtn" href="data.html"></a></li>
+            <li><a class="virtMgmtBtn" href="virtualization.html"></a></li>
+            <li><a class="resMgmtBtn" href="adaptation.html"></a></li>
+        </ul>
+        <ul class="breadcrumbs">
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul class="breadcrumbs">
+            <li class="text">EXEMPLARY APPLICATIONS</li>
+            <li class="text">REGISTERED SERVICES</li>
+            <li class="text">PHYSICAL RESOURCES OF SMART CITIES</li>
+        </ul>
+
+        <ul class="home">
+            <li>
+                <img class="icon" src="img/Icon-Water.png" /><br/>
+                <span>Water<br/>Consumption</span>
+            </li>
+            <li>
+                <img class="icon" src="img/Icon-Waste.png" /><br/>
+                <span>Waste<br/>Capacity</span>
+            </li>
+            <li style="margin-left: 130px; margin-right: 130px;">
+                <img class="icon" src="img/Icon-Services.png" /><br/>
+                <span>CNetCoffeeBrower<br/>Mark's iPad<br/>Something else<br/>and 5 more...</span>
+            </li>
+            <li>
+                <img class="icon" src="img/Icon-London.png" /><br/>
+                <span>London</span>
+            </li>
+            <li>
+                <img class="icon" src="img/Icon-Santander.png" /><br/>
+                <span>Santander</span>
+            </li>
+        </ul>
+        <div id="footer"></div>
+
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+        <script src="js/main.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            InitHomePage();
+        });
+        </script>
+    </body>
+</html>

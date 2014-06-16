@@ -1,0 +1,164 @@
+body {
+    background-image: url(../img/Bg.jpg);
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    background-color: transparent;
+    margin: 0px;
+    padding: 5px;
+    text-align: center;
+}
+#header {
+    background: url(../img/Logo-Almanac.png) no-repeat 0 0;
+    background-size: 335px 109px;
+    width: 335px;
+    height: 109px;
+    margin: 0px auto;
+    text-align: center;
+}
+#footer {
+    background: url(../img/Ribbon-OverviewBottom.png) no-repeat 0 0;
+    background-size: 520px 131px;
+    width: 520px;
+    height: 131px;
+    margin: 80px auto;
+    text-align: center;
+}
+.navigation {
+    margin-top: 0px;
+    padding: 0px 0px 0px 0px;
+}
+.navigation li {
+    display: inline-block;
+    padding: 0px 0px;
+    padding: 0px;
+}
+.breadcrumbs {
+    margin-top: -15px;
+    padding: 0px 0px 0px 0px;
+}
+.breadcrumbs li {
+    display: inline-block;
+    padding: 0px;
+    width: 335px;
+    height: 54px;
+    background: url(../img/ArrowUp.png);
+    background-size: 335px 54px;
+    color: #5b5b5b;
+}
+.breadcrumbs li.text {
+    display: inline-block;
+    padding: 0px;
+    width: 335px;
+    height: 30px;
+    background: transparent;
+}
+.breadcrumbs li.inactive {
+    background: transparent;
+}
+.home {
+    margin-top: -15px;
+    padding: 0px 0px 0px 0px;
+}
+.home li {
+    display: inline-block;
+    padding: 5px 0px;
+    color: #5b5b5b;
+    vertical-align: top;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.icon {
+    width: 82px;
+    height: 82px;
+}
+a.mainBtn {
+    background: transparent;
+    width: 335px;
+    height: 109px;
+    display: block;
+}
+a.dataMgmtBtn {
+    background: url(../img/Comp-DataMngm-Active.png) no-repeat 0 0;
+    background-size: 335px 145px;
+    width: 335px;
+    height: 145px;
+    display: block;
+}
+a.dataMgmtBtn:active {
+    background: url(../img/Comp-DataMngm-Passive.png) no-repeat 0 0;
+    background-size: 335px 145px;
+}
+a.dataMgmtBtnActive {
+    background: url(../img/Comp-DataMngm-Passive.png) no-repeat 0 0;
+    background-size: 335px 145px;
+}
+a.virtMgmtBtn {
+    background: url(../img/Comp-Virt-Active.png) no-repeat 0 0;
+    background-size: 335px 145px;
+    width: 335px;
+    height: 145px;
+    display: block;
+}
+a.virtMgmtBtn:active {
+    background: url(../img/Comp-Virt-Passive.png) no-repeat 0 0;
+    background-size: 335px 145px;
+}
+a.virtMgmtBtnActive {
+    background: url(../img/Comp-Virt-Passive.png) no-repeat 0 0;
+    background-size: 335px 145px;
+}
+a.resMgmtBtn {
+    background: url(../img/Comp-AdaptResrc-Active.png) no-repeat 0 0;
+    background-size: 335px 145px;
+    width: 335px;
+    height: 145px;
+    display: block;
+}
+a.resMgmtBtn:active {
+    background: url(../img/Comp-AdaptResrc-Passive.png) no-repeat 0 0;
+    background-size: 335px 145px;
+}
+a.resMgmtBtnActive {
+    background: url(../img/Comp-AdaptResrc-Passive.png) no-repeat 0 0;
+    background-size: 335px 145px;
+}
+.tableContainer {
+    margin-top: -15px;
+    text-align: center;
+}
+.dataTable {
+    margin: 0px auto;
+    text-align: center;
+    width: 1000px;
+}
+.dataTable tr {
+    text-align: left;
+    font-size: 14px;
+    color: #5b5b5b;
+}
+.plotTable {
+    background-color: transparent;
+    margin: 0px auto;
+    text-align: left;
+    width: 1024px;
+}
+.plotTable tr {
+    vertical-align: top;
+}
+.plotTable td {
+    text-align: center;
+}
+.mapTable {
+    background-color: transparent;
+    margin: 0px auto;
+    text-align: left;
+    width: 1024px;
+}
+.mapTable tr {
+    vertical-align: top;
+}
+.mapTable td {
+    text-align: center;
+}
+.map { 
+    height: 340px; 
+}
