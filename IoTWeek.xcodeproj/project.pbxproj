@@ -17,6 +17,7 @@
 		B2276E5B193F520200D2CC96 /* Meta+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = B2276E5A193F520200D2CC96 /* Meta+Load.m */; };
 		B2276E5E19405BD400D2CC96 /* MeasureVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B2276E5D19405BD400D2CC96 /* MeasureVC.m */; };
 		B26D9D221940AFDC00D6C812 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26D9D211940AFDC00D6C812 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		B29D1FF2194DE1A2008E3CB7 /* DetailDescriptionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B29D1FF1194DE1A2008E3CB7 /* DetailDescriptionVC.m */; };
 		B2B92C6819262B41009E4E3D /* IoTStateObservationCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */; };
 		B2D09C061941E3B100483079 /* IoTLocationMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D09C051941E3B100483079 /* IoTLocationMapViewController.m */; };
 		B2D09C091941E6CE00483079 /* IoTStateObservation+Location.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D09C081941E6CE00483079 /* IoTStateObservation+Location.m */; };
@@ -76,6 +77,8 @@
 		B2276E5C19405BD400D2CC96 /* MeasureVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeasureVC.h; sourceTree = "<group>"; };
 		B2276E5D19405BD400D2CC96 /* MeasureVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeasureVC.m; sourceTree = "<group>"; };
 		B26D9D211940AFDC00D6C812 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		B29D1FF0194DE1A2008E3CB7 /* DetailDescriptionVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailDescriptionVC.h; sourceTree = "<group>"; };
+		B29D1FF1194DE1A2008E3CB7 /* DetailDescriptionVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailDescriptionVC.m; sourceTree = "<group>"; };
 		B2B92C6619262B41009E4E3D /* IoTStateObservationCDTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoTStateObservationCDTVC.h; sourceTree = "<group>"; };
 		B2B92C6719262B41009E4E3D /* IoTStateObservationCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IoTStateObservationCDTVC.m; sourceTree = "<group>"; };
 		B2D09C041941E3B100483079 /* IoTLocationMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoTLocationMapViewController.h; sourceTree = "<group>"; };
@@ -288,6 +291,8 @@
 				E9E0492D192578EA00473E27 /* SettingsVC.m */,
 				B2276E5C19405BD400D2CC96 /* MeasureVC.h */,
 				B2276E5D19405BD400D2CC96 /* MeasureVC.m */,
+				B29D1FF0194DE1A2008E3CB7 /* DetailDescriptionVC.h */,
+				B29D1FF1194DE1A2008E3CB7 /* DetailDescriptionVC.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -415,6 +420,7 @@
 				B2276E5E19405BD400D2CC96 /* MeasureVC.m in Sources */,
 				B2276E49193F4FED00D2CC96 /* IoTEntity.m in Sources */,
 				E9F70E971923ED33007485B3 /* IoTEntity+Load.m in Sources */,
+				B29D1FF2194DE1A2008E3CB7 /* DetailDescriptionVC.m in Sources */,
 				B2D09C061941E3B100483079 /* IoTLocationMapViewController.m in Sources */,
 				B2276E5B193F520200D2CC96 /* Meta+Load.m in Sources */,
 				E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */,
@@ -567,6 +573,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -584,6 +591,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -12,6 +12,7 @@
 #import "IoTStateObservation+Load.h"
 #import "ImageViewController.h"
 #import "IoTLocationMapViewController.h"
+#import "DetailDescriptionVC.h"
 
 @interface IoTStateObservationCDTVC ()
 
@@ -130,6 +131,12 @@
         if ([selectedObservation.cnProperty.cnDataType isEqual: @"xs:geojson"])
             return YES;
     }
+    
+    if ([identifier isEqualToString:@"IoTStateObservationDetail"])
+    {
+        return YES;
+    }
+    
     return NO;
 }
 
@@ -144,6 +151,9 @@
     else if ([vc isKindOfClass:[IoTLocationMapViewController class]]) {
         IoTLocationMapViewController *ilmvc = (IoTLocationMapViewController *)vc;
         ilmvc.iotStateobservation = iotStateObservation;
+    } else if ([vc isKindOfClass:[DetailDescriptionVC class]]) {
+        DetailDescriptionVC *iotentityDetailVC = (DetailDescriptionVC *)vc;
+        iotentityDetailVC.entity = iotStateObservation;
     }
 }
 

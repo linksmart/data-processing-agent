@@ -23,14 +23,12 @@
 {
     _mapView = mapView;
     self.mapView.delegate = self;
-    self.title = @"Yehaa";
+    self.title = @"Location Pin";
     [self updateMapViewAnnotations];
 }
 
 -(void)setIotStateobservation:(IoTStateObservation *)iotStateobservation {
-    // iotStateobservation.title = @"Hey";
     self.iotStateObservations = [[NSArray alloc] initWithObjects:iotStateobservation, nil];
-    
 }
 
 // remove all existing annotations from the map
@@ -56,7 +54,7 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
-    static NSString *reuseId = @"PhotosByPhotographerMapViewController";
+    static NSString *reuseId = @"IoTLocationMapViewController";
     MKAnnotationView *view = [mapView dequeueReusableAnnotationViewWithIdentifier:reuseId];
     if (!view) {
         view = [[MKPinAnnotationView alloc] initWithAnnotation:annotation
