@@ -104,4 +104,14 @@
                                                       self.cnValue,@"Value", nil];
 }
 
+-(NSString*)description {
+    NSMutableString *returnString = [[NSMutableString alloc] init];
+    
+    [returnString appendFormat:@"Resulttime: %@\r\n", self.cnResultTime];
+    [returnString appendFormat:@"Phenomenontime: %@\r\n", self.cnPhenomenonTime];
+    [returnString appendFormat:@"Base: %@\r\n", self.cnValue];
+    
+    return returnString;
+}
+
 @end

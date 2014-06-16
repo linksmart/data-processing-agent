@@ -151,11 +151,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTStateObservation Cell" textLabel="wyC-bd-hd6" detailTextLabel="olh-KO-cpb" style="IBUITableViewCellStyleSubtitle" id="lBt-VX-iCH">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="IoTStateObservation Cell" textLabel="wyC-bd-hd6" detailTextLabel="olh-KO-cpb" style="IBUITableViewCellStyleSubtitle" id="lBt-VX-iCH">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lBt-VX-iCH" id="xnt-QG-A4Z">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="253" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Observation Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wyC-bd-hd6">
@@ -176,6 +176,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <segue destination="NmN-p4-Ku6" kind="push" id="LDQ-NY-Csz"/>
+                                    <segue destination="3XH-yR-gqQ" kind="push" identifier="IoTStateObservationDetail" trigger="accessoryAction" id="DGU-bR-kws"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -410,6 +411,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ufq-3I-YF5"/>
+        <segue reference="DGU-bR-kws"/>
     </inferredMetricsTieBreakers>
 </document>

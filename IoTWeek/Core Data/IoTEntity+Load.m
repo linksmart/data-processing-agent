@@ -124,7 +124,6 @@
     return iotEntity;
 }
 
-
 -(NSString*)description {
     NSMutableString *returnString = [[NSMutableString alloc] init];
     
