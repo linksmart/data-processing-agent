@@ -7,7 +7,7 @@ var Almanac = {
   //
 
   // limit the query to 15 elements out of UX considerations
-  waterConsumptionJsonAPI: "data/WastePlot.json",
+  waterConsumptionJsonAPI: "data/WaterPlot.json",
   // limit the query to 15 elements out of UX considerations
   wasteCapacityJsonAPI: "data/WastePlot.json",
   // A listing of services (IoTEntities) for the virtualization page
@@ -71,10 +71,10 @@ function InitDataPage() {
   $.getJSON(Almanac.waterConsumptionJsonAPI, function(data) {
     var labels = new Array();
     var values = new Array();
-    $.each(data.IoTStateObservation, function(i, item) {
-      var t = moment(item.PhenomenonTime);
+    $.each(data, function(i, item) {
+      var t = moment(item.created_at);
       labels.push(t.format("MMMM Do, hh:mm"))
-      values.push(item.Value);
+      values.push(item.amount);
     });
     createWaterChart(labels.slice(1, 15).reverse(), values.slice(1, 15).reverse());
   }).fail(function(err) {
