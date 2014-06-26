@@ -210,26 +210,46 @@ function pushValue(value, devId)
 												<div class="offset2 fg-white"><span class="text">Network:${listValue.networkType} Type:${listValue.type}</span></div>
 											</div>
 											<div class="row">
-												<c:if
-													test="${listValue.type == 'Thermometer' && temp eq false}">
-													<c:set var="temp" value="true" />
-													<input id="clickMe" type="button" value="Get Graph"
-														onclick="load_tempsensor('${listValue.type}');" />
+<%-- 												<c:if --%>
+<%-- 													test="${listValue.type == 'Thermometer' && temp eq false}"> --%>
+<%-- 													<c:set var="temp" value="true" /> --%>
+<!-- 													<input id="clickMe" type="button" value="Get Graph" -->
+<%-- 														onclick="load_tempsensor('${listValue.type}');" /> --%>
+<%-- 												</c:if> --%>
+												
+												<c:if test="${listValue.type == 'Thermometer'}">
+													<div class="grid fluid">
+														<button id="hidechart-${listValue.id }" class="small" onclick="resizeTile('${listValue.id}');" style="visibility: hidden">Close chart</button>
+														<button id="showchart-${listValue.id }" class="small" onclick="load_tempsensor('${listValue.id}');">Show chart</button>
+													</div>
 												</c:if>
 			
-												<c:if
-													test="${listValue.type == 'DistanceSensor' && dist eq false}"> 
-												<c:set var="dist" value="true" />
-													<img src="<c:url value="/resources/images/Dustbin.jpg" />" alt="Dustbin" width="110" height="90">
-													<input id="clickMe" type="button" value="Get Graph"
-														onclick="load_distsensor('${listValue.type}');" /> 
+<%-- 												<c:if --%>
+<%-- 													test="${listValue.type == 'DistanceSensor' && dist eq false}">  --%>
+<%-- 												<c:set var="dist" value="true" /> --%>
+<%-- 													<img src="<c:url value="/resources/images/Dustbin.jpg" />" alt="Dustbin" width="110" height="90"> --%>
+<!-- 													<input id="clickMe" type="button" value="Get Graph" -->
+<%-- 														onclick="load_distsensor('${listValue.type}');" />  --%>
+<%-- 												</c:if>  --%>
+											
+												<c:if test="${listValue.type == 'DistanceSensor'}">
+													<div class="grid fluid">
+														<button id="hidechart-${listValue.id }" class="small" onclick="resizeTile('${listValue.id}');" style="visibility: hidden">Close chart</button>
+														<button id="showchart-${listValue.id }" class="small" onclick="load_distsensor('${listValue.id}');">Show chart</button>
+													</div>
 												</c:if> 
-			
-												<c:if
-													test="${listValue.type == 'Accelerometer' && accel eq false}">
-													<c:set var="accel" value="true" /> 
-												<input id="${listValue.id}" type="button" value="Get Graph"
-													onclick="load_Accel('${listValue.type}');" />
+<%-- 												<c:if --%>
+<%-- 													test="${listValue.type == 'Accelerometer' && accel eq false}"> --%>
+<%-- 													<c:set var="accel" value="true" />  --%>
+<%-- 												<input id="${listValue.id}" type="button" value="Get Graph" --%>
+<%-- 													onclick="load_Accel('${listValue.type}');" /> --%>
+<%-- 												</c:if>  --%>
+
+												<c:if test="${listValue.type == 'Accelerometer'}">
+													<div class="grid fluid">
+														<button id="hidechart-${listValue.id }" class="small" onclick="resizeTile('${listValue.id}');" style="visibility: hidden">Close chart</button>
+														<button id="showchart-${listValue.id }" class="small" onclick="load_Accel('${listValue.id}');">Show chart</button>
+													</div>
 												</c:if> 
 										
 												<c:if test="${listValue.type == 'VehicleSpeed'}"> 
