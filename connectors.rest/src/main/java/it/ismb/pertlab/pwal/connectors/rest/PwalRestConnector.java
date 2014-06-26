@@ -74,8 +74,8 @@ public class PwalRestConnector implements PWALDeviceListener {
 			}
 		}
 		
-		else if((networkType == null || networkType.length() == 0) &&
-		   (deviceType != null && deviceType.length() != 0))
+		else if((networkType == null || networkType.isEmpty()) &&
+		   (deviceType != null && !deviceType.isEmpty()))
 		{
 			for (Device d : pwal.getDevicesList()) 
 			{
@@ -83,8 +83,8 @@ public class PwalRestConnector implements PWALDeviceListener {
 					dev.add(d.getPwalId());
 			}
 		}
-		else if((networkType != null && networkType.length() != 0) &&
-		   (deviceType == null || deviceType.length() == 0))
+		else if((networkType != null && !networkType.isEmpty()) &&
+		   (deviceType == null || deviceType.isEmpty()))
 		{
 			for (Device d : pwal.getDevicesList()) 
 			{

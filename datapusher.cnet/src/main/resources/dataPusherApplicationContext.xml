@@ -5,14 +5,14 @@
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<import resource="classpath:applicationContext-pwal.xml"/>
-	<bean id="DataPusher" class="it.ismb.pertlab.pwal.datapusher.cnet.CnetDataPusher">
-	<property name="serviceEndpoint">
-		<value>http://energyportal.cnet.se/StorageManagerMdb20140604/REST/IoTEntities/</value>
-	</property>
-    	<constructor-arg >
-    		<value type="int">10</value>
-    	</constructor-arg>
-    	<constructor-arg ref="PWAL"></constructor-arg>
+<!-- 	<bean id="DataPusher" class="it.ismb.pertlab.pwal.datapusher.cnet.CnetDataPusher"> -->
+<!-- 	<property name="serviceEndpoint"> -->
+<!-- 		<value>http://energyportal.cnet.se/StorageManagerMdb20140604/REST/IoTEntities/</value> -->
+<!-- 	</property> -->
+<!--     	<constructor-arg > -->
+<!--     		<value type="int">10</value> -->
+<!--     	</constructor-arg> -->
+<!--     	<constructor-arg ref="PWAL"></constructor-arg> -->
 <!--     	<property name="pwal" ref="PWAL"></property> -->
-    </bean>
+<!--     </bean> -->
 </beans>

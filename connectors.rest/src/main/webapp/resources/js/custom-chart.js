@@ -693,7 +693,7 @@ function load_vehiclecounter( devID) {
 				},
 
 				title : {
-					text : data.title
+					text : "Vehicle Counter Sensor",
 				},
 				xAxis : {
 					title : {

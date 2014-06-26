@@ -138,6 +138,7 @@ public class ChartService {
 						list.add(new SeriesBean("Number of vehicle",  new double [] {System.currentTimeMillis(),count}));
 						list.add(new SeriesBean("Occupancy",  new double [] {System.currentTimeMillis(),occupancy}));
 					}
+					break;
 				case DeviceType.FILL_LEVEL_SENSOR:
 					if(d.getId().equals(devID))
 					{
@@ -171,6 +172,7 @@ public class ChartService {
 						}
 						
 					}
+					break;
 				default:
 					break;
 				}
@@ -197,6 +199,7 @@ public class ChartService {
 		}
 
 		if(categories.length>0){
+			//da sempre lo stesso titolo ma lo cambio da js a mano
 			return new DataBean(devtype, "Vehicle Speed Sensor", "Km/h", "Time", Arrays.asList(categories), list);
 		}
 

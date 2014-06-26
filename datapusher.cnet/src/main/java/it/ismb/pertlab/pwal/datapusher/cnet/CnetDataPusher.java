@@ -21,6 +21,7 @@ import it.ismb.pertlab.pwal.datapusher.cnet.restclient.CnetDataPusherRestClient;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -129,7 +130,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								{
 									Double doubleflow=Double.parseDouble(flow);
 									doubleflow = doubleflow / 10000;
-									observation.setValue(flow);
+									observation.setValue(String.valueOf(doubleflow));
 								}
 								else
 									observation.setValue("0");
@@ -223,7 +224,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 		
 		log.info("Checking if the device already exists.");
 		ArrayOfIoTEntity arrayOfIoTEntity = cnetRestClient.alreadyExists(newDevice.getPwalId());
-		if(arrayOfIoTEntity.getIoTEntity().size() == 0)
+		if(arrayOfIoTEntity != null && arrayOfIoTEntity.getIoTEntity().size() == 0)
 		{
 			log.info("Device {} does not exist into the database. Going to push...",newDevice);
 			log.info("Pushing new device {} into CNET cloud database.", newDevice.getPwalId());
@@ -364,7 +365,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 			//IoTEntity deviceAbout = new IoTEntity();
 			this.iotEntities.put(newDevice.getPwalId(), deviceAbout);
 			
-			deviceAbout.toXml();
+			//deviceAbout.toXml();
 		}
 		else
 		{
