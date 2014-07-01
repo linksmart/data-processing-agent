@@ -13,8 +13,6 @@
 
 @interface IoTLocationMapViewController : UIViewController
 
-// our Model
-// we will show all photos by this photographer on a map
 @property (nonatomic, strong)  IoTStateObservation *iotStateobservation;
 
 @end
