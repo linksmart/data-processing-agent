@@ -22,10 +22,7 @@
 }
 
 - (IBAction)registerDevice:(UIButton *)sender {
-    // AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    // if ([appDelegate.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)])
-    //     [appDelegate.locationManager requestAlwaysAuthorization]; // ONLY IOS8!!!! But important there
-    
+
     NSUUID *deviceId = [UIDevice currentDevice].identifierForVendor;
     NSString *locationProperty = [NSString stringWithFormat:@"%@%@", [deviceId UUIDString], @":location"];
     NSString *waterFlowProperty = [NSString stringWithFormat:@"%@%@", [deviceId UUIDString], @":flow"];
@@ -85,8 +82,6 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:jsonData];
-    
-    // NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:nil];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:nil];
     
