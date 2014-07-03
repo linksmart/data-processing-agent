@@ -31,13 +31,6 @@
     self.iotStateObservations = [[NSArray alloc] initWithObjects:iotStateobservation, nil];
 }
 
-// remove all existing annotations from the map
-// and add all of our photosByPhotographer to the map
-// zoom the map to show them all
-// if we are capable of showing a photo immediately
-//   (i.e. self.imageViewController is not nil)
-//   then pick one of the photos at random and show it
-
 - (void)updateMapViewAnnotations
 {
     [self.mapView removeAnnotations:self.mapView.annotations];
@@ -46,11 +39,6 @@
 }
 
 #pragma mark - MKMapViewDelegate
-
-// enhances our callout to have left (UIImageView) and right (UIButton) accessory views
-// only does this if we are going to need to segue to a different VC to show a photo
-//  (because, if not (i.e. self.imageViewController is not nil), the photo will already be on screen
-//   so there is no reason to show its thumbnail or make the user click again on disclosure button)
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
