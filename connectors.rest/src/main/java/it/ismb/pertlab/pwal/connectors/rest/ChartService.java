@@ -1,85 +1,260 @@
 package it.ismb.pertlab.pwal.connectors.rest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
+import it.ismb.pertlab.pwal.api.devices.model.DistanceSensor;
+import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
+import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
+import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
+import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.highcharts.bean.DataBean;
 import it.ismb.pertlab.pwal.highcharts.bean.SeriesBean;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ChartService {
 
 	@Autowired
 	private PwalImpl pwal;
-	
+
 	private static SimpleDateFormat sdf = new SimpleDateFormat("d-MMM-yyyy HH:mm:ss");
-	
-    public DataBean getLineChartData1() {
-        List<SeriesBean> list = new ArrayList<SeriesBean>();
-        list.add(new SeriesBean("Tokyo",  new double[] {7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6}));
-        list.add(new SeriesBean("New York",  new double[] {0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5}));
-        list.add(new SeriesBean("London", new double[] {3.9, 4.2, 5.7, 8.5, 12.9, 15.2, 15.0, 16.6, 14.2, 10.3, 6.6, 4.8}));
+	private static SimpleDateFormat sdf1 = new SimpleDateFormat();
 
-        String[] categories = new String[] {"9 Jan '13", "8 Feb '13","5 Mar '13","12 Apr '13","14 May '13","21 Jun '13","30 Jul '13","8 Aug '13","5 Sep '13","17 Oct '13","23 Nov '13","5 Dec '13"};
-        return new DataBean("chart1-container", "LineChart Title", "Y Values (%)", "Run Dates", Arrays.asList(categories), list);
-    }
-    
-    public DataBean getTemperaturelineChartData(){
-    	List<SeriesBean> list = new ArrayList<SeriesBean>();
-    	List<Device> tempDevList = new ArrayList<Device>();
-    	Collection<Device> devList= pwal.getDevicesList();
-    	
-    	String[] categories=null;
-    	
-    	for(Device d:devList){
-    		if(DeviceType.THERMOMETER.equals(d.getType() )){
-    			tempDevList.add(d);
-    			Thermometer t=(Thermometer) d;
+	//    public DataBean getLineChartData1() {
+	//        List<SeriesBean> list = new ArrayList<SeriesBean>();
+	//        list.add(new SeriesBean("Tokyo",  new double[] {7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6}));
+	//        list.add(new SeriesBean("New York",  new double[] {0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5}));
+	//        list.add(new SeriesBean("London", new double[] {3.9, 4.2, 5.7, 8.5, 12.9, 15.2, 15.0, 16.6, 14.2, 10.3, 6.6, 4.8}));
+	//
+	//        String[] categories = new String[] {"9 Jan '13", "8 Feb '13","5 Mar '13","12 Apr '13","14 May '13","21 Jun '13","30 Jul '13","8 Aug '13","5 Sep '13","17 Oct '13","23 Nov '13","5 Dec '13"};
+	////        return new DataBean("chart1-container", "LineChart Title", "Y Values (%)", "Run Dates", Arrays.asList(categories), list);
+	//    }
+
+	public DataBean getTemperaturelineChartData(){
+		List<SeriesBean> list = new ArrayList<SeriesBean>();
+		List<Device> tempDevList = new ArrayList<Device>();
+		Collection<Device> devList= pwal.getDevicesList();
+
+		long[] categories=null;
+
+		for(Device d:devList){
+			if(DeviceType.THERMOMETER.equals(d.getType() )){
+				tempDevList.add(d);
+				Thermometer t=(Thermometer) d;
 				t.getTemperature();
-    			list.add(new SeriesBean(t.getType(),  new double [] {t.getTemperature()}));
-    			categories= new String[] {sdf.format(System.currentTimeMillis())};
-    		}
-    	}
-    	if(categories.length>0){
-    	return new DataBean("temperature-container", "Temperature Sensor", "Degree Celcius", "Time", Arrays.asList(categories), list);
-    	}
-    	
-    	else return null;
-    }
+				list.add(new SeriesBean(t.getType(),  new double [] {t.getTemperature()}));
+				categories= new long[] {System.currentTimeMillis()};
+			}
+		}
+		if(categories.length>0){
+			return new DataBean("temperature-container", "Temperature Sensor", "Degree Celcius", "Time", Arrays.asList(categories), list);
+		}
 
-    public DataBean getLineChartData2() {
-        List<SeriesBean> list = new ArrayList<SeriesBean>();
-        list.add(new SeriesBean("Munich",  new double[] {8.0, 6.9, 9.5, 12.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6}));
-        list.add(new SeriesBean("Paris", new double[] {0.8, 0.8, 6.7, 11.3, 17.0, 22.0, 23.8, 24.1, 20.1, 14.1, 8.6, 2.5}));
-        list.add(new SeriesBean("Rome",  new double[] {3.8, 8.2, 5.7, 8.5, 11.9, 17.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8}));
+		else return null;
+	}
 
-        String[] categories = new String[] {"2 Jan '13", "4 Feb '13","5 Mar '13","10 Apr '13","8 May '13","30 Jun '13","3 Jul '13","8 Aug '13","5 Sep '13","17 Oct '13","23 Nov '13","5 Dec '13"};
-        return new DataBean("chart2-container", "LineChart Title", "Y Values (%)", "Run Dates", Arrays.asList(categories), list);
-    }
+	public DataBean getTemperatureSplineChartData(){
+		List<SeriesBean> list = new ArrayList<SeriesBean>();
+		List<Device> tempDevList = new ArrayList<Device>();
+		Collection<Device> devList= pwal.getDevicesList();
 
-    
+		long[] categories=null;
 
-    public DataBean getLineChartData3() {
-        List<SeriesBean> list = new ArrayList<SeriesBean>();
-        list.add(new SeriesBean("Chicago",  new double[] {17.0, 16.9, 4.5, 9.5, 15.2, 12.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6}));
-        list.add(new SeriesBean("Dublin",  new double[] {9.2, 10.8, 25.7, 18.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 23.5}));
-        list.add(new SeriesBean("Madrid",  new double[] {8.8, 8.2, 9.7, 8.5, 10.9, 16.2, 16.0, 16.6, 11.2, 10.3, 6.6, 9.8}));
 
-        String[] categories = new String[] {"4 Jan '13", "14 Feb '13","15 Mar '13","11 Apr '13","19 May '13","23 Jun '13","3 Jul '13","8 Aug '13","5 Sep '13","17 Oct '13","23 Nov '13","5 Dec '13"};
-        return new DataBean("chart3-container", "LineChart Title", "Y Values (%)", "Run Dates", Arrays.asList(categories), list);
-    }
+		for(Device d:devList){
+			if(DeviceType.THERMOMETER.equals(d.getType() )){
+				tempDevList.add(d);
+				Thermometer t=(Thermometer) d;
+				t.getTemperature();
+
+				list.add(new SeriesBean(t.getType(),  new double [] {System.currentTimeMillis(),t.getTemperature()}));
+				categories= new long[] {System.currentTimeMillis()};
+			}
+		}
+
+		if(categories.length>0){
+			return new DataBean("pwal:Thermometer", "Temperature Sensor", "Degree Celcius", "Time", Arrays.asList(categories), list);
+		}
+
+		else return null;
+	}
+
+	public DataBean getSantanderSplineChartData(String devID){
+		List<SeriesBean> list = new ArrayList<SeriesBean>();
+		Collection<Device> devList= pwal.getDevicesList();
+	
+		String devtype = null;
+		long[] categories= new long[] {System.currentTimeMillis()};
+		System.out.println("received: " + devID);
+		synchronized (pwal.getDevicesList()) {
+			for(Device d:devList){
+				switch (d.getType()) {
+				case DeviceType.VEHICLE_SPEED:
+					if(d.getId().equals(devID))
+					{
+						VehicleSpeed v = (VehicleSpeed) d;
+						devtype = v.getType();
+		
+						Double avgspeed = v.getAverageSpeed(); 
+						Double median = v.getMedianSpeed();
+						
+						if(v.getAverageSpeed() == -1){
+							avgspeed =(double) 0;
+
+						} else avgspeed = v.getAverageSpeed();
+						
+						if(v.getMedianSpeed() == -1){
+							median =(double) 0;
+
+						} else median = v.getAverageSpeed();
+
+						list.add(new SeriesBean("Average Speed",  new double [] {System.currentTimeMillis(),avgspeed}));
+						list.add(new SeriesBean("Median Speed",  new double [] {System.currentTimeMillis(),median}));
+					}
+					break;
+				case DeviceType.VEHICLE_COUNTER:
+					if(d.getId().equals(devID))
+					{
+						VehicleCounter c = (VehicleCounter)d;
+						devtype = c.getType();
+						
+						Double count = c.getCount();
+						Double occupancy = c.getOccupancy();
+						if(count == -1)
+							count = (double)0;
+						if(occupancy == -1)
+							occupancy = (double) 0;
+						list.add(new SeriesBean("Number of vehicle",  new double [] {System.currentTimeMillis(),count}));
+						list.add(new SeriesBean("Occupancy",  new double [] {System.currentTimeMillis(),occupancy}));
+					}
+					break;
+				case DeviceType.FILL_LEVEL_SENSOR:
+					if(d.getId().equals(devID))
+					{
+						FillLevel fl = (FillLevel)d;
+						devtype = fl.getType();
+						
+						Integer level = fl.getLevel();
+						Integer depth = fl.getDepth();
+						
+						if(level == null)
+							level = 0;
+						if(depth == null)
+							depth = 0;
+						
+						list.add(new SeriesBean("Waste bin level",  new double [] {System.currentTimeMillis(),level}));
+						list.add(new SeriesBean("Waste bin depth",  new double [] {System.currentTimeMillis(),depth}));
+					}
+					break;
+				case DeviceType.FLOW_METER_SENSOR:
+					if(d.getId().equals(devID))
+					{
+						FlowMeter fm = (FlowMeter)d;
+						devtype = fm.getType();
+						
+						Integer flow = fm.getFlow();
+						if(flow != null)
+						{
+							String flowString = String.valueOf(flow);
+							Double flowDouble = Double.valueOf(flowString);
+							list.add(new SeriesBean("Flow",  new double [] {System.currentTimeMillis(),flowDouble / 10000}));
+						}
+						
+					}
+					break;
+				default:
+					break;
+				}
+//				if(DeviceType.VEHICLE_SPEED.equals(d.getType()) && d.getId().equals(devID)){
+//
+//					VehicleSpeed v = (VehicleSpeed) d;
+//					devtype = v.getType();
+//	
+//					if(v.getAverageSpeed() == -1){
+//						avgspeed =(double) 0;
+//
+//					} else avgspeed = v.getAverageSpeed();
+//					
+//					if(v.getMedianSpeed() == -1){
+//						median =(double) 0;
+//
+//					} else median = v.getAverageSpeed();
+//
+//					list.add(new SeriesBean("Average Speed",  new double [] {System.currentTimeMillis(),avgspeed}));
+//					list.add(new SeriesBean("Median Speed",  new double [] {System.currentTimeMillis(),median}));
+//					categories= new long[] {System.currentTimeMillis()};
+//				}
+			}
+		}
+
+		if(categories.length>0){
+			//da sempre lo stesso titolo ma lo cambio da js a mano
+			return new DataBean(devtype, "Vehicle Speed Sensor", "Km/h", "Time", Arrays.asList(categories), list);
+		}
+
+		else return null;
+	}
+
+	public DataBean getDistanceSplineChartData(){
+		List<SeriesBean> list = new ArrayList<SeriesBean>();
+		List<Device> distDevList = new ArrayList<Device>();
+		Collection<Device> devList= pwal.getDevicesList();
+
+		Double dustbin_inch=34.5;
+		Double fill_level;
+
+		long[] categories=null;
+
+
+		for(Device d:devList){
+			if(DeviceType.DISTANCE_SENSOR.equals(d.getType() )){
+				distDevList.add(d);
+				DistanceSensor t=(DistanceSensor) d;
+				fill_level= dustbin_inch-t.getDistanceInch();
+				list.add(new SeriesBean(t.getType(),  new double [] {System.currentTimeMillis(),fill_level}));
+				categories= new long[] {System.currentTimeMillis()};
+			}
+		}
+
+		if(categories.length>0){
+			return new DataBean("pwal:DistanceSensor", "Distance Sensor", "Dustbin Fill Level", "Time", Arrays.asList(categories), list);
+		}
+
+		else return null;
+	} 
+
+	public DataBean getAccel3DChartData(){
+
+		List<SeriesBean> list = new ArrayList<SeriesBean>();
+		List<Device> accelDevList = new ArrayList<Device>();
+		Collection<Device> devList= pwal.getDevicesList();
+		long[] categories=null;
+
+		for(Device d:devList){
+			if(DeviceType.ACCELEROMETER.equals(d.getType() )){
+				accelDevList.add(d);
+				Accelerometer a=(Accelerometer) d;
+
+				list.add(new SeriesBean(a.getType(),  new double [] {a.getXAcceleration(),a.getYAcceleration(),a.getZAcceleration()}));
+				categories= new long[] {System.currentTimeMillis()};
+			}
+		}
+
+		if(categories.length>0){
+			return new DataBean("pwal:Accelerometer", "Accelerometer Sensor", "Null", "Null", Arrays.asList(categories), list);
+		}
+		else return null;
+	}
 
 }

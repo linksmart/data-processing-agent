@@ -1,0 +1,2 @@
+#serviceendpoint=http://energyportal.cnet.se/StorageManagerMdb20140604/REST/IoTEntities
+serviceendpoint=http://192.168.0.115:8080/dm/IoTEntities

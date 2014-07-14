@@ -18,8 +18,8 @@ public class FillLevelSensorFit extends BaseSerialDevice implements FillLevel {
 	private String id;
 	private String pwalId;
 	private SerialManager manager;
-	private Integer level;
-	private Integer depth;
+	private Integer level = 0;
+	private Integer depth = 0;
 	
 	public FillLevelSensorFit(SerialManager manager)
 	{

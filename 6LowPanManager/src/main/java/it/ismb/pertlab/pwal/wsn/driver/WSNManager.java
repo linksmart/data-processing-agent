@@ -24,7 +24,7 @@ public class WSNManager extends DevicesManager{
 	
 	private int port = 7730;
 	byte [] sendData 	= new byte [12];
-	byte [] receiveData = new byte [12];
+	byte [] receiveData = new byte [16]; // fix to accelerometer z axis reading
 	DatagramSocket udplistener = null;
 	DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 	
@@ -131,6 +131,17 @@ public class WSNManager extends DevicesManager{
 				case Definitions.SENSOR_LIGHT:
 					break;
 				case Definitions.SENSOR_HUMIDITY:
+					break;
+				case Definitions.SENSOR_DISTANCE:
+					WSNUltraSoundDistanceSensor ds=new WSNUltraSoundDistanceSensor();
+					ds.setId(super.generateId());
+					ds.setAddress(msg.getSrcAddress());
+					ds.setManager(this);
+					for(DeviceListener l:deviceListener)
+					{
+						l.notifyDeviceAdded(ds);
+					}					
+					devicesDiscovered.put(ds.getId(), ds);
 					break;
 				default:
 					break;

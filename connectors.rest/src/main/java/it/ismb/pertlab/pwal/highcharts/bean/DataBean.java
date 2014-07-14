@@ -11,11 +11,11 @@ public class DataBean {
     private String title;
     private String yAxisTitle;
     private String xAxisTitle;
-    private List<String> categories;
+    private List<long[]> categories;
     private List<SeriesBean> series;
 
 
-    public DataBean(String divId, String title, String yAxisTitle, String xAxisTitle, List<String> categories, List<SeriesBean> series) {
+    public DataBean(String divId, String title, String yAxisTitle, String xAxisTitle, List<long[]> categories, List<SeriesBean> series) {
         this.setDivId(divId);
         this.setTitle(title);
         this.setyAxisTitle(yAxisTitle);
@@ -25,7 +25,8 @@ public class DataBean {
     }
 
 
-    public String getTitle() {
+
+	public String getTitle() {
         return title;
     }
 
@@ -41,12 +42,12 @@ public class DataBean {
         this.yAxisTitle = yAxisTitle;
     }
 
-    public List<String> getCategories() {
+    public List<long[]> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<String> categories) {
-        this.categories = categories;
+    public void setCategories(List<long[]> categories2) {
+        this.categories = categories2;
     }
 
     public List<SeriesBean> getSeries() {

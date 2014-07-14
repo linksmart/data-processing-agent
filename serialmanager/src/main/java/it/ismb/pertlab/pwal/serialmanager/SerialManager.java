@@ -5,12 +5,17 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import jssc.SerialPort;
@@ -35,9 +40,20 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 	//Map< device id, object class name>
 	private Map<String,String> configuredDevices;
 	
+	private Properties properties = new Properties();
+	private InputStream input = null;
+	
 	//portString is a comma separated string containing the list of ports to be opened
-	public SerialManager(String portStrings, Map<String,String> props)
+	public SerialManager(Map<String,String> props)
 	{
+//		this.input = new FileInputStream(this.getClass().getClassLoader().getResource("config.props").getFile());
+//		this.properties.load(this.input);
+//		log.info("Properties file loaded.");
+//		String portStrings = this.properties.getProperty("ports");
+		String portStrings = "COM9,COM6";
+//		String portStrings = "ttyACM0,ttyACM1";
+
+		log.debug("Ports in config file are: {}",portStrings);
 		String[] ports=portStrings.split(",");
 		idsPort=new HashMap<>();
 		for(String port:ports)
@@ -104,9 +120,13 @@ public class SerialManager extends DevicesManager implements SerialPortEventList
 				devicesDiscovered.put(deviceId, d);
 				for(DeviceListener l:deviceListener)
 				{
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						log.error("Exception: ", e);
+					}
 					l.notifyDeviceAdded(d);
 				}
-			
 				log.debug("Device discovered: id="+deviceId);
 			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
 				// TODO Auto-generated catch block

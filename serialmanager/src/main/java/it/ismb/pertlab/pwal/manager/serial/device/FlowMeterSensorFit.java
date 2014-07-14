@@ -3,7 +3,6 @@ package it.ismb.pertlab.pwal.manager.serial.device;
 import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
-import it.ismb.pertlab.pwal.api.devices.model.WaterPump;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.serialmanager.BaseSerialDevice;
 import it.ismb.pertlab.pwal.serialmanager.SerialManager;
@@ -13,13 +12,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeter, WaterPump {
+public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeter {
 
 	protected static final Logger log=LoggerFactory.getLogger(FlowMeterSensorFit.class);
 	private String id;
 	private String pwalId;
 	private SerialManager manager;
 	private Integer flow;
+	private Unit unit;
 	
 	public FlowMeterSensorFit(SerialManager manager)
 	{
@@ -66,12 +66,12 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeter, W
 	}
 
 
-	@Override
-	public void setVelocity(Double value) {
-		String message = "*p1=" + value.intValue() + "$x#\n";
-		log.info("Sending {}", message);
-		manager.sendCommand(this.id, message);
-	}
+//	@Override
+//	public void setVelocity(Double value) {
+//		String message = "*p1=" + value.intValue() + "$x#\n";
+//		log.info("Sending {}", message);
+//		manager.sendCommand(this.id, message);
+//	}
 
 	@Override
 	public Integer getFlow() {
@@ -104,14 +104,12 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeter, W
 
 	@Override
 	public Unit getUnit() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.unit;
 	}
 
 	@Override
 	public void setUnit(Unit unit) {
-		// TODO Auto-generated method stub
-		
+		this.unit = unit;
 	}
 
 }

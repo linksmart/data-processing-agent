@@ -30,7 +30,6 @@ public class PwalImpl implements Pwal, DeviceListener {
 	
 	private static final Logger log=LoggerFactory.getLogger(PwalImpl.class);
 
-	
 	public PwalImpl(List<DevicesManager> devicesManager)
 	{
 		this.devicesList= new ArrayList<>();
@@ -65,15 +64,35 @@ public class PwalImpl implements Pwal, DeviceListener {
 	@Override
 	public void notifyDeviceAdded(Device newDevice) {
 		String generatedId = this.generateId();
-		newDevice.setPwalId(generatedId);
+		//this is just a WORKAROUND for the IoT demo. fixed id to solve db sync
+		switch (newDevice.getId()) {
+		case "idFlowSensor":
+			newDevice.setPwalId("1fa71b84-f0c8-4bd6-91f8-4e69e073ece7");
+			break;
+		case "idFillLevelSensor":
+			newDevice.setPwalId("41fbcb5a-8e0e-460a-bcc0-ffd067793dbb");
+			break;
+		case "idWaterPump":
+			newDevice.setPwalId("2d66307c-6d7a-4687-a4fa-dc0893648bcd");
+			break;
+		default:
+			newDevice.setPwalId(generatedId);
+			break;
+		}
 		log.info("New PWAL device added: generated id {} type {}.", generatedId, newDevice.getType());
 		
-		String LogMsg="New PWAL device added: generated Id:"+generatedId+"; type:"+ newDevice.getType();
+		String LogMsg="New device added: generated Id:"+generatedId+"; type:"+ newDevice.getType();
 		pwalDeviceLoggerList.add(0, new DeviceLogger(sdf.format(System.currentTimeMillis()), LogMsg ));
 		if(pwalDeviceLoggerList.size()>maxlogsize) {
 			pwalDeviceLoggerList.remove(pwalDeviceLoggerList.size() -1);
 		}
-		this.devicesList.add(newDevice);
+		synchronized (this.devicesList) {
+			this.devicesList.add(newDevice);
+		}
+
+		for (PWALDeviceListener listener : this.pwalDeviceListeners) {
+			listener.notifyPWALDeviceAdded(newDevice);
+		}
 	}
 
 	@Override
@@ -83,9 +102,9 @@ public class PwalImpl implements Pwal, DeviceListener {
 			if(d.getPwalId().equals(removedDevice.getPwalId()))
 			{
 					this.devicesList.remove(index);
-					log.info("New PWAL device removed: id {} type {}.", removedDevice.getPwalId(), removedDevice.getType());
+					log.info("New device removed: id {} type {}.", removedDevice.getPwalId(), removedDevice.getType());
 					
-					String LogMsg="PWAL device Removed: Id: "+removedDevice.getPwalId()+";type:"+ removedDevice.getType();
+					String LogMsg="Device Removed: Id: "+removedDevice.getPwalId()+";type:"+ removedDevice.getType();
 					pwalDeviceLoggerList.add(0, new DeviceLogger(sdf.format(System.currentTimeMillis()), LogMsg ));
 					if(pwalDeviceLoggerList.size()>maxlogsize) {
 						pwalDeviceLoggerList.remove(pwalDeviceLoggerList.size() -1);
@@ -93,6 +112,10 @@ public class PwalImpl implements Pwal, DeviceListener {
 					break;
 			}
 			index++;
+		}
+		
+		for (PWALDeviceListener listener : this.pwalDeviceListeners) {
+			listener.notifyPWALDeviceRemoved(removedDevice);
 		}
 	}
 

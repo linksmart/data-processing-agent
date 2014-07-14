@@ -1,11 +1,11 @@
 package it.ismb.pertlab.pwal.connectors.rest;
 
-import it.ismb.pertlab.pwal.PwalImpl;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.WaterPump;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.api.internal.Pwal;
 import it.ismb.pertlab.pwal.connectors.datamodel.DeviceCommand;
 import it.ismb.pertlab.pwal.connectors.datamodel.DevicesManagerStatus;
 
@@ -34,7 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PwalRestConnector implements PWALDeviceListener {
 
 	@Autowired
-	private PwalImpl pwal;
+	private Pwal pwal;
+	
 	private static final Logger log=LoggerFactory.getLogger(PwalRestConnector.class);
 
 	/**
@@ -73,8 +74,8 @@ public class PwalRestConnector implements PWALDeviceListener {
 			}
 		}
 		
-		else if((networkType == null || networkType.length() == 0) &&
-		   (deviceType != null && deviceType.length() != 0))
+		else if((networkType == null || networkType.isEmpty()) &&
+		   (deviceType != null && !deviceType.isEmpty()))
 		{
 			for (Device d : pwal.getDevicesList()) 
 			{
@@ -82,8 +83,8 @@ public class PwalRestConnector implements PWALDeviceListener {
 					dev.add(d.getPwalId());
 			}
 		}
-		else if((networkType != null && networkType.length() != 0) &&
-		   (deviceType == null || deviceType.length() == 0))
+		else if((networkType != null && !networkType.isEmpty()) &&
+		   (deviceType == null || deviceType.isEmpty()))
 		{
 			for (Device d : pwal.getDevicesList()) 
 			{
@@ -129,7 +130,7 @@ public class PwalRestConnector implements PWALDeviceListener {
 					log.info("Requested device type is: {}", device.getType());
 					try {
 						Method setVelocityMethod = ((WaterPump)device).getClass().getMethod(command.getMethodName(), Double.class);
-						setVelocityMethod.invoke(((WaterPump)device).getClass(), command.getParams().toArray()[0]);
+						setVelocityMethod.invoke(((WaterPump)device),Double.parseDouble((String) command.getParams().toArray()[0]));
 						return new ResponseEntity<>(HttpStatus.OK);
 					} catch (NoSuchMethodException | SecurityException e) {
 						log.error("Exception: ", e);

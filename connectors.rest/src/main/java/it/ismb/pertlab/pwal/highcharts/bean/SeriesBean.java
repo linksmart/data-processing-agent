@@ -18,7 +18,6 @@ public class SeriesBean {
       this.data = data;
     }
 
-
     public String getName() {
         return name;
     }
