@@ -24,7 +24,7 @@ public class WSNManager extends DevicesManager{
 	
 	private int port = 7730;
 	byte [] sendData 	= new byte [12];
-	byte [] receiveData = new byte [12];
+	byte [] receiveData = new byte [16]; // fix to accelerometer z axis reading
 	DatagramSocket udplistener = null;
 	DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 	
