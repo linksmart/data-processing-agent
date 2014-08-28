@@ -1,0 +1,21 @@
+{
+  "key":{
+    "label":"Magic Test Key",
+    "private_access": true,
+    "permissions":[
+      {
+        "access_methods":["put"],
+        "source_ip": "666.666.66.666",
+        "resources": [
+          {
+            "feed_id": 929
+          }
+        ]
+      },
+      {
+        "access_methods": ["get", "post", "delete"]
+      }
+    ]
+  }
+}
+

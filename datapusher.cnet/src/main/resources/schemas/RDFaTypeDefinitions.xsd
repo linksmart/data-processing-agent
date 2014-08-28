@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.w3.org/1999/xhtml/datatypes/"
+  xmlns:xh11d="http://www.w3.org/1999/xhtml/datatypes/"
+  targetNamespace="http://www.w3.org/1999/xhtml/datatypes/"
+  elementFormDefault="qualified"
+  >
+  
+  <xs:annotation>
+    <xs:documentation>LinkSmart RDFa definitions</xs:documentation>
+    <xs:documentation>This schema is a (corrected) version of the schema provided in Appendix A1 of 
+      RDFa Core 1.1 - Second Edition, Syntax and processing rules for embedding RDF through attributes
+      W3C Recommendation 22 August 2013
+      http://www.w3.org/TR/2013/REC-rdfa-core-20130822/
+      
+      http://www.w3.org/TR/rdfa-syntax/#xml-schema-definition
+    </xs:documentation>
+    <xs:documentation>CNet Svenska AB</xs:documentation>
+    <xs:documentation>2014-03-26</xs:documentation>
+  </xs:annotation>
+  
+  <xs:simpleType name="CURIE">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?(/[^\s/][^\s]*|[^\s/][^\s]*|[^\s]?)" />
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType> 
+  
+  <xs:simpleType name="CURIEs">
+    <xs:list itemType="xh11d:CURIE"/>
+  </xs:simpleType>
+  
+  <xs:simpleType name="SafeCURIE">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\[(([\i-[:]][\c-[:]]*)?:)?(/[^\s/][^\s]*|[^\s/][^\s]*|[^\s]?)\]" />
+      <xs:minLength value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="SafeCURIEs">
+    <xs:list itemType="xh11d:SafeCURIE"/>
+  </xs:simpleType>
+  
+  <xs:simpleType name="TERM">
+    <xs:restriction base="xs:Name">
+      <xs:pattern value="[\i-[:]][/\c-[:]]*" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  
+  <xs:simpleType name="CURIEorIRI">
+    <xs:union memberTypes="xh11d:CURIE xs:anyURI" />
+  </xs:simpleType>
+  
+  <xs:simpleType name="CURIEorIRIs">
+    <xs:list itemType="xh11d:CURIEorIRI"/>
+  </xs:simpleType>
+  
+  <xs:simpleType name="SafeCURIEorCURIEorIRI">
+    <xs:union memberTypes="xh11d:SafeCURIE xh11d:CURIE xs:anyURI" />
+  </xs:simpleType>
+  
+  <xs:simpleType name="SafeCURIEorCURIEorIRIs">
+    <xs:list itemType="xh11d:SafeCURIEorCURIEorIRI"/>
+  </xs:simpleType>
+  
+  <xs:simpleType name='AbsIRI'>
+    <xs:restriction base='xs:string'>
+      <xs:pattern value="[\i-[:]][\c-[:]]+:.+" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="TERMorCURIEorAbsIRI">
+    <xs:union memberTypes="xh11d:TERM xh11d:CURIE xh11d:AbsIRI" />
+  </xs:simpleType>
+  
+  <xs:simpleType name="TERMorCURIEorAbsIRIs">
+    <xs:list itemType="xh11d:TERMorCURIEorAbsIRI"/>
+  </xs:simpleType>
+</xs:schema>
