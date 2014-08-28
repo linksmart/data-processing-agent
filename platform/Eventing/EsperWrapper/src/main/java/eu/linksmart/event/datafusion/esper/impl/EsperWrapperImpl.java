@@ -1,16 +1,18 @@
 package eu.linksmart.event.datafusion.esper.impl;
 
+import com.espertech.esper.client.EPServiceProvider;
+import com.espertech.esper.client.EPServiceProviderManager;
+import com.espertech.esper.client.EPStatement;
+import eu.linksmart.api.event.datafusion.ComplexEventHandler;
+import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.EventFeeder;
+import org.apache.log4j.Logger;
+import org.osgi.service.component.ComponentContext;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.osgi.service.component.ComponentContext;
-
-import com.espertech.esper.client.*;
-
-import eu.linksmart.api.event.datafusion.*;
 
 
 public class EsperWrapperImpl implements  DataFusionWrapper {
@@ -32,11 +34,11 @@ public class EsperWrapperImpl implements  DataFusionWrapper {
 			LOG.info("EsperWrapper is ativated!");
 			
 		}
-	protected synchronized void bindFeeder(EventsFeeder feeder) {
+	protected synchronized void bindFeeder(EventFeeder feeder) {
 		feeder.dataFusionWrapperSignIn(this);
 		
 	}
-	protected synchronized void unbindFeeder(EventsFeeder feeder) {
+	protected synchronized void unbindFeeder(EventFeeder feeder) {
 		feeder.dataFusionWrapperSignOut(this);
 	}
 	protected synchronized void bindCEH(ComplexEventHandler handler) {

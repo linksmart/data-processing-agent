@@ -1,11 +1,9 @@
 package eu.linksmart.event.datafusion.esper.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import eu.linksmart.api.event.datafusion.ResponseSet;
+import eu.linksmart.api.event.datafusion.ResponseSet.Response;
 
-import eu.linksmart.datafusion.datafusionwrapper.ResponseSet.Response;
-import eu.linksmart.datafusion.datafusionwrapper.ResponseSet;
+import java.util.ArrayList;
 
 public class EsperResponseSet extends  ArrayList<Response> implements ResponseSet{
 

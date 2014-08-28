@@ -1,14 +1,12 @@
 package eu.linksmart.event.datafusion.esper.impl;
 
-import java.util.ArrayList;
-
-
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
+import eu.linksmart.api.event.datafusion.ComplexEventHandler;
+import eu.linksmart.api.event.datafusion.ResponseSet;
+import eu.linksmart.api.event.datafusion.ResponseSet.Response;
 
-import eu.linksmart.datafusion.datafusionwrapper.ComplexEventHandler;
-import eu.linksmart.datafusion.datafusionwrapper.ResponseSet.Response;
-import eu.linksmart.datafusion.datafusionwrapper.ResponseSet;
+import java.util.ArrayList;
 
 public class QueryListener implements UpdateListener {
 	private ComplexEventHandler CEPHandler;

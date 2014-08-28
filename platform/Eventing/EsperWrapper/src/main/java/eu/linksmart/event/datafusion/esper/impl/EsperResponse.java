@@ -1,8 +1,8 @@
 package eu.linksmart.event.datafusion.esper.impl;
 
-import java.util.Hashtable;
+import eu.linksmart.api.event.datafusion.ResponseSet.Response;
 
-import eu.linksmart.datafusion.datafusionwrapper.ResponseSet.Response;
+import java.util.Hashtable;
 
 public class EsperResponse extends Hashtable<String, Object> implements Response {
 

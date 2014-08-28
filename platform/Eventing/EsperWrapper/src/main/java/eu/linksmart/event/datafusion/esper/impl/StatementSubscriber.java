@@ -1,8 +1,8 @@
 package eu.linksmart.event.datafusion.esper.impl;
 
-import java.util.Map;
+import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 
-import eu.linksmart.datafusion.datafusionwrapper.ComplexEventHandler;
+import java.util.Map;
 
 class StatementSubscriber{
 	
