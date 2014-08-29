@@ -16,8 +16,8 @@
 
     <packaging>bundle</packaging>
 
-    <name>LinkSmart Service - CHANGE THIS</name>
-    <description>LinkSmart service description - CHANGE THIS</description>
+    <name>MQTTClient</name>
+
     <dependencies>
         <dependency>
             <groupId>eu.linksmart</groupId>
