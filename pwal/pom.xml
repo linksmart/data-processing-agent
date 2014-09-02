@@ -125,8 +125,8 @@
 		</dependency>
 		<dependency>
 			<groupId>it.ismb.pertlab.pwal</groupId>
-			<artifactId>etsi-m2m-manager</artifactId>
-			<version>0.0.1</version>
+			<artifactId>estsi-m2m-manager-v2</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

@@ -26,7 +26,7 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Pwal start" );
-        ApplicationContext ctx=new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
+        ApplicationContext ctx=new ClassPathXmlApplicationContext(new String[]{"applicationContext-pwal.xml"});
         Pwal p=(Pwal) ctx.getBean("PWAL");
 //        CnetDataPusher cnet = new CnetDataPusher(5);
 //        p.addPwalDeviceListener(cnet);
