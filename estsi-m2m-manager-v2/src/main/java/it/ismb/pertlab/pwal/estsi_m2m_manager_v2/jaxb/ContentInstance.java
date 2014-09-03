@@ -11,6 +11,7 @@ package it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -45,6 +46,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  * 
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ContentInstance", propOrder = {
     "creationTime",

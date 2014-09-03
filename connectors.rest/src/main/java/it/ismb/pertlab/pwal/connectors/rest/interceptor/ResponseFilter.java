@@ -23,10 +23,10 @@ public class ResponseFilter implements Filter {
 		System.out.println("doFilter");
 		
 		LinkSmartResponseWrapper lsResponse = new LinkSmartResponseWrapper((HttpServletResponse)response);
-		lsResponse.forceContentType("text/plain");
 //		lsResponse.forceBufferSize(16384);
 //		response.setContentType("text/plain");
 		chain.doFilter(request, lsResponse);
+		lsResponse.forceBufferSize(16384);
 	}
 
 	@Override

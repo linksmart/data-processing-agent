@@ -4,6 +4,7 @@ import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.Application;
 import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.Applications;
 import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.Container;
 import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.Containers;
+import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.ContentInstance;
 import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.ContentInstances;
 import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.SclBase;
 
@@ -49,6 +50,11 @@ public class EtsiM2MMessageParser {
 	public ContentInstances parseContentInstances(InputStream is) throws JAXBException
 	{
 		return this.unmarshal(ContentInstances.class, is);
+	}
+	
+	public ContentInstance parseContentInstance(InputStream is) throws JAXBException
+	{
+		return this.unmarshal(ContentInstance.class, is);
 	}
 	
 	private <T> T unmarshal( Class<T> docClass, InputStream inputStream ) throws JAXBException 

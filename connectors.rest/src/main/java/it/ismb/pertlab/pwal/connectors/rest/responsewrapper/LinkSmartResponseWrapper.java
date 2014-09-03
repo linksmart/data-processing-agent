@@ -9,7 +9,7 @@ public class LinkSmartResponseWrapper extends HttpServletResponseWrapper {
 	
 	public LinkSmartResponseWrapper(HttpServletResponse response) {
 		super(response);
-		this.forceBufferSize(32000);
+//		this.forceBufferSize(32000);
 	}
 	
 //	public void setContentType(String contentType)
@@ -41,6 +41,5 @@ public class LinkSmartResponseWrapper extends HttpServletResponseWrapper {
         if (!name.equals("Content-Type") && !name.equals("Transfer-Encoding")) {
             super.addHeader(name, value);
         }
-
     }
 }

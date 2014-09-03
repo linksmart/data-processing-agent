@@ -4,7 +4,7 @@ import it.ismb.pertlab.pwal.api.data.pusher.DataPusher;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
-import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
+import it.ismb.pertlab.pwal.api.devices.model.FlowMeterFit;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
@@ -124,7 +124,7 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
 								}
 								break;
 							case DeviceType.FLOW_METER_SENSOR:
-								FlowMeter fm = (FlowMeter)d;
+								FlowMeterFit fm = (FlowMeterFit)d;
 								String flow = String.valueOf(fm.getFlow());
 								if(flow != null && !flow.isEmpty())
 								{

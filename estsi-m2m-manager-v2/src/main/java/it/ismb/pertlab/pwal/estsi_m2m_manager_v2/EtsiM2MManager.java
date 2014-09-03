@@ -173,29 +173,25 @@ public class EtsiM2MManager extends DevicesManager
 //			String[] containerTokens = container.getId().split("/");
 			String containerName = container.getId(); //containerTokens[containerTokens.length - 1];
 			log.info("Container name is: {}", containerName);
-			for (String key : this.devicesMapping.keySet()) {
-				if(containerName.equals(key))
+			String deviceId = this.generateId();
+			for (String searchString : container.getSearchStrings().getSearchString()) {
+				log.debug("SearchString: {}", searchString);
+				try
 				{
-					for(String className : this.devicesMapping.get(key))
+					Class<?> classDevice = Class.forName("it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom."+searchString);
+					Constructor<?> constructor=classDevice.getConstructor(String.class, CloseableHttpClient.class);
+					Device d = (Device) constructor.newInstance(container.getContentInstancesReference(), this.client);
+					d.setId(deviceId);
+					this.devicesDiscovered.put(deviceId, d);
+					for(DeviceListener l:deviceListener)
 					{
-						Class<?> classDevice = Class.forName(className);
-						Constructor<?> constructor=classDevice.getConstructor(String.class, CloseableHttpClient.class);
-						Device d = (Device) constructor.newInstance(container.getContentInstancesReference(), this.client);
-						String deviceId = this.generateId();
-						d.setId(deviceId);
-						this.devicesDiscovered.put(deviceId, d);
-						for(DeviceListener l:deviceListener)
-						{
-							log.info("New M2M device discovered. Generating event.");
-							try {
-								Thread.sleep(10000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							l.notifyDeviceAdded(d);
-						}
+						log.info("New M2M device discovered. Generating event.");
+						l.notifyDeviceAdded(d);
 					}
+				}
+				catch(ClassNotFoundException ex)
+				{
+					log.warn("Ops....class {} not found.", searchString);
 				}
 			}
 		} catch (IOException | IllegalStateException | JAXBException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

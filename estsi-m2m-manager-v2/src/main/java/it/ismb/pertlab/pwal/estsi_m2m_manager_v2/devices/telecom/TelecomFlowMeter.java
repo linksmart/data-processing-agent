@@ -1,7 +1,7 @@
 package it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom;
 
+import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
-import it.ismb.pertlab.pwal.api.devices.model.PhMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
@@ -22,18 +22,18 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-public class TelecomPhMeter implements PhMeter {
+public class TelecomFlowMeter implements FlowMeter {
 
 	private String pwalId;
 	private String id;
-	private Double ph; 
+	private Double flow; 
 	private CloseableHttpClient client;
 	private HttpGet contentInstancesRequest;
 	private String contentInstancesUrl;
 	private EtsiM2MMessageParser messageParser;
 	private static final Logger log = LoggerFactory.getLogger(TelecomPhMeter.class);
 	
-	public TelecomPhMeter(String contentInstancesUrl, CloseableHttpClient client)
+	public TelecomFlowMeter(String contentInstancesUrl, CloseableHttpClient client)
 	{
 		this.client = client;
 		this.contentInstancesUrl = contentInstancesUrl+"/latest";
@@ -44,26 +44,6 @@ public class TelecomPhMeter implements PhMeter {
 		contentInstancesRequest.setHeader("Accept", "application/xml");
 		contentInstancesRequest.setHeader("From", "http://m2mtilab.dtdns.net:8082/etsi/almanac/applications/APP");
 		this.messageParser = new EtsiM2MMessageParser();
-	}
-	
-	@Override
-	public Double getPh() {
-		try {
-			CloseableHttpResponse phResponse = this.client.execute(contentInstancesRequest);
-//			ContentInstances cis = this.messageParser.parseContentInstances(phResponse.getEntity().getContent());
-			ContentInstance ci = this.messageParser.parseContentInstance(phResponse.getEntity().getContent());
-			if(ci != null)
-			{
-	//			log.debug("Received message: "+this.messageParser.toXml(ContentInstances.class, ci));
-				Gson gson = new Gson();
-				TelecomWaterJson values = gson.fromJson(ci.getContent().getTextContent(), TelecomWaterJson.class);
-				this.ph = values.getPh();
-				log.debug("Json parsed: {}", values.toString());
-			}
-		} catch (IOException | IllegalStateException | JAXBException e) {
-			log.error("getPh: ",e);
-		}
-		return this.ph;
 	}
 
 	@Override
@@ -88,7 +68,7 @@ public class TelecomPhMeter implements PhMeter {
 
 	@Override
 	public String getType() {
-		return DeviceType.PH_METER;
+		return DeviceType.FLOW_METER_SENSOR;
 	}
 
 	@Override
@@ -130,6 +110,26 @@ public class TelecomPhMeter implements PhMeter {
 	public void setUnit(Unit unit) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Double getFlow() {
+		try {
+			CloseableHttpResponse phResponse = this.client.execute(contentInstancesRequest);
+//			ContentInstances cis = this.messageParser.parseContentInstances(phResponse.getEntity().getContent());
+			ContentInstance ci = this.messageParser.parseContentInstance(phResponse.getEntity().getContent());
+			if(ci != null)
+			{
+	//			log.debug("Received message: "+this.messageParser.toXml(ContentInstances.class, ci));
+				Gson gson = new Gson();
+				TelecomWaterJson values = gson.fromJson(ci.getContent().getTextContent(), TelecomWaterJson.class);
+				this.flow = values.getFlow();
+				log.debug("Json parsed: {}", values.toString());
+			}
+		} catch (IOException | IllegalStateException | JAXBException e) {
+			log.error("getFlow: ",e);
+		}
+		return this.flow;
 	}
 
 }
