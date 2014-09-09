@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
@@ -19,7 +20,7 @@ import org.junit.Test;
 public class EtsiM2MMessageParserTest {
 
 	@Test
-	public void testParseApplications() throws FileNotFoundException, DatatypeConfigurationException
+	public void testParseApplications() throws FileNotFoundException, DatatypeConfigurationException, JAXBException
 	{
 		InputStream is=new FileInputStream(this.getClass().getClassLoader().getResource("applications.xml").getFile());
 		EtsiM2MMessageParser parser=new EtsiM2MMessageParser();
@@ -46,7 +47,7 @@ public class EtsiM2MMessageParserTest {
 	}
 	
 	@Test
-	public void testGetApplication() throws FileNotFoundException, DatatypeConfigurationException
+	public void testGetApplication() throws FileNotFoundException, DatatypeConfigurationException, JAXBException
 	{
 		InputStream is=new FileInputStream(this.getClass().getClassLoader().getResource("application.xml").getFile());
 		EtsiM2MMessageParser parser=new EtsiM2MMessageParser();

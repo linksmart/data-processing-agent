@@ -14,18 +14,20 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * <p>Java class for ScheduleString complex type.
+ * <p>Java class for hexBinary complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ScheduleString">
+ * &lt;complexType name="hexBinary">
  *   &lt;simpleContent>
- *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" />
+ *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>hexBinary">
+ *       &lt;attribute ref="{http://www.w3.org/2005/05/xmlmime}contentType"/>
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -34,16 +36,17 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ScheduleString", propOrder = {
+@XmlType(name = "hexBinary", namespace = "http://www.w3.org/2005/05/xmlmime", propOrder = {
     "value"
 })
-public class ScheduleString {
+public class HexBinary {
 
     @XmlValue
-    protected String value;
-    @XmlAttribute(name = "id", required = true)
-    @XmlSchemaType(name = "anySimpleType")
-    protected String id;
+    @XmlJavaTypeAdapter(HexBinaryAdapter.class)
+    @XmlSchemaType(name = "hexBinary")
+    protected byte[] value;
+    @XmlAttribute(name = "contentType", namespace = "http://www.w3.org/2005/05/xmlmime")
+    protected String contentType;
 
     /**
      * Gets the value of the value property.
@@ -53,7 +56,7 @@ public class ScheduleString {
      *     {@link String }
      *     
      */
-    public String getValue() {
+    public byte[] getValue() {
         return value;
     }
 
@@ -65,32 +68,32 @@ public class ScheduleString {
      *     {@link String }
      *     
      */
-    public void setValue(String value) {
+    public void setValue(byte[] value) {
         this.value = value;
     }
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the contentType property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getId() {
-        return id;
+    public String getContentType() {
+        return contentType;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the contentType property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setId(String value) {
-        this.id = value;
+    public void setContentType(String value) {
+        this.contentType = value;
     }
 
 }

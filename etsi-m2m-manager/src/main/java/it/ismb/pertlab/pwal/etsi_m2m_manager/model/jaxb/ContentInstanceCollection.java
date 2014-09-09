@@ -16,16 +16,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Schedule complex type.
+ * <p>Java class for ContentInstanceCollection complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Schedule">
+ * &lt;complexType name="ContentInstanceCollection">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://uri.etsi.org/m2m}scheduleString" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://uri.etsi.org/m2m}contentInstance" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,40 +35,40 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Schedule", propOrder = {
-    "scheduleString"
+@XmlType(name = "ContentInstanceCollection", propOrder = {
+    "contentInstance"
 })
-public class Schedule {
+public class ContentInstanceCollection {
 
-    protected List<ScheduleString> scheduleString;
+    protected List<ContentInstance> contentInstance;
 
     /**
-     * Gets the value of the scheduleString property.
+     * Gets the value of the contentInstance property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the scheduleString property.
+     * This is why there is not a <CODE>set</CODE> method for the contentInstance property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getScheduleString().add(newItem);
+     *    getContentInstance().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ScheduleString }
+     * {@link ContentInstance }
      * 
      * 
      */
-    public List<ScheduleString> getScheduleString() {
-        if (scheduleString == null) {
-            scheduleString = new ArrayList<ScheduleString>();
+    public List<ContentInstance> getContentInstance() {
+        if (contentInstance == null) {
+            contentInstance = new ArrayList<ContentInstance>();
         }
-        return this.scheduleString;
+        return this.contentInstance;
     }
 
 }

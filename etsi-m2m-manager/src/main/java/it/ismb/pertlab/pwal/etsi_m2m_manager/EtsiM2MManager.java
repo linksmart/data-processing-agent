@@ -1,80 +1,66 @@
 package it.ismb.pertlab.pwal.etsi_m2m_manager;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
+import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
+import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
-import it.ismb.pertlab.pwal.etsi_m2m_manager.model.EtsiM2MMessageParser;
-import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.Applications;
-import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.NamedReferenceCollection;
-import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ReferenceToNamedResource;
+import it.ismb.pertlab.pwal.etsi_m2m_manager.utility.M2MUtility;
+import it.ismb.pertlab.pwal.etsi_m2m_manager.utility.events.M2MDeviceListener;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import java.util.ArrayList;
+import java.util.List;
 
-public class EtsiM2MManager extends DevicesManager{
-	private String baseUrl;
-	private CloseableHttpClient client;
+public class EtsiM2MManager extends DevicesManager implements M2MDeviceListener
+{
+	private M2MUtility m2mUtility;
 	
 	public EtsiM2MManager(String baseUrl)
 	{
-		client=HttpClients.createDefault();
-		this.baseUrl=baseUrl;
-		
+		this.m2mUtility = new M2MUtility(baseUrl, null);
+		this.m2mUtility.addM2MEventListener(this);
 	}
 	
-	@Override
 	public void run() {
+		log.info("M2M manager started.");
+		this.m2mUtility.exploreM2MResourcesTree();
 		while(!t.isInterrupted())
-		{		
-			discoverApplications();
+		{
 			
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				t.interrupt();
+		}
+		for(List<Device> ld : this.devicesDiscovered.values()){
+			for (Device d : ld) {
+				for (DeviceListener dl : this.deviceListener) {
+					dl.notifyDeviceRemoved(d);
+				}
 			}
 		}
+		this.devicesDiscovered.clear();
 	}
-
-	private void discoverApplications() {
-		HttpGet applicationsRequest=new HttpGet(this.baseUrl+"/applications");
-		applicationsRequest.setHeader("Authorization", "Basic d2F0ZXI6d2F0ZXJwYXNzd29yZA==");
-		applicationsRequest.setHeader("Content-Type", "application/xml");
-		applicationsRequest.setHeader("Accept", "application/xml");
-		applicationsRequest.setHeader("From", "http://m2mtilab.dtdns.net:8082/etsi/almanac/applications/APP");
-		
-		try {
-			CloseableHttpResponse resp=client.execute(applicationsRequest);
-			EtsiM2MMessageParser parser=new EtsiM2MMessageParser();
-			parser.parseApplications(resp.getEntity().getContent());
-			
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 
 	@Override
 	public String getNetworkType() {
 		return DeviceNetworkType.M2M;
 	}
 
+	@Override
+	public void notifyM2MDeviceAdded(Device newDevice) {
+		if(this.devicesDiscovered.containsKey(newDevice.getId()))
+			this.devicesDiscovered.get(newDevice.getId()).add(newDevice);
+		else
+		{
+			List<Device> ld = new ArrayList<>();
+			ld.add(newDevice);
+			this.devicesDiscovered.put(newDevice.getId(), ld);
+		}
+		for(DeviceListener l:deviceListener)
+		{
+			log.info("New M2M device discovered. Generating event.");
+			l.notifyDeviceAdded(newDevice);
+		}
+	}
+
+	@Override
+	public void notifyM2MDeviceRemoved(Device removedDevice) {
+		this.devicesDiscovered.remove(removedDevice);		
+	}
 }

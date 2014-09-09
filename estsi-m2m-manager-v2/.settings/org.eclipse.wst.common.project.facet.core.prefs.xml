@@ -1,7 +1,0 @@
-<root>
-  <facet id="jpt.jaxb">
-    <node name="classgen">
-      <attribute name="package" value="it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb"/>
-    </node>
-  </facet>
-</root>
