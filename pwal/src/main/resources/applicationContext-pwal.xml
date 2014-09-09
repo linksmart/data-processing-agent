@@ -13,7 +13,7 @@
 <!-- 				<ref bean="wsnManager"/> --> 
 <!-- 						<ref bean="bluetoothManager"/>  -->
 <!--  				 <ref bean="serialManager"/>  -->
-<!--  				<ref bean="SmartSantanderManager" />  -->
+ 				<ref bean="SmartSantanderManager" /> 
 <!-- 					<ref bean="xivelyManager"/> -->
 					<ref bean="m2mManagerV2" />
     		</list>
@@ -47,15 +47,5 @@
 <!-- 	</bean> -->
 	<bean id="m2mManagerV2" class="it.ismb.pertlab.pwal.estsi_m2m_manager_v2.EtsiM2MManager">
 		<constructor-arg value="http://m2mtilab.dtdns.net/etsi/almanac" />
-		<constructor-arg>
-			<map>
-				<entry key="pipe1">
-					<list>
-						<value>it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom.TelecomPhMeter</value>
-<!-- 						<value>it.ismb.pertlab.pwal.api.devices.model.FlowMeter</value> -->
-					</list>
-				</entry>
-			</map>
-		</constructor-arg>
 	</bean>
 </beans>

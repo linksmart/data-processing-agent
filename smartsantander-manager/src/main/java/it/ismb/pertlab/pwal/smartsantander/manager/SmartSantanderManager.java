@@ -16,12 +16,12 @@ import java.util.List;
 
 /**
  * This component manages the SmartSantander sensors network
- *
+ * 
  */
-public class SmartSantanderManager extends DevicesManager
-{
-	SmartSantanderRestClient restClient = new SmartSantanderRestClient("http://data.smartsantander.eu/ISMB/", log);
-	
+public class SmartSantanderManager extends DevicesManager {
+	SmartSantanderRestClient restClient = new SmartSantanderRestClient(
+			"http://data.smartsantander.eu/ISMB/", log);
+
 	public void run() {
 		while (!t.isInterrupted()) {
 			log.info("Retrieving devices list from SmartSantander");
@@ -31,22 +31,24 @@ public class SmartSantanderManager extends DevicesManager
 				log.info("Devices list size: {}.",availableNodes.size());
 				//Check for devices removed...comparing devices discovered with the list returned by SmartSantander
 				List<Device> toBeRemoved = new ArrayList<>();
-				for (Device d : devicesDiscovered.values()) {
-					Boolean found = false;
-					for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes) {
-						
-						if(d.getId().equals(smartSantanderSingleNodeJson.getNodeId()))
+				for (List<Device> ld : devicesDiscovered.values()) {
+					for (Device d : ld) {
+						Boolean found = false;
+						for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes) {
+							
+							if(d.getId().equals(smartSantanderSingleNodeJson.getNodeId()))
+							{
+								found = true;
+								continue;
+							}
+						}	
+						if(!found)
 						{
-							found = true;
-							continue;
-						}
-					}	
-					if(!found)
-					{
-						log.info("Device {} seems to be removed. It is no more present in the retrieved devices list.", d);
-						toBeRemoved.add(d);
-						for (DeviceListener l : deviceListener) {
-							l.notifyDeviceRemoved(d);
+							log.info("Device {} seems to be removed. It is no more present in the retrieved devices list.", d);
+							toBeRemoved.add(d);
+							for (DeviceListener l : deviceListener) {
+								l.notifyDeviceRemoved(d);
+							}
 						}
 					}
 				}
@@ -73,8 +75,12 @@ public class SmartSantanderManager extends DevicesManager
 							location.setLat(smartSantanderSingleNodeJson.getLatitude());
 							location.setLon(smartSantanderSingleNodeJson.getLongitude());
 							vehicleCounter.setLocation(location);
-							
-							this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleCounter);
+							if(!this.devicesDiscovered.containsKey(smartSantanderSingleNodeJson.getNodeId()))
+							{
+								List<Device> ld = new ArrayList<>();
+								this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), ld);
+							}
+							this.devicesDiscovered.get(smartSantanderSingleNodeJson.getNodeId()).add(vehicleCounter);
 							for (DeviceListener l : deviceListener) {
 								l.notifyDeviceAdded(vehicleCounter);
 							}
@@ -86,7 +92,12 @@ public class SmartSantanderManager extends DevicesManager
 							location2.setLat(smartSantanderSingleNodeJson.getLatitude());
 							location2.setLon(smartSantanderSingleNodeJson.getLongitude());
 							vehicleSpeed.setLocation(location2);
-							devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleSpeed);
+							if(!this.devicesDiscovered.containsKey(smartSantanderSingleNodeJson.getNodeId()))
+							{
+								List<Device> ld = new ArrayList<>();
+								this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), ld);
+							}
+							this.devicesDiscovered.get(smartSantanderSingleNodeJson.getNodeId()).add(vehicleSpeed);
 							for (DeviceListener l : deviceListener) {
 								l.notifyDeviceAdded(vehicleSpeed);
 							}

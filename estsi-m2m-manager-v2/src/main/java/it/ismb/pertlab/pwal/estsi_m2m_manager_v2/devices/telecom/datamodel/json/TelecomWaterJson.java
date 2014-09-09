@@ -1,4 +1,4 @@
-package it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom.datamodel;
+package it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom.datamodel.json;
 
 public class TelecomWaterJson {
 

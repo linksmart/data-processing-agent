@@ -57,20 +57,19 @@ public class EtsiM2MMessageParser {
 		return this.unmarshal(ContentInstance.class, is);
 	}
 	
-	private <T> T unmarshal( Class<T> docClass, InputStream inputStream ) throws JAXBException 
-	{
-	    JAXBContext jc = JAXBContext.newInstance( docClass );
-	    Unmarshaller u = jc.createUnmarshaller();
-	    @SuppressWarnings("unchecked")
-		T doc = (T)u.unmarshal( inputStream );
-	    return doc;
+	private <T> T unmarshal(Class<T> docClass, InputStream inputStream)
+			throws JAXBException {
+		JAXBContext jc = JAXBContext.newInstance(docClass);
+		Unmarshaller u = jc.createUnmarshaller();
+		@SuppressWarnings("unchecked")
+		T doc = (T) u.unmarshal(inputStream);
+		return doc;
 	}
-	
-	public <T> void toXml(Class<T> jaxbClass, T jaxbObj) throws JAXBException 
-	{
-            JAXBContext ctx = JAXBContext.newInstance(jaxbClass);
-            Marshaller marshaller = ctx.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.marshal(jaxbObj, System.out);
-    }
+
+	public <T> void toXml(Class<T> jaxbClass, T jaxbObj) throws JAXBException {
+		JAXBContext ctx = JAXBContext.newInstance(jaxbClass);
+		Marshaller marshaller = ctx.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		marshaller.marshal(jaxbObj, System.out);
+	}
 }

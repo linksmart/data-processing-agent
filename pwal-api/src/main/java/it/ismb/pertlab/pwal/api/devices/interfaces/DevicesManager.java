@@ -17,7 +17,7 @@ public abstract class DevicesManager implements Runnable {
 	protected Thread t;
 	protected String id;
 	protected static final Logger log=LoggerFactory.getLogger(DevicesManager.class);
-	protected HashMap<String, Device> devicesDiscovered = new HashMap<>();
+	protected HashMap<String, List<Device>> devicesDiscovered = new HashMap<>();
 	protected DeviceManagerStatus status = DeviceManagerStatus.STOPPED;
 	
 	public DeviceManagerStatus getStatus() {
@@ -34,7 +34,7 @@ public abstract class DevicesManager implements Runnable {
 	}
 
 	public void setId(String id) {
-		this.id = this.generateId();
+		this.id = this.generateId(id);
 	}
 
 	public void start(){
@@ -44,7 +44,7 @@ public abstract class DevicesManager implements Runnable {
 			break;
 		case STOPPED:
 			log.info("Starting device manager: {}", this.id);
-			t=new Thread(this);
+			t = new Thread(this);
 			this.status = DeviceManagerStatus.STARTED;
 			t.start();
 			break;
@@ -59,9 +59,12 @@ public abstract class DevicesManager implements Runnable {
 		case STARTED:
 			log.info("Stopping device manager: {}", this.id);
 			this.status = DeviceManagerStatus.STOPPED;
-			for (Device d : this.devicesDiscovered.values()) {
-				for (DeviceListener l : this.deviceListener) {
-					l.notifyDeviceRemoved(d);
+			for (List<Device> ld : this.devicesDiscovered.values()) {
+				for(Device d : ld)
+				{
+					for (DeviceListener l : this.deviceListener) {
+						l.notifyDeviceRemoved(d);
+					}
 				}
 			}
 			this.devicesDiscovered.clear();
@@ -84,7 +87,8 @@ public abstract class DevicesManager implements Runnable {
 		deviceListener.remove(l);
 	}
 	
-	protected String generateId()
+	@Deprecated
+	protected String generateId(String deviceID)
 	{
 		return UUID.randomUUID().toString();
 	}

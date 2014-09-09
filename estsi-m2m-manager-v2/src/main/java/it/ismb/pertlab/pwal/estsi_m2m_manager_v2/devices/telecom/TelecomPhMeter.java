@@ -5,7 +5,8 @@ import it.ismb.pertlab.pwal.api.devices.model.PhMeter;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
-import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom.datamodel.TelecomWaterJson;
+import it.ismb.pertlab.pwal.api.shared.PwalHttpClient;
+import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom.datamodel.json.TelecomWaterJson;
 import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.ContentInstance;
 import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.jaxb.ContentInstances;
 import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.parser.EtsiM2MMessageParser;
@@ -27,15 +28,15 @@ public class TelecomPhMeter implements PhMeter {
 	private String pwalId;
 	private String id;
 	private Double ph; 
-	private CloseableHttpClient client;
+//	private CloseableHttpClient client;
 	private HttpGet contentInstancesRequest;
 	private String contentInstancesUrl;
 	private EtsiM2MMessageParser messageParser;
 	private static final Logger log = LoggerFactory.getLogger(TelecomPhMeter.class);
 	
-	public TelecomPhMeter(String contentInstancesUrl, CloseableHttpClient client)
+	public TelecomPhMeter(String contentInstancesUrl)
 	{
-		this.client = client;
+//		this.client = client;
 		this.contentInstancesUrl = contentInstancesUrl+"/latest";
 		contentInstancesRequest = new HttpGet(this.contentInstancesUrl);
 		//These headers should be dynamic
@@ -49,16 +50,19 @@ public class TelecomPhMeter implements PhMeter {
 	@Override
 	public Double getPh() {
 		try {
-			CloseableHttpResponse phResponse = this.client.execute(contentInstancesRequest);
-//			ContentInstances cis = this.messageParser.parseContentInstances(phResponse.getEntity().getContent());
-			ContentInstance ci = this.messageParser.parseContentInstance(phResponse.getEntity().getContent());
-			if(ci != null)
+			CloseableHttpResponse phResponse = PwalHttpClient.getInstance().executeRequest(contentInstancesRequest);;
+			if(phResponse.getEntity().getContent() != null)
 			{
-	//			log.debug("Received message: "+this.messageParser.toXml(ContentInstances.class, ci));
-				Gson gson = new Gson();
-				TelecomWaterJson values = gson.fromJson(ci.getContent().getTextContent(), TelecomWaterJson.class);
-				this.ph = values.getPh();
-				log.debug("Json parsed: {}", values.toString());
+				ContentInstance ci = this.messageParser
+						.parseContentInstance(phResponse.getEntity()
+								.getContent());
+				if (ci != null) {
+					Gson gson = new Gson();
+					TelecomWaterJson values = gson.fromJson(ci.getContent()
+							.getTextContent(), TelecomWaterJson.class);
+					this.ph = values.getPh();
+					log.debug("Json parsed: {}", values.toString());
+				}
 			}
 		} catch (IOException | IllegalStateException | JAXBException e) {
 			log.error("getPh: ",e);
