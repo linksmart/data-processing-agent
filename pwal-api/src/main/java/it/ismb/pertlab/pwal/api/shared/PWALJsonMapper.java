@@ -8,6 +8,11 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+/**
+ * This class provides utilities to map json file into object and viceversa.
+ * @author GBo
+ *
+ */
 public class PWALJsonMapper {
 	private ObjectMapper mapper;
 
