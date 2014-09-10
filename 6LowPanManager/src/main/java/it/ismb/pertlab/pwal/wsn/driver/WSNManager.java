@@ -15,7 +15,9 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
 
 public class WSNManager extends DevicesManager{
@@ -97,6 +99,7 @@ public class WSNManager extends DevicesManager{
 	 * If a new type of sensor wants to be added to the WSN managed by this Manager,
 	 * it is needed to create a new case in the main switch for parsing the new type.
 	 */
+	@SuppressWarnings("deprecation")
 	private void registerSensorsType(IMessage msg) throws Exception
 	{
 		byte[] response=msg.getPayload();
@@ -115,7 +118,12 @@ public class WSNManager extends DevicesManager{
 					{
 						l.notifyDeviceAdded(ts);
 					}
-					devicesDiscovered.put(ts.getId(), ts);
+					if(!this.devicesDiscovered.containsKey(ts.getId()))
+					{
+						List<Device> ld = new ArrayList<>();
+						this.devicesDiscovered.put(ts.getId(), ld);
+					}
+					devicesDiscovered.get(ts.getId()).add(ts);
 					break;
 				case Definitions.SENSOR_ACCEL:
 					WSNAccelerometerSensor as=new WSNAccelerometerSensor();
@@ -126,7 +134,12 @@ public class WSNManager extends DevicesManager{
 					{
 						l.notifyDeviceAdded(as);
 					}					
-					devicesDiscovered.put(as.getId(), as);
+					if(!this.devicesDiscovered.containsKey(as.getId()))
+					{
+						List<Device> ld = new ArrayList<>();
+						this.devicesDiscovered.put(as.getId(), ld);
+					}
+					devicesDiscovered.get(as.getId()).add(as);
 					break;
 				case Definitions.SENSOR_LIGHT:
 					break;
@@ -141,7 +154,12 @@ public class WSNManager extends DevicesManager{
 					{
 						l.notifyDeviceAdded(ds);
 					}					
-					devicesDiscovered.put(ds.getId(), ds);
+					if(!this.devicesDiscovered.containsKey(ds.getId()))
+					{
+						List<Device> ld = new ArrayList<>();
+						this.devicesDiscovered.put(ds.getId(), ld);
+					}
+					devicesDiscovered.get(ds.getId()).add(ds);
 					break;
 				default:
 					break;
@@ -174,15 +192,18 @@ public class WSNManager extends DevicesManager{
 		String pwalType=Definitions.getCorresponsidngDeviceType(type);
 
 		//searching the correct sensor
-		for(Device d:super.devicesDiscovered.values())
+		for(List<Device> ld:super.devicesDiscovered.values())
 		{
-			WSNBaseDevice bd=(WSNBaseDevice) d;
-				
-			log.debug("Searching the correct sensor for device "+bd.getAddress()+" and type "+pwalType);
-			if(bd.getAddress().equals(data.getSrcAddress()) && d.getType().equals(pwalType))
+			for (Device d : ld) 
 			{
-				log.debug("Device found id="+d.getId());
-				bd.notifyMessage(data.getPayload());
+				WSNBaseDevice bd=(WSNBaseDevice) d;
+					
+				log.debug("Searching the correct sensor for device "+bd.getAddress()+" and type "+pwalType);
+				if(bd.getAddress().equals(data.getSrcAddress()) && d.getType().equals(pwalType))
+				{
+					log.debug("Device found id="+d.getId());
+					bd.notifyMessage(data.getPayload());
+				}
 			}
 		}
 	}

@@ -52,7 +52,4 @@
 	<bean id="m2mManager" class="it.ismb.pertlab.pwal.etsi_m2m_manager.EtsiM2MManager">
 		<constructor-arg value="http://m2mtilab.dtdns.net/etsi/almanac" />
 	</bean>
-	<bean id="m2mManager" class="it.ismb.pertlab.pwal.etsi_m2m_manager.EtsiM2MManager">
-		<constructor-arg value="http://m2mtilab.dtdns.net/etsi/almanac" />
-	</bean>
 </beans>
