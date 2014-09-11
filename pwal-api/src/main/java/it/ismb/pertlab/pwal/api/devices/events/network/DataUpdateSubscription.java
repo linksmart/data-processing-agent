@@ -18,6 +18,11 @@
 package it.ismb.pertlab.pwal.api.devices.events.network;
 
 /**
+ * A class representing a device subscription to low-level network events. It
+ * specifies the device responsible for the subscription, the desired event
+ * delivery time, the low-level identifier of the device. Last subscription
+ * activation is tracked and can be queried to check timing compliance.
+ * 
  * @author <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
@@ -35,7 +40,8 @@ public class DataUpdateSubscription
 	// the last updated instant (in system time) used to check if data for this
 	// subscription must be delivered or not
 	// TODO: improve this using a calendar object?
-	// TODO: check if it is better to handle updates outside to keep the model cleaner
+	// TODO: check if it is better to handle updates outside to keep the model
+	// cleaner
 	private long timestamp;
 	
 	/**
@@ -115,15 +121,16 @@ public class DataUpdateSubscription
 	{
 		return timestamp;
 	}
-
+	
 	/**
-	 * @param timestamp the timestamp to set
+	 * @param timestamp
+	 *            the timestamp to set
 	 */
 	public void setTimestamp(long timestamp)
 	{
 		this.timestamp = timestamp;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -3,7 +3,7 @@ package it.ismb.pertlab.pwal.smartsantander.manager;
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.events.network.DataUpdateSubscription;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
-import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.interfaces.PollingDevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderSingleNodeJson;
@@ -20,28 +20,45 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This component manages the SmartSantander sensors network
+ * This component manages the SmartSantander sensors network supporting network
+ * level polling
+ * 
+ * modified by <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
-public class SmartSantanderManager extends DevicesManager
+public class SmartSantanderManager extends PollingDevicesManager
 {
+	// the minimum polling time safely supported by the network
 	public static final int MINIMUM_POLLING_TIME = 100;
+	
+	// the default polling time for sensors handled by this manager
 	public static final int DEFAULT_POLLING_TIME = 5000;
+	
+	// the percent tolerance on data delivery times
 	public static final int TIME_TOLERANCE_PERCENT = 10;
 	
+	// the rest client need to gather sensor data
 	SmartSantanderRestClient restClient = new SmartSantanderRestClient("http://data.smartsantander.eu/ISMB/", log);
 	
+	// the poller service
 	private ScheduledExecutorService poller;
+	
+	// the polling task
 	private SmartSantanderPollingTask pollingTask;
+	
+	// the future task execution promise that allows handling the polling
+	// process
 	private ScheduledFuture<?> futureRun;
 	
 	public SmartSantanderManager()
 	{
 		super();
-		this.poller = Executors.newSingleThreadScheduledExecutor();
-		this.pollingTask = new SmartSantanderPollingTask(this, log);
 		
-		log.info("Constructor called");
+		//build the poller
+		this.poller = Executors.newSingleThreadScheduledExecutor();
+		
+		//build the polling task
+		this.pollingTask = new SmartSantanderPollingTask(this, log);
 	}
 	
 	public void run()
@@ -110,8 +127,10 @@ public class SmartSantanderManager extends DevicesManager
 								
 								this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleCounter);
 								
-								log.info("Adding subscription for:" + vehicleCounter.getId());
+								log.debug("Adding subscription for:" + vehicleCounter.getId());
+								
 								// add device polling subscription
+								// TODO: define sampling time at the device level
 								this.addSubscription(new DataUpdateSubscription(1000, vehicleCounter, vehicleCounter
 										.getId()));
 								
@@ -120,6 +139,7 @@ public class SmartSantanderManager extends DevicesManager
 									l.notifyDeviceAdded(vehicleCounter);
 								}
 								break;
+								
 							case SmartSantaderDeviceTypes.VEHICLE_SPEED:
 								SmartSantanderVehicleSpeedDevice vehicleSpeed = new SmartSantanderVehicleSpeedDevice(
 										this.restClient, this.getNetworkType());
@@ -130,10 +150,13 @@ public class SmartSantanderManager extends DevicesManager
 								vehicleSpeed.setLocation(location2);
 								devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleSpeed);
 								
-								log.info("Adding subscription for:" + vehicleSpeed.getId());
+								log.debug("Adding subscription for:" + vehicleSpeed.getId());
+								
 								// add device polling subscription
+								// TODO: define sampling time at the device level
 								this.addSubscription(new DataUpdateSubscription(2000, vehicleSpeed, vehicleSpeed
 										.getId()));
+								
 								for (DeviceListener l : deviceListener)
 								{
 									l.notifyDeviceAdded(vehicleSpeed);
@@ -167,6 +190,7 @@ public class SmartSantanderManager extends DevicesManager
 		// check if the polling task is running
 		if ((this.futureRun != null) && (!this.futureRun.isCancelled()))
 		{
+			//cancel the polling task
 			this.futureRun.cancel(false);
 			
 		}
@@ -186,10 +210,11 @@ public class SmartSantanderManager extends DevicesManager
 		this.basePollingTimeMillis = SmartSantanderManager.DEFAULT_POLLING_TIME;
 	}
 	
-	
-	
-	/* (non-Javadoc)
-	 * @see it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager#setMinimumPollingTimeMillis()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager#
+	 * setMinimumPollingTimeMillis()
 	 */
 	@Override
 	protected void setMinimumPollingTimeMillis()
@@ -203,13 +228,14 @@ public class SmartSantanderManager extends DevicesManager
 	{
 		this.timeTolerancePercentage = SmartSantanderManager.TIME_TOLERANCE_PERCENT;
 	}
-
+	
 	@Override
 	protected void updatePollingTime()
 	{
 		// check if the polling task is running
 		if ((this.futureRun != null) && (!this.futureRun.isCancelled()))
 		{
+			//stop the current polling task
 			this.futureRun.cancel(false);
 			
 		}
@@ -222,7 +248,5 @@ public class SmartSantanderManager extends DevicesManager
 				TimeUnit.MILLISECONDS);
 		
 	}
-
-	
 	
 }

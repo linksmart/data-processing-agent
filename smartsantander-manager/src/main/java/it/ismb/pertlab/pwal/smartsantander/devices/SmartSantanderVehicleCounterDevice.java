@@ -47,20 +47,24 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter, DataU
 	
 	public Double getOccupancy()
 	{
-		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
+		/*SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
 		if (measure != null)
 			return measure.getOccupancy();
 		else
-			return -1.0;
+			return -1.0;*/
+		return this.occupancy;
 	}
 	
 	public Double getCount()
 	{
+		/*
 		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
 		if (measure != null)
 			return measure.getCount();
 		else
 			return -1.0;
+			*/
+		return this.count;
 	}
 	
 	public String getNetworkType()

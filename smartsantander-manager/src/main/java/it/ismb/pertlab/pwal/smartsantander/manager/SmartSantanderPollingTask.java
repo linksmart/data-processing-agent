@@ -27,6 +27,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 
 /**
+ * The polling task handling actual polling for Smart Santander sensors. It
+ * takes care of querying the network-level end point and to deliver updates to
+ * the subscribing devices, with the required timing properties.
+ * 
  * @author <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
@@ -92,7 +96,7 @@ public class SmartSantanderPollingTask implements Runnable
 							{
 								subscription.setTimestamp(currentTime);
 								subscription.getSubscriber().handleUpdate(currentMeasure);
-								log.info("Updating device of type"+((Device)subscription.getSubscriber()).getType());
+								log.info("Updating device of type" + ((Device) subscription.getSubscriber()).getType());
 							}
 						}
 					}
