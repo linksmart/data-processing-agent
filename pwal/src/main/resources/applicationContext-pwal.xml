@@ -20,26 +20,26 @@
     	</constructor-arg>
     </bean>
     <bean id="SmartSantanderManager" class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager"/>
-	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/>
-	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.bluetooth.BluetoothManager">
+<!--  	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/> -->
+<!--	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.bluetooth.BluetoothManager">
 		<constructor-arg>
 			<map>
 				<entry key="00123EFF29DB" value="it.ismb.pertlab.pwal.manager.bluetooth.device.ThermometerDevice"/>
 			</map>
 		</constructor-arg>
-	</bean>
-	<bean id="serialManager" class="it.ismb.pertlab.pwal.serialmanager.SerialManager">
+	</bean> -->
+<!--	<bean id="serialManager" class="it.ismb.pertlab.pwal.serialmanager.SerialManager">
 		<constructor-arg>
-			<map>
-<!-- 				List of sensors that can be provided by this serial device -->
-<!-- 				key=sensor_id value=device_type -->
-				<entry key="idFillLevelSensor" value="it.ismb.pertlab.pwal.manager.serial.device.FillLevelSensorFit"/>
-				<entry key="idFlowSensor" value="it.ismb.pertlab.pwal.manager.serial.device.FlowMeterSensorFit"/>
-    			<entry key="idWaterPump" value="it.ismb.pertlab.pwal.manager.serial.device.WaterPumpFit"/>
-<!-- 				<entry key="2" value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor"/>
- --><!-- 				<entry key="3" value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor"/> -->
+			<map> 
+ 				List of sensors that can be provided by this serial device 
+				key=sensor_id value=device_type
+ 				<entry key="idFillLevelSensor" value="it.ismb.pertlab.pwal.manager.serial.device.FillLevelSensorFit"/> 
+ 				<entry key="idFlowSensor" value="it.ismb.pertlab.pwal.manager.serial.device.FlowMeterSensorFit"/> 
+    			<entry key="idWaterPump" value="it.ismb.pertlab.pwal.manager.serial.device.WaterPumpFit"/> 
+ 				<entry key="2" value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor"/> 
+  				<entry key="3" value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor"/> 
 			</map>
 		</constructor-arg>
-	</bean>
-	<bean id="xivelyManager" class="it.ismb.pertlab.pwal.xivelymanager.XivelyManager"/>
+	</bean> -->
+<!--	<bean id="xivelyManager" class="it.ismb.pertlab.pwal.xivelymanager.XivelyManager"/> -->
 </beans>

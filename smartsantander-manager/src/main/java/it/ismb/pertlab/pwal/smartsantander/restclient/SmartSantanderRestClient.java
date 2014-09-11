@@ -77,7 +77,7 @@ public class SmartSantanderRestClient {
 		return null;
 	}
 
-	private List<SmartSantanderTrafficIntensityJson> getMeasures() {
+	public List<SmartSantanderTrafficIntensityJson> getMeasures() {
 		HttpHeaders h = new HttpHeaders();
 		h.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<SmartSantanderTrafficIntensityJson[]> entity=new HttpEntity<SmartSantanderTrafficIntensityJson[]>(h);

@@ -1,5 +1,6 @@
 package it.ismb.pertlab.pwal.smartsantander.devices;
 
+import it.ismb.pertlab.pwal.api.devices.events.network.DataUpdateSubscriber;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
@@ -8,8 +9,9 @@ import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
 import it.ismb.pertlab.pwal.smartsantander.restclient.SmartSantanderRestClient;
 
-public class SmartSantanderVehicleSpeedDevice implements VehicleSpeed {
-
+public class SmartSantanderVehicleSpeedDevice implements VehicleSpeed, DataUpdateSubscriber
+{
+	
 	String id;
 	String pwalId;
 	String type = DeviceType.VEHICLE_SPEED;
@@ -18,108 +20,170 @@ public class SmartSantanderVehicleSpeedDevice implements VehicleSpeed {
 	String dateLastMeasurement;
 	SmartSantanderRestClient restClient;
 	
-	public SmartSantanderVehicleSpeedDevice(SmartSantanderRestClient restClient, String networkType) {
+	private Double occupancy = 0.0;
+	private Double count= 0.0;
+	private Double medianSpeed = 0.0;
+	private Double averageSpeed = 0.0;
+	
+	public SmartSantanderVehicleSpeedDevice(SmartSantanderRestClient restClient, String networkType)
+	{
 		this.restClient = restClient;
 		this.networkType = networkType;
 	}
 	
-	public String getId() {
+	public String getId()
+	{
 		return this.id;
 	}
-
-	public void setId(String id) {
+	
+	public void setId(String id)
+	{
 		this.id = id;
 	}
-
-	public String getType() {
+	
+	public String getType()
+	{
 		return this.type;
 	}
-
-	public Double getOccupancy() {
-		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if(measure != null)
+	
+	public Double getOccupancy()
+	{
+		
+		/*SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
+		if (measure != null)
 			return measure.getOccupancy();
 		else
-			return -1.0;	
+			return -1.0;*/
+		return this.occupancy;
 	}
-
-	public Double getCount() {
+	
+	public Double getCount()
+	{
+		/*
 		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if(measure != null)
+		if (measure != null)
 			return measure.getCount();
 		else
 			return -1.0;
+		*/
+		
+		return this.count;
 	}
-
-	public Double getMedianSpeed() {
-		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if(measure != null)
+	
+	public Double getMedianSpeed()
+	{
+		/*SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
+		if (measure != null)
 			return measure.getMedian_speed();
 		else
 			return -1.0;
+			*/
+		return this.medianSpeed;
 	}
-
-	public Double getAverageSpeed() {
+	
+	public Double getAverageSpeed()
+	{
+		/*
 		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if(measure != null)
+		if (measure != null)
 			return measure.getAverage_speed();
 		else
 			return -1.0;
+			*/
+		return this.averageSpeed;
 	}
-
-	public String getNetworkType() {
+	
+	public String getNetworkType()
+	{
 		return this.networkType;
 	}
 	
-	public String getDateLastMeasurement() {
+	public String getDateLastMeasurement()
+	{
+		/*
 		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if(measure != null)
+		if (measure != null)
 			return measure.getDate();
 		else
 			return null;
+			*/
+		return this.dateLastMeasurement;
 	}
-
+	
 	@Override
-	public String getPwalId() {
+	public String getPwalId()
+	{
 		return this.pwalId;
 	}
-
+	
 	@Override
-	public void setPwalId(String pwalId) {
+	public void setPwalId(String pwalId)
+	{
 		this.pwalId = pwalId;
 	}
-
+	
 	@Override
-	public String getUpdatedAt() {
+	public String getUpdatedAt()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public void setUpdatedAt(String updatedAt) {
+	public void setUpdatedAt(String updatedAt)
+	{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public Location getLocation() {
+	public Location getLocation()
+	{
 		return location;
 	}
-
+	
 	@Override
-	public void setLocation(Location location) {
-		this.location=location;
+	public void setLocation(Location location)
+	{
+		this.location = location;
 	}
-
+	
 	@Override
-	public Unit getUnit() {
+	public Unit getUnit()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public void setUnit(Unit unit) {
+	public void setUnit(Unit unit)
+	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public <T> void handleUpdate(T updatedData)
+	{
+		if (updatedData instanceof SmartSantanderTrafficIntensityJson)
+		{
+			// cast the received data
+			SmartSantanderTrafficIntensityJson updatedJson = (SmartSantanderTrafficIntensityJson) updatedData;
+			
+			// get the measures
+			this.count = updatedJson.getCount();
+			this.occupancy = updatedJson.getOccupancy();
+			this.medianSpeed = updatedJson.getMedian_speed();
+			this.averageSpeed = updatedJson.getAverage_speed();
+			this.dateLastMeasurement = updatedJson.getDate();
+		}
+		
+	}
+
+	@Override
+	public String getNetworkLevelId()
+	{
+		// TODO Auto-generated method stub
+		return this.id;
 	}
 }
