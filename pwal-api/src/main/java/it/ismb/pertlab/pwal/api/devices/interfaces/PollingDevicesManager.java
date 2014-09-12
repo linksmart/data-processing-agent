@@ -17,9 +17,9 @@
  */
 package it.ismb.pertlab.pwal.api.devices.interfaces;
 
-import it.ismb.pertlab.pwal.api.devices.events.network.DataUpdatePublisher;
-import it.ismb.pertlab.pwal.api.devices.events.network.DataUpdateSubscription;
-import it.ismb.pertlab.pwal.api.devices.events.network.MaximumCommonPollingTimeTask;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdatePublisher;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscription;
+import it.ismb.pertlab.pwal.api.devices.polling.MaximumCommonPollingTimeTask;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,11 +33,11 @@ import java.util.concurrent.FutureTask;
  * @author <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
-public abstract class PollingDevicesManager extends DevicesManager implements DataUpdatePublisher
+public abstract class PollingDevicesManager<T> extends DevicesManager implements DataUpdatePublisher<T>
 {
 	// the set of subscribers to low-level data updates, mainly for
 	// polling-based technologies
-	protected HashMap<String, Set<DataUpdateSubscription>> lowLevelDataSubscriptions;
+	protected HashMap<String, Set<DataUpdateSubscription<T>>> lowLevelDataSubscriptions;
 	
 	// the number of active subscriptions
 	protected int nActiveSubscriptions;
@@ -59,7 +59,7 @@ public abstract class PollingDevicesManager extends DevicesManager implements Da
 		super();
 		
 		// initialize the set of subscribers to low-level data updates
-		this.lowLevelDataSubscriptions = new HashMap<String, Set<DataUpdateSubscription>>();
+		this.lowLevelDataSubscriptions = new HashMap<String, Set<DataUpdateSubscription<T>>>();
 		
 		// asks implementing classes to set the base polling time
 		this.setBasePollingTimeMillis();
@@ -90,7 +90,7 @@ public abstract class PollingDevicesManager extends DevicesManager implements Da
 	 ***********************************************************/
 	
 	@Override
-	public boolean addSubscription(DataUpdateSubscription subscription)
+	public boolean addSubscription(DataUpdateSubscription<T> subscription)
 	{
 		// the operation result as boolean
 		boolean added = false;
@@ -103,14 +103,14 @@ public abstract class PollingDevicesManager extends DevicesManager implements Da
 					+ subscription.getDeliveryTimeMillis());
 			
 			// check if the subscription lUID exists
-			Set<DataUpdateSubscription> subscriptionBucket = this.lowLevelDataSubscriptions.get(subscription.getlUID());
+			Set<DataUpdateSubscription<T>> subscriptionBucket = this.lowLevelDataSubscriptions.get(subscription.getlUID());
 			
 			// if the bucket does not exists, create it
 			if (subscriptionBucket == null)
 			{
 				// create the set of subscriptions associated to the lower id,
 				// they can in fact be possibly more than one per low id.
-				subscriptionBucket = new HashSet<DataUpdateSubscription>();
+				subscriptionBucket = new HashSet<DataUpdateSubscription<T>>();
 				
 				// store the set
 				this.lowLevelDataSubscriptions.put(subscription.getlUID(), subscriptionBucket);
@@ -166,9 +166,9 @@ public abstract class PollingDevicesManager extends DevicesManager implements Da
 		
 		// extract the polling times
 		int i = 0;
-		for (Set<DataUpdateSubscription> subscriptions : this.lowLevelDataSubscriptions.values())
+		for (Set<DataUpdateSubscription<T>> subscriptions : this.lowLevelDataSubscriptions.values())
 		{
-			for (DataUpdateSubscription subscription : subscriptions)
+			for (DataUpdateSubscription<T> subscription : subscriptions)
 			{
 				// extract and store the desired polling time
 				pollingTimesMillis[i] = subscription.getDeliveryTimeMillis();
@@ -229,13 +229,13 @@ public abstract class PollingDevicesManager extends DevicesManager implements Da
 	protected abstract void updatePollingTime();
 	
 	@Override
-	public boolean removeSubscription(DataUpdateSubscription subscription)
+	public boolean removeSubscription(DataUpdateSubscription<T> subscription)
 	{
 		// the result flag
 		boolean removed = false;
 		
 		// get the subscription bucket associated to te given lUID
-		Set<DataUpdateSubscription> subscriptionBucket = this.lowLevelDataSubscriptions.get(subscription.getlUID());
+		Set<DataUpdateSubscription<T>> subscriptionBucket = this.lowLevelDataSubscriptions.get(subscription.getlUID());
 		
 		// remove the given subscription
 		removed = subscriptionBucket.remove(subscription);
@@ -262,7 +262,7 @@ public abstract class PollingDevicesManager extends DevicesManager implements Da
 	 * listSubscriptions()
 	 */
 	@Override
-	public Set<DataUpdateSubscription> listSubscriptions(String lUID)
+	public Set<DataUpdateSubscription<T>> listSubscriptions(String lUID)
 	{
 		// TODO Auto-generated method stub
 		return this.lowLevelDataSubscriptions.get(lUID);
@@ -275,7 +275,7 @@ public abstract class PollingDevicesManager extends DevicesManager implements Da
 	 * getSubscription(java.lang.String)
 	 */
 	@Override
-	public Set<DataUpdateSubscription> getSubscriptions(String lUID)
+	public Set<DataUpdateSubscription<T>> getSubscriptions(String lUID)
 	{
 		return this.lowLevelDataSubscriptions.get(lUID);
 	}

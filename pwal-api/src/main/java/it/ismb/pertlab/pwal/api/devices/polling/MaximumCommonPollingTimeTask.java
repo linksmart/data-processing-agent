@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package it.ismb.pertlab.pwal.api.devices.events.network;
+package it.ismb.pertlab.pwal.api.devices.polling;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;

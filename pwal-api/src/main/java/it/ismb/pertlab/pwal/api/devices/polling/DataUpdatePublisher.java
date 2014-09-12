@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package it.ismb.pertlab.pwal.api.devices.events.network;
+package it.ismb.pertlab.pwal.api.devices.polling;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -31,7 +31,7 @@ import java.util.Set;
  * @author <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
-public interface DataUpdatePublisher
+public interface DataUpdatePublisher<T>
 {
 	/**
 	 * Adds a subscription to network-level data updates for the Device instance
@@ -45,7 +45,7 @@ public interface DataUpdatePublisher
 	 *
 	 * @return true if subscription was successful, false otherwise.
 	 **/
-	public boolean addSubscription(DataUpdateSubscription subscription);
+	public boolean addSubscription(DataUpdateSubscription<T> subscription);
 	
 	/**
 	 * Provides a {@link HashMap} of live references to currently active
@@ -54,7 +54,7 @@ public interface DataUpdatePublisher
 	 * @param lUID the low-level device identifier
 	 * @return The set of currently active subscriptions.
 	 */
-	public Set<DataUpdateSubscription> listSubscriptions(String lUID);
+	public Set<DataUpdateSubscription<T>> listSubscriptions(String lUID);
 	
 	/**
 	 * Gets the subscription registered by the device having the given lUID
@@ -65,7 +65,7 @@ public interface DataUpdatePublisher
 	 *            the low level identifier enabling data delivery
 	 * @return The Update subscriptions associated to the given lUID
 	 */
-	public Set<DataUpdateSubscription> getSubscriptions(String lUID);
+	public Set<DataUpdateSubscription<T>> getSubscriptions(String lUID);
 	
 	/**
 	 * Removes the subscription to network-level data updates for the given
@@ -74,7 +74,7 @@ public interface DataUpdatePublisher
 	 * @return true if removal is successful, false otherwise.
 	 *
 	 **/
-	public boolean removeSubscription(DataUpdateSubscription subscription);
+	public boolean removeSubscription(DataUpdateSubscription<T> subscription);
 	
 	/**
 	 * Gets the number of currently active subscriptions

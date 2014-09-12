@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package it.ismb.pertlab.pwal.api.devices.events.network;
+package it.ismb.pertlab.pwal.api.devices.polling;
 
 /**
  * A class representing a device subscription to low-level network events. It
@@ -26,13 +26,13 @@ package it.ismb.pertlab.pwal.api.devices.events.network;
  * @author <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
-public class DataUpdateSubscription
+public class DataUpdateSubscription<T>
 {
 	// the required delivery time in milliseconds
 	private int deliveryTimeMillis;
 	
 	// the subscriber which requested this subscription
-	private DataUpdateSubscriber subscriber;
+	private DataUpdateSubscriber<T> subscriber;
 	
 	// the low-level identifier for the subscriber to handle data delivery
 	private String lUID;
@@ -54,7 +54,7 @@ public class DataUpdateSubscription
 	 * @param subscriber
 	 *            The subscriber object.
 	 */
-	public DataUpdateSubscription(int deliveryTimeMillis, DataUpdateSubscriber subscriber, String lUID)
+	public DataUpdateSubscription(int deliveryTimeMillis, DataUpdateSubscriber<T> subscriber, String lUID)
 	{
 		super();
 		this.deliveryTimeMillis = deliveryTimeMillis;
@@ -83,7 +83,7 @@ public class DataUpdateSubscription
 	/**
 	 * @return the subscriber
 	 */
-	public DataUpdateSubscriber getSubscriber()
+	public DataUpdateSubscriber<T> getSubscriber()
 	{
 		return subscriber;
 	}
@@ -92,7 +92,7 @@ public class DataUpdateSubscription
 	 * @param subscriber
 	 *            the subscriber to set
 	 */
-	public void setSubscriber(DataUpdateSubscriber subscriber)
+	public void setSubscriber(DataUpdateSubscriber<T> subscriber)
 	{
 		this.subscriber = subscriber;
 	}
@@ -145,7 +145,7 @@ public class DataUpdateSubscription
 		// compare the subscribers (only one subscription per subscriber is
 		// allowed)
 		if (obj instanceof DataUpdateSubscriber)
-			equals = ((DataUpdateSubscriber) obj).equals(this.subscriber);
+			equals = ((DataUpdateSubscriber<?>) obj).equals(this.subscriber);
 		else
 			equals = super.equals(obj);
 		

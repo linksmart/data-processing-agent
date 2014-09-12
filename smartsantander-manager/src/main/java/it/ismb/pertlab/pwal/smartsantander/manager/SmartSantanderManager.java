@@ -1,12 +1,13 @@
 package it.ismb.pertlab.pwal.smartsantander.manager;
 
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
-import it.ismb.pertlab.pwal.api.devices.events.network.DataUpdateSubscription;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.PollingDevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscription;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderSingleNodeJson;
+import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
 import it.ismb.pertlab.pwal.smartsantander.devices.SmartSantanderVehicleCounterDevice;
 import it.ismb.pertlab.pwal.smartsantander.devices.SmartSantanderVehicleSpeedDevice;
 import it.ismb.pertlab.pwal.smartsantander.devices.types.SmartSantaderDeviceTypes;
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * modified by <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
-public class SmartSantanderManager extends PollingDevicesManager
+public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderTrafficIntensityJson>
 {
 	// the minimum polling time safely supported by the network
 	public static final int MINIMUM_POLLING_TIME = 100;
@@ -131,7 +132,7 @@ public class SmartSantanderManager extends PollingDevicesManager
 								
 								// add device polling subscription
 								// TODO: define sampling time at the device level
-								this.addSubscription(new DataUpdateSubscription(1000, vehicleCounter, vehicleCounter
+								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(1000, vehicleCounter, vehicleCounter
 										.getId()));
 								
 								for (DeviceListener l : deviceListener)
@@ -154,7 +155,7 @@ public class SmartSantanderManager extends PollingDevicesManager
 								
 								// add device polling subscription
 								// TODO: define sampling time at the device level
-								this.addSubscription(new DataUpdateSubscription(2000, vehicleSpeed, vehicleSpeed
+								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(2000, vehicleSpeed, vehicleSpeed
 										.getId()));
 								
 								for (DeviceListener l : deviceListener)

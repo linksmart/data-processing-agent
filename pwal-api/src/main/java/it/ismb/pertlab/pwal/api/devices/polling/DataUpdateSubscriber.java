@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package it.ismb.pertlab.pwal.api.devices.events.network;
+package it.ismb.pertlab.pwal.api.devices.polling;
 
 /**
  * @author <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
-public interface DataUpdateSubscriber
+public interface DataUpdateSubscriber <T>
 {
 	/**
 	 * Called when updated data is available at the network level, the data
@@ -32,7 +32,7 @@ public interface DataUpdateSubscriber
 	 * 
 	 * @param <T>
 	 **/
-	public <T> void handleUpdate(T updatedData);
+	public void handleUpdate(T updatedData);
 	
 	/**
 	 * Provides the network-level id that allows identifying the device data

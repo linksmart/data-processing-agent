@@ -1,14 +1,15 @@
 package it.ismb.pertlab.pwal.smartsantander.devices;
 
-import it.ismb.pertlab.pwal.api.devices.events.network.DataUpdateSubscriber;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
 import it.ismb.pertlab.pwal.smartsantander.restclient.SmartSantanderRestClient;
 
-public class SmartSantanderVehicleCounterDevice implements VehicleCounter, DataUpdateSubscriber
+public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
+		DataUpdateSubscriber<SmartSantanderTrafficIntensityJson>
 {
 	
 	String id;
@@ -47,23 +48,21 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter, DataU
 	
 	public Double getOccupancy()
 	{
-		/*SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if (measure != null)
-			return measure.getOccupancy();
-		else
-			return -1.0;*/
+		/*
+		 * SmartSantanderTrafficIntensityJson measure =
+		 * this.restClient.getLastMeasures(this.id); if (measure != null) return
+		 * measure.getOccupancy(); else return -1.0;
+		 */
 		return this.occupancy;
 	}
 	
 	public Double getCount()
 	{
 		/*
-		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if (measure != null)
-			return measure.getCount();
-		else
-			return -1.0;
-			*/
+		 * SmartSantanderTrafficIntensityJson measure =
+		 * this.restClient.getLastMeasures(this.id); if (measure != null) return
+		 * measure.getCount(); else return -1.0;
+		 */
 		return this.count;
 	}
 	
@@ -134,18 +133,14 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter, DataU
 	}
 	
 	@Override
-	public <T> void handleUpdate(T updatedData)
+	public void handleUpdate(SmartSantanderTrafficIntensityJson updatedData)
 	{
-		if (updatedData instanceof SmartSantanderTrafficIntensityJson)
-		{
-			// cast the received data
-			SmartSantanderTrafficIntensityJson updatedJson = (SmartSantanderTrafficIntensityJson) updatedData;
-			
-			// get the measures
-			this.count = updatedJson.getCount();
-			this.occupancy = updatedJson.getOccupancy();
-		}
+		// cast the received data
+		SmartSantanderTrafficIntensityJson updatedJson = (SmartSantanderTrafficIntensityJson) updatedData;
 		
+		// get the measures
+		this.count = updatedJson.getCount();
+		this.occupancy = updatedJson.getOccupancy();
 	}
 	
 	@Override

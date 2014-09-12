@@ -17,8 +17,8 @@
  */
 package it.ismb.pertlab.pwal.smartsantander.manager;
 
-import it.ismb.pertlab.pwal.api.devices.events.network.DataUpdateSubscription;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscription;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
 
 import java.util.List;
@@ -82,11 +82,11 @@ public class SmartSantanderPollingTask implements Runnable
 				
 				// dispatch the new measure if a subscription is registered for
 				// the given lUID
-				Set<DataUpdateSubscription> subscriptionBucket = this.manager.getSubscriptions(lUID);
+				Set<DataUpdateSubscription<SmartSantanderTrafficIntensityJson>> subscriptionBucket = this.manager.getSubscriptions(lUID);
 				
 				if (subscriptionBucket != null)
 				{
-					for (DataUpdateSubscription subscription : subscriptionBucket)
+					for (DataUpdateSubscription<SmartSantanderTrafficIntensityJson> subscription : subscriptionBucket)
 					{
 						if (subscription != null)
 						{
