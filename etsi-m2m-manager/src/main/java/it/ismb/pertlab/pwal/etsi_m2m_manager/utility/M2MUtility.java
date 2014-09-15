@@ -32,7 +32,8 @@ public class M2MUtility extends TimerTask
     private DateTime createBefore;
     private List<String> currentDevicesList;
     private List<String> futureDevicesList;
-    // private Dictionary<String, String> props; // TODO: find a better way to set the header content. It can be different every time
+    // private Dictionary<String, String> props; // TODO: find a better way to
+    // set the header content. It can be different every time
     private static Logger log = LoggerFactory.getLogger(M2MUtility.class);
     List<M2MDeviceListener> m2mDeviceListeners = new ArrayList<>();
 
@@ -40,19 +41,22 @@ public class M2MUtility extends TimerTask
     {
         this.baseDiscoveryUrl = baseUrl
                 + "/discovery?searchPrefix=application&inType=CT&createdAfter=%s&createdBefore=%s";
-        this.createAfter = new DateTime("1970-01-01T00:00:00Z", DateTimeZone.UTC);
+        this.createAfter = new DateTime("1970-01-01T00:00:00Z",
+                DateTimeZone.UTC);
         this.createBefore = new DateTime(DateTimeZone.UTC);
         this.currentDevicesList = new ArrayList<>();
         this.futureDevicesList = new ArrayList<>();
     }
 
     /**
-     * This method requestes every time all the containers list since the 1/1/1970 and check if there are removed or added containers 
+     * This method requestes every time all the containers list since the
+     * 1/1/1970 and check if there are removed or added containers
      */
     public void discoverM2MDevices()
     {
         log.info("Start building m2m resources tree");
-        this.createBefore = new DateTime(DateTimeZone.UTC);;
+        this.createBefore = new DateTime(DateTimeZone.UTC);
+        ;
         String completeBaseDiscoveryUrl = String.format(this.baseDiscoveryUrl,
                 this.createAfter.toString(), this.createBefore.toString());
         log.debug("baseDiscoveryUlr: {}", completeBaseDiscoveryUrl);
@@ -73,32 +77,44 @@ public class M2MUtility extends TimerTask
             Discovery discoveryResult = PWALXmlMapper.unmarshal(
                     Discovery.class, resp.getEntity().getContent());
             PWALXmlMapper.toXml(Discovery.class, discoveryResult);
-            if(discoveryResult.getDiscoveryURI() != null)
+            if (discoveryResult.getDiscoveryURI() != null)
             {
                 for (String devicesUri : discoveryResult.getDiscoveryURI()
                         .getReference())
                 {
                     String[] tokens = devicesUri.split("/");
-                    String containerName = tokens[tokens.length-1];
-                    if(!this.currentDevicesList.contains(containerName))
+                    String containerName = tokens[tokens.length - 1];
+                    if (!this.futureDevicesList.contains(containerName))
+                        this.futureDevicesList.add(containerName);
+                    
+                    if (!this.currentDevicesList.contains(containerName))
                         this.retrieveContainer(devicesUri);
+                    else
+                        log.info("Device {} already exists.", containerName);
                 }
             }
             else
                 log.info("No news from the M2M platform");
-            //Same epoch date because the first version will make an intersection between the two devices lists
-//            this.createAfter = new DateTime(DateTimeZone.UTC);
-            if(this.currentDevicesList.size() != 0)
+            // Same epoch date because the first version will make an
+            // intersection between the two devices lists
+            // this.createAfter = new DateTime(DateTimeZone.UTC);
+            if (this.currentDevicesList.size() != 0)
             {
-                List<String> removedDevices = this.intersect(this.futureDevicesList, this.currentDevicesList);
-                log.debug("After intersection there are {} devices that have to be removed.", removedDevices.size());
+                List<String> removedDevices = this.intersect(
+                        this.futureDevicesList, this.currentDevicesList);
+                log.debug(
+                        "After intersection there are {} devices that have to be removed.",
+                        removedDevices.size());
                 for (String s : removedDevices)
                 {
-                    this.currentDevicesList.remove(s);
-                    log.info("Removing device: {}", s);
+                    if(this.currentDevicesList.contains(s))
+                    {
+                        this.currentDevicesList.remove(s);
+                        log.info("Removing device: {}", s);
+                    }
                 }
             }
-            this.currentDevicesList.addAll(this.futureDevicesList);
+//            this.currentDevicesList.addAll(this.futureDevicesList);
             this.futureDevicesList.clear();
         }
         catch (IOException | IllegalStateException | JAXBException e)
@@ -138,37 +154,28 @@ public class M2MUtility extends TimerTask
             for (String searchString : container.getSearchStrings()
                     .getSearchString())
             {
-                if (this.currentDevicesList != null
-                        && !this.currentDevicesList.contains(deviceId))
+                // this.previousDevicesList.add(deviceId);
+                log.debug("SearchString: {}", searchString);
+                try
                 {
-//                    this.previousDevicesList.add(deviceId);
-                    log.debug("SearchString: {}", searchString);
-                    try
+                    Class<?> classDevice = Class
+                            .forName("it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom."
+                                    + searchString);
+                    Constructor<?> constructor = classDevice
+                            .getConstructor(String.class);
+                    Device d = (Device) constructor.newInstance(container
+                            .getContentInstancesReference());
+                    d.setId(deviceId);
+                    for (M2MDeviceListener m : this.m2mDeviceListeners)
                     {
-                        Class<?> classDevice = Class
-                                .forName("it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom."
-                                        + searchString);
-                        Constructor<?> constructor = classDevice
-                                .getConstructor(String.class);
-                        Device d = (Device) constructor.newInstance(container
-                                .getContentInstancesReference());
-                        d.setId(deviceId);
-                        if(!this.futureDevicesList.contains(d.getId()))
-                            this.futureDevicesList.add(d.getId());
-                        for (M2MDeviceListener m : this.m2mDeviceListeners)
-                        {
-                            log.debug("NEW DEVICE FOUND. GENERATING EVENT.");
-                            m.notifyM2MDeviceAdded(d);
-                        }
-                    }
-                    catch (ClassNotFoundException ex)
-                    {
-                        log.warn("Ops....class {} not found.", searchString);
+                        log.debug("NEW DEVICE FOUND. GENERATING EVENT.");
+                        this.currentDevicesList.add(deviceId);
+                        m.notifyM2MDeviceAdded(d);
                     }
                 }
-                else
+                catch (ClassNotFoundException ex)
                 {
-                    log.info("Device {} already exists.", deviceId);
+                    log.warn("Ops....class {} not found.", searchString);
                 }
             }
         }
@@ -181,16 +188,27 @@ public class M2MUtility extends TimerTask
         }
     }
 
-    private List<String> intersect(List<String> A, List<String> B) {
+    /**
+     * Compare the two list received as paramenters and check which elements in
+     * A are not present in B (A - B)
+     * 
+     * @param A a list of string
+     * @param B a list of string
+     * @return the difference between the two list
+     */
+    private List<String> intersect(List<String> A, List<String> B)
+    {
         List<String> rtnList = new ArrayList<>();
-        for(String dto : A) {
-            if(!B.contains(dto)) {
+        for (String dto : A)
+        {
+            if (!B.contains(dto))
+            {
                 rtnList.add(dto);
             }
         }
         return rtnList;
     }
-    
+
     public void addM2MEventListener(M2MDeviceListener listener)
     {
         this.m2mDeviceListeners.add(listener);
@@ -204,6 +222,6 @@ public class M2MUtility extends TimerTask
     @Override
     public void run()
     {
-       this.discoverM2MDevices();
+        this.discoverM2MDevices();
     }
 }
