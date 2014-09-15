@@ -7,4 +7,5 @@ public class DeviceNetworkType {
 	public static final String SERIAL="Serial";
 	public static final String SMARTSANTANDER="SmartSantander";
 	public static final String XIVELY="Xively";
+	public static final String WASTEBINSIMULATOR = "WasteBinSimulator";
 }

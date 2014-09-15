@@ -21,6 +21,9 @@ import javax.measure.DecimalMeasure;
 import javax.measure.quantity.Temperature;
 
 /**
+ * A class for representing the sensor data for a given waste bin, used as
+ * payload for network-level events.
+ * 
  * @author <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
  *
  */
@@ -31,6 +34,9 @@ public class WasteBinSensorData
 	
 	// the waste bin fill level (percentage number between 0 and 100)
 	private int fillLevel;
+	
+	// the waste bin network id
+	private String lUID;
 	
 	/**
 	 * Builds a new waste bin data, holding the relevant sensor measurements for
@@ -43,11 +49,14 @@ public class WasteBinSensorData
 	 *            The unit of measure for temperature values
 	 * @param fillLevel
 	 *            The fill level
+	 * @param lUID
+	 *            The low level (network) id of the device generating this data
 	 */
-	public WasteBinSensorData(DecimalMeasure<Temperature> temperature, int fillLevel)
+	public WasteBinSensorData(DecimalMeasure<Temperature> temperature, int fillLevel, String lUID)
 	{
 		this.temperature = temperature;
 		this.fillLevel = fillLevel;
+		this.lUID = lUID;
 	}
 	
 	/**
@@ -91,11 +100,31 @@ public class WasteBinSensorData
 	 */
 	public void setFillLevel(int fillLevel)
 	{
-		//handles value setting saturating to 0 and 100, respectively
+		// handles value setting saturating to 0 and 100, respectively
 		if (fillLevel > 0)
 			this.fillLevel = (fillLevel > 100) ? 100 : fillLevel;
 		else
 			this.fillLevel = 0;
 	}
 	
+	/**
+	 * Sets the low level (network) id of the device generating this data
+	 * 
+	 * @return the lUID
+	 */
+	public String getlUID()
+	{
+		return lUID;
+	}
+	
+	/**
+	 * Gets the low level (network) id of the device generating this data
+	 * 
+	 * @param lUID
+	 *            the lUID to set
+	 */
+	public void setlUID(String lUID)
+	{
+		this.lUID = lUID;
+	}
 }

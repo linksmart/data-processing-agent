@@ -17,4 +17,5 @@ public class DeviceType {
 	public static final String FLOW_METER_SENSOR = "FlowMeterSensor";
 	public static final String WATER_PUMP = "WaterPump";
 	public static final String RESISTANCE = "Resistance";
+	public static final String WASTE_BIN = "WasteBin";
 }

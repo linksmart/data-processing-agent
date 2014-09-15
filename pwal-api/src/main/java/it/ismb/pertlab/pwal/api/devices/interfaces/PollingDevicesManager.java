@@ -54,6 +54,9 @@ public abstract class PollingDevicesManager<T> extends DevicesManager implements
 	// the minimum polling time in milliseconds
 	protected int minimumPollingTimeMillis;
 	
+	// the automatic polling time update flag
+	protected boolean autoPollingTimeUpdate;
+	
 	public PollingDevicesManager()
 	{
 		super();
@@ -72,6 +75,9 @@ public abstract class PollingDevicesManager<T> extends DevicesManager implements
 		
 		// defaults to the base polling time milliseconds
 		this.pollingTimeMillis = basePollingTimeMillis;
+		
+		// auto polling time on by default
+		this.autoPollingTimeUpdate = true;
 	}
 	
 	// force sub classes to set a base polling time in milliseconds
@@ -145,7 +151,8 @@ public abstract class PollingDevicesManager<T> extends DevicesManager implements
 			log.info("More than one subscription");
 			
 			//re-compute the polling time
-			this.computeMaximumCommonPollingTime();
+			if(this.autoPollingTimeUpdate)
+				this.computeMaximumCommonPollingTime();
 			
 			// successful addition
 			added = true;
@@ -291,6 +298,22 @@ public abstract class PollingDevicesManager<T> extends DevicesManager implements
 	{
 		// TODO Auto-generated method stub
 		return this.nActiveSubscriptions;
+	}
+	
+	/**
+	 * Enables / disables automatic computation of polling times
+	 * 
+	 * @param enabled
+	 */
+	public void setAutoPollingUpdate(boolean enabled)
+	{
+		if((!this.autoPollingTimeUpdate)&&(enabled))
+		{
+			this.computeMaximumCommonPollingTime();
+			
+		}
+		
+		this.autoPollingTimeUpdate = enabled;
 	}
 	
 	/***********************************************************/
