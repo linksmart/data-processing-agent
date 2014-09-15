@@ -9,6 +9,7 @@ import it.ismb.pertlab.pwal.etsi_m2m_manager.utility.events.M2MDeviceListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 public class EtsiM2MManager extends DevicesManager implements M2MDeviceListener
 {
@@ -23,10 +24,18 @@ public class EtsiM2MManager extends DevicesManager implements M2MDeviceListener
     public void run()
     {
         log.info("M2M manager started.");
-        this.m2mUtility.exploreM2MResourcesTree();
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(this.m2mUtility, 0, 60*1000);
         while (!t.isInterrupted())
         {
-
+            try
+            {
+                Thread.sleep(20000);
+            }
+            catch (InterruptedException e)
+            {
+                log.error("EtsiM2MManager: {}",e.getLocalizedMessage());
+            }
         }
         for (List<Device> ld : this.devicesDiscovered.values())
         {
@@ -65,9 +74,15 @@ public class EtsiM2MManager extends DevicesManager implements M2MDeviceListener
         }
     }
 
+    public List<String> getDevicesListNames()
+    {
+        return new ArrayList<>(this.devicesDiscovered.keySet());
+    }
+    
     @Override
     public void notifyM2MDeviceRemoved(Device removedDevice)
     {
         this.devicesDiscovered.remove(removedDevice);
     }
+    
 }

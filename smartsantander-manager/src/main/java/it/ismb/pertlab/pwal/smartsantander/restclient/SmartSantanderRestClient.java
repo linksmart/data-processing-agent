@@ -16,112 +16,140 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 
-public class SmartSantanderRestClient {
+public class SmartSantanderRestClient
+{
 
-	private static Logger log = null;
-	private String serviceEndpoint;
-	private PWALJsonMapper jsonMapper;
-	// private RestTemplate template;
-	private List<SmartSantanderTrafficIntensityJson> measure = null;
+    private static Logger log = null;
+    private String serviceEndpoint;
+    private PWALJsonMapper jsonMapper;
+    // private RestTemplate template;
+    private List<SmartSantanderTrafficIntensityJson> measure = null;
 
-	public SmartSantanderRestClient(String serviceEndpoint, Logger logger) {
-		this.serviceEndpoint = serviceEndpoint;
-		this.jsonMapper = new PWALJsonMapper();
-		// template=new RestTemplate();
-		log = logger;
-	}
+    public SmartSantanderRestClient(String serviceEndpoint, Logger logger)
+    {
+        this.serviceEndpoint = serviceEndpoint;
+        this.jsonMapper = new PWALJsonMapper();
+        // template=new RestTemplate();
+        log = logger;
+    }
 
-	/**
-	 * retrive the SmartSantader nodes list
-	 * 
-	 * @return List of nodes available in SmartSantander network
-	 */
-	public List<SmartSantanderSingleNodeJson> getNodes() {
-		try {
-			HttpGet getSmartSantanderNodes = new HttpGet(serviceEndpoint
-					+ "GetNodes");
+    /**
+     * retrive the SmartSantader nodes list
+     * 
+     * @return List of nodes available in SmartSantander network
+     */
+    public List<SmartSantanderSingleNodeJson> getNodes()
+    {
+        try
+        {
+            HttpGet getSmartSantanderNodes = new HttpGet(serviceEndpoint
+                    + "GetNodes");
 
-			CloseableHttpResponse resp = PwalHttpClient.getInstance()
-					.executeRequest(getSmartSantanderNodes);
-			if (resp.getStatusLine().getStatusCode() == 200) {
-				SmartSantanderSingleNodeJson[] nodes = this.jsonMapper
-						.json2obj(SmartSantanderSingleNodeJson[].class, resp
-								.getEntity().getContent());
-				return Arrays.asList(nodes);
-			} else {
-				log.warn("Nodes request failed. HTTP status is: {}", resp
-						.getStatusLine().getStatusCode());
-			}
-		} catch (IOException e) {
-			log.error("getNodes: ", e.getLocalizedMessage());
-		}
-		return null;
-	}
+            CloseableHttpResponse resp = PwalHttpClient.getInstance()
+                    .executeRequest(getSmartSantanderNodes);
+            if (resp.getStatusLine().getStatusCode() == 200)
+            {
+                SmartSantanderSingleNodeJson[] nodes = this.jsonMapper
+                        .json2obj(SmartSantanderSingleNodeJson[].class, resp
+                                .getEntity().getContent());
+                return Arrays.asList(nodes);
+            }
+            else
+            {
+                log.warn("Nodes request failed. HTTP status is: {}", resp
+                        .getStatusLine().getStatusCode());
+            }
+        }
+        catch (IOException e)
+        {
+            log.error("getNodes: ", e.getLocalizedMessage());
+        }
+        return null;
+    }
 
-	public SmartSantanderTrafficIntensityJson getLastMeasures(String nodeId) {
-		if (this.measure == null) {
-			this.measure = getMeasures();
-			log.info(
-					"Searching for measure belonging to the required nodeId: {}",
-					nodeId);
-			for (SmartSantanderTrafficIntensityJson traffic : this.measure) {
-				if (traffic.getNodeId().equals(nodeId))
-					return traffic;
-			}
-		} else {
-			if (isOutOfDate()) {
-				this.measure = getMeasures();
-			}
-			log.info(
-					"Searching for measure belonging to the required nodeId: {}",
-					nodeId);
-			for (SmartSantanderTrafficIntensityJson traffic : this.measure) {
-				if (traffic.getNodeId().equals(nodeId))
-					return traffic;
-			}
-		}
-		return null;
-	}
+    public SmartSantanderTrafficIntensityJson getLastMeasures(String nodeId)
+    {
+        if (this.measure == null)
+        {
+            this.measure = getMeasures();
+            log.info(
+                    "Searching for measure belonging to the required nodeId: {}",
+                    nodeId);
+            for (SmartSantanderTrafficIntensityJson traffic : this.measure)
+            {
+                if (traffic.getNodeId().equals(nodeId))
+                    return traffic;
+            }
+        }
+        else
+        {
+            if (isOutOfDate())
+            {
+                this.measure = getMeasures();
+            }
+            log.info(
+                    "Searching for measure belonging to the required nodeId: {}",
+                    nodeId);
+            for (SmartSantanderTrafficIntensityJson traffic : this.measure)
+            {
+                if (traffic.getNodeId().equals(nodeId))
+                    return traffic;
+            }
+        }
+        return null;
+    }
 
-	private List<SmartSantanderTrafficIntensityJson> getMeasures() {
-		HttpGet getSmartSantanderNodes = new HttpGet(serviceEndpoint
-				+ "GetTrafficIntensityLastValues");
+    private List<SmartSantanderTrafficIntensityJson> getMeasures()
+    {
+        HttpGet getSmartSantanderNodes = new HttpGet(serviceEndpoint
+                + "GetTrafficIntensityLastValues");
 
-		CloseableHttpResponse resp;
-		try {
-			resp = PwalHttpClient.getInstance().executeRequest(
-					getSmartSantanderNodes);
-			if (resp.getStatusLine().getStatusCode() == 200) {
-				SmartSantanderTrafficIntensityJson[] measure = this.jsonMapper
-						.json2obj(SmartSantanderTrafficIntensityJson[].class,
-								resp.getEntity().getContent());
-				return Arrays.asList(measure);
-			} else {
-				log.warn("Measures request failed. HTTP status is: {}", resp
-						.getStatusLine().getStatusCode());
-			}
-		} catch (IOException e) {
-			log.error("getSmartSantanderNodes: ", e.getLocalizedMessage());
-		}
-		return null;
-	}
+        CloseableHttpResponse resp;
+        try
+        {
+            resp = PwalHttpClient.getInstance().executeRequest(
+                    getSmartSantanderNodes);
+            if (resp.getStatusLine().getStatusCode() == 200)
+            {
+                SmartSantanderTrafficIntensityJson[] measure = this.jsonMapper
+                        .json2obj(SmartSantanderTrafficIntensityJson[].class,
+                                resp.getEntity().getContent());
+                return Arrays.asList(measure);
+            }
+            else
+            {
+                log.warn("Measures request failed. HTTP status is: {}", resp
+                        .getStatusLine().getStatusCode());
+            }
+        }
+        catch (IOException e)
+        {
+            log.error("getSmartSantanderNodes: ", e.getLocalizedMessage());
+        }
+        return null;
+    }
 
-	@SuppressWarnings("deprecation")
-	private Boolean isOutOfDate() {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-				"MM-dd-yyyy HH:mm:ss");
-		try {
-			Date date = simpleDateFormat.parse(this.measure.get(0).getDate());
-			Date now = new Date();
-			if ((date.getMinutes() - now.getMinutes()) != 0) {
-				log.debug("Measure is out of date");
-				return true;
-			}
-			log.debug("Measure is not out of date");
-			return false;
-		} catch (ParseException ex) {
-			log.error("Parse date exception: ", ex);
-		}
-		return false;
-	}
+    @SuppressWarnings("deprecation")
+    private Boolean isOutOfDate()
+    {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                "MM-dd-yyyy HH:mm:ss");
+        try
+        {
+            Date date = simpleDateFormat.parse(this.measure.get(0).getDate());
+            Date now = new Date();
+            if ((date.getMinutes() - now.getMinutes()) != 0)
+            {
+                log.debug("Measure is out of date");
+                return true;
+            }
+            log.debug("Measure is not out of date");
+            return false;
+        }
+        catch (ParseException ex)
+        {
+            log.error("Parse date exception: ", ex);
+        }
+        return false;
+    }
 }

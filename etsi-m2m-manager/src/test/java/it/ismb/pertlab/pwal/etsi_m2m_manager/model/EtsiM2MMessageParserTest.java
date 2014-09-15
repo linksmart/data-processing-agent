@@ -1,6 +1,7 @@
 package it.ismb.pertlab.pwal.etsi_m2m_manager.model;
 
 import static org.junit.Assert.assertEquals;
+import it.ismb.pertlab.pwal.api.shared.PWALXmlMapper;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.Application;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.Applications;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.NamedReferenceCollection;
@@ -23,8 +24,7 @@ public class EtsiM2MMessageParserTest {
 	public void testParseApplications() throws FileNotFoundException, DatatypeConfigurationException, JAXBException
 	{
 		InputStream is=new FileInputStream(this.getClass().getClassLoader().getResource("applications.xml").getFile());
-		EtsiM2MMessageParser parser=new EtsiM2MMessageParser();
-		Applications appl=parser.parseApplications(is);
+		Applications appl=PWALXmlMapper.unmarshal(Applications.class, is);
 		assertEquals("http://m2mtilab.dtdns.net/etsi/almanac/accessRights/AR",appl.getAccessRightID());
 		//appl.getApplicationAnncCollection();
 		NamedReferenceCollection appColl=appl.getApplicationCollection();
@@ -50,8 +50,7 @@ public class EtsiM2MMessageParserTest {
 	public void testGetApplication() throws FileNotFoundException, DatatypeConfigurationException, JAXBException
 	{
 		InputStream is=new FileInputStream(this.getClass().getClassLoader().getResource("application.xml").getFile());
-		EtsiM2MMessageParser parser=new EtsiM2MMessageParser();
-		Application app=parser.parseApplication(is);
+		Application app=PWALXmlMapper.unmarshal(Application.class, is);
 
 		assertEquals("http://m2mtilab.dtdns.net/etsi/almanac/applications/water/accessRights/AR",app.getAccessRightID());
 		assertEquals("http://m2mtilab.dtdns.net/etsi/almanac/applications/water/accessRights",app.getAccessRightsReference());

@@ -53,7 +53,7 @@ public class PwalRestConnector implements PWALDeviceListener {
 	public @ResponseBody Map<String, List<String>> getAllDevicesList(@RequestParam(value="networkType", required=false) String networkType, 
 			  @RequestParam(value="deviceType", required=false)String deviceType)
 	{
-		log.info("Returing all devices list");
+		log.info("Returning all devices list");
 		Map<String, List<String>> result = new HashMap<>();
 		
 		List<String> dev = new ArrayList<>();

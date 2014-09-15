@@ -38,15 +38,10 @@
     	<artifactId>pwal-api</artifactId>
     	<version>0.0.1</version>
     </dependency>
-    <dependency>
-    	<groupId>org.apache.httpcomponents</groupId>
-    	<artifactId>httpclient</artifactId>
-    	<version>4.3.3</version>
-    </dependency>
-    <dependency>
-		<groupId>com.google.code.gson</groupId>
-		<artifactId>gson</artifactId>
-		<version>1.7.1</version>
-	  </dependency>
+	<dependency>
+		<groupId>joda-time</groupId>
+		<artifactId>joda-time</artifactId>
+		<version>2.4</version>
+ 	</dependency>
   </dependencies>
 </project>

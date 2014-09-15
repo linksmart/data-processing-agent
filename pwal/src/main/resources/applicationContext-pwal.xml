@@ -13,7 +13,7 @@
 				<!-- <ref bean="wsnManager"/> -->
 				<!-- <ref bean="bluetoothManager"/> -->
 				<!-- <ref bean="serialManager"/> -->
-				<ref bean="SmartSantanderManager" />
+<!-- 				<ref bean="SmartSantanderManager" /> -->
 				<!-- <ref bean="xivelyManager"/> -->
 				<ref bean="m2mManager" />
 			</list>

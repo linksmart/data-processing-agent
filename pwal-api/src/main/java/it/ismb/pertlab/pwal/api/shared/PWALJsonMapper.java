@@ -10,23 +10,29 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * This class provides utilities to map json file into object and viceversa.
+ * 
  * @author GBo
- *
+ * 
  */
-public class PWALJsonMapper {
-	private ObjectMapper mapper;
+public class PWALJsonMapper
+{
+    private static ObjectMapper mapper = new ObjectMapper();
 
-	public PWALJsonMapper() {
-		this.mapper = new ObjectMapper();
-	}
-	
-	public <T> T json2obj(Class<T> objClass, InputStream is) throws JsonParseException, JsonMappingException, IOException
-	{
-		return this.mapper.readValue(is, objClass);
-	}
-	
-	public <T> String obj2json (T obj) throws JsonGenerationException, JsonMappingException, IOException
-	{
-		return this.mapper.writeValueAsString(obj);
-	}
+    public static <T> T json2obj(Class<T> objClass, InputStream is)
+            throws JsonParseException, JsonMappingException, IOException
+    {
+        return mapper.readValue(is, objClass);
+    }
+    
+    public static <T> T json2obj(Class<T> objClass, String is)
+            throws JsonParseException, JsonMappingException, IOException
+    {
+        return mapper.readValue(is, objClass);
+    }
+
+    public static <T> String obj2json(T obj) throws JsonGenerationException,
+            JsonMappingException, IOException
+    {
+        return mapper.writeValueAsString(obj);
+    }
 }
