@@ -13,14 +13,14 @@
 <!-- 				<ref bean="wsnManager"/> --> 
 <!-- 						<ref bean="bluetoothManager"/>  -->
 <!--  				 <ref bean="serialManager"/>  -->
- 				<ref bean="SmartSantanderManager" /> 
+ 				<!--  <ref bean="SmartSantanderManager" /> --> 
  				<ref bean="WasteBinSimulatorManager" /> 
 <!-- 					<ref bean="xivelyManager"/> -->
 
     		</list>
     	</constructor-arg>
     </bean>
-    <bean id="SmartSantanderManager" class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager"/>
+    <!-- <bean id="SmartSantanderManager" class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager"/> -->
     <bean id="WasteBinSimulatorManager" class="it.ismb.pertlab.pwal.wastebinsimulator.WasteBinSimulatorManager"/>
 <!--  	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager"/> -->
 <!--	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.bluetooth.BluetoothManager">
