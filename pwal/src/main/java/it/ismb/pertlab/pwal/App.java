@@ -1,10 +1,19 @@
 package it.ismb.pertlab.pwal;
 
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
+import it.ismb.pertlab.pwal.api.devices.model.AirQualirySensor;
+import it.ismb.pertlab.pwal.api.devices.model.DewPointSensor;
 import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
+import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
+import it.ismb.pertlab.pwal.api.devices.model.HumiditySensor;
+import it.ismb.pertlab.pwal.api.devices.model.LightSensor;
 import it.ismb.pertlab.pwal.api.devices.model.OxyMeter;
+import it.ismb.pertlab.pwal.api.devices.model.PhMeter;
+import it.ismb.pertlab.pwal.api.devices.model.PressureSensor;
 import it.ismb.pertlab.pwal.api.devices.model.Resistance;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore;
+import it.ismb.pertlab.pwal.api.devices.model.SittingsCounter;
+import it.ismb.pertlab.pwal.api.devices.model.TransitsCounter;
 import it.ismb.pertlab.pwal.api.devices.model.Semaphore.State;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
@@ -101,6 +110,43 @@ public class App
 						Resistance r=(Resistance) de;
 						System.out.println("This is a resistance"
 								+" ohm: "+r.getOhm());
+						break;
+					case DeviceType.FLOW_METER_SENSOR:
+						FlowMeter f = (FlowMeter)de;
+						System.out.println(String.format("This is a flow meter. Id: %s, NetworkType: %s, Flow: %f.", f.getId(), f.getNetworkType(), f.getFlow()));
+						break;
+					case DeviceType.PH_METER:
+						PhMeter ph = (PhMeter)de;
+						System.out.println(String.format("This is a ph meter. Id: %s, NetworkType: %s, Ph: %f.", ph.getId(), ph.getNetworkType(), ph.getPh()));
+						break;
+					case DeviceType.TRANSITS_COUNTER:
+                                            TransitsCounter tc = (TransitsCounter)de;
+                                            System.out.println(String.format("This is a transits counter. PWAL id: %s, Id: %s, NetworkType: %s, Transits: %d.", tc.getPwalId(), tc.getId(), tc.getNetworkType(), tc.getTransitCount()));
+                                            break;
+	                                case DeviceType.SITTINGS_COUNTER:
+	                                            SittingsCounter sc = (SittingsCounter)de;
+	                                            System.out.println(String.format("This is a sittings counter. PWAL id: %s, Id: %s, NetworkType: %s, Sittings: %d.", sc.getPwalId(), sc.getId(), sc.getNetworkType(), sc.getSittingsCount()));
+	                                            break;
+	                                case DeviceType.PRESSURE_SENSOR:
+                                            PressureSensor ps = (PressureSensor)de;
+                                            System.out.println(String.format("This is a pressure sensor. PWAL id: %s, Id: %s, NetworkType: %s, Pressure: %f.", ps.getPwalId(), ps.getId(), ps.getNetworkType(), ps.getPressure()));
+                                            break;
+	                                case DeviceType.AIR_QUALITY_SENSOR:
+                                            AirQualirySensor aq = (AirQualirySensor)de;
+                                            System.out.println(String.format("This is an air quality sensor. PWAL id: %s, Id: %s, NetworkType: %s, CO2 level: %f.", aq.getPwalId(), aq.getId(), aq.getNetworkType(), aq.getCO2Level()));
+                                            break;
+	                                case DeviceType.DEW_POINT_SENSOR:
+                                            DewPointSensor dp = (DewPointSensor)de;
+                                            System.out.println(String.format("This is a dew point temperature sensor. PWAL id: %s, Id: %s, NetworkType: %s, DewPoint: %f.", dp.getPwalId(), dp.getId(), dp.getNetworkType(), dp.getDewPointTemperature()));
+                                            break;
+	                                case DeviceType.HUMIDITY_SENSOR:
+	                                    HumiditySensor hu = (HumiditySensor)de;
+	                                    System.out.println(String.format("This is a humidity sensor. PWAL id: %s, Id: %s, NetworkType: %s, Humidity: %f.", hu.getPwalId(), hu.getId(), hu.getNetworkType(), hu.getHumidity()));
+	                                    break;
+	                                case DeviceType.LIGHT_SENSOR:
+                                            LightSensor ls = (LightSensor)de;
+                                            System.out.println(String.format("This is a light sensor. PWAL id: %s, Id: %s, NetworkType: %s, Lumen: %f.", ls.getPwalId(), ls.getId(), ls.getNetworkType(), ls.getLight()));
+                                            break;
 					default:
 						break;
 					}

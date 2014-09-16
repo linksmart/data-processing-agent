@@ -29,4 +29,14 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+<!-- 	<filter> -->
+<!-- 	    <filter-name>responseFilter</filter-name> -->
+<!-- 	    <filter-class>it.ismb.pertlab.pwal.connectors.rest.interceptor.ResponseFilter</filter-class> -->
+<!-- 	</filter> -->
+	
+<!-- 	<filter-mapping> -->
+<!-- 	    <filter-name>responseFilter</filter-name> -->
+<!-- 	    <url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
 </web-app>

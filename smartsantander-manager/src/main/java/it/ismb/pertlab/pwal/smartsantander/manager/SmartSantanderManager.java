@@ -74,26 +74,27 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 				// Check for devices removed...comparing devices discovered with
 				// the list returned by SmartSantander
 				List<Device> toBeRemoved = new ArrayList<>();
-				for (Device d : devicesDiscovered.values())
-				{
-					Boolean found = false;
-					for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes)
-					{
-						
-						if (d.getId().equals(smartSantanderSingleNodeJson.getNodeId()))
+
+				for (List<Device> ld : devicesDiscovered.values()) {
+					for (Device d : ld) {
+						Boolean found = false;
+						for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes) {
+							
+							if(d.getId().equals(smartSantanderSingleNodeJson.getNodeId()))
+							{
+								found = true;
+								continue;
+							}
+						}	
+						if(!found)
 						{
-							found = true;
-							continue;
-						}
-					}
-					if (!found)
-					{
-						log.info("Device {} seems to be removed. It is no more present in the retrieved devices list.",
-								d);
-						toBeRemoved.add(d);
-						for (DeviceListener l : deviceListener)
-						{
-							l.notifyDeviceRemoved(d);
+
+							log.info("Device {} seems to be removed. It is no more present in the retrieved devices list.", d);
+							toBeRemoved.add(d);
+							for (DeviceListener l : deviceListener) {
+								l.notifyDeviceRemoved(d);
+							}
+
 						}
 					}
 				}
@@ -115,58 +116,57 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 				{
 					if (!this.devicesDiscovered.containsKey(smartSantanderSingleNodeJson.getNodeId()))
 					{
-						switch (smartSantanderSingleNodeJson.getType())
-						{
-							case SmartSantaderDeviceTypes.VEHICLE_COUNTER:
-								SmartSantanderVehicleCounterDevice vehicleCounter = new SmartSantanderVehicleCounterDevice(
-										this.restClient, this.getNetworkType());
-								vehicleCounter.setId(smartSantanderSingleNodeJson.getNodeId());
-								Location location = new Location();
-								location.setLat(smartSantanderSingleNodeJson.getLatitude());
-								location.setLon(smartSantanderSingleNodeJson.getLongitude());
-								vehicleCounter.setLocation(location);
-								
-								this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleCounter);
-								
-								log.debug("Adding subscription for:" + vehicleCounter.getId());
+						switch (smartSantanderSingleNodeJson.getType()) {
+						case SmartSantaderDeviceTypes.VEHICLE_COUNTER:
+							SmartSantanderVehicleCounterDevice vehicleCounter = new SmartSantanderVehicleCounterDevice(this.restClient, this.getNetworkType());
+							vehicleCounter.setId(smartSantanderSingleNodeJson.getNodeId());
+							Location location=new Location();
+							location.setLat(smartSantanderSingleNodeJson.getLatitude());
+							location.setLon(smartSantanderSingleNodeJson.getLongitude());
+							vehicleCounter.setLocation(location);
+							if(!this.devicesDiscovered.containsKey(smartSantanderSingleNodeJson.getNodeId()))
+							{
+								List<Device> ld = new ArrayList<>();
+								this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), ld);
+log.debug("Adding subscription for:" + vehicleCounter.getId());
 								
 								// add device polling subscription
 								// TODO: define sampling time at the device level
 								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(1000, vehicleCounter, vehicleCounter
 										.getId()));
+							}
+							this.devicesDiscovered.get(smartSantanderSingleNodeJson.getNodeId()).add(vehicleCounter);
+							for (DeviceListener l : deviceListener) {
+								l.notifyDeviceAdded(vehicleCounter);
+							}
+							break;
+						case SmartSantaderDeviceTypes.VEHICLE_SPEED:
+							SmartSantanderVehicleSpeedDevice vehicleSpeed = new SmartSantanderVehicleSpeedDevice(this.restClient, this.getNetworkType());
+							vehicleSpeed.setId(smartSantanderSingleNodeJson.getNodeId());
+							Location location2=new Location();
+							location2.setLat(smartSantanderSingleNodeJson.getLatitude());
+							location2.setLon(smartSantanderSingleNodeJson.getLongitude());
+							vehicleSpeed.setLocation(location2);
+							if(!this.devicesDiscovered.containsKey(smartSantanderSingleNodeJson.getNodeId()))
+							{
+								List<Device> ld = new ArrayList<>();
+								this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), ld);
 								
-								for (DeviceListener l : deviceListener)
-								{
-									l.notifyDeviceAdded(vehicleCounter);
-								}
-								break;
-								
-							case SmartSantaderDeviceTypes.VEHICLE_SPEED:
-								SmartSantanderVehicleSpeedDevice vehicleSpeed = new SmartSantanderVehicleSpeedDevice(
-										this.restClient, this.getNetworkType());
-								vehicleSpeed.setId(smartSantanderSingleNodeJson.getNodeId());
-								Location location2 = new Location();
-								location2.setLat(smartSantanderSingleNodeJson.getLatitude());
-								location2.setLon(smartSantanderSingleNodeJson.getLongitude());
-								vehicleSpeed.setLocation(location2);
-								devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), vehicleSpeed);
-								
-								log.debug("Adding subscription for:" + vehicleSpeed.getId());
+log.debug("Adding subscription for:" + vehicleSpeed.getId());
 								
 								// add device polling subscription
 								// TODO: define sampling time at the device level
 								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(2000, vehicleSpeed, vehicleSpeed
 										.getId()));
-								
-								for (DeviceListener l : deviceListener)
-								{
-									l.notifyDeviceAdded(vehicleSpeed);
-								}
-								break;
-							default:
-								log.error("I don't know the hell is {}. Unknown type, sorry.",
-										smartSantanderSingleNodeJson.getType());
-								break;
+							}
+							this.devicesDiscovered.get(smartSantanderSingleNodeJson.getNodeId()).add(vehicleSpeed);
+							for (DeviceListener l : deviceListener) {
+								l.notifyDeviceAdded(vehicleSpeed);
+							}
+							break;
+						default:
+							log.error("I don't know the hell is {}. Unknown type, sorry.", smartSantanderSingleNodeJson.getType());
+							break;
 						}
 					}
 				}

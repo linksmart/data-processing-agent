@@ -78,11 +78,6 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.2</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>it.ismb.pertlab.pwal.driver</groupId> -->
-		<!-- <artifactId>BluetoothThermometerDriver</artifactId> -->
-		<!-- <version>0.0.1</version> -->
-		<!-- </dependency> -->
 		<dependency>
 		<groupId>it.ismb.pertlab.pwal</groupId>
 		<artifactId>6LowPanManager</artifactId>
@@ -111,6 +106,11 @@
 		<dependency>
 			<groupId>it.ismb.pertlab.pwal</groupId>
 			<artifactId>wastebinsimulator</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>it.ismb.pertlab.pwal</groupId>
+			<artifactId>etsi-m2m-manager</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
