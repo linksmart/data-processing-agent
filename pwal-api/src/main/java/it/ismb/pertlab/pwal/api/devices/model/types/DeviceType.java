@@ -23,4 +23,5 @@ public class DeviceType
     public static final String SITTINGS_COUNTER = "SittingsCounter";
     public static final String AIR_QUALITY_SENSOR = "CO2Level";
     public static final String DEW_POINT_SENSOR = "DewPointTemperature";
+    public static final String WASTE_BIN = "WasteBin";
 }

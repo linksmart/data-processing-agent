@@ -2,10 +2,12 @@ package it.ismb.pertlab.pwal.smartsantander.manager;
 
 import it.ismb.pertlab.pwal.api.devices.events.DeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
-import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.devices.interfaces.PollingDevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscription;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderSingleNodeJson;
+import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
 import it.ismb.pertlab.pwal.smartsantander.devices.SmartSantanderVehicleCounterDevice;
 import it.ismb.pertlab.pwal.smartsantander.devices.SmartSantanderVehicleSpeedDevice;
 import it.ismb.pertlab.pwal.smartsantander.devices.types.SmartSantaderDeviceTypes;
@@ -13,24 +15,66 @@ import it.ismb.pertlab.pwal.smartsantander.restclient.SmartSantanderRestClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
- * This component manages the SmartSantander sensors network
+ * This component manages the SmartSantander sensors network supporting network
+ * level polling
  * 
+ * modified by <a href="mailto:dario.bonino@gmail.com">Dario Bonino</a>
+ *
  */
-public class SmartSantanderManager extends DevicesManager {
-	SmartSantanderRestClient restClient = new SmartSantanderRestClient(
-			"http://data.smartsantander.eu/ISMB/", log);
-
-	public void run() {
-		while (!t.isInterrupted()) {
+public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderTrafficIntensityJson>
+{
+	// the minimum polling time safely supported by the network
+	public static final int MINIMUM_POLLING_TIME = 100;
+	
+	// the default polling time for sensors handled by this manager
+	public static final int DEFAULT_POLLING_TIME = 5000;
+	
+	// the percent tolerance on data delivery times
+	public static final int TIME_TOLERANCE_PERCENT = 10;
+	
+	// the rest client need to gather sensor data
+	SmartSantanderRestClient restClient = new SmartSantanderRestClient("http://data.smartsantander.eu/ISMB/", log);
+	
+	// the poller service
+	private ScheduledExecutorService poller;
+	
+	// the polling task
+	private SmartSantanderPollingTask pollingTask;
+	
+	// the future task execution promise that allows handling the polling
+	// process
+	private ScheduledFuture<?> futureRun;
+	
+	public SmartSantanderManager()
+	{
+		super();
+		
+		//build the poller
+		this.poller = Executors.newSingleThreadScheduledExecutor();
+		
+		//build the polling task
+		this.pollingTask = new SmartSantanderPollingTask(this, log);
+	}
+	
+	public void run()
+	{
+		while (!t.isInterrupted())
+		{
 			log.info("Retrieving devices list from SmartSantander");
 			List<SmartSantanderSingleNodeJson> availableNodes = restClient.getNodes();
-			if(availableNodes != null && availableNodes.size() != 0)
+			if (availableNodes != null && availableNodes.size() != 0)
 			{
-				log.info("Devices list size: {}.",availableNodes.size());
-				//Check for devices removed...comparing devices discovered with the list returned by SmartSantander
+				log.info("Devices list size: {}.", availableNodes.size());
+				// Check for devices removed...comparing devices discovered with
+				// the list returned by SmartSantander
 				List<Device> toBeRemoved = new ArrayList<>();
+
 				for (List<Device> ld : devicesDiscovered.values()) {
 					for (Device d : ld) {
 						Boolean found = false;
@@ -44,28 +88,33 @@ public class SmartSantanderManager extends DevicesManager {
 						}	
 						if(!found)
 						{
+
 							log.info("Device {} seems to be removed. It is no more present in the retrieved devices list.", d);
 							toBeRemoved.add(d);
 							for (DeviceListener l : deviceListener) {
 								l.notifyDeviceRemoved(d);
 							}
+
 						}
 					}
 				}
-				//Removing devices no more available. Separate cycle to avoid collection changing while ciclying on it
+				// Removing devices no more available. Separate cycle to avoid
+				// collection changing while ciclying on it
 				log.info("Removing no more present devices...");
-				if(toBeRemoved.size() != 0)
+				if (toBeRemoved.size() != 0)
 				{
-					for (Device device : toBeRemoved) {
-						log.debug("Removing {}.",device);
+					for (Device device : toBeRemoved)
+					{
+						log.debug("Removing {}.", device);
 						this.devicesDiscovered.remove(device);
 					}
 				}
 				else
 					log.info("No device removed since last devices list request.");
 				
-				for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes) {
-					if(!this.devicesDiscovered.containsKey(smartSantanderSingleNodeJson.getNodeId()))
+				for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes)
+				{
+					if (!this.devicesDiscovered.containsKey(smartSantanderSingleNodeJson.getNodeId()))
 					{
 						switch (smartSantanderSingleNodeJson.getType()) {
 						case SmartSantaderDeviceTypes.VEHICLE_COUNTER:
@@ -79,6 +128,12 @@ public class SmartSantanderManager extends DevicesManager {
 							{
 								List<Device> ld = new ArrayList<>();
 								this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), ld);
+log.debug("Adding subscription for:" + vehicleCounter.getId());
+								
+								// add device polling subscription
+								// TODO: define sampling time at the device level
+								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(1000, vehicleCounter, vehicleCounter
+										.getId()));
 							}
 							this.devicesDiscovered.get(smartSantanderSingleNodeJson.getNodeId()).add(vehicleCounter);
 							for (DeviceListener l : deviceListener) {
@@ -96,6 +151,13 @@ public class SmartSantanderManager extends DevicesManager {
 							{
 								List<Device> ld = new ArrayList<>();
 								this.devicesDiscovered.put(smartSantanderSingleNodeJson.getNodeId(), ld);
+								
+log.debug("Adding subscription for:" + vehicleSpeed.getId());
+								
+								// add device polling subscription
+								// TODO: define sampling time at the device level
+								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(2000, vehicleSpeed, vehicleSpeed
+										.getId()));
 							}
 							this.devicesDiscovered.get(smartSantanderSingleNodeJson.getNodeId()).add(vehicleSpeed);
 							for (DeviceListener l : deviceListener) {
@@ -113,19 +175,79 @@ public class SmartSantanderManager extends DevicesManager {
 			{
 				log.info("Something goes wrong retrieving devices from SmartSantander");
 			}
-			try {
-				//Ask for devices list again in 1 minute
+			try
+			{
+				// Ask for devices list again in 1 minute
 				log.debug("I'm going to ask for devices nodes again in 1 minute.");
 				Thread.sleep(60000);
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e)
+			{
 				log.error("Exception: ", e);
 				t.interrupt();
 			}
 		}
+		
+		// check if the polling task is running
+		if ((this.futureRun != null) && (!this.futureRun.isCancelled()))
+		{
+			//cancel the polling task
+			this.futureRun.cancel(false);
+			
+		}
 	}
-
+	
 	@Override
-	public String getNetworkType() {
+	public String getNetworkType()
+	{
 		return DeviceNetworkType.SMARTSANTANDER;
 	}
+	
+	@Override
+	protected void setBasePollingTimeMillis()
+	{
+		// set the minimum allowed polling time
+		// TODO: set this value in the configuration...
+		this.basePollingTimeMillis = SmartSantanderManager.DEFAULT_POLLING_TIME;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager#
+	 * setMinimumPollingTimeMillis()
+	 */
+	@Override
+	protected void setMinimumPollingTimeMillis()
+	{
+		this.minimumPollingTimeMillis = SmartSantanderManager.MINIMUM_POLLING_TIME;
+		
+	}
+	
+	@Override
+	protected void setTimeTolerancePercentage()
+	{
+		this.timeTolerancePercentage = SmartSantanderManager.TIME_TOLERANCE_PERCENT;
+	}
+	
+	@Override
+	protected void updatePollingTime()
+	{
+		// check if the polling task is running
+		if ((this.futureRun != null) && (!this.futureRun.isCancelled()))
+		{
+			//stop the current polling task
+			this.futureRun.cancel(false);
+			
+		}
+		
+		log.info("Updating polling time to: " + this.pollingTimeMillis);
+		log.info("Active subscriptions:" + this.nActiveSubscriptions);
+		
+		// starts the poller only if at least one subscription is available
+		this.futureRun = this.poller.scheduleAtFixedRate(this.pollingTask, 0, this.pollingTimeMillis,
+				TimeUnit.MILLISECONDS);
+		
+	}
+	
 }

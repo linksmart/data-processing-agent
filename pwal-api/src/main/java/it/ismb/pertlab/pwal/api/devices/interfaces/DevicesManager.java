@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 public abstract class DevicesManager implements Runnable
 {
-
     protected List<DeviceListener> deviceListener = new LinkedList<>();
     protected Thread t;
     protected String id;
@@ -21,6 +20,14 @@ public abstract class DevicesManager implements Runnable
             .getLogger(DevicesManager.class);
     protected HashMap<String, List<Device>> devicesDiscovered = new HashMap<>();
     protected DeviceManagerStatus status = DeviceManagerStatus.STOPPED;
+    
+    /**
+	 * Empty constructor to conform to the Bean instantiation pattern
+	 */
+	public DevicesManager()
+	{
+				
+	}
 
     public DeviceManagerStatus getStatus()
     {

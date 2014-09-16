@@ -21,14 +21,12 @@ public class SmartSantanderRestClient
 
     private static Logger log = null;
     private String serviceEndpoint;
-    private PWALJsonMapper jsonMapper;
     // private RestTemplate template;
     private List<SmartSantanderTrafficIntensityJson> measure = null;
 
     public SmartSantanderRestClient(String serviceEndpoint, Logger logger)
     {
         this.serviceEndpoint = serviceEndpoint;
-        this.jsonMapper = new PWALJsonMapper();
         // template=new RestTemplate();
         log = logger;
     }
@@ -49,7 +47,7 @@ public class SmartSantanderRestClient
                     .executeRequest(getSmartSantanderNodes);
             if (resp.getStatusLine().getStatusCode() == 200)
             {
-                SmartSantanderSingleNodeJson[] nodes = this.jsonMapper
+                SmartSantanderSingleNodeJson[] nodes = PWALJsonMapper
                         .json2obj(SmartSantanderSingleNodeJson[].class, resp
                                 .getEntity().getContent());
                 return Arrays.asList(nodes);
@@ -99,7 +97,7 @@ public class SmartSantanderRestClient
         return null;
     }
 
-    private List<SmartSantanderTrafficIntensityJson> getMeasures()
+    public List<SmartSantanderTrafficIntensityJson> getMeasures()
     {
         HttpGet getSmartSantanderNodes = new HttpGet(serviceEndpoint
                 + "GetTrafficIntensityLastValues");
@@ -111,7 +109,7 @@ public class SmartSantanderRestClient
                     getSmartSantanderNodes);
             if (resp.getStatusLine().getStatusCode() == 200)
             {
-                SmartSantanderTrafficIntensityJson[] measure = this.jsonMapper
+                SmartSantanderTrafficIntensityJson[] measure = PWALJsonMapper
                         .json2obj(SmartSantanderTrafficIntensityJson[].class,
                                 resp.getEntity().getContent());
                 return Arrays.asList(measure);

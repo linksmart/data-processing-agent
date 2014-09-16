@@ -4,11 +4,14 @@ import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
 import it.ismb.pertlab.pwal.smartsantander.restclient.SmartSantanderRestClient;
 
-public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
-
+public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
+		DataUpdateSubscriber<SmartSantanderTrafficIntensityJson>
+{
+	
 	String id;
 	String pwalId;
 	String type = DeviceType.VEHICLE_COUNTER;
@@ -18,6 +21,9 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
 	SmartSantanderRestClient restClient;
 	SmartSantanderTrafficIntensityJson measure;
 	
+	private Double occupancy;
+	private Double count;
+	
 	public SmartSantanderVehicleCounterDevice(SmartSantanderRestClient restClient, String networkType)
 	{
 		this.restClient = restClient;
@@ -25,87 +31,122 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter {
 		this.measure = new SmartSantanderTrafficIntensityJson();
 	}
 	
-	public String getId() {
+	public String getId()
+	{
 		return this.id;
 	}
-
-	public void setId(String id) {
+	
+	public void setId(String id)
+	{
 		this.id = id;
 	}
-
-	public String getType() {
+	
+	public String getType()
+	{
 		return this.type;
 	}
-
-	public Double getOccupancy() {
-		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if(measure != null)
-			return measure.getOccupancy();
-		else
-			return -1.0;	
+	
+	public Double getOccupancy()
+	{
+		/*
+		 * SmartSantanderTrafficIntensityJson measure =
+		 * this.restClient.getLastMeasures(this.id); if (measure != null) return
+		 * measure.getOccupancy(); else return -1.0;
+		 */
+		return this.occupancy;
 	}
-
-	public Double getCount() {
-		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if(measure != null)
-			return measure.getCount();
-		else
-			return -1.0;	
+	
+	public Double getCount()
+	{
+		/*
+		 * SmartSantanderTrafficIntensityJson measure =
+		 * this.restClient.getLastMeasures(this.id); if (measure != null) return
+		 * measure.getCount(); else return -1.0;
+		 */
+		return this.count;
 	}
-
-	public String getNetworkType() {
+	
+	public String getNetworkType()
+	{
 		return this.networkType;
 	}
-
-	public String getDateLastMeasurement() {
+	
+	public String getDateLastMeasurement()
+	{
 		SmartSantanderTrafficIntensityJson measure = this.restClient.getLastMeasures(this.id);
-		if(measure != null)
+		if (measure != null)
 			return measure.getDate();
 		else
 			return null;
 	}
-
+	
 	@Override
-	public String getPwalId() {
+	public String getPwalId()
+	{
 		return pwalId;
 	}
-
+	
 	@Override
-	public void setPwalId(String pwalId) {
+	public void setPwalId(String pwalId)
+	{
 		this.pwalId = pwalId;
 	}
-
+	
 	@Override
-	public String getUpdatedAt() {
+	public String getUpdatedAt()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public void setUpdatedAt(String updatedAt) {
+	public void setUpdatedAt(String updatedAt)
+	{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public Location getLocation() {
+	public Location getLocation()
+	{
 		return location;
 	}
-
+	
 	@Override
-	public void setLocation(Location location) {
-		this.location=location;
+	public void setLocation(Location location)
+	{
+		this.location = location;
 	}
-
+	
 	@Override
-	public Unit getUnit() {
+	public Unit getUnit()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public void setUnit(Unit unit) {
+	public void setUnit(Unit unit)
+	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void handleUpdate(SmartSantanderTrafficIntensityJson updatedData)
+	{
+		// cast the received data
+		SmartSantanderTrafficIntensityJson updatedJson = (SmartSantanderTrafficIntensityJson) updatedData;
+		
+		// get the measures
+		this.count = updatedJson.getCount();
+		this.occupancy = updatedJson.getOccupancy();
+	}
+	
+	@Override
+	public String getNetworkLevelId()
+	{
+		// TODO Auto-generated method stub
+		return this.id;
 	}
 }
