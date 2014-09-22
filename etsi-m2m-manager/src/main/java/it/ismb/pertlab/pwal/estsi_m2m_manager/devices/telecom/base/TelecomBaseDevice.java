@@ -1,4 +1,4 @@
-package it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom.base;
+package it.ismb.pertlab.pwal.estsi_m2m_manager.devices.telecom.base;
 
 import org.apache.http.client.methods.HttpGet;
 
@@ -18,4 +18,23 @@ public class TelecomBaseDevice
         contentInstancesRequest.setHeader("From", "http://m2mtilab.dtdns.net:8082/etsi/almanac/applications/APP");
     }
 
+    public HttpGet getContentInstancesRequest()
+    {
+        return contentInstancesRequest;
+    }
+
+    public void setContentInstancesRequest(HttpGet contentInstancesRequest)
+    {
+        this.contentInstancesRequest = contentInstancesRequest;
+    }
+
+    public String getContentInstancesUrl()
+    {
+        return contentInstancesUrl;
+    }
+
+    public void setContentInstancesUrl(String contentInstancesUrl)
+    {
+        this.contentInstancesUrl = contentInstancesUrl;
+    }
 }

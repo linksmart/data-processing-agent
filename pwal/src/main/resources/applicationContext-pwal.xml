@@ -12,10 +12,10 @@
 				<!-- <ref bean="wsnManager"/> -->
 				<!-- <ref bean="bluetoothManager"/> -->
 				<!-- <ref bean="serialManager"/> -->
-				<!-- <ref bean="SmartSantanderManager" /> -->
+				<ref bean="SmartSantanderManager" />
 				<!-- <ref bean="xivelyManager"/> -->
 				<ref bean="m2mManager" />
-				<ref bean="WasteBinSimulatorManager" /> 
+<!-- 				<ref bean="WasteBinSimulatorManager" />  -->
 			</list>
 		</constructor-arg>
 	</bean>
@@ -53,5 +53,5 @@
 	<bean id="m2mManager" class="it.ismb.pertlab.pwal.etsi_m2m_manager.EtsiM2MManager">
 		<constructor-arg value="http://m2mtilab.dtdns.net/etsi/almanac" />
 	</bean>
-	<bean id="WasteBinSimulatorManager" class="it.ismb.pertlab.pwal.wastebinsimulator.WasteBinSimulatorManager"/>
+<!-- 	<bean id="WasteBinSimulatorManager" class="it.ismb.pertlab.pwal.wastebinsimulator.WasteBinSimulatorManager"/> -->
 </beans>

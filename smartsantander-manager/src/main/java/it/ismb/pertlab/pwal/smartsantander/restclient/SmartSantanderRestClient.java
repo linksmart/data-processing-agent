@@ -21,13 +21,13 @@ public class SmartSantanderRestClient
 
     private static Logger log = null;
     private String serviceEndpoint;
-    // private RestTemplate template;
+    private PwalHttpClient httpClient;
     private List<SmartSantanderTrafficIntensityJson> measure = null;
 
     public SmartSantanderRestClient(String serviceEndpoint, Logger logger)
     {
         this.serviceEndpoint = serviceEndpoint;
-        // template=new RestTemplate();
+        this.httpClient = new PwalHttpClient();
         log = logger;
     }
 
@@ -43,7 +43,7 @@ public class SmartSantanderRestClient
             HttpGet getSmartSantanderNodes = new HttpGet(serviceEndpoint
                     + "GetNodes");
 
-            CloseableHttpResponse resp = PwalHttpClient.getInstance()
+            CloseableHttpResponse resp = this.httpClient
                     .executeRequest(getSmartSantanderNodes);
             if (resp.getStatusLine().getStatusCode() == 200)
             {
@@ -105,7 +105,7 @@ public class SmartSantanderRestClient
         CloseableHttpResponse resp;
         try
         {
-            resp = PwalHttpClient.getInstance().executeRequest(
+            resp = this.httpClient.executeRequest(
                     getSmartSantanderNodes);
             if (resp.getStatusLine().getStatusCode() == 200)
             {

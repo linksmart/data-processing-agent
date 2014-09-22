@@ -18,16 +18,16 @@ public class PwalHttpClient {
 	
 	private PoolingHttpClientConnectionManager connectionManager;
 	private CloseableHttpClient httpClient;
-	private static PwalHttpClient instance;
+//	private static PwalHttpClient instance;
 	
-	public static PwalHttpClient getInstance()
-	{
-		if(instance == null)
-			instance = new PwalHttpClient();
-		return instance;
-	}
+//	public static PwalHttpClient getInstance()
+//	{
+//		if(instance == null)
+//			instance = new PwalHttpClient();
+//		return instance;
+//	}
 	
-	private PwalHttpClient()
+	public PwalHttpClient()
 	{	
 		this.connectionManager = new PoolingHttpClientConnectionManager();
 		this.httpClient = HttpClients.custom().setConnectionManager(

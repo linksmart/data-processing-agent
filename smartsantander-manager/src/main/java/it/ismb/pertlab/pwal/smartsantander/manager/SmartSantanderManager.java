@@ -36,7 +36,7 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 	public static final int DEFAULT_POLLING_TIME = 5000;
 	
 	// the percent tolerance on data delivery times
-	public static final int TIME_TOLERANCE_PERCENT = 10;
+	public static final int TIME_TOLERANCE_PERCENT = 100;
 	
 	// the rest client need to gather sensor data
 	SmartSantanderRestClient restClient = new SmartSantanderRestClient("http://data.smartsantander.eu/ISMB/", log);
@@ -62,7 +62,8 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 		this.pollingTask = new SmartSantanderPollingTask(this, log);
 	}
 	
-	public void run()
+	@SuppressWarnings("unchecked")
+    public void run()
 	{
 		while (!t.isInterrupted())
 		{
@@ -94,7 +95,6 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 							for (DeviceListener l : deviceListener) {
 								l.notifyDeviceRemoved(d);
 							}
-
 						}
 					}
 				}
@@ -107,6 +107,8 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 					{
 						log.debug("Removing {}.", device);
 						this.devicesDiscovered.remove(device);
+						//removing subscription
+						this.removeSubscription((DataUpdateSubscription<SmartSantanderTrafficIntensityJson>) this.lowLevelDataSubscriptions.get(device.getId()));
 					}
 				}
 				else
@@ -132,7 +134,7 @@ log.debug("Adding subscription for:" + vehicleCounter.getId());
 								
 								// add device polling subscription
 								// TODO: define sampling time at the device level
-								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(1000, vehicleCounter, vehicleCounter
+								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(60000, vehicleCounter, vehicleCounter
 										.getId()));
 							}
 							this.devicesDiscovered.get(smartSantanderSingleNodeJson.getNodeId()).add(vehicleCounter);
@@ -156,7 +158,7 @@ log.debug("Adding subscription for:" + vehicleSpeed.getId());
 								
 								// add device polling subscription
 								// TODO: define sampling time at the device level
-								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(2000, vehicleSpeed, vehicleSpeed
+								this.addSubscription(new DataUpdateSubscription<SmartSantanderTrafficIntensityJson>(60000, vehicleSpeed, vehicleSpeed
 										.getId()));
 							}
 							this.devicesDiscovered.get(smartSantanderSingleNodeJson.getNodeId()).add(vehicleSpeed);

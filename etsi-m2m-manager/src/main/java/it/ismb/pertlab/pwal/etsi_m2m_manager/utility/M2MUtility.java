@@ -12,6 +12,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -35,7 +36,13 @@ public class M2MUtility extends TimerTask
     // private Dictionary<String, String> props; // TODO: find a better way to
     // set the header content. It can be different every time
     private static Logger log = LoggerFactory.getLogger(M2MUtility.class);
-    List<M2MDeviceListener> m2mDeviceListeners = new ArrayList<>();
+    //list of m2m devices notifications listeners
+    private List<M2MDeviceListener> m2mDeviceListeners = new ArrayList<>();
+    private HashMap<String, String> contentInstancesUrlMap;
+    //PWAL XML utility
+    private PWALXmlMapper xmlMapper;
+    //PWAL Http client
+    private PwalHttpClient httpClient;
 
     public M2MUtility(String baseUrl, Dictionary<String, String> props)
     {
@@ -46,6 +53,9 @@ public class M2MUtility extends TimerTask
         this.createBefore = new DateTime(DateTimeZone.UTC);
         this.currentDevicesList = new ArrayList<>();
         this.futureDevicesList = new ArrayList<>();
+        this.contentInstancesUrlMap = new HashMap<>();
+        this.xmlMapper = new PWALXmlMapper();
+        this.httpClient = new PwalHttpClient();
     }
 
     /**
@@ -72,11 +82,11 @@ public class M2MUtility extends TimerTask
 
         try
         {
-            CloseableHttpResponse resp = PwalHttpClient.getInstance()
+            CloseableHttpResponse resp = this.httpClient
                     .executeRequest(sclBaseRequest);
-            Discovery discoveryResult = PWALXmlMapper.unmarshal(
+            Discovery discoveryResult = this.xmlMapper.unmarshal(
                     Discovery.class, resp.getEntity().getContent());
-            PWALXmlMapper.toXml(Discovery.class, discoveryResult);
+//            PWALXmlMapper.toXml(Discovery.class, discoveryResult);
             if (discoveryResult.getDiscoveryURI() != null)
             {
                 for (String devicesUri : discoveryResult.getDiscoveryURI()
@@ -137,16 +147,16 @@ public class M2MUtility extends TimerTask
 
         try
         {
-            CloseableHttpResponse resp = PwalHttpClient.getInstance()
+            CloseableHttpResponse resp = this.httpClient
                     .executeRequest(containerRequest);
             // print received input stream
             // int c;
             // while((c = resp.getEntity().getContent().read()) != -1)
             // System.out.print((char)c);
 
-            Container container = PWALXmlMapper.unmarshal(Container.class, resp
+            Container container = this.xmlMapper.unmarshal(Container.class, resp
                     .getEntity().getContent());
-            PWALXmlMapper.toXml(Container.class, container);
+//            PWALXmlMapper.toXml(Container.class, container);
             String containerName = container.getId();
             log.info("Container name is: {}", containerName);
             String[] containerNameTokens = containerName.split("/");
@@ -170,6 +180,7 @@ public class M2MUtility extends TimerTask
                     {
                         log.debug("NEW DEVICE FOUND. GENERATING EVENT.");
                         this.currentDevicesList.add(deviceId);
+                        this.contentInstancesUrlMap.put(deviceId, container.getContentInstancesReference());
                         m.notifyM2MDeviceAdded(d);
                     }
                 }
@@ -218,7 +229,16 @@ public class M2MUtility extends TimerTask
     {
         this.m2mDeviceListeners.remove(listener);
     }
-
+    
+    /**
+     * Return an hash map with all the devices and their content instances
+     * @return an hash map with the container name as key and a content instance url
+     */
+    public HashMap<String, String> getContentInstancesUrl()
+    {
+        return this.contentInstancesUrlMap;
+    }
+    
     @Override
     public void run()
     {

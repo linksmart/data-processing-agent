@@ -10,7 +10,10 @@ import javax.xml.bind.Unmarshaller;
 
 public class PWALXmlMapper
 {
-    public static <T> T unmarshal(Class<T> docClass, InputStream inputStream)
+    public PWALXmlMapper()
+    {  }
+    
+    public <T> T unmarshal(Class<T> docClass, InputStream inputStream)
             throws JAXBException
     {
         JAXBContext jc = JAXBContext.newInstance(docClass);
@@ -20,7 +23,7 @@ public class PWALXmlMapper
         return doc;
     }
 
-    public static <T> ByteArrayOutputStream marshal(Class<T> docClass, T obj)
+    public <T> ByteArrayOutputStream marshal(Class<T> docClass, T obj)
     {
         Marshaller marshaller = null;
         ByteArrayOutputStream baos = null;
@@ -39,7 +42,7 @@ public class PWALXmlMapper
         return baos;
     }
 
-    public static <T> void toXml(Class<T> jaxbClass, T jaxbObj)
+    public <T> void toXml(Class<T> jaxbClass, T jaxbObj)
             throws JAXBException
     {
         JAXBContext ctx = JAXBContext.newInstance(jaxbClass);

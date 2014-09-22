@@ -1,6 +1,8 @@
 package it.ismb.pertlab.pwal.etsi_m2m_manager.devices.telecom.datamodel.json;
 
-public class TelecomWaterJson {
+import it.ismb.pertlab.pwal.estsi_m2m_manager.devices.telecom.base.TelecomBaseJson;
+
+public class TelecomWaterJson extends TelecomBaseJson {
 
 	private Double ph;
 	private Double flow;

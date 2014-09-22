@@ -20,7 +20,8 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
 	String dateLastMeasurement;
 	SmartSantanderRestClient restClient;
 	SmartSantanderTrafficIntensityJson measure;
-	
+	private String updatedAt;
+	private String expiresAt;
 	private Double occupancy;
 	private Double count;
 	
@@ -95,15 +96,13 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
 	@Override
 	public String getUpdatedAt()
 	{
-		// TODO Auto-generated method stub
-		return null;
+	    return this.updatedAt;
 	}
 	
 	@Override
 	public void setUpdatedAt(String updatedAt)
 	{
-		// TODO Auto-generated method stub
-		
+	    this.updatedAt = updatedAt;
 	}
 	
 	@Override
@@ -149,4 +148,16 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
 		// TODO Auto-generated method stub
 		return this.id;
 	}
+
+    @Override
+    public String getExpiresAt()
+    {
+        return this.expiresAt;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        this.expiresAt = expiresAt;
+    }
 }

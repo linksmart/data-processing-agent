@@ -5,36 +5,36 @@ import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber;
 import it.ismb.pertlab.pwal.api.shared.PWALJsonMapper;
-import it.ismb.pertlab.pwal.api.shared.PWALXmlMapper;
-import it.ismb.pertlab.pwal.api.shared.PwalHttpClient;
-import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom.base.TelecomBaseDevice;
+import it.ismb.pertlab.pwal.estsi_m2m_manager.devices.telecom.base.TelecomBaseDevice;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.devices.telecom.datamodel.json.TelecomSmartBench1M2Json;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstance;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstances;
 
 import java.io.IOException;
 
-import javax.xml.bind.JAXBException;
-
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TelecomBench1Humidity_M2 extends TelecomBaseDevice implements
-        HumiditySensor
+        HumiditySensor, DataUpdateSubscriber<ContentInstances>
 {
 
     private String pwalId;
     private String id;
     private Location location;
     private Unit unit;
+    private Double humidity;
+    private String expiresAt;
+    private String updatedAt;
     private static final Logger log = LoggerFactory
             .getLogger(TelecomBench1Humidity_M2.class);
 
     public TelecomBench1Humidity_M2(String contentInstanceUrl)
     {
         super(contentInstanceUrl);
+        this.humidity = -1.0;
     }
 
     @Override
@@ -76,17 +76,27 @@ public class TelecomBench1Humidity_M2 extends TelecomBaseDevice implements
     @Override
     public String getUpdatedAt()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return this.updatedAt;
     }
 
     @Override
     public void setUpdatedAt(String updatedAt)
     {
-        // TODO Auto-generated method stub
-
+        this.updatedAt = updatedAt;
     }
 
+    @Override
+    public String getExpiresAt()
+    {
+        return this.expiresAt;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        this.expiresAt = expiresAt;
+    }
+    
     @Override
     public Location getLocation()
     {
@@ -114,44 +124,51 @@ public class TelecomBench1Humidity_M2 extends TelecomBaseDevice implements
     @Override
     public Double getHumidity()
     {
-        try
+        return this.humidity;
+    }
+
+    @Override
+    public void handleUpdate(ContentInstances updatedData)
+    {
+        if (updatedData.getContentInstanceCollection() != null
+                && updatedData.getContentInstanceCollection()
+                        .getContentInstance() != null
+                && updatedData.getContentInstanceCollection()
+                        .getContentInstance().size() > 0)
         {
-            CloseableHttpResponse transitResponse = PwalHttpClient
-                    .getInstance().executeRequest(this.contentInstancesRequest);
-            if (transitResponse.getEntity() != null
-                    && transitResponse.getEntity().getContent() != null)
+            for (ContentInstance ci : updatedData
+                    .getContentInstanceCollection()
+                    .getContentInstance())
             {
-                ContentInstances cis = PWALXmlMapper.unmarshal(
-                        ContentInstances.class, transitResponse.getEntity()
-                                .getContent());
-                if (cis.getContentInstanceCollection() != null
-                        && cis.getContentInstanceCollection() != null)
+                for (String searchString : ci.getSearchStrings()
+                        .getSearchString())
                 {
-                    for (ContentInstance ci : cis
-                            .getContentInstanceCollection()
-                            .getContentInstance())
+                    if (searchString.equals("M2"))
                     {
-                        for (String searchString : ci.getSearchStrings()
-                                .getSearchString())
+                        TelecomSmartBench1M2Json m2json;
+                        try
                         {
-                            if (searchString.equals("M2"))
-                            {
-                                TelecomSmartBench1M2Json m2json = PWALJsonMapper
-                                        .json2obj(
-                                                TelecomSmartBench1M2Json.class,
-                                                ci.getContent()
-                                                        .getTextContent());
-                                return Double.parseDouble(m2json.getHumidity());
-                            }
+                            m2json = PWALJsonMapper
+                                    .json2obj(
+                                            TelecomSmartBench1M2Json.class,
+                                            ci.getContent()
+                                                    .getTextContent());
+                            this.humidity = Double.parseDouble(m2json.getHumidity());
+                            return;
+                        }
+                        catch (IOException e)
+                        {
+                            log.error("Humidity: ", e.getLocalizedMessage());
                         }
                     }
                 }
             }
         }
-        catch (IOException | IllegalStateException | JAXBException e)
-        {
-            log.error("getHumidity: {}", e.getLocalizedMessage());
-        }
-        return -1.0;
     }
+
+        @Override
+        public String getNetworkLevelId()
+        {
+            return this.id;
+        }
 }

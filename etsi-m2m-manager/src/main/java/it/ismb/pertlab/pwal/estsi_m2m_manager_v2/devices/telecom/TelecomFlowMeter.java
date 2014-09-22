@@ -5,61 +5,38 @@ import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber;
 import it.ismb.pertlab.pwal.api.shared.PWALJsonMapper;
-import it.ismb.pertlab.pwal.api.shared.PWALXmlMapper;
-import it.ismb.pertlab.pwal.api.shared.PwalHttpClient;
-import it.ismb.pertlab.pwal.estsi_m2m_manager_v2.devices.telecom.base.TelecomBaseDevice;
+import it.ismb.pertlab.pwal.estsi_m2m_manager.devices.telecom.base.TelecomBaseDevice;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.devices.telecom.datamodel.json.TelecomWaterJson;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstance;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstances;
 
 import java.io.IOException;
 
-import javax.xml.bind.JAXBException;
-
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter
+public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter, DataUpdateSubscriber<ContentInstances>
 {
 
     private String pwalId;
     private String id;
     private Double flow;
+    private String updatedAt;
+    private String expiresAt;
     private static final Logger log = LoggerFactory
             .getLogger(TelecomPhMeter.class);
 
     public TelecomFlowMeter(String contentInstanceUrl)
     {
-        super(contentInstanceUrl);        
-        this.contentInstancesUrl = contentInstanceUrl + "/latest";
+        super(contentInstanceUrl);
+        this.flow = -1.0;
     }
 
     @Override
     public Double getFlow()
     {
-        try
-        {
-            CloseableHttpResponse flowResponse = PwalHttpClient.getInstance()
-                    .executeRequest(contentInstancesRequest);
-
-            if (flowResponse.getEntity().getContent() != null)
-            {
-                ContentInstances cis = PWALXmlMapper.unmarshal(ContentInstances.class, flowResponse.getEntity()
-                                .getContent());
-                if (cis != null)
-                {
-                    ContentInstance ci = cis.getContentInstanceCollection().getContentInstance().get(0);
-                    TelecomWaterJson values = PWALJsonMapper.json2obj(TelecomWaterJson.class, ci.getContent().getTextContent());
-                    this.flow = values.getFlow();
-                }
-            }
-        }
-        catch (IOException | IllegalStateException | JAXBException e)
-        {
-            log.error("getFlow: ", e.getCause());
-        }
         return this.flow;
     }
 
@@ -102,17 +79,27 @@ public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter
     @Override
     public String getUpdatedAt()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return this.updatedAt;
     }
 
     @Override
     public void setUpdatedAt(String updatedAt)
     {
-        // TODO Auto-generated method stub
-
+        this.updatedAt = updatedAt;
     }
 
+    @Override
+    public String getExpiresAt()
+    {
+        return this.expiresAt;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        this.expiresAt = expiresAt;    
+    }
+    
     @Override
     public Location getLocation()
     {
@@ -139,5 +126,37 @@ public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter
     {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void handleUpdate(ContentInstances updatedData)
+    {
+        try
+        {
+            if (updatedData.getContentInstanceCollection() != null
+                    && updatedData.getContentInstanceCollection()
+                            .getContentInstance() != null
+                    && updatedData.getContentInstanceCollection()
+                            .getContentInstance().size() > 0)
+            {
+                ContentInstance ci = updatedData.getContentInstanceCollection()
+                        .getContentInstance().get(0);
+                TelecomWaterJson values = PWALJsonMapper.json2obj(
+                        TelecomWaterJson.class, ci.getContent()
+                                .getTextContent());
+                this.flow = values.getFlow();
+                return;
+            }
+        }
+        catch (IOException | IllegalStateException e)
+        {
+            log.error("getFlow: ", e.getCause());
+        }
+    }
+
+    @Override
+    public String getNetworkLevelId()
+    {
+        return this.id;
     }
 }

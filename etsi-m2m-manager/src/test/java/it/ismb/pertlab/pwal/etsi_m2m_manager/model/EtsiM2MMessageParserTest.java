@@ -20,11 +20,12 @@ import org.junit.Test;
 
 public class EtsiM2MMessageParserTest {
 
+        private PWALXmlMapper xmlMapper = new PWALXmlMapper();
 	@Test
 	public void testParseApplications() throws FileNotFoundException, DatatypeConfigurationException, JAXBException
 	{
 		InputStream is=new FileInputStream(this.getClass().getClassLoader().getResource("applications.xml").getFile());
-		Applications appl=PWALXmlMapper.unmarshal(Applications.class, is);
+		Applications appl=xmlMapper.unmarshal(Applications.class, is);
 		assertEquals("http://m2mtilab.dtdns.net/etsi/almanac/accessRights/AR",appl.getAccessRightID());
 		//appl.getApplicationAnncCollection();
 		NamedReferenceCollection appColl=appl.getApplicationCollection();
@@ -50,7 +51,7 @@ public class EtsiM2MMessageParserTest {
 	public void testGetApplication() throws FileNotFoundException, DatatypeConfigurationException, JAXBException
 	{
 		InputStream is=new FileInputStream(this.getClass().getClassLoader().getResource("application.xml").getFile());
-		Application app=PWALXmlMapper.unmarshal(Application.class, is);
+		Application app=xmlMapper.unmarshal(Application.class, is);
 
 		assertEquals("http://m2mtilab.dtdns.net/etsi/almanac/applications/water/accessRights/AR",app.getAccessRightID());
 		assertEquals("http://m2mtilab.dtdns.net/etsi/almanac/applications/water/accessRights",app.getAccessRightsReference());

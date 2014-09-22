@@ -18,11 +18,13 @@ public class CnetDataPusherRestClient
 
     private static Logger log = null;
     private String serviceEndpoint;
+    private PWALXmlMapper xmlMapper;
 
     public CnetDataPusherRestClient(String endpoint, Logger logger)
     {
         log = logger;
         this.serviceEndpoint = endpoint;
+        this.xmlMapper = new PWALXmlMapper();
     }
 
     /**
@@ -42,7 +44,7 @@ public class CnetDataPusherRestClient
                     + deviceName);
             CloseableHttpResponse resp = PwalHttpClient.getInstance()
                     .executeRequest(getIoTEntity);
-            ArrayOfIoTEntity response = PWALXmlMapper.unmarshal(
+            ArrayOfIoTEntity response = this.xmlMapper.unmarshal(
                     ArrayOfIoTEntity.class, resp.getEntity().getContent());
             if (resp.getStatusLine().getStatusCode() == 200)
             {
@@ -67,11 +69,11 @@ public class CnetDataPusherRestClient
         try
         {
             HttpPost postIoTEntity = new HttpPost(serviceEndpoint);
-            postIoTEntity.setEntity(new ByteArrayEntity(PWALXmlMapper.marshal(
+            postIoTEntity.setEntity(new ByteArrayEntity(this.xmlMapper.marshal(
                     IoTEntity.class, iotEntity).toByteArray()));
             CloseableHttpResponse resp = PwalHttpClient.getInstance()
                     .executeRequest(postIoTEntity);
-            IoTEntity iotEntityResp = PWALXmlMapper.unmarshal(IoTEntity.class,
+            IoTEntity iotEntityResp = this.xmlMapper.unmarshal(IoTEntity.class,
                     resp.getEntity().getContent());
             if (resp.getStatusLine().getStatusCode() == 200)
             {
@@ -96,7 +98,7 @@ public class CnetDataPusherRestClient
         try
         {
             HttpPost postIoTEntityValues = new HttpPost(serviceEndpoint);
-            postIoTEntityValues.setEntity(new ByteArrayEntity(PWALXmlMapper
+            postIoTEntityValues.setEntity(new ByteArrayEntity(this.xmlMapper
                     .marshal(IoTEntity.class, iotEntity).toByteArray()));
             CloseableHttpResponse resp;
 

@@ -96,7 +96,7 @@ public class SmartSantanderPollingTask implements Runnable
 							{
 								subscription.setTimestamp(currentTime);
 								subscription.getSubscriber().handleUpdate(currentMeasure);
-								log.info("Updating device of type" + ((Device) subscription.getSubscriber()).getType());
+								log.info("Updating device: {} of type: {}.",((Device) subscription.getSubscriber()).getPwalId(),((Device) subscription.getSubscriber()).getType());
 							}
 						}
 					}
