@@ -1,7 +1,7 @@
 /**
  * 
  */
-package it.ismb.pertlab.pwal.api.event;
+package it.ismb.pertlab.pwal.api.events.base;
 
 import java.util.Date;
 

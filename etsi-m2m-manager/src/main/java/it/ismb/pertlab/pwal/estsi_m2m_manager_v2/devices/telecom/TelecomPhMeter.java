@@ -6,6 +6,8 @@ import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber;
+import it.ismb.pertlab.pwal.api.events.base.PWALNewDataAvailableEvent;
+import it.ismb.pertlab.pwal.api.events.pubsub.topics.PWALTopicsUtility;
 import it.ismb.pertlab.pwal.api.shared.PWALJsonMapper;
 import it.ismb.pertlab.pwal.estsi_m2m_manager.devices.telecom.base.TelecomBaseDevice;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.devices.telecom.datamodel.json.TelecomWaterJson;
@@ -13,11 +15,13 @@ import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstance;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstances;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TelecomPhMeter extends TelecomBaseDevice implements PhMeter, DataUpdateSubscriber<ContentInstances>
+public class TelecomPhMeter extends TelecomBaseDevice implements PhMeter,
+        DataUpdateSubscriber<ContentInstances>
 {
 
     private String pwalId;
@@ -96,9 +100,9 @@ public class TelecomPhMeter extends TelecomBaseDevice implements PhMeter, DataUp
     @Override
     public void setExpiresAt(String expiresAt)
     {
-        this.expiresAt = expiresAt;    
+        this.expiresAt = expiresAt;
     }
-    
+
     @Override
     public Location getLocation()
     {
@@ -138,11 +142,22 @@ public class TelecomPhMeter extends TelecomBaseDevice implements PhMeter, DataUp
                     && updatedData.getContentInstanceCollection()
                             .getContentInstance().size() > 0)
             {
-                ContentInstance ci = updatedData.getContentInstanceCollection().getContentInstance().get(0);
+                ContentInstance ci = updatedData.getContentInstanceCollection()
+                        .getContentInstance().get(0);
                 TelecomWaterJson values = PWALJsonMapper.json2obj(
                         TelecomWaterJson.class, ci.getContent()
                                 .getTextContent());
                 this.ph = values.getPh();
+                HashMap<String, Object> valuesMap = new HashMap<>();
+                valuesMap.put("ph", this.ph);
+                PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
+                        this.updatedAt, this.getPwalId(), this.getExpiresAt(),
+                        valuesMap, this);
+                log.info("Publishing event");
+                this.eventPublisher.setTopics(new String[]
+                        { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
+                                this.getPwalId()) });
+                this.eventPublisher.publish(event);
                 log.debug("Json parsed: {}", values.toString());
                 return;
             }
@@ -156,6 +171,6 @@ public class TelecomPhMeter extends TelecomBaseDevice implements PhMeter, DataUp
     @Override
     public String getNetworkLevelId()
     {
-       return this.id;
+        return this.id;
     }
 }

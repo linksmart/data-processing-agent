@@ -100,6 +100,10 @@ public class EtsiM2MPollingTask extends PWALPollingTask<ContentInstances>
                                                     cis);
                                             DateTime updateAt = DateTime
                                                     .now(DateTimeZone.UTC);
+                                            String expiresAt = updateAt
+                                                    .plusMillis(
+                                                            dus.getDeliveryTimeMillis())
+                                                    .toString();
                                             ((Device) dus.getSubscriber())
                                                     .setUpdatedAt(updateAt
                                                             .toString());

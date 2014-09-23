@@ -6,6 +6,10 @@ import it.ismb.pertlab.pwal.api.devices.events.DeviceLogger;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
+import it.ismb.pertlab.pwal.api.events.base.PWALBaseEvent;
+import it.ismb.pertlab.pwal.api.events.base.PWALNewDataAvailableEvent;
+import it.ismb.pertlab.pwal.api.events.pubsub.PWALEventDispatcher;
+import it.ismb.pertlab.pwal.api.events.pubsub.subscriber.PWALEventSubsciber;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +22,10 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mycila.event.Event;
+import com.mycila.event.Topics;
+import com.mycila.event.annotation.Subscribe;
 
 public class PwalImpl implements Pwal, DeviceListener {
 
@@ -46,8 +54,24 @@ public class PwalImpl implements Pwal, DeviceListener {
 			d.addDeviceListener(this);
 			this.startDeviceManager(d.getId());
 		}
+		PWALEventDispatcher.getInstance().getDispatcher().subscribe(Topics.any(), PWALNewDataAvailableEvent.class, new PWALEventSubsciber<PWALNewDataAvailableEvent>()
+                {
+                    @Override
+                    public void onEvent(Event<PWALNewDataAvailableEvent> arg0)
+                            throws Exception
+                    {
+                        log.info("Received NewDataAvailable event from {}.", arg0.getSource().getSenderId());
+                        log.info("Event topic is: {}", arg0.getTopic());
+                        log.info("Mausurement will be valid from {} to {}", arg0.getSource().getTimeStamp(), arg0.getSource().getExpirationTime());
+                        log.info("New values received: ");
+                        for (String k : arg0.getSource().getValues().keySet())
+                        {
+                            log.info("Key: {}, Value: {}",k, arg0.getSource().getValues().get(k));
+                        }
+                    }
+                });
 	}
-	
+			
 	public Device getDevice(String id) {
 		for (Device d : this.devicesList) {
 			if(d.getPwalId().equals(id))

@@ -1,11 +1,14 @@
 package it.ismb.pertlab.pwal.estsi_m2m_manager.devices.telecom.base;
 
+import it.ismb.pertlab.pwal.api.events.pubsub.publisher.PWALEventPublisher;
+
 import org.apache.http.client.methods.HttpGet;
 
 public class TelecomBaseDevice
 {
     protected HttpGet contentInstancesRequest;
     protected String contentInstancesUrl;
+    protected PWALEventPublisher eventPublisher;
     
     public TelecomBaseDevice(String contentInstanceUrl)
     {
@@ -16,6 +19,8 @@ public class TelecomBaseDevice
         contentInstancesRequest.setHeader("Content-Type", "application/xml");
         contentInstancesRequest.setHeader("Accept", "application/xml");
         contentInstancesRequest.setHeader("From", "http://m2mtilab.dtdns.net:8082/etsi/almanac/applications/APP");
+        
+        this.eventPublisher = new PWALEventPublisher();
     }
 
     public HttpGet getContentInstancesRequest()
