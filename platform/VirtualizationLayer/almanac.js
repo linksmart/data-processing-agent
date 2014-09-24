@@ -9,11 +9,11 @@
 var basic = require('./basic.js').basic,	//Static files, logs
 	config = require('./config.js').config,
 	http = require('http'),
-	proxy = require('http-proxy').createProxyServer({}),
+	httpProxy = require('http-proxy').createProxyServer({}),
 	xmlWriter = require('xml-writer'),
 	atomWriter = require('atom-writer');
 
-proxy.on('error', function (err, req, res) {
+httpProxy.on('error', function (err, req, res) {
 		basic.serve500(req, res, 'Error proxying: ' + err);
 	});
 
@@ -69,6 +69,52 @@ var almanac = {
 	},
 	//</Socket.IO>
 
+	//<MQTT>
+	_mqttClient: null,
+	mqttInit: function () {
+		var mqtt = require('mqtt');
+		almanac._mqttClient = mqtt.createClient(1883, 'localhost');
+
+		almanac._mqttClient.on('message', function (topic, message) {
+			almanac._io.emit('chat', 'MQTT: ' + message);
+			console.log('MQTT: ' + message);
+		});
+
+		almanac._mqttClient.subscribe('chat');
+		setTimeout(function () {
+				almanac._mqttClient.publish('chat', 'Hello MQTT');
+			}, 5000);
+	},
+	//</MQTT>
+
+	//<SSDP (UPnP)>
+	_ssdpClient: null,
+	ssdpInit: function () {
+		var SsdpClient = require('node-ssdp').Client;
+		almanac._ssdpClient = new SsdpClient();
+
+		almanac._ssdpClient.on('response', function (headers, statusCode, rinfo) {
+			//console.log('SSDP: ' + JSON.stringify(headers) + ' ; ' + JSON.stringify(statusCode) + ' ; ' + JSON.stringify(rinfo));
+			if (headers &&
+				headers.ST === config.hosts.recourceCatalogueUrn &&
+				headers.LOCATION && (headers.LOCATION.indexOf('http://127.0.0.1') === 0) &&
+				headers.LOCATION !== almanac._recourceCatalogueUrl) {
+				almanac._recourceCatalogueUrl = headers.LOCATION;
+				console.log('UPnP: discovered the resource catalogue on ' + almanac._recourceCatalogueUrl);
+				almanac._io.emit('chat', 'UPnP: discovered the resource catalogue');
+			};
+		});
+
+		function discoverResourceCatalogues() {
+			//console.log('SSDP: discovery');
+			almanac._ssdpClient.search(config.hosts.recourceCatalogueUrn);
+		}
+
+		discoverResourceCatalogues();
+		setInterval(discoverResourceCatalogues, 30000);
+	},
+	//</SSDP (UPnP)>
+
 	serveHome: function (req, res) {
 		var now = new Date();
 		res.writeHead(200, {
@@ -95,6 +141,19 @@ It is now ' + now.toISOString() + '.\n\
 </body>\n\
 </html>\n\
 ');
+	},
+
+	_recourceCatalogueUrl: '',
+	proxyResourceCatalogue: function (req, res) {
+		if (!almanac._recourceCatalogueUrl) {
+			basic.serve503(req, res);
+			return;
+		}
+		var proxy = http.request(almanac._recourceCatalogueUrl + req.url, function (res2) {
+			res2.pipe(res, { end: true });
+		});
+
+		req.pipe(proxy, { end: true });
 	},
 
 	proxyDataManagement: function (req, res) {
@@ -132,7 +191,7 @@ It is now ' + now.toISOString() + '.\n\
 			options.forward = null;
 		}
 
-		proxy.web(req, res, options, function (err) {
+		httpProxy.web(req, res, options, function (err) {
 				basic.serve500(req, res, 'Error proxying to DataManagement: ' + err);
 			});
 	},
@@ -389,7 +448,7 @@ It is now ' + now.toISOString() + '.\n\
 
 	proxyScral: function (req, res) {
 		req.url = config.hosts.scralPublic.path + req.url;
-		proxy.web(req, res, {
+		httpProxy.web(req, res, {
 				headers: {
 					'Connection': 'close',
 					host: config.hosts.scralPublic.headers.host,
@@ -407,7 +466,7 @@ It is now ' + now.toISOString() + '.\n\
 
 	proxySmartSantander: function (req, res) {
 		req.url = config.hosts.santanderPublic.path + req.url;
-		proxy.web(req, res, {
+		httpProxy.web(req, res, {
 				headers: {
 					'Connection': 'close',
 					host: config.hosts.santanderPublic.headers.host,

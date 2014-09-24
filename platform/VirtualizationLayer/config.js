@@ -8,6 +8,7 @@
 
 var IS_LOCAL_IOT_WEEK = false,
 	hosts = {
+		'recourceCatalogueUrn': 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
 		'storageCloud': {	//Public Storage Manager cloud
 			headers: {
 				host: 'energyportal.cnet.se',
@@ -25,8 +26,8 @@ var IS_LOCAL_IOT_WEEK = false,
 			port: 80,
 		},
 		'virtualPublic': {	//Public Virtualization Layer
-			host: 'p2.alapetite.dk',
-			port: 8080,
+			host: 'almanac.alexandra.dk',
+			port: 80,
 		},
 		'virtualLocal': {	//Local Virtualization Layer at IoT-week
 			host: '127.0.0.1',

@@ -25,41 +25,46 @@ var server = http.createServer(function (req, res) {
 					s1 = urlSegments[1];
 					break;
 			}
-switch (s1) {	//Routing
-	case 'dm/':	//Proxying to Data Management
-		req.url = req.url.substring(s1.length);
-		almanac.proxyDataManagement(req, res);
-		break;
-	case 'dm-geojson/':	//Conversion of Data Management JSON to GeoJSON
-		req.url = req.url.substring(s1.length);
-		almanac.proxyDataManagementToGeojson(req, res);
-		break;
-	case 'dm-atom/':	//Conversion of Data Management JSON to ATOM (RSS)
-	case 'dm-rss/':
-		req.url = req.url.substring(s1.length);
-		almanac.proxyDataManagementToAtom(req, res);
-		break;
-	case 'dm-txt/':	//Conversion of Data Management JSON to TXT
-	case 'dm-tsv/':
-	case 'dm-csv/':
-		req.url = req.url.substring(s1.length);
-		almanac.proxyDataManagementToText(req, res, s1 === 'dm-csv/' ? 'csv' : 'tsv');
-		break;
-	case 'scral/':	//Proxying to SCRAL
-		req.url = req.url.substring(s1.length);
-		almanac.proxyScral(req, res);
-		break;
-	case 'santander/':	//Proxying to SmartSantander
-		req.url = req.url.substring(s1.length);
-		almanac.proxySmartSantander(req, res);
-		break;
-	case '':	//Serve a welcome page
-		almanac.serveHome(req, res);
-		break;
-	default:	//Serve a static file
-		basic.serveStaticFile(req, res);
-		break;
-}
+			switch (s1) {	//Routing
+				case 'ResourceCatalogue/':
+					req.url = req.url.substring(s1.length + 1);	//+1 when we do not want the slash
+					almanac.proxyResourceCatalogue(req, res);
+					//basic.serve503(req, res);
+					break;
+				case 'dm/':	//Proxying to Data Management
+					req.url = req.url.substring(s1.length);
+					almanac.proxyDataManagement(req, res);
+					break;
+				case 'dm-geojson/':	//Conversion of Data Management JSON to GeoJSON
+					req.url = req.url.substring(s1.length);
+					almanac.proxyDataManagementToGeojson(req, res);
+					break;
+				case 'dm-atom/':	//Conversion of Data Management JSON to ATOM (RSS)
+				case 'dm-rss/':
+					req.url = req.url.substring(s1.length);
+					almanac.proxyDataManagementToAtom(req, res);
+					break;
+				case 'dm-txt/':	//Conversion of Data Management JSON to TXT
+				case 'dm-tsv/':
+				case 'dm-csv/':
+					req.url = req.url.substring(s1.length);
+					almanac.proxyDataManagementToText(req, res, s1 === 'dm-csv/' ? 'csv' : 'tsv');
+					break;
+				case 'scral/':	//Proxying to SCRAL
+					req.url = req.url.substring(s1.length);
+					almanac.proxyScral(req, res);
+					break;
+				case 'santander/':	//Proxying to SmartSantander
+					req.url = req.url.substring(s1.length);
+					almanac.proxySmartSantander(req, res);
+					break;
+				case '':	//Serve a welcome page
+					almanac.serveHome(req, res);
+					break;
+				default:	//Serve a static file
+					basic.serveStaticFile(req, res);
+					break;
+			}
 		} else {
 			basic.serve400(req, res);
 		}
@@ -75,8 +80,17 @@ switch (s1) {	//Routing
 	}
 });
 
-almanac.ioInit(server);	//Socket.IO
+server.on('error', function (err) {
+	console.error('Server error: %s. Check that you can use port %d.', err, almanac.config.hosts.masterVirtualizationLayer.port);
+	process.exit(1);
+});
 
-server.listen(almanac.config.hosts.masterVirtualizationLayer.port)
+server.listen(almanac.config.hosts.masterVirtualizationLayer.port);
+
+setTimeout(function() {
+		almanac.ioInit(server);	//Socket.IO
+		almanac.mqttInit();	//MQTT
+		almanac.ssdpInit();	//UPnP
+	}, 2000);
 
 console.log('Node.js server running ALMANAC Virtualization Layer at %j', server.address());

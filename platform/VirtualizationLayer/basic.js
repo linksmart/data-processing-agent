@@ -118,6 +118,26 @@ It is now ' + now.toISOString() + '.\n\
 ');
 	},
 
+	serve503: function (req, res) {
+		res.writeHead(503, {
+			'Content-Type': 'text/html; charset=UTF-8',
+			'Date': (new Date()).toUTCString(),
+			'Server': basic.serverSignature
+		});
+		res.end('<!DOCTYPE html>\n\
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
+<head>\n\
+<meta charset="UTF-8" />\n\
+<title>503 Service Unavailable</title>\n\
+</head>\n\
+<body>\n\
+<h1>Service Unavailable</h1>\n\
+<p>The service you are requesting is temporarily unavailable.</p>\n\
+</body>\n\
+</html>\n\
+');
+	},
+
 	serveStaticFile: function (req, res) {
 		if ((/^\/[a-z0-9_-]+\.[a-z]{2,4}$/i).test(req.url) && (!(/\.\./).test(req.url))) {
 			var myPath = './static' + req.url;
