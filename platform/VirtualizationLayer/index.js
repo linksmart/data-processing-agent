@@ -91,6 +91,7 @@ setTimeout(function() {
 		almanac.ioInit(server);	//Socket.IO
 		almanac.mqttInit();	//MQTT
 		almanac.ssdpInit();	//UPnP
+		almanac.linksmartInit();	//Register in the NetworkManager
 	}, 2000);
 
 console.log('Node.js server running ALMANAC Virtualization Layer at %j', server.address());

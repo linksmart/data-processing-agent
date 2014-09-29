@@ -8,22 +8,24 @@
 
 var IS_LOCAL_IOT_WEEK = false,
 	hosts = {
-		'recourceCatalogueUrn': 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
+		RecourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
+		NetworkManagerUrl: 'http://localhost:8082/NetworkManager',
+		VirtualizationLayerLocalUrl: 'http://localhost/',
 		'storageCloud': {	//Public Storage Manager cloud
 			headers: {
 				host: 'energyportal.cnet.se',
 			},
 			host: 'energyportal.cnet.se',
-			path: '/StorageManagerCloud/REST',
 			port: 80,
+			path: '/StorageManagerCloud/REST',
 		},
 		'storageLocal': {	//Local Storage Manager at IoT-week
 			headers: {
 				host: '192.168.1.30',
 			},
 			host: '192.168.1.30',	//Static IP for IoT-week
-			path: '/StorageManagerLocal/REST',
 			port: 80,
+			path: '/StorageManagerLocal/REST',
 		},
 		'virtualPublic': {	//Public Virtualization Layer
 			host: 'almanac.alexandra.dk',
@@ -42,16 +44,16 @@ var IS_LOCAL_IOT_WEEK = false,
 				host: '130.192.85.162:8080',
 			},
 			host: '130.192.85.162',
-			path: '/connectors.rest-0.2.1',
 			port: 8080,
+			path: '/connectors.rest-0.2.1',
 		},
 		'santanderPublic': {	//Public SmartSantander instance cloud
 			headers: {
 				host: 'data.smartsantander.eu',
 			},
 			host: 'data.smartsantander.eu',
-			path: '/ISMB',
 			port: 80,
+			path: '/ISMB',
 		},
 	};
 

@@ -11,7 +11,8 @@ var basic = require('./basic.js').basic,	//Static files, logs
 	http = require('http'),
 	httpProxy = require('http-proxy').createProxyServer({}),
 	xmlWriter = require('xml-writer'),
-	atomWriter = require('atom-writer');
+	atomWriter = require('atom-writer'),
+	request = require('request');
 
 httpProxy.on('error', function (err, req, res) {
 		basic.serve500(req, res, 'Error proxying: ' + err);
@@ -96,7 +97,7 @@ var almanac = {
 		almanac._ssdpClient.on('response', function (headers, statusCode, rinfo) {
 			//console.log('SSDP: ' + JSON.stringify(headers) + ' ; ' + JSON.stringify(statusCode) + ' ; ' + JSON.stringify(rinfo));
 			if (headers &&
-				headers.ST === config.hosts.recourceCatalogueUrn &&
+				headers.ST === config.hosts.RecourceCatalogueUrn &&
 				headers.LOCATION && (headers.LOCATION.indexOf('http://127.0.0.1') === 0) &&
 				headers.LOCATION !== almanac._recourceCatalogueUrl) {
 				almanac._recourceCatalogueUrl = headers.LOCATION;
@@ -107,13 +108,61 @@ var almanac = {
 
 		function discoverResourceCatalogues() {
 			//console.log('SSDP: discovery');
-			almanac._ssdpClient.search(config.hosts.recourceCatalogueUrn);
+			almanac._ssdpClient.search(config.hosts.RecourceCatalogueUrn);
 		}
 
 		discoverResourceCatalogues();
 		setInterval(discoverResourceCatalogues, 30000);
 	},
 	//</SSDP (UPnP)>
+
+	//<LinkSmart NetworkManager>
+	linksmartInit: function () {
+		function registerInNetworkManager() {
+			request.post({
+					url: config.hosts.NetworkManagerUrl,
+					json: true,
+					body: JSON.stringify({
+							'Endpoint': config.hosts.VirtualizationLayerLocalUrl,
+							'BackboneName': 'eu.linksmart.network.backbone.impl.soap.BackboneSOAPImpl',
+							'Attributes': {
+								'description': 'VirtualizationLayer',
+								'sid': 'eu.linksmart.almanac.virtualizationlayer'
+							}
+						}),
+					timeout: 4000
+				}, function (error, response, body) {
+					if (!error && response.statusCode == 200 && body && body.VirtualAddress) {
+						console.error('Registered in the NetworkManager with VirtualAddress: ' + body.VirtualAddress);
+					} else {
+						console.error('Cannot register in the NetworkManager! Will try again.');
+						console.error(JSON.stringify({error: error, response: response, body: body}));
+					}
+				});
+		}
+
+		function refreshInNetworkManager() {
+			request.get({
+						url: config.hosts.NetworkManagerUrl + '?description="VirtualizationLayer"',
+						json: true,
+						timeout: 2000
+					}, function (error, response, body) {
+					if (!error && response.statusCode == 200 && body) {
+						if (body.length == 0) {	//Needs registration
+							registerInNetworkManager();
+						} else {
+							console.error('Already registered in NetworkManager at address: ' + body[0].VirtualAddress);
+						}
+					} else {
+						console.error('Cannot contact the NetworkManager! Will try again.');
+					}
+				});
+		}
+
+		refreshInNetworkManager();
+		setInterval(refreshInNetworkManager, 120000);
+	},
+	//</LinkSmart NetworkManager>
 
 	serveHome: function (req, res) {
 		var now = new Date();
