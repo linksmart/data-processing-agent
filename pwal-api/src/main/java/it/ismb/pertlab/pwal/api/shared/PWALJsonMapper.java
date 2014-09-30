@@ -19,7 +19,7 @@ import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
  */
 public class PWALJsonMapper
 {
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static ObjectMapper mapper;
 
     public PWALJsonMapper()
     {
@@ -33,18 +33,25 @@ public class PWALJsonMapper
     public static <T> T json2obj(Class<T> objClass, InputStream is)
             throws JsonParseException, JsonMappingException, IOException
     {
-        return mapper.readValue(is, objClass);
+        return getMapper().readValue(is, objClass);
     }
 
     public static <T> T json2obj(Class<T> objClass, String is)
             throws JsonParseException, JsonMappingException, IOException
     {
-        return mapper.readValue(is, objClass);
+        return getMapper().readValue(is, objClass);
     }
 
     public static <T> String obj2json(T obj) throws JsonGenerationException,
             JsonMappingException, IOException
     {
-        return mapper.writeValueAsString(obj);
+        return getMapper().writeValueAsString(obj);
+    }
+    
+    public static ObjectMapper getMapper()
+    {
+        if(mapper == null)
+            mapper = new ObjectMapper();
+        return mapper;
     }
 }

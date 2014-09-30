@@ -39,7 +39,7 @@ public class PWALMqttNewDataAvailableEventSubscriber extends
         if (toSend != null)
         {
             String topic = AlmanacTopics.createAlmanacTopic("observation",
-                    "iotentity", event.getSource().getSenderId(), "");
+                    "iotentity", event.getSource().getSender().getPwalId(), "");
             log.info("Publishing new data available event on mqtt topic: {}",
                     topic);
             this.mqttDispatcher.publish(topic, PWALJsonMapper.obj2json(toSend)
