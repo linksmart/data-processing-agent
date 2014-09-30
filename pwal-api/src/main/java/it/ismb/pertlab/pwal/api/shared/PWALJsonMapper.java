@@ -5,8 +5,11 @@ import java.io.InputStream;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.AnnotationIntrospector;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
 
 /**
  * This class provides utilities to map json file into object and viceversa.
@@ -18,12 +21,21 @@ public class PWALJsonMapper
 {
     private static ObjectMapper mapper = new ObjectMapper();
 
+    public PWALJsonMapper()
+    {
+        AnnotationIntrospector jacksonIntrospector = new JacksonAnnotationIntrospector();
+        mapper.getSerializationConfig().withAnnotationIntrospector(
+                jacksonIntrospector);
+        mapper.getSerializationConfig().withSerializationInclusion(
+                Inclusion.NON_NULL);
+    }
+
     public static <T> T json2obj(Class<T> objClass, InputStream is)
             throws JsonParseException, JsonMappingException, IOException
     {
         return mapper.readValue(is, objClass);
     }
-    
+
     public static <T> T json2obj(Class<T> objClass, String is)
             throws JsonParseException, JsonMappingException, IOException
     {

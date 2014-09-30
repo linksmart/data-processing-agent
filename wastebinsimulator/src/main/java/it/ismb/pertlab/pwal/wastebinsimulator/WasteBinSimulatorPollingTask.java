@@ -21,8 +21,11 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscription;
 import it.ismb.pertlab.pwal.wastebinsimulator.data.WasteBinSensorData;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 
@@ -103,6 +106,10 @@ public class WasteBinSimulatorPollingTask implements Runnable
 							{
 								//update the device
 								subscription.setTimestamp(currentTime);
+								Date expire = new Date(currentTime+subscription.getDeliveryTimeMillis());
+								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+								sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+								((Device)subscription.getSubscriber()).setExpiresAt(sdf.format(expire));
 								subscription.getSubscriber().handleUpdate(cUpdate);
 								
 								//log

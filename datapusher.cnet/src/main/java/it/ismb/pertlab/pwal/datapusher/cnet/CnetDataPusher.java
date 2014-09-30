@@ -246,8 +246,8 @@ public class CnetDataPusher extends DataPusher implements PWALDeviceListener
             geoPointMeta.getProperty().add("geo:point");
             // what if they are not available?
             if (newDevice.getLocation() != null)
-                geoPointMeta.setValue(newDevice.getLocation().getLat() + " "
-                        + newDevice.getLocation().getLon());
+                geoPointMeta.setValue(newDevice.getLocation().getLon()+ " "
+                        + newDevice.getLocation().getLat() );
             iotEntity.getMeta().add(geoPointMeta);
 
             // what if sensor can return two values (different types)

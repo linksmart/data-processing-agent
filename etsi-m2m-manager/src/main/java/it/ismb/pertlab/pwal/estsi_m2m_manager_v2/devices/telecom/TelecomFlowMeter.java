@@ -6,6 +6,8 @@ import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber;
+import it.ismb.pertlab.pwal.api.events.base.PWALNewDataAvailableEvent;
+import it.ismb.pertlab.pwal.api.events.pubsub.topics.PWALTopicsUtility;
 import it.ismb.pertlab.pwal.api.shared.PWALJsonMapper;
 import it.ismb.pertlab.pwal.estsi_m2m_manager.devices.telecom.base.TelecomBaseDevice;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.devices.telecom.datamodel.json.TelecomWaterJson;
@@ -13,11 +15,13 @@ import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstance;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstances;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter, DataUpdateSubscriber<ContentInstances>
+public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter,
+        DataUpdateSubscriber<ContentInstances>
 {
 
     private String pwalId;
@@ -50,6 +54,9 @@ public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter, Da
     public void setPwalId(String pwalId)
     {
         this.pwalId = pwalId;
+        this.eventPublisher.setTopics(new String[]
+                { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
+                        this.getPwalId()) });
     }
 
     @Override
@@ -97,9 +104,9 @@ public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter, Da
     @Override
     public void setExpiresAt(String expiresAt)
     {
-        this.expiresAt = expiresAt;    
+        this.expiresAt = expiresAt;
     }
-    
+
     @Override
     public Location getLocation()
     {
@@ -144,7 +151,15 @@ public class TelecomFlowMeter extends TelecomBaseDevice implements FlowMeter, Da
                 TelecomWaterJson values = PWALJsonMapper.json2obj(
                         TelecomWaterJson.class, ci.getContent()
                                 .getTextContent());
-                this.flow = values.getFlow();
+                if (values.getFlow() != null)
+                    this.flow = values.getFlow();
+                HashMap<String, Object> valuesMap = new HashMap<>();
+                valuesMap.put("getFlow", this.getFlow());
+                PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
+                        this.updatedAt, this.getPwalId(), this.getExpiresAt(),
+                        valuesMap, this);
+                log.info("Publishing event");
+                this.eventPublisher.publish(event);
                 return;
             }
         }

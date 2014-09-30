@@ -6,6 +6,8 @@ import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber;
+import it.ismb.pertlab.pwal.api.events.base.PWALNewDataAvailableEvent;
+import it.ismb.pertlab.pwal.api.events.pubsub.topics.PWALTopicsUtility;
 import it.ismb.pertlab.pwal.api.shared.PWALJsonMapper;
 import it.ismb.pertlab.pwal.estsi_m2m_manager.devices.telecom.base.TelecomBaseDevice;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.devices.telecom.datamodel.json.TelecomSmartBench2M1Json;
@@ -13,6 +15,7 @@ import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstance;
 import it.ismb.pertlab.pwal.etsi_m2m_manager.model.jaxb.ContentInstances;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +50,9 @@ public class TelecomBench2Pollution_M1 extends TelecomBaseDevice implements
     public void setPwalId(String pwalId)
     {
         this.pwalId = pwalId;
+        this.eventPublisher.setTopics(new String[]
+        { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
+                this.getPwalId()) });
     }
 
     @Override
@@ -94,9 +100,9 @@ public class TelecomBench2Pollution_M1 extends TelecomBaseDevice implements
     @Override
     public void setExpiresAt(String expiresAt)
     {
-        this.expiresAt = expiresAt;    
+        this.expiresAt = expiresAt;
     }
-    
+
     @Override
     public Location getLocation()
     {
@@ -139,8 +145,7 @@ public class TelecomBench2Pollution_M1 extends TelecomBaseDevice implements
                             .getContentInstance().size() > 0)
             {
                 for (ContentInstance ci : updatedData
-                        .getContentInstanceCollection()
-                        .getContentInstance())
+                        .getContentInstanceCollection().getContentInstance())
                 {
                     for (String searchString : ci.getSearchStrings()
                             .getSearchString())
@@ -148,11 +153,19 @@ public class TelecomBench2Pollution_M1 extends TelecomBaseDevice implements
                         if (searchString.equals("M1"))
                         {
                             TelecomSmartBench2M1Json m2json = PWALJsonMapper
-                                    .json2obj(
-                                            TelecomSmartBench2M1Json.class,
-                                            ci.getContent()
-                                                    .getTextContent());
-                            this.co2Level = Double.parseDouble(m2json.getPollution());
+                                    .json2obj(TelecomSmartBench2M1Json.class,
+                                            ci.getContent().getTextContent());
+                            if (new Double(Double.parseDouble(m2json
+                                    .getPollution())) != null)
+                                this.co2Level = Double.parseDouble(m2json
+                                        .getPollution());
+                            HashMap<String, Object> valuesMap = new HashMap<>();
+                            valuesMap.put("getCO2Level", this.getCO2Level());
+                            PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
+                                    this.updatedAt, this.getPwalId(), this.getExpiresAt(),
+                                    valuesMap, this);
+                            log.info("Publishing event");
+                            this.eventPublisher.publish(event);
                             return;
                         }
                     }

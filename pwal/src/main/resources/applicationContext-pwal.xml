@@ -15,12 +15,12 @@
 				<ref bean="SmartSantanderManager" />
 				<!-- <ref bean="xivelyManager"/> -->
 				<ref bean="m2mManager" />
-<!-- 				<ref bean="WasteBinSimulatorManager" />  -->
+				<ref bean="WasteBinSimulatorManager" /> 
 			</list>
 		</constructor-arg>
 	</bean>
 	<bean id="SmartSantanderManager"
-		class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager" />
+		class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager" depends-on="mqttPusher"/>
 	<bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager" />
 	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.bluetooth.BluetoothManager">
 
@@ -42,16 +42,17 @@
 					value="it.ismb.pertlab.pwal.manager.serial.device.FlowMeterSensorFit" />
 				<entry key="idWaterPump"
 					value="it.ismb.pertlab.pwal.manager.serial.device.WaterPumpFit" />
-				<entry key="2"
-					value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor" />
-				<entry key="3"
-					value="it.ismb.pertlab.pwal.manager.serial.device.TemperatureSensor" />
 			</map>
 		</constructor-arg>
 	</bean> 
 <!--	<bean id="xivelyManager" class="it.ismb.pertlab.pwal.xivelymanager.XivelyManager"/> -->
-	<bean id="m2mManager" class="it.ismb.pertlab.pwal.etsi_m2m_manager.EtsiM2MManager">
+	<bean id="m2mManager" class="it.ismb.pertlab.pwal.etsi_m2m_manager.EtsiM2MManager" depends-on="mqttPusher">
 		<constructor-arg value="http://m2mtilab.dtdns.net/etsi/almanac" />
 	</bean>
-<!-- 	<bean id="WasteBinSimulatorManager" class="it.ismb.pertlab.pwal.wastebinsimulator.WasteBinSimulatorManager"/> -->
+	<bean id="mqttPusher" class="it.ismb.pertlab.pwal.pusher.mqtt.MqttPusher">
+		<constructor-arg value="tcp://130.192.86.227:1883" />
+	</bean>
+	<bean id="WasteBinSimulatorManager" class="it.ismb.pertlab.pwal.wastebinsimulator.WasteBinSimulatorManager" depends-on="mqttPusher">
+		<constructor-arg value="1000" />
+	</bean>
 </beans>

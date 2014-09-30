@@ -6,7 +6,16 @@
             <pattern>%date %-5level [%thread] - [%logger]- %msg%n</pattern>
         </encoder>
     </appender>
+     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>/var/log/tomcat7/scral.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>/var/log/tomcat7/scral.%d{yyyy-MM-dd}.%i.gz</FileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date %-5level [%thread] - [%logger]- %msg%n</pattern>
+        </encoder>
+    </appender>
   <root level="INFO">
-    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
   </root>
 </configuration>

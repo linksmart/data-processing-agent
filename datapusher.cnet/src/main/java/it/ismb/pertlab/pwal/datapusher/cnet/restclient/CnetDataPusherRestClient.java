@@ -19,12 +19,14 @@ public class CnetDataPusherRestClient
     private static Logger log = null;
     private String serviceEndpoint;
     private PWALXmlMapper xmlMapper;
+    private PwalHttpClient httpClient;
 
     public CnetDataPusherRestClient(String endpoint, Logger logger)
     {
         log = logger;
         this.serviceEndpoint = endpoint;
         this.xmlMapper = new PWALXmlMapper();
+        this.httpClient = new PwalHttpClient();
     }
 
     /**
@@ -42,7 +44,7 @@ public class CnetDataPusherRestClient
         {
             HttpGet getIoTEntity = new HttpGet(serviceEndpoint + "?like="
                     + deviceName);
-            CloseableHttpResponse resp = PwalHttpClient.getInstance()
+            CloseableHttpResponse resp = this.httpClient
                     .executeRequest(getIoTEntity);
             ArrayOfIoTEntity response = this.xmlMapper.unmarshal(
                     ArrayOfIoTEntity.class, resp.getEntity().getContent());
@@ -71,7 +73,7 @@ public class CnetDataPusherRestClient
             HttpPost postIoTEntity = new HttpPost(serviceEndpoint);
             postIoTEntity.setEntity(new ByteArrayEntity(this.xmlMapper.marshal(
                     IoTEntity.class, iotEntity).toByteArray()));
-            CloseableHttpResponse resp = PwalHttpClient.getInstance()
+            CloseableHttpResponse resp = this.httpClient
                     .executeRequest(postIoTEntity);
             IoTEntity iotEntityResp = this.xmlMapper.unmarshal(IoTEntity.class,
                     resp.getEntity().getContent());
@@ -102,7 +104,7 @@ public class CnetDataPusherRestClient
                     .marshal(IoTEntity.class, iotEntity).toByteArray()));
             CloseableHttpResponse resp;
 
-            resp = PwalHttpClient.getInstance().executeRequest(
+            resp = this.httpClient.executeRequest(
                     postIoTEntityValues);
 
             if (resp.getStatusLine().getStatusCode() == 200)

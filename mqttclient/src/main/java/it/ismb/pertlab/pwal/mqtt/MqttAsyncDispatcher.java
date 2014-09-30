@@ -19,6 +19,7 @@ package it.ismb.pertlab.pwal.mqtt;
 
 import java.util.Arrays;
 
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
@@ -164,12 +165,14 @@ public class MqttAsyncDispatcher implements MqttCallback
 		
 	}
 	
-	public void messageArrived(String arg0, MqttMessage arg1) throws Exception
+	public void messageArrived(String arg0, MqttMessage mqttMessage) throws Exception
 	{
 		// // Called when a message arrives from the server that matches any
 		// subscription made by the client
 		
 		// empty in this case as this dispatcher only publishes data...
+	    this.logger.info("Unknow arg0: {}", arg0);
+	    this.logger.info("MqttMessage: ", new String(mqttMessage.getPayload()));	    
 	}
 	
 	/**
@@ -309,6 +312,18 @@ public class MqttAsyncDispatcher implements MqttCallback
 			e.printStackTrace();
 		}
 	}
+
+    public void subscribe(String topicFilter, int qos) //, IMqttActionListener listener)
+    {
+        try
+        {
+            this.asyncClient.subscribe(topicFilter, qos, null, (IMqttActionListener) this);
+        }
+        catch (MqttException e)
+        {
+            this.logger.error("Mqtt subscribe exception: ",e);
+        }
+    }
 	
 	
 	

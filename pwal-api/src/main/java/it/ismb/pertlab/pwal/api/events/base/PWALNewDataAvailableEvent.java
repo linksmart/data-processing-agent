@@ -17,11 +17,10 @@ public class PWALNewDataAvailableEvent extends PWALBaseEvent
     public PWALNewDataAvailableEvent(String timeStamp, String senderId,
             String expirationTime, HashMap<String, Object> values, Device device)
     {
-        super(timeStamp, senderId);
+        super(timeStamp, senderId, device);
         
         this.expirationTime = new DateTime(expirationTime, DateTimeZone.UTC);
         this.values = values;
-        this.device = device;
     }
 
     public HashMap<String, Object> getValues()

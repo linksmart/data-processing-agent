@@ -8,4 +8,10 @@ public class PWALTopicsUtility
         String newDataAvailableTopic = "newdata/devices/%s/%s";
         return String.format(newDataAvailableTopic, networkId, deviceId);
     }
+    
+    public static String newDeviceAddedTopic(String networkId)
+    {
+        String newDeviceAddedTopic = "newdevice/%s";
+        return String.format(newDeviceAddedTopic, networkId);
+    }
 }

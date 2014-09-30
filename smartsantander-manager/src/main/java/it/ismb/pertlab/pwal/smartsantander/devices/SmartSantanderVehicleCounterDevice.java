@@ -1,10 +1,19 @@
 package it.ismb.pertlab.pwal.smartsantander.devices;
 
+import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
+import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber;
+import it.ismb.pertlab.pwal.api.events.base.PWALNewDataAvailableEvent;
+import it.ismb.pertlab.pwal.api.events.pubsub.publisher.PWALEventPublisher;
+import it.ismb.pertlab.pwal.api.events.pubsub.topics.PWALTopicsUtility;
 import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficIntensityJson;
 import it.ismb.pertlab.pwal.smartsantander.restclient.SmartSantanderRestClient;
 
@@ -24,12 +33,17 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
 	private String expiresAt;
 	private Double occupancy;
 	private Double count;
+	private PWALEventPublisher eventPublisher;
+	private Logger log = LoggerFactory.getLogger(SmartSantanderVehicleCounterDevice.class);
 	
 	public SmartSantanderVehicleCounterDevice(SmartSantanderRestClient restClient, String networkType)
 	{
 		this.restClient = restClient;
 		this.networkType = networkType;
 		this.measure = new SmartSantanderTrafficIntensityJson();
+		this.eventPublisher = new PWALEventPublisher();
+		this.count = 0.0;
+		this.occupancy = 0.0;	
 	}
 	
 	public String getId()
@@ -91,6 +105,9 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
 	public void setPwalId(String pwalId)
 	{
 		this.pwalId = pwalId;
+	          this.eventPublisher.setTopics(new String[]
+	                        { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.SMARTSANTANDER,
+	                                this.getPwalId()) });
 	}
 	
 	@Override
@@ -138,8 +155,18 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
 		SmartSantanderTrafficIntensityJson updatedJson = (SmartSantanderTrafficIntensityJson) updatedData;
 		
 		// get the measures
-		this.count = updatedJson.getCount();
-		this.occupancy = updatedJson.getOccupancy();
+		if(updatedJson.getCount() != null)
+		    this.count = updatedJson.getCount();
+		if(updatedJson.getOccupancy() != null)
+		    this.occupancy = updatedJson.getOccupancy();
+		HashMap<String, Object> valuesMap = new HashMap<>();
+		valuesMap.put("getCount", this.getCount());
+		valuesMap.put("getOccupancy", this.getOccupancy());
+                PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
+                        this.updatedAt, this.getPwalId(), this.getExpiresAt(),
+                        valuesMap, this);
+                log.info("Publishing event");
+                this.eventPublisher.publish(event);
 	}
 	
 	@Override

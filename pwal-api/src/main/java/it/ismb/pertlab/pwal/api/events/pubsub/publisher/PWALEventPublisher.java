@@ -24,7 +24,7 @@ public class PWALEventPublisher implements Publisher
     }
 
     @Override
-    public void publish(Object arg0)
+    public synchronized void publish(Object arg0)
     {
         for (Topic t : this.getTopics())
         {

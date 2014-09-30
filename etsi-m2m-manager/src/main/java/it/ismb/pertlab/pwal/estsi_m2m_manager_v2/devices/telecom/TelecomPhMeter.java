@@ -35,6 +35,7 @@ public class TelecomPhMeter extends TelecomBaseDevice implements PhMeter,
     public TelecomPhMeter(String contentInstanceUrl)
     {
         super(contentInstanceUrl);
+        this.ph = 0.0;
     }
 
     @Override
@@ -53,6 +54,9 @@ public class TelecomPhMeter extends TelecomBaseDevice implements PhMeter,
     public void setPwalId(String pwalId)
     {
         this.pwalId = pwalId;
+        this.eventPublisher.setTopics(new String[]
+        { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
+                this.getPwalId()) });
     }
 
     @Override
@@ -147,16 +151,14 @@ public class TelecomPhMeter extends TelecomBaseDevice implements PhMeter,
                 TelecomWaterJson values = PWALJsonMapper.json2obj(
                         TelecomWaterJson.class, ci.getContent()
                                 .getTextContent());
-                this.ph = values.getPh();
+                if (values.getPh() != null)
+                    this.ph = values.getPh();
                 HashMap<String, Object> valuesMap = new HashMap<>();
-                valuesMap.put("ph", this.ph);
+                valuesMap.put("getPh", this.getPh());
                 PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
                         this.updatedAt, this.getPwalId(), this.getExpiresAt(),
                         valuesMap, this);
                 log.info("Publishing event");
-                this.eventPublisher.setTopics(new String[]
-                        { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
-                                this.getPwalId()) });
                 this.eventPublisher.publish(event);
                 log.debug("Json parsed: {}", values.toString());
                 return;

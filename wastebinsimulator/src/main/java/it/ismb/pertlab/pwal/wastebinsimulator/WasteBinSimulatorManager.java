@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 public class WasteBinSimulatorManager extends PollingDevicesManager<WasteBinSensorData>
 {
 	// the default number of simulated bins
-	public static final int DEFAULT_N_BINS = 10000;
+	public static final int DEFAULT_N_BINS = 10;
 	
 	// the minimum polling time safely supported by the network in milliseconds
 	public static final int MINIMUM_POLLING_TIME = 180000; // 3 min

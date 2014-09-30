@@ -11,6 +11,6 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
  */
 public interface WasteBin extends Device
 {
-	public double getTemperature();
-	public int getFillLevel();	
+	public Double getTemperature();
+	public Integer getFillLevel();	
 }
