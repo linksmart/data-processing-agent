@@ -38,6 +38,7 @@ import javax.measure.DecimalMeasure;
 import javax.measure.quantity.Temperature;
 import javax.measure.unit.SI;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,12 +75,14 @@ public class SimulatedWasteBin implements WasteBin,
     private double latitude;
 
     // the temperature value as a measure
+    @JsonIgnore
     private DecimalMeasure<Temperature> temperature;
 
     // the current fill level
     private int fillLevel;
 
     // the number of days in which it gets filled
+    @JsonIgnore
     private int nDaysToFull;
 
     // the waste bin identifier
@@ -189,16 +192,18 @@ public class SimulatedWasteBin implements WasteBin,
      * 
      * @return the temperature
      */
-    public DecimalMeasure<Temperature> getTemperatureAsMeasure()
-    {
-        return temperature;
-    }
+//    @JsonIgnore
+//    public DecimalMeasure<Temperature> getTemperatureAsMeasure()
+//    {
+//        return temperature;
+//    }
 
     /**
      * Sets the current bin temperature as a value with a unit of measure.
      * 
      * @param temperature the temperature to set
      */
+    @JsonIgnore
     public void setTemperatureAsMeasure(DecimalMeasure<Temperature> temperature)
     {
         this.temperature = temperature;
@@ -231,6 +236,7 @@ public class SimulatedWasteBin implements WasteBin,
      * 
      * @return the nDaysToFull
      */
+    @JsonIgnore
     public int getnDaysToFull()
     {
         return nDaysToFull;
@@ -241,6 +247,7 @@ public class SimulatedWasteBin implements WasteBin,
      * 
      * @return the latestUpdate
      */
+    @JsonIgnore
     public Date getLatestUpdate()
     {
         return latestUpdate;
@@ -276,6 +283,7 @@ public class SimulatedWasteBin implements WasteBin,
      * @see it.ismb.pertlab.pwal.api.devices.polling.DataUpdateSubscriber#
      * getNetworkLevelId()
      */
+    @JsonIgnore
     @Override
     public String getNetworkLevelId()
     {

@@ -35,6 +35,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * A device manager which simulates a number of fictitious waste bins equipped
  * with a temperature and a fill level sensor, it manages realistic temperature
@@ -304,6 +306,7 @@ public class WasteBinSimulatorManager extends PollingDevicesManager<WasteBinSens
 	 * @return the networkLayer the {@link WasteBinNetwork} layer used by this
 	 *         manager
 	 */
+	@JsonIgnore
 	public WasteBinNetwork getNetworkLayer()
 	{
 		return networkLayer;

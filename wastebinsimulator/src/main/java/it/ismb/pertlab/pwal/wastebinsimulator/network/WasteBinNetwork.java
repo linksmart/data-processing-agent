@@ -237,11 +237,11 @@ public class WasteBinNetwork
 			int currentFillLevel = this.fGenerator.getCurrentFillLevel(currentBin.getFillLevel(), currentBin.getLatestUpdate(), currentBin.getnDaysToFull());
 			
 			// if null try using the previous value
-			if (currentT == null)
-			{
-				currentT = currentBin.getTemperatureAsMeasure();
-			}
-			
+//			if (currentT == null)
+//			{
+//				currentT = currentBin.getTemperatureAsMeasure();
+//			}
+//			
 			// if not null (Tin Pants handling)
 			if (currentT != null)
 			{
