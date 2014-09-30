@@ -20,8 +20,9 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.w3c.dom.Element;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**

@@ -151,7 +151,8 @@ public class MqttAsyncDispatcher implements MqttCallback
 		// An application may choose to implement reconnection
 		// logic at this point. This preliminary implementation simply logs the
 		// error.
-		this.logger.warn("Lost connection with the given MQTT broker...", t);
+		this.logger.warn("Lost connection with the given MQTT broker...Reconnecting", t);
+		this.syncConnect();
 		
 	}
 	

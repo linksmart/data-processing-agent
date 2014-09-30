@@ -3,13 +3,17 @@ package it.ismb.pertlab.pwal.api.shared;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.AnnotationIntrospector;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+
 
 /**
  * This class provides utilities to map json file into object and viceversa.
@@ -22,13 +26,7 @@ public class PWALJsonMapper
     private static ObjectMapper mapper;
 
     public PWALJsonMapper()
-    {
-        AnnotationIntrospector jacksonIntrospector = new JacksonAnnotationIntrospector();
-        mapper.getSerializationConfig().withAnnotationIntrospector(
-                jacksonIntrospector);
-        mapper.getSerializationConfig().withSerializationInclusion(
-                Inclusion.NON_NULL);
-    }
+    {    }
 
     public static <T> T json2obj(Class<T> objClass, InputStream is)
             throws JsonParseException, JsonMappingException, IOException
@@ -51,7 +49,13 @@ public class PWALJsonMapper
     public static ObjectMapper getMapper()
     {
         if(mapper == null)
+        {
             mapper = new ObjectMapper();
+            AnnotationIntrospector jacksonIntrospector = new JacksonAnnotationIntrospector();
+            mapper.getSerializationConfig().with(
+                    jacksonIntrospector);
+            mapper.setSerializationInclusion(Include.NON_EMPTY);
+        }
         return mapper;
     }
 }
