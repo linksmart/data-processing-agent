@@ -7,15 +7,21 @@
         </encoder>
     </appender>
      <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>/var/log/tomcat7/scral.log</File>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/var/log/tomcat7/scral.%d{yyyy-MM-dd}.%i.gz</FileNamePattern>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%date %-5level [%thread] - [%logger]- %msg%n</pattern>
-        </encoder>
-    </appender>
+        <File>scral.log</File>
+       <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+          <fileNamePattern>scral.%i.log.zip</fileNamePattern>
+          <minIndex>1</minIndex>
+          <maxIndex>3</maxIndex>
+      </rollingPolicy>
+      <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+          <maxFileSize>5MB</maxFileSize>
+      </triggeringPolicy>
+    <encoder>
+      <pattern>%date{YYYY-MM-dd HH:mm:ss} %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+    </encoder>
+  </appender>
+
   <root level="INFO">
-    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
   </root>
 </configuration>
