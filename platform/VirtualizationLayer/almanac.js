@@ -45,28 +45,29 @@ var almanac = {
 				almanac._ioClients[remoteAddress + ':' + remotePort] = socket.id;
 				almanac._io.emit('chat', 'Connected ' + almanac._ioSockets[socket.id]);
 				socket.emit('chat', 'Welcome ' + almanac._ioSockets[socket.id]);
-				console.log('Connected ' + almanac._ioSockets[socket.id]);
+				console.log('Socket.IO: connected ' + almanac._ioSockets[socket.id]);
 
 				socket.on('chat', function (msg) {
 						msg = almanac._ioSockets[socket.id] + '> ' + msg;
 						almanac._io.emit('chat', msg);
-						console.log('Chat ' + msg);
+						console.log('Socket.IO: chat: ' + msg);
 					});
 
 				socket.on('disconnect', function () {
 						var clientId = almanac._ioSockets[socket.id];
 						almanac._io.emit('chat', 'Disconnected ' + clientId);
-						console.log('Disconnected ' + clientId);
+						console.log('Socket.IO: disconnected ' + clientId);
 						try {
 							var socketId = almanac._ioClients[clientId];
 							delete almanac._ioSockets[socket.id];
 							delete almanac._ioClients[clientId];
 							delete almanac._ioSockets[socketId];
 						} catch (ex) {
-							console.warn('Warning during Socket.IO disconnection: ' + ex);
+							console.warn('Socket.IO: warning during disconnection: ' + ex);
 						}
 					});
 			});
+		console.log('Socket.IO: started');
 	},
 	//</Socket.IO>
 
@@ -74,16 +75,16 @@ var almanac = {
 	_mqttClient: null,
 	mqttInit: function () {
 		var mqtt = require('mqtt');
-		almanac._mqttClient = mqtt.createClient(1883, 'localhost');
+		almanac._mqttClient = mqtt.createClient(config.hosts.mqttBroker.port, config.hosts.mqttBroker.host);
 
 		almanac._mqttClient.on('message', function (topic, message) {
 			almanac._io.emit('chat', 'MQTT: ' + message);
-			console.log('MQTT: ' + message);
+			console.log('MQTT: ' + topic + ': ' + message);
 		});
 
 		almanac._mqttClient.subscribe('chat');
 		setTimeout(function () {
-				almanac._mqttClient.publish('chat', 'Hello MQTT');
+				almanac._mqttClient.publish('chat', 'MQTT started');
 			}, 5000);
 	},
 	//</MQTT>
@@ -97,7 +98,7 @@ var almanac = {
 		almanac._ssdpClient.on('response', function (headers, statusCode, rinfo) {
 			//console.log('SSDP: ' + JSON.stringify(headers) + ' ; ' + JSON.stringify(statusCode) + ' ; ' + JSON.stringify(rinfo));
 			if (headers &&
-				headers.ST === config.hosts.RecourceCatalogueUrn &&
+				headers.ST === config.hosts.recourceCatalogueUrn &&
 				headers.LOCATION && (headers.LOCATION.indexOf('http://127.0.0.1') === 0) &&
 				headers.LOCATION !== almanac._recourceCatalogueUrl) {
 				almanac._recourceCatalogueUrl = headers.LOCATION;
@@ -108,7 +109,7 @@ var almanac = {
 
 		function discoverResourceCatalogues() {
 			//console.log('SSDP: discovery');
-			almanac._ssdpClient.search(config.hosts.RecourceCatalogueUrn);
+			almanac._ssdpClient.search(config.hosts.recourceCatalogueUrn);
 		}
 
 		discoverResourceCatalogues();
@@ -117,13 +118,14 @@ var almanac = {
 	//</SSDP (UPnP)>
 
 	//<LinkSmart NetworkManager>
+	_virtualAddress: null,
 	linksmartInit: function () {
 		function registerInNetworkManager() {
 			request.post({
-					url: config.hosts.NetworkManagerUrl,
+					url: config.hosts.networkManagerUrl,
 					json: true,
 					body: JSON.stringify({
-							'Endpoint': config.hosts.VirtualizationLayerLocalUrl,
+							'Endpoint': 'http://' + config.hosts.virtualizationLayer.host + ':' + config.hosts.virtualizationLayer.port + '/',
 							'BackboneName': 'eu.linksmart.network.backbone.impl.soap.BackboneSOAPImpl',
 							'Attributes': {
 								'description': 'VirtualizationLayer',
@@ -133,28 +135,32 @@ var almanac = {
 					timeout: 4000
 				}, function (error, response, body) {
 					if (!error && response.statusCode == 200 && body && body.VirtualAddress) {
-						console.error('Registered in the NetworkManager with VirtualAddress: ' + body.VirtualAddress);
+						almanac._virtualAddress = body.VirtualAddress;
+						console.log('VirtualizationLayer: Registered in the NetworkManager with VirtualAddress: ' + almanac._virtualAddress);
 					} else {
-						console.error('Cannot register in the NetworkManager! Will try again.');
-						console.error(JSON.stringify({error: error, response: response, body: body}));
+						console.error('VirtualizationLayer: Cannot register in the NetworkManager! Will try again.');
 					}
 				});
 		}
 
 		function refreshInNetworkManager() {
 			request.get({
-						url: config.hosts.NetworkManagerUrl + '?description="VirtualizationLayer"',
+						//TODO: use http://localhost:8082/GetNetworkManagerStatus?method=getLocalServices instead to get only local services: body.VirtualAddresses[i].description.indexOf('eu.linksmart.almanac.virtualizationlayer;') > 0; body.VirtualAddresses[i].virtualAddress
+						url: config.hosts.networkManagerUrl + '?description="VirtualizationLayer"',
 						json: true,
 						timeout: 2000
 					}, function (error, response, body) {
 					if (!error && response.statusCode == 200 && body) {
 						if (body.length == 0) {	//Needs registration
 							registerInNetworkManager();
-						} else {
-							console.error('Already registered in NetworkManager at address: ' + body[0].VirtualAddress);
+						} else if (almanac._virtualAddress == null) {
+							almanac._virtualAddress = body[0].VirtualAddress;
+							console.log('VirtualizationLayer: Already registered in NetworkManager at address: ' + almanac._virtualAddress);
+						} else if (almanac._virtualAddress != body[0].VirtualAddress) {
+							console.error('VirtualizationLayer: Inconsistent virtual address in NetworkManager: ' + almanac._virtualAddress + ' != ' + body[0].VirtualAddress);
 						}
 					} else {
-						console.error('Cannot contact the NetworkManager! Will try again.');
+						console.warn('VirtualizationLayer: Cannot contact the NetworkManager! Will try again.');
 					}
 				});
 		}
@@ -496,16 +502,16 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	proxyScral: function (req, res) {
-		req.url = config.hosts.scralPublic.path + req.url;
+		req.url = config.hosts.scral.path + req.url;
 		httpProxy.web(req, res, {
 				headers: {
 					'Connection': 'close',
-					host: config.hosts.scralPublic.headers.host,
+					host: config.hosts.scral.headers.host,
 				},
 				forward: null,
 				target: {
-					host: config.hosts.scralPublic.host,
-					port: config.hosts.scralPublic.port,
+					host: config.hosts.scral.host,
+					port: config.hosts.scral.port,
 				},
 				xfwd: true,
 			}, function (err) {
@@ -514,16 +520,16 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	proxySmartSantander: function (req, res) {
-		req.url = config.hosts.santanderPublic.path + req.url;
+		req.url = config.hosts.santander.path + req.url;
 		httpProxy.web(req, res, {
 				headers: {
 					'Connection': 'close',
-					host: config.hosts.santanderPublic.headers.host,
+					host: config.hosts.santander.headers.host,
 				},
 				forward: null,
 				target: {
-					host: config.hosts.santanderPublic.host,
-					port: config.hosts.santanderPublic.port,
+					host: config.hosts.santander.host,
+					port: config.hosts.santander.port,
 				},
 				xfwd: true,	//Include X-Forwarded-For header
 			}, function (err) {

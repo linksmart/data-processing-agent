@@ -4,8 +4,7 @@
 		by Alexandre Alapetite http://alexandre.alapetite.fr
 */
 
-var util = require('util'),
-	os = require('os'),
+var os = require('os'),
 	fs = require('fs'),
 	path = require('path');
 
@@ -22,7 +21,7 @@ var basic = {
 	serverSignature: 'Node.js / Debian ' + os.type() + ' ' + os.release() + ' ' + os.arch() + ' / Raspberry Pi',
 
 	log: function (req, res) {
-		util.log(req.connection.remoteAddress + '\t' + res.statusCode + '\t"' + req.method + ' ' + req.url + '"\t"' +
+		console.log('HTTP:\t' + (new Date()).toISOString() + '\t' + req.connection.remoteAddress + '\t' + res.statusCode + '\t"' + req.method + ' ' + req.url + '"\t"' +
 			(req.headers['user-agent'] || '') + '"\t"' + (req.headers['referer'] || '') + '"');
 	},
 

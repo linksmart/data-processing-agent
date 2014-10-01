@@ -6,12 +6,22 @@
 			for the ALMANAC European project http://www.almanac-project.eu
 */
 
-var IS_LOCAL_IOT_WEEK = false,
-	hosts = {
-		RecourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
-		NetworkManagerUrl: 'http://localhost:8082/NetworkManager',
-		VirtualizationLayerLocalUrl: 'http://localhost/',
-		'storageCloud': {	//Public Storage Manager cloud
+var hosts = {
+		virtualizationLayerPublic: {	//Public IP of this Virtualization Layer, if any
+			host: 'almanac.alexandra.dk',
+			port: 80,
+		},
+		virtualizationLayer: {
+			host: 'localhost',
+			port: 80
+		},
+		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
+		networkManagerUrl: 'http://localhost:8082/NetworkManager',
+		mqttBroker: {
+			host: 'localhost',
+			port: 1883
+		},
+		storageCloud: {	//Public Storage Manager cloud
 			headers: {
 				host: 'energyportal.cnet.se',
 			},
@@ -19,27 +29,15 @@ var IS_LOCAL_IOT_WEEK = false,
 			port: 80,
 			path: '/StorageManagerCloud/REST',
 		},
-		'storageLocal': {	//Local Storage Manager at IoT-week
+		storage: {	//Local Storage Manager
 			headers: {
 				host: '192.168.1.30',
 			},
-			host: '192.168.1.30',	//Static IP for IoT-week
+			host: '192.168.1.30',
 			port: 80,
 			path: '/StorageManagerLocal/REST',
 		},
-		'virtualPublic': {	//Public Virtualization Layer
-			host: 'almanac.alexandra.dk',
-			port: 80,
-		},
-		'virtualLocal': {	//Local Virtualization Layer at IoT-week
-			host: '127.0.0.1',
-			port: 8080,
-		},
-		'virtualTunnel': {	//Virtualization Layer for IoT-week through SSH tunnel
-			host: 'localhost',
-			port: 8082,
-		},
-		'scralPublic': {	//Public example of SCRAL
+		scral: {
 			headers: {
 				host: '130.192.85.162:8080',
 			},
@@ -47,7 +45,7 @@ var IS_LOCAL_IOT_WEEK = false,
 			port: 8080,
 			path: '/connectors.rest-0.2.1',
 		},
-		'santanderPublic': {	//Public SmartSantander instance cloud
+		santander: {	//Public SmartSantander instance cloud
 			headers: {
 				host: 'data.smartsantander.eu',
 			},
@@ -57,9 +55,8 @@ var IS_LOCAL_IOT_WEEK = false,
 		},
 	};
 
-hosts.masterStorageManager = IS_LOCAL_IOT_WEEK ? hosts.storageLocal : hosts.storageCloud;
-hosts.masterVirtualizationLayer = IS_LOCAL_IOT_WEEK ? hosts.virtualLocal : hosts.virtualPublic;
-hosts.slaveVirtualizationLayer = null;	//IS_LOCAL_IOT_WEEK ? hosts.virtualPublic : hosts.virtualTunnel;
+hosts.masterStorageManager = hosts.storageCloud;
+hosts.slaveVirtualizationLayer = null;
 
 exports.config = {
 	hosts: hosts,

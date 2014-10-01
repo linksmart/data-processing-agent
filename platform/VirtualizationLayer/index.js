@@ -76,16 +76,16 @@ var server = http.createServer(function (req, res) {
 		req.url = reqUrl0;
 		basic.log(req, res);
 	} catch (ex) {
-		console.error('Log exception: %s', ex);
+		console.error('Node.js: Log exception: %s', ex);
 	}
 });
 
 server.on('error', function (err) {
-	console.error('Server error: %s. Check that you can use port %d.', err, almanac.config.hosts.masterVirtualizationLayer.port);
+	console.error('Node.js: server error: %s. Check that you can use port %d.', err, almanac.config.hosts.virtualizationLayer.port);
 	process.exit(1);
 });
 
-server.listen(almanac.config.hosts.masterVirtualizationLayer.port);
+server.listen(almanac.config.hosts.virtualizationLayer.port);
 
 setTimeout(function() {
 		almanac.ioInit(server);	//Socket.IO
@@ -94,4 +94,4 @@ setTimeout(function() {
 		almanac.linksmartInit();	//Register in the NetworkManager
 	}, 2000);
 
-console.log('Node.js server running ALMANAC Virtualization Layer at %j', server.address());
+console.log('Node.js: server running ALMANAC Virtualization Layer at %j', server.address());
