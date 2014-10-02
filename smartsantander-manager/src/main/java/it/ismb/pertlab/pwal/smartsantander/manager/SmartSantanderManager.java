@@ -67,11 +67,11 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 	{
 		while (!t.isInterrupted())
 		{
-			log.info("Retrieving devices list from SmartSantander");
+			log.debug("Retrieving devices list from SmartSantander");
 			List<SmartSantanderSingleNodeJson> availableNodes = restClient.getNodes();
 			if (availableNodes != null && availableNodes.size() != 0)
 			{
-				log.info("Devices list size: {}.", availableNodes.size());
+				log.debug("Devices list size: {}.", availableNodes.size());
 				// Check for devices removed...comparing devices discovered with
 				// the list returned by SmartSantander
 				List<Device> toBeRemoved = new ArrayList<>();
@@ -90,7 +90,7 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 						if(!found)
 						{
 
-							log.info("Device {} seems to be removed. It is no more present in the retrieved devices list.", d);
+							log.info("Device {} seems to be removed. It is not into the devices list.", d);
 							toBeRemoved.add(d);
 							for (DeviceListener l : deviceListener) {
 								l.notifyDeviceRemoved(d);
@@ -100,19 +100,19 @@ public class SmartSantanderManager extends PollingDevicesManager<SmartSantanderT
 				}
 				// Removing devices no more available. Separate cycle to avoid
 				// collection changing while ciclying on it
-				log.info("Removing no more present devices...");
+				log.debug("Removing no more present devices...");
 				if (toBeRemoved.size() != 0)
 				{
 					for (Device device : toBeRemoved)
 					{
-						log.debug("Removing {}.", device);
+						log.info("Removing {}.", device);
 						this.devicesDiscovered.remove(device);
 						//removing subscription
 						this.removeSubscription((DataUpdateSubscription<SmartSantanderTrafficIntensityJson>) this.lowLevelDataSubscriptions.get(device.getId()));
 					}
 				}
 				else
-					log.info("No device removed since last devices list request.");
+					log.debug("No device removed since last devices list request.");
 				
 				for (SmartSantanderSingleNodeJson smartSantanderSingleNodeJson : availableNodes)
 				{
@@ -175,7 +175,7 @@ log.debug("Adding subscription for:" + vehicleSpeed.getId());
 			}
 			else
 			{
-				log.info("Something goes wrong retrieving devices from SmartSantander");
+				log.warn("Something goes wrong retrieving devices from SmartSantander");
 			}
 			try
 			{
@@ -244,7 +244,7 @@ log.debug("Adding subscription for:" + vehicleSpeed.getId());
 		}
 		
 		log.info("Updating polling time to: " + this.pollingTimeMillis);
-		log.info("Active subscriptions:" + this.nActiveSubscriptions);
+		log.debug("Active subscriptions:" + this.nActiveSubscriptions);
 		
 		// starts the poller only if at least one subscription is available
 		this.futureRun = this.poller.scheduleAtFixedRate(this.pollingTask, 0, this.pollingTimeMillis,

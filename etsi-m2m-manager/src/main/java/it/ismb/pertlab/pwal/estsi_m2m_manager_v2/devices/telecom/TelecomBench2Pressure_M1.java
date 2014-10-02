@@ -162,11 +162,14 @@ public class TelecomBench2Pressure_M1 extends TelecomBaseDevice implements
                             HashMap<String, Object> valuesMap = new HashMap<>();
                             valuesMap.put("getPressure", this.getPressure());
                             PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
-                                    this.updatedAt, this.getPwalId(), this.getExpiresAt(),
-                                    valuesMap, this);
-                            log.info("Publishing event");
+                                    this.updatedAt, this.getPwalId(),
+                                    this.getExpiresAt(), valuesMap, this);
+                            log.debug(
+                                    "Device {} is publishing a new data available event on topic: {}",
+                                    this.getPwalId(),
+                                    this.eventPublisher.getTopics());
                             this.eventPublisher.publish(event);
-                                            
+
                             return;
                         }
                     }

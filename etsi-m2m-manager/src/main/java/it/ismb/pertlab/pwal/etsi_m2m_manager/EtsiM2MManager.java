@@ -143,7 +143,7 @@ public class EtsiM2MManager extends PollingDevicesManager<ContentInstances>
         }
 
         log.info("Updating polling time to: " + this.pollingTimeMillis);
-        log.info("Active subscriptions:" + this.nActiveSubscriptions);
+        log.debug("Active subscriptions:" + this.nActiveSubscriptions);
 
         // starts the poller only if at least one subscription is available
         this.futureRun = this.poller.scheduleAtFixedRate(this.pollingTask, 0,

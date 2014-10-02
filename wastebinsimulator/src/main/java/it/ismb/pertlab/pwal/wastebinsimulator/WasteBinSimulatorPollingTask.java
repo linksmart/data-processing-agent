@@ -113,8 +113,9 @@ public class WasteBinSimulatorPollingTask implements Runnable
 								subscription.getSubscriber().handleUpdate(cUpdate);
 								
 								//log
-								this.logger.info("Updating device of type "
-										+ ((Device) subscription.getSubscriber()).getType()+" lUID:"+cUpdate.getlUID());
+                                                                this.logger.info("Updating device: {} type: {}.",((Device) subscription.getSubscriber()).getPwalId(),((Device) subscription.getSubscriber()).getType());
+//								this.logger.info("Updating device {} type "
+//										+ ((Device) subscription.getSubscriber()).getType()+" lUID:"+cUpdate.getlUID());
 							}
 						}
 					}

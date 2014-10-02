@@ -60,12 +60,12 @@ public class EtsiM2MPollingTask extends PWALPollingTask<ContentInstances>
                 try
                 {
                     // this.httpClient = new PwalHttpClient();
-                    log.info("Retrieving {} content instances from {}", key,
+                    log.debug("Retrieving {} content instances from {}", key,
                             contentInstancesRequest.getURI());
                     long time = System.currentTimeMillis();
                     CloseableHttpResponse contentInstanceResponse = this.httpClient
                             .executeRequest(contentInstancesRequest);
-                    log.info("Received response after {} millis.",
+                    log.debug("Received response after {} millis.",
                             System.currentTimeMillis() - time);
                     InputStream is = contentInstanceResponse.getEntity()
                             .getContent();
@@ -108,12 +108,9 @@ public class EtsiM2MPollingTask extends PWALPollingTask<ContentInstances>
                                                     .setUpdatedAt(updateAt
                                                             .toString());
                                             ((Device) dus.getSubscriber())
-                                                    .setExpiresAt(updateAt
-                                                            .plusMillis(
-                                                                    dus.getDeliveryTimeMillis())
-                                                            .toString());
+                                                    .setExpiresAt(expiresAt);
                                             log.info(
-                                                    "Updating device: {} of type: {} ",
+                                                    "Updating device: {} type: {}.",
                                                     ((Device) dus
                                                             .getSubscriber())
                                                             .getPwalId(),

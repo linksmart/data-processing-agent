@@ -69,8 +69,7 @@ public class M2MUtility extends TimerTask
         ;
         String completeBaseDiscoveryUrl = String.format(this.baseDiscoveryUrl,
                 this.createAfter.toString(), this.createBefore.toString());
-        log.debug("baseDiscoveryUlr: {}", completeBaseDiscoveryUrl);
-        log.info("Getting devices at: {}", completeBaseDiscoveryUrl);
+        log.debug("Getting devices at: {}", completeBaseDiscoveryUrl);
         HttpGet sclBaseRequest = new HttpGet(completeBaseDiscoveryUrl);
         // These headers should be dynamic
         sclBaseRequest.setHeader("Authorization",
@@ -100,7 +99,7 @@ public class M2MUtility extends TimerTask
                     if (!this.currentDevicesList.contains(containerName))
                         this.retrieveContainer(devicesUri);
                     else
-                        log.info("Device {} already exists.", containerName);
+                        log.debug("Device {} already exists.", containerName);
                 }
             }
             else
@@ -136,7 +135,7 @@ public class M2MUtility extends TimerTask
 
     private void retrieveContainer(String containerUrl)
     {
-        log.info("Getting Container at: {}", containerUrl);
+        log.debug("Getting Container at: {}", containerUrl);
         HttpGet containerRequest = new HttpGet(containerUrl);
         containerRequest.setHeader("Authorization",
                 "Basic d2F0ZXI6d2F0ZXJwYXNzd29yZA==");
@@ -158,7 +157,7 @@ public class M2MUtility extends TimerTask
                     .getEntity().getContent());
 //            PWALXmlMapper.toXml(Container.class, container);
             String containerName = container.getId();
-            log.info("Container name is: {}", containerName);
+            log.debug("Container name is: {}", containerName);
             String[] containerNameTokens = containerName.split("/");
             String deviceId = containerNameTokens[containerNameTokens.length - 1];
             for (String searchString : container.getSearchStrings()

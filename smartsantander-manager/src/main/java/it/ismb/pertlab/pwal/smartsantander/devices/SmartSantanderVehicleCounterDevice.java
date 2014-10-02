@@ -165,7 +165,7 @@ public class SmartSantanderVehicleCounterDevice implements VehicleCounter,
                 PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
                         this.updatedAt, this.getPwalId(), this.getExpiresAt(),
                         valuesMap, this);
-                log.info("Publishing event");
+                log.debug("Device {} is publishing new data available event on topic: {}", this.getPwalId(), this.eventPublisher.getTopics());
                 this.eventPublisher.publish(event);
 	}
 	

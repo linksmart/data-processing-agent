@@ -168,7 +168,10 @@ public class TelecomBench1AirQuality_M2 extends TelecomBaseDevice implements
                             PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
                                     this.updatedAt, this.getPwalId(),
                                     this.getExpiresAt(), valuesMap, this);
-                            log.info("Publishing event");
+                            log.debug(
+                                    "Device {} is publishing a new data available event on topic: {}",
+                                    this.getPwalId(),
+                                    this.eventPublisher.getTopics());
                             this.eventPublisher.publish(event);
                             if (co2 != null)
                                 this.co2level = co2;

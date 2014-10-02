@@ -70,7 +70,7 @@ public class SmartSantanderRestClient
         if (this.measure == null)
         {
             this.measure = getMeasures();
-            log.info(
+            log.debug(
                     "Searching for measure belonging to the required nodeId: {}",
                     nodeId);
             for (SmartSantanderTrafficIntensityJson traffic : this.measure)
@@ -85,7 +85,7 @@ public class SmartSantanderRestClient
             {
                 this.measure = getMeasures();
             }
-            log.info(
+            log.debug(
                     "Searching for measure belonging to the required nodeId: {}",
                     nodeId);
             for (SmartSantanderTrafficIntensityJson traffic : this.measure)

@@ -31,10 +31,10 @@ public class PWALMqttNewDeviceAddedEventSubscriber extends
     @Override
     public void onEvent(Event<PWALNewDeviceAddedEvent> event) throws Exception
     {
-        log.info("########## NEW DEVICE ADDED EVENT ##########");
-        log.info("Received NewDeviceAdded event from {}.", event.getSource()
+        log.debug("########## NEW DEVICE ADDED EVENT ##########");
+        log.debug("Received NewDeviceAdded event from {}.", event.getSource()
                 .getSenderId());
-        log.info("Event topic is: {}", event.getTopic());
+        log.debug("Event topic is: {}", event.getTopic());
 
         IoTEntity toSend = iotEntityFactory.device2IoTEntity(event.getSource()
                 .getSender());
@@ -43,7 +43,7 @@ public class PWALMqttNewDeviceAddedEventSubscriber extends
         {
             String topic = AlmanacTopics.createAlmanacTopic("metadata",
                     "iotentity", event.getSource().getSender().getPwalId(), "");
-            log.info("Publishing new data available event on mqtt topic: {}",
+            log.info("Publishing new device added event on mqtt topic: {}",
                     topic);
             this.mqttDispatcher.publish(topic, PWALJsonMapper.obj2json(toSend)
                     .getBytes());

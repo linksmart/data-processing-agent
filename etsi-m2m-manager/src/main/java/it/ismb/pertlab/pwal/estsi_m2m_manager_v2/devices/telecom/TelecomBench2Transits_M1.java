@@ -160,11 +160,15 @@ public class TelecomBench2Transits_M1 extends TelecomBaseDevice implements
                                 this.transitCount = Integer.parseInt(m1json
                                         .getTransits());
                             HashMap<String, Object> valuesMap = new HashMap<>();
-                            valuesMap.put("getTransitCount", this.getTransitCount());
+                            valuesMap.put("getTransitCount",
+                                    this.getTransitCount());
                             PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
-                                    this.updatedAt, this.getPwalId(), this.getExpiresAt(),
-                                    valuesMap, this);
-                            log.info("Publishing event");
+                                    this.updatedAt, this.getPwalId(),
+                                    this.getExpiresAt(), valuesMap, this);
+                            log.debug(
+                                    "Device {} is publishing a new data available event on topic: {}",
+                                    this.getPwalId(),
+                                    this.eventPublisher.getTopics());
                             this.eventPublisher.publish(event);
                             return;
                         }

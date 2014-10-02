@@ -51,8 +51,8 @@ public class TelecomBench2Temperature_M1 extends TelecomBaseDevice implements
     {
         this.pwalId = pwalId;
         this.eventPublisher.setTopics(new String[]
-                { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
-                        this.getPwalId()) });
+        { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
+                this.getPwalId()) });
     }
 
     @Override
@@ -160,11 +160,15 @@ public class TelecomBench2Temperature_M1 extends TelecomBaseDevice implements
                                 this.temperature = Double.parseDouble(m2json
                                         .getTemperature());
                             HashMap<String, Object> valuesMap = new HashMap<>();
-                            valuesMap.put("getTemperature", this.getTemperature());
+                            valuesMap.put("getTemperature",
+                                    this.getTemperature());
                             PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
-                                    this.updatedAt, this.getPwalId(), this.getExpiresAt(),
-                                    valuesMap, this);
-                            log.info("Publishing event");
+                                    this.updatedAt, this.getPwalId(),
+                                    this.getExpiresAt(), valuesMap, this);
+                            log.debug(
+                                    "Device {} is publishing a new data available event on topic: {}",
+                                    this.getPwalId(),
+                                    this.eventPublisher.getTopics());
                             this.eventPublisher.publish(event);
                             return;
                         }

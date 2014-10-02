@@ -6,12 +6,8 @@ import it.ismb.pertlab.pwal.api.devices.events.DeviceLogger;
 import it.ismb.pertlab.pwal.api.devices.events.PWALDeviceListener;
 import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
-import it.ismb.pertlab.pwal.api.events.base.PWALBaseEvent;
-import it.ismb.pertlab.pwal.api.events.base.PWALNewDataAvailableEvent;
 import it.ismb.pertlab.pwal.api.events.base.PWALNewDeviceAddedEvent;
-import it.ismb.pertlab.pwal.api.events.pubsub.PWALEventDispatcher;
 import it.ismb.pertlab.pwal.api.events.pubsub.publisher.PWALEventPublisher;
-import it.ismb.pertlab.pwal.api.events.pubsub.subscriber.PWALEventSubsciber;
 import it.ismb.pertlab.pwal.api.events.pubsub.topics.PWALTopicsUtility;
 import it.ismb.pertlab.pwal.api.internal.Pwal;
 
@@ -27,11 +23,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mycila.event.Event;
-import com.mycila.event.Topic;
-import com.mycila.event.Topics;
-import com.mycila.event.annotation.Subscribe;
 
 public class PwalImpl implements Pwal, DeviceListener {
 
@@ -62,33 +53,6 @@ public class PwalImpl implements Pwal, DeviceListener {
 			this.startDeviceManager(d.getId());
 		}
 		this.eventPublisher = new PWALEventPublisher();
-//		PWALEventDispatcher.getInstance().getDispatcher().subscribe(Topics.any(), PWALNewDataAvailableEvent.class, new PWALEventSubsciber<PWALNewDataAvailableEvent>()
-//                {
-//                    @Override
-//                    public void onEvent(Event<PWALNewDataAvailableEvent> arg0)
-//                            throws Exception
-//                    {
-//                        log.info("Received NewDataAvailable event from {}.", arg0.getSource().getSenderId());
-//                        log.info("Event topic is: {}", arg0.getTopic());
-//                        log.info("Mausurement will be valid from {} to {}", arg0.getSource().getTimeStamp(), arg0.getSource().getExpirationTime());
-//                        log.info("New values received: ");
-//                        for (String k : arg0.getSource().getValues().keySet())
-//                        {
-//                            log.info("Key: {}, Value: {}",k, arg0.getSource().getValues().get(k));
-//                        }
-//                    }
-//                });
-//		
-//		PWALEventDispatcher.getInstance().getDispatcher().subscribe(Topic.match("newdata/devices/**"), PWALNewDataAvailableEvent.class, new PWALEventSubsciber<PWALNewDataAvailableEvent>()
-//                {
-//
-//                    @Override
-//                    public void onEvent(Event<PWALNewDataAvailableEvent> arg0)
-//                            throws Exception
-//                    {
-//                        log.info("############### Received NewData event ###############");
-//                    }
-//                });
 	}
 			
 	public Device getDevice(String id) {
@@ -107,26 +71,12 @@ public class PwalImpl implements Pwal, DeviceListener {
 	@Override
 	public void notifyDeviceAdded(Device newDevice) {
 		String generatedId = this.generateId(newDevice);
-		//this is just a WORKAROUND for the IoT demo. fixed id to solve db sync
-		switch (newDevice.getId()) {
-		case "idFlowSensor":
-			newDevice.setPwalId("1fa71b84-f0c8-4bd6-91f8-4e69e073ece7");
-			break;
-		case "idFillLevelSensor":
-			newDevice.setPwalId("41fbcb5a-8e0e-460a-bcc0-ffd067793dbb");
-			break;
-		case "idWaterPump":
-			newDevice.setPwalId("2d66307c-6d7a-4687-a4fa-dc0893648bcd");
-			break;
-		default:
-			newDevice.setPwalId(generatedId);
-			break;
-		}
-		log.info("New PWAL device added: generated id {} type {}.", generatedId, newDevice.getType());
+		newDevice.setPwalId(generatedId);
+		log.debug("New PWAL device added: generated id {} type {}.", generatedId, newDevice.getType());
 		PWALNewDeviceAddedEvent event = new PWALNewDeviceAddedEvent(DateTime.now(DateTimeZone.UTC).toString(), "PWAL", newDevice);
 		this.eventPublisher.setTopics(new String[]{PWALTopicsUtility.newDeviceAddedTopic(newDevice.getNetworkType())});
 		this.eventPublisher.publish(event);
-		log.info("NEW DEVICE ADDED EVENT PUBLISHED USING TOPIC {}", PWALTopicsUtility.newDeviceAddedTopic(newDevice.getNetworkType()));
+		log.debug("NEW DEVICE ADDED EVENT PUBLISHED USING TOPIC {}", PWALTopicsUtility.newDeviceAddedTopic(newDevice.getNetworkType()));
 		
 		
 		String LogMsg="New device added: generated Id:"+generatedId+"; type:"+ newDevice.getType();

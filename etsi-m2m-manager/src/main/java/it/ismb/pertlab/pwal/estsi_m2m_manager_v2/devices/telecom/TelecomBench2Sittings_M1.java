@@ -50,8 +50,8 @@ public class TelecomBench2Sittings_M1 extends TelecomBaseDevice implements
     {
         this.pwalId = pwalId;
         this.eventPublisher.setTopics(new String[]
-                { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
-                        this.getPwalId()) });
+        { PWALTopicsUtility.createDeviceNewDataTopic(DeviceNetworkType.M2M,
+                this.getPwalId()) });
     }
 
     @Override
@@ -159,11 +159,15 @@ public class TelecomBench2Sittings_M1 extends TelecomBaseDevice implements
                                 this.sittingCount = Integer.parseInt(m1json
                                         .getSittings());
                             HashMap<String, Object> valuesMap = new HashMap<>();
-                            valuesMap.put("getSittingsCount", this.getSittingsCount());
+                            valuesMap.put("getSittingsCount",
+                                    this.getSittingsCount());
                             PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
-                                    this.updatedAt, this.getPwalId(), this.getExpiresAt(),
-                                    valuesMap, this);
-                            log.info("Publishing event");
+                                    this.updatedAt, this.getPwalId(),
+                                    this.getExpiresAt(), valuesMap, this);
+                            log.debug(
+                                    "Device {} is publishing a new data available event on topic: {}",
+                                    this.getPwalId(),
+                                    this.eventPublisher.getTopics());
                             this.eventPublisher.publish(event);
                             return;
                         }

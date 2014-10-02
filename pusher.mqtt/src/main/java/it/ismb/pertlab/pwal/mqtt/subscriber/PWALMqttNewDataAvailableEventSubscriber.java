@@ -29,10 +29,10 @@ public class PWALMqttNewDataAvailableEventSubscriber extends
     public void onEvent(Event<PWALNewDataAvailableEvent> event)
             throws Exception
     {
-        log.info("########## NEW DATA AVAILABLE EVENT ##########");
-        log.info("Received NewDataAvailable event from {}.", event.getSource()
+        log.debug("########## NEW DATA AVAILABLE EVENT ##########");
+        log.debug("Received NewDataAvailable event from {}.", event.getSource()
                 .getSenderId());
-        log.info("Event topic is: {}", event.getTopic());
+        log.debug("Event topic is: {}", event.getTopic());
 
         it.ismb.pertlab.pwal.linksmart.cnet.jaxb.Event toSend = this.eventFactory
                 .createEvent(event.getSource(), "OBSERVATION");

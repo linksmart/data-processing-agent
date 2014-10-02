@@ -161,11 +161,15 @@ public class TelecomBench1DewPoint_M2 extends TelecomBaseDevice implements
                             if (dp != null)
                                 this.dewPoint = dp;
                             HashMap<String, Object> valuesMap = new HashMap<>();
-                            valuesMap.put("getDewPointTemperature", this.getDewPointTemperature());
+                            valuesMap.put("getDewPointTemperature",
+                                    this.getDewPointTemperature());
                             PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
                                     this.updatedAt, this.getPwalId(),
                                     this.getExpiresAt(), valuesMap, this);
-                            log.info("Publishing event");
+                            log.debug(
+                                    "Device {} is publishing a new data available event on topic: {}",
+                                    this.getPwalId(),
+                                    this.eventPublisher.getTopics());
                             this.eventPublisher.publish(event);
                             return;
                         }

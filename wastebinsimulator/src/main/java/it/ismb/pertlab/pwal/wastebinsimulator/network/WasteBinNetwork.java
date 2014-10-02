@@ -255,12 +255,12 @@ public class WasteBinNetwork
 				i++;
 				
 				// log
-				WasteBinNetwork.logger.info("Updated [" + i + "]: T="+currentT+" F="+currentFillLevel);
+				WasteBinNetwork.logger.debug("Updated [" + i + "]: T="+currentT+" F="+currentFillLevel);
 			}
 			
 		}
 		
-		WasteBinNetwork.logger.info("Generated updates, Elapsed time: "
+		WasteBinNetwork.logger.debug("Generated updates, Elapsed time: "
 				+ ((System.currentTimeMillis() - time) / 1000.0) + "s");
 		
 		return updates;

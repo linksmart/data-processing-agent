@@ -162,9 +162,12 @@ public class TelecomBench2Pollution_M1 extends TelecomBaseDevice implements
                             HashMap<String, Object> valuesMap = new HashMap<>();
                             valuesMap.put("getCO2Level", this.getCO2Level());
                             PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
-                                    this.updatedAt, this.getPwalId(), this.getExpiresAt(),
-                                    valuesMap, this);
-                            log.info("Publishing event");
+                                    this.updatedAt, this.getPwalId(),
+                                    this.getExpiresAt(), valuesMap, this);
+                            log.debug(
+                                    "Device {} is publishing a new data available event on topic: {}",
+                                    this.getPwalId(),
+                                    this.eventPublisher.getTopics());
                             this.eventPublisher.publish(event);
                             return;
                         }

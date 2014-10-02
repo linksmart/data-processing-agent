@@ -168,7 +168,10 @@ public class TelecomBench2Humidity_M1 extends TelecomBaseDevice implements
                             PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
                                     this.updatedAt, this.getPwalId(),
                                     this.getExpiresAt(), valuesMap, this);
-                            log.info("Publishing event");
+                            log.debug(
+                                    "Device {} is publishing a new data available event on topic: {}",
+                                    this.getPwalId(),
+                                    this.eventPublisher.getTopics());
                             this.eventPublisher.publish(event);
                             return;
                         }
