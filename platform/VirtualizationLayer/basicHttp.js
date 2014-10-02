@@ -8,7 +8,7 @@ var os = require('os'),
 	fs = require('fs'),
 	path = require('path');
 
-var basic = {
+var basicHttp = {
 
 	escapeHtml: function (text) {
 		return text.replace(/&/g, "&amp;")
@@ -18,7 +18,7 @@ var basic = {
 			.replace(/'/g, "&#039;");
 	},
 
-	serverSignature: 'Node.js / Debian ' + os.type() + ' ' + os.release() + ' ' + os.arch() + ' / Raspberry Pi',
+	serverSignature: 'Node.js ' + process.version + ' / ' + os.type() + ' ' + os.release() + ' ' + os.arch(),
 
 	log: function (req, res) {
 		console.log('HTTP:\t' + (new Date()).toISOString() + '\t' + req.connection.remoteAddress + '\t' + res.statusCode + '\t"' + req.method + ' ' + req.url + '"\t"' +
@@ -30,7 +30,7 @@ var basic = {
 		res.writeHead(200, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': now.toUTCString(),
-			'Server': basic.serverSignature
+			'Server': basicHttp.serverSignature
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -57,7 +57,7 @@ It is now ' + now.toISOString() + '.\n\
 		res.writeHead(400, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basic.serverSignature
+			'Server': basicHttp.serverSignature
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -78,7 +78,7 @@ It is now ' + now.toISOString() + '.\n\
 		res.writeHead(404, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basic.serverSignature
+			'Server': basicHttp.serverSignature
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -89,7 +89,7 @@ It is now ' + now.toISOString() + '.\n\
 <body>\n\
 <h1>Not Found</h1>\n\
 <p>The requested <abbr title="Uniform Resource Locator">URL</abbr> <kbd>' +
-	basic.escapeHtml(req.url) + '</kbd> was not found on this server.</p>\n\
+	basicHttp.escapeHtml(req.url) + '</kbd> was not found on this server.</p>\n\
 </body>\n\
 </html>\n\
 ');
@@ -100,7 +100,7 @@ It is now ' + now.toISOString() + '.\n\
 		res.writeHead(500, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basic.serverSignature
+			'Server': basicHttp.serverSignature
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -121,7 +121,7 @@ It is now ' + now.toISOString() + '.\n\
 		res.writeHead(503, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basic.serverSignature
+			'Server': basicHttp.serverSignature
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -159,16 +159,16 @@ It is now ' + now.toISOString() + '.\n\
 							'Cache-Control': 'public, max-age=86400',
 							'Date': (new Date()).toUTCString(),
 							'Last-Modified': modifiedDate,
-							'Server': basic.serverSignature
+							'Server': basicHttp.serverSignature
 						});
 						fs.createReadStream(myPath).pipe(res);
 					}
 				} else {
-					basic.serve404(req, res);
+					basicHttp.serve404(req, res);
 				}
 			});
 		} else {
-			basic.serve404(req, res);
+			basicHttp.serve404(req, res);
 		}
 	},
 
@@ -176,11 +176,11 @@ It is now ' + now.toISOString() + '.\n\
 		res.writeHead(200, {
 			'Content-Type': 'application/json; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basic.serverSignature
+			'Server': basicHttp.serverSignature,
 		});
 		res.end(JSON.stringify(json));
 	},
 
 };
 
-exports.basic = basic;
+exports.basicHttp = basicHttp;

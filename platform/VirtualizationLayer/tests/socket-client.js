@@ -1,6 +1,6 @@
 "use strict";
 
-var socketio = require('./node_modules/socket.io/node_modules/socket.io-client')('http://p2.alapetite.dk:8080/');
+var socketio = require('../node_modules/socket.io/node_modules/socket.io-client')('http://p2.alapetite.dk:8080/');
 
 socketio.on('connect', function() {
 		console.log('Connected');

@@ -27,7 +27,7 @@ var hosts = {
 			},
 			host: 'energyportal.cnet.se',
 			port: 80,
-			path: '/StorageManagerCloud/REST',
+			path: '/StorageManagerCloud/REST/',
 		},
 		storage: {	//Local Storage Manager
 			headers: {
@@ -35,7 +35,7 @@ var hosts = {
 			},
 			host: '192.168.1.30',
 			port: 80,
-			path: '/StorageManagerLocal/REST',
+			path: '/StorageManagerLocal/REST/',
 		},
 		scral: {
 			headers: {
@@ -43,7 +43,7 @@ var hosts = {
 			},
 			host: '130.192.86.227',
 			port: 8080,
-			path: '/connectors.rest-0.2.0',
+			path: '/connectors.rest-0.2.0/',
 		},
 		santander: {	//Public SmartSantander instance cloud
 			headers: {
@@ -51,7 +51,7 @@ var hosts = {
 			},
 			host: 'data.smartsantander.eu',
 			port: 80,
-			path: '/ISMB',
+			path: '/ISMB/',
 		},
 		virtualizationLayerPeers: [	//Temporary manual peering while waiting for deployments using the NetworkManager
 			'http://almanac.alexandra.dk/',

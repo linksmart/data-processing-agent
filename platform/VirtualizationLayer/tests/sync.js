@@ -6,7 +6,7 @@
 			for the ALMANAC European project http://www.almanac-project.eu
 */
 
-var config = require('./config.js').config,
+var config = require('../config.js').config,
 	http = require('http');
 
 config.hosts.storageCloud.path += '/IoTEntities';
