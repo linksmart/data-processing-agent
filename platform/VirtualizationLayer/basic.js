@@ -172,6 +172,15 @@ It is now ' + now.toISOString() + '.\n\
 		}
 	},
 
+	serveJson: function (req, res, json) {
+		res.writeHead(200, {
+			'Content-Type': 'application/json; charset=UTF-8',
+			'Date': (new Date()).toUTCString(),
+			'Server': basic.serverSignature
+		});
+		res.end(JSON.stringify(json));
+	},
+
 };
 
 exports.basic = basic;

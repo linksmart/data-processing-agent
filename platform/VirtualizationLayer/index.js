@@ -58,6 +58,13 @@ var server = http.createServer(function (req, res) {
 					req.url = req.url.substring(s1.length);
 					almanac.proxySmartSantander(req, res);
 					break;
+				case 'virtualizationLayerInfo':	//Requests the public address of this VirtualizationLayer instance and other info
+					basic.serveJson(req, res, {
+							virtualAddress: almanac.virtualAddress,
+							publicAddress: almanac.config.hosts.virtualizationLayerPublic,
+							server: basic.serverSignature,
+						});
+					break;
 				case '':	//Serve a welcome page
 					almanac.serveHome(req, res);
 					break;

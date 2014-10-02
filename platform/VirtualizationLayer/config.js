@@ -13,13 +13,13 @@ var hosts = {
 		},
 		virtualizationLayer: {
 			host: 'localhost',
-			port: 80
+			port: 80,
 		},
 		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
 		networkManagerUrl: 'http://localhost:8082/NetworkManager',
 		mqttBroker: {
 			host: 'localhost',
-			port: 1883
+			port: 1883,
 		},
 		storageCloud: {	//Public Storage Manager cloud
 			headers: {
@@ -39,11 +39,11 @@ var hosts = {
 		},
 		scral: {
 			headers: {
-				host: '130.192.85.162:8080',
+				host: '130.192.86.227:8080',
 			},
-			host: '130.192.85.162',
+			host: '130.192.86.227',
 			port: 8080,
-			path: '/connectors.rest-0.2.1',
+			path: '/connectors.rest-0.2.0',
 		},
 		santander: {	//Public SmartSantander instance cloud
 			headers: {
@@ -53,6 +53,10 @@ var hosts = {
 			port: 80,
 			path: '/ISMB',
 		},
+		virtualizationLayerPeers: [	//Temporary manual peering while waiting for deployments using the NetworkManager
+			'http://almanac.alexandra.dk/',
+			'http://p2.alapetite.dk:8080/',
+		],
 	};
 
 hosts.masterStorageManager = hosts.storageCloud;

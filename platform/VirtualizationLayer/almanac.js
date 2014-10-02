@@ -82,9 +82,9 @@ var almanac = {
 			console.log('MQTT: ' + topic + ': ' + message);
 		});
 
-		almanac._mqttClient.subscribe('chat');
+		almanac._mqttClient.subscribe('/almanac/#');
 		setTimeout(function () {
-				almanac._mqttClient.publish('chat', 'MQTT started');
+				almanac._mqttClient.publish('/almanac/0/chat', 'VirtualizationLayer MQTT started');
 			}, 5000);
 	},
 	//</MQTT>
@@ -118,7 +118,7 @@ var almanac = {
 	//</SSDP (UPnP)>
 
 	//<LinkSmart NetworkManager>
-	_virtualAddress: null,
+	virtualAddress: null,
 	linksmartInit: function () {
 		function registerInNetworkManager() {
 			request.post({
@@ -135,8 +135,8 @@ var almanac = {
 					timeout: 4000
 				}, function (error, response, body) {
 					if (!error && response.statusCode == 200 && body && body.VirtualAddress) {
-						almanac._virtualAddress = body.VirtualAddress;
-						console.log('VirtualizationLayer: Registered in the NetworkManager with VirtualAddress: ' + almanac._virtualAddress);
+						almanac.virtualAddress = body.VirtualAddress;
+						console.log('VirtualizationLayer: Registered in the NetworkManager with VirtualAddress: ' + almanac.virtualAddress);
 					} else {
 						console.error('VirtualizationLayer: Cannot register in the NetworkManager! Will try again.');
 					}
@@ -153,11 +153,11 @@ var almanac = {
 					if (!error && response.statusCode == 200 && body) {
 						if (body.length == 0) {	//Needs registration
 							registerInNetworkManager();
-						} else if (almanac._virtualAddress == null) {
-							almanac._virtualAddress = body[0].VirtualAddress;
-							console.log('VirtualizationLayer: Already registered in NetworkManager at address: ' + almanac._virtualAddress);
-						} else if (almanac._virtualAddress != body[0].VirtualAddress) {
-							console.error('VirtualizationLayer: Inconsistent virtual address in NetworkManager: ' + almanac._virtualAddress + ' != ' + body[0].VirtualAddress);
+						} else if (almanac.virtualAddress == null) {
+							almanac.virtualAddress = body[0].VirtualAddress;
+							console.log('VirtualizationLayer: Already registered in NetworkManager at address: ' + almanac.virtualAddress);
+						} else if (almanac.virtualAddress != body[0].VirtualAddress) {
+							console.error('VirtualizationLayer: Inconsistent virtual address in NetworkManager: ' + almanac.virtualAddress + ' != ' + body[0].VirtualAddress);
 						}
 					} else {
 						console.warn('VirtualizationLayer: Cannot contact the NetworkManager! Will try again.');
@@ -191,6 +191,7 @@ Hello ' + req.connection.remoteAddress + '!\n\
 This is ' + req.connection.localAddress + ' running <a href="http://nodejs.org/" rel="external">Node.js</a>.\n\
 I am a Virtualization Layer for the <a href="http://www.almanac-project.eu/" rel="external">ALMANAC European project (Reliable Smart Secure Internet Of Things For Smart Cities)</a>.\n\
 I talk mainly to other machines, but there is a <a href="socket.html">WebSocket demo</a> for humans.\n\
+<a href="./virtualizationLayerInfo">More information about this instance</a>.\n\
 It is now ' + now.toISOString() + '.\n\
 </pre>\n\
 </body>\n\
