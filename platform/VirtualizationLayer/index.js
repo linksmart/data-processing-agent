@@ -11,7 +11,7 @@ var http = require('http'),
 	config = require('./config.js').config,
 	almanac = require('./almanac.js').almanac;
 
-almanac.version = '0.2';
+almanac.version = require('./package.json').version;
 basicHttp.serverSignature = 'ALMANAC VirtualizationLayer ' + almanac.version + ' / ' + basicHttp.serverSignature;
 almanac.basicHttp = basicHttp;
 almanac.config = config;

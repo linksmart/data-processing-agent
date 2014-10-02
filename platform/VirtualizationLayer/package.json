@@ -1,0 +1,43 @@
+{
+	"name": "almanac-virtualization-layer",
+	"version": "0.2.0",
+	"author": {
+		"name": "Alexandre Alapetite",
+		"email": "alexandre.alapetite@alexandra.dk",
+		"url": "http://alexandra.dk/alexandre.alapetite"
+	},
+	"contributors": [
+	],
+	"description": "VirtualizationLayer for the ALMANAC European project, by Alexandra Institute",
+	"keywords": [
+		"IoT",
+		"LinkSmart"
+	],
+	"homepage": "http://www.almanac-project.eu/",
+	"main": "./index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://scm.fit.fraunhofer.de:8181/scm/git/almanac"
+	},
+	"dependencies": {
+		"socket.io": "~1.1.0",
+		"mqtt": "~0.3.12",
+		"node-ssdp": "~2.0.1",
+		"request": "~2.44.0",
+		"xml-writer": "~1.5.0",
+		"atom-writer": "~1.1.2"
+	},
+	"_patchedDependencies": {
+		"http-proxy": "~1.1.4"
+	},
+	"devDependencies": {
+	},
+	"license": "MIT",
+	"engines": {
+		"node": ">=0.10.0"
+	},
+	"readmeFilename": "README.md",
+	"bugs": {
+		"url": "https://jira.fit.fraunhofer.de/jira/browse/AI"
+	}
+}
