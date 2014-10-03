@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -54,7 +55,8 @@ public class PWALJsonMapper
             mapper.getSerializationConfig().with(
                     jacksonIntrospector);
             mapper.setSerializationInclusion(Include.NON_EMPTY);
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            df.setTimeZone(TimeZone.getTimeZone("GMT"));
             mapper.setDateFormat(df);
         }
         return mapper;

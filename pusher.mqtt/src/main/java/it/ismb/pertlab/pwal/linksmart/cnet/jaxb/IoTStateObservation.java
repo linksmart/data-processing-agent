@@ -134,13 +134,13 @@ public class IoTStateObservation {
      *     {@link XMLGregorianCalendar }
      *     
      */
-//    public XMLGregorianCalendar getResultTime() {
-//        return resultTime;
-//    }
-    public String getResultTime() {
+    public XMLGregorianCalendar getResultTime() {
+        return resultTime;
+    }
+ /*   public String getResultTime() {
         DateTime data = new DateTime(resultTime.toGregorianCalendar().getTimeInMillis(),DateTimeZone.UTC);
         return data.toString();
-    }
+    }*/
 
     /**
      * Sets the value of the resultTime property.
