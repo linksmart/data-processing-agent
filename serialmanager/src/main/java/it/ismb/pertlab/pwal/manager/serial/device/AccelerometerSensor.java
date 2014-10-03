@@ -98,6 +98,7 @@ public class AccelerometerSensor  extends BaseSerialDevice implements Accelerome
 		this.xAxis = Double.valueOf(xdata[1]);
 		this.yAxis = Double.valueOf(ydata[1]);
 		this.zAxis = Double.valueOf(zdata[1]);
+		
 	}
 
 	@Override
@@ -114,5 +115,19 @@ public class AccelerometerSensor  extends BaseSerialDevice implements Accelerome
 	public Double getZAcceleration() {
 		return zAxis;
 	}
+
+    @Override
+    public String getExpiresAt()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

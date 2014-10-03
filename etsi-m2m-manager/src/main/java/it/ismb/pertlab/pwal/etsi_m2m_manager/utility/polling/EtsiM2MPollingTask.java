@@ -39,7 +39,7 @@ public class EtsiM2MPollingTask extends PWALPollingTask<ContentInstances>
     @Override
     public void run()
     {
-        log.info("Polling " + this.manager.getActiveSubscriptionsSize()
+        log.debug("Polling " + this.manager.getActiveSubscriptionsSize()
                 + " subscription...");
         if (this.manager.getActiveSubscriptionsSize() > 0)
         {
@@ -109,7 +109,7 @@ public class EtsiM2MPollingTask extends PWALPollingTask<ContentInstances>
                                                             .toString());
                                             ((Device) dus.getSubscriber())
                                                     .setExpiresAt(expiresAt);
-                                            log.info(
+                                            log.debug(
                                                     "Updating device: {} type: {}.",
                                                     ((Device) dus
                                                             .getSubscriber())
@@ -119,7 +119,7 @@ public class EtsiM2MPollingTask extends PWALPollingTask<ContentInstances>
                                                             .getType());
                                         }
                                         else
-                                            log.info(
+                                            log.debug(
                                                     "Recevied a null ContentInstances XML from: {}.",
                                                     contentInstancesRequest
                                                             .getURI());
@@ -130,7 +130,7 @@ public class EtsiM2MPollingTask extends PWALPollingTask<ContentInstances>
                     }
                     else
                     {
-                        log.info("Received a null input stream");
+                        log.warn("Received a null input stream");
                     }
                     // Thread.sleep(15000);
                 }

@@ -9,6 +9,7 @@
 package it.ismb.pertlab.pwal.linksmart.cnet.jaxb;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -20,6 +21,8 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.w3c.dom.Element;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -106,6 +109,10 @@ public class IoTStateObservation {
     public XMLGregorianCalendar getPhenomenonTime() {
         return phenomenonTime;
     }
+//    public String getPhenomenonTime() {
+//        DateTime data = new DateTime(phenomenonTime.toGregorianCalendar().getTimeInMillis(), DateTimeZone.UTC);
+//        return data.toString();
+//    }
 
     /**
      * Sets the value of the phenomenonTime property.
@@ -127,8 +134,12 @@ public class IoTStateObservation {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getResultTime() {
-        return resultTime;
+//    public XMLGregorianCalendar getResultTime() {
+//        return resultTime;
+//    }
+    public String getResultTime() {
+        DateTime data = new DateTime(resultTime.toGregorianCalendar().getTimeInMillis(),DateTimeZone.UTC);
+        return data.toString();
     }
 
     /**

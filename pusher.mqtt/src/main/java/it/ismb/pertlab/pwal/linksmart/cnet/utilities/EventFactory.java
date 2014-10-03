@@ -268,10 +268,6 @@ public class EventFactory
             ct.getAny().add(tosend);
 
             toReturn.setContent(ct);
-
-            // this.xmlMapper.toXml(Event.class, toReturn);
-            // log.info("Sending data to the cloud...");
-            // log.info("Data sent to the cloud.");
         }
         else
             return null;

@@ -10,6 +10,7 @@ package it.ismb.pertlab.pwal.linksmart.cnet.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
@@ -20,6 +21,9 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.w3c.dom.Element;
 
 
@@ -134,6 +138,12 @@ public class EventMeta {
     public XMLGregorianCalendar getTimestamp() {
         return timestamp;
     }
+    //To avoid milli in json
+//    public String getTimestamp() {
+//        DateTime data = new DateTime(timestamp.toGregorianCalendar().getTimeInMillis(), DateTimeZone.UTC);
+//        return data.toString();
+//    }
+
 
     /**
      * Sets the value of the timestamp property.

@@ -68,7 +68,7 @@ public class WasteBinSimulatorPollingTask implements Runnable
 	public void run()
 	{
 		//info
-		this.logger.info("Polling " + this.manager.getActiveSubscriptionsSize() + "subscription...");
+		this.logger.debug("Polling " + this.manager.getActiveSubscriptionsSize() + "subscription...");
 		
 		// if there is at least one subscription
 		if (this.manager.getActiveSubscriptionsSize() > 0)
@@ -113,7 +113,7 @@ public class WasteBinSimulatorPollingTask implements Runnable
 								subscription.getSubscriber().handleUpdate(cUpdate);
 								
 								//log
-                                                                this.logger.info("Updating device: {} type: {}.",((Device) subscription.getSubscriber()).getPwalId(),((Device) subscription.getSubscriber()).getType());
+                                                                this.logger.debug("Updating device: {} type: {}.",((Device) subscription.getSubscriber()).getPwalId(),((Device) subscription.getSubscriber()).getType());
 //								this.logger.info("Updating device {} type "
 //										+ ((Device) subscription.getSubscriber()).getType()+" lUID:"+cUpdate.getlUID());
 							}

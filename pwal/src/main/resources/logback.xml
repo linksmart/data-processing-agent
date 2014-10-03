@@ -17,7 +17,7 @@
           <maxFileSize>5MB</maxFileSize>
       </triggeringPolicy>
     <encoder>
-      <pattern>%date{YYYY-MM-dd HH:mm:ss} %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+      <pattern>%date %-5level [%thread] - [%logger]- %msg%n</pattern>
     </encoder>
   </appender>
 

@@ -24,6 +24,8 @@ import it.ismb.pertlab.pwal.smartsantander.datamodel.json.SmartSantanderTrafficI
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 
 /**
@@ -95,8 +97,19 @@ public class SmartSantanderPollingTask implements Runnable
 							if (currentTime - subscription.getTimestamp() >= (subscription.getDeliveryTimeMillis()))
 							{
 								subscription.setTimestamp(currentTime);
+								 DateTime updateAt = DateTime
+			                                                    .now(DateTimeZone.UTC);
+			                                            String expiresAt = updateAt
+			                                                    .plusMillis(
+			                                                            subscription.getDeliveryTimeMillis())
+			                                                    .toString();
+			                                            ((Device) subscription.getSubscriber())
+			                                                    .setUpdatedAt(updateAt
+			                                                            .toString());
+			                                            ((Device) subscription.getSubscriber())
+			                                                    .setExpiresAt(expiresAt);
 								subscription.getSubscriber().handleUpdate(currentMeasure);
-								log.info("Updating device: {} type: {}.",((Device) subscription.getSubscriber()).getPwalId(),((Device) subscription.getSubscriber()).getType());
+								log.debug("Updating device: {} type: {}.",((Device) subscription.getSubscriber()).getPwalId(),((Device) subscription.getSubscriber()).getType());
 							}
 						}
 					}

@@ -33,7 +33,7 @@ public class MqttPusher
 
     private void connectToMqttBroker()
     {
-        log.info("Connecting...");
+        log.debug("Connecting...");
         PWALEventDispatcher
                 .getInstance()
                 .getDispatcher()
@@ -53,7 +53,7 @@ public class MqttPusher
     @SuppressWarnings("unused")
     private void disconnectToMqttBroker()
     {
-        log.info("Disconnecting...");
+        log.debug("Disconnecting...");
     }
     
     public MqttAsyncDispatcher getDispatcher()

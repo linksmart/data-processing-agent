@@ -50,8 +50,8 @@
 		<constructor-arg value="http://m2mtilab.dtdns.net/etsi/almanac" />
 	</bean>
 	<bean id="mqttPusher" class="it.ismb.pertlab.pwal.pusher.mqtt.MqttPusher">
-<!-- 		<constructor-arg value="tcp://130.192.86.227:1883" /> -->
-		<constructor-arg value="tcp://localhost:1883" />
+		<constructor-arg value="tcp://130.192.86.227:1883" />
+<!-- 		<constructor-arg value="tcp://localhost:1883" /> -->
 	</bean>
 	<bean id="WasteBinSimulatorManager" class="it.ismb.pertlab.pwal.wastebinsimulator.WasteBinSimulatorManager" depends-on="mqttPusher">
 		<constructor-arg value="10000" />

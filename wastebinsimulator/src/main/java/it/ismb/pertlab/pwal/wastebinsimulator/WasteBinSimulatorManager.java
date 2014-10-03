@@ -190,7 +190,7 @@ public class WasteBinSimulatorManager extends PollingDevicesManager<WasteBinSens
 		this.setAutoPollingUpdate(true);
 		
 		// profiling
-		log.info("Created " + allBins.size() + ", elapsed time: " + (System.currentTimeMillis() - time) + "ms");
+		log.debug("Created " + allBins.size() + ", elapsed time: " + (System.currentTimeMillis() - time) + "ms");
 		
 		// --------------- END of SET-UP ----------------
 		
@@ -284,7 +284,7 @@ public class WasteBinSimulatorManager extends PollingDevicesManager<WasteBinSens
 		}
 		
 		log.info("Updating polling time to: " + this.pollingTimeMillis);
-		log.info("Active subscriptions:" + this.nActiveSubscriptions);
+		log.debug("Active subscriptions:" + this.nActiveSubscriptions);
 		
 		// starts the poller only if at least one subscription is available
 		this.futureRun = this.poller.scheduleAtFixedRate(this.pollingTask, 0, this.pollingTimeMillis,

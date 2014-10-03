@@ -272,7 +272,7 @@ public class SimulatedWasteBin implements WasteBin,
         PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(
                 this.updatedAt, this.getPwalId(),
                 this.getExpiresAt(), valuesMap, this);
-        logger.info("Device {} is publishing a new data available event on topic: {}", this.getPwalId(), this.eventPublisher.getTopics());
+        logger.debug("Device {} is publishing a new data available event on topic: {}", this.getPwalId(), this.eventPublisher.getTopics());
         this.eventPublisher.publish(event);
 
     }

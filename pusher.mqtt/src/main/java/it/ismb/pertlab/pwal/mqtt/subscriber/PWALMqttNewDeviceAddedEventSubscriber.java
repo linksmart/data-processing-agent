@@ -43,7 +43,7 @@ public class PWALMqttNewDeviceAddedEventSubscriber extends
         {
             String topic = AlmanacTopics.createAlmanacTopic("metadata",
                     "iotentity", event.getSource().getSender().getPwalId(), "");
-            log.info("Publishing new device added event on mqtt topic: {}",
+            log.debug("Publishing new device added event on mqtt topic: {}",
                     topic);
             this.mqttDispatcher.publish(topic, PWALJsonMapper.obj2json(toSend)
                     .getBytes());

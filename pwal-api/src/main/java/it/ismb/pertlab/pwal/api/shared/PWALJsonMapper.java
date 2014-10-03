@@ -2,16 +2,15 @@ package it.ismb.pertlab.pwal.api.shared;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 
 
@@ -55,6 +54,8 @@ public class PWALJsonMapper
             mapper.getSerializationConfig().with(
                     jacksonIntrospector);
             mapper.setSerializationInclusion(Include.NON_EMPTY);
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            mapper.setDateFormat(df);
         }
         return mapper;
     }

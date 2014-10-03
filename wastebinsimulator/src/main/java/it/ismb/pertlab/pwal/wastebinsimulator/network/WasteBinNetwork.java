@@ -159,7 +159,7 @@ public class WasteBinNetwork
 					activeBins.add(currentBin);
 					
 					// info
-					logger.info("Created virtual WasteBin at: " + currentLatitude + "N, " + currentLongitude + "E");
+					logger.debug("Created virtual WasteBin at: " + currentLatitude + "N, " + currentLongitude + "E");
 					
 					// return true
 					return true;
