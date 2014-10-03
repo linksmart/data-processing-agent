@@ -101,6 +101,24 @@ public class WasteBinSimulatorManager extends PollingDevicesManager<WasteBinSens
 	}
 	
 	/**
+	 * Empty constructor respecting the bean instantiation pattern
+	 */
+	public WasteBinSimulatorManager(String cityModel, String cityModelFile, String cityModelPrefix, String ontologyDir)
+	{
+		String cityModelPath = WasteBinSimulatorManager.class.getClassLoader().getResource(cityModelFile).getPath();
+		String ontologyDirPath = WasteBinSimulatorManager.class.getClassLoader().getResource(ontologyDir).getPath();
+		
+		// build the network layer
+		this.networkLayer = new WasteBinNetwork(cityModel,cityModelPath,cityModelPrefix,ontologyDirPath);
+		
+		// build the poller
+		this.poller = Executors.newSingleThreadScheduledExecutor();
+		
+		// build the polling task
+		this.pollingTask = new WasteBinSimulatorPollingTask(this, log);
+	}
+	
+	/**
 	 * Creates a new waste bin simulator manager handling the given number of
 	 * fake bins
 	 * 
@@ -283,7 +301,7 @@ public class WasteBinSimulatorManager extends PollingDevicesManager<WasteBinSens
 			
 		}
 		
-		log.info("Updating polling time to: " + this.pollingTimeMillis);
+		log.debug("Updating polling time to: " + this.pollingTimeMillis);
 		log.debug("Active subscriptions:" + this.nActiveSubscriptions);
 		
 		// starts the poller only if at least one subscription is available

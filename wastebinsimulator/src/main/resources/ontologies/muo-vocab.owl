@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:uomvocab="http://purl.oclc.org/NET/muo/muo#">
+
+<!--
+         (c) MyMobileWeb project, 2008
+
+         Classes and properties of this ontology have been
+         designed by the MyMobileWeb project.
+
+      -->
+
+    <owl:Ontology rdf:about="http://purl.oclc.org/NET/muo/muo#">
+      <dc:creator>Diego Berrueta and Luis Polo</dc:creator>
+      <dc:date>2008</dc:date>
+      <dc:rights>(c) MyMobileWeb project, 2008</dc:rights>
+      <rdfs:comment xml:lang="en">
+         Classes and properties of this ontology have been
+         designed by the MyMobileWeb project.
+      </rdfs:comment>
+      <rdfs:label xml:lang="en">MUO - Measurement Units Ontology</rdfs:label>
+   </owl:Ontology>
+
+<!-- Classes -->  
+
+ <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement">
+      <rdfs:label xml:lang="en">Unit of measurement</rdfs:label>
+      <rdfs:comment xml:lang="en">Measurement units are standards for measurement of physical properties or qualities. Every unit is related to a particular kind of property. For instance, the meter unit is uniquely related to the length property. Under our ontological approach, units are abstract spaces used as a reference metrics for quality spaces, such as physical qualia, and they are counted by some number. For instance, weight-units define some quality spaces for the weight-quality where specific weights of objects, like devices or persons, are located by means of comparisons with the proper weight-value of the selected weight-unit.</rdfs:comment>
+      <owl:disjointWith rdf:resource="http://purl.oclc.org/NET/muo/muo#Prefix"/>
+      <owl:disjointWith rdf:resource="http://purl.oclc.org/NET/muo/muo#PhysicalQuality"/>
+   </owl:Class>
+   
+  <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#BaseUnit">
+      <rdfs:comment xml:lang="en">Base units are units that have not been derived from any other unit. In turn, base units can be used to derive other measurement units. The International System of Units (SI), recognizes several base units for base physical qualities assumed to be mutually independent.</rdfs:comment>
+      <rdfs:label xml:lang="en">Base unit of measurement</rdfs:label>
+      <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+   </owl:Class>
+  
+  <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#DerivedUnit">
+      <rdfs:comment xml:lang="en">Some physical qualities (such as area, acceleration, etc.), called derived physical qualities, are defined in terms of base qualities via a system of dimensional equations. The derived units for derived qualities are obtained from these equations combinated with the base units.</rdfs:comment>
+      <rdfs:label xml:lang="en">Derived unit of measurement</rdfs:label>
+      <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+      <owl:disjointWith rdf:resource="http://purl.oclc.org/NET/muo/muo#BaseUnit"/>
+   </owl:Class>
+
+   <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#ComplexDerivedUnit">
+      <rdfs:comment xml:lang="en">Units that are derived from two or more measurement units (i.e. a derived unit which is defined by means of more than one unit in its dimensional equation). For instance, the complex derived unit meter per second squared is defined by a dimensional equation with two units: m and s2.</rdfs:comment>
+      <rdfs:label xml:lang="en">Complex derived unit of measurement</rdfs:label>
+      <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/muo/muo#DerivedUnit"/>
+   </owl:Class>
+
+   <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#SimpleDerivedUnit">
+      <rdfs:comment xml:lang="en">Units that are derived from exactly one base unit. There are two main possibilities. On one hand, there are units that are derived by adding a prefix to the unit. The prefix is a name or associated symbol (e.g. kilo) that precedes a unit of measure (e.g. meter) to form a decimal multiple or submultiple (e.g. Kilometer). Derived units, obtained by the application of a prefix, measure the same physical quality as its base unit. On the other hand, there are another kind of simple derived units that are also obtained from exactly one base unit but they measure a different physical quality. They are obtained by changing the exponent of the unit in the dimensional equation. For instance, this is how square meters are derived from meters. This exponent is represented in MUO with the datatype property muo:dimensionalSize. Combining this two patterns we can represent units that are obtained from a prefix and that have a dimension size different from 1, for instance, the unit square kilometer.</rdfs:comment>
+      <rdfs:label xml:lang="en">Derived unit of measurement made out of exactly one base unit</rdfs:label>
+      <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/muo/muo#DerivedUnit"/>
+      <owl:disjointWith rdf:resource="http://purl.oclc.org/NET/muo/muo#ComplexDerivedUnit"/>
+   </owl:Class>
+
+   <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#QualityValue">
+      <rdfs:label xml:lang="en">Quality value</rdfs:label>
+      <rdfs:comment xml:lang="en">The value of an individual quality, for instance, the weight of an individual object.   If we consider metrology, the value of a physical quality Q is expressed as the product of a numerical value {Q} and a physical unit [Q]: Q = {Q} x [Q]. In MUO, the class muo:QualityValue is used to represent the values of qualities, Q. Instances of this class are related with 1) exactly one unit, suitable for measure the physical quality (meters for length, grams for weight, etc), by means of the property muo:measuredIn, [Q]; 2) a number, which express the relationship between the value and the unit by means of the rdf:value property, {Q}; 3) a time, which expresses the quality value along the line of time. Quality values can be temporalized, but this is not always necessary.
+</rdfs:comment>
+   </owl:Class>
+
+   <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#PhysicalQuality">
+      <rdfs:label xml:lang="en">Physical quality</rdfs:label>
+      <rdfs:comment xml:lang="en">The physical qualities such as mass, weight, speed, etc. are kind of properties that can be quantified i.e. that can be perceived, measured or even calculated. The concept of physical quality is similar to the notion of quality, used in metrology, the science of measurement. We distinguish between: 1) A physical quality in the general sense: a kind of physical property ascribed to phenomena that can be quantified for a particular phenomenon (e.g. length and electrical charge); 2) A physical quantity in the particular sense: a quantifiable property ascribed to a particular phenomenon (e.g. the weight of my device). MUO only uses physical quantities in the general sense.</rdfs:comment>
+      <owl:disjointWith rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+      <owl:disjointWith rdf:resource="http://purl.oclc.org/NET/muo/muo#Prefix"/>
+   </owl:Class>
+
+   <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#Prefix">
+      <rdfs:label xml:lang="en">Prefix</rdfs:label>
+      <rdfs:comment xml:lang="en">A prefix (also known as a metric prefix) is a name or associated symbol that precedes a unit of measure (or its symbol) to form a decimal multiple or submultiple. Prefixes are used to reduce the quantity of zeroes in numerical equivalencies. For instance, 1000 meters can be written as 1 kilometer, using the prefix kilo, a symbol to represent the number 1000.</rdfs:comment>
+      <owl:disjointWith rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+      <owl:disjointWith rdf:resource="http://purl.oclc.org/NET/muo/muo#PhysicalQuality"/>
+   </owl:Class>
+
+   <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#MetricUnit">
+      <rdfs:comment xml:lang="en">FIX</rdfs:comment>
+      <rdfs:label xml:lang="en">Metric unit</rdfs:label>
+      <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+   </owl:Class>
+
+   <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#SIUnit">
+      <rdfs:comment xml:lang="en">Unit belonging to the International System of Units. The SI recognizes several base and derived units for some physical qualities assumed to be mutually independent.</rdfs:comment>
+      <rdfs:label xml:lang="en">SI unit</rdfs:label>
+      <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+   </owl:Class>
+
+   <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#BaseUnit">
+      <rdfs:label xml:lang="en">Base unit</rdfs:label>
+      <rdfs:comment xml:lang="en">Base units are units that have not been derived from any other unit. In turn, base units can be used to derive other measurement units.</rdfs:comment>
+      <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+   </owl:Class>
+
+<!-- Datatype Properties -->
+
+   <owl:FunctionalProperty rdf:about="http://purl.oclc.org/NET/muo/muo#prefSymbol">
+      <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+      <rdfs:label xml:lang="en">Preferred Symbol</rdfs:label>
+      <rdfs:comment xml:lang="en">Standarized symbol of the entity</rdfs:comment>
+      <rdfs:domain>
+	<owl:Class>
+	  <owl:unionOf rdf:parseType="Collection">
+	    <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+	    <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#Prefix"/>
+	  </owl:unionOf>
+	</owl:Class>
+      </rdfs:domain>
+   </owl:FunctionalProperty>
+
+   <owl:DatatypeProperty rdf:about="http://purl.oclc.org/NET/muo/muo#altSymbol">
+      <rdfs:label xml:lang="en">Alternate Symbol</rdfs:label>
+      <rdfs:comment xml:lang="en">Alternate (standarized) symbol of the entity</rdfs:comment>
+      <rdfs:domain>
+	<owl:Class>
+	  <owl:unionOf rdf:parseType="Collection">
+	    <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+	    <owl:Class rdf:about="http://purl.oclc.org/NET/muo/muo#Prefix"/>
+	  </owl:unionOf>
+	</owl:Class>
+      </rdfs:domain>
+   </owl:DatatypeProperty>
+   
+   <owl:DatatypeProperty rdf:about="http://purl.oclc.org/NET/muo/muo#factor">
+      <rdfs:label xml:lang="en">Factor</rdfs:label>
+      <rdfs:comment xml:lang="en">Modification factor that multiples the base value of the unit</rdfs:comment>
+      <rdfs:domain rdf:resource="http://purl.oclc.org/NET/muo/muo#Prefix"/>
+   </owl:DatatypeProperty>
+   
+   <owl:DatatypeProperty rdf:about="http://purl.oclc.org/NET/muo/muo#dimensionalSize">
+      <rdfs:label xml:lang="en">Dimensional size</rdfs:label>
+      <rdfs:comment xml:lang="en">The dimensional size of a simple derived unit, i.e., the exponent of the dimension in the dimensional equation. For instance, for square meters, the dimensional size is two.</rdfs:comment>
+      <rdfs:domain rdf:resource="http://purl.oclc.org/NET/muo/muo#SimpleDerivedUnit"/>
+      <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+   </owl:DatatypeProperty>
+
+   <owl:FunctionalProperty rdf:about="http://purl.oclc.org/NET/muo/muo#inTime">
+      <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+      <rdfs:label>In Time</rdfs:label>
+      <rdfs:comment>The time of a particular quality value (e.g. the weight of Carlos yesterday).</rdfs:comment>
+      <rdfs:domain rdf:resource="http://purl.oclc.org/NET/muo/muo#QualityValue"/>
+      <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+   </owl:FunctionalProperty>
+
+
+<!-- Object Properties -->
+
+   <owl:FunctionalProperty rdf:about="http://purl.oclc.org/NET/muo/muo#measuresQuality">
+      <rdfs:comment xml:lang="en">The physical quality the unit is able to measure.</rdfs:comment>
+      <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+      <rdfs:label xml:lang="en">Measures quality</rdfs:label>
+      <rdfs:domain rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+      <rdfs:range rdf:resource="http://purl.oclc.org/NET/muo/muo#PhysicalQuality"/>
+   </owl:FunctionalProperty>
+   
+   <owl:FunctionalProperty rdf:about="http://purl.oclc.org/NET/muo/muo#measuredIn">
+      <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+      <rdfs:label xml:lang="en">Measured in</rdfs:label>
+      <rdfs:comment xml:lang="en">The unit used in the measurement of a particular quality value</rdfs:comment>
+      <rdfs:domain rdf:resource="http://purl.oclc.org/NET/muo/muo#QualityValue"/>
+      <rdfs:range rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+   </owl:FunctionalProperty>
+   
+   <owl:FunctionalProperty rdf:about="http://purl.oclc.org/NET/muo/muo#modifierPrefix">
+      <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+      <rdfs:label xml:lang="en">Unit prefix</rdfs:label>
+      <rdfs:comment xml:lang="en">The modifier prefix that applies to a derived unit of measurement</rdfs:comment>
+      <rdfs:domain rdf:resource="http://purl.oclc.org/NET/muo/muo#SimpleDerivedUnit"/>
+      <rdfs:range rdf:resource="http://purl.oclc.org/NET/muo/muo#Prefix"/>
+   </owl:FunctionalProperty>
+   
+  <owl:InverseFunctionalProperty rdf:about="http://purl.oclc.org/NET/muo/muo#qualityValue">
+      <rdfs:label xml:lang="en">Quality value</rdfs:label>
+      <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+      <rdfs:comment xml:lang="en">The quality value of a measurable physical quality of an entity or phenomenon.
+      </rdfs:comment>
+      <rdfs:range rdf:resource="http://purl.oclc.org/NET/muo/muo#QualityValue"/>
+   </owl:InverseFunctionalProperty>
+   
+   <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/muo/muo#derivesFrom">
+      <rdfs:label xml:lang="en">Derives from</rdfs:label>
+      <rdfs:comment xml:lang="en">This property relates a unit with another unit from which the former is derived. For instance, square meter derives from meter.</rdfs:comment>
+      <rdfs:domain rdf:resource="http://purl.oclc.org/NET/muo/muo#DerivedUnit"/>
+      <rdfs:range rdf:resource="http://purl.oclc.org/NET/muo/muo#UnitOfMeasurement"/>
+   </owl:ObjectProperty>
+
+<!-- Annotation Properties -->
+
+   <owl:AnnotationProperty rdf:about="http://purl.oclc.org/NET/muo/muo#preferredUnit">
+      <rdfs:label>Preferred Unit</rdfs:label>
+      <rdfs:comment>The user-preferred unit for measuring the values of a muo:qualityValue subproperty (e.g. weight). This information is used by the conversion service to convert a value expressed in one unit to the preferred one.</rdfs:comment>
+   </owl:AnnotationProperty>
+   
+   <owl:AnnotationProperty rdf:about="http://purl.oclc.org/NET/muo/muo#propertyMeasuresQuality">
+      <rdfs:label>Property Measures Quality</rdfs:label>
+      <rdfs:comment>The physical quality measured by a muo:qualityValue subproperty (e.g. weight).</rdfs:comment>
+   </owl:AnnotationProperty>
+
+   <owl:DatatypeProperty rdf:about="http://purl.oclc.org/NET/muo/muo#qualityLiteralValue">
+     <!-- FIXME: add documentation -->
+   </owl:DatatypeProperty>
+
+   <owl:AnnotationProperty rdf:about="http://purl.oclc.org/NET/muo/muo#equivalentObjectProperty">
+     <!-- FIXME: add documentation -->
+   </owl:AnnotationProperty>
+
+   <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/creator"/>
+   <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/date"/>
+   <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/rights"/>
+
+</rdf:RDF>

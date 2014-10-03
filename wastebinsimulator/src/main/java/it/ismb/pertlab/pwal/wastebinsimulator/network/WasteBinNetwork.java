@@ -22,6 +22,11 @@ import it.ismb.pertlab.pwal.wastebinsimulator.data.OWMTemperatureGenerator;
 import it.ismb.pertlab.pwal.wastebinsimulator.data.TemperatureGenerator;
 import it.ismb.pertlab.pwal.wastebinsimulator.data.WasteBinSensorData;
 import it.ismb.pertlab.pwal.wastebinsimulator.devices.SimulatedWasteBin;
+import it.ismb.pertlab.smartcity.api.DryWasteBin;
+import it.ismb.pertlab.smartcity.api.Quarter;
+import it.ismb.pertlab.smartcity.api.SmartCity;
+import it.ismb.pertlab.smartcity.api.WasteBin;
+import it.ismb.pertlab.smartcity.data.n3.deserialization.N3Parser;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -106,6 +111,31 @@ public class WasteBinNetwork
 		this.nBins = nBins;
 		
 		this.initCommon();
+		
+		// initialize the waste bins
+		this.initBins();
+	}
+	
+	public WasteBinNetwork(String cityModel, String cityModelFile, String cityModelPrefix, String ontologyDir)
+	{
+		N3Parser n3d = new N3Parser();
+		Set<SmartCity> allCities = n3d.getCities(cityModel, cityModelFile, cityModelPrefix, ontologyDir);
+		Set<WasteBin> allBins = new HashSet<WasteBin>();
+		// assume only one city
+		if (!allCities.isEmpty())
+		{
+			SmartCity city = allCities.iterator().next();
+			
+			Set<Quarter> cityQuarters = city.getQuarters();
+			
+			for (Quarter quarter : cityQuarters)
+				allBins.addAll(quarter.getBins());
+			
+		}
+		
+		this.initCommon();
+		
+		this.initBins(allBins);
 	}
 	
 	/**
@@ -115,9 +145,6 @@ public class WasteBinNetwork
 	{
 		// create inner data structures
 		this.activeBins = new Vector<SimulatedWasteBin>();
-		
-		// initialize the waste bins
-		this.initBins();
 		
 		// initialize the temperature generator
 		this.tGenerator = new OWMTemperatureGenerator();
@@ -150,16 +177,68 @@ public class WasteBinNetwork
 					
 					// build the current bin
 					SimulatedWasteBin currentBin = new SimulatedWasteBin((float) currentLongitude,
-							(float) currentLatitude, "" + getId());
+							(float) currentLatitude, "" + getId(), DryWasteBin.class);
 					
 					// set a random fill level
-					currentBin.setFillLevel((int)Math.round(Math.random()*100));
+					currentBin.setFillLevel((int) Math.round(Math.random() * 100));
 					
 					// store the bin
 					activeBins.add(currentBin);
 					
 					// info
-					logger.debug("Created virtual WasteBin at: " + currentLatitude + "N, " + currentLongitude + "E");
+					logger.info("Created virtual WasteBin at: " + currentLatitude + "N, " + currentLongitude + "E");
+					
+					// return true
+					return true;
+				}
+				
+			};
+			compService.submit(task);
+		}
+		
+		// wait for all threads to complete
+		for (int i = 0; i < nBins; i++)
+		{
+			try
+			{
+				compService.take();
+			}
+			catch (InterruptedException e)
+			{
+				logger.warn("Error while generating bins", e);
+			}
+		}
+		
+		// shutdown the execution service to free resources
+		initializationService.shutdown(); // always reclaim resources
+		
+	}
+	
+	/**
+	 * Parallel bin creation using 4 threads
+	 */
+	private void initBins(Set<WasteBin> bins)
+	{
+		ExecutorService initializationService = Executors.newFixedThreadPool(4);
+		CompletionService<Boolean> compService = new ExecutorCompletionService<Boolean>(initializationService);
+		for (final WasteBin bin : bins)
+		{
+			Callable<Boolean> task = new Callable<Boolean>() {
+				
+				@Override
+				public Boolean call()
+				{
+					
+					// build the current bin
+					SimulatedWasteBin currentBin = new SimulatedWasteBin(bin);
+					currentBin.setFillLevel((int) Math.round(Math.random() * 100));
+					
+					// store the bin
+					activeBins.add(currentBin);
+					
+					// info
+					logger.debug("Created virtual WasteBin at: " + bin.getLocation().getLatitude() + "N, "
+							+ bin.getLocation().getLongitude() + "E");
 					
 					// return true
 					return true;
@@ -234,19 +313,21 @@ public class WasteBinNetwork
 				currentT = this.tGenerator.getCurrentTemperature((float) currentBin.getLatitude(),
 						(float) currentBin.getLongitude());
 			
-			int currentFillLevel = this.fGenerator.getCurrentFillLevel(currentBin.getFillLevel(), currentBin.getLatestUpdate(), currentBin.getnDaysToFull());
+			int currentFillLevel = this.fGenerator.getCurrentFillLevel(currentBin.getFillLevel(),
+					currentBin.getLatestUpdate(), currentBin.getnDaysToFull());
 			
 			// if null try using the previous value
-//			if (currentT == null)
-//			{
-//				currentT = currentBin.getTemperatureAsMeasure();
-//			}
-//			
+			// if (currentT == null)
+			// {
+			// currentT = currentBin.getTemperatureAsMeasure();
+			// }
+			//
 			// if not null (Tin Pants handling)
 			if (currentT != null)
 			{
 				// build the updated sensor data
-				WasteBinSensorData cData = new WasteBinSensorData(currentT, currentFillLevel, currentBin.getNetworkLevelId());
+				WasteBinSensorData cData = new WasteBinSensorData(currentT, currentFillLevel,
+						currentBin.getNetworkLevelId());
 				
 				// store the update
 				updates.add(cData);
@@ -255,7 +336,7 @@ public class WasteBinNetwork
 				i++;
 				
 				// log
-				WasteBinNetwork.logger.debug("Updated [" + i + "]: T="+currentT+" F="+currentFillLevel);
+				WasteBinNetwork.logger.debug("Updated [" + i + "]: T=" + currentT + " F=" + currentFillLevel);
 			}
 			
 		}

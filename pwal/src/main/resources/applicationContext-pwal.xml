@@ -54,6 +54,14 @@
 <!-- 		<constructor-arg value="tcp://localhost:1883" /> -->
 	</bean>
 	<bean id="WasteBinSimulatorManager" class="it.ismb.pertlab.pwal.wastebinsimulator.WasteBinSimulatorManager" depends-on="mqttPusher">
-		<constructor-arg value="10000" />
+		<!-- <constructor-arg value="10000" /> -->
+		<constructor-arg
+			value="http://www.almanac-project.eu/ontologies/smartcity/turin_waste.owl" />
+		<constructor-arg
+			value="turin_waste.n3" />
+		<constructor-arg
+			value="altow" />
+		<constructor-arg
+			value="ontologies/" />
 	</bean>
 </beans>
