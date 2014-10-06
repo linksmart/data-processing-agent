@@ -50,7 +50,8 @@ It is now ' + now.toISOString() + '.\n\
 	serveInfo: function (req, res) {
 		almanac.basicHttp.serveJson(req, res, {
 			version: almanac.version,
-			publicAddress: almanac.config.hosts.virtualizationLayerPublic,
+			publicAddress: 'http://' + almanac.config.hosts.virtualizationLayerPublic.host +
+				(almanac.config.hosts.virtualizationLayerPublic.port == 80 ? '' : ':' + almanac.config.hosts.virtualizationLayerPublic.port) + '/',
 			virtualAddress: almanac.virtualAddress,
 			resourceCatalogue: (almanac.recourceCatalogueUrl != ''),
 			server: almanac.basicHttp.serverSignature,
