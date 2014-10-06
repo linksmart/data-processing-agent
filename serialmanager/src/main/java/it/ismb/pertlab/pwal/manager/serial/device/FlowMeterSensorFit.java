@@ -1,12 +1,19 @@
 package it.ismb.pertlab.pwal.manager.serial.device;
 
+import java.util.HashMap;
+
 import it.ismb.pertlab.pwal.api.devices.model.FlowMeterFit;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
+import it.ismb.pertlab.pwal.api.events.base.PWALNewDataAvailableEvent;
+import it.ismb.pertlab.pwal.api.events.pubsub.publisher.PWALEventPublisher;
 import it.ismb.pertlab.pwal.serialmanager.BaseSerialDevice;
 import it.ismb.pertlab.pwal.serialmanager.SerialManager;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +27,14 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeterFit
 	private SerialManager manager;
 	private Integer flow;
 	private Unit unit;
+	private String updatedAt;
+	private String expiresAt;
+	private PWALEventPublisher eventPublisher;
 	
 	public FlowMeterSensorFit(SerialManager manager)
 	{
 		this.manager = manager;
+		this.eventPublisher = new PWALEventPublisher();
 	}
 	
 	@Override
@@ -33,6 +44,13 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeterFit
 		FlowMeterSensorFit values = gson.fromJson(payload, FlowMeterSensorFit.class);
 		this.flow = values.flow;
 		log.debug("Payload json parsed: {}", values.toString());
+		DateTime timestamp = new DateTime(DateTime.now(), DateTimeZone.UTC);
+		this.setUpdatedAt(timestamp.toString());
+		this.setExpiresAt(this.getUpdatedAt());
+		HashMap<String, Object> valuesUpdated = new HashMap<>();
+	        valuesUpdated.put("getDepth", this.getFlow());
+	        PWALNewDataAvailableEvent event = new PWALNewDataAvailableEvent(this.updatedAt, this.getPwalId(), this.expiresAt, valuesUpdated, this);
+	        this.eventPublisher.publish(event);
 	}
 
 	@Override
@@ -80,14 +98,12 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeterFit
 
 	@Override
 	public String getUpdatedAt() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.updatedAt;
 	}
 
 	@Override
 	public void setUpdatedAt(String updatedAt) {
-		// TODO Auto-generated method stub
-		
+		this.updatedAt = updatedAt;
 	}
 
 	@Override
@@ -111,5 +127,17 @@ public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeterFit
 	public void setUnit(Unit unit) {
 		this.unit = unit;
 	}
+
+    @Override
+    public String getExpiresAt()
+    {
+        return this.expiresAt;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        this.expiresAt = expiresAt;
+    }
 
 }

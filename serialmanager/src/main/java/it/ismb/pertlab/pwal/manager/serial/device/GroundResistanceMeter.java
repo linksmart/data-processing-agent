@@ -9,6 +9,7 @@ import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.serialmanager.BaseSerialDevice;
 import it.ismb.pertlab.pwal.serialmanager.SerialManager;
 
+//TODO:add event support
 public class GroundResistanceMeter extends BaseSerialDevice implements Resistance{
 	private String updatedAt;
 	private String pwalId;
@@ -92,5 +93,19 @@ public class GroundResistanceMeter extends BaseSerialDevice implements Resistanc
 		this.ohm=Integer.parseInt(payload.trim());
 		this.updatedAt=Calendar.getInstance().toString();
 	}
+
+    @Override
+    public String getExpiresAt()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 
 }
