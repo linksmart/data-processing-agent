@@ -14,7 +14,7 @@ module.exports = function (almanac) {
 		//console.log('SSDP: ' + JSON.stringify(headers) + ' ; ' + JSON.stringify(statusCode) + ' ; ' + JSON.stringify(rinfo));
 		if (headers &&
 			headers.ST === almanac.config.hosts.recourceCatalogueUrn &&
-			headers.LOCATION && (headers.LOCATION.indexOf('http://127.0.0.1') === 0) &&
+			headers.LOCATION && (headers.LOCATION.indexOf('http://127.0.0.1') < 0) &&	//127.0.0.1 is not always visible
 			headers.LOCATION !== almanac.recourceCatalogueUrl) {
 			almanac.recourceCatalogueUrl = headers.LOCATION;
 			console.log('UPnP: discovered the resource catalogue on ' + almanac.recourceCatalogueUrl);
