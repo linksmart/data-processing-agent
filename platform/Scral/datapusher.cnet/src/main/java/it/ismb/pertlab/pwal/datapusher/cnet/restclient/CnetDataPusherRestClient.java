@@ -1,98 +1,122 @@
 package it.ismb.pertlab.pwal.datapusher.cnet.restclient;
 
+import it.ismb.pertlab.pwal.api.shared.PWALXmlMapper;
+import it.ismb.pertlab.pwal.api.shared.PwalHttpClient;
 import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.ArrayOfIoTEntity;
 import it.ismb.pertlab.pwal.datapusher.cnet.datamodel.IoTEntity;
 
-import java.util.Arrays;
+import java.io.IOException;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.slf4j.Logger;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
-public class CnetDataPusherRestClient {
+public class CnetDataPusherRestClient
+{
 
-	private static Logger log = null;
-	private String serviceEndpoint;
-	private RestTemplate template;
-	
-	public CnetDataPusherRestClient(String endpoint, Logger logger)
-	{
-		this.template = new RestTemplate();
-		log = logger;
-		this.serviceEndpoint = endpoint;
-	}
-	
-	public ArrayOfIoTEntity alreadyExists(String deviceName)
-	{
-		try
-		{
-			HttpHeaders h=new HttpHeaders();
-			h.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-			HttpEntity<ArrayOfIoTEntity> entity=new HttpEntity<ArrayOfIoTEntity>(h);
-			log.debug("Contacting {}?like={} ",serviceEndpoint,deviceName);
-			ResponseEntity<ArrayOfIoTEntity> r=template.exchange(serviceEndpoint+"?like=" + deviceName, HttpMethod.GET, entity, ArrayOfIoTEntity.class);
-			ArrayOfIoTEntity response = new ArrayOfIoTEntity();
-			if(r.getStatusCode().compareTo(HttpStatus.OK)==0)
-			{
-				response = (ArrayOfIoTEntity)r.getBody();
-				return response;
-			}
-		}
-		catch(Exception ex)
-		{
-			log.error("Exception: ", ex);
-		}
-		return new ArrayOfIoTEntity();
-	}
-	
-	public IoTEntity pushNewIoTEntity(IoTEntity iotEntity)
-	{
-		try
-		{
-			HttpHeaders h=new HttpHeaders();
-			h.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-			HttpEntity<IoTEntity> entity=new HttpEntity<IoTEntity>(iotEntity,h);
-			log.debug("Contacting {} ",serviceEndpoint);
-			ResponseEntity<IoTEntity> r=template.exchange(serviceEndpoint, HttpMethod.POST, entity, IoTEntity.class);
-			IoTEntity response = new IoTEntity();
-			if(r.getStatusCode().compareTo(HttpStatus.OK)==0)
-			{
-				response = (IoTEntity)r.getBody();
-				log.debug("Recevied xml response: ");
-				response.toXml();
-				return response;
-			}
-		}
-		catch(Exception ex)
-		{
-			log.error("Exception: ", ex);
-		}
-		return null;
-	}
-	
-	public Boolean pushNewValues(IoTEntity iotEntity)
-	{
-		try
-		{
-			HttpHeaders h=new HttpHeaders();
-			h.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-			HttpEntity<IoTEntity> entity=new HttpEntity<IoTEntity>(iotEntity,h);
-			log.debug("Contacting {} ",serviceEndpoint);
-			ResponseEntity<Void> r=template.exchange(serviceEndpoint, HttpMethod.POST, entity, Void.class);
-			if(r.getStatusCode().compareTo(HttpStatus.OK)==0)
-			{
-				return true;
-			}
-		}
-		catch(Exception ex)
-		{
-			log.error("Exception: ", ex);
-		}
-		return false;
-	}
+    private static Logger log = null;
+    private String serviceEndpoint;
+    private PWALXmlMapper xmlMapper;
+    private PwalHttpClient httpClient;
+
+    public CnetDataPusherRestClient(String endpoint, Logger logger)
+    {
+        log = logger;
+        this.serviceEndpoint = endpoint;
+        this.xmlMapper = new PWALXmlMapper();
+        this.httpClient = new PwalHttpClient();
+    }
+
+    /**
+     * This method check if an IoTEntity already exists into the data
+     * management.
+     * 
+     * @param deviceName is the device name used to search if the IoTEntity of
+     *            the corresponding device already exist.
+     * @return a filled IoTEntity with the device "about" reference if the
+     *         device already exists or an empty IoTEntity if not.
+     */
+    public ArrayOfIoTEntity alreadyExists(String deviceName)
+    {
+        try
+        {
+            HttpGet getIoTEntity = new HttpGet(serviceEndpoint + "?like="
+                    + deviceName);
+            CloseableHttpResponse resp = this.httpClient
+                    .executeRequest(getIoTEntity);
+            ArrayOfIoTEntity response = this.xmlMapper.unmarshal(
+                    ArrayOfIoTEntity.class, resp.getEntity().getContent());
+            if (resp.getStatusLine().getStatusCode() == 200)
+            {
+                return response;
+            }
+        }
+        catch (Exception ex)
+        {
+            log.error("Exception: ", ex);
+        }
+        return new ArrayOfIoTEntity();
+    }
+
+    /**
+     * Push the new IoTEntity into the CNET cloud data manager.
+     * 
+     * @param iotEntity is the IoTEntity to be pushed.
+     * @return an IoTEntity with the about reference
+     */
+    public IoTEntity pushNewIoTEntity(IoTEntity iotEntity)
+    {
+        try
+        {
+            HttpPost postIoTEntity = new HttpPost(serviceEndpoint);
+            postIoTEntity.setEntity(new ByteArrayEntity(this.xmlMapper.marshal(
+                    IoTEntity.class, iotEntity).toByteArray()));
+            CloseableHttpResponse resp = this.httpClient
+                    .executeRequest(postIoTEntity);
+            IoTEntity iotEntityResp = this.xmlMapper.unmarshal(IoTEntity.class,
+                    resp.getEntity().getContent());
+            if (resp.getStatusLine().getStatusCode() == 200)
+            {
+                return iotEntityResp;
+            }
+        }
+        catch (Exception ex)
+        {
+            log.error("Exception: ", ex);
+        }
+        return null;
+    }
+
+    /**
+     * Pushs new values into the CNET cloud data manager.
+     * 
+     * @param iotEntity is the IoTEntity containing the IoTObservation
+     * @return true if ok, false if not.
+     */
+    public Boolean pushNewValues(IoTEntity iotEntity)
+    {
+        try
+        {
+            HttpPost postIoTEntityValues = new HttpPost(serviceEndpoint);
+            postIoTEntityValues.setEntity(new ByteArrayEntity(this.xmlMapper
+                    .marshal(IoTEntity.class, iotEntity).toByteArray()));
+            CloseableHttpResponse resp;
+
+            resp = this.httpClient.executeRequest(
+                    postIoTEntityValues);
+
+            if (resp.getStatusLine().getStatusCode() == 200)
+            {
+                return true;
+            }
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

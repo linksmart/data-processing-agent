@@ -40,10 +40,18 @@ public interface Device {
 	/**
 	 * Sets the last time when the current value has been updated
 	 * 
-	 * @param updatedAt
-	 *             time to set
+	 * @param updatedAt update time to be set (UTC)
 	 */
 	void setUpdatedAt(String updatedAt);
+	/**
+	 * Returns the measure expiration date
+	 */
+	String getExpiresAt();
+	/**
+	 * Sets the measure expiration date
+	 * @param expireAt expiration time to be set (UTC)
+	 */
+	void setExpiresAt(String expiresAt);
 	/**
 	 * Returns the location of the device
 	 * 

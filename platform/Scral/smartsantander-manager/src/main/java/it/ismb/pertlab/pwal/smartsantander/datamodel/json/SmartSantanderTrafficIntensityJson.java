@@ -1,7 +1,7 @@
 package it.ismb.pertlab.pwal.smartsantander.datamodel.json;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 public class SmartSantanderTrafficIntensityJson {
 

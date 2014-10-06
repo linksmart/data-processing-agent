@@ -1,0 +1,15 @@
+$prefix:$url a wbin:City ;
+	gr:name "$name" ;
+	rdfs:label "$name";
+	s:description "$description" ;
+	rdfs:comment "$description";
+#if($latitude)
+	s:latitude $latitude ;
+#end
+#if($longitude)
+	s:longitude $longitude ;
+#end
+#if($geoNameId)
+	owl:SameIndividual geonames:$geoNameId ;
+#end
+	geo:hasGeometry [geo:asWKT """$coordinates"""^^geo:wktLiteral] .

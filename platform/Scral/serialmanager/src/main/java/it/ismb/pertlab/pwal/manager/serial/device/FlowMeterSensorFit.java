@@ -1,6 +1,6 @@
 package it.ismb.pertlab.pwal.manager.serial.device;
 
-import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
+import it.ismb.pertlab.pwal.api.devices.model.FlowMeterFit;
 import it.ismb.pertlab.pwal.api.devices.model.Location;
 import it.ismb.pertlab.pwal.api.devices.model.Unit;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeter {
+public class FlowMeterSensorFit extends BaseSerialDevice implements FlowMeterFit {
 
 	protected static final Logger log=LoggerFactory.getLogger(FlowMeterSensorFit.class);
 	private String id;

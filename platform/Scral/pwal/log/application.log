@@ -1804,3 +1804,483 @@
 2014-05-23 17:06:36,990 30923 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
 2014-05-23 17:06:50,706 44639 INFO  [DefaultRequestHandler.java: 112] (main:) Requesting http://api.xively.com/v2/feeds/1314255331/datastreams/13-1.json
 2014-05-23 17:06:51,024 44957 INFO  [DefaultResponseHandler.java: 37] (main:) Handling response [200]
+2014-07-31 09:59:28,423 5     INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 09:59:29,382 964   INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:29,630 1212  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=2&tag=temperature
+2014-07-31 09:59:29,888 1470  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:29,894 1476  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=3&tag=temperature
+2014-07-31 09:59:30,087 1669  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:30,116 1698  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=4&tag=temperature
+2014-07-31 09:59:30,318 1900  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:30,335 1917  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=5&tag=temperature
+2014-07-31 09:59:30,545 2127  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:30,548 2130  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=6&tag=temperature
+2014-07-31 09:59:30,788 2370  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:30,807 2389  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=7&tag=temperature
+2014-07-31 09:59:31,031 2613  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:31,039 2621  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=8&tag=temperature
+2014-07-31 09:59:31,280 2862  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:31,301 2883  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=9&tag=temperature
+2014-07-31 09:59:31,534 3116  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:31,552 3134  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=10&tag=temperature
+2014-07-31 09:59:31,803 3385  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:31,806 3388  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=11&tag=temperature
+2014-07-31 09:59:31,968 3550  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:31,977 3559  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=12&tag=temperature
+2014-07-31 09:59:32,174 3756  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:32,178 3760  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=13&tag=temperature
+2014-07-31 09:59:32,403 3985  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:32,408 3990  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=14&tag=temperature
+2014-07-31 09:59:32,579 4161  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:32,581 4163  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=15&tag=temperature
+2014-07-31 09:59:32,787 4369  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:32,798 4380  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=16&tag=temperature
+2014-07-31 09:59:32,968 4550  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:32,984 4566  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=17&tag=temperature
+2014-07-31 09:59:33,154 4736  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:33,162 4744  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=18&tag=temperature
+2014-07-31 09:59:33,417 4999  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:33,443 5025  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=19&tag=temperature
+2014-07-31 09:59:33,822 5404  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:33,833 5415  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=20&tag=temperature
+2014-07-31 09:59:34,056 5638  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:34,059 5641  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=21&tag=temperature
+2014-07-31 09:59:34,246 5828  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:34,250 5832  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=22&tag=temperature
+2014-07-31 09:59:34,436 6018  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:34,466 6048  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=23&tag=temperature
+2014-07-31 09:59:34,682 6264  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:34,687 6269  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=24&tag=temperature
+2014-07-31 09:59:34,944 6526  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:34,950 6532  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 09:59:35,137 6719  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:35,143 6725  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=2&tag=humidity
+2014-07-31 09:59:35,376 6958  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:35,383 6965  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=3&tag=humidity
+2014-07-31 09:59:35,610 7192  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:35,615 7197  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=4&tag=humidity
+2014-07-31 09:59:35,834 7416  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:35,841 7423  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=5&tag=humidity
+2014-07-31 09:59:36,099 7681  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:36,104 7686  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=6&tag=humidity
+2014-07-31 09:59:36,352 7934  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:36,408 7990  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=7&tag=humidity
+2014-07-31 09:59:36,637 8219  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:36,644 8226  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=8&tag=humidity
+2014-07-31 09:59:36,888 8470  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:36,900 8482  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=9&tag=humidity
+2014-07-31 09:59:37,066 8648  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:37,076 8658  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=10&tag=humidity
+2014-07-31 09:59:37,272 8854  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:37,277 8859  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=11&tag=humidity
+2014-07-31 09:59:37,526 9108  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:37,539 9121  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=12&tag=humidity
+2014-07-31 09:59:37,748 9330  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:37,753 9335  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=13&tag=humidity
+2014-07-31 09:59:37,986 9568  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:37,992 9574  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=14&tag=humidity
+2014-07-31 09:59:38,233 9815  INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:38,237 9819  INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=15&tag=humidity
+2014-07-31 09:59:38,496 10078 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:38,500 10082 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=16&tag=humidity
+2014-07-31 09:59:38,664 10246 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:38,668 10250 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=17&tag=humidity
+2014-07-31 09:59:38,949 10531 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:38,954 10536 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=18&tag=humidity
+2014-07-31 09:59:39,158 10740 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:39,168 10750 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=19&tag=humidity
+2014-07-31 09:59:39,330 10912 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:39,336 10918 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=20&tag=humidity
+2014-07-31 09:59:39,534 11116 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:39,540 11122 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=21&tag=humidity
+2014-07-31 09:59:39,709 11291 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:39,714 11296 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=22&tag=humidity
+2014-07-31 09:59:39,882 11464 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:39,885 11467 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=23&tag=humidity
+2014-07-31 09:59:40,126 11708 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:40,130 11712 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=24&tag=humidity
+2014-07-31 09:59:40,367 11949 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:40,370 11952 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 09:59:40,536 12118 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:40,542 12124 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=2&tag=light
+2014-07-31 09:59:40,710 12292 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:40,714 12296 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=3&tag=light
+2014-07-31 09:59:40,947 12529 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:40,951 12533 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=4&tag=light
+2014-07-31 09:59:41,226 12808 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:41,229 12811 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=5&tag=light
+2014-07-31 09:59:41,394 12976 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:41,397 12979 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=6&tag=light
+2014-07-31 09:59:41,635 13217 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:41,641 13223 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=7&tag=light
+2014-07-31 09:59:41,839 13421 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:41,847 13429 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=8&tag=light
+2014-07-31 09:59:42,045 13627 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:42,053 13635 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=9&tag=light
+2014-07-31 09:59:42,325 13907 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:42,330 13912 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=10&tag=light
+2014-07-31 09:59:42,583 14165 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:42,587 14169 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=11&tag=light
+2014-07-31 09:59:42,791 14373 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:42,797 14379 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=12&tag=light
+2014-07-31 09:59:43,050 14632 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:43,054 14636 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=13&tag=light
+2014-07-31 09:59:43,247 14829 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:43,250 14832 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=14&tag=light
+2014-07-31 09:59:43,444 15026 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:43,451 15033 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=15&tag=light
+2014-07-31 09:59:43,622 15204 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:43,626 15208 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=16&tag=light
+2014-07-31 09:59:43,812 15394 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:43,816 15398 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=17&tag=light
+2014-07-31 09:59:43,983 15565 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:43,987 15569 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=18&tag=light
+2014-07-31 09:59:44,160 15742 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:44,164 15746 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=19&tag=light
+2014-07-31 09:59:44,351 15933 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:44,357 15939 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=20&tag=light
+2014-07-31 09:59:44,582 16164 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:44,584 16166 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=21&tag=light
+2014-07-31 09:59:44,808 16390 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:44,811 16393 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=22&tag=light
+2014-07-31 09:59:45,055 16637 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:45,060 16642 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=23&tag=light
+2014-07-31 09:59:45,220 16802 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:45,230 16812 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=24&tag=light
+2014-07-31 09:59:45,433 17015 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:45,442 17024 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 09:59:45,700 17282 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:45,703 17285 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=2&tag=pressure
+2014-07-31 09:59:45,949 17531 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:45,955 17537 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=3&tag=pressure
+2014-07-31 09:59:46,172 17754 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:46,177 17759 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=4&tag=pressure
+2014-07-31 09:59:46,350 17932 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:46,356 17938 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=5&tag=pressure
+2014-07-31 09:59:46,553 18135 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:46,562 18144 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=6&tag=pressure
+2014-07-31 09:59:46,728 18310 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:46,731 18313 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=7&tag=pressure
+2014-07-31 09:59:46,935 18517 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:46,944 18526 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=8&tag=pressure
+2014-07-31 09:59:47,112 18694 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:47,117 18699 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=9&tag=pressure
+2014-07-31 09:59:47,331 18913 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:47,337 18919 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=10&tag=pressure
+2014-07-31 09:59:47,547 19129 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:47,551 19133 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=11&tag=pressure
+2014-07-31 09:59:47,723 19305 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:47,727 19309 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=12&tag=pressure
+2014-07-31 09:59:47,947 19529 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:47,951 19533 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=13&tag=pressure
+2014-07-31 09:59:48,170 19752 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:48,180 19762 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=14&tag=pressure
+2014-07-31 09:59:48,407 19989 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:48,411 19993 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=15&tag=pressure
+2014-07-31 09:59:48,622 20204 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:48,628 20210 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=16&tag=pressure
+2014-07-31 09:59:48,793 20375 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:48,798 20380 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=17&tag=pressure
+2014-07-31 09:59:49,212 20794 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:49,215 20797 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=18&tag=pressure
+2014-07-31 09:59:49,441 21023 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:49,446 21028 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=19&tag=pressure
+2014-07-31 09:59:49,694 21276 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:49,699 21281 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=20&tag=pressure
+2014-07-31 09:59:49,896 21478 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:49,902 21484 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=21&tag=pressure
+2014-07-31 09:59:50,067 21649 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:50,072 21654 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=22&tag=pressure
+2014-07-31 09:59:50,246 21828 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:50,250 21832 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=23&tag=pressure
+2014-07-31 09:59:50,408 21990 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 09:59:50,413 21995 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=24&tag=pressure
+2014-07-31 09:59:50,582 22164 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:00:50,590 82172 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:00:50,794 82376 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:00:50,811 82393 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:00:50,987 82569 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:00:50,990 82572 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:00:51,164 82746 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:00:51,166 82748 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:00:51,383 82965 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:01:51,387 142969 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:01:51,686 143268 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:01:51,689 143271 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:01:51,844 143426 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:01:51,846 143428 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:01:52,012 143594 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:01:52,014 143596 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:01:52,165 143747 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:02:52,168 203750 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:02:52,375 203957 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:02:52,380 203962 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:02:52,573 204155 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:02:52,576 204158 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:02:52,776 204358 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:02:52,781 204363 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:02:52,958 204540 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:03:52,962 264544 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:03:53,172 264754 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:03:53,177 264759 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:03:53,448 265030 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:03:53,453 265035 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:03:53,638 265220 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:03:53,642 265224 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:03:53,826 265408 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:04:53,832 325414 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:04:54,042 325624 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:04:54,047 325629 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:04:54,204 325786 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:04:54,208 325790 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:04:54,379 325961 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:04:54,382 325964 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:04:54,561 326143 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:05:54,565 386147 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:05:54,792 386374 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:05:54,794 386376 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:05:55,029 386611 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:05:55,031 386613 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:05:55,276 386858 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:05:55,280 386862 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:05:55,517 387099 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:06:55,522 447104 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:06:55,713 447295 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:06:55,718 447300 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:06:55,908 447490 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:06:55,912 447494 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:06:56,078 447660 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:06:56,082 447664 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:06:56,405 447987 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:07:56,408 507990 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:07:56,653 508235 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:07:56,657 508239 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:07:56,835 508417 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:07:56,839 508421 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:07:56,994 508576 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:07:56,999 508581 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:07:57,158 508740 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:08:57,162 568744 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:08:57,389 568971 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:08:57,393 568975 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:08:57,565 569147 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:08:57,570 569152 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:08:57,771 569353 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:08:57,773 569355 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:08:58,002 569584 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:09:58,008 629590 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:09:58,185 629767 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:09:58,187 629769 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:09:58,341 629923 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:09:58,345 629927 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:09:58,527 630109 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:09:58,531 630113 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:09:58,740 630322 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:10:58,744 690326 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:10:58,955 690537 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:10:58,960 690542 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:10:59,151 690733 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:10:59,155 690737 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:10:59,336 690918 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:10:59,339 690921 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:10:59,529 691111 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:11:59,534 751116 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:11:59,746 751328 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:11:59,749 751331 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:11:59,964 751546 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:11:59,968 751550 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:12:00,170 751752 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:12:00,173 751755 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:12:00,378 751960 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:13:00,382 811964 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:13:00,571 812153 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:13:00,576 812158 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:13:00,876 812458 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:13:00,880 812462 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:13:01,120 812702 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:13:01,124 812706 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:13:01,312 812894 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:14:01,316 872898 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:14:01,586 873168 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:14:01,589 873171 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:14:01,924 873506 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:14:01,928 873510 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:14:02,110 873692 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:14:02,114 873696 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:14:02,447 874029 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:15:02,452 934034 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:15:02,812 934394 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:15:02,815 934397 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:15:03,154 934736 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:15:03,156 934738 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:15:03,482 935064 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:15:03,486 935068 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:15:03,746 935328 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:16:03,749 995331 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:16:03,929 995511 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:16:03,933 995515 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:16:04,132 995714 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:16:04,135 995717 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:16:04,325 995907 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:16:04,327 995909 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:16:04,516 996098 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:17:04,521 1056103 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:17:04,794 1056376 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:17:04,797 1056379 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:17:05,011 1056593 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:17:05,013 1056595 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:17:05,194 1056776 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:17:05,198 1056780 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:17:05,406 1056988 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:18:05,410 1116992 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:18:05,609 1117191 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:18:05,612 1117194 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:18:05,817 1117399 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:18:05,819 1117401 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:18:06,052 1117634 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:18:06,054 1117636 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:18:06,251 1117833 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:19:06,254 1177836 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:19:06,579 1178161 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:19:06,584 1178166 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:19:06,766 1178348 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:19:06,767 1178349 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:19:07,074 1178656 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:19:07,076 1178658 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:19:07,303 1178885 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:20:07,308 1238890 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:20:07,732 1239314 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:20:07,737 1239319 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:20:07,982 1239564 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:20:07,986 1239568 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:20:08,204 1239786 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:20:08,206 1239788 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:20:08,555 1240137 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:21:08,559 1300141 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:21:08,776 1300358 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:21:08,780 1300362 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:21:08,967 1300549 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:21:08,970 1300552 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:21:09,166 1300748 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:21:09,168 1300750 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:21:09,363 1300945 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:22:09,365 1360947 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:22:09,650 1361232 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:22:09,652 1361234 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:22:09,838 1361420 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:22:09,841 1361423 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:22:10,001 1361583 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:22:10,004 1361586 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:22:10,184 1361766 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:23:10,186 1421768 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:23:10,366 1421948 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:23:10,370 1421952 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:23:10,529 1422111 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:23:10,534 1422116 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:23:10,721 1422303 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:23:10,724 1422306 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:23:10,954 1422536 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:24:10,958 1482540 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:24:11,206 1482788 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:24:11,209 1482791 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:24:11,410 1482992 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:24:11,413 1482995 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:24:11,686 1483268 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:24:11,689 1483271 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:24:11,877 1483459 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:25:11,882 1543464 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:25:12,098 1543680 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:25:12,100 1543682 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:25:12,284 1543866 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:25:12,287 1543869 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:25:12,485 1544067 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:25:12,487 1544069 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:25:12,799 1544381 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:26:12,803 1604385 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:26:13,071 1604653 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:26:13,073 1604655 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:26:13,263 1604845 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:26:13,266 1604848 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:26:13,495 1605077 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:26:13,496 1605078 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:26:13,707 1605289 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:27:13,710 1665292 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:27:14,006 1665588 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:27:14,009 1665591 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:27:14,237 1665819 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:27:14,239 1665821 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:27:14,467 1666049 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:27:14,469 1666051 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:27:14,655 1666237 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:28:14,660 1726242 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:28:14,867 1726449 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:28:14,869 1726451 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:28:15,188 1726770 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:28:15,191 1726773 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:28:15,376 1726958 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:28:15,379 1726961 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:28:15,559 1727141 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:29:15,563 1787145 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:29:15,775 1787357 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:29:15,779 1787361 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:29:15,945 1787527 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:29:15,948 1787530 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:29:16,128 1787710 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:29:16,131 1787713 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:29:16,290 1787872 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:30:16,293 1847875 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:30:16,520 1848102 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:30:16,522 1848104 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:30:16,738 1848320 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:30:16,741 1848323 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:30:16,943 1848525 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:30:16,945 1848527 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:30:17,114 1848696 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:31:17,117 1908699 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:31:17,295 1908877 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:31:17,297 1908879 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:31:17,643 1909225 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:31:17,645 1909227 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:31:17,893 1909475 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:31:17,895 1909477 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:31:18,114 1909696 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:32:18,116 1969698 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:32:18,332 1969914 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:32:18,335 1969917 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:32:18,499 1970081 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:32:18,501 1970083 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:32:18,675 1970257 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:32:18,677 1970259 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:32:18,901 1970483 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:33:18,904 2030486 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:33:19,097 2030679 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:33:19,100 2030682 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:33:19,335 2030917 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:33:19,338 2030920 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:33:19,577 2031159 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:33:19,579 2031161 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:33:19,804 2031386 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:34:19,807 2091389 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:34:20,087 2091669 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:34:20,089 2091671 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:34:20,312 2091894 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:34:20,313 2091895 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:34:20,552 2092134 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:34:20,553 2092135 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:34:20,727 2092309 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:35:20,729 2152311 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:35:21,015 2152597 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:35:21,019 2152601 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:35:21,270 2152852 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:35:21,273 2152855 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:35:21,500 2153082 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:35:21,507 2153089 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:35:21,752 2153334 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:36:21,754 2213336 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=temperature
+2014-07-31 10:36:21,948 2213530 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:36:21,950 2213532 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=humidity
+2014-07-31 10:36:22,187 2213769 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:36:22,190 2213772 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=light
+2014-07-31 10:36:22,390 2213972 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]
+2014-07-31 10:36:22,393 2213975 INFO  [DefaultRequestHandler.java: 112] (Thread-0:) Requesting http://api.xively.com/v2/feeds.json?per_page=1&order=created_at&page=1&tag=pressure
+2014-07-31 10:36:22,587 2214169 INFO  [DefaultResponseHandler.java: 37] (Thread-0:) Handling response [200]

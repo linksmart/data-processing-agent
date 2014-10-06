@@ -5,7 +5,7 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.model.Accelerometer;
 import it.ismb.pertlab.pwal.api.devices.model.DistanceSensor;
 import it.ismb.pertlab.pwal.api.devices.model.FillLevel;
-import it.ismb.pertlab.pwal.api.devices.model.FlowMeter;
+import it.ismb.pertlab.pwal.api.devices.model.FlowMeterFit;
 import it.ismb.pertlab.pwal.api.devices.model.Thermometer;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleCounter;
 import it.ismb.pertlab.pwal.api.devices.model.VehicleSpeed;
@@ -160,7 +160,7 @@ public class ChartService {
 				case DeviceType.FLOW_METER_SENSOR:
 					if(d.getId().equals(devID))
 					{
-						FlowMeter fm = (FlowMeter)d;
+						FlowMeterFit fm = (FlowMeterFit)d;
 						devtype = fm.getType();
 						
 						Integer flow = fm.getFlow();

@@ -10,7 +10,9 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
-	<import resource="classpath:dataPusherApplicationContext.xml"/>		
-
+	<import resource="classpath:applicationContext-pwal.xml"/>		
+	<bean id="PwalRestConnector" class="it.ismb.pertlab.pwal.connectors.rest.PwalRestConnector">
+ 		<property name="pwal" ref="PWAL" />
+	</bean>
 </beans>
 

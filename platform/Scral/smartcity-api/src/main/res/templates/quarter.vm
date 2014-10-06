@@ -1,0 +1,8 @@
+$prefix:$url a wbin:Quarter;
+	gr:name "$name";
+	rdfs:label "$name";
+	s:description "$description";
+	rdfs:comment "$description";
+	geo:hasGeometry [geo:asWKT """$coordinates"""^^geo:wktLiteral]; 
+	geo:sfWithin $prefix:$city ;
+	geo:sfWithin $prefix:$district .
