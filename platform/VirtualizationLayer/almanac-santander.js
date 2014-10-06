@@ -9,21 +9,12 @@
 module.exports = function (almanac) {
 
 	function proxySmartSantander(req, res) {
-		req.url = almanac.config.hosts.santander.path + req.url;
-		almanac.httpProxy.web(req, res, {
-				headers: {
-					'Connection': 'close',
-					host: almanac.config.hosts.santander.headers.host,
-				},
-				forward: null,
-				target: {
-					host: almanac.config.hosts.santander.host,
-					port: almanac.config.hosts.santander.port,
-				},
-				xfwd: true,	//Include X-Forwarded-For header
-			}, function (err) {
-				almanac.basicHttp.serve500(req, res, 'Error proxying to SmartSantander: ' + err);
-			});
+		req.pipe(almanac.request.get('http://' + almanac.config.hosts.santander.host + ':' + almanac.config.hosts.santander.port + almanac.config.hosts.santander.path + req.url,
+			function (error, response, body) {
+				if (error) {
+					almanac.basicHttp.serve500(req, res, 'Error proxying to SmartSantander!');
+				}
+			})).pipe(res);
 	}
 
 	almanac.routes['santander/'] = proxySmartSantander;	//Proxying to SmartSantander

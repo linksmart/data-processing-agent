@@ -8,47 +8,40 @@
 
 var hosts = {
 		virtualizationLayerPublic: {	//Public IP of this Virtualization Layer, if any
+			scheme: 'http',
 			host: 'almanac.alexandra.dk',
 			port: 80,
 		},
 		virtualizationLayer: {
+			scheme: 'http',
 			host: 'localhost',
 			port: 80,
 		},
 		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
-		networkManagerUrl: 'http://localhost:8082/NetworkManager',
+		networkManager: {
+			host: 'localhost',
+			port: 8082,
+		},
 		mqttBroker: {
 			host: 'localhost',
 			port: 1883,
 		},
 		storageCloud: {	//Public Storage Manager cloud
-			headers: {
-				host: 'energyportal.cnet.se',
-			},
 			host: 'energyportal.cnet.se',
 			port: 80,
 			path: '/StorageManagerCloud/REST/',
 		},
 		storage: {	//Local Storage Manager
-			headers: {
-				host: '192.168.1.30',
-			},
 			host: '192.168.1.30',
 			port: 80,
 			path: '/StorageManagerLocal/REST/',
 		},
 		scral: {
-			headers: {
-				host: '130.192.86.227:8080',
-			},
 			host: '130.192.86.227',
 			port: 8080,
 			path: '/connectors.rest-0.2.0/',
 		},
 		santander: {	//Public SmartSantander instance cloud
-			headers: {
-				host: 'data.smartsantander.eu',
-			},
 			host: 'data.smartsantander.eu',
 			port: 80,
 			path: '/ISMB/',

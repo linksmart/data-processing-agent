@@ -12,25 +12,15 @@ var xmlWriter = require('xml-writer'),
 module.exports = function (almanac) {
 
 	function proxyDataManagement(req, res) {
-		var options = {
-			headers: {
-				'Connection': 'close',
-				'X-Almanac-VL': req.connection.localAddress,
-			},
-			target: JSON.parse(JSON.stringify(almanac.config.hosts.masterStorageManager)),
-			xfwd: true,
-		};
-		options.target.path += req.url;
 
-		//Forward POST requests to Socket.IO clients (WebSocket)
-		if (req.method === 'POST' && almanac.webSocket) {
+		if (req.method === 'POST' && almanac.webSocket) {	//Forward POST requests
 			var body = '';
 			req.addListener('data', function (chunk) {
 					body += chunk;
 				});
 			req.addListener('end', function () {
 					console.log('POST forwarded to WebSocket');
-					almanac.webSocket.emit('DM', {
+					almanac.webSocket.emit('DM', {	//Forward POST requests to Socket.IO clients (WebSocket)
 							body: body,
 							headers: req.headers,
 							url: req.url,
@@ -38,17 +28,12 @@ module.exports = function (almanac) {
 				});
 		}
 
-		//Forward POST requests to another Virtualization Layer instance (for IoT-week);
-		if (req.method === 'POST' && almanac.config.hosts.slaveVirtualizationLayer && (req.headers['x-almanac-vl'] == undefined)) {	//Do not forward more than once to avoid infinite loops
-			console.log('Forward to ' + almanac.config.hosts.slaveVirtualizationLayer.host + ':' + almanac.config.hosts.slaveVirtualizationLayer.port);
-			options.forward = JSON.parse(JSON.stringify(almanac.config.hosts.slaveVirtualizationLayer));
-		} else {
-			options.forward = null;
-		}
-
-		almanac.httpProxy.web(req, res, options, function (err) {
-				almanac.basicHttp.serve500(req, res, 'Error proxying to DataManagement: ' + err);
-			});
+		req.pipe(almanac.request.get('http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
+			function (error, response, body) {
+				if (error) {
+					almanac.basicHttp.serve500(req, res, 'Error proxying to DataManagement!');
+				}
+			})).pipe(res);
 	}
 
 	function dmToGeojson(json) {	//Conversion to GeoJSON format (JSON convention for geographic data)
@@ -120,7 +105,7 @@ module.exports = function (almanac) {
 				method: 'GET',
 				headers: {
 					'Accept': 'application/json',
-					'Host': almanac.config.hosts.masterStorageManager.headers.host,
+					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
 					'Connection': 'close',
 				}
 			}, function(res2) {
@@ -194,7 +179,7 @@ module.exports = function (almanac) {
 				method: 'GET',
 				headers: {
 					'Accept': 'application/json',
-					'Host': almanac.config.hosts.masterStorageManager.headers.host,
+					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
 					'Connection': 'close',
 				}
 			}, function(res2) {
@@ -269,7 +254,7 @@ module.exports = function (almanac) {
 				method: 'GET',
 				headers: {
 					'Accept': 'application/json',
-					'Host': almanac.config.hosts.masterStorageManager.headers.host,
+					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
 					'Connection': 'close',
 				}
 			}, function(res2) {

@@ -9,14 +9,12 @@
 module.exports = function (almanac) {
 	almanac.virtualAddress = null;
 
-	var request = require('request');
-
 	function registerInNetworkManager() {
-		request.post({
-				url: almanac.config.hosts.networkManagerUrl,
+		almanac.request.post({
+				url: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/NetworkManager',
 				json: true,
 				body: JSON.stringify({
-						'Endpoint': 'http://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/',
+						'Endpoint': almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/',
 						'BackboneName': 'eu.linksmart.network.backbone.impl.soap.BackboneSOAPImpl',
 						'Attributes': {
 							'description': 'VirtualizationLayer',
@@ -35,20 +33,27 @@ module.exports = function (almanac) {
 	}
 
 	function refreshInNetworkManager() {
-		request.get({
-					//TODO: use http://localhost:8082/GetNetworkManagerStatus?method=getLocalServices instead to get only local services: body.VirtualAddresses[i].description.indexOf('eu.linksmart.almanac.virtualizationlayer;') > 0; body.VirtualAddresses[i].virtualAddress
-					url: almanac.config.hosts.networkManagerUrl + '?description="VirtualizationLayer"',
-					json: true,
-					timeout: 2000,
-				}, function (error, response, body) {
-				if (!error && response.statusCode == 200 && body) {
-					if (body.length == 0) {	//Needs registration
+		almanac.request.get({
+				//url: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/NetworkManager?description="VirtualizationLayer"',
+				url: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/GetNetworkManagerStatus?method=getLocalServices',
+				json: true,
+				timeout: 2000,
+			}, function (error, response, body) {
+				if (!error && response.statusCode == 200 && body && body.VirtualAddresses) {
+					var virtualAddress = '';
+					for (var i = 0; i < body.VirtualAddresses.length; i++) {
+						var va = body.VirtualAddresses[i];
+						if (va.description && (va.description.indexOf(';SID = eu.linksmart.almanac.virtualizationlayer;') > 0)) {
+							virtualAddress = va.virtualAddress;	//Found existing local VirtualizationLayer
+						}
+					}
+					if (!virtualAddress) {	//Needs registration
 						registerInNetworkManager();
 					} else if (almanac.virtualAddress == null) {
-						almanac.virtualAddress = body[0].VirtualAddress;
+						almanac.virtualAddress = virtualAddress;
 						console.log('VirtualizationLayer: Already registered in NetworkManager at address: ' + almanac.virtualAddress);
-					} else if (almanac.virtualAddress != body[0].VirtualAddress) {
-						console.error('VirtualizationLayer: Inconsistent virtual address in NetworkManager: ' + almanac.virtualAddress + ' != ' + body[0].VirtualAddress);
+					} else if (almanac.virtualAddress != virtualAddress) {
+						console.error('VirtualizationLayer: Inconsistent virtual address in NetworkManager: ' + almanac.virtualAddress + ' != ' + virtualAddress);
 					}
 				} else {
 					console.warn('VirtualizationLayer: Cannot contact the NetworkManager! Will try again.');
@@ -58,4 +63,15 @@ module.exports = function (almanac) {
 
 	refreshInNetworkManager();
 	setInterval(refreshInNetworkManager, 120000);
+
+	function proxyNetworkManagerTunnel(req, res) {
+		req.pipe(almanac.request.get('http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/Tunneling/0/' + req.url,
+			function (error, response, body) {
+				if (error) {
+					almanac.basicHttp.serve500(req, res, 'Error proxying to NetworkManager tunneling!');
+				}
+			})).pipe(res);
+	}
+
+	almanac.routes['tunnel/'] = proxyNetworkManagerTunnel;	//Proxying to NetworkManager tunnel
 };

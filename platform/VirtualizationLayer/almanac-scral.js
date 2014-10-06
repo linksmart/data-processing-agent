@@ -9,21 +9,12 @@
 module.exports = function (almanac) {
 
 	function proxyScral(req, res) {
-		req.url = almanac.config.hosts.scral.path + req.url;
-		almanac.httpProxy.web(req, res, {
-				headers: {
-					'Connection': 'close',
-					host: almanac.config.hosts.scral.headers.host,
-				},
-				forward: null,
-				target: {
-					host: almanac.config.hosts.scral.host,
-					port: almanac.config.hosts.scral.port,
-				},
-				xfwd: true,	//Include X-Forwarded-For header
-			}, function (err) {
-				almanac.basicHttp.serve500(req, res, 'Error proxying to SCRAL: ' + err);
-			});
+		req.pipe(almanac.request.get('http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path + req.url,
+			function (error, response, body) {
+				if (error) {
+					almanac.basicHttp.serve500(req, res, 'Error proxying to SCRAL!');
+				}
+			})).pipe(res);
 	}
 
 	almanac.routes['scral/'] = proxyScral;	//Proxying to SCRAL

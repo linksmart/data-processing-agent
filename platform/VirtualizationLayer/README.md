@@ -29,7 +29,7 @@ cd /home/almanac/platform/nodejs/VirtualizationLayer/
 npm install
 ```
 
-> The main dependencies include `socket.io`, `mqtt`, `node-ssdp`, and `request`. We use a patched `http-proxy` library, included in the source code (this library may be removed in the future).
+> The main dependencies include `socket.io`, `mqtt`, `node-ssdp`, and `request`.
 
 
 # Setup of the Virtualization Layer

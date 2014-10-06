@@ -13,7 +13,7 @@ var almanac = {
 	http: null,
 	server: null,
 	version: '0',
-	httpProxy: null,
+	request: require('request'),
 
 	routes: {	//Routing of requests
 	},
@@ -50,8 +50,7 @@ It is now ' + now.toISOString() + '.\n\
 	serveInfo: function (req, res) {
 		almanac.basicHttp.serveJson(req, res, {
 			version: almanac.version,
-			publicAddress: 'http://' + almanac.config.hosts.virtualizationLayerPublic.host +
-				(almanac.config.hosts.virtualizationLayerPublic.port == 80 ? '' : ':' + almanac.config.hosts.virtualizationLayerPublic.port) + '/',
+			publicAddress: almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayerPublic.host + ':' + almanac.config.hosts.virtualizationLayerPublic.port + '/',
 			virtualAddress: almanac.virtualAddress,
 			resourceCatalogue: (almanac.recourceCatalogueUrl != ''),
 			server: almanac.basicHttp.serverSignature,
@@ -60,11 +59,6 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	init: function() {
-		almanac.httpProxy = require('http-proxy').createProxyServer({});
-		almanac.httpProxy.on('error', function (err, req, res) {
-			almanac.basicHttp.serve500(req, res, 'Error proxying: ' + err);
-		});
-
 		almanac.routes['virtualizationLayerInfo'] = almanac.serveInfo;	//Requests the public address of this VirtualizationLayer instance and other info
 
 		require('./almanac-resourceCatalogue.js')(almanac);
