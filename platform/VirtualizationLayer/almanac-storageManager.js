@@ -54,11 +54,12 @@ module.exports = function (almanac) {
 					}];
 			}
 			if (Array.isArray(json.IoTEntity)) {	//Ex: /dm-geojson/IoTEntities
-				var ioTEntities = json.IoTEntity;
+				var ioTEntities = json.IoTEntity,
+					coordinates = [];
 				for (var i = 0; i < ioTEntities.length; i++) {
 					var ioTEntity = ioTEntities[i];
 					if (Array.isArray(ioTEntity.Meta) && ioTEntity.Meta[0] && ioTEntity.Meta[0].Value && ioTEntity.Meta[0].property === 'geo:point') {
-						var coordinates = ioTEntity.Meta[0].Value.split(' ', 3);
+						coordinates = ioTEntity.Meta[0].Value.split(' ', 3);
 						geoJson.features.push({
 							'type': 'Feature',
 							'geometry': {
@@ -76,7 +77,7 @@ module.exports = function (almanac) {
 							var iotProperty = ioTEntity.Properties[j] || {};
 							if (Array.isArray(iotProperty.IoTStateObservation) && iotProperty.IoTStateObservation[0] && iotProperty.IoTStateObservation[0].Value &&
 								iotProperty.DataType && (iotProperty.DataType.toUpperCase().indexOf('GEOJSON') >= 0)) {
-								var coordinates = iotProperty.IoTStateObservation[0].Value.split(' ', 3);
+								coordinates = iotProperty.IoTStateObservation[0].Value.split(' ', 3);
 								geoJson.features.push({
 									'type': 'Feature',
 									'geometry': {

@@ -25,6 +25,14 @@ cd /home/almanac/platform/nodejs/VirtualizationLayer/
 
 4. Use `npm` to fetch the librairies and dependencies automatically:
 
+For a production deployment:
+
+```sh
+npm install --production
+```
+
+Or if you want to perform continuous integration and other tests, leave out the `production` flag:
+
 ```sh
 npm install
 ```
@@ -37,6 +45,14 @@ npm install
 Edit the config.js file according to your network.
 
 TODO: More information to follow
+
+
+# Testing the Virtualization Layer:
+(Only available when the installation was done without the `production` flag)
+
+```sh
+npm test
+```
 
 
 # Running the Virtualization Layer

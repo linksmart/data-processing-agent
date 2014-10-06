@@ -11,19 +11,16 @@ module.exports = function (almanac) {
 	almanac.ssdpClient = new SsdpClient();
 
 	almanac.ssdpClient.on('response', function (headers, statusCode, rinfo) {
-		//console.log('SSDP: ' + JSON.stringify(headers) + ' ; ' + JSON.stringify(statusCode) + ' ; ' + JSON.stringify(rinfo));
-		if (headers &&
-			headers.ST === almanac.config.hosts.recourceCatalogueUrn &&
-			headers.LOCATION && (headers.LOCATION.indexOf('http://127.0.0.1') < 0) &&	//127.0.0.1 is not always visible
-			headers.LOCATION !== almanac.recourceCatalogueUrl) {
+		if (headers && headers.ST === almanac.config.hosts.recourceCatalogueUrn &&
+			headers.LOCATION && headers.LOCATION !== almanac.recourceCatalogueUrl &&
+			(!almanac.recourceCatalogueUrl || almanac.recourceCatalogueUrl.indexOf('http://127.0.0.1') < 0)) {	//Priority to 127.0.0.1 address
 			almanac.recourceCatalogueUrl = headers.LOCATION;
 			console.log('UPnP: discovered the resource catalogue on ' + almanac.recourceCatalogueUrl);
 			almanac.webSocket.emit('chat', 'UPnP: discovered the resource catalogue');
-		};
+		}
 	});
 
 	function discoverResourceCatalogues() {
-		//console.log('SSDP: discovery');
 		almanac.ssdpClient.search(almanac.config.hosts.recourceCatalogueUrn);
 	}
 

@@ -1,6 +1,7 @@
 {
 	"name": "almanac-virtualization-layer",
 	"version": "0.2.0",
+	"license": "Apache-2.0",
 	"author": {
 		"name": "Alexandre Alapetite",
 		"email": "alexandre.alapetite@alexandra.dk",
@@ -15,9 +16,16 @@
 	],
 	"homepage": "http://www.almanac-project.eu/",
 	"main": "./index.js",
+	"readmeFilename": "README.md",
 	"repository": {
 		"type": "git",
 		"url": "https://scm.fit.fraunhofer.de:8181/scm/git/almanac"
+	},
+	"bugs": {
+		"url": "https://jira.fit.fraunhofer.de/jira/browse/AI"
+	},
+	"engines": {
+		"node": ">=0.10.0"
 	},
 	"dependencies": {
 		"socket.io": "~1.1.0",
@@ -28,13 +36,15 @@
 		"atom-writer": "~1.1.2"
 	},
 	"devDependencies": {
+		"jshint": "~2.5.6"
 	},
-	"license": "Apache-2.0",
-	"engines": {
-		"node": ">=0.10.0"
+	"jshintConfig": {
+		"node": true,
+		"multistr": true,
+		"sub": true
 	},
-	"readmeFilename": "README.md",
-	"bugs": {
-		"url": "https://jira.fit.fraunhofer.de/jira/browse/AI"
+	"scripts": {
+		"lint": "nodejs ./node_modules/.bin/jshint *.js",
+		"pretest": "npm run-script lint"
 	}
 }

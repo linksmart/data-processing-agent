@@ -49,7 +49,7 @@ module.exports = function (almanac) {
 					}
 					if (!virtualAddress) {	//Needs registration
 						registerInNetworkManager();
-					} else if (almanac.virtualAddress == null) {
+					} else if (!almanac.virtualAddress) {
 						almanac.virtualAddress = virtualAddress;
 						console.log('VirtualizationLayer: Already registered in NetworkManager at address: ' + almanac.virtualAddress);
 					} else if (almanac.virtualAddress != virtualAddress) {

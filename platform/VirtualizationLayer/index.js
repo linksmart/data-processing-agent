@@ -35,7 +35,7 @@ var server = http.createServer(function (req, res) {
 			if (almanac.routes[s1]) {
 				req.url = req.url.substring(s1.length + 1);
 				almanac.routes[s1](req, res);
-			} else if (s1 == '') {
+			} else if (s1 === '') {
 				almanac.serveHome(req, res);
 			} else {
 				basicHttp.serveStaticFile(req, res);

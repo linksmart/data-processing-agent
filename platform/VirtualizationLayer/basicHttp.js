@@ -50,7 +50,7 @@ It is now ' + now.toISOString() + '.\n\
 </ul>\n\
 </body>\n\
 </html>\n\
-');
+ ');
 	},
 
 	serve400: function (req, res) {
@@ -70,7 +70,7 @@ It is now ' + now.toISOString() + '.\n\
 <p>Your browser sent a request that this server could not understand.</p>\n\
 </body>\n\
 </html>\n\
-');
+ ');
 	},
 
 	serve404: function (req, res) {
@@ -92,7 +92,7 @@ It is now ' + now.toISOString() + '.\n\
 	basicHttp.escapeHtml(req.url) + '</kbd> was not found on this server.</p>\n\
 </body>\n\
 </html>\n\
-');
+ ');
 	},
 
 	serve500: function (req, res, ex) {
@@ -114,7 +114,7 @@ It is now ' + now.toISOString() + '.\n\
 <pre>' + ex + '</pre>\n\
 </body>\n\
 </html>\n\
-');
+ ');
 	},
 
 	serve503: function (req, res) {
@@ -134,7 +134,7 @@ It is now ' + now.toISOString() + '.\n\
 <p>The service you are requesting is temporarily unavailable.</p>\n\
 </body>\n\
 </html>\n\
-');
+ ');
 	},
 
 	serveStaticFile: function (req, res) {
