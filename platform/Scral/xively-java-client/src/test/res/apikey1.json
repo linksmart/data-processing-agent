@@ -1,0 +1,15 @@
+{
+  "keys":
+  [
+	  {
+	    "label":"Simple Test Key",
+	    "private_access": true,
+	    "permissions":[
+	      {
+		"access_methods": ["get"]
+	      }
+	    ]
+	  }
+  ]
+}
+
