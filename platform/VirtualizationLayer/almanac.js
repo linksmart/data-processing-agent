@@ -64,6 +64,7 @@ It is now ' + now.toISOString() + '.\n\
 	init: function() {
 		almanac.routes['virtualizationLayerInfo'] = almanac.serveInfo;	//Requests the public address of this VirtualizationLayer instance and other info
 
+		require('./almanac-peering.js')(almanac);
 		require('./almanac-resourceCatalogue.js')(almanac);
 		require('./almanac-storageManager.js')(almanac);
 		require('./almanac-scral.js')(almanac);

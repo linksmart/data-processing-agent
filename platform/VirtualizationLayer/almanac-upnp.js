@@ -25,5 +25,5 @@ module.exports = function (almanac) {
 	}
 
 	discoverResourceCatalogues();
-	setInterval(discoverResourceCatalogues, 30000);
+	setInterval(discoverResourceCatalogues, 60000);
 };

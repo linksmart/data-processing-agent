@@ -14,20 +14,20 @@ module.exports = function (almanac) {
 				url: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/NetworkManager',
 				json: true,
 				body: JSON.stringify({
-						'Endpoint': almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/',
+						'Endpoint': almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/',	//The port number must always be mentionned for LinkSmart
 						'BackboneName': 'eu.linksmart.network.backbone.impl.soap.BackboneSOAPImpl',
 						'Attributes': {
 							'description': 'VirtualizationLayer',
-							'sid': 'eu.linksmart.almanac.virtualizationlayer'
+							'sid': 'eu.linksmart.almanac.virtualizationlayer',
 						}
 					}),
 				timeout: 4000,
 			}, function (error, response, body) {
 				if (!error && response.statusCode == 200 && body && body.VirtualAddress) {
 					almanac.virtualAddress = body.VirtualAddress;
-					console.log('VirtualizationLayer: Registered in the NetworkManager with VirtualAddress: ' + almanac.virtualAddress);
+					console.log('Registered in the NetworkManager with VirtualAddress: ' + almanac.virtualAddress);
 				} else {
-					console.error('VirtualizationLayer: Cannot register in the NetworkManager! Will try again.');
+					console.error('Cannot register in the NetworkManager! Will try again.');
 				}
 			});
 	}
@@ -51,12 +51,12 @@ module.exports = function (almanac) {
 						registerInNetworkManager();
 					} else if (!almanac.virtualAddress) {
 						almanac.virtualAddress = virtualAddress;
-						console.log('VirtualizationLayer: Already registered in NetworkManager at address: ' + almanac.virtualAddress);
+						console.log('Already registered in NetworkManager at address: ' + almanac.virtualAddress);
 					} else if (almanac.virtualAddress != virtualAddress) {
-						console.error('VirtualizationLayer: Inconsistent virtual address in NetworkManager: ' + almanac.virtualAddress + ' != ' + virtualAddress);
+						console.error('Inconsistent virtual address in NetworkManager: ' + almanac.virtualAddress + ' != ' + virtualAddress);
 					}
 				} else {
-					console.warn('VirtualizationLayer: Cannot contact the NetworkManager! Will try again.');
+					console.warn('Cannot contact the NetworkManager! Will try again.');
 				}
 			});
 	}

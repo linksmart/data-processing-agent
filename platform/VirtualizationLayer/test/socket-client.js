@@ -1,6 +1,7 @@
 "use strict";
 
-var socketio = require('../node_modules/socket.io/node_modules/socket.io-client')('http://p2.alapetite.dk:8080/');
+var config = require('../config.js').config,
+	socketio = require('../node_modules/socket.io/node_modules/socket.io-client')(config.hosts.virtualizationLayerPublic.scheme + '://' + config.hosts.virtualizationLayerPublic.host + ':' + config.hosts.virtualizationLayerPublic.port + '/');
 
 socketio.on('connect', function() {
 		console.log('Connected');
@@ -14,11 +15,10 @@ socketio.on('chat', function(msg) {
 		console.log('Chat: ' + msg);
 	});
 
-socketio.on('DM', function(msg) {
-		try {
-			var json = JSON.parse(msg.body);
-			console.log('Valid JSON: ' + JSON.stringify(json) + ' ; posted to: ' + msg.url + ' ; with headers: ' + JSON.stringify(msg.headers));
-		} catch (e) {
-			console.log('Invalid JSON: ' + msg.body + ' ; posted to: ' + msg.url);
-		}
+socketio.on('DM', function(json) {
+		console.log('DM: ' + JSON.stringify(json));
+	});
+
+socketio.on('mqtt', function(json) {
+		console.log('MQTT: ' + JSON.stringify(json));
 	});

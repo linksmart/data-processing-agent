@@ -30,7 +30,7 @@ var basicHttp = {
 		res.writeHead(200, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': now.toUTCString(),
-			'Server': basicHttp.serverSignature
+			'Server': basicHttp.serverSignature,
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -57,7 +57,7 @@ It is now ' + now.toISOString() + '.\n\
 		res.writeHead(400, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature
+			'Server': basicHttp.serverSignature,
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -78,7 +78,7 @@ It is now ' + now.toISOString() + '.\n\
 		res.writeHead(404, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature
+			'Server': basicHttp.serverSignature,
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -95,12 +95,53 @@ It is now ' + now.toISOString() + '.\n\
  ');
 	},
 
+	serve405: function (req, res, allowedMethods) {
+		res.writeHead(405, {
+			'Content-Type': 'text/html; charset=UTF-8',
+			'Date': (new Date()).toUTCString(),
+			'Server': basicHttp.serverSignature,
+			'Allow': allowedMethods,
+		});
+		res.end('<!DOCTYPE html>\n\
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
+<head>\n\
+<meta charset="UTF-8" />\n\
+<title>405 Method Not Allowed</title>\n\
+</head>\n\
+<body>\n\
+<h1>Method Not Allowed</h1>\n\
+<p>The requested method <kbd>' + basicHttp.escapeHtml(req.method) + '</kbd> is not allowed at this URL.</p>\n\
+</body>\n\
+</html>\n\
+ ');
+	},
+
+	serve406: function (req, res) {
+		res.writeHead(406, {
+			'Content-Type': 'text/html; charset=UTF-8',
+			'Date': (new Date()).toUTCString(),
+			'Server': basicHttp.serverSignature,
+		});
+		res.end('<!DOCTYPE html>\n\
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
+<head>\n\
+<meta charset="UTF-8" />\n\
+<title>406 Not Acceptable</title>\n\
+</head>\n\
+<body>\n\
+<h1>Not Acceptable</h1>\n\
+<p>The content-type is not acceptable for this URL.</p>\n\
+</body>\n\
+</html>\n\
+ ');
+	},
+
 	serve500: function (req, res, ex) {
 		console.warn(ex);
 		res.writeHead(500, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature
+			'Server': basicHttp.serverSignature,
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
@@ -121,7 +162,7 @@ It is now ' + now.toISOString() + '.\n\
 		res.writeHead(503, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature
+			'Server': basicHttp.serverSignature,
 		});
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\

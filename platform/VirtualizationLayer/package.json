@@ -1,6 +1,6 @@
 {
 	"name": "almanac-virtualization-layer",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"license": "Apache-2.0",
 	"author": {
 		"name": "Alexandre Alapetite",
@@ -11,6 +11,7 @@
 	],
 	"description": "VirtualizationLayer for the ALMANAC European project, by Alexandra Institute",
 	"keywords": [
+		"ALMANAC",
 		"IoT",
 		"LinkSmart"
 	],

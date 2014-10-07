@@ -11,8 +11,14 @@ module.exports = function (almanac) {
 	almanac.mqttClient = mqtt.createClient(almanac.config.hosts.mqttBroker.port, almanac.config.hosts.mqttBroker.host);
 
 	almanac.mqttClient.on('message', function (topic, message) {
-		almanac.webSocket.emit('chat', 'MQTT: ' + message);
+		almanac.webSocket.emit('mqtt', {
+				instance: almanac.config.hosts.virtualizationLayerPublic,
+				topic: topic,
+				body: message,
+			});
 		console.log('MQTT: ' + topic + ': ' + message);
+
+		almanac.peering.mqttPeering(topic, message);	//Peering with other VirtualizationLayers
 	});
 
 	almanac.mqttClient.subscribe('/almanac/#');
@@ -20,4 +26,8 @@ module.exports = function (almanac) {
 	setTimeout(function () {
 			almanac.mqttClient.publish('/almanac/0/chat', 'VirtualizationLayer MQTT started');
 		}, 5000);
+
+	setInterval(function () {
+			almanac.mqttClient.publish('/almanac/0/chat', 'VirtualizationLayer alive');
+		}, 60000);
 };

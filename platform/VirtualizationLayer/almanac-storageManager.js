@@ -13,19 +13,8 @@ module.exports = function (almanac) {
 
 	function proxyDataManagement(req, res) {
 
-		if (req.method === 'POST' && almanac.webSocket) {	//Forward POST requests
-			var body = '';
-			req.addListener('data', function (chunk) {
-					body += chunk;
-				});
-			req.addListener('end', function () {
-					console.log('POST forwarded to WebSocket');
-					almanac.webSocket.emit('DM', {	//Forward POST requests to Socket.IO clients (WebSocket)
-							body: body,
-							headers: req.headers,
-							url: req.url,
-						});
-				});
+		if (req.method === 'POST') {
+			almanac.webSocket.forwardHttp(req, res, 'DM');	//Forward POST requests to Socket.IO clients (WebSocket)
 		}
 
 		req.pipe(almanac.request.get('http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
