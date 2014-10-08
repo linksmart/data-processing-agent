@@ -15,21 +15,18 @@ module.exports = function (almanac) {
 	}
 
 	almanac.peering = {
-		mqttPeering: function (topic, message) {
-			if (!message) {
-				message = {};
+		mqttPeering: function (topic, json) {
+			if (!json) {
+				json = {};
 			}
-			message.mqttTopic = topic;
+			json.mqttTopic = topic;
+			json.vlInstance = almanac.config.hosts.virtualizationLayerPublic;
 
 			function postToPeer(peer) {
 				almanac.request.post({
 						url: peer + 'mqttPeering/',
 						json: true,
-						body: {
-							instance: almanac.config.hosts.virtualizationLayerPublic,
-							topic: topic,
-							body: message,
-						},
+						body: json,
 						timeout: 7000,
 					}, function (error, response, body) {
 						if (error || !response || response.statusCode != 200) {

@@ -12,18 +12,20 @@ var xmlWriter = require('xml-writer'),
 module.exports = function (almanac) {
 
 	almanac.storageManager = {
-		postMqttEvent: function (topic, message) {	//Forward an MQTT event over HTTP POST to the StorageManager
-			message.mqttTopic = topic;
+		postMqttEvent: function (topic, json) {	//Forward an MQTT event over HTTP POST to the StorageManager
+			//json.mqttTopic = topic;
+			//json.vlInstance: almanac.config.hosts.virtualizationLayerPublic,
 			almanac.request.post({
-					url: almanac.config.hosts.masterStorageManager.scheme + '://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + 'IoTEntities',
+					url: almanac.config.hosts.masterStorageManager.scheme + '://' + almanac.config.hosts.masterStorageManager.host +
+						':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + 'IoTEntities',
 					json: true,
-					body: message,
-					timeout: 4000,
+					body: json,
+					timeout: 9000,
 				}, function (error, response, body) {
 					if (error || response.statusCode != 200) {
 						console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' forwarding MQTT event to StorageManager!');
 					} else {
-						console.log('MQTT event forwarded to StorageManager');
+						console.log('MQTT event forwarded to StorageManager: ');
 					}
 				});
 		}
@@ -35,7 +37,8 @@ module.exports = function (almanac) {
 			almanac.webSocket.forwardHttp(req, res, 'DM');	//Forward POST requests to Socket.IO clients (WebSocket)
 		}
 
-		req.pipe(almanac.request.get('http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
+		req.pipe(almanac.request.get('http://' + almanac.config.hosts.masterStorageManager.host +
+			':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
 			function (error, response, body) {
 				if (error) {
 					almanac.basicHttp.serve500(req, res, 'Error proxying to DataManagement!');
