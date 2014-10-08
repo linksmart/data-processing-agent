@@ -1,0 +1,9 @@
+$prefix:$url a wbin:$class ;
+	rdfs:comment "$description" ;
+	s:description "$description" ;
+	vcard:hasAddress [vcard:street-address "$address"; vcard:locality "$city"] ;
+	s:latitude $latitude ;
+	s:longitude $longitude ;
+	geo:hasGeometry [geo:asWKT """$coordinates"""^^geo:wktLiteral] ;
+	geo:sfWithin $prefix:$quarter ;
+	geo:sfWithin $prefix:$district .

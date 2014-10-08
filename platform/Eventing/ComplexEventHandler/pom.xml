@@ -49,8 +49,13 @@
 
     <packaging>bundle</packaging>
 
+<<<<<<< HEAD
     <name>LinkSmart Service - ComplexEventHandler</name>
     <description>LinkSmart service description - CHANGE THIS</description>
+=======
+    <name>ComplexEventHandler</name>
+   
+>>>>>>> dc3a81a8fbabeca60d2457ef82467d183c7e597f
 
     <build>
         <plugins>

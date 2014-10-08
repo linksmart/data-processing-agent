@@ -78,12 +78,7 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.2</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>it.ismb.pertlab.pwal.driver</groupId> -->
-		<!-- <artifactId>BluetoothThermometerDriver</artifactId> -->
-		<!-- <version>0.0.1</version> -->
-		<!-- </dependency> -->
-		<dependency>
+<!--		<dependency>
 		<groupId>it.ismb.pertlab.pwal</groupId>
 		<artifactId>6LowPanManager</artifactId>
 		<version>0.0.1</version>
@@ -92,13 +87,13 @@
 		<groupId>it.ismb.pertlab.pwal</groupId>
 		<artifactId>bluetoothmanager</artifactId>
 		<version>0.0.1</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>it.ismb.pert.pwal</groupId>
 			<artifactId>smartsantander-manager</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>it.ismb.pertlab.pwal</groupId>
 			<artifactId>xivelymanager</artifactId>
 			<version>0.0.1</version>
@@ -107,6 +102,21 @@
 			<groupId>it.ismb.pertlab.pwal</groupId>
 			<artifactId>serialmanager</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>-->
+		<dependency>
+			<groupId>it.ismb.pertlab.pwal</groupId>
+			<artifactId>etsi-m2m-manager</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>it.ismb.pertlab.pwal</groupId>
+			<artifactId>pusher.mqtt</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>it.ismb.pertlab.pwal</groupId>
+			<artifactId>wastebinsimulator</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 

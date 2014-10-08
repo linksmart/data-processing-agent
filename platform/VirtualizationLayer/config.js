@@ -6,57 +6,55 @@
 			for the ALMANAC European project http://www.almanac-project.eu
 */
 
-var IS_LOCAL_IOT_WEEK = false,
-	hosts = {
-		'storageCloud': {	//Public Storage Manager cloud
-			headers: {
-				host: 'energyportal.cnet.se',
-			},
-			host: 'energyportal.cnet.se',
-			path: '/StorageManagerCloud/REST',
+var hosts = {
+		virtualizationLayerPublic: {	//Public IP of this Virtualization Layer, if any
+			scheme: 'http',
+			host: 'almanac.alexandra.dk',
 			port: 80,
 		},
-		'storageLocal': {	//Local Storage Manager at IoT-week
-			headers: {
-				host: '192.168.1.30',
-			},
-			host: '192.168.1.30',	//Static IP for IoT-week
-			path: '/StorageManagerLocal/REST',
+		virtualizationLayer: {
+			scheme: 'http',
+			host: 'localhost',
 			port: 80,
 		},
-		'virtualPublic': {	//Public Virtualization Layer
-			host: 'p2.alapetite.dk',
-			port: 8080,
-		},
-		'virtualLocal': {	//Local Virtualization Layer at IoT-week
-			host: '127.0.0.1',
-			port: 8080,
-		},
-		'virtualTunnel': {	//Virtualization Layer for IoT-week through SSH tunnel
+		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
+		networkManager: {
 			host: 'localhost',
 			port: 8082,
 		},
-		'scralPublic': {	//Public example of SCRAL
-			headers: {
-				host: '130.192.85.162:8080',
-			},
-			host: '130.192.85.162',
-			path: '/connectors.rest-0.2.1',
-			port: 8080,
+		mqttBroker: {
+			host: 'localhost',
+			port: 1883,
 		},
-		'santanderPublic': {	//Public SmartSantander instance cloud
-			headers: {
-				host: 'data.smartsantander.eu',
-			},
-			host: 'data.smartsantander.eu',
-			path: '/ISMB',
+		storageCloud: {	//Public Storage Manager cloud
+			host: 'energyportal.cnet.se',
 			port: 80,
+			path: '/StorageManagerCloud/REST/',
 		},
+		storage: {	//Local Storage Manager
+			host: '192.168.1.30',
+			port: 80,
+			path: '/StorageManagerLocal/REST/',
+		},
+		scral: {
+			host: '130.192.86.227',
+			port: 8080,
+			path: '/connectors.rest-0.2.0/',
+		},
+		santander: {	//Public SmartSantander instance cloud
+			host: 'data.smartsantander.eu',
+			port: 80,
+			path: '/ISMB/',
+		},
+		virtualizationLayerPeers: [	//Temporary manual peering while waiting for deployments using the NetworkManager
+			'http://almanac.alexandra.dk/',	//Alexandra Institute (Ubuntu)
+			'http://p2.alapetite.dk:8080/',	//Alexandra Institute (Raspberry Pi)
+			'http://130.192.86.227:8088/',	//ISMB
+		],
 	};
 
-hosts.masterStorageManager = IS_LOCAL_IOT_WEEK ? hosts.storageLocal : hosts.storageCloud;
-hosts.masterVirtualizationLayer = IS_LOCAL_IOT_WEEK ? hosts.virtualLocal : hosts.virtualPublic;
-hosts.slaveVirtualizationLayer = null;	//IS_LOCAL_IOT_WEEK ? hosts.virtualPublic : hosts.virtualTunnel;
+hosts.masterStorageManager = hosts.storageCloud;
+hosts.slaveVirtualizationLayer = null;
 
 exports.config = {
 	hosts: hosts,

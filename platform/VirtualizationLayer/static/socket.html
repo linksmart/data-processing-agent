@@ -27,16 +27,20 @@ socket.on('chat', function(msg) {
 		}
 	});
 
-socket.on('DM', function(msg) {
+socket.on('DM', function(json) {
 		var messages = document.getElementById('messages'),
 			li = document.createElement('li');
 		if (messages) {
-			try {
-				var json = JSON.parse(msg.body);
-				li.textContent = 'Valid JSON: ' + JSON.stringify(json) + ' ; posted to: ' + msg.url + ' ; with headers: ' + JSON.stringify(msg.headers);
-			} catch (e) {
-				li.textContent = 'Invalid JSON: ' + msg.body + ' ; posted to: ' + msg.url;
-			}
+			li.textContent = 'DM: ' + JSON.stringify(json);
+			messages.appendChild(li);
+		}
+	});
+
+socket.on('mqtt', function(json) {
+		var messages = document.getElementById('messages'),
+			li = document.createElement('li');
+		if (messages) {
+			li.textContent = 'MQTT: ' + JSON.stringify(json);
 			messages.appendChild(li);
 		}
 	});

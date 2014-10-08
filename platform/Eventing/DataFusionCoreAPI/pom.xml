@@ -16,8 +16,13 @@
 
     <packaging>bundle</packaging>
 
+<<<<<<< HEAD
     <name>OSGi Component - DataFusion Core APIs</name>
     <description>OSGi Component description - Describe the APIs of needed in the internal logic</description>
+=======
+    <name>DataFusionCoreAPI</name>
+    
+>>>>>>> dc3a81a8fbabeca60d2457ef82467d183c7e597f
 
     <build>
         <plugins>

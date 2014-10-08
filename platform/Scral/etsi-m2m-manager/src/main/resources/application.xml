@@ -1,0 +1,21 @@
+<xml>
+    <application appid="http://m2mtilab.dtdns.net/etsi/almanac/applications/water">
+        <accessRightID>http://m2mtilab.dtdns.net/etsi/almanac/applications/water/accessRights/AR</accessRightID>
+        <searchStrings>
+            <searchString>water</searchString>
+            <searchString>da</searchString>
+        </searchStrings>
+        <creationTime>2014-05-08T09:37:25</creationTime>
+        <lastModifiedTime>2014-05-08T09:37:25</lastModifiedTime>
+        <announceTo>
+            <active>FALSE</active>
+            <sclList></sclList>
+        </announceTo>
+        <referencePoint>DIA_REFERENCE_POINT</referencePoint>
+        <containersReference>http://m2mtilab.dtdns.net/etsi/almanac/applications/water/containers</containersReference>
+        <groupsReference>http://m2mtilab.dtdns.net/etsi/almanac/applications/water/groups</groupsReference>
+        <accessRightsReference>http://m2mtilab.dtdns.net/etsi/almanac/applications/water/accessRights</accessRightsReference>
+        <subscriptionsReference>http://m2mtilab.dtdns.net/etsi/almanac/applications/water/subscriptions</subscriptionsReference>
+        <notificationChannels>http://m2mtilab.dtdns.net/etsi/almanac/applications/water/notificationChannels</notificationChannels>
+    </application>
+</xml>
