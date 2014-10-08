@@ -16,6 +16,11 @@ module.exports = function (almanac) {
 
 	almanac.peering = {
 		mqttPeering: function (topic, message) {
+			if (!message) {
+				message = {};
+			}
+			message.mqttTopic = topic;
+
 			function postToPeer(peer) {
 				almanac.request.post({
 						url: peer + 'mqttPeering/',

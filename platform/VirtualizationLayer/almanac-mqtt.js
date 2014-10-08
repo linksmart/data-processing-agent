@@ -19,6 +19,10 @@ module.exports = function (almanac) {
 		console.log('MQTT: ' + topic + ': ' + message);
 
 		almanac.peering.mqttPeering(topic, message);	//Peering with other VirtualizationLayers
+
+		if (topic && (topic.indexOf('/iotentity/') > 0)) {	//Temporary forward to StorageManager, which does not listens to MQTT yet
+			almanac.storageManager.postMqttEvent(topic, message);
+		}
 	});
 
 	almanac.mqttClient.subscribe('/almanac/#');

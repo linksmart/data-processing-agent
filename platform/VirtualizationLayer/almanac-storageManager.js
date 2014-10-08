@@ -11,6 +11,24 @@ var xmlWriter = require('xml-writer'),
 
 module.exports = function (almanac) {
 
+	almanac.storageManager = {
+		postMqttEvent: function (topic, message) {	//Forward an MQTT event over HTTP POST to the StorageManager
+			message.mqttTopic = topic;
+			almanac.request.post({
+					url: almanac.config.hosts.masterStorageManager.scheme + '://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + '/IoTEntities',
+					json: true,
+					body: message,
+					timeout: 4000,
+				}, function (error, response, body) {
+					if (error || response.statusCode != 200) {
+						console.warn('MQTT event forwarded to StorageManager');
+					} else {
+						console.log('Error forwarding MQTT event to StorageManager!');
+					}
+				});
+		}
+	};
+
 	function proxyDataManagement(req, res) {
 
 		if (req.method === 'POST') {
