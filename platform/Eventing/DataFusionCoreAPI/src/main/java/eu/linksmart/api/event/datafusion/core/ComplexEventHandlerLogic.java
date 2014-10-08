@@ -31,7 +31,7 @@ public interface ComplexEventHandlerLogic {
      * @return <code>true</code> if the query was deployed successfully. <code>false</code> otherwise.
      *
      * */
-    public boolean  addHandler(String name, String query, String topic);
+    public boolean  addHandler(String name, String query, String[] topic);
 
     /// Temporal
     public boolean pauseQuery(String name);

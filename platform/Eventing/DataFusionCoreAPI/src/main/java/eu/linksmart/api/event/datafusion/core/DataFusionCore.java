@@ -23,7 +23,7 @@ public interface DataFusionCore {
 	 * @return <code>true</code> if the query was deployed successfully. <code>false</code> otherwise.
 	 *
 	 * */
-	public boolean addQuery(String name, Object query, String topic);
+	public boolean addQuery(String name, Object query, String[] topic);
 	/// Temporal
 	public boolean pauseQuery(String name);
 	/// Temporal

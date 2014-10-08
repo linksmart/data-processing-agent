@@ -1,6 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
-import java.util.Map;
+import eu.almanac.event.datafusion.utils.IoTEntityEvent;
+
 /**
  * 
  * The DF wrapper is an Interface . The Interface provide API in which the several engines connect to the Almanac framework. 
@@ -26,13 +27,13 @@ public interface DataFusionWrapper {
 	public String getName();
 	/**
 	 * Add send and event to the CEP engine 
-	 * 
-	 * @param topic where the event was published
-	 * @param parts is the event itself. A map of values and values names
+	 *
+	 * @param event is the event itself. A map of values and values names
 	 * 
 	 * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addEvent(String topic, Map<String, Object> parts);
+	public boolean addEvent(String topic, IoTEntityEvent event);
+
 	/**
 	 * Configure a particular type in the engine.
 	 * 
@@ -63,20 +64,18 @@ public interface DataFusionWrapper {
 	 * 
 	 * NOTE: currently there is no abstract data fusion language, therefore the query sent is a engine specific, this will change along with this function!
 	 * 
-	 * @param name which reference the query
-	 * @param query to be implemented in the CEP engine. <p>
-	 * @param topic which the query will query  
+	 * @param query to add in the engine
 	 * 
 	 * @return <code>true</code> if the query is successfully deployed in the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addQuery(String name, String query, String topic);
-	
-	/// Temporar
-	public boolean puseQuery(String name);
+	public boolean addQuery( Query query);
 
-	/// Temporar
+	/// Temporal
+	public boolean pauseQuery(String name);
+
+	/// Temporal
 	public boolean startQuery(String name);
 
-	/// Temporar
+	/// Temporal
 	public boolean removeQuery(String name);
 }
