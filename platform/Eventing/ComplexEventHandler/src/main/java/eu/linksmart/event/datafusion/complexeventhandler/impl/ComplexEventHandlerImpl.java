@@ -8,6 +8,7 @@ import eu.linksmart.api.event.datafusion.core.ComplexEventHandlerLogic;
 import eu.linksmart.network.*;
 import eu.linksmart.network.networkmanager.NetworkManager;
 import eu.linksmart.utils.Part;
+import org.apache.felix.scr.annotations.*;
 import org.apache.log4j.Logger;
 import org.osgi.service.component.ComponentContext;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 
 /**
  * Implementation of {@link ComplexEventHandler} and {@link ComplexEventHandlerLogic}. <p>
- * This implementation is a {@link LinkSmartService}.
+ * This implementation is a LinkSmart Service
  * 
  * 
  * @author José Ángel Carvajal Soto
@@ -27,34 +28,54 @@ import java.util.Map;
  * @since       0.01
  * @see ComplexEventHandler
  * @see ComplexEventHandlerLogic
- * @see LinkSmartService
  * 
  * 
  * */
+
+@Component(name="ComplexEventHandler")
+@Service
 public class ComplexEventHandlerImpl implements ComplexEventHandler, ComplexEventHandlerLogic {
 
 
 	/// Location of the publication wrapper EventBrokerManager
-	private EventPublicationWrapper publicationWrapper;
-	
+    @Reference(name="DataFusionWrapper",
+            cardinality = ReferenceCardinality.MANDATORY_UNARY,
+            bind="bindDFWraper",
+            unbind="unbindDFWraper",
+            policy= ReferencePolicy.DYNAMIC)
+    DataFusionWrapper dummy;
+
+    @Reference(name="EventPublicationWrapper",
+            cardinality = ReferenceCardinality.MANDATORY_UNARY,
+            bind="bindWrapper",
+            unbind="unbindWrapper",
+            policy= ReferencePolicy.DYNAMIC)
+    private EventPublicationWrapper publicationWrapper;
 	/// Subscribed wrappers in the handler 
-	private ArrayList<DataFusionWrapper> dfWrappers;
+	private ArrayList<DataFusionWrapper> dfWrappers = null;
 	
 	/// Buffer of queries. The buffer is for the DFWrappers who come after a query was added into this handler. 
-	private Map<String,String> queries;
+	private Map<String,String> nameQuery= null;
+    private Map<String,String[]> nameTopics= null;
 
 	/// Buffer of responses. The buffer storage the responses of the CEP engine/s till the EventBroker is available. 
-	private ArrayList<ResponseSet> queuedResponse;
+	private ArrayList<ResponseSet> queuedResponse= null;
 			
 	/**
-	 *  @see LinkSmartService
 	 *  
 	 * */
 	protected boolean init() {
-		
-		dfWrappers = new  ArrayList<DataFusionWrapper>();
-		queries = new  Hashtable<String, String>();
-		queuedResponse = new ArrayList<ResponseSet>();
+		if(dfWrappers == null)
+		    dfWrappers = new  ArrayList<DataFusionWrapper>();
+
+        if(nameQuery == null)
+            nameQuery = new  Hashtable<String, String>();
+
+        if(nameTopics == null)
+            nameTopics = new  Hashtable<String, String[]>();
+
+        if(queuedResponse == null)
+		    queuedResponse = new ArrayList<ResponseSet>();
 
 		
 		
@@ -66,8 +87,9 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler, ComplexEven
 	 * 
 	 * */
 	protected synchronized void bindWrapper(EventPublicationWrapper wrapper) {
+        System.out.println("HOLA: bindWrapper!");
 		publicationWrapper = wrapper;
-		publicationWrapper.findEventManager(SERVICE_ID, "EventManager:HMI2014");
+		publicationWrapper.findEventManager(SERVICE_ID, "tcp://localhost:1883");
 		
 		
 	}
@@ -78,18 +100,31 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler, ComplexEven
 	 * */
 	protected synchronized void unbindWrapper(EventPublicationWrapper wrapper) {
 		//TODO: handle case when the Wrapper unbind
+        System.out.println("HOLA!");
+
 		
 	}
+    protected synchronized void bindDFWraper(DataFusionWrapper dfw){
+        this.dataFusionWrapperSignIn(dfw);
+    }
+    protected synchronized void unbindDFWraper(DataFusionWrapper dfw){
+        this.dataFusionWrapperSignIn(dfw);
+
+    }
 	/**
 	 *  @see ComplexEventHandlerLogic
 	 *  
 	 * */
 	@Override
-	public boolean addHandler(String name, String query, String topic) {
+	public boolean addHandler(String name, String query, String[] topics) {
 		// TODO Auto-generated method stub
 		for (DataFusionWrapper i: dfWrappers)
-			i.addQuery(name, query,topic);
-		queries.put(topic,query);
+			i.addQuery(name, query,topics);
+
+        if (dfWrappers.isEmpty()) {
+            nameQuery.put(name, query);
+            nameTopics.put(name, topics);
+        }
 		
 		
 		return true;
@@ -100,13 +135,27 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler, ComplexEven
 	 * */
 	@Override
 	public boolean dataFusionWrapperSignIn(DataFusionWrapper dfw) {
-		
+
+        if(dfWrappers == null)
+            dfWrappers = new  ArrayList<DataFusionWrapper>();
+
+        if(nameQuery == null)
+            nameQuery = new  Hashtable<String, String>();
+
+        if(nameTopics == null)
+            nameTopics = new  Hashtable<String, String[]>();
+
+        if(queuedResponse == null)
+            queuedResponse = new ArrayList<ResponseSet>();
+
+        System.out.println("HOLA: dataFusionWrapperSignIn!");
 		boolean ret = dfWrappers.add(dfw);
 		
-		for(String i: queries.keySet())
-			dfw.addQuery(i,queries.get(i),i);
-			
-		
+		for(String i: nameQuery.keySet()) {
+            dfw.addQuery(i, nameQuery.get(i), nameTopics.get(i));
+            nameQuery.remove(i);
+            nameTopics.remove(i);
+        }
 		return ret;
 	}
 	/**
@@ -161,7 +210,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler, ComplexEven
 	 * */
 	@Override
 	public boolean dataFusionWrapperSignOut(DataFusionWrapper dfw) {
-		
+        System.out.println("HOLA!");
 		return dfWrappers.remove(dfw);
 	}
 	/// =======================================================================================================================
@@ -169,12 +218,18 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler, ComplexEven
 
 	protected Logger LOG = Logger.getLogger(this.getClass().getName());
 	protected ComponentContext context;
-	protected NetworkManager networkManager;
+    @Reference(name="NetworkManager",
+            cardinality = ReferenceCardinality.MANDATORY_UNARY,
+            bind="bindNet",
+            unbind="unbindNet",
+            policy= ReferencePolicy.DYNAMIC)
+    protected NetworkManager networkManager;
 	public final String SERVICE_ID = this.getClass().getSimpleName();
 	protected String backbone;
 	protected VirtualAddress myVirtualAddress;
-	
+    @Activate
 	protected void activate(ComponentContext context) throws Exception {
+        System.out.println("HOLA activate handler!");
 		this.context = context;
 		
 		if (!init())
@@ -183,7 +238,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler, ComplexEven
 		registerService();
 	
 	}
-	
+    @Deactivate
 	protected void deactivate(ComponentContext context) throws Exception {
 		//TODO: deregistration in the NM.
 		

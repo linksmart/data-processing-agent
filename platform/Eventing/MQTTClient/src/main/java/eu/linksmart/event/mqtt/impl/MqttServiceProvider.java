@@ -1,7 +1,9 @@
 package eu.linksmart.event.mqtt.impl;
 
 import com.google.gson.Gson;
-import eu.linksmart.api.event.*;
+import eu.linksmart.api.event.EventPublicationWrapper;
+import eu.linksmart.api.event.EventSubscriber;
+import eu.linksmart.api.event.EventSubscriptionWrapper;
 import eu.linksmart.network.Registration;
 import eu.linksmart.network.ServiceAttribute;
 import eu.linksmart.network.VirtualAddress;
@@ -27,7 +29,6 @@ public class MqttServiceProvider implements EventSubscriptionWrapper, EventPubli
 
 
     Map<String,MqttClient> clients;
-
 
     protected boolean init() {
         clients = new Hashtable<String,MqttClient>();
@@ -58,6 +59,8 @@ public class MqttServiceProvider implements EventSubscriptionWrapper, EventPubli
         // Create a new connection
         if(!clients.containsKey(clientId)){
 
+            if (brokerPID == "")
+                brokerPID = "tcp://localhost:1883";
             clients.put(clientId, connect(clientId, brokerPID) );
 
         }
@@ -117,14 +120,17 @@ public class MqttServiceProvider implements EventSubscriptionWrapper, EventPubli
     @Override
     public void registerCallback(EventSubscriber subscriber,
                                  String serviceID) {
+        clients.get(serviceID).setCallback(new CallBackerImpl(subscriber));
 
-        // TODO Auto-generated method stub
 
     }
     @Override
     public void deregisterCallback(String serviceID) {
-        // TODO Auto-generated method stub
-
+        try {
+            clients.get(serviceID).disconnect();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void subscribeWithTopic(String serviceID, String topic) {
@@ -170,7 +176,8 @@ public class MqttServiceProvider implements EventSubscriptionWrapper, EventPubli
     private NetworkManager networkManager;
     public final String SERVICE_ID = this.getClass().getSimpleName();
     protected String backbone;
-    protected VirtualAddress myVirtualAddress;
+    protected VirtualAddress myVirtualAddressPublicator;
+    protected VirtualAddress myVirtualAddressSubscriber;
 
     @Activate
     protected void activate(ComponentContext context) throws Exception {
@@ -221,8 +228,8 @@ public class MqttServiceProvider implements EventSubscriptionWrapper, EventPubli
 
         String subscriberURL = CXF_SERVICES_PATH + EventPublicationWrapper.class.getSimpleName();
         // Save HID associated to service ID
-        myVirtualAddress = createService(subscriberURL, EventPublicationWrapper.class.getSimpleName());
-        //subscriberHIDs.put(DataFusionCore.class.getName(), virtualAddress);
+        myVirtualAddressPublicator = createService(subscriberURL, EventPublicationWrapper.class.getSimpleName());
+
 
         // Publish as Web Service
         Hashtable props = new Hashtable();
@@ -230,6 +237,20 @@ public class MqttServiceProvider implements EventSubscriptionWrapper, EventPubli
         props.put("service.exported.configs", "org.apache.cxf.ws");
         props.put("org.apache.cxf.ws.address", subscriberURL);
         context.getBundleContext().registerService(	EventPublicationWrapper.class.getName(), this, props);
+
+        subscriberURL = CXF_SERVICES_PATH + EventSubscriptionWrapper.class.getSimpleName();
+
+        myVirtualAddressSubscriber = createService(subscriberURL, EventSubscriptionWrapper.class.getSimpleName());
+
+
+        // Publish as Web Service
+       props = new Hashtable();
+        props.put("service.exported.interfaces", "*");
+        props.put("service.exported.configs", "org.apache.cxf.ws");
+        props.put("org.apache.cxf.ws.address", subscriberURL);
+        context.getBundleContext().registerService(	EventSubscriptionWrapper.class.getName(), this, props);
+        //subscriberHIDs.put(DataFusionCore.class.getName(), virtualAddress);
+
     }
 
     protected synchronized void bindNet(NetworkManager nm) {
@@ -241,7 +262,9 @@ public class MqttServiceProvider implements EventSubscriptionWrapper, EventPubli
     }
     protected synchronized void unbindNet(NetworkManager nm) {
         try {
-            networkManager.removeService(myVirtualAddress);
+            networkManager.removeService(myVirtualAddressPublicator);
+
+            networkManager.removeService(myVirtualAddressSubscriber);
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

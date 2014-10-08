@@ -1,15 +1,14 @@
 package eu.linksmart.event.datafusion.esper.impl;
 
 
-
 public class EsperQuery  {
 	private final String name;
-	private final String topic;
+	private final String[] topics;
 	private final String query;
 	
-	public EsperQuery(String name,String query, String topic){
+	public EsperQuery(String name,String query, String[] topics){
 	 this.name= name;
-	 this.topic = topic;
+	 this.topics = topics;
 	 this.query = query;
 	}
 
@@ -19,9 +18,9 @@ public class EsperQuery  {
 	}
 
 	
-	public String getTopic() {
+	public String[]  getTopic() {
 		// TODO Auto-generated method stub
-		return topic;
+		return topics;
 	}
 
 	

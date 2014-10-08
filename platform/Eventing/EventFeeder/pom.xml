@@ -9,7 +9,7 @@
             <artifactId>eu.linksmart.api.network</artifactId>
             <version>2.2.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
+      <dependency>
             <groupId>eu.linksmart</groupId>
             <artifactId>eu.linksmart.api.networkmanager</artifactId>
             <version>2.2.0-SNAPSHOT</version>
@@ -17,20 +17,50 @@
 
         <dependency>
             <groupId>eu.linksmart</groupId>
-            <artifactId>eu.linksmart.api.event.datafusion</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart</groupId>
             <artifactId>eu.linksmart.api.event.datafusion.core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>eu.linksmart</groupId>
             <artifactId>eu.linksmart.api.event</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>eu.linksmart</groupId>
+            <artifactId>eu.linksmart.event.wrapper.mqtt</artifactId>
+            <version>2.2.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.linksmart</groupId>
+            <artifactId>eu.linksmart.api.event.datafusion</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.3.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+
     </dependencies>
+
 
     <parent>
         <groupId>eu.linksmart</groupId>
@@ -38,14 +68,14 @@
         <version>2.2.0-SNAPSHOT</version>
     </parent>
 
-
     <artifactId>eu.linksmart.event.datafusion.eventfeeder</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>eu.linksmart</groupId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <packaging>bundle</packaging>
 
-    <name>LinkSmart Service - CHANGE THIS</name>
-    <description>LinkSmart service description - CHANGE THIS</description>
+    <name>LinkSmart Service - EventFeeder</name>
+    <description>LinkSmart Service description -Bundle in charge of feed de CEP Engines</description>
 
     <build>
         <plugins>
@@ -55,9 +85,35 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>eu.linksmart.event.datafusion.eventfeeder</Bundle-SymbolicName>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                     </instructions>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>/test/deploy</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
