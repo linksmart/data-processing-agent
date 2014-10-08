@@ -12,7 +12,9 @@ module.exports = function (almanac) {
 			var remoteAddress = socket.remoteAddress;	//To populate ._peername https://github.com/joyent/node/blob/03e9f84933fe610b04b107cf1f83d17485e8906e/lib/net.js#L563
 		});
 
-	almanac.webSocket = require('socket.io')(almanac.server);
+	almanac.webSocket = require('socket.io')(almanac.server, {
+			path: '/socket.io',
+		});
 
 	var ioClients = {},
 		ioSockets = {};

@@ -25,7 +25,7 @@ module.exports = function (almanac) {
 					if (error || response.statusCode != 200) {
 						console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' forwarding MQTT event to StorageManager!');
 					} else {
-						console.log('MQTT event forwarded to StorageManager: ');
+						console.log('MQTT event forwarded to StorageManager ' + JSON.stringify({query: json, response: response}));
 					}
 				});
 		}
@@ -117,7 +117,6 @@ module.exports = function (almanac) {
 				headers: {
 					'Accept': 'application/json',
 					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
-					'Connection': 'close',
 				}
 			}, function(res2) {
 				var body = '';
@@ -191,7 +190,6 @@ module.exports = function (almanac) {
 				headers: {
 					'Accept': 'application/json',
 					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
-					'Connection': 'close',
 				}
 			}, function(res2) {
 				var body = '';
@@ -266,7 +264,6 @@ module.exports = function (almanac) {
 				headers: {
 					'Accept': 'application/json',
 					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
-					'Connection': 'close',
 				}
 			}, function(res2) {
 				var body = '';
