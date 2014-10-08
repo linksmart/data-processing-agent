@@ -15,7 +15,7 @@ module.exports = function (almanac) {
 		postMqttEvent: function (topic, message) {	//Forward an MQTT event over HTTP POST to the StorageManager
 			message.mqttTopic = topic;
 			almanac.request.post({
-					url: almanac.config.hosts.masterStorageManager.scheme + '://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + '/IoTEntities',
+					url: almanac.config.hosts.masterStorageManager.scheme + '://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + 'IoTEntities',
 					json: true,
 					body: message,
 					timeout: 4000,
