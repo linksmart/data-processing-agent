@@ -21,9 +21,9 @@ module.exports = function (almanac) {
 					timeout: 4000,
 				}, function (error, response, body) {
 					if (error || response.statusCode != 200) {
-						console.warn('MQTT event forwarded to StorageManager');
+						console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' forwarding MQTT event to StorageManager!');
 					} else {
-						console.log('Error forwarding MQTT event to StorageManager!');
+						console.log('MQTT event forwarded to StorageManager');
 					}
 				});
 		}
