@@ -1,0 +1,33 @@
+{
+  "About":"_239d094b-7d77-3f32-8f43-7079a5634af3",
+  "Meta":[
+    {
+      "Value":"Xively",
+      "property":"almanac:networkType"
+    },
+    {
+      "Value":"4.412633 50.813979",
+      "property":"geo:point"
+    }
+  ],
+  "Name":"488920744##fillLevel",
+  "Properties":[
+    {
+      "About":"488920744##fillLevel:SimpleFillLevelSensor:getLevel",
+      "DataType":"java.lang.Double",
+      "Name":"Level value",
+      "TypeOf":[
+        "almanac:SimpleFillLevelSensor:getLevel"
+      ],
+      "UnitOfMeasurement":{
+        "TypeOf":[
+          "Level value"
+        ],
+        "property":"%"
+      }
+    }
+  ],
+  "TypeOf":[
+    "SimpleFillLevelSensor"
+  ]
+}
