@@ -75,13 +75,13 @@ module.exports = function (almanac) {
 					coordinates = [];
 				for (var i = 0; i < ioTEntities.length; i++) {
 					var ioTEntity = ioTEntities[i];
-					if (Array.isArray(ioTEntity.Meta) && ioTEntity.Meta[0] && ioTEntity.Meta[0].Value && ioTEntity.Meta[0].property === 'geo:point') {
-						coordinates = ioTEntity.Meta[0].Value.split(' ', 3);
+					if (Array.isArray(ioTEntity.Meta) && ioTEntity.Meta[1] && ioTEntity.Meta[1].Value && ioTEntity.Meta[1].property === 'geo:point') {	//TODO: Do not hard-code `Meta[1]`
+						coordinates = ioTEntity.Meta[1].Value.split(' ', 3);
 						geoJson.features.push({
 							'type': 'Feature',
 							'geometry': {
 								'type': 'Point',
-								'coordinates': [1 * (coordinates[1] || 0), 1 * (coordinates[0] || 0)],	//Reversed order for GeoJSON: longitude, latitude
+								'coordinates': [1 * (coordinates[0] || 0), 1 * (coordinates[1] || 0)],	//GeoJSON: longitude, latitude
 							},
 							'properties': {
 								'name': ioTEntity.Name,
