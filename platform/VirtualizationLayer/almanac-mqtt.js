@@ -20,7 +20,7 @@ module.exports = function (almanac) {
 						topic: topic,
 						body: json,
 					});
-				almanac.storageManager.postMqttEvent(topic, json);	//Temporary forward to StorageManager, which does not listens to MQTT yet
+				//almanac.storageManager.postMqttEvent(topic, json);	//Temporary forward to StorageManager
 				almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 			}
 		} catch (ex) {
@@ -31,14 +31,14 @@ module.exports = function (almanac) {
 	almanac.mqttClient.subscribe('/almanac/#');
 
 	setTimeout(function () {
-			almanac.mqttClient.publish('/almanac/0/chat', JSON.stringify({
-					chat: 'VirtualizationLayer MQTT started',
+			almanac.mqttClient.publish('/almanac/0/info', JSON.stringify({
+					info: 'VirtualizationLayer MQTT started',
 				}));
 		}, 5000);
 
 	setInterval(function () {
-			almanac.mqttClient.publish('/almanac/0/chat', JSON.stringify({
-					chat: 'VirtualizationLayer alive',
+			almanac.mqttClient.publish('/almanac/0/info', JSON.stringify({
+					info: 'VirtualizationLayer alive',
 				}));
 		}, 60000);
 

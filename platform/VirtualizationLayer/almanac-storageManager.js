@@ -35,15 +35,29 @@ module.exports = function (almanac) {
 
 		if (req.method === 'POST') {
 			almanac.webSocket.forwardHttp(req, res, 'DM');	//Forward POST requests to Socket.IO clients (WebSocket)
-		}
 
-		req.pipe(almanac.request.get('http://' + almanac.config.hosts.masterStorageManager.host +
+			req.pipe(almanac.request.post('http://' + almanac.config.hosts.masterStorageManager.host +
 			':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
 			function (error, response, body) {
-				if (error) {
-					almanac.basicHttp.serve500(req, res, 'Error proxying to DataManagement!');
+				if (error || response.statusCode != 200) {
+					console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' proxying to StorageManager!');
+					almanac.basicHttp.serve500(req, res, 'Error proxying to StorageManager!');
+				} else {
+					console.log('POST Request forwarded to StorageManager: ' + JSON.stringify({response: response}));
 				}
 			})).pipe(res);
+		} else {
+			req.pipe(almanac.request.get('http://' + almanac.config.hosts.masterStorageManager.host +
+				':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
+				function (error, response, body) {
+					if (error || response.statusCode != 200) {
+						console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' proxying to StorageManager!');
+						almanac.basicHttp.serve500(req, res, 'Error proxying to StorageManager!');
+					} else {
+						console.log('GET Request forwarded to StorageManager: ' + JSON.stringify({response: response}));
+					}
+				})).pipe(res);
+		}
 	}
 
 	function dmToGeojson(json) {	//Conversion to GeoJSON format (JSON convention for geographic data)

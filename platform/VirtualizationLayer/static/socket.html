@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">
 <head>
 <meta charset="UTF-8" />
-<title>Socket.IO chat | ALMANAC</title>
+<title>Socket.IO viewer | ALMANAC</title>
 <meta name="robots" content="noindex,nofollow" />
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,7 +18,7 @@ form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 
 <script>
 var socket = io();
 
-socket.on('chat', function(msg) {
+socket.on('info', function(msg) {
 		var messages = document.getElementById('messages'),
 			li = document.createElement('li');
 		if (messages) {
@@ -46,7 +46,7 @@ socket.on('mqtt', function(json) {
 	});
 
 function chat(form) {
-	socket.emit('chat', form.m.value);
+	socket.emit('info', form.m.value);
 	form.m.value = '';
 	return false;
 }
