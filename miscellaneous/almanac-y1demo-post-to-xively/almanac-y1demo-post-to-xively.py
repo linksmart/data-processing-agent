@@ -6,7 +6,7 @@ import xml.etree.ElementTree as etree
 from Bin import *
 	
 BINS = {
-	'B': Bin('B','7634658','VSIi8JhrKPAG8gZ2wlfpG4UUqCqXvOIzmYRiqoL90XtVedvH'),
+	'B': Bin('B','561056653','HZr68o7VWYaYbr1NV0YVkwQjPYgQei8UlLkdbCvl7QKnsAzF'),
 	'C': Bin('C','488920744','CwW3flZOE0AS8in6R05wKBCXYcimJ04zWIDBJFrZT5Byy9JF'),
 	'D': Bin('D','675560879','VEAoRaIYPfL8rIjXoNJT5lFpU9TqGYrhWBHnUwB72KR4INda')
 	};	
