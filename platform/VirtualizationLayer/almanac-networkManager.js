@@ -25,9 +25,9 @@ module.exports = function (almanac) {
 			}, function (error, response, body) {
 				if (!error && response.statusCode == 200 && body && body.VirtualAddress) {
 					almanac.virtualAddress = body.VirtualAddress;
-					console.log('Registered in the NetworkManager with VirtualAddress: ' + almanac.virtualAddress);
+					almanac.log.info('VL', 'Registered in the NetworkManager with VirtualAddress: ' + almanac.virtualAddress);
 				} else {
-					console.warn('Cannot register in the NetworkManager! Will try again.');
+					almanac.log.warn('VL', 'Cannot register in the NetworkManager! Will try again.');
 				}
 			});
 	}
@@ -51,12 +51,12 @@ module.exports = function (almanac) {
 						registerInNetworkManager();
 					} else if (!almanac.virtualAddress) {
 						almanac.virtualAddress = virtualAddress;
-						console.log('Already registered in NetworkManager at address: ' + almanac.virtualAddress);
+						almanac.log.info('VL', 'Already registered in NetworkManager at address: ' + almanac.virtualAddress);
 					} else if (almanac.virtualAddress != virtualAddress) {
-						console.error('Inconsistent virtual address in NetworkManager: ' + almanac.virtualAddress + ' != ' + virtualAddress);
+						almanac.log.error('VL', 'Inconsistent virtual address in NetworkManager: ' + almanac.virtualAddress + ' != ' + virtualAddress);
 					}
 				} else {
-					console.warn('Cannot contact the NetworkManager! Will try again.');
+					almanac.log.warn('VL', 'Cannot contact the NetworkManager! Will try again.');
 				}
 			});
 	}
@@ -67,8 +67,11 @@ module.exports = function (almanac) {
 	function proxyNetworkManagerTunnel(req, res) {
 		req.pipe(almanac.request.get('http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/Tunneling/0/' + req.url,
 			function (error, response, body) {
-				if (error) {
-					almanac.basicHttp.serve500(req, res, 'Error proxying to NetworkManager tunneling!');
+				if (error || response.statusCode != 200 || !body) {
+					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' proxying to NetworkManager tunneling!');
+					if (!body) {
+						almanac.basicHttp.serve500(req, res, 'Error proxying to NetworkManager tunneling!');
+					}
 				}
 			})).pipe(res);
 	}

@@ -32,25 +32,25 @@ module.exports = function (almanac) {
 			ioClients[remoteAddress + ':' + remotePort] = socket.id;
 			almanac.webSocket.emit('info', 'Connected ' + ioSockets[socket.id]);
 			socket.emit('info', 'Welcome ' + ioSockets[socket.id]);
-			console.log('Socket.IO: connected ' + ioSockets[socket.id]);
+			almanac.log.info('VL', 'Socket.IO: connected ' + ioSockets[socket.id]);
 
 			socket.on('info', function (msg) {
 					msg = ioSockets[socket.id] + '> ' + msg;
 					almanac.webSocket.emit('info', msg);
-					console.info('Socket.IO: info: ' + msg);
+					almanac.log.verbose('VL', 'Socket.IO: info: ' + msg);
 				});
 
 			socket.on('disconnect', function () {
 					var clientId = ioSockets[socket.id];
 					almanac.webSocket.emit('info', 'Disconnected ' + clientId);
-					console.log('Socket.IO: disconnected ' + clientId);
+					almanac.log.info('VL', 'Socket.IO: disconnected ' + clientId);
 					try {
 						var socketId = ioClients[clientId];
 						delete ioSockets[socket.id];
 						delete ioClients[clientId];
 						delete ioSockets[socketId];
 					} catch (ex) {
-						console.warn('Socket.IO: warning during disconnection: ' + ex);
+						almanac.log.warn('VL', 'Socket.IO: warning during disconnection: ' + ex);
 					}
 				});
 		});
@@ -69,12 +69,12 @@ module.exports = function (almanac) {
 							url: req.url,
 							body: json,
 						});
-					console.info('Peering POST forwarded to WebSocket on room ' + room);
+					almanac.log.verbose('VL', 'Peering POST forwarded to WebSocket on room ' + room);
 				} catch (ex) {
-					console.warn('Error while forwarding POST to WebSocket: ' + ex);
+					almanac.log.warn('VL', 'Error while forwarding POST to WebSocket: ' + ex);
 				}
 			});
 	};
 
-	console.log('Socket.IO: started');
+	almanac.log.info('VL', 'Socket.IO: started');
 };

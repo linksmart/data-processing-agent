@@ -11,8 +11,11 @@ module.exports = function (almanac) {
 	function proxySmartSantander(req, res) {
 		req.pipe(almanac.request.get('http://' + almanac.config.hosts.santander.host + ':' + almanac.config.hosts.santander.port + almanac.config.hosts.santander.path + req.url,
 			function (error, response, body) {
-				if (error) {
-					almanac.basicHttp.serve500(req, res, 'Error proxying to SmartSantander!');
+				if (error || response.statusCode != 200 || !body) {
+					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' proxying to SmartSantander!');
+					if (!body) {
+						almanac.basicHttp.serve500(req, res, 'Error proxying to SmartSantander!');
+					}
 				}
 			})).pipe(res);
 	}

@@ -23,9 +23,9 @@ module.exports = function (almanac) {
 					timeout: 9000,
 				}, function (error, response, body) {
 					if (error || response.statusCode != 200) {
-						console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' forwarding MQTT event to StorageManager!');
+						almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' forwarding MQTT event to StorageManager!');
 					} else {
-						console.info('MQTT event forwarded to StorageManager ' + JSON.stringify({query: json, response: response}));
+						almanac.log.verbose('VL', 'MQTT event forwarded to StorageManager ' + JSON.stringify({query: json, response: response}));
 					}
 				});
 		}
@@ -42,11 +42,13 @@ module.exports = function (almanac) {
 				uri: 'http://' + almanac.config.hosts.masterStorageManager.host +
 					':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
 			}, function (error, response, body) {
-				if (error || response.statusCode != 200) {
-					console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' proxying to StorageManager!');
-					almanac.basicHttp.serve500(req, res, 'Error proxying to StorageManager!');
+				if (error || response.statusCode != 200 || !body) {
+					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' proxying to StorageManager!');
+					if (!body) {
+						almanac.basicHttp.serve500(req, res, 'Error proxying to StorageManager!');
+					}
 				} else if (req.method === 'POST') {
-					console.info('POST request forwarded to StorageManager' + JSON.stringify({response: response}));
+					almanac.log.verbose('VL', 'POST request forwarded to StorageManager' + JSON.stringify({response: response}));
 				}
 			})).pipe(res);
 	}

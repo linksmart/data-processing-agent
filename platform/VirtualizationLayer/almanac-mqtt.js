@@ -12,7 +12,7 @@ module.exports = function (almanac) {
 
 	almanac.mqttClient.on('message', function (topic, message) {
 		try {
-			console.info('MQTT: ' + topic + ': ' + message);
+			almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
 			if (topic && (topic.indexOf('/iotentity') > 0)) {
 				var json = JSON.parse(message);
 				almanac.webSocket.emit('mqtt', {
@@ -24,7 +24,7 @@ module.exports = function (almanac) {
 				almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 			}
 		} catch (ex) {
-			console.warn('MQTT message error: ' + ex);
+			almanac.log.warn('VL', 'MQTT message error: ' + ex);
 		}
 	});
 

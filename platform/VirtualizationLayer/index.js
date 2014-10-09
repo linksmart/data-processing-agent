@@ -12,6 +12,8 @@ var http = require('http'),
 	almanac = require('./almanac.js').almanac;
 
 almanac.version = require('./package.json').version;
+almanac.log = require('npmlog');
+basicHttp.npmlog = almanac.log;
 basicHttp.serverSignature = 'ALMANAC VirtualizationLayer ' + almanac.version + ' / ' + basicHttp.serverSignature;
 almanac.basicHttp = basicHttp;
 almanac.config = config;
@@ -51,12 +53,12 @@ var server = http.createServer(function (req, res) {
 		req.url = reqUrl0;
 		basicHttp.log(req, res);
 	} catch (ex) {
-		console.error('Node.js: Log exception: %s', ex);
+		almanac.log.error('VL', 'Node.js: Log exception: %s', ex);
 	}
 });
 
 server.on('error', function (err) {
-	console.error('Node.js: server error: %s. Check that you can use port %d.', err, config.hosts.virtualizationLayer.port);
+	almanac.log.error('VL', 'Node.js: server error: %s. Check that you can use port %d.', err, config.hosts.virtualizationLayer.port);
 	process.exit(1);
 });
 
@@ -66,4 +68,4 @@ server.listen(config.hosts.virtualizationLayer.port);
 
 almanac.init();
 
-console.log('Node.js: server running ALMANAC Virtualization Layer at %j', server.address());
+almanac.log.info('VL', 'Node.js: server running ALMANAC Virtualization Layer at %j', server.address());
