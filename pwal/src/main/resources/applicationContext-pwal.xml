@@ -44,6 +44,7 @@
 					value="it.ismb.pertlab.pwal.manager.serial.device.WaterPumpFit" />
 			</map>
 		</constructor-arg>
+		<constructor-arg value="COM7"> 
 	</bean> 
 	<bean id="xivelyManager" class="it.ismb.pertlab.pwal.xivelymanager.XivelyManager"/> -->
 	<bean id="m2mManager" class="it.ismb.pertlab.pwal.etsi_m2m_manager.EtsiM2MManager" depends-on="mqttPusher">
