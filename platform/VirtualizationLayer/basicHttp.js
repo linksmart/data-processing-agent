@@ -22,7 +22,7 @@ var basicHttp = {
 
 	log: function (req, res) {
 		console.log('HTTP:\t' + (new Date()).toISOString() + '\t' + req.connection.remoteAddress + '\t' + res.statusCode + '\t"' + req.method + ' ' + req.url + '"\t"' +
-			(req.headers['user-agent'] || '') + '"\t"' + (req.headers['referer'] || '') + '"');
+			(req.headers['user-agent'] || '') + '"');
 	},
 
 	serveHome: function (req, res) {

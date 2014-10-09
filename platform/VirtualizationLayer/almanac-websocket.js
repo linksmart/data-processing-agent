@@ -37,7 +37,7 @@ module.exports = function (almanac) {
 			socket.on('info', function (msg) {
 					msg = ioSockets[socket.id] + '> ' + msg;
 					almanac.webSocket.emit('info', msg);
-					console.log('Socket.IO: info: ' + msg);
+					console.info('Socket.IO: info: ' + msg);
 				});
 
 			socket.on('disconnect', function () {
@@ -69,7 +69,7 @@ module.exports = function (almanac) {
 							url: req.url,
 							body: json,
 						});
-					console.log('Peering POST forwarded to WebSocket on room ' + room);
+					console.info('Peering POST forwarded to WebSocket on room ' + room);
 				} catch (ex) {
 					console.warn('Error while forwarding POST to WebSocket: ' + ex);
 				}

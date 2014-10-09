@@ -27,12 +27,12 @@ module.exports = function (almanac) {
 						url: peer + 'mqttPeering/',
 						json: true,
 						body: json,
-						timeout: 7000,
+						timeout: 9000,
 					}, function (error, response, body) {
 						if (error || !response || response.statusCode != 200) {
 							console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' while forwarding MQTT to ' + peer);
 						} else {
-							console.log('MQTT forwarded to ' + peer);
+							console.info('MQTT forwarded to ' + peer);
 						}
 					});
 			}
@@ -58,7 +58,7 @@ module.exports = function (almanac) {
 				});
 			req.addListener('end', function () {
 					almanac.webSocket.emit('mqtt', JSON.parse(body));	//Forward to Socket.IO clients (WebSocket)
-					console.log('Peering MQTT forwarded to WebSocket');
+					console.info('Peering MQTT forwarded to WebSocket');
 					almanac.basicHttp.serveJson(req, res, {});
 				});
 		}
