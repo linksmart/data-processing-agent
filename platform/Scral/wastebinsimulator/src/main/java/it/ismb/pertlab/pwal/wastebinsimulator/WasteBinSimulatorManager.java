@@ -105,8 +105,8 @@ public class WasteBinSimulatorManager extends PollingDevicesManager<WasteBinSens
 	 */
 	public WasteBinSimulatorManager(String cityModel, String cityModelFile, String cityModelPrefix, String ontologyDir)
 	{
-		String cityModelPath = WasteBinSimulatorManager.class.getClassLoader().getResource(cityModelFile).getPath();
-		String ontologyDirPath = WasteBinSimulatorManager.class.getClassLoader().getResource(ontologyDir).getPath();
+		String cityModelPath = this.getClass().getClassLoader().getResource(cityModelFile).getPath();
+		String ontologyDirPath = this.getClass().getClassLoader().getResource(ontologyDir).getPath();
 		
 		// build the network layer
 		this.networkLayer = new WasteBinNetwork(cityModel,cityModelPath,cityModelPrefix,ontologyDirPath);

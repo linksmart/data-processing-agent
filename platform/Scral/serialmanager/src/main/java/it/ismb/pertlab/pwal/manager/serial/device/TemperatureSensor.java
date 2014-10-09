@@ -7,6 +7,7 @@ import it.ismb.pertlab.pwal.api.devices.model.types.DeviceType;
 import it.ismb.pertlab.pwal.serialmanager.BaseSerialDevice;
 import it.ismb.pertlab.pwal.serialmanager.SerialManager;
 
+//TODO: add events support
 public class TemperatureSensor extends BaseSerialDevice implements Thermometer{
 
 	private String id;
@@ -93,5 +94,19 @@ public class TemperatureSensor extends BaseSerialDevice implements Thermometer{
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    public String getExpiresAt()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 
 }
