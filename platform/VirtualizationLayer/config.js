@@ -27,11 +27,13 @@ var hosts = {
 			port: 1883,
 		},
 		storageCloud: {	//Public Storage Manager cloud
+			scheme: 'http',
 			host: 'energyportal.cnet.se',
 			port: 80,
 			path: '/StorageManagerCloud/REST/',
 		},
 		storage: {	//Local Storage Manager
+			scheme: 'http',
 			host: '192.168.1.30',
 			port: 80,
 			path: '/StorageManagerLocal/REST/',

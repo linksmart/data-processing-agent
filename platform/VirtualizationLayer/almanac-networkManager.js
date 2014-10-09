@@ -27,7 +27,7 @@ module.exports = function (almanac) {
 					almanac.virtualAddress = body.VirtualAddress;
 					console.log('Registered in the NetworkManager with VirtualAddress: ' + almanac.virtualAddress);
 				} else {
-					console.error('Cannot register in the NetworkManager! Will try again.');
+					console.warn('Cannot register in the NetworkManager! Will try again.');
 				}
 			});
 	}

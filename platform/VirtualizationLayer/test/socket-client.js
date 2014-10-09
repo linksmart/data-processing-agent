@@ -11,8 +11,8 @@ socketio.on('disconnect', function() {
 		console.log('Disconnected');
 	});
 
-socketio.on('chat', function(msg) {
-		console.log('Chat: ' + msg);
+socketio.on('info', function(msg) {
+		console.log('Info: ' + msg);
 	});
 
 socketio.on('DM', function(json) {

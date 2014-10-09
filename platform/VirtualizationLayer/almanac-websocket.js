@@ -12,7 +12,9 @@ module.exports = function (almanac) {
 			var remoteAddress = socket.remoteAddress;	//To populate ._peername https://github.com/joyent/node/blob/03e9f84933fe610b04b107cf1f83d17485e8906e/lib/net.js#L563
 		});
 
-	almanac.webSocket = require('socket.io')(almanac.server);
+	almanac.webSocket = require('socket.io')(almanac.server, {
+			path: '/socket.io',
+		});
 
 	var ioClients = {},
 		ioSockets = {};
@@ -28,19 +30,19 @@ module.exports = function (almanac) {
 			}
 			ioSockets[socket.id] = remoteAddress + ':' + remotePort;
 			ioClients[remoteAddress + ':' + remotePort] = socket.id;
-			almanac.webSocket.emit('chat', 'Connected ' + ioSockets[socket.id]);
-			socket.emit('chat', 'Welcome ' + ioSockets[socket.id]);
+			almanac.webSocket.emit('info', 'Connected ' + ioSockets[socket.id]);
+			socket.emit('info', 'Welcome ' + ioSockets[socket.id]);
 			console.log('Socket.IO: connected ' + ioSockets[socket.id]);
 
-			socket.on('chat', function (msg) {
+			socket.on('info', function (msg) {
 					msg = ioSockets[socket.id] + '> ' + msg;
-					almanac.webSocket.emit('chat', msg);
-					console.log('Socket.IO: chat: ' + msg);
+					almanac.webSocket.emit('info', msg);
+					console.info('Socket.IO: info: ' + msg);
 				});
 
 			socket.on('disconnect', function () {
 					var clientId = ioSockets[socket.id];
-					almanac.webSocket.emit('chat', 'Disconnected ' + clientId);
+					almanac.webSocket.emit('info', 'Disconnected ' + clientId);
 					console.log('Socket.IO: disconnected ' + clientId);
 					try {
 						var socketId = ioClients[clientId];
@@ -67,7 +69,7 @@ module.exports = function (almanac) {
 							url: req.url,
 							body: json,
 						});
-					console.log('Peering POST forwarded to WebSocket on room ' + room);
+					console.info('Peering POST forwarded to WebSocket on room ' + room);
 				} catch (ex) {
 					console.warn('Error while forwarding POST to WebSocket: ' + ex);
 				}

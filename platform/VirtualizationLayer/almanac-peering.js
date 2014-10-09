@@ -15,22 +15,24 @@ module.exports = function (almanac) {
 	}
 
 	almanac.peering = {
-		mqttPeering: function (topic, message) {
+		mqttPeering: function (topic, json) {
+			if (!json) {
+				json = {};
+			}
+			json.mqttTopic = topic;
+			json.vlInstance = almanac.config.hosts.virtualizationLayerPublic;
+
 			function postToPeer(peer) {
 				almanac.request.post({
 						url: peer + 'mqttPeering/',
 						json: true,
-						body: {
-							instance: almanac.config.hosts.virtualizationLayerPublic,
-							topic: topic,
-							body: message,
-						},
-						timeout: 7000,
+						body: json,
+						timeout: 9000,
 					}, function (error, response, body) {
 						if (error || !response || response.statusCode != 200) {
 							console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' while forwarding MQTT to ' + peer);
 						} else {
-							console.log('MQTT forwarded to ' + peer);
+							console.info('MQTT forwarded to ' + peer);
 						}
 					});
 			}
@@ -56,7 +58,7 @@ module.exports = function (almanac) {
 				});
 			req.addListener('end', function () {
 					almanac.webSocket.emit('mqtt', JSON.parse(body));	//Forward to Socket.IO clients (WebSocket)
-					console.log('Peering MQTT forwarded to WebSocket');
+					console.info('Peering MQTT forwarded to WebSocket');
 					almanac.basicHttp.serveJson(req, res, {});
 				});
 		}

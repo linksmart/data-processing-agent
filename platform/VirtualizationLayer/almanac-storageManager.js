@@ -11,16 +11,42 @@ var xmlWriter = require('xml-writer'),
 
 module.exports = function (almanac) {
 
+	almanac.storageManager = {
+		postMqttEvent: function (topic, json) {	//Forward an MQTT event over HTTP POST to the StorageManager
+			//json.mqttTopic = topic;
+			//json.vlInstance: almanac.config.hosts.virtualizationLayerPublic,
+			almanac.request.post({
+					url: almanac.config.hosts.masterStorageManager.scheme + '://' + almanac.config.hosts.masterStorageManager.host +
+						':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + 'IoTEntities',
+					json: true,
+					body: json,
+					timeout: 9000,
+				}, function (error, response, body) {
+					if (error || response.statusCode != 200) {
+						console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' forwarding MQTT event to StorageManager!');
+					} else {
+						console.info('MQTT event forwarded to StorageManager ' + JSON.stringify({query: json, response: response}));
+					}
+				});
+		}
+	};
+
 	function proxyDataManagement(req, res) {
 
 		if (req.method === 'POST') {
 			almanac.webSocket.forwardHttp(req, res, 'DM');	//Forward POST requests to Socket.IO clients (WebSocket)
 		}
 
-		req.pipe(almanac.request.get('http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
-			function (error, response, body) {
-				if (error) {
-					almanac.basicHttp.serve500(req, res, 'Error proxying to DataManagement!');
+		req.pipe(almanac.request({
+				method: req.method,
+				uri: 'http://' + almanac.config.hosts.masterStorageManager.host +
+					':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
+			}, function (error, response, body) {
+				if (error || response.statusCode != 200) {
+					console.warn('Error ' + (response ? response.statusCode : 'undefined') + ' proxying to StorageManager!');
+					almanac.basicHttp.serve500(req, res, 'Error proxying to StorageManager!');
+				} else if (req.method === 'POST') {
+					console.info('POST request forwarded to StorageManager' + JSON.stringify({response: response}));
 				}
 			})).pipe(res);
 	}
@@ -96,7 +122,6 @@ module.exports = function (almanac) {
 				headers: {
 					'Accept': 'application/json',
 					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
-					'Connection': 'close',
 				}
 			}, function(res2) {
 				var body = '';
@@ -170,7 +195,6 @@ module.exports = function (almanac) {
 				headers: {
 					'Accept': 'application/json',
 					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
-					'Connection': 'close',
 				}
 			}, function(res2) {
 				var body = '';
@@ -245,7 +269,6 @@ module.exports = function (almanac) {
 				headers: {
 					'Accept': 'application/json',
 					'Host': almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port,
-					'Connection': 'close',
 				}
 			}, function(res2) {
 				var body = '';
