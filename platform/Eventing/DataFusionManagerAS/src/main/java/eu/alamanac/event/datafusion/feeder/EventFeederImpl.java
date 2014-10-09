@@ -20,10 +20,15 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
     private MqttClient client;
     private Gson parser;
     private Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<String, DataFusionWrapper>();
+    private final String DFM_QUERY_TOPIC = "/almanac/dataFusionManager/observation/iotentity";
+    private final String EVENT_TOPIC = "/almanac/observation/#";
+    private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
+    private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
+
 
     public EventFeederImpl(){
         try {
-            client = new MqttClient("tcp://localhost:1883","EsperStandalone3");
+            client = new MqttClient("tcp://130.192.86.227:1883","EsperStandalone3");
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -33,9 +38,9 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
         try {
             client.setCallback(this);
             client.connect();
-            client.subscribe("/almanac/local/observation/ioTEntity/dataFusionManager");
+            client.subscribe(DFM_QUERY_TOPIC);
 
-            client.subscribe("/almanac/local/#");
+            client.subscribe(EVENT_TOPIC);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -82,13 +87,14 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
         System.out.println(topic);
         String msg = new String(mqttMessage.getPayload(),"UTF-8");
 
+
         IoTEntityEvent event =null;
 
         try {
 
             event = parser.fromJson(msg, IoTEntityEvent.class);
 
-            if (topic.equals("/almanac/local/observation/ioTEntity/dataFusionManager")) {
+            if (topic.equals(DFM_QUERY_TOPIC)) {
 
 
                 Query query = new EsperQuery(event);
@@ -107,8 +113,19 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
             }
         }catch (JsonParseException e) {
             // e.printStackTrace();
-            System.out.println("No IoTEvent received instead received :");
-            System.out.println(msg);
+            HashMap<String,String> error = new HashMap<String, String>();
+            error.put("ErrorTopic","JsonParseException");
+            error.put("ErrorTrace",e.getStackTrace().toString());
+            error.put("Message","No IoTEvent received instead received :"+msg);
+
+            try {
+                client.publish(ERROR_TOPIC,parser.toJson(error).getBytes(),0,false);
+
+            }catch (Exception ex){
+                ex.printStackTrace();
+                e.printStackTrace();
+            }
+
             return;
 
         }catch (Exception e){

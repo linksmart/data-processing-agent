@@ -9,21 +9,25 @@ public class EsperQuery implements Query {
     protected String name;
     protected String query;
     protected String[] input;
-
+    protected String[] output;
     protected String[] scope;
 
     public EsperQuery(IoTEntityEvent event){
 
         this.name = event.getProperties("Name").getIoTStateObservation()[0].getValue();
         this.query = event.getProperties("Query").getIoTStateObservation()[0].getValue();
-
+        this.output = new String[event.getProperties("Output").getIoTStateObservation().length];
         this.input = new String[event.getProperties("Input").getIoTStateObservation().length];
         int n=0;
         for (IoTValue i :event.getProperties("Input").getIoTStateObservation() ) {
             this.input[n] = i.getValue();
             n++;
         }
-
+        n=0;
+        for (IoTValue i :event.getProperties("Output").getIoTStateObservation() ) {
+            this.output[n] = i.getValue();
+            n++;
+        }
         this.scope = new String[event.getProperties("Scope").getIoTStateObservation().length];
         n=0;
         for (IoTValue i :event.getProperties("Scope").getIoTStateObservation() ) {
@@ -50,6 +54,11 @@ public class EsperQuery implements Query {
     }
     public String getScope(int index){
         return  scope[index];
+    }
+
+    @Override
+    public String[] getOutput() {
+        return output;
     }
 
 }

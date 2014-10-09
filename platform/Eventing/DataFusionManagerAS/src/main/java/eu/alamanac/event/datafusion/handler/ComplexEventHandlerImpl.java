@@ -13,6 +13,7 @@ import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -25,6 +26,12 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     private IoTEntityEvent response;
     private Gson parser;
     private String dateOfCreation;
+    private Boolean sendPerProperty = false;
+
+    private final String DFM_TOPIC = "/almanac/observation/iotentity/dataFusionManager";
+    private final String EVENT_TOPIC = "/almanac/observation/iotentity";
+    private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
+    private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
 
     public ComplexEventHandlerImpl(Query query) throws RemoteException {
         try {
@@ -44,6 +51,16 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     public void update(Map event) {
 
         try {
+
+            if(event.containsKey((Object)(new String("SetEventPerEntity")))){
+                sendPerProperty = (Boolean)event.get((Object)(new String("SetEventPerEntity")));
+
+                event.remove((Object) (new String("SetEventPerEntity")));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try {
             TimeZone tz = TimeZone.getTimeZone("UTC");
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
             df.setTimeZone(tz);
@@ -56,22 +73,29 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             for(Object key : event.keySet()) {
                 try {
 
-                    IoTEntityEvent ent = (IoTEntityEvent) event.get(key);
+                    if(sendPerProperty){
+                        IoTEntityEvent ent = (IoTEntityEvent) event.get(key);
+                        for(String output : query.getOutput()) {
+                            CEPHandler.publish(output + ent.getAbout(), parser.toJson(ent).getBytes(), 0, false);
+                        }
+                        continue;
+                    }else {
+                        IoTEntityEvent ent = (IoTEntityEvent) event.get(key);
 
-                    if (cepEvent.getProperties("IoTEntities") == null ) {
-                        cepEvent.getProperties(n).setAbout("IoTEntities");
-                        n++;
+                        if (cepEvent.getProperties("IoTEntities") == null) {
+                            cepEvent.getProperties(n).setAbout("IoTEntities");
+                            n++;
+                        }
+
+                        cepEvent.getProperties("IoTEntities").addIoTStateObservation(ent.getAbout(), dateOfCreation, nowAsISO);
+
+                        for (IoTProperty p : ent.getProperties()) {
+
+                            for (IoTValue v : p.getIoTStateObservation())
+                                cepEvent.addProperty(p.getAbout(), 0).addIoTStateObservation(v.getValue(), v.getPhenomenonTime(), v.getResultTime());
+
+                        }
                     }
-
-                    cepEvent.getProperties("IoTEntities").addIoTStateObservation(ent.getAbout(), dateOfCreation, nowAsISO);
-
-                    for(IoTProperty p: ent.getProperties()){
-
-                        for (IoTValue v: p.getIoTStateObservation())
-                            cepEvent.addProperty(p.getAbout(), 0).addIoTStateObservation(v.getValue(),v.getPhenomenonTime(),v.getResultTime());
-
-                    }
-
                     // CEPHandler.publish("/almanac/local/iotentity/dataFusionManager/" + query.getName(), parser.toJson(event).getBytes(), 2, false);
 
                 } catch (Exception eEntity) {
@@ -138,10 +162,30 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
                 }
             }
-            CEPHandler.publish("/almanac/local/observation/iotentity/" + query.getName(), parser.toJson(cepEvent).getBytes(), 0, false);
-
+            for(String output : query.getOutput()) {
+                CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+            }
         } catch (MqttException e) {
             e.printStackTrace();
+        }
+
+    }
+    public void update(IoTEntityEvent event) {
+
+
+        try {
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+            df.setTimeZone(tz);
+            String nowAsISO = df.format(new Date());
+
+            if (!CEPHandler.isConnected())
+                CEPHandler.connect();
+            for (String output : query.getOutput())
+                CEPHandler.publish(output + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
+
+        }catch (Exception e){
+
         }
 
     }
@@ -152,11 +196,17 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             try {
                 if (!CEPHandler.isConnected())
                     CEPHandler.connect();
-                CEPHandler.publish("/almanac/local/errors/string/dataFusionManager/info", errorMessage.getBytes(),0,false);
+
+                HashMap<String,String> error = new HashMap<String, String>();
+                error.put("ErrorTopic","Exception");
+                error.put("Message",errorMessage);
+
+                CEPHandler.publish(ERROR_TOPIC, errorMessage.getBytes(),0,false);
                 return true;
             } catch (MqttException e) {
                 e.printStackTrace();
             }
         return false;
     }
+
 }
