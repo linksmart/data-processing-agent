@@ -142,7 +142,7 @@ public class EsperEngine implements DataFusionWrapper {
             }
 
             String esperTopic = topic.substring(1).replace('/', '.');
-            esperParentTopic = parentTopic.replace('/','.');
+            esperParentTopic = parentTopic.replace('/', '.');
 
             addEsperEvent(esperTopic,topic,event);
 
@@ -274,17 +274,19 @@ public class EsperEngine implements DataFusionWrapper {
 
             String esperTopic;
             queryReady.put(query.getName(), true);
-            for(String topic : query.getInput()){
+            if (query.haveInput()) {
+                for (String topic : query.getInput()) {
 
-                // Adapt the topic to a Esper topic
-                esperTopic = topic.substring(1).replace('/', '.');
+                    // Adapt the topic to a Esper topic
+                    esperTopic = topic.substring(1).replace('/', '.');
 
-                // changing state of the queries this could be made in several places in several threads!
-                synchronized (this) {
+                    // changing state of the queries this could be made in several places in several threads!
+                    synchronized (this) {
 
-                    // if the type of the topic is defined
-                    if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(esperTopic)) {
-                       defineIoTTypes(esperTopic);
+                        // if the type of the topic is defined
+                        if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(esperTopic)) {
+                            defineIoTTypes(esperTopic);
+                        }
                     }
                 }
             }

@@ -162,9 +162,14 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
                 }
             }
-            for(String output : query.getOutput()) {
-                CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
-            }
+            if(query.haveOutput())
+                for(String output : query.getOutput()) {
+                    CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                }
+            else
+                for(String output : query.getOutput()) {
+                    CEPHandler.publish(ERROR_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                }
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -181,9 +186,15 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
             if (!CEPHandler.isConnected())
                 CEPHandler.connect();
-            for (String output : query.getOutput())
-                CEPHandler.publish(output + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
 
+            if(query.haveOutput())
+                for(String output : query.getOutput()) {
+                    CEPHandler.publish(output + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
+                }
+            else
+                for(String output : query.getOutput()) {
+                    CEPHandler.publish(ERROR_TOPIC + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
+                }
         }catch (Exception e){
 
         }

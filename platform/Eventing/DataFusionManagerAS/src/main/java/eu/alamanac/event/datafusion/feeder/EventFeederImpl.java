@@ -2,6 +2,7 @@ package eu.alamanac.event.datafusion.feeder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import eu.alamanac.event.datafusion.core.DataFusionManager;
 import eu.alamanac.event.datafusion.esper.EsperQuery;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
@@ -28,7 +29,8 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
 
     public EventFeederImpl(){
         try {
-            client = new MqttClient("tcp://130.192.86.227:1883","EsperStandalone3");
+           //            client = new MqttClient("tcp://130.192.86.227:1883","EsperStandalone3");
+            client = new MqttClient("tcp://localhost:1883","EsperStandalone3");
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -97,13 +99,14 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
             if (topic.equals(DFM_QUERY_TOPIC)) {
 
 
-                Query query = new EsperQuery(event);
+                try {
+                    Query query = new EsperQuery(event);
 
-
-                if (query != null) {
-                    for (DataFusionWrapper i: dataFusionWrappers.values())
-                        i.addQuery(query);
-                }
+                    if (query != null) {
+                        for (DataFusionWrapper i : dataFusionWrappers.values())
+                            i.addQuery(query);
+                    }
+                }catch (Exception e){}
 
             } else {
 
@@ -112,19 +115,9 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
                 // addEvent(topic,je.getProperties()[0].toMap());
             }
         }catch (JsonParseException e) {
-            // e.printStackTrace();
-            HashMap<String,String> error = new HashMap<String, String>();
-            error.put("ErrorTopic","JsonParseException");
-            error.put("ErrorTrace",e.getStackTrace().toString());
-            error.put("Message","No IoTEvent received instead received :"+msg);
 
-            try {
-                client.publish(ERROR_TOPIC,parser.toJson(error).getBytes(),0,false);
+            DataFusionManager.reportError("JsonParseException", "No IoTEvent received instead received :"+msg, e.getStackTrace().toString());
 
-            }catch (Exception ex){
-                ex.printStackTrace();
-                e.printStackTrace();
-            }
 
             return;
 
