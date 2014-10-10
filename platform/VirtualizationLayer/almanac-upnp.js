@@ -15,7 +15,7 @@ module.exports = function (almanac) {
 			headers.LOCATION && headers.LOCATION !== almanac.recourceCatalogueUrl &&
 			(!almanac.recourceCatalogueUrl || almanac.recourceCatalogueUrl.indexOf('http://127.0.0.1') < 0)) {	//Priority to 127.0.0.1 address
 			almanac.recourceCatalogueUrl = headers.LOCATION;
-			console.log('UPnP: discovered the resource catalogue on ' + almanac.recourceCatalogueUrl);
+			almanac.log.info('VL', 'UPnP: discovered the resource catalogue on ' + almanac.recourceCatalogueUrl);
 			almanac.webSocket.emit('info', 'UPnP: discovered the resource catalogue');
 		}
 	});

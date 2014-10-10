@@ -99,4 +99,18 @@ public class UltrasoundDistanceSensor extends BaseSerialDevice implements Distan
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    public String getExpiresAt()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }

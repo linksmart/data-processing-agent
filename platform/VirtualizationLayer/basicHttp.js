@@ -20,9 +20,16 @@ var basicHttp = {
 
 	serverSignature: 'Node.js ' + process.version + ' / ' + os.type() + ' ' + os.release() + ' ' + os.arch(),
 
+	npmlog: null,
+
 	log: function (req, res) {
-		console.log('HTTP:\t' + (new Date()).toISOString() + '\t' + req.connection.remoteAddress + '\t' + res.statusCode + '\t"' + req.method + ' ' + req.url + '"\t"' +
-			(req.headers['user-agent'] || '') + '"');
+		var message = (new Date()).toISOString() + '\t' + req.connection.remoteAddress + '\t' + res.statusCode + '\t"' + req.method + ' ' + req.url + '"\t"' +
+			(req.headers['user-agent'] || '') + '"';
+		if (basicHttp.npmlog) {
+			basicHttp.npmlog.http('VL', message);
+		} else {
+			console.log('HTTP:\t' + message);
+		}
 	},
 
 	serveHome: function (req, res) {
@@ -137,7 +144,11 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	serve500: function (req, res, ex) {
-		console.warn(ex);
+		if (basicHttp.npmlog) {
+			basicHttp.npmlog.error('VL', ex);
+		} else {
+			console.error(ex);
+		}
 		res.writeHead(500, {
 			'Content-Type': 'text/html; charset=UTF-8',
 			'Date': (new Date()).toUTCString(),

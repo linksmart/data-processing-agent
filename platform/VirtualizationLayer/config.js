@@ -48,10 +48,10 @@ var hosts = {
 			port: 80,
 			path: '/ISMB/',
 		},
-		virtualizationLayerPeers: [	//Temporary manual peering while waiting for deployments using the NetworkManager
-			'http://almanac.alexandra.dk/',	//Alexandra Institute (Ubuntu)
-			'http://p2.alapetite.dk:8080/',	//Alexandra Institute (Raspberry Pi)
-			'http://130.192.86.227:8088/',	//ISMB
+		virtualizationLayerPeers: [	//Manual peering (sends the local MQTT events to other VirtualizationLayers
+			//'http://almanac.alexandra.dk/',	//Alexandra Institute (Ubuntu)
+			//'http://p2.alapetite.dk:8080/',	//Alexandra Institute (Raspberry Pi)
+			//'http://130.192.86.227:8088/',	//ISMB
 		],
 	};
 

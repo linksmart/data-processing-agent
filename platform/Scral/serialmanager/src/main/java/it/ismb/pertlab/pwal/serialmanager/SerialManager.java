@@ -5,7 +5,6 @@ import it.ismb.pertlab.pwal.api.devices.interfaces.Device;
 import it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager;
 import it.ismb.pertlab.pwal.api.devices.model.types.DeviceNetworkType;
 
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import jssc.SerialPort;
@@ -39,32 +37,26 @@ public class SerialManager extends DevicesManager implements
     private Map<String, List<String>> idsPort;
     // Map< device id, object class name>
     private Map<String, String> configuredDevices;
+    //comma separated string with all paths of the serial ports
+    private String portStrings;
 
-    private Properties properties = new Properties();
-    private InputStream input = null;
-
-    // portString is a comma separated string containing the list of ports to be
-    // opened
-    public SerialManager(Map<String, String> props)
+    /***
+     * This constructor create the SerialManager
+     * 
+     * @param props a map with device ids (id_flowSensor...) as key and the complete class name as value
+     * @param serialPorts a comma separated string containing all the serial ports paths (COM7,COM8...)
+     */
+    public SerialManager(Map<String, String> props, String serialPorts)
     {
-        // this.input = new
-        // FileInputStream(this.getClass().getClassLoader().getResource("config.props").getFile());
-        // this.properties.load(this.input);
-        // log.info("Properties file loaded.");
-        // String portStrings = this.properties.getProperty("ports");
-        String portStrings = "COM9,COM6";
-        // String portStrings = "ttyACM0,ttyACM1";
-
-        log.debug("Ports in config file are: {}", portStrings);
+        log.debug("Ports in config file are: {}", serialPorts);
+        this.portStrings = serialPorts;
         String[] ports = portStrings.split(",");
         idsPort = new HashMap<>();
         for (String port : ports)
         {
-            // idsPort.put(port.trim(), new LinkedList<String>());
             idsPort.put(port.trim(),
                     Arrays.asList(props.keySet().toArray(new String[]
                     {})));
-
             queue.put(port, new ArrayBlockingQueue<Byte>(2048));
             queueThreads.put(port, new MessageQueue(queue.get(port), this));
             queueThreads.get(port).start();

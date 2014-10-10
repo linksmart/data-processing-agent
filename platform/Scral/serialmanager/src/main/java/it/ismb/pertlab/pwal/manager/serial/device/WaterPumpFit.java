@@ -89,10 +89,31 @@ public class WaterPumpFit implements WaterPump {
 	}
 
 	@Override
-	public void setVelocity(Double value) {
+	public void setSpeed(Double value) {
 		String message = "*p1=" + value.intValue() + "$x#\n";
 		log.info("Sending {}", message);
 		manager.sendCommand(this.id, message);
 	}
+
+    @Override
+    public String getExpiresAt()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setExpiresAt(String expiresAt)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Double getSpeed()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
