@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
+<!--    <parent>
         <groupId>eu.linksmart</groupId>
         <artifactId>linksmart-osgi-component</artifactId>
         <version>2.2.0-SNAPSHOT</version>
-    </parent>
+    </parent>-->
 
     <groupId>eu.linksmart</groupId>
     <artifactId>eu.linksmart.api.event.datafusion.core</artifactId>
@@ -16,19 +16,18 @@
 
     <packaging>bundle</packaging>
 
-<<<<<<< HEAD
+
     <name>OSGi Component - DataFusion Core APIs</name>
     <description>OSGi Component description - Describe the APIs of needed in the internal logic</description>
-=======
-    <name>DataFusionCoreAPI</name>
-    
->>>>>>> dc3a81a8fbabeca60d2457ef82467d183c7e597f
+
+
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.4.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -36,7 +35,7 @@
                     </instructions>
                 </configuration>
             </plugin>
-            <plugin>
+  <!--          <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.8</version>
@@ -61,7 +60,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
    

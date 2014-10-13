@@ -25,11 +25,11 @@
             <artifactId>esper</artifactId>
             <version>5.0.0</version>
         </dependency>
-        <dependency>
+ <!--       <dependency>
             <groupId>eu.linksmart</groupId>
             <artifactId>eu.linksmart.api.event</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>eu.linksmart</groupId>
             <artifactId>eu.linksmart.api.event.datafusion</artifactId>
