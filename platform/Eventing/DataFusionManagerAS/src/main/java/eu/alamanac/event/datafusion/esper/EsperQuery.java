@@ -3,9 +3,9 @@ package eu.alamanac.event.datafusion.esper;
 import eu.alamanac.event.datafusion.core.DataFusionManager;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.IoTValue;
-import eu.linksmart.api.event.datafusion.Query;
+import eu.linksmart.api.event.datafusion.Statement;
 
-public class EsperQuery implements Query {
+public class EsperQuery implements Statement {
 
     protected String name;
     protected String query;

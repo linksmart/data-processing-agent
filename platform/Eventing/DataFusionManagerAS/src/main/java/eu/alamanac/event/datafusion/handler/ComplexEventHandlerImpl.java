@@ -5,7 +5,7 @@ import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.IoTProperty;
 import eu.almanac.event.datafusion.utils.IoTValue;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
-import eu.linksmart.api.event.datafusion.Query;
+import eu.linksmart.api.event.datafusion.Statement;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -22,7 +22,7 @@ import java.util.TimeZone;
  */
 public class ComplexEventHandlerImpl implements ComplexEventHandler{
     private MqttClient CEPHandler;
-    private final Query query;
+    private final Statement query;
     private IoTEntityEvent response;
     private Gson parser;
     private String dateOfCreation;
@@ -33,7 +33,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
 
-    public ComplexEventHandlerImpl(Query query) throws RemoteException {
+    public ComplexEventHandlerImpl(Statement query) throws RemoteException {
         try {
             this.CEPHandler= new MqttClient("tcp://localhost:1883","list");
         } catch (MqttException e) {

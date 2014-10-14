@@ -7,7 +7,7 @@ import eu.alamanac.event.datafusion.esper.EsperQuery;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.EventFeeder;
-import eu.linksmart.api.event.datafusion.Query;
+import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 import org.eclipse.paho.client.mqttv3.*;
 
@@ -21,16 +21,18 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
     private MqttClient client;
     private Gson parser;
     private Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<String, DataFusionWrapper>();
+    private String BROKER_URL;
     private final String DFM_QUERY_TOPIC = "/almanac/dataFusionManager/observation/iotentity";
     private final String EVENT_TOPIC = "/almanac/observation/#";
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
 
 
-    public EventFeederImpl(){
+    public EventFeederImpl(String broker){
+        BROKER_URL = broker;
         try {
            //            client = new MqttClient("tcp://130.192.86.227:1883","EsperStandalone3");
-            client = new MqttClient("tcp://localhost:1883","EsperStandalone3");
+            client = new MqttClient(BROKER_URL,"EsperStandalone3");
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -100,11 +102,11 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
 
 
                 try {
-                    Query query = new EsperQuery(event);
+                    Statement query = new EsperQuery(event);
 
                     if (query != null) {
                         for (DataFusionWrapper i : dataFusionWrappers.values())
-                            i.addQuery(query);
+                            i.addStatement(query);
                     }
                 }catch (Exception e){}
 

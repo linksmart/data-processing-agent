@@ -17,8 +17,8 @@ public class DataFusionManager {
     static MqttClient errorReporter;
     static String brokerURL = "tcp://localhost:1883";
     public static void main(String[] args) {
-        if(args.length==2)
-            brokerURL = args[1];
+        if(args.length==1)
+            brokerURL = args[0];
 
         try {
             errorReporter = new MqttClient(brokerURL,"errorReporter");
@@ -26,7 +26,7 @@ public class DataFusionManager {
             e.printStackTrace();
         }
         try {
-            EventFeeder feeder = new EventFeederImpl();
+            EventFeeder feeder = new EventFeederImpl(brokerURL);
 
             feeder.dataFusionWrapperSignIn(new EsperEngine());
 

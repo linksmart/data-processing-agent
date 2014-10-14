@@ -2,6 +2,7 @@ package eu.linksmart.api.event.datafusion;
 
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 
+
 /**
  * 
  * The DF wrapper is an Interface . The Interface provide API in which the several engines connect to the Almanac framework. 
@@ -68,14 +69,7 @@ public interface DataFusionWrapper {
 	 * 
 	 * @return <code>true</code> if the query is successfully deployed in the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addQuery( Query query);
+	public boolean addStatement( Statement query);
 
-	/// Temporal
-	public boolean pauseQuery(String name);
 
-	/// Temporal
-	public boolean startQuery(String name);
-
-	/// Temporal
-	public boolean removeQuery(String name);
 }

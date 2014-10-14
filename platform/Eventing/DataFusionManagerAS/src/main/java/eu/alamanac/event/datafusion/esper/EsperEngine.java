@@ -9,7 +9,7 @@ import eu.alamanac.event.datafusion.handler.ComplexEventHandlerImpl;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
-import eu.linksmart.api.event.datafusion.Query;
+import eu.linksmart.api.event.datafusion.Statement;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class EsperEngine implements DataFusionWrapper {
     Map<String, Map<String,String>> topicName = new HashMap<String, Map<String,String>>();
     Map<String, Map<String,String>> nameTopic = new HashMap<String, Map<String,String>>();
     Map<String, Boolean> queryReady = new HashMap<String,Boolean>();
-    Map<String, Query> nameQuery = new HashMap<String,Query >();
+    Map<String, Statement> nameQuery = new HashMap<String,Statement >();
     public EsperEngine(){
         Configuration config = new Configuration();
        // config.addImport("eu.almanac.event.datafusion.esper.utils.*");	// package import
@@ -168,93 +168,110 @@ public class EsperEngine implements DataFusionWrapper {
     }
 
     @Override
-  /*  public boolean addQuery(Query query) {
+    public boolean addStatement(Statement statement) {
+        Boolean ret = false;
+        if(statement.getQuery().equals("pause") || statement.getQuery().equals("Pause")){
+            ret = pauseQuery(statement.getName());
 
-        ComplexEventHandler handler;
-
-        try {
-             handler = new ComplexEventHandlerImpl(query);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            return false;
-        }
-        if(epService.getEPAdministrator().getStatement(query.getName())!=null)
-
-            handler.publishError("Query with name"+query.getName()+"already added");
-
-        try{
-            boolean allDefined = true, queryUpdate= false;
-
-            String esperTopic;
-            queryReady.put(query.getName(), true);
-            for(String topic : query.getInput()){
-
-                // Adapt the topic to a Esper topic
-                esperTopic = topic.substring(1).replace('/', '.');
-
-                // changing state of the queries this could be made in several places in several threads!
-                synchronized (this) {
-
-                    // if the type of the topic is defined
-                    if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(esperTopic)) {
-                        // the type of the topic is not defined
-
-                        allDefined = false;
-
-                        // set this query as not ready to be deploy
-                        //update status
-                        queryReady.put(query.getName(), false);
-                        //update query
-                        if(!queryUpdate) {
-                            nameQuery.put(query.getName(), query);
-                            queryUpdate = true;
-                        }
-                        // add the query to the wetting queries in this topic
-                        if (!topicName.containsKey(topic)) {
-                            topicName.put(topic, new HashMap<String, String>());
-                            topicName.get(topic).put(query.getName(), query.getName());
-
-                        } else {
-                            topicName.get(topic).put(query.getName(), query.getName());
-                        }
-                        if (!nameTopic.containsKey(query.getName())) {
-                            nameTopic.put(query.getName(), new HashMap<String, String>());
-                            nameTopic.get(query.getName()).put(topic, topic);
-
-                        } else {
-                            nameTopic.get(query.getName()).put(topic, topic);
-                        }
-
-
-                    }
-                }
-            }
-            if(allDefined){
-                try {
-                    // add the query and the listener for the query
-                    EPStatement statement = epService.getEPAdministrator().createEPL(query.getQuery(), query.getName());
-
-                    statement.setSubscriber(handler);
-
-                }catch (Exception e){
-
-                    handler.publishError(e.getMessage());
-                }
-            }
-
-
-            return true;
-
-        }catch(Exception e){
-
-            e.printStackTrace();
-
-            return false;
+        }else if(statement.getQuery().equals("start") || statement.getQuery().equals("Start")){
+            ret = startQuery(statement.getName());
+        }else if(statement.getQuery().equals("remove") || statement.getQuery().equals("remove")){
+            ret = removeQuery(statement.getName());
+        } else {
+            ret =  addQuery(statement);
         }
 
+        return ret;
     }
-*/
-    public boolean addQuery(Query query) {
+
+    /* @Override
+  *  public boolean addQuery(Query query) {
+
+         ComplexEventHandler handler;
+
+         try {
+              handler = new ComplexEventHandlerImpl(query);
+         } catch (RemoteException e) {
+             e.printStackTrace();
+             return false;
+         }
+         if(epService.getEPAdministrator().getStatement(query.getName())!=null)
+
+             handler.publishError("Query with name"+query.getName()+"already added");
+
+         try{
+             boolean allDefined = true, queryUpdate= false;
+
+             String esperTopic;
+             queryReady.put(query.getName(), true);
+             for(String topic : query.getInput()){
+
+                 // Adapt the topic to a Esper topic
+                 esperTopic = topic.substring(1).replace('/', '.');
+
+                 // changing state of the queries this could be made in several places in several threads!
+                 synchronized (this) {
+
+                     // if the type of the topic is defined
+                     if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(esperTopic)) {
+                         // the type of the topic is not defined
+
+                         allDefined = false;
+
+                         // set this query as not ready to be deploy
+                         //update status
+                         queryReady.put(query.getName(), false);
+                         //update query
+                         if(!queryUpdate) {
+                             nameQuery.put(query.getName(), query);
+                             queryUpdate = true;
+                         }
+                         // add the query to the wetting queries in this topic
+                         if (!topicName.containsKey(topic)) {
+                             topicName.put(topic, new HashMap<String, String>());
+                             topicName.get(topic).put(query.getName(), query.getName());
+
+                         } else {
+                             topicName.get(topic).put(query.getName(), query.getName());
+                         }
+                         if (!nameTopic.containsKey(query.getName())) {
+                             nameTopic.put(query.getName(), new HashMap<String, String>());
+                             nameTopic.get(query.getName()).put(topic, topic);
+
+                         } else {
+                             nameTopic.get(query.getName()).put(topic, topic);
+                         }
+
+
+                     }
+                 }
+             }
+             if(allDefined){
+                 try {
+                     // add the query and the listener for the query
+                     EPStatement statement = epService.getEPAdministrator().createEPL(query.getQuery(), query.getName());
+
+                     statement.setSubscriber(handler);
+
+                 }catch (Exception e){
+
+                     handler.publishError(e.getMessage());
+                 }
+             }
+
+
+             return true;
+
+         }catch(Exception e){
+
+             e.printStackTrace();
+
+             return false;
+         }
+
+     }
+ */
+    public boolean addQuery(Statement query) {
 
         ComplexEventHandler handler;
 
@@ -313,7 +330,6 @@ public class EsperEngine implements DataFusionWrapper {
 
     }
 
-    @Override
     public boolean pauseQuery(String name) {
 
         if(epService.getEPAdministrator().getStatement(name)==null)
@@ -324,7 +340,6 @@ public class EsperEngine implements DataFusionWrapper {
         return true;
     }
 
-    @Override
     public boolean startQuery(String name) {
 
         if(epService.getEPAdministrator().getStatement(name)==null)
@@ -334,7 +349,6 @@ public class EsperEngine implements DataFusionWrapper {
         return true;
     }
 
-    @Override
     public boolean removeQuery(String name) {
 
         if(epService.getEPAdministrator().getStatement(name)==null)
