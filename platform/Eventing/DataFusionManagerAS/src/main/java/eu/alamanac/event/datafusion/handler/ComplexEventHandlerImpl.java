@@ -48,6 +48,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             throw new RemoteException(e.getMessage());
         }
     }
+
     public void update(Map event) {
 
         System.out.println("Updating event");
