@@ -45,14 +45,14 @@ public class DataFusionManager {
             try {
                 if(!errorReporter.isConnected())
                     errorReporter.connect();
-                errorReporter.publish("/alamanac/error/json/dataFusionManager"+error.get("ErrorTopic"),new Gson().toJson(error).getBytes(),0,false);
+                errorReporter.publish("/alamanac/error/json/dataFusionManager/"+error.get("ErrorTopic"),new Gson().toJson(error).getBytes(),0,false);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
     }
     public static void reportError(String errorTopic, String message, String trace ){
         HashMap<String,String> error = new HashMap<String, String>();
-        error.put("ErrorTopic","JsonParseException");
+        error.put("ErrorTopic",errorTopic);
         error.put("Message",message);
 
         if (trace!=null)

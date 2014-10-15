@@ -10,9 +10,9 @@ public class IoTProperty implements java.io.Serializable {
         this.About = "";
         this.IoTStateObservation = null;
     }
-    public IoTProperty (int n, String about){
+    public IoTProperty ( String about){
         this.About = about;
-        this.IoTStateObservation = new ArrayList<IoTValue>(n);
+        this.IoTStateObservation = new ArrayList<IoTValue>();
     }
     public IoTProperty (ArrayList<IoTValue> IoTStateObservation, String about){
         this.About = about;
@@ -32,11 +32,7 @@ public class IoTProperty implements java.io.Serializable {
         IoTStateObservation.add( new IoTValue(value,phenomenonTime,resultTime));
     }
 
-    public void resizeIoTStateObservation(int n){
-        ArrayList<IoTValue> aux = IoTStateObservation;
-        if (aux!=null)
-            IoTStateObservation.addAll(aux);
-    }
+
     public IoTValue[] getIoTStateObservation() {
         IoTValue[] aux = new IoTValue[IoTStateObservation.size()];
            return IoTStateObservation.toArray(aux);

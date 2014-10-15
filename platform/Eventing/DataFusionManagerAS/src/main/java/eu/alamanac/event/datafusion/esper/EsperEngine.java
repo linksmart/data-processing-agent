@@ -14,6 +14,7 @@ import eu.linksmart.api.event.datafusion.Statement;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Caravajal on 06.10.2014.
@@ -26,8 +27,10 @@ public class EsperEngine implements DataFusionWrapper {
     Map<String, Statement> nameQuery = new HashMap<String,Statement >();
     public EsperEngine(){
         Configuration config = new Configuration();
-       // config.addImport("eu.almanac.event.datafusion.esper.utils.*");	// package import
+        // config.addImport("eu.alamanac.event.datafusion.esper.utils.*");	// package import
+        config.addImport("java.security.*");
         config.addImport(Tools.class);
+        config.addImport(UUID.class);
         epService = EPServiceProviderManager.getDefaultProvider(config);
 
     }
@@ -175,7 +178,7 @@ public class EsperEngine implements DataFusionWrapper {
 
         }else if(statement.getQuery().equals("start") || statement.getQuery().equals("Start")){
             ret = startQuery(statement.getName());
-        }else if(statement.getQuery().equals("remove") || statement.getQuery().equals("remove")){
+        }else if(statement.getQuery().equals("remove") || statement.getQuery().equals("Remove")){
             ret = removeQuery(statement.getName());
         } else {
             ret =  addQuery(statement);
@@ -353,6 +356,9 @@ public class EsperEngine implements DataFusionWrapper {
 
         if(epService.getEPAdministrator().getStatement(name)==null)
             return false;
+
+        ((ComplexEventHandlerImpl)epService.getEPAdministrator().getStatement(name).getSubscriber()).destroy();
+
         epService.getEPAdministrator().getStatement(name).destroy();
 
         return true;

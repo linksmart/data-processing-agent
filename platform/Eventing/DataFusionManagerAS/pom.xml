@@ -8,6 +8,8 @@
     <artifactId>eu.almanac.event.datafusion.imp</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <name>Standalone Application - DataFusionManager</name>
+    <description>Data Fusion Manager  - The standalone implementation of the Data Fusion service in almanac</description>
 
     <dependencies>
         <dependency>

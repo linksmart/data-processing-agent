@@ -15,9 +15,9 @@ import java.util.ArrayList;
         this.Properties = null;
     }
 
-    public IoTEntityEvent (int n, String about){
+    public IoTEntityEvent ( String about){
         this.About = about;
-        this.Properties = new ArrayList<IoTProperty>(n);
+        this.Properties = new ArrayList<IoTProperty>();
     }
     public IoTEntityEvent (IoTProperty[] properties, String about){
         this.About = about;
@@ -37,8 +37,8 @@ import java.util.ArrayList;
         Properties.set(index, value);
     }
 
-    public IoTProperty addProperty(String about, int n) {
-        Properties.add(new IoTProperty(n,about));
+    public IoTProperty addProperty(String about) {
+        Properties.add(new IoTProperty(about));
         return Properties.get(Properties.size()-1);
     }
     public IoTProperty getProperties(int index) {

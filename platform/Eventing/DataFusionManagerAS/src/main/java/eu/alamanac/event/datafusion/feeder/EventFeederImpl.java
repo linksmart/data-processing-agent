@@ -13,6 +13,7 @@ import org.eclipse.paho.client.mqttv3.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Caravajal on 06.10.2014.
@@ -32,7 +33,7 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
         BROKER_URL = broker;
         try {
            //            client = new MqttClient("tcp://130.192.86.227:1883","EsperStandalone3");
-            client = new MqttClient(BROKER_URL,"EsperStandalone3");
+            client = new MqttClient(BROKER_URL, String.valueOf((new Random()).nextDouble()));
         } catch (MqttException e) {
             e.printStackTrace();
         }
