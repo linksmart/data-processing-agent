@@ -8,28 +8,24 @@
 	<name>Eventing</name>
 	<description>ALMANAC Eventing and Data Fusion</description>
 	<modules>
-    <module>ComplexEventHandler</module>
     <module>DataFusionAPI</module>
-    <module>DataFusionCore</module>
     <module>DataFusionCoreAPI</module>
-    <module>EsperWrapper</module>
-    <module>EventFeeder</module>
-    <module>EventsAPI</module>
-    <module>MQTTClient</module>
+    <!--<module>EventsAPI</module>-->
+    <module>DataFusionManagerAS</module>
 	</modules>
 	<repositories>
 		<repository>
 			<id>maven</id>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
-   <repository>
+ <!--  <repository>
       <id>LS</id>
       <url>http://greatfool.fit.fraunhofer.de:8081/nexus/content/groups/public</url>        
     </repository>
-   <!-- Contains newest Esper -->
+   &lt;!&ndash; Contains newest Esper &ndash;&gt;	-->
    <repository>
       <id>opencast-public</id>
       <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>
-    </repository>	
+    </repository>
 	</repositories>
 </project>
