@@ -58,6 +58,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
     public void update(Map event) {
 
+        System.out.println("Updating query: "+query.getName());
         try {
 
             if(event.containsKey((Object)(new String("SetEventPerEntity")))){
