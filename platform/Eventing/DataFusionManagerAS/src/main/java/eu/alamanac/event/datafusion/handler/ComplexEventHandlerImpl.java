@@ -32,8 +32,15 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     private final String EVENT_TOPIC = "/almanac/observation/iotentity";
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
+    private static Map<String,String> knownInstances= new HashMap<String,String>();
 
     public ComplexEventHandlerImpl(Statement query) throws RemoteException {
+        if(knownInstances.containsKey("local"))
+            knownInstances.put("local","tcp://localhost:1883");
+
+
+        if(knownInstances.containsKey("ismb_public") )
+            knownInstances.put("ismb_public","tcp://130.192.86.227:1883");
         this.query=query;
         parser = new Gson();
         response = new IoTEntityEvent();
@@ -43,7 +50,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         df.setTimeZone(tz);
         dateOfCreation = df.format(new Date());
         try {
-            this.CEPHandler= new MqttClient("tcp://localhost:1883",query.getName());
+            this.CEPHandler= new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()),query.getName());
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
         }
@@ -51,7 +58,6 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
     public void update(Map event) {
 
-        System.out.println("Updating event");
         try {
 
             if(event.containsKey((Object)(new String("SetEventPerEntity")))){
