@@ -35,11 +35,11 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     private static Map<String,String> knownInstances= new HashMap<String,String>();
 
     public ComplexEventHandlerImpl(Statement query) throws RemoteException {
-        if(knownInstances.containsKey("local"))
+        if(!knownInstances.containsKey("local"))
             knownInstances.put("local","tcp://localhost:1883");
 
 
-        if(knownInstances.containsKey("ismb_public") )
+        if(!knownInstances.containsKey("ismb_public") )
             knownInstances.put("ismb_public","tcp://130.192.86.227:1883");
         this.query=query;
         parser = new Gson();
