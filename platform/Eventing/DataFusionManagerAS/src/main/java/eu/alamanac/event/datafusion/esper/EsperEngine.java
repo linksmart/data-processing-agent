@@ -322,14 +322,14 @@ public class EsperEngine implements DataFusionWrapper {
                 for (String topic : query.getInput()) {
 
                     // Adapt the topic to a Esper topic
-                    esperTopic = topic.substring(1).replace('/', '.');
+                    //esperTopic = topic.substring(1).replace('/', '.');
 
                     // changing state of the queries this could be made in several places in several threads!
                     synchronized (this) {
 
                         // if the type of the topic is defined
-                        if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(esperTopic)) {
-                            defineIoTTypes(esperTopic);
+                        if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(topic)) {
+                            defineIoTTypes(topic);
                         }
                     }
                 }

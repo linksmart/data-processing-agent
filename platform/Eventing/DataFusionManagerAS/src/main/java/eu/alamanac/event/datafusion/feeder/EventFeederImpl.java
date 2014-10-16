@@ -138,7 +138,7 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
 
-        LoggerHandler.report("info","message arrived with topic"+topic);
+        LoggerHandler.report("info","message arrived with topic: "+topic);
 
         String msg = new String(mqttMessage.getPayload(),"UTF-8");
 

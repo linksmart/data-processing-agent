@@ -12,7 +12,7 @@ public class EsperQuery implements Statement {
     protected String satement;
     protected String[] input =null;
     protected String[] output=null;
-    protected String[] scope=null;
+    protected String[] scope={"local"};
 
 
 
@@ -26,9 +26,11 @@ public class EsperQuery implements Statement {
             throw new Exception("IoTEntity Event Error: The query must have a name!");
         }
 
-        if(event.getProperties("Statement")!= null)
-            this.satement = event.getProperties("Statement").getIoTStateObservation()[0].getValue();
-        else{
+        if(event.getProperties("Statement")!= null) {
+           // this.satement = event.getProperties("Statement").getIoTStateObservation()[0].getValue().replace("{", "").replace("}", "");
+
+            this.satement = getInputAndCleanStatement(event.getProperties("Statement").getIoTStateObservation()[0].getValue());
+        }else{
             LoggerHandler.publish("syntax_error","IoTEntity Event Error: The query must have a name!",null);
             throw new Exception("IoTEntity Event Error: The query must have a statement!");
         }
@@ -44,6 +46,8 @@ public class EsperQuery implements Statement {
 
         if(event.getProperties("Input")!= null) {
             this.input = new String[event.getProperties("Input").getIoTStateObservation().length];
+
+            String []rawInputs = event.getProperties("Statement").getIoTStateObservation()[0].getValue().split("\\{");
             n = 0;
             for (IoTValue i : event.getProperties("Input").getIoTStateObservation()) {
                 this.input[n] = i.getValue();
@@ -61,6 +65,42 @@ public class EsperQuery implements Statement {
         }
     }
 
+    private String getInputAndCleanStatement(String statement) {
+
+        String ret = statement ,lower=statement.toLowerCase();
+
+        if(lower.contains("topics")) {
+            String fromStatement = statement.substring(lower.indexOf("topics"));
+
+            if (fromStatement.contains("{") && fromStatement.contains("}")) {
+                ret = statement.substring(0, lower.indexOf("topics"));
+                String aux[] = statement.substring( lower.indexOf("topics")).split("\\}");
+                String topics[] =fromStatement.substring(fromStatement.indexOf("{"),fromStatement.indexOf("}")).split(",");
+
+                this.input = new String[topics.length];
+                int n = 0;
+                for (String i : topics) {
+                    this.input[n] = i.substring(i.indexOf("(")+1, i.indexOf(")"));
+
+                    ret += this.input[n]+i.substring(i.indexOf(")")+1);
+
+                    if(n<topics.length-1)
+                        ret += ", ";
+
+                    n++;
+                }
+
+                ret += aux[1];
+
+
+            }else{
+                LoggerHandler.publish("Syntax_error", "missing '{' or '}' after the from in query:" + getName(), null);
+            }
+        }
+
+
+        return ret;
+    }
     public String getName(){
         return  name;
     }
