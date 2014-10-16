@@ -75,6 +75,6 @@ public class LoggerHandler {
         if (trace!=null)
             error.put("Source",trace);
 
-        report(error);
+        publish(error);
     }
 }
