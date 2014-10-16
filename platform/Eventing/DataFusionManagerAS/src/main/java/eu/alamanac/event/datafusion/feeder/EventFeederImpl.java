@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import eu.alamanac.event.datafusion.core.DataFusionManager;
 import eu.alamanac.event.datafusion.esper.EsperQuery;
+import eu.alamanac.event.datafusion.logging.LoggerHandler;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.EventFeeder;
@@ -18,7 +19,7 @@ import java.util.Random;
 /**
  * Created by Caravajal on 06.10.2014.
  */
-public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCallback {
+public  class EventFeederImpl extends Thread implements EventFeeder, EventFeederLogic, MqttCallback {
     private MqttClient client;
     private Gson parser;
     private Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<String, DataFusionWrapper>();
@@ -27,7 +28,9 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
     private final String EVENT_TOPIC = "/almanac/observation/#";
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
+    private Boolean toShutdown = false;
 
+    private Boolean down =false;
 
     public EventFeederImpl(String broker){
         BROKER_URL = broker;
@@ -50,6 +53,8 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
             e.printStackTrace();
         }
 
+        start();
+
     }
     @Override
     public boolean dataFusionWrapperSignIn(DataFusionWrapper dfw) {
@@ -67,6 +72,50 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
         return false;
     }
 
+   public boolean isDown(){
+       synchronized (down) {
+           return down;
+       }
+   }
+
+    @Override
+    public void run(){
+        while (!down) {
+            synchronized (toShutdown) {
+                if (toShutdown  ) {
+
+                    try {
+                        client.disconnect();
+                    } catch (MqttException e) {
+                        LoggerHandler.report("error", e);
+                    }
+
+                    try {
+                        client.close();
+                    } catch (MqttException e) {
+                        LoggerHandler.report("error", e);
+                    }
+
+
+                    for (DataFusionWrapper i : dataFusionWrappers.values())
+                        i.destroy();
+
+                    LoggerHandler.report("info",this.getClass().getSimpleName()+" logged off");
+
+                    synchronized (down) {
+                        down = true;
+                    }
+
+                }
+            }
+            try {
+                this.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
     @Override
     public boolean suscribeToTopic(String topic) {
         try {
@@ -89,7 +138,8 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
 
-        System.out.println(topic);
+        LoggerHandler.report("info","message arrived with topic"+topic);
+
         String msg = new String(mqttMessage.getPayload(),"UTF-8");
 
 
@@ -106,10 +156,19 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
                     Statement query = new EsperQuery(event);
 
                     if (query != null) {
-                        for (DataFusionWrapper i : dataFusionWrappers.values())
-                            i.addStatement(query);
+                        if (query.getStatement().toLowerCase().equals("shutdown")){
+                            synchronized (toShutdown) {
+                                toShutdown = true;
+                            }
+                        }else {
+
+                            for (DataFusionWrapper i : dataFusionWrappers.values())
+                                i.addStatement(query);
+                        }
                     }
-                }catch (Exception e){}
+                }catch (Exception e){
+                    LoggerHandler.report("error",e);
+                }
 
             } else {
 
@@ -119,7 +178,7 @@ public  class EventFeederImpl implements EventFeeder, EventFeederLogic, MqttCall
             }
         }catch (JsonParseException e) {
 
-            DataFusionManager.reportError("JsonParseException", "No IoTEvent received instead received :"+msg, e.getStackTrace().toString());
+            LoggerHandler.report("JsonParseException", "No IoTEvent received instead received :" + msg, e.getStackTrace().toString());
 
 
             return;

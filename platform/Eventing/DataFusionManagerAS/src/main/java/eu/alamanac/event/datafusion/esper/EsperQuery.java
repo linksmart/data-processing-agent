@@ -1,6 +1,7 @@
 package eu.alamanac.event.datafusion.esper;
 
 import eu.alamanac.event.datafusion.core.DataFusionManager;
+import eu.alamanac.event.datafusion.logging.LoggerHandler;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.IoTValue;
 import eu.linksmart.api.event.datafusion.Statement;
@@ -8,10 +9,12 @@ import eu.linksmart.api.event.datafusion.Statement;
 public class EsperQuery implements Statement {
 
     protected String name;
-    protected String query;
+    protected String satement;
     protected String[] input =null;
     protected String[] output=null;
     protected String[] scope=null;
+
+
 
     public EsperQuery(IoTEntityEvent event) throws Exception {
 
@@ -19,14 +22,14 @@ public class EsperQuery implements Statement {
         if(event.getProperties("Name")!= null)
             this.name = event.getProperties("Name").getIoTStateObservation()[0].getValue();
         else{
-            DataFusionManager.reportError("ioTEvent_Syntax_Error","IoTEntity Event Error: The query must have a name!",null);
+            LoggerHandler.publish("syntax_error", "IoTEntity Event Error: The query must have a name!", null);
             throw new Exception("IoTEntity Event Error: The query must have a name!");
         }
 
-        if(event.getProperties("Query")!= null)
-            this.query = event.getProperties("Query").getIoTStateObservation()[0].getValue();
+        if(event.getProperties("Statement")!= null)
+            this.satement = event.getProperties("Statement").getIoTStateObservation()[0].getValue();
         else{
-            DataFusionManager.reportError("ioTEventSyntaxError","IoTEntity Event Error: The query must have a name!",null);
+            LoggerHandler.publish("syntax_error","IoTEntity Event Error: The query must have a name!",null);
             throw new Exception("IoTEntity Event Error: The query must have a statement!");
         }
 
@@ -61,8 +64,8 @@ public class EsperQuery implements Statement {
     public String getName(){
         return  name;
     }
-    public String getQuery(){
-        return  query;
+    public String getStatement(){
+        return  satement;
     }
     public String[] getInput(){
         return  input;

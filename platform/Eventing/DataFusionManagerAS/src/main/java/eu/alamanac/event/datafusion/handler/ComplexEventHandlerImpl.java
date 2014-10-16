@@ -1,6 +1,7 @@
 package eu.alamanac.event.datafusion.handler;
 
 import com.google.gson.Gson;
+import eu.alamanac.event.datafusion.logging.LoggerHandler;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.IoTProperty;
 import eu.almanac.event.datafusion.utils.IoTValue;
@@ -32,7 +33,6 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     private final String EVENT_TOPIC = "/almanac/observation/iotentity";
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
-    private static Map<String,String> knownInstances= new HashMap<String,String>();
 
     public ComplexEventHandlerImpl(Statement query) throws RemoteException {
         if(!knownInstances.containsKey("local"))
@@ -58,7 +58,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
     public void update(Map event) {
 
-        System.out.println("Updating query: "+query.getName());
+        LoggerHandler.report("info", "Updating query: " + query.getName());
         try {
 
             if(event.containsKey((Object)(new String("SetEventPerEntity")))){
@@ -210,25 +210,17 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
     }
 
+
+
     @Override
-    public boolean publishError(String errorMessage) {
+    public boolean publishError(String topic, String errorMessage) {
 
-            try {
-                if (!CEPHandler.isConnected())
-                    CEPHandler.connect();
+        LoggerHandler.publish(query.getName()+"/"+topic,errorMessage,null);
 
-                HashMap<String,String> error = new HashMap<String, String>();
-                error.put("ErrorTopic","Exception");
-                error.put("Message",errorMessage);
-
-                CEPHandler.publish(ERROR_TOPIC, errorMessage.getBytes(),0,false);
-                return true;
-            } catch (MqttException e) {
-                e.printStackTrace();
-            }
-        return false;
+        return true;
     }
 
+    @Override
     public void destroy(){
         try {
             if(CEPHandler.isConnected())
@@ -244,4 +236,6 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             e.printStackTrace();
         }
     }
+
+
 }

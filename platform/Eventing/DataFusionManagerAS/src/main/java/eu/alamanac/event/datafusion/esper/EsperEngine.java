@@ -6,6 +6,7 @@ import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import eu.alamanac.event.datafusion.esper.utils.Tools;
 import eu.alamanac.event.datafusion.handler.ComplexEventHandlerImpl;
+import eu.alamanac.event.datafusion.logging.LoggerHandler;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
@@ -53,7 +54,7 @@ public class EsperEngine implements DataFusionWrapper {
     }
     @Override
     public String getName() {
-        return "Esper";
+        return this.getClass().getSimpleName();
     }
 
     /*private boolean addEsperEvent(String esperTopic, String topic, IoTEntityEvent event){
@@ -173,18 +174,41 @@ public class EsperEngine implements DataFusionWrapper {
     @Override
     public boolean addStatement(Statement statement) {
         Boolean ret = false;
-        if(statement.getQuery().equals("pause") || statement.getQuery().equals("Pause")){
+        if(statement.getStatement().toLowerCase().equals("pause")){
             ret = pauseQuery(statement.getName());
 
-        }else if(statement.getQuery().equals("start") || statement.getQuery().equals("Start")){
+        }else if(statement.getStatement().toLowerCase().equals("start") ){
+
             ret = startQuery(statement.getName());
-        }else if(statement.getQuery().equals("remove") || statement.getQuery().equals("Remove")){
+
+        }else if(statement.getStatement().toLowerCase().equals("remove") ){
+
             ret = removeQuery(statement.getName());
-        } else {
+
+        } else if (statement.getStatement().toLowerCase().contains("add instance ") ) {
+            String[] nameURL = statement.getStatement().toLowerCase().replace("add instance","").trim().split("=");
+            if(nameURL.length==2){
+
+                ComplexEventHandler.knownInstances.put(nameURL[0],nameURL[1]);
+
+            }else {
+                LoggerHandler.report("syntax_error","Statement " + statement.getName()+" try to add a instance but the format is incorrect, the correct format is 'add instance <instanceName>=<instanceURL>'");
+            }
+
+        }else {
             ret =  addQuery(statement);
         }
 
         return ret;
+    }
+
+    @Override
+    public void destroy() {
+        for (String i: epService.getEPAdministrator().getStatementNames())
+            removeQuery(i);
+
+        LoggerHandler.report("info",getName()+" logged off");
+
     }
 
     /* @Override
@@ -286,7 +310,7 @@ public class EsperEngine implements DataFusionWrapper {
         }
         if(epService.getEPAdministrator().getStatement(query.getName())!=null) {
 
-            handler.publishError("Query with name" + query.getName() + "already added");
+            handler.publishError("","Query with name" + query.getName() + "already added");
             return false;
         }
         try{
@@ -312,13 +336,13 @@ public class EsperEngine implements DataFusionWrapper {
             }
                 try {
                     // add the query and the listener for the query
-                    EPStatement statement = epService.getEPAdministrator().createEPL(query.getQuery(), query.getName());
+                    EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getName());
 
                     statement.setSubscriber(handler);
 
                 }catch (Exception e){
 
-                    handler.publishError(e.getMessage());
+                    handler.publishError("error",e.getMessage());
                 }
 
 
