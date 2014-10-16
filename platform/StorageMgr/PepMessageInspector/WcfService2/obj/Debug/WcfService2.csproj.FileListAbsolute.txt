@@ -1,0 +1,7 @@
+C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\WcfService2\bin\WcfService2.dll
+C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\WcfService2\bin\WcfService2.pdb
+C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\WcfService2\obj\Debug\WcfService2.dll
+C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\WcfService2\obj\Debug\WcfService2.pdb
+C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\WcfService2\obj\Debug\WcfService2.csprojResolveAssemblyReference.cache
+C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\WcfService2\bin\XMLSerializationExample.dll
+C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\WcfService2\bin\XMLSerializationExample.pdb
