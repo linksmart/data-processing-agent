@@ -7,7 +7,7 @@ public interface Statement {
 
     public String getName();
 
-    public String getQuery();
+    public String getStatement();
 
     public String[] getInput();
 

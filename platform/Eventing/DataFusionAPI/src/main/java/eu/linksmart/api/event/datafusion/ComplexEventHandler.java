@@ -1,6 +1,9 @@
 package eu.linksmart.api.event.datafusion;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * One of the two Interfaces which represents the API of the Complex Event Handler (CEH).
  * 
@@ -20,6 +23,7 @@ package eu.linksmart.api.event.datafusion;
 
 public interface ComplexEventHandler {
 
+    static Map<String,String> knownInstances= new HashMap<String,String>();
 	/**
 	 * The CEH do not have an awareness of which engines are available. <p>
 	 * For the Handler is enable to interact with a Data Fusion Engine,
@@ -43,5 +47,9 @@ public interface ComplexEventHandler {
 	 * @return <code>true</code> if the event was handled successfully , <code>false</code> otherwise.
 	 * */
 	//public boolean callbacker(ResponseSet answer);
-     public  boolean publishError(String errorMessage);
+
+    public  boolean publishError(String topic, String errorMessage);
+
+    public void destroy();
+
 }

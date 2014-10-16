@@ -71,5 +71,7 @@ public interface DataFusionWrapper {
 	 * */
 	public boolean addStatement( Statement query);
 
+    public void destroy();
+
 
 }

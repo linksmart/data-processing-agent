@@ -35,4 +35,7 @@ public interface  EventFeeder {
 	 * @return <code>true</code> in a successful unsubscription, <code>false</code> otherwise.
 	 * */
 	public boolean dataFusionWrapperSignOut(DataFusionWrapper dfw);
+
+    public boolean isDown();
+
 }
