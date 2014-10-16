@@ -3,54 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <title>Socket.IO viewer | ALMANAC</title>
-<meta name="robots" content="noindex,nofollow" />
+<meta name="robots" content="noindex, nofollow" />
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font: 13px Helvetica, Arial; }
+body { font: 13px "Arial", "Helvetica", sans-serif; }
 form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-#messages { list-style-type: none; margin: 0; padding: 0; }
-#messages li { padding: 5px 10px; }
-#messages li:nth-child(odd) { background: #eee; }
+input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+#messages { list-style-type: none; margin: 0 0 45px 0; padding: 0; }
+li { padding: 5px 10px; }
+li:nth-child(odd) { background: #eee; }
 </style>
 <script src="/socket.io/socket.io.js"></script>
-<script>
-var socket = io();
-
-socket.on('info', function(msg) {
-		var messages = document.getElementById('messages'),
-			li = document.createElement('li');
-		if (messages) {
-			li.textContent = msg;
-			messages.appendChild(li);
-		}
-	});
-
-socket.on('DM', function(json) {
-		var messages = document.getElementById('messages'),
-			li = document.createElement('li');
-		if (messages) {
-			li.textContent = 'DM: ' + JSON.stringify(json);
-			messages.appendChild(li);
-		}
-	});
-
-socket.on('mqtt', function(json) {
-		var messages = document.getElementById('messages'),
-			li = document.createElement('li');
-		if (messages) {
-			li.textContent = 'MQTT: ' + JSON.stringify(json);
-			messages.appendChild(li);
-		}
-	});
-
-function chat(form) {
-	socket.emit('info', form.m.value);
-	form.m.value = '';
-	return false;
-}
-</script>
 </head>
 
 <body>
@@ -60,4 +24,41 @@ function chat(form) {
 		<button>Send</button>
 	</form>
 </body>
+
+<script>
+"use strict";
+
+var socket = io(),
+	messages = document.getElementById('messages'),
+	messageBox = document.getElementById('m');
+
+function append(text) {
+	while (messages.childNodes.length > 255) {
+		messages.removeChild(messages.firstChild);
+	}
+	var li = document.createElement('li');
+	li.textContent = text;
+	messages.appendChild(li);
+	window.scrollTo(0, document.body.scrollHeight);
+	messageBox.focus();
+}
+
+socket.on('info', function(msg) {
+		append(msg);
+	});
+
+socket.on('DM', function(json) {
+		append('DM: ' + JSON.stringify(json));
+	});
+
+socket.on('mqtt', function(json) {
+		append('MQTT: ' + JSON.stringify(json));
+	});
+
+function chat(form) {
+	socket.emit('info', form.m.value);
+	form.m.value = '';
+	return false;
+}
+</script>
 </html>
