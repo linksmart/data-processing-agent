@@ -1,0 +1,4 @@
+c:\users\vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\bin\Debug\XMLSerializationExample.exe
+c:\users\vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\bin\Debug\XMLSerializationExample.pdb
+c:\users\vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\obj\x86\Debug\XMLSerializationExample.exe
+c:\users\vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\obj\x86\Debug\XMLSerializationExample.pdb
