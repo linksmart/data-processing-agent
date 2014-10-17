@@ -7,16 +7,24 @@
 */
 
 var http = require('http'),
+	fs = require('fs'),
 	basicHttp = require('./basicHttp.js').basicHttp,	//Static files, logs
 	config = require('./config.js').config,
 	almanac = require('./almanac.js').almanac;
 
+if (fs.existsSync('./config.local.js')) {	//Load local configuration, if any
+	var localConfig = require('./config.local.js').config,
+		extend = require('extend');
+	extend(true, config, localConfig);
+}
+
+almanac.config = config;
 almanac.version = require('./package.json').version;
 almanac.log = require('npmlog');
+almanac.log.level = almanac.config.logLevel;
 basicHttp.npmlog = almanac.log;
 basicHttp.serverSignature = 'ALMANAC VirtualizationLayer ' + almanac.version + ' / ' + basicHttp.serverSignature;
 almanac.basicHttp = basicHttp;
-almanac.config = config;
 almanac.http = http;
 
 var server = http.createServer(function (req, res) {

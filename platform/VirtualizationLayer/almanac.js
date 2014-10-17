@@ -54,6 +54,7 @@ It is now ' + now.toISOString() + '.\n\
 			virtualAddress: almanac.virtualAddress,
 			networkManager: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/',
 			storageManager: 'http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path,
+			mqttToHttpStorageManagerEnabled: almanac.config.mqttToHttpStorageManagerEnabled,
 			resourceCatalogue: almanac.recourceCatalogueUrl,
 			scral: 'http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path,
 			server: almanac.basicHttp.serverSignature,
