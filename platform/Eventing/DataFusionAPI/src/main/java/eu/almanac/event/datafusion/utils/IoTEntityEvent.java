@@ -62,8 +62,25 @@ import java.util.ArrayList;
     }
 
 
-    public IoTProperty[] getProperties() {
-        IoTProperty[] v = null;
-        return Properties.toArray(v);
+    public ArrayList<IoTProperty> getProperties() {
+        return Properties;
+    }
+    public boolean haveLikeProperty(String property){
+        for (IoTProperty p: this.Properties)
+            if(p.getAbout().contains(property)) {
+                return true;
+            }
+
+
+        return false;
+    }
+    public boolean haveProperty(String propertyName){
+        if(Properties != null)
+            for(IoTProperty i : Properties) {
+                if (i.getAbout() != null)
+                    if (i.getAbout().equals(propertyName))
+                        return true;
+            }
+        return false;
     }
 }
