@@ -6,6 +6,8 @@ import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.IoTValue;
 import eu.linksmart.api.event.datafusion.Statement;
 
+import java.util.ArrayList;
+
 public class EsperQuery implements Statement {
 
     protected String name;
@@ -20,7 +22,7 @@ public class EsperQuery implements Statement {
 
         int n;
         if(event.getProperties("Name")!= null)
-            this.name = event.getProperties("Name").getIoTStateObservation()[0].getValue();
+            this.name = event.getProperties("Name").getIoTStateObservation().get(0).getValue();
         else{
             LoggerHandler.publish("syntax_error", "IoTEntity Event Error: The query must have a name!", null);
             throw new Exception("IoTEntity Event Error: The query must have a name!");
@@ -29,14 +31,14 @@ public class EsperQuery implements Statement {
         if(event.getProperties("Statement")!= null) {
            // this.satement = event.getProperties("Statement").getIoTStateObservation()[0].getValue().replace("{", "").replace("}", "");
 
-            this.satement = getInputAndCleanStatement(event.getProperties("Statement").getIoTStateObservation()[0].getValue());
+            this.satement = getInputAndCleanStatement(event.getProperties("Statement").getIoTStateObservation().get(0).getValue());
         }else{
             LoggerHandler.publish("syntax_error","IoTEntity Event Error: The query must have a name!",null);
             throw new Exception("IoTEntity Event Error: The query must have a statement!");
         }
 
         if(event.getProperties("Output")!= null) {
-            this.output = new String[event.getProperties("Output").getIoTStateObservation().length];
+            this.output = new String[event.getProperties("Output").getIoTStateObservation().size()];
             n = 0;
             for (IoTValue i : event.getProperties("Output").getIoTStateObservation()) {
                 this.output[n] = i.getValue();
@@ -45,9 +47,9 @@ public class EsperQuery implements Statement {
         }
 
         if(event.getProperties("Input")!= null) {
-            this.input = new String[event.getProperties("Input").getIoTStateObservation().length];
+            this.input = new String[event.getProperties("Input").getIoTStateObservation().size()];
 
-            String []rawInputs = event.getProperties("Statement").getIoTStateObservation()[0].getValue().split("\\{");
+            String []rawInputs = event.getProperties("Statement").getIoTStateObservation().get(0).getValue().split("\\{");
             n = 0;
             for (IoTValue i : event.getProperties("Input").getIoTStateObservation()) {
                 this.input[n] = i.getValue();
@@ -56,7 +58,7 @@ public class EsperQuery implements Statement {
         }
 
         if(event.getProperties("Scope")!= null) {
-            this.scope = new String[event.getProperties("Scope").getIoTStateObservation().length];
+            this.scope = new String[event.getProperties("Scope").getIoTStateObservation().size()];
             n = 0;
             for (IoTValue i : event.getProperties("Scope").getIoTStateObservation()) {
                 this.scope[n] = i.getValue();
@@ -77,12 +79,19 @@ public class EsperQuery implements Statement {
                 String aux[] = statement.substring( lower.indexOf("topics")).split("\\}");
                 String topics[] =fromStatement.substring(fromStatement.indexOf("{"),fromStatement.indexOf("}")).split(",");
 
-                this.input = new String[topics.length];
+                ArrayList<String> inputs = new ArrayList<>();
                 int n = 0;
                 for (String i : topics) {
-                    this.input[n] = i.substring(i.indexOf("(")+1, i.indexOf(")"));
+                    try {
 
-                    ret += this.input[n]+i.substring(i.indexOf(")")+1);
+                        inputs.add( i.substring(i.indexOf("[")+1, i.indexOf("]")));
+
+                        ret += inputs.get(inputs.size()-1)+i.substring(i.indexOf("]")+1);
+                    }catch (Exception e){
+                        ret += i;
+                    }
+
+
 
                     if(n<topics.length-1)
                         ret += ", ";
