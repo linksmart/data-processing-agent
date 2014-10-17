@@ -11,10 +11,11 @@ import eu.linksmart.api.event.datafusion.EventFeeder;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Caravajal on 06.10.2014.
@@ -34,9 +35,20 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
 
     public EventFeederImpl(String broker){
         BROKER_URL = broker;
+
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+        df.setTimeZone(tz);
+        String nowAsISO = df.format(new Date());
+        String clientid =nowAsISO+"-"+String.valueOf((new Random()).nextDouble());
         try {
+
            //            client = new MqttClient("tcp://130.192.86.227:1883","EsperStandalone3");
-            client = new MqttClient(BROKER_URL, String.valueOf((new Random()).nextDouble()));
+
+
+            client = new MqttClient(BROKER_URL, clientid);
+
+
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -46,9 +58,11 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
         try {
             client.setCallback(this);
             client.connect();
-            client.subscribe(DFM_QUERY_TOPIC);
+            //client.subscribe(DFM_QUERY_TOPIC);
+
 
             client.subscribe(EVENT_TOPIC);
+
         } catch (MqttException e) {
             e.printStackTrace();
         }

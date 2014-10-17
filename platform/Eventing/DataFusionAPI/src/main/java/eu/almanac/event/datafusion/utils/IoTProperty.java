@@ -33,9 +33,9 @@ public class IoTProperty implements java.io.Serializable {
     }
 
 
-    public IoTValue[] getIoTStateObservation() {
-        IoTValue[] aux = new IoTValue[IoTStateObservation.size()];
-           return IoTStateObservation.toArray(aux);
+    public ArrayList<IoTValue> getIoTStateObservation() {
+
+           return IoTStateObservation;
        }
     public void setIoTStateObservation( IoTValue[] value) {
         this.IoTStateObservation = new ArrayList<IoTValue>(value.length);

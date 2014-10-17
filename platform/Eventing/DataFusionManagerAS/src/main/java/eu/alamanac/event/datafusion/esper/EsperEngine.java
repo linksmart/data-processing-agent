@@ -105,7 +105,7 @@ public class EsperEngine implements DataFusionWrapper {
         }
         return true;
     }*/
-    private boolean addEsperEvent(String esperTopic, String topic, IoTEntityEvent event){
+    private boolean addEsperEvent(String esperTopic, IoTEntityEvent event){
         try {
             synchronized (this) {
                 // if the topic type is already defined, then the event is send
@@ -137,20 +137,20 @@ public class EsperEngine implements DataFusionWrapper {
         try {
 
 
-            String esperParentTopic ="",parentTopic ="";
+            String esperParentTopic ="";
             String [] esperTopcArray = topic.substring(1).split("/");
 
-            for (int i=0; i<esperTopcArray.length-1;i++) {
-                parentTopic = esperTopcArray[i];
+            esperParentTopic = esperTopcArray[0];
+            for (int i=1; i<esperTopcArray.length-1;i++) {
+                esperParentTopic += "."+esperTopcArray[i];
 
             }
-
+            esperParentTopic += ".hash";
             String esperTopic = topic.substring(1).replace('/', '.');
-            esperParentTopic = parentTopic.replace('/', '.');
 
-            addEsperEvent(esperTopic,topic,event);
+            addEsperEvent(esperTopic,event);
 
-            addEsperEvent(esperParentTopic,parentTopic,event);
+            addEsperEvent(esperParentTopic,event);
 
         }catch(Exception e){
 
@@ -302,15 +302,10 @@ public class EsperEngine implements DataFusionWrapper {
 
         ComplexEventHandler handler;
 
-        try {
-            handler = new ComplexEventHandlerImpl(query);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            return false;
-        }
+
         if(epService.getEPAdministrator().getStatement(query.getName())!=null) {
 
-            handler.publishError("","Query with name" + query.getName() + "already added");
+            LoggerHandler.publish("syntax_error","Query with name" + query.getName() + "already added",null);
             return false;
         }
         try{
@@ -337,12 +332,16 @@ public class EsperEngine implements DataFusionWrapper {
                 try {
                     // add the query and the listener for the query
                     EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getName());
-
+                    try {
+                        handler = new ComplexEventHandlerImpl(query);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
                     statement.setSubscriber(handler);
 
                 }catch (Exception e){
-
-                    handler.publishError("error",e.getMessage());
+                    LoggerHandler.publish("syntax_error",e.getMessage(),null);
                 }
 
 
