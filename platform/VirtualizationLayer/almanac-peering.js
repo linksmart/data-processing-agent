@@ -27,7 +27,7 @@ module.exports = function (almanac) {
 						url: peer + 'mqttPeering/',
 						json: true,
 						body: json,
-						timeout: 9000,
+						timeout: 15000,
 					}, function (error, response, body) {
 						if (error || !response || response.statusCode != 200) {
 							almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' while forwarding MQTT to ' + peer);

@@ -20,7 +20,7 @@ module.exports = function (almanac) {
 						':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + 'IoTEntities',
 					json: true,
 					body: json,
-					timeout: 9000,
+					timeout: 15000,
 				}, function (error, response, body) {
 					if (error || response.statusCode != 200) {
 						almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' forwarding MQTT event to StorageManager!');
@@ -41,11 +41,12 @@ module.exports = function (almanac) {
 				method: req.method,
 				uri: 'http://' + almanac.config.hosts.masterStorageManager.host +
 					':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
+				timeout: 15000,
 			}, function (error, response, body) {
 				if (error || response.statusCode != 200 || !body) {
 					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' proxying to StorageManager!');
 					if (!body) {
-						almanac.basicHttp.serve500(req, res, 'Error proxying to StorageManager!');
+						almanac.basicHttp.serve503(req, res);
 					}
 				} else if (req.method === 'POST') {
 					almanac.log.verbose('VL', 'POST request forwarded to StorageManager' + JSON.stringify({response: response}));
