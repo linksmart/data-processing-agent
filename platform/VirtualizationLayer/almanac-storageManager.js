@@ -41,7 +41,7 @@ module.exports = function (almanac) {
 				method: req.method,
 				uri: 'http://' + almanac.config.hosts.masterStorageManager.host +
 					':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path + req.url,
-				timeout: 15000,
+				timeout: 25000,
 			}, function (error, response, body) {
 				if (error || response.statusCode != 200 || !body) {
 					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' proxying to StorageManager!');
@@ -60,35 +60,46 @@ module.exports = function (almanac) {
 				'features': [],
 			};
 		if (json) {
-			if (Array.isArray(json.IoTStateObservation)) {	//Encapsulate IoTStateObservation into an IoTProperty. Ex: /dm-geojson/IoTEntities/E3CFE564-EFD8-4839-BB69-89F1939DADE0/properties/E3CFE564-EFD8-4839-BB69-89F1939DADE0:location/observations
-				json.IoTProperty = [{
-						DataType: 'xs:geojson', 	//Assuming correct type if the user asks to transform output to GeoJSON
-						IoTStateObservation: [ json.IoTStateObservation[0] ],	//Take only the first IoTStateObservation
-					}];
+			if (Array.isArray(json.IoTStateObservation) && json.IoTStateObservation.length > 0 &&
+				/[0-9.]+ [0-9.]+/.test(json.IoTStateObservation[0].Value)) {	//Encapsulate IoTStateObservation into an IoTProperty. Ex: /dm-geojson/IoTEntities/40A5F4D2-54AD-4B5B-9996-5AF6DB7046CB/Properties/40A5F4D2-54AD-4B5B-9996-5AF6DB7046CB:location/observations
+				json = {
+						IoTProperty: [{
+								DataType: 'xs:geojson', 	//Assuming correct type if the user asks to transform output to GeoJSON
+								IoTStateObservation: [ json.IoTStateObservation[0] ],	//Take only the first/newest IoTStateObservation
+							}],
+					};
 			}
 			if (Array.isArray(json.IoTProperty)) {	//Encapsulate a single IoTProperty into an IoTEntity. Ex: /dm-geojson/IoTEntities/E3CFE564-EFD8-4839-BB69-89F1939DADE0/properties
-				json.IoTEntity = [{
-						Properties: json.IoTProperty,
-					}];
+				json = {
+						IoTEntity: [{
+								Properties: json.IoTProperty,
+							}],
+					};
 			}
 			if (Array.isArray(json.IoTEntity)) {	//Ex: /dm-geojson/IoTEntities
 				var ioTEntities = json.IoTEntity,
 					coordinates = [];
 				for (var i = 0; i < ioTEntities.length; i++) {
 					var ioTEntity = ioTEntities[i];
-					if (Array.isArray(ioTEntity.Meta) && ioTEntity.Meta[1] && ioTEntity.Meta[1].Value && ioTEntity.Meta[1].property === 'geo:point') {	//TODO: Do not hard-code `Meta[1]`
-						coordinates = ioTEntity.Meta[1].Value.split(' ', 3);
-						geoJson.features.push({
-							'type': 'Feature',
-							'geometry': {
-								'type': 'Point',
-								'coordinates': [1 * (coordinates[0] || 0), 1 * (coordinates[1] || 0)],	//GeoJSON: longitude, latitude
-							},
-							'properties': {
-								'name': ioTEntity.Name,
-								'description': ioTEntity.Description,
-							},
-						});
+					if (Array.isArray(ioTEntity.Meta)) {
+						for (var j = 0; j < ioTEntity.Meta.length; j++) {
+							var iotMeta = ioTEntity.Meta[j];
+							if (iotMeta && iotMeta.Value && iotMeta.property === 'geo:point') {
+								coordinates = iotMeta.Value.split(' ', 3);
+								geoJson.features.push({
+									'type': 'Feature',
+									'geometry': {
+										'type': 'Point',
+										'coordinates': [1 * (coordinates[0] || 0), 1 * (coordinates[1] || 0)],	//GeoJSON: longitude, latitude
+									},
+									'properties': {
+										'name': ioTEntity.Name,
+										'description': ioTEntity.Description,
+									},
+								});
+								break;
+							}
+						}
 					}
 					if (Array.isArray(ioTEntity.Properties)) {
 						for (var j = 0; j < ioTEntity.Properties.length; j++) {
