@@ -31,7 +31,7 @@ var hosts = {
 		scral: {
 			host: 'localhost',
 			port: 8080,
-			path: '/connectors.rest-0.2.0/',
+			path: '/connectors.rest/',
 		},
 		storage: {	//Local Storage Manager
 			scheme: 'http',
