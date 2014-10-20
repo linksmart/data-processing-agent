@@ -38,7 +38,7 @@ var almanac = {
 Hello ' + req.connection.remoteAddress + '!\n\
 This is ' + req.connection.localAddress + ' running <a href="http://nodejs.org/" rel="external">Node.js</a>.\n\
 I am a Virtualization Layer for the <a href="http://www.almanac-project.eu/" rel="external">ALMANAC European project (Reliable Smart Secure Internet Of Things For Smart Cities)</a>.\n\
-I talk mainly to other machines, but there is a <a href="socket.html">WebSocket demo</a> for humans.\n\
+I talk mainly to other machines, but there is a <a href="socket.html">WebSocket log</a> for humans, and a <a href="console.html">JavaScript console</a>.\n\
 <a href="./virtualizationLayerInfo">More information about this instance</a>.\n\
 It is now ' + now.toISOString() + '.\n\
 </pre>\n\

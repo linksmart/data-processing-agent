@@ -41,7 +41,7 @@ var hosts = {
 		},
 		storageCloud: {	//Public Storage Manager cloud
 			scheme: 'http',
-			host: 'energyportal.cnet.se',
+			host: 'almanac.cnet.se',
 			port: 80,
 			path: '/StorageManagerCloud/REST/',
 		},

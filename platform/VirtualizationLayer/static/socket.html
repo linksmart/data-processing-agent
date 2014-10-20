@@ -32,12 +32,13 @@ var socket = io(),
 	messageBox = document.getElementById('m');
 
 function append(text) {
-	while (messages.childNodes.length > 255) {
+	while (messages.childNodes.length > 128) {
 		messages.removeChild(messages.firstChild);
 	}
 	var li = document.createElement('li');
 	li.textContent = text;
 	messages.appendChild(li);
+	li = null;
 	window.scrollTo(0, document.body.scrollHeight);
 	messageBox.focus();
 }
