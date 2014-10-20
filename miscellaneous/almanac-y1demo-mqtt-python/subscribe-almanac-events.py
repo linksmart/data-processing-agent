@@ -31,14 +31,14 @@ def on_message(mqttc, obj, msg):
 	ev="";
 	if "observation" in msg.topic:
 		ev = IoTObservationEvent(msg.payload);
-		#print(str(ev));
+		print(str(ev));
 		observations[ev.About] = ev;
 	elif "almanac/metadata/iotentity" in msg.topic:	
 		ev = IoTEntityEvent(msg.payload);
 		#print(str(ev));
 		entities[ev.About] = ev;
 		print(ev.About);
-		#print(str(ev));
+		print(str(ev));
 	else:
 		print("other");
 	#print(msg.topic+"\n\n"+str(msg.payload)+"\n")
