@@ -20,7 +20,9 @@ module.exports = function (almanac) {
 						topic: topic,
 						body: json,
 					});
-				//almanac.storageManager.postMqttEvent(topic, json);	//Temporary forward to StorageManager
+				if (almanac.config.mqttToHttpStorageManagerEnabled) {
+					almanac.storageManager.postMqttEvent(topic, json);	//Forward to StorageManager
+				}
 				almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 			}
 		} catch (ex) {

@@ -42,9 +42,8 @@ npm install
 
 # Setup of the Virtualization Layer
 
-Edit the config.js file according to your network.
+Look at the `config.js` without changing it, and edit a `config.local.js` file according to your network (and example is provided in `config.local.example.js`).
 
-TODO: More information to follow
 
 
 # Testing the Virtualization Layer:

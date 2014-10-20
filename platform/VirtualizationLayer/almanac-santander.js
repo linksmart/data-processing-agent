@@ -9,12 +9,15 @@
 module.exports = function (almanac) {
 
 	function proxySmartSantander(req, res) {
-		req.pipe(almanac.request.get('http://' + almanac.config.hosts.santander.host + ':' + almanac.config.hosts.santander.port + almanac.config.hosts.santander.path + req.url,
-			function (error, response, body) {
+		req.pipe(almanac.request({
+				method: req.method,
+				uri: 'http://' + almanac.config.hosts.santander.host + ':' + almanac.config.hosts.santander.port + almanac.config.hosts.santander.path + req.url,
+				timeout: 15000,
+			}, function (error, response, body) {
 				if (error || response.statusCode != 200 || !body) {
 					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' proxying to SmartSantander!');
 					if (!body) {
-						almanac.basicHttp.serve500(req, res, 'Error proxying to SmartSantander!');
+						almanac.basicHttp.serve503(req, res);
 					}
 				}
 			})).pipe(res);

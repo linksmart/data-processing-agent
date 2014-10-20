@@ -1,6 +1,8 @@
 "use strict";
 /*
-	Virtualization Layer | Configuration file
+	Virtualization Layer | Glogal configuration file
+	> Do not edit "config.js" but create instead a "config.local.js" file with only the properties you would like to change;
+	> an example is available in "config.local.example.js"
 		by Alexandre Alapetite http://alexandre.alapetite.fr
 			from Alexandra Institute http://www.alexandra.dk
 			for the ALMANAC European project http://www.almanac-project.eu
@@ -9,7 +11,7 @@
 var hosts = {
 		virtualizationLayerPublic: {	//Public IP of this Virtualization Layer, if any
 			scheme: 'http',
-			host: 'almanac.alexandra.dk',
+			host: 'example.net',
 			port: 80,
 		},
 		virtualizationLayer: {
@@ -17,31 +19,31 @@ var hosts = {
 			host: 'localhost',
 			port: 80,
 		},
-		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
+		mqttBroker: {
+			host: 'localhost',
+			port: 1883,
+		},
 		networkManager: {
 			host: 'localhost',
 			port: 8082,
 		},
-		mqttBroker: {
+		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
+		scral: {
 			host: 'localhost',
-			port: 1883,
+			port: 8080,
+			path: '/connectors.rest-0.2.0/',
+		},
+		storage: {	//Local Storage Manager
+			scheme: 'http',
+			host: 'localhost',
+			port: 8081,
+			path: '/StorageManagerLocal/REST/',
 		},
 		storageCloud: {	//Public Storage Manager cloud
 			scheme: 'http',
 			host: 'energyportal.cnet.se',
 			port: 80,
 			path: '/StorageManagerCloud/REST/',
-		},
-		storage: {	//Local Storage Manager
-			scheme: 'http',
-			host: '192.168.1.30',
-			port: 80,
-			path: '/StorageManagerLocal/REST/',
-		},
-		scral: {
-			host: '130.192.86.227',
-			port: 8080,
-			path: '/connectors.rest-0.2.0/',
 		},
 		santander: {	//Public SmartSantander instance cloud
 			host: 'data.smartsantander.eu',
@@ -56,8 +58,13 @@ var hosts = {
 	};
 
 hosts.masterStorageManager = hosts.storageCloud;
-hosts.slaveVirtualizationLayer = null;
 
 exports.config = {
 	hosts: hosts,
+
+	//{silent, error, warn, http, info, verbose, silly}
+	logLevel: 'info',
+
+	//Forward or not the local MQTT events by HTTP to the StorageManager (the one defined in hosts.masterStorageManager)
+	mqttToHttpStorageManagerEnabled: false,
 };
