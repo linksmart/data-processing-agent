@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<title>Socket.IO console | ALMANAC</title>
+<meta name="robots" content="noindex, nofollow" />
+<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+<h1>Socket.IO console</h1>
+<p>See JavaScript console</p>
+
+<script>
+"use strict";
+
+var socket = io();
+
+function append(text) {
+	console.log(text);
+}
+
+socket.on('info', function(msg) {
+		append(msg);
+	});
+
+socket.on('DM', function(json) {
+		append('DM: ' + JSON.stringify(json));
+	});
+
+socket.on('mqtt', function(json) {
+		append('MQTT: ' + JSON.stringify(json));
+	});
+</script>
+</body>
+</html>

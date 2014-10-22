@@ -76,4 +76,4 @@ server.listen(config.hosts.virtualizationLayer.port);
 
 almanac.init();
 
-almanac.log.info('VL', 'Node.js: server running ALMANAC Virtualization Layer at %j', server.address());
+almanac.log.warn('VL', 'Node.js: server running ALMANAC Virtualization Layer at %j', server.address());

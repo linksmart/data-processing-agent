@@ -31,7 +31,7 @@ var hosts = {
 		scral: {
 			host: 'localhost',
 			port: 8080,
-			path: '/connectors.rest-0.2.0/',
+			path: '/connectors.rest/',
 		},
 		storage: {	//Local Storage Manager
 			scheme: 'http',
@@ -41,7 +41,7 @@ var hosts = {
 		},
 		storageCloud: {	//Public Storage Manager cloud
 			scheme: 'http',
-			host: 'energyportal.cnet.se',
+			host: 'almanac.cnet.se',
 			port: 80,
 			path: '/StorageManagerCloud/REST/',
 		},

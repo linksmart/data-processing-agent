@@ -8,7 +8,8 @@ from Bin import *
 BINS = {
 	'B': Bin('B','561056653','HZr68o7VWYaYbr1NV0YVkwQjPYgQei8UlLkdbCvl7QKnsAzF'),
 	'C': Bin('C','488920744','CwW3flZOE0AS8in6R05wKBCXYcimJ04zWIDBJFrZT5Byy9JF'),
-	'D': Bin('D','675560879','VEAoRaIYPfL8rIjXoNJT5lFpU9TqGYrhWBHnUwB72KR4INda')
+	'D': Bin('D','675560879','VEAoRaIYPfL8rIjXoNJT5lFpU9TqGYrhWBHnUwB72KR4INda'),
+	'E': Bin('E','1987314073','NTKcEStj5JvADeMNMa58kVqMr0rsOjHzik5k7ZBWfbvcbq4l')
 	};	
 
 active=True;

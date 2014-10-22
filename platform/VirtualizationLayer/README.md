@@ -17,8 +17,8 @@
 2. Create and move to the directory where the VirtualizationLayer should be located, e.g.
 
 ```sh
-mkdir -p /home/almanac/platform/nodejs/VirtualizationLayer/
-cd /home/almanac/platform/nodejs/VirtualizationLayer/
+mkdir -p /opt/virtualization-layer/
+cd /opt/virtualization-layer/
 ```
 
 3. Deploy the VirtualizationLayer source-code
@@ -59,7 +59,7 @@ npm test
 ## Either manually:
 
 ```sh
-cd /home/almanac/platform/nodejs/VirtualizationLayer
+cd /opt/virtualization-layer/
 nodejs index.js
 ```
 
@@ -67,7 +67,32 @@ nodejs index.js
 Edit the file `/etc/cron.d/almanac` and add:
 
 ```sh
-@reboot root cd /home/almanac/platform/nodejs/VirtualizationLayer && nodejs /home/almanac/platform/nodejs/VirtualizationLayer/index.js >> /home/almanac/platform/log/VirtualizationLayer.log 2>&1 &
+@reboot root cd /opt/virtualization-layer/ && nodejs /opt/virtualization-layer/index.js >> /var/log/virtualization-layer/virtualization-layer.log 2>&1 &
+```
+
+## Or from a Linux Upstart service
+
+Add a new file `/etc/init/virtualization-layer.conf`
+
+```sh
+description	"ALMANAC VirtualizationLayer"
+
+start on startup
+stop on shutdown
+
+respawn
+respawn limit 30 60
+
+script
+	cd /opt/virtualization-layer
+	exec sudo -u almanac /usr/bin/nodejs /opt/virtualization-layer/index.js >> /var/log/virtualization-layer/virtualization-layer.log 2>&1
+end script
+```
+
+And then use it a a service, such as:
+
+```sh
+service virtualization-layer restart
 ```
 
 ## TODO: Document using "forever" https://github.com/nodejitsu/forever
