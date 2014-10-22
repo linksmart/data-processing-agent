@@ -25,6 +25,7 @@ public class Tools {
                 ret.getProperties(0).addIoTStateObservation(observation, nowAsISO, nowAsISO);
 
 
+
                 return ret;
             }catch (Exception e){
                 e.printStackTrace();

@@ -7,10 +7,10 @@
 	<packaging>pom</packaging>
 	<name>Eventing</name>
 	<description>ALMANAC Eventing and Data Fusion</description>
+
 	<modules>
     <module>DataFusionAPI</module>
     <module>DataFusionCoreAPI</module>
-    <!--<module>EventsAPI</module>-->
     <module>DataFusionManagerAS</module>
 	</modules>
 	<repositories>
@@ -27,5 +27,17 @@
       <id>opencast-public</id>
       <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>
     </repository>
-	</repositories>
+        <repository>
+            <id>central</id>
+            <url>https://linksmart.eu/repo/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>

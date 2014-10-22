@@ -78,6 +78,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             if (!CEPHandler.isConnected())
                 CEPHandler.connect();
             IoTEntityEvent cepEvent = new IoTEntityEvent("DataFusionManager");
+            cepEvent.setAbout(query.getName());
             int n=0;
             for(Object key : event.keySet()) {
                 try {
