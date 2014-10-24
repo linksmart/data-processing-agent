@@ -26,7 +26,7 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
     private Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<String, DataFusionWrapper>();
     private String BROKER_URL;
     private final String DFM_QUERY_TOPIC = "/almanac/observation/iotentity/dataFusionManager";
-    private final String EVENT_TOPIC = "/#";
+    private final String EVENT_TOPIC = "#";
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
     private Boolean toShutdown = false;

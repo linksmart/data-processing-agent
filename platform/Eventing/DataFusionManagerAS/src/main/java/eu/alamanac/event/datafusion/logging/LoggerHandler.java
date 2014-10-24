@@ -16,7 +16,7 @@ public class LoggerHandler {
     public static final String LOG_TOPIC ="/eu/alamanac/event/datafusion/";
     public static String BROKER ="tcp://localhost:1883";
     public static void report(Map<String,String> info){
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
        System.out.println(gson.toJson(info));
     }
     public static void report(String source, String text){
@@ -46,12 +46,17 @@ public class LoggerHandler {
             client.connect();
             String subTopic = info.get("Topic");
             info.remove("Topic");
-
+            try {
             if (perTopic)
-                client.publish(subTopic,gson.toJson(info).getBytes(),0,false);
-            else
-                client.publish(LOG_TOPIC+subTopic,gson.toJson(info).getBytes(),0,false);
 
+                    client.publish(subTopic,gson.toJson(info).getBytes("UTF-8"),0,false);
+
+            else
+                client.publish(LOG_TOPIC+subTopic,gson.toJson(info).getBytes("UTF-8"),0,false);
+        } catch (UnsupportedEncodingException e) {
+            report(info);
+            e.printStackTrace();
+        }
             published =true;
 
         } catch (MqttException e) {
