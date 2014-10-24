@@ -99,7 +99,8 @@ public class EsperQuery implements Statement {
                     n++;
                 }
 
-                ret += aux[1];
+                if (aux.length>1)
+                    ret += aux[1];
 
 
             }else{

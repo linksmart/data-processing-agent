@@ -26,9 +26,7 @@ public class IoTProperty implements java.io.Serializable {
          About = value;
     }
     public void addIoTStateObservation(String value, String phenomenonTime, String resultTime){
-        ArrayList<IoTValue> aux = IoTStateObservation;
-        if (aux!=null)
-            IoTStateObservation.addAll(aux);
+
         IoTStateObservation.add( new IoTValue(value,phenomenonTime,resultTime));
     }
 

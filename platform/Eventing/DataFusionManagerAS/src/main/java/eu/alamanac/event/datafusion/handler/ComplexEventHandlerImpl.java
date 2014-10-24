@@ -96,7 +96,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                         IoTEntityEvent ent = (IoTEntityEvent) event.get(key);
 
                         if (cepEvent.getProperties("IoTEntities") == null) {
-                            cepEvent.getProperties(n).setAbout("IoTEntities");
+                            cepEvent.addProperty("IoTEntities");
                             n++;
                         }
 
@@ -108,13 +108,13 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                                 cepEvent.addProperty(p.getAbout()).addIoTStateObservation(v.getValue(), v.getPhenomenonTime(), v.getResultTime());
 
                         }
-
+/*
                         if(query.haveOutput())
                             for(String output : query.getOutput()) {
                                 CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
                             }
                         else
-                            CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                            CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);*/
                     }
                     // CEPHandler.publish("/almanac/local/iotentity/dataFusionManager/" + query.getName(), parser.toJson(event).getBytes(), 2, false);
 
@@ -127,13 +127,13 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                         for (IoTValue v : ent.getIoTStateObservation())
                             cepEvent.addProperty(ent.getAbout()).addIoTStateObservation(v.getValue(), v.getPhenomenonTime(), v.getResultTime());
 
-
+/*
                         if(query.haveOutput())
                             for(String output : query.getOutput()) {
                                 CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
                             }
                         else
-                            CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                            CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);*/
 
                     } catch (Exception eBoolean) {
 
@@ -142,12 +142,12 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                             Boolean ent = (Boolean) event.get(key);
                             cepEvent.addProperty(key.toString()).addIoTStateObservation(ent.toString(), dateOfCreation, nowAsISO);
 
-                            if(query.haveOutput())
+                           /* if(query.haveOutput())
                                 for(String output : query.getOutput()) {
                                     CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
                                 }
                             else
-                                CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                                CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);*/
 
                         } catch (Exception eProperty) {
 
@@ -156,12 +156,12 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                                 Integer ent = (Integer) event.get(key);
                                 cepEvent.addProperty(key.toString()).addIoTStateObservation(ent.toString(), dateOfCreation, nowAsISO);
 
-                                if(query.haveOutput())
+                              /*  if(query.haveOutput())
                                     for(String output : query.getOutput()) {
                                         CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
                                     }
                                 else
-                                    CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                                    CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);*/
 
                             } catch (Exception eString) {
                                 try {
@@ -169,12 +169,12 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                                     Double ent = (Double) event.get(key);
                                     cepEvent.addProperty(key.toString()).addIoTStateObservation(ent.toString(), dateOfCreation, nowAsISO);
 
-                                    if(query.haveOutput())
+                                /*    if(query.haveOutput())
                                         for(String output : query.getOutput()) {
                                             CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
                                         }
                                     else
-                                        CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                                        CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);*/
 
                                 } catch (Exception e) {
                                     try {
@@ -182,12 +182,12 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                                         Float ent = (Float) event.get(key);
                                         cepEvent.addProperty(key.toString()).addIoTStateObservation(ent.toString(), dateOfCreation, nowAsISO);
 
-                                        if(query.haveOutput())
+                                   /*     if(query.haveOutput())
                                             for(String output : query.getOutput()) {
                                                 CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
                                             }
                                         else
-                                            CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                                            CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);*/
 
                                     } catch (Exception eFloat) {
 
@@ -196,24 +196,24 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                                             String ent = (String) event.get(key);
                                             cepEvent.addProperty(key.toString()).addIoTStateObservation(ent, dateOfCreation, nowAsISO);
 
-                                            if(query.haveOutput())
+                                          /*  if(query.haveOutput())
                                                 for(String output : query.getOutput()) {
                                                     CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
                                                 }
                                             else
-                                                CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                                                CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);*/
                                         } catch (Exception eInteger) {
 
                                             try {
 
                                                 cepEvent.addProperty(key.toString()  ).addIoTStateObservation(parser.toJson(event), dateOfCreation, nowAsISO);
 
-                                                if(query.haveOutput())
+                                          /*      if(query.haveOutput())
                                                     for(String output : query.getOutput()) {
                                                         CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
                                                     }
                                                 else
-                                                    CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                                                    CEPHandler.publish(EVENT_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);*/
                                             } catch (Exception eMqtt) {
                                                 e.printStackTrace();
                                             }
@@ -228,16 +228,19 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
                 }
 
+
+            }
+            if (!sendPerProperty)
                 if(query.haveOutput())
                     for(String output : query.getOutput()) {
-                        CEPHandler.publish(output + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
+                        CEPHandler.publish(output + query.getName(), parser.toJson(cepEvent).getBytes(), 0, false);
                     }
                 else
-                    CEPHandler.publish(ERROR_TOPIC + cepEvent.getAbout(), parser.toJson(cepEvent).getBytes(), 0, false);
-            }
+                    CEPHandler.publish(EVENT_TOPIC + query.getName(), parser.toJson(cepEvent).getBytes(), 0, false);
         } catch (MqttException e) {
             e.printStackTrace();
         }
+
 
     }
     public void update(IoTEntityEvent event) {
@@ -257,9 +260,8 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                     CEPHandler.publish(output + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
                 }
             else
-                for(String output : query.getOutput()) {
-                    CEPHandler.publish(ERROR_TOPIC + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
-                }
+                    CEPHandler.publish(EVENT_TOPIC + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
+
         }catch (Exception e){
 
         }

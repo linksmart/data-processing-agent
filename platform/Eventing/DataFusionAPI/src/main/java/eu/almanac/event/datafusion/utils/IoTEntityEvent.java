@@ -38,8 +38,12 @@ import java.util.ArrayList;
     }
 
     public IoTProperty addProperty(String about) {
-        Properties.add(new IoTProperty(about));
-        return Properties.get(Properties.size()-1);
+        if (!haveProperty(about)) {
+            Properties.add(new IoTProperty(about));
+            return Properties.get(Properties.size() - 1);
+        }else{
+            return getProperties(about);
+        }
     }
     public IoTProperty getProperties(int index) {
         return Properties.get(index);
