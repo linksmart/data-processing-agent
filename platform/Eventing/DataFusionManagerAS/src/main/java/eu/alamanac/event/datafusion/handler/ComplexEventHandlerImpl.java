@@ -71,7 +71,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         }
         try {
             TimeZone tz = TimeZone.getTimeZone("UTC");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
             df.setTimeZone(tz);
             String nowAsISO = df.format(new Date());
 
@@ -248,7 +248,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
         try {
             TimeZone tz = TimeZone.getTimeZone("UTC");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
             df.setTimeZone(tz);
             String nowAsISO = df.format(new Date());
 
