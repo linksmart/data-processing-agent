@@ -48,7 +48,7 @@ public interface ComplexEventHandler {
 	 * */
 	//public boolean callbacker(ResponseSet answer);
 
-    public  boolean publishError(String topic, String errorMessage);
+    public  boolean publishError( String errorMessage);
 
     public void destroy();
 

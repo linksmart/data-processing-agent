@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +36,9 @@ public class LoggerHandler {
 
         report(error);
     }
-    public static void publish(Map<String,String> info){
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public static void publish(Map<String,String> info, boolean perTopic){
+        Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
         boolean published =false;
         MqttClient client =null;
         try {
@@ -45,7 +47,10 @@ public class LoggerHandler {
             String subTopic = info.get("Topic");
             info.remove("Topic");
 
-            client.publish(LOG_TOPIC+subTopic,gson.toJson(info).getBytes(),0,false);
+            if (perTopic)
+                client.publish(subTopic,gson.toJson(info).getBytes(),0,false);
+            else
+                client.publish(LOG_TOPIC+subTopic,gson.toJson(info).getBytes(),0,false);
 
             published =true;
 
@@ -67,7 +72,7 @@ public class LoggerHandler {
         }
 
     }
-    public static void publish(String errorTopic, String message, String trace ){
+    public static void publish(String errorTopic, String message, String trace, boolean perTopic ){
         HashMap<String,String> error = new HashMap<String, String>();
         error.put("Topic",errorTopic);
         error.put("Message",message);
@@ -75,6 +80,6 @@ public class LoggerHandler {
         if (trace!=null)
             error.put("Source",trace);
 
-        publish(error);
+        publish(error, perTopic);
     }
 }

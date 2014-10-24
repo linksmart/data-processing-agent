@@ -24,7 +24,7 @@ public class EsperQuery implements Statement {
         if(event.getProperties("Name")!= null)
             this.name = event.getProperties("Name").getIoTStateObservation().get(0).getValue();
         else{
-            LoggerHandler.publish("syntax_error", "IoTEntity Event Error: The query must have a name!", null);
+            LoggerHandler.publish("query/"+"anonymous", "IoTEntity Event Error: The query must have a name!", null,true);
             throw new Exception("IoTEntity Event Error: The query must have a name!");
         }
 
@@ -33,7 +33,7 @@ public class EsperQuery implements Statement {
 
             this.satement = getInputAndCleanStatement(event.getProperties("Statement").getIoTStateObservation().get(0).getValue());
         }else{
-            LoggerHandler.publish("syntax_error","IoTEntity Event Error: The query must have a name!",null);
+            LoggerHandler.publish("query/"+name,"IoTEntity Event Error: The query must have a name!",null,true);
             throw new Exception("IoTEntity Event Error: The query must have a statement!");
         }
 
@@ -104,7 +104,7 @@ public class EsperQuery implements Statement {
 
 
             }else{
-                LoggerHandler.publish("Syntax_error", "missing '{' or '}' after the from in query:" + getName(), null);
+                LoggerHandler.publish("query/"+name, "missing '{' or '}' after the from in query:" + getName(), null,true);
             }
         }
 

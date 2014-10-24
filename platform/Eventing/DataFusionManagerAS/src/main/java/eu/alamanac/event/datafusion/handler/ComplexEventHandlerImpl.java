@@ -271,9 +271,9 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
     @Override
-    public boolean publishError(String topic, String errorMessage) {
+    public boolean publishError(String errorMessage) {
 
-        LoggerHandler.publish(query.getName()+"/"+topic,errorMessage,null);
+        LoggerHandler.publish("query/"+query.getName(),errorMessage,null,true);
 
         return true;
     }

@@ -305,7 +305,7 @@ public class EsperEngine implements DataFusionWrapper {
 
         if(epService.getEPAdministrator().getStatement(query.getName())!=null) {
 
-            LoggerHandler.publish("syntax_error","Query with name" + query.getName() + "already added",null);
+            LoggerHandler.publish(query.getName(),"Query with name" + query.getName() + " already added",null, true);
             return false;
         }
         try{
@@ -341,7 +341,7 @@ public class EsperEngine implements DataFusionWrapper {
                     statement.setSubscriber(handler);
 
                 }catch (Exception e){
-                    LoggerHandler.publish("syntax_error",e.getMessage(),null);
+                    LoggerHandler.publish(query.getName(),e.getMessage(),null,true);
                 }
 
 

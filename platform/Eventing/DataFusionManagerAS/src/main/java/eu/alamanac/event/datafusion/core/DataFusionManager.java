@@ -33,7 +33,7 @@ public class DataFusionManager {
         int i = 0;
         while (feeder.isDown()){
             if (i == 0)
-            LoggerHandler.publish("info","Data Fusion Manager is alive",null);
+            LoggerHandler.publish("info","Data Fusion Manager is alive",null,false);
             i = (i+1)%6;
 
             try {

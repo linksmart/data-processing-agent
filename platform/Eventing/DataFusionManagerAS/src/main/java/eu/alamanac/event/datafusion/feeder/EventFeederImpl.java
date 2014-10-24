@@ -26,7 +26,7 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
     private Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<String, DataFusionWrapper>();
     private String BROKER_URL;
     private final String DFM_QUERY_TOPIC = "/almanac/observation/iotentity/dataFusionManager";
-    private final String EVENT_TOPIC = "/almanac/observation/#";
+    private final String EVENT_TOPIC = "/#";
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
     private Boolean toShutdown = false;
@@ -163,39 +163,42 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
 
             event = parser.fromJson(msg, IoTEntityEvent.class);
 
-            if (topic.equals(DFM_QUERY_TOPIC)) {
+            if(event.getAbout()!=null) {
+                if (/*topic.equals(DFM_QUERY_TOPIC)*/ event.getAbout().equals("DataFusionManager")) {
 
 
-                try {
-                    Statement query = new EsperQuery(event);
+                    try {
+                        Statement query = new EsperQuery(event);
 
-                    if (query != null) {
-                        if (query.getStatement().toLowerCase().equals("shutdown")){
-                            synchronized (toShutdown) {
-                                toShutdown = true;
+                        if (query != null) {
+                            if (query.getStatement().toLowerCase().equals("shutdown")) {
+                                synchronized (toShutdown) {
+                                    toShutdown = true;
+                                }
+                            } else {
+
+                                for (DataFusionWrapper i : dataFusionWrappers.values())
+                                    i.addStatement(query);
                             }
-                        }else {
-
-                            for (DataFusionWrapper i : dataFusionWrappers.values())
-                                i.addStatement(query);
                         }
+                    } catch (Exception e) {
+                        LoggerHandler.report("error", e);
                     }
-                }catch (Exception e){
-                    LoggerHandler.report("error",e);
+
+                } else {
+
+                    for (DataFusionWrapper i : dataFusionWrappers.values())
+                        i.addEvent(topic, event);
+                    // addEvent(topic,je.getProperties()[0].toMap());
                 }
-
-            } else {
-
-                for (DataFusionWrapper i: dataFusionWrappers.values())
-                    i.addEvent(topic, event);
-                // addEvent(topic,je.getProperties()[0].toMap());
+            }else{
+                LoggerHandler.report("JsonParseWarning", "No IoTEvent received instead received :" + msg,null);
             }
         }catch (JsonParseException e) {
 
-            LoggerHandler.report("JsonParseException", "No IoTEvent received instead received :" + msg, e.getStackTrace().toString());
+            LoggerHandler.report("JsonParseError", "No IoTEvent received instead received :" + msg, e.getStackTrace().toString());
 
 
-            return;
 
         }catch (Exception e){
             e.printStackTrace();
