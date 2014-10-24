@@ -341,7 +341,7 @@ public class EsperEngine implements DataFusionWrapper {
                     statement.setSubscriber(handler);
 
                 }catch (Exception e){
-                    LoggerHandler.publish(query.getName(),e.getMessage(),null,true);
+                    LoggerHandler.publish("queries/"+query.getName(),e.getMessage(),null,true);
                 }
 
 
