@@ -59,6 +59,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     public void update(Map event) {
 
         LoggerHandler.report("info", "Updating query: " + query.getName());
+
         try {
 
             if(event.containsKey((Object)(new String("SetEventPerEntity")))){
@@ -78,7 +79,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             if (!CEPHandler.isConnected())
                 CEPHandler.connect();
             IoTEntityEvent cepEvent = new IoTEntityEvent("DataFusionManager");
-            cepEvent.setAbout(query.getName());
+            cepEvent.setAbout(query.getSource());
             int n=0;
             for(Object key : event.keySet()) {
                 try {
@@ -233,10 +234,10 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             if (!sendPerProperty)
                 if(query.haveOutput())
                     for(String output : query.getOutput()) {
-                        CEPHandler.publish(output + query.getName(), parser.toJson(cepEvent).getBytes(), 0, false);
+                        CEPHandler.publish(output + query.getSource(), parser.toJson(cepEvent).getBytes(), 0, false);
                     }
                 else
-                    CEPHandler.publish(EVENT_TOPIC + query.getName(), parser.toJson(cepEvent).getBytes(), 0, false);
+                    CEPHandler.publish(EVENT_TOPIC + query.getSource(), parser.toJson(cepEvent).getBytes(), 0, false);
         } catch (MqttException e) {
             e.printStackTrace();
         }

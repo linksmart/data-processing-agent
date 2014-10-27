@@ -36,7 +36,6 @@ public class Tools {
 
        return  CreateIoTEntity(entity,property,observation.toString());
     }
-
     static public IoTEntityEvent CreateIoTEntity(String entity, String property, Integer observation ){
 
         return  CreateIoTEntity(entity,property,observation.toString());
@@ -71,6 +70,43 @@ public class Tools {
 
         return  CreateIoTEntity(generateRandomAbout(),property,observation.toString());
     }
+
+    static public Map CreateIoTEntities(Map entities, String property, String observation ){
+
+
+        Map<String,IoTEntityEvent> arg =entities;
+        Map<String, IoTEntityEvent> ret = new HashMap<String,IoTEntityEvent>();
+
+        for (String key: arg.keySet()){
+            ret.put(key,CreateIoTEntity(key,generateRandomAbout()+property,observation));
+        }
+
+        return ret;
+    }
+    static public Map CreateIoTEntities(Map entities, String property, Float observation ){
+
+        return CreateIoTEntities(entities,property,observation.toString());
+    }
+
+    static public Map CreateIoTEntities(Map entities, String property, Double observation ){
+
+        return CreateIoTEntities(entities,property,observation.toString());
+    }
+
+    static public Map CreateIoTEntities(Map entities, String property, Integer observation ){
+
+        return CreateIoTEntities(entities,property,observation.toString());
+    }
+    static public Map CreateIoTEntities(Map entities, String property, Boolean observation ){
+
+        return CreateIoTEntities(entities,property,observation.toString());
+    }
+
+    static public IoTEntityEvent CreateIoTEntities(IoTEntityEvent entities, String property, Object observation ){
+
+        return CreateIoTEntity(entities.getAbout(),property,observation.toString());
+    }
+
     static public Boolean containsProperty(IoTEntityEvent entity, String property) {
 
         System.out.println(entity.haveProperty(property));
@@ -118,6 +154,15 @@ public class Tools {
     static public String generateRandomAbout(){
 
         return UUID.randomUUID().toString().replace("-","_").replace("#","_");
+    }
+
+    static public String IoTAVG(Map entities){
+        System.out.println("test");
+        return "hola";
+    }
+    static public String IoTAVG(Object[] entities){
+        System.out.println("test");
+        return "hola";
     }
 
 

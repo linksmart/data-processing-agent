@@ -9,6 +9,8 @@ public interface Statement {
 
     public String getStatement();
 
+    public String getSource();
+
     public String[] getInput();
 
     public String[] getScope();

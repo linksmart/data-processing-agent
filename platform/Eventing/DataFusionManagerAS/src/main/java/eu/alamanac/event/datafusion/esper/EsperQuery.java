@@ -11,7 +11,9 @@ import java.util.ArrayList;
 public class EsperQuery implements Statement {
 
     protected String name;
-    protected String satement;
+    protected String statement;
+
+    protected String source;
     protected String[] input =null;
     protected String[] output=null;
     protected String[] scope={"local"};
@@ -31,12 +33,19 @@ public class EsperQuery implements Statement {
         if(event.getProperties("Statement")!= null) {
            // this.satement = event.getProperties("Statement").getIoTStateObservation()[0].getValue().replace("{", "").replace("}", "");
 
-            this.satement = getInputAndCleanStatement(event.getProperties("Statement").getIoTStateObservation().get(0).getValue());
+            this.statement = getInputAndCleanStatement(event.getProperties("Statement").getIoTStateObservation().get(0).getValue());
         }else{
             LoggerHandler.publish("query/"+name,"IoTEntity Event Error: The query must have a name!",null,true);
             throw new Exception("IoTEntity Event Error: The query must have a statement!");
         }
+        if(event.getProperties("Source")!= null) {
+            // this.satement = event.getProperties("Statement").getIoTStateObservation()[0].getValue().replace("{", "").replace("}", "");
 
+            this.source = getInputAndCleanStatement(event.getProperties("Source").getIoTStateObservation().get(0).getValue());
+        }else {
+
+            this.source = name;
+        }
         if(event.getProperties("Output")!= null) {
             this.output = new String[event.getProperties("Output").getIoTStateObservation().size()];
             n = 0;
@@ -115,7 +124,7 @@ public class EsperQuery implements Statement {
         return  name;
     }
     public String getStatement(){
-        return  satement;
+        return  statement;
     }
     public String[] getInput(){
         return  input;
@@ -142,6 +151,11 @@ public class EsperQuery implements Statement {
     @Override
     public String[] getOutput() {
         return output;
+    }
+
+    @Override
+    public String getSource() {
+        return source;
     }
 
 }
