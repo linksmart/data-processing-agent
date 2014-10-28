@@ -5,8 +5,11 @@ import eu.alamanac.event.datafusion.logging.LoggerHandler;
 import eu.almanac.event.datafusion.utils.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.IoTValue;
 import eu.linksmart.api.event.datafusion.Statement;
+import sun.misc.Regexp;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EsperQuery implements Statement {
 
@@ -76,7 +79,7 @@ public class EsperQuery implements Statement {
         }
     }
 
-    private String getInputAndCleanStatement(String statement) {
+ /*   private String getInputAndCleanStatement(String statement) {
 
         String ret = statement ,lower=statement.toLowerCase();
 
@@ -110,6 +113,58 @@ public class EsperQuery implements Statement {
 
                 if (aux.length>1)
                     ret += aux[1];
+
+
+            }else{
+                LoggerHandler.publish("query/"+name, "missing '{' or '}' after the from in query:" + getName(), null,true);
+            }
+        }
+
+
+        return ret;
+    }*/
+    private String getInputAndCleanStatement(String statement) {
+
+        String ret = statement ,lower=statement.toLowerCase();
+
+        if(lower.contains("topics")) {
+            String fromStatement = statement.substring(lower.indexOf("topics"));
+
+
+            if (fromStatement.contains("{") && fromStatement.contains("}")) {
+                ret = statement.substring(0, lower.indexOf("topics"));
+                //String aux[] = statement.substring( lower.indexOf("topics")).split("\\}");
+                String topics[] =fromStatement.split("\\{([^}]+)\\}");
+
+                Pattern pattern = Pattern.compile("\\{[^}]+\\}",Pattern.DOTALL);
+
+                // Now create matcher object.
+                Matcher matcher = pattern.matcher(statement);
+                int k=matcher.groupCount();
+                ArrayList<String> inputs = new ArrayList<>();
+                int n = 0, m=0;
+                for (int i=0; matcher.find();i++) {
+                    try {
+                        String aux =matcher.group(0);
+                        int start =1;
+                        if(aux.charAt(1) == '/')
+                           start =2;
+                        aux = aux.substring(start,aux.length()-1).replace("#","hash").replace("/",".");
+                       // if(m==1)
+                            inputs.add( aux );
+                       // else if(n!=0)
+                            ret +=  aux+topics[n+1];
+                    }catch (Exception e){
+                        ret += i;
+                    }
+
+
+                    n++;
+                    m=(m+1)%3;
+                }
+
+                //if (topics.length>1)
+                //    ret += topics[topics.length-1];
 
 
             }else{
