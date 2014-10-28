@@ -38,7 +38,7 @@ import java.util.ArrayList;
     }
 
     public IoTProperty addProperty(String about) {
-        if (!haveProperty(about)) {
+        if (!hasProperty(about)) {
             Properties.add(new IoTProperty(about));
             return Properties.get(Properties.size() - 1);
         }else{
@@ -69,7 +69,7 @@ import java.util.ArrayList;
     public ArrayList<IoTProperty> getProperties() {
         return Properties;
     }
-    public boolean haveLikeProperty(String property){
+    public boolean hasLikeProperty(String property){
         for (IoTProperty p: this.Properties)
             if(p.getAbout().contains(property)) {
                 return true;
@@ -78,7 +78,7 @@ import java.util.ArrayList;
 
         return false;
     }
-    public boolean haveProperty(String propertyName){
+    public boolean hasProperty(String propertyName){
         if(Properties != null)
             for(IoTProperty i : Properties) {
                 if (i.getAbout() != null)

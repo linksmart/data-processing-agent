@@ -109,8 +109,8 @@ public class Tools {
 
     static public Boolean containsProperty(IoTEntityEvent entity, String property) {
 
-        System.out.println(entity.haveProperty(property));
-        return entity.haveProperty(property);
+        System.out.println(entity.hasProperty(property));
+        return entity.hasProperty(property);
     }
     static public Boolean containsProperty(IoTProperty[] properties, String property) {
 
@@ -126,7 +126,7 @@ public class Tools {
     static public Boolean likeProperty(IoTEntityEvent entity, String property) {
 
 
-        return entity.haveLikeProperty(property);
+        return entity.hasLikeProperty(property);
     }
     static public Boolean likeProperty(IoTProperty[] properties, String property) {
 

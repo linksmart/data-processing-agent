@@ -1,6 +1,10 @@
 package eu.almanac.event.datafusion.utils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class IoTProperty implements java.io.Serializable {
     private ArrayList<IoTValue> IoTStateObservation =null;
@@ -28,8 +32,18 @@ public class IoTProperty implements java.io.Serializable {
     public void addIoTStateObservation(String value, String phenomenonTime, String resultTime){
 
         IoTStateObservation.add( new IoTValue(value,phenomenonTime,resultTime));
+
     }
 
+
+    public void addIoTStateObservation(String value){
+
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        df.setTimeZone(tz);
+        String nowAsISO = df.format(new Date());
+        IoTStateObservation.add( new IoTValue(value,nowAsISO,nowAsISO));
+    }
 
     public ArrayList<IoTValue> getIoTStateObservation() {
 
