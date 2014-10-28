@@ -15,15 +15,15 @@ import java.util.Map;
  * Created by Caravajal on 06.10.2014.
  */
 public class DataFusionManager {
-    static String brokerURL = "tcp://localhost:1883";
+   // static String brokerURL = "tcp://localhost:1883";
 
     public static void main(String[] args) {
         if(args.length==1)
-            brokerURL = args[0];
+           LoggerHandler.BROKER = args[0];
 
         EventFeeder feeder = null;
         try {
-             feeder = new EventFeederImpl(brokerURL);
+             feeder = new EventFeederImpl(LoggerHandler.BROKER);
 
             feeder.dataFusionWrapperSignIn(new EsperEngine());
 

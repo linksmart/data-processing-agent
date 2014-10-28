@@ -57,19 +57,19 @@ public class DFClient {
             }
             if (cmd.hasOption("entity")) {
                 query.addProperty("Source");
-                query.getProperties("Source").addIoTStateObservation(cmd.getOptionValue("name"));
+                query.getProperties("Source").addIoTStateObservation(cmd.getOptionValue("entity"));
             }
             if (cmd.hasOption("input")) {
                 query.addProperty("Input");
-                query.getProperties("Input").addIoTStateObservation(cmd.getOptionValue("name"));
+                query.getProperties("Input").addIoTStateObservation(cmd.getOptionValue("input"));
             }
             if (cmd.hasOption("output")) {
                 query.addProperty("Output");
-                query.getProperties("Output").addIoTStateObservation(cmd.getOptionValue("name"));
+                query.getProperties("Output").addIoTStateObservation(cmd.getOptionValue("output"));
             }
             if (cmd.hasOption("scope")) {
                 query.addProperty("Scope");
-                query.getProperties("Scope").addIoTStateObservation(cmd.getOptionValue("name"));
+                query.getProperties("Scope").addIoTStateObservation(cmd.getOptionValue("scope"));
             }
             Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
