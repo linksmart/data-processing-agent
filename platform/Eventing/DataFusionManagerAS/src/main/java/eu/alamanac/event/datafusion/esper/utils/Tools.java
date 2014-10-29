@@ -13,18 +13,10 @@ public class Tools {
 
             try {
 
-
-                TimeZone tz = TimeZone.getTimeZone("UTC");
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-                df.setTimeZone(tz);
-                String nowAsISO = df.format(new Date());
-
                 IoTEntityEvent ret = new IoTEntityEvent(entity);
 
-                ret.addProperty(  property);
-                ret.getProperties(0).addIoTStateObservation(observation, nowAsISO, nowAsISO);
-
-
+                ret.addProperty(  entity+"##"+property );
+                ret.getProperties(0).addIoTStateObservation(observation);
 
                 return ret;
             }catch (Exception e){
@@ -50,7 +42,10 @@ public class Tools {
 
         return  CreateIoTEntity(entity,property,observation.toString());
     }
+    static public IoTEntityEvent CreateIoTEntity(String entity, String property, Object observation ){
 
+        return  CreateIoTEntity(entity,property,observation.toString());
+    }
     static public IoTEntityEvent CreateIoTEntity( String property, Boolean observation ){
 
         return  CreateIoTEntity(generateRandomAbout(),property,observation.toString());

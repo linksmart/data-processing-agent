@@ -52,7 +52,7 @@ public class DFClient {
                     query.getProperties("Statement").addIoTStateObservation(content);
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.err.println(e.getMessage());
                 }
             }
             if (cmd.hasOption("entity")) {
@@ -167,7 +167,7 @@ public class DFClient {
 
             return cmd;
         } catch (ParseException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("DFClient", getCommandArgsOptions());
             return null;
