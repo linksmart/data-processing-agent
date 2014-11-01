@@ -1,9 +1,6 @@
 package eu.alamanac.event.datafusion.esper;
 
-import com.espertech.esper.client.Configuration;
-import com.espertech.esper.client.EPServiceProvider;
-import com.espertech.esper.client.EPServiceProviderManager;
-import com.espertech.esper.client.EPStatement;
+import com.espertech.esper.client.*;
 import eu.alamanac.event.datafusion.esper.utils.Tools;
 import eu.alamanac.event.datafusion.handler.ComplexEventHandlerImpl;
 import eu.alamanac.event.datafusion.logging.LoggerHandler;
@@ -138,19 +135,25 @@ public class EsperEngine implements DataFusionWrapper {
 
 
             String esperParentTopic ="";
-            String [] esperTopcArray = topic.substring(1).split("/");
+            if(topic.charAt(0)== '/')
+                topic = topic.substring(1);
+
+            String [] esperTopcArray = topic.split("/");
 
             esperParentTopic = esperTopcArray[0];
             for (int i=1; i<esperTopcArray.length-1;i++) {
                 esperParentTopic += "."+esperTopcArray[i];
 
             }
-            esperParentTopic += ".hash";
-            String esperTopic = topic.substring(1).replace('/', '.');
 
-            addEsperEvent(esperTopic,event);
+            String esperTopic = topic.replace('/', '.');
 
-            addEsperEvent(esperParentTopic,event);
+           // addEsperEvent(esperTopic, event);
+
+
+
+            addEsperEvent(esperParentTopic+ ".hash",event);
+            insertStream(esperTopcArray[esperTopcArray.length-1],esperParentTopic);
 
         }catch(Exception e){
 
@@ -161,6 +164,21 @@ public class EsperEngine implements DataFusionWrapper {
         return true;
     }
 
+    private Integer noTopics =0;
+    private boolean insertStream(String head, String parretTopic){
+        if (epService.getEPAdministrator().getStatement(head)!=null)
+            return false;
+        EPStatement statement =null;
+        try {
+             statement = epService.getEPAdministrator().createEPL("insert into "+parretTopic+"."+head+" select * from "+parretTopic+".hash (about = '"+head+"')" , head);
+
+
+        }catch (EPStatementSyntaxException Esyn){
+            Esyn.printStackTrace();
+        }
+
+        return statement.getState() != EPStatementState.STARTED;
+    }
     @Override
     public boolean addEventType(String nameType, String[] eventSchema, Object[] eventTypes) {
         return false;

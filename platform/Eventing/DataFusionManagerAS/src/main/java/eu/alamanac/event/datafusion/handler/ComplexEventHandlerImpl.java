@@ -234,7 +234,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             if (!sendPerProperty)
                 if(query.haveOutput())
                     for(String output : query.getOutput()) {
-                        CEPHandler.publish(output + query.getSource(), parser.toJson(cepEvent).getBytes(), 0, false);
+                        CEPHandler.publish(output+"/" + query.getSource(), parser.toJson(cepEvent).getBytes(), 0, false);
                     }
                 else
                     CEPHandler.publish(EVENT_TOPIC + query.getSource(), parser.toJson(cepEvent).getBytes(), 0, false);
@@ -246,6 +246,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     }
     public void update(IoTEntityEvent event) {
 
+        LoggerHandler.report("info", "Updating query: " + query.getName());
 
         try {
             TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -258,7 +259,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
             if(query.haveOutput())
                 for(String output : query.getOutput()) {
-                    CEPHandler.publish(output + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
+                    CEPHandler.publish(output+"/" + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
                 }
             else
                     CEPHandler.publish(EVENT_TOPIC + event.getAbout(), parser.toJson(event).getBytes(), 0, false);
