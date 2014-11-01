@@ -1,0 +1,29 @@
+{
+    "Properties": [
+        {
+            "IoTStateObservation": [
+                {
+                    "Value": "fake-binA"
+                }
+            ],
+            "About": "Name"
+        },
+        {
+            "IoTStateObservation": [
+                {
+                    "Value": "_5fb87cdf_24d2_3f96_8620_f108de542c2f_fake"
+                }
+            ],
+            "About": "Source"
+        },
+        {
+            "IoTStateObservation": [
+                {
+                    "Value": "select '85.00' as `561056653##fillLevel:SimpleFillLevelSensor:getLevel` from pattern[every timer:interval(1 seconds)]"
+                }
+            ],
+            "About": "Statement"
+        }
+    ],
+    "About": "DataFusionManager"
+}

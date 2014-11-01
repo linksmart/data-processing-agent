@@ -1,0 +1,1 @@
+select '85.00' as `1987314073##fillLevel:SimpleFillLevelSensor:getLevel` from pattern[every timer:interval(1 seconds)]
