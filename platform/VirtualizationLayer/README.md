@@ -77,7 +77,7 @@ Add a new file `/etc/init/virtualization-layer.conf`
 ```sh
 description	"ALMANAC VirtualizationLayer"
 
-start on startup
+start on net-device-up
 stop on shutdown
 
 respawn

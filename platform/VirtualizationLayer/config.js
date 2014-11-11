@@ -41,7 +41,7 @@ var hosts = {
 		},
 		storageCloud: {	//Public Storage Manager cloud
 			scheme: 'http',
-			host: 'almanac.cnet.se',
+			host: 'almanac_dmf1.cnet.se',
 			port: 80,
 			path: '/StorageManagerCloud/REST/',
 		},

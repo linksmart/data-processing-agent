@@ -61,11 +61,13 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	serve400: function (req, res) {
-		res.writeHead(400, {
-			'Content-Type': 'text/html; charset=UTF-8',
-			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature,
-		});
+		if (!res.headersSent) {
+			res.writeHead(400, {
+				'Content-Type': 'text/html; charset=UTF-8',
+				'Date': (new Date()).toUTCString(),
+				'Server': basicHttp.serverSignature,
+			});
+		}
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
 <head>\n\
@@ -82,11 +84,13 @@ It is now ' + now.toISOString() + '.\n\
 
 	serve404: function (req, res) {
 	//When a static file is not found
-		res.writeHead(404, {
-			'Content-Type': 'text/html; charset=UTF-8',
-			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature,
-		});
+		if (!res.headersSent) {
+			res.writeHead(404, {
+				'Content-Type': 'text/html; charset=UTF-8',
+				'Date': (new Date()).toUTCString(),
+				'Server': basicHttp.serverSignature,
+			});
+		}
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
 <head>\n\
@@ -103,12 +107,14 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	serve405: function (req, res, allowedMethods) {
-		res.writeHead(405, {
-			'Content-Type': 'text/html; charset=UTF-8',
-			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature,
-			'Allow': allowedMethods,
-		});
+		if (!res.headersSent) {
+			res.writeHead(405, {
+				'Content-Type': 'text/html; charset=UTF-8',
+				'Date': (new Date()).toUTCString(),
+				'Server': basicHttp.serverSignature,
+				'Allow': allowedMethods,
+			});
+		}
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
 <head>\n\
@@ -124,11 +130,13 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	serve406: function (req, res) {
-		res.writeHead(406, {
-			'Content-Type': 'text/html; charset=UTF-8',
-			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature,
-		});
+		if (!res.headersSent) {
+			res.writeHead(406, {
+				'Content-Type': 'text/html; charset=UTF-8',
+				'Date': (new Date()).toUTCString(),
+				'Server': basicHttp.serverSignature,
+			});
+		}
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
 <head>\n\
@@ -149,11 +157,13 @@ It is now ' + now.toISOString() + '.\n\
 		} else {
 			console.error(ex);
 		}
-		res.writeHead(500, {
-			'Content-Type': 'text/html; charset=UTF-8',
-			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature,
-		});
+		if (!res.headersSent) {
+			res.writeHead(500, {
+				'Content-Type': 'text/html; charset=UTF-8',
+				'Date': (new Date()).toUTCString(),
+				'Server': basicHttp.serverSignature,
+			});
+		}
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
 <head>\n\
@@ -170,11 +180,13 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	serve503: function (req, res) {
-		res.writeHead(503, {
-			'Content-Type': 'text/html; charset=UTF-8',
-			'Date': (new Date()).toUTCString(),
-			'Server': basicHttp.serverSignature,
-		});
+		if (!res.headersSent) {
+			res.writeHead(503, {
+				'Content-Type': 'text/html; charset=UTF-8',
+				'Date': (new Date()).toUTCString(),
+				'Server': basicHttp.serverSignature,
+			});
+		}
 		res.end('<!DOCTYPE html>\n\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">\n\
 <head>\n\

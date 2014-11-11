@@ -30,19 +30,39 @@ module.exports = function (almanac) {
 			}
 			ioSockets[socket.id] = remoteAddress + ':' + remotePort;
 			ioClients[remoteAddress + ':' + remotePort] = socket.id;
-			almanac.webSocket.emit('info', 'Connected ' + ioSockets[socket.id]);
-			socket.emit('info', 'Welcome ' + ioSockets[socket.id]);
+			almanac.webSocket.in('info').emit('info', 'Connected ' + ioSockets[socket.id]);
 			almanac.log.info('VL', 'Socket.IO: connected ' + ioSockets[socket.id]);
+
+			var rooms = ['alert', 'DM', 'info', 'peering', 'scral'];
+			socket.on('subscribe', function(room) {
+					if (rooms.indexOf(room) >= 0) {
+						almanac.log.verbose('VL', 'Socket.IO: ' + ioSockets[socket.id] + ' joins room ' + room);
+						socket.join(room);
+						if (room === 'info') {
+							socket.emit('info', 'Welcome ' + ioSockets[socket.id]);
+						}
+					} else {
+						almanac.log.info('VL', 'Socket.IO: ' + ioSockets[socket.id] + ' tries to join invalid room!');
+					}
+				});
+			socket.on('unsubscribe', function(room) {
+					if (rooms.indexOf('room') >= 0) {
+						almanac.log.verbose('VL', 'Socket.IO: ' + ioSockets[socket.id] + ' leaves room ' + room);
+						socket.leave(room);
+					} else {
+						almanac.log.info('VL', 'Socket.IO: ' + ioSockets[socket.id] + ' tries to leave invalid room!');
+					}
+				});
 
 			socket.on('info', function (msg) {
 					msg = ioSockets[socket.id] + '> ' + msg;
-					almanac.webSocket.emit('info', msg);
+					almanac.webSocket.in('info').emit('info', msg);
 					almanac.log.verbose('VL', 'Socket.IO: info: ' + msg);
 				});
 
 			socket.on('disconnect', function () {
 					var clientId = ioSockets[socket.id];
-					almanac.webSocket.emit('info', 'Disconnected ' + clientId);
+					almanac.webSocket.in('info').emit('info', 'Disconnected ' + clientId);
 					almanac.log.info('VL', 'Socket.IO: disconnected ' + clientId);
 					try {
 						var socketId = ioClients[clientId];
@@ -63,7 +83,7 @@ module.exports = function (almanac) {
 		req.addListener('end', function () {
 				try {
 					var json = JSON.parse(body);
-					almanac.webSocket.emit(room, {	//Forward to Socket.IO clients (WebSocket)
+					almanac.webSocket.in(room).emit(room, {	//Forward to Socket.IO clients (WebSocket)
 							instance: almanac.config.hosts.virtualizationLayerPublic,
 							headers: req.headers,
 							url: req.url,

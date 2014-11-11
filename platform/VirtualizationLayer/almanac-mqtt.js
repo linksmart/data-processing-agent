@@ -13,17 +13,27 @@ module.exports = function (almanac) {
 	almanac.mqttClient.on('message', function (topic, message) {
 		try {
 			almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
-			if (topic && (topic.indexOf('/iotentity') > 0)) {
-				var json = JSON.parse(message);
-				almanac.webSocket.emit('mqtt', {
-						instance: almanac.config.hosts.virtualizationLayerPublic,
-						topic: topic,
-						body: json,
-					});
-				if (almanac.config.mqttToHttpStorageManagerEnabled) {
-					almanac.storageManager.postMqttEvent(topic, json);	//Forward to StorageManager
+			if (topic) {
+				if (topic.indexOf('/almanac/alert') === 0) {
+					almanac.webSocket.in('alert').emit('alert', {
+							instance: almanac.config.hosts.virtualizationLayerPublic,
+							topic: topic,
+							body: JSON.parse(message),
+						});
+					almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
+				} else if (topic.indexOf('/iotentity') > 0) {
+					almanac.webSocket.in('scral').emit('scral', {
+							instance: almanac.config.hosts.virtualizationLayerPublic,
+							topic: topic,
+							body: JSON.parse(message),
+						});
+					if (almanac.config.mqttToHttpStorageManagerEnabled) {
+						almanac.storageManager.postMqttEvent(topic, json);	//Forward to StorageManager
+					}
+					almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
+				} else if (topic.indexOf('/almanac/0/info') === 0) {
+					almanac.webSocket.in('info').emit('info', message);
 				}
-				almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 			}
 		} catch (ex) {
 			almanac.log.warn('VL', 'MQTT message error: ' + ex);
