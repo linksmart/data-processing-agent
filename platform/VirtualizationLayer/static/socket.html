@@ -46,14 +46,27 @@ function append(text) {
 socket.on('info', function(msg) {
 		append(msg);
 	});
+socket.emit('subscribe', 'info');
+
+socket.on('alert', function(json) {
+		append('alert: ' + JSON.stringify(json));
+	});
+socket.emit('subscribe', 'alert');
 
 socket.on('DM', function(json) {
 		append('DM: ' + JSON.stringify(json));
 	});
+socket.emit('subscribe', 'DM');
 
-socket.on('mqtt', function(json) {
-		append('MQTT: ' + JSON.stringify(json));
+socket.on('peering', function(json) {
+		append('Peering: ' + JSON.stringify(json));
 	});
+socket.emit('subscribe', 'peering');
+
+socket.on('scral', function(json) {
+		append('SCRAL: ' + JSON.stringify(json));
+	});
+socket.emit('subscribe', 'scral');
 
 function chat(form) {
 	socket.emit('info', form.m.value);

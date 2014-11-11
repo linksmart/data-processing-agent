@@ -57,9 +57,15 @@ module.exports = function (almanac) {
 					body += chunk;
 				});
 			req.addListener('end', function () {
-					almanac.webSocket.emit('mqtt', JSON.parse(body));	//Forward to Socket.IO clients (WebSocket)
-					almanac.log.verbose('VL', 'Peering MQTT forwarded to WebSocket');
-					almanac.basicHttp.serveJson(req, res, {});
+					try {
+						var json = JSON.parse(body);
+						almanac.webSocket.in('peering').emit('peering', json);	//Forward to Socket.IO clients (WebSocket)
+						almanac.log.verbose('VL', 'Peering MQTT forwarded to WebSocket');
+						almanac.basicHttp.serveJson(req, res, {});
+					} catch (ex) {
+						almanac.log.warn('VL', 'MQTT peering error: ' + ex);
+						almanac.basicHttp.serve500(req, res);
+					}
 				});
 		}
 	}
