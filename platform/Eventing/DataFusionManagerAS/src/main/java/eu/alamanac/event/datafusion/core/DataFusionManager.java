@@ -18,9 +18,10 @@ public class DataFusionManager {
    // static String brokerURL = "tcp://localhost:1883";
 
     public static void main(String[] args) {
-        if(args.length==1)
-           LoggerHandler.BROKER = args[0];
-
+        if(args.length>=1) {
+            System.out.println(args[0]);
+            LoggerHandler.BROKER = args[0];
+        }
         EventFeeder feeder = null;
         try {
              feeder = new EventFeederImpl(LoggerHandler.BROKER);
