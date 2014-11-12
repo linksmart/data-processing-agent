@@ -81,14 +81,24 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             IoTEntityEvent cepEvent = new IoTEntityEvent("DataFusionManager");
             cepEvent.setAbout(query.getSource());
             int n=0;
+
+            try{
+
+                IoTEntityEvent[] events = (IoTEntityEvent[]) event.values().toArray()[0];
+                update(events);
+            }catch (Exception e){
+
+            }
+
             for(Object key : event.keySet()) {
                 try {
 
                     if(sendPerProperty){
+
                         IoTEntityEvent ent = (IoTEntityEvent) event.get(key);
                         if(query.haveOutput())
                             for(String output : query.getOutput()) {
-                                CEPHandler.publish(output + ent.getAbout(), parser.toJson(ent).getBytes(), 0, false);
+                                CEPHandler.publish(output + "/" + ent.getAbout(), parser.toJson(ent).getBytes(), 0, false);
                             }
                         else
                             CEPHandler.publish(EVENT_TOPIC + ent.getAbout(), parser.toJson(ent).getBytes(), 0, false);
@@ -267,6 +277,35 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         }catch (Exception e){
 
         }
+
+    }
+
+
+    public void update(IoTEntityEvent[] events) {
+
+        LoggerHandler.report("info", "Updating query: " + query.getName());
+        String out ="";
+
+            try {
+                TimeZone tz = TimeZone.getTimeZone("UTC");
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+                df.setTimeZone(tz);
+                String nowAsISO = df.format(new Date());
+
+                if (!CEPHandler.isConnected())
+                    CEPHandler.connect();
+
+                if (query.haveOutput())
+                    for (String output : query.getOutput()) {
+                        CEPHandler.publish(output + "/" + query.getName(), parser.toJson(events).getBytes(), 0, false);
+                    }
+                else
+                    CEPHandler.publish(EVENT_TOPIC + query.getName(), parser.toJson(events).getBytes(), 0, false);
+
+
+            } catch (Exception e) {
+
+            }
 
     }
 
