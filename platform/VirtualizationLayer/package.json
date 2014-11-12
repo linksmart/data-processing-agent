@@ -1,6 +1,6 @@
 {
 	"name": "almanac-virtualization-layer",
-	"version": "0.2.19",
+	"version": "0.2.20",
 	"license": "Apache-2.0",
 	"author": {
 		"name": "Alexandre Alapetite",
@@ -29,17 +29,17 @@
 		"node": ">=0.10.0"
 	},
 	"dependencies": {
-		"socket.io": "~1.1.0",
-		"mqtt": "~0.3.12",
+		"socket.io": "~1.2.0",
+		"mqtt": "~0.3.13",
 		"node-ssdp": "~2.0.1",
-		"request": "~2.45.0",
+		"request": "~2.47.0",
 		"xml-writer": "~1.5.0",
 		"atom-writer": "~1.1.2",
 		"npmlog": "~0.1.1",
 		"extend": "~2.0.0"
 	},
 	"devDependencies": {
-		"jshint": "~2.5.6"
+		"jshint": "~2.5.10"
 	},
 	"jshintConfig": {
 		"node": true,
