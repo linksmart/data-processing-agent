@@ -14,18 +14,21 @@ module.exports = function (almanac) {
 		try {
 			almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
 			if (topic) {
+				var json = null;
 				if (topic.indexOf('/almanac/alert') === 0) {
+					json = JSON.parse(message);
 					almanac.webSocket.in('alert').emit('alert', {
 							instance: almanac.config.hosts.virtualizationLayerPublic,
 							topic: topic,
-							body: JSON.parse(message),
+							body: json,
 						});
 					almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 				} else if (topic.indexOf('/iotentity') > 0) {
+					json = JSON.parse(message);
 					almanac.webSocket.in('scral').emit('scral', {
 							instance: almanac.config.hosts.virtualizationLayerPublic,
 							topic: topic,
-							body: JSON.parse(message),
+							body: json,
 						});
 					if (almanac.config.mqttToHttpStorageManagerEnabled) {
 						almanac.storageManager.postMqttEvent(topic, json);	//Forward to StorageManager

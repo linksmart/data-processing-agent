@@ -102,8 +102,8 @@ module.exports = function (almanac) {
 						}
 					}
 					if (Array.isArray(ioTEntity.Properties)) {
-						for (var j = 0; j < ioTEntity.Properties.length; j++) {
-							var iotProperty = ioTEntity.Properties[j] || {};
+						for (var k = 0; k < ioTEntity.Properties.length; k++) {
+							var iotProperty = ioTEntity.Properties[k] || {};
 							if (Array.isArray(iotProperty.IoTStateObservation) && iotProperty.IoTStateObservation[0] && iotProperty.IoTStateObservation[0].Value &&
 								iotProperty.DataType && (iotProperty.DataType.toUpperCase().indexOf('GEOJSON') >= 0)) {
 								coordinates = iotProperty.IoTStateObservation[0].Value.split(' ', 3);
