@@ -22,7 +22,7 @@ public interface RequestHandler<IN extends ResourceRequest, OUT extends Resource
 	/**
 	 * Comma separated name list of resources handled by this component.
 	 */
-	static final String PROPERTY_RESOURCE_NAME = "resource.names";
+	static final String PROPERTY_RESOURCE_NAMES = "resource.names";
 
 	/**
 	 * Comma separated type list of resources handled by this component.

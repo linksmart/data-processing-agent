@@ -1,5 +1,7 @@
 package eu.linksmart.resource.message;
 
+import java.util.HashMap;
+
 /**
  * Request to list instances of specified type.
  * 
@@ -10,36 +12,44 @@ public class ListRequest extends ResourceRequest {
 
 	private static final long serialVersionUID = -3865792166645511477L;
 
-	static final String EVENT_TOPIC = ResourceRequest.EVENT_TOPIC + "/LIST";
+	public static final String EVENT_TOPIC = EVENT_TOPIC_REQUEST + "/LIST";
 
-	private String resourceType;
+	public static final String PROPERTY_RESOURCE_TYPE = "resource.type";
 
-	int limit;
+	public static final String PROPERTY_RESOURCE_LIST_OFFSET = "resource.list_offset";
 
-	int offset;
+	public static final String PROPERTY_RESOURCE_LIST_LIMIT = "resource.list_limit";
 
 	public ListRequest(String resourceType) {
 		this(resourceType, 0, 10);
 	}
 
-	public ListRequest(String resourceType, int offset, int limit) {
-		// No concrete resource involved
-		super(null);
-		this.resourceType = resourceType;
-		this.offset = offset;
-		this.limit = limit;
+	public ListRequest(final String resourceType, final int offset,
+			final int limit) {
+		super(new HashMap() {
+			{
+				put(PROPERTY_RESOURCE_TYPE, resourceType);
+				put(PROPERTY_RESOURCE_LIST_OFFSET, offset);
+				put(PROPERTY_RESOURCE_LIST_LIMIT, limit);
+			}
+		});
 	}
 
 	public String getResourceType() {
-		return resourceType;
-	}
-
-	public int getLimit() {
-		return limit;
+		return (String) getProperty(PROPERTY_RESOURCE_TYPE);
 	}
 
 	public int getOffset() {
-		return offset;
+		return (Integer) getProperty(PROPERTY_RESOURCE_LIST_OFFSET);
+	}
+
+	public int getLimit() {
+		return (Integer) getProperty(PROPERTY_RESOURCE_LIST_LIMIT);
+	}
+
+	@Override
+	public String getEventTopic() {
+		return EVENT_TOPIC;
 	}
 
 }

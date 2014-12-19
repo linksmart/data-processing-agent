@@ -1,5 +1,6 @@
 package eu.linksmart.resource.service;
 
+import eu.linksmart.resource.ResourcePath;
 import eu.linksmart.resource.ResourceUpdateException;
 
 /**
@@ -21,13 +22,13 @@ public interface ResourceUpdater {
 	 * @param content
 	 *            The content used to partially update the resource.
 	 * 
-	 * @param location
-	 *            The location of sub-resource region to be updated.
+	 * @param path
+	 *            The path pointing to a sub-resource region to be updated.
 	 * 
 	 * @throws ResourceUpdateException
 	 *             If the partial update of the resource failed.
 	 * 
 	 */
-	void update(String name, Object content, String location)
+	void update(String name, Object content, ResourcePath path)
 			throws ResourceUpdateException;
 }

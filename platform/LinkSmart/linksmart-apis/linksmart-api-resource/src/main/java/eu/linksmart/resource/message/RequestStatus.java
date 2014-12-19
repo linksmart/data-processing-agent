@@ -1,10 +1,7 @@
 package eu.linksmart.resource.message;
 
-
-
-
 /**
- * Processing status of a resource request.
+ * Status of a resource request processing.
  * 
  * @author pullmann
  *

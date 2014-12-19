@@ -1,17 +1,19 @@
 package eu.linksmart.resource.message;
 
-
-
 /**
  * Request to store a resource gained from parsing a supplied representation.
  * 
  * @author pullmann
  *
  * @param <T>
+ *            Type of resource to be stored.
  */
 public class StoreRequest<T> extends ResourceRequest {
 
-	static final String EVENT_TOPIC = ResourceRequest.EVENT_TOPIC + "/STORE";
+	private static final long serialVersionUID = -5621756085824800717L;
+
+	static final String EVENT_TOPIC = ResourceRequest.EVENT_TOPIC_REQUEST
+			+ "/STORE";
 
 	private String resourceType;
 
@@ -33,6 +35,11 @@ public class StoreRequest<T> extends ResourceRequest {
 
 	public T getResource() {
 		return resource;
+	}
+
+	@Override
+	public String getEventTopic() {
+		return EVENT_TOPIC;
 	}
 
 }
