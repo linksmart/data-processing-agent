@@ -26,11 +26,14 @@
     NSUUID *deviceId = [UIDevice currentDevice].identifierForVendor;
     NSString *locationProperty = [NSString stringWithFormat:@"%@%@", [deviceId UUIDString], @":location"];
     NSString *waterFlowProperty = [NSString stringWithFormat:@"%@%@", [deviceId UUIDString], @":flow"];
+    NSString *speedProperty = [NSString stringWithFormat:@"%@%@", [deviceId UUIDString], @":speed"];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:[deviceId UUIDString] forKey:@"DeviceId"];
     [userDefaults setObject:[locationProperty description] forKey:@"LocationPropertyId"];
     [userDefaults setObject:[waterFlowProperty description] forKey:@"WaterFlowPropertyId"];
+    [userDefaults setObject:[speedProperty description] forKey:@"SpeedPropertyId"];
+    
     
     NSString *deviceName = [UIDevice currentDevice].name;
     NSString *systemVersion = [UIDevice currentDevice].systemVersion;
@@ -69,12 +72,24 @@
                                                                     @"TypeId" : @"m^3/s",
                                                                     @"property" : @""
                                                                     }
-                                                        }
+                                                        },
+                                                        @{
+                                                            @"Prefix" : @"almanac:http://ns.almanac.eu/ontologies xs:XMLSchema",
+                                                            @"About" : [speedProperty description],
+                                                            @"TypeOf" : @[@"almanac:speed"],
+                                                            @"DataType" : @"xs:double",
+                                                            @"Name" : @"Speed",
+                                                            @"Description" : @"Your speed",
+                                                            @"UnitOfMeasurement" : @{
+                                                                    @"TypeId" : @"m/s",
+                                                                    @"property" : @""
+                                                                    }
+                                                            }
                                                      ]
                                      };
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDictionary options:NSJSONWritingPrettyPrinted error:NULL];
-    NSString *urlString = [NSString stringWithFormat:@"http://p2.alapetite.dk:8080/dm/IoTEntities"];
+    NSString *urlString = [NSString stringWithFormat:@"http://almanac.alexandra.dk/dm/IoTEntities"];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
 
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];

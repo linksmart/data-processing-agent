@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B202FE1B1926E3950008679B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B202FE1A1926E3950008679B /* MapKit.framework */; };
 		B2276E49193F4FED00D2CC96 /* IoTEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B2276E48193F4FED00D2CC96 /* IoTEntity.m */; };
 		B2276E4C193F4FEE00D2CC96 /* IoTStateObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = B2276E4B193F4FEE00D2CC96 /* IoTStateObservation.m */; };
 		B2276E4F193F4FEE00D2CC96 /* Property.m in Sources */ = {isa = PBXBuildFile; fileRef = B2276E4E193F4FEE00D2CC96 /* Property.m */; };
@@ -24,6 +23,7 @@
 		B2EF9524192D527700ED2664 /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EF9523192D527700ED2664 /* ImageViewController.m */; };
 		E90DCD2619257BAE0071CF4D /* PropertiesCDTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */; };
 		E90DCD38192581A40071CF4D /* IoTStateObservation+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */; };
+		E995C8881A98BEFE0097F3BF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E995C8871A98BEFE0097F3BF /* MapKit.framework */; };
 		E9BB2FF719242ACF00E21913 /* Property+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB2FF419242ACF00E21913 /* Property+Load.m */; };
 		E9BB2FF819242ACF00E21913 /* TypeOf+Load.m in Sources */ = {isa = PBXBuildFile; fileRef = E9BB2FF619242ACF00E21913 /* TypeOf+Load.m */; };
 		E9E0492E192578EA00473E27 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E9E0492D192578EA00473E27 /* SettingsVC.m */; };
@@ -59,7 +59,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B202FE1A1926E3950008679B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		B2276E47193F4FED00D2CC96 /* IoTEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTEntity.h; path = "Core Data/IoTEntity.h"; sourceTree = "<group>"; };
 		B2276E48193F4FED00D2CC96 /* IoTEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoTEntity.m; path = "Core Data/IoTEntity.m"; sourceTree = "<group>"; };
 		B2276E4A193F4FEE00D2CC96 /* IoTStateObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoTStateObservation.h; path = "Core Data/IoTStateObservation.h"; sourceTree = "<group>"; };
@@ -91,6 +90,7 @@
 		E90DCD2519257BAE0071CF4D /* PropertiesCDTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertiesCDTVC.m; sourceTree = "<group>"; };
 		E90DCD36192581A40071CF4D /* IoTStateObservation+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IoTStateObservation+Load.h"; path = "Core Data/IoTStateObservation+Load.h"; sourceTree = "<group>"; };
 		E90DCD37192581A40071CF4D /* IoTStateObservation+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IoTStateObservation+Load.m"; path = "Core Data/IoTStateObservation+Load.m"; sourceTree = "<group>"; };
+		E995C8871A98BEFE0097F3BF /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E9BB2FF319242ACF00E21913 /* Property+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Property+Load.h"; path = "Core Data/Property+Load.h"; sourceTree = "<group>"; };
 		E9BB2FF419242ACF00E21913 /* Property+Load.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Property+Load.m"; path = "Core Data/Property+Load.m"; sourceTree = "<group>"; };
 		E9BB2FF519242ACF00E21913 /* TypeOf+Load.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TypeOf+Load.h"; path = "Core Data/TypeOf+Load.h"; sourceTree = "<group>"; };
@@ -134,8 +134,8 @@
 			files = (
 				B26D9D221940AFDC00D6C812 /* CoreLocation.framework in Frameworks */,
 				E9F70E381923E7D5007485B3 /* CoreGraphics.framework in Frameworks */,
+				E995C8881A98BEFE0097F3BF /* MapKit.framework in Frameworks */,
 				E9F70E3A1923E7D5007485B3 /* UIKit.framework in Frameworks */,
-				B202FE1B1926E3950008679B /* MapKit.framework in Frameworks */,
 				E9F70E361923E7D5007485B3 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,8 +175,8 @@
 		E9F70E341923E7D5007485B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E995C8871A98BEFE0097F3BF /* MapKit.framework */,
 				B26D9D211940AFDC00D6C812 /* CoreLocation.framework */,
-				B202FE1A1926E3950008679B /* MapKit.framework */,
 				E9F70E351923E7D5007485B3 /* Foundation.framework */,
 				E9F70E371923E7D5007485B3 /* CoreGraphics.framework */,
 				E9F70E391923E7D5007485B3 /* UIKit.framework */,
@@ -348,6 +348,9 @@
 						DevelopmentTeam = MS98VENSMS;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
 								enabled = 1;
 							};
 							com.apple.iOS = {
@@ -570,10 +573,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IoTWeek/IoTWeek-Prefix.pch";
 				INFOPLIST_FILE = "IoTWeek/IoTWeek-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -588,10 +591,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "IoTWeek/IoTWeek-Prefix.pch";
 				INFOPLIST_FILE = "IoTWeek/IoTWeek-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

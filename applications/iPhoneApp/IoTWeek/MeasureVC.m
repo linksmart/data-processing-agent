@@ -33,7 +33,7 @@
     NSString *deviceId = [[userDefaults objectForKey:@"DeviceId"] description];
     NSString *flowId = [[userDefaults objectForKey:@"WaterFlowPropertyId"] description];
     
-    NSString *urlString = [NSString stringWithFormat:@"http://p2.alapetite.dk:8080/dm/IoTEntities/%@/Properties/%@/observations", deviceId, flowId];
+    NSString *urlString = [NSString stringWithFormat:@"http://almanac.alexandra.dk/dm/IoTEntities/%@/Properties/%@/observations", deviceId, flowId];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
     
     NSLog(@"TheURL: %@", [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]);
@@ -47,7 +47,7 @@
     IoTStateObservation *myLocatonObservation = [[IoTStateObservation alloc] initWithEntity:entity
                                                      insertIntoManagedObjectContext:nil];
 
-    myLocatonObservation.cnValue = @"0.003";
+    myLocatonObservation.cnValue = @"0.006";
     myLocatonObservation.cnPhenomenonTime = [NSDate date];
     myLocatonObservation.cnResultTime = [NSDate date];
     

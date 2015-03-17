@@ -43,7 +43,7 @@
     
     // Warm up GPS or other location services
     self.locationManager = [[CLLocationManager alloc] init];
-    // [self.locationManager requestWhenInUseAuthorization]; // ONLY IOS8!!!! But important there
+    [self.locationManager requestAlwaysAuthorization]; // ONLY IOS8!!!! But important there
     if ([CLLocationManager locationServicesEnabled])
     {
         self.locationManager.delegate = self;
@@ -79,6 +79,7 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *deviceId = [[userDefaults objectForKey:@"DeviceId"] description];
         NSString *locationId = [[userDefaults objectForKey:@"LocationPropertyId"] description];
+        NSString *speedId = [[userDefaults objectForKey:@"SpeedPropertyId"] description];
         
         // One should stop even looking for locations
         // but if I only had a wee bit more time...
@@ -87,10 +88,10 @@
             return;
         }
         
-        NSString *urlString = [NSString stringWithFormat:@"http://p2.alapetite.dk:8080/dm/IoTEntities/%@/Properties/%@/observations", deviceId, locationId];
+        NSString *urlString = [NSString stringWithFormat:@"http://almanac.alexandra.dk/dm/IoTEntities/%@/Properties/%@/observations", deviceId, locationId];
         NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
         
-        // NSLog(@"TheURL: %@", [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]);
+        NSLog(@"TheURL: %@", [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]);
         
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
         [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
@@ -98,6 +99,7 @@
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"IoTStateObservation"
                                                   inManagedObjectContext:self.iotEntityDatabaseContext];
         
+        // Location stuff
         IoTStateObservation *myLocatonObservation = [[IoTStateObservation alloc] initWithEntity:entity
                                                                  insertIntoManagedObjectContext:nil];
         
@@ -114,6 +116,31 @@
         [request setHTTPBody:jsonData];
         
         [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:nil];
+        
+        // Speed stuff
+        urlString = [NSString stringWithFormat:@"http://almanac.alexandra.dk/dm/IoTEntities/%@/Properties/%@/observations", deviceId, speedId];
+        url = [NSURL URLWithString:[urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+        request = [[NSMutableURLRequest alloc] initWithURL:url];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        
+        IoTStateObservation *mySpeedObservation = [[IoTStateObservation alloc] initWithEntity:entity
+                                                                 insertIntoManagedObjectContext:nil];
+        
+        if (myCurrentlocation.speed > 0) {
+            mySpeedObservation.cnValue = [NSString stringWithFormat:@"%f", myCurrentlocation.speed];
+            mySpeedObservation.cnPhenomenonTime = [NSDate date];
+            mySpeedObservation.cnResultTime = [NSDate date];
+            
+            jsonData = [NSJSONSerialization dataWithJSONObject:mySpeedObservation.iotStateObservationAsJSON options:NSJSONWritingPrettyPrinted error:NULL];
+            
+            // NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [request setHTTPMethod:@"POST"];
+            [request setHTTPBody:jsonData];
+            
+            [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:nil];
+        }
     }
 }
 
@@ -129,7 +156,7 @@
         sessionConfig.allowsCellularAccess = NO;
         sessionConfig.timeoutIntervalForRequest = BACKGROUND_FETCH_TIMEOUT;
         NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://p2.alapetite.dk:8080/dm/IoTEntities"]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://almanac.alexandra.dk/dm/IoTEntities?take=1"]];
         
         //NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost:8888/test.json"]];
         
@@ -191,7 +218,7 @@
 {
     [self.downloadSession getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         if (![downloadTasks count]) {
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://p2.alapetite.dk:8080/dm/IoTEntities"]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://almanac.alexandra.dk/dm/IoTEntities?typeof=phone%7Cpad&take=1000000"]];
             //NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost:8888/test.json"]];
             
             [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
@@ -243,6 +270,9 @@
     if (context) {
         NSArray *iotEntities = [self iotEntitiesAtURL:localFile];
         [context performBlock:^{
+            if (!localFile) {
+                return;
+            }
             [IoTEntity loadIoTEntitiesFromArray:iotEntities usingManagedContext:context];
             [context save:NULL];
             if (whenDone) whenDone();
