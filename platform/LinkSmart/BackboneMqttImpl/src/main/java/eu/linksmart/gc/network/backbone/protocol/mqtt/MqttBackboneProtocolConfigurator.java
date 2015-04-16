@@ -16,7 +16,7 @@ public class MqttBackboneProtocolConfigurator extends Configurator {
 	public static String CONFIGURATION_FILE = "/mqttprotocol.properties";
 
 	public static final String BACKBONE_DESCRIPTION = "BackboneMQTT.description";
-
+    public static final String DOMAIN = "BackboneMQTT.Domain";
     public static final String SECURITY_PARAMETERS = "BackboneMQTT.SecurityParameters";
 
     public static String BROKER_URL = "BackboneMQTT.MQTT.BrokerURL";

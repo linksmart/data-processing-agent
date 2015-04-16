@@ -22,6 +22,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentContext;
 
 import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -131,13 +133,31 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
         registerBroker();
 
     }
+    String getHostName(){
+        String hostname = "localhost";
+
+        try
+        {
+            InetAddress addr;
+            addr = InetAddress.getLocalHost();
+            hostname = addr.getHostName();
+        }
+        catch (UnknownHostException ex)
+        {
+            System.out.println("Hostname can not be resolved");
+        }
+        return hostname;
+    }
     // TODO To be moved?
     private void registerBroker() throws RemoteException {
 
+        String hostName= getHostName(), domain = conf.get(conf.DOMAIN);
+
         Part[] attributes = {
-                new Part("DESCRIPTION","Broker"),
+                new Part("DESCRIPTION","Broker hosted in :"+hostName),
                 new Part("SID",MQTTProtocolID.toString()),
-                new Part("DOMAIN","fit.fraunhofer.de")
+                new Part("brokerName",hostName+"."+domain),
+                new Part("domain",domain)
 
         };
 
