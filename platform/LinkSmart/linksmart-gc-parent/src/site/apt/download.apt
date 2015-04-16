@@ -1,0 +1,38 @@
+ ------
+Download
+ ------
+Fraunhofer FIT
+ ------
+2014-11-05
+ ------
+
+Download LinkSmart 2.2.1
+
+  Snapshot versions of the distribution can be found here:
+
+  {{{https://linksmart.eu/repo/content/repositories/snapshots/eu/linksmart/distribution/linksmart-main-distribution/2.2.2-SNAPSHOT/}Directory of snapshot releases}}
+
+  The directory contains all generated packages, the checksums and the signatures.
+
+  LinkSmart distribution can be found here:
+  
+*-------------------------+----------+----------+-----------+
+|                         | Download | Checksum | Signature |
+*-------------------------+----------+----------+-----------+
+| LinkSmart Distribution 2.2.1 (tar.gz)  | {{{https://linksmart.eu/repo/content/repositories/releases/eu/linksmart/distribution/linksmart-main-distribution/2.2.1/linksmart-main-distribution-2.2.1-bin.tar.gz} linksmart-distribution-2.2.1-bin.tar.gz}} | {{{https://linksmart.eu/repo/content/repositories/releases/eu/linksmart/distribution/linksmart-main-distribution/2.2.1/linksmart-main-distribution-2.2.1-bin.tar.gz.md5} linksmart-distribution-2.2.1-bin.tar.gz.md5}} | {{{https://linksmart.eu/repo/content/repositories/releases/eu/linksmart/distribution/linksmart-main-distribution/2.2.1/linksmart-main-distribution-2.2.1-bin.tar.gz.sha1} linksmart-main-distribution-2.2.1-bin.tar.gz.sha1}} |
+*-------------------------+----------+----------+-----------+
+| LinkSmart Distribution 2.2.1 (zip)     | {{{https://linksmart.eu/repo/content/repositories/releases/eu/linksmart/distribution/linksmart-main-distribution/2.2.1/linksmart-main-distribution-2.2.1-bin.zip} linksmart-distribution-2.2.1-bin.zip}} | {{{https://linksmart.eu/repo/content/repositories/releases/eu/linksmart/distribution/linksmart-main-distribution/2.2.1/linksmart-main-distribution-2.2.1-bin.zip.md5} linksmart-main-distribution-2.2.1-bin.zip.md5}} | {{{https://linksmart.eu/repo/content/repositories/releases/eu/linksmart/distribution/linksmart-main-distribution/2.2.1/linksmart-main-distribution-2.2.1-bin.zip.sha1} linksmart-main-distribution-2.2.1-bin.zip.sha1}} |
+*-------------------------+----------+----------+-----------+
+
+
+* System {Requirements}
+
+*----------------------+---------------------------------------------------------------------------------------------+
+| <<JDK>>              | 1.7 or above 
+*----------------------+---------------------------------------------------------------------------------------------+
+| <<Memory>>           | No minimum requirement
+*----------------------+---------------------------------------------------------------------------------------------+
+| <<Disk>>             | No minimum requirement. 
+*----------------------+---------------------------------------------------------------------------------------------+
+| <<Operating System>> | No minimum requirement. Tested on Debian Linux, Windows 7 and Apple OS.
+*----------------------+---------------------------------------------------------------------------------------------+

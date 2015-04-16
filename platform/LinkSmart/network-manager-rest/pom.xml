@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eu.linksmart.gc</groupId>
+		<artifactId>eu.linksmart.gc.osgi.component</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>eu.linksmart.gc.networkmanager.rest</artifactId>
+
+    <packaging>bundle</packaging>
+
+    <name>LS GC - NetworkManager REST</name>
+    <description>LinkSmart GC NetworkManager REST API</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>eu.linksmart.gc</groupId>
+            <artifactId>eu.linksmart.gc.api.network</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.gc</groupId>
+            <artifactId>eu.linksmart.gc.api.utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.gc</groupId>
+            <artifactId>eu.linksmart.gc.api.networkmanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.http.jetty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>com.springsource.org.json</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

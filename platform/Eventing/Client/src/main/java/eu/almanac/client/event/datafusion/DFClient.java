@@ -2,7 +2,8 @@ package eu.almanac.client.event.datafusion;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import eu.almanac.event.datafusion.utils.IoTEntityEvent;
+
+import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -29,10 +30,10 @@ public class DFClient {
             client.connect();
 
 
-            IoTEntityEvent query = new IoTEntityEvent("DataFusionManager");
+            Event query = new Event("DataFusionManager");
             if (cmd.hasOption("name")) {
                 query.addProperty("Name");
-                query.getProperties("Name").addIoTStateObservation(cmd.getOptionValue("name"));
+                query.getEbyName("Name").setSv(cmd.getOptionValue("name"));
             } else {
 
                 HelpFormatter formatter = new HelpFormatter();
@@ -43,13 +44,13 @@ public class DFClient {
             }
             if (cmd.hasOption("query")) {
                 query.addProperty("Statement");
-                query.getProperties("Statement").addIoTStateObservation(cmd.getOptionValue("query"));
+                query.getEbyName("Statement").setSv(cmd.getOptionValue("query"));
             } else if (cmd.hasOption("file")){
                 try {
                     String content = FileUtils.readFileToString(new File(cmd.getOptionValue("file")), "utf-8").replace("\n","".replace("\r",""));
 
                     query.addProperty("Statement");
-                    query.getProperties("Statement").addIoTStateObservation(content);
+                    query.getEbyName("Statement").setSv(content);
 
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
@@ -57,19 +58,19 @@ public class DFClient {
             }
             if (cmd.hasOption("entity")) {
                 query.addProperty("Source");
-                query.getProperties("Source").addIoTStateObservation(cmd.getOptionValue("entity"));
+                query.getEbyName("Source").setSv(cmd.getOptionValue("entity"));
             }
             if (cmd.hasOption("input")) {
                 query.addProperty("Input");
-                query.getProperties("Input").addIoTStateObservation(cmd.getOptionValue("input"));
+                query.getEbyName("Input").setSv(cmd.getOptionValue("input"));
             }
             if (cmd.hasOption("output")) {
                 query.addProperty("Output");
-                query.getProperties("Output").addIoTStateObservation(cmd.getOptionValue("output"));
+                query.getEbyName("Output").setSv(cmd.getOptionValue("output"));
             }
             if (cmd.hasOption("scope")) {
                 query.addProperty("Scope");
-                query.getProperties("Scope").addIoTStateObservation(cmd.getOptionValue("scope"));
+                query.getEbyName("Scope").setSv(cmd.getOptionValue("scope"));
             }
             Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 

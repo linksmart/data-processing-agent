@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>eu.linksmart.gc.parent</artifactId>
+        <groupId>eu.linksmart.gc</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../linksmart-gc-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>superpom</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>../linksmart-gc-osgi-component</module>
+        <module>../gc-apis</module>
+        <module>../gc-network-manager</module>
+        <module>../NetworkManagerProtocolWrapper</module>
+        <module>../BackboneMqttImpl</module>
+        <module>../backbone-http-protocol</module>
+        <module>../deployment/features</module>
+        <module>../backbone-zmq</module>
+        <module>../gc-identity-manager</module>
+        <module>../gc-backbone-router</module>
+        <module>../network-manager-rest</module>
+        <module>../http-tunneling</module>
+        <module>../deployment/distribution</module>
+    </modules>
+
+</project>

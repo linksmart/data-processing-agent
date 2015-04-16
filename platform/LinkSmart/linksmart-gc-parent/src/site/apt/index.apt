@@ -1,0 +1,21 @@
+ --------------------------
+LinkSmart
+ --------------------------
+Fraunhofer FIT
+ --------------------------
+2014-11-05
+ --------------------------
+
+
+Welcome to LinkSmart
+
+  LinkSmart is an OSGi-based middleware for the networking of heterogeneous systems through loosely coupled web services. 
+  Our vision is to build an interoperability platform that facilitates the creation of cost-effective, 
+  high-performance cyber-physical systems and Internet of Things applications.
+  LinkSmart was originally developed within the {{{http://hydramiddleware.eu/}Hydra}}
+  EU project for Networked Embedded Systems, allowing developers to incorporate heterogeneous 
+  physical devices into their applications through easy-to-use web services for controlling any device.
+  
+* Get LinkSmart 
+      
+  You can get the latest release of the LinkSmart middleware from our {{{./download.html}download page}}.  

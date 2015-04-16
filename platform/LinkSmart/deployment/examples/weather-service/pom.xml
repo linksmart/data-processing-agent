@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eu.linksmart.gc</groupId>
+		<artifactId>eu.linksmart.gc.osgi.component</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>eu.linksmart.gc.examples</groupId>
+    <artifactId>eu.linksmart.gc.examples.weather.service</artifactId>
+	
+    <packaging>bundle</packaging>
+
+    <name>GlobalConnect Example Weather Service</name>
+    <description>GlobalConnect Example Weather Service</description>
+
+	<properties>
+		<skipTests>true</skipTests>
+	</properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>eu.linksmart.gc</groupId>
+            <artifactId>eu.linksmart.gc.api.network</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.gc</groupId>
+            <artifactId>eu.linksmart.gc.api.utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.gc</groupId>
+            <artifactId>eu.linksmart.gc.api.networkmanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.http.jetty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>com.springsource.org.json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.commons-httpclient</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                    </instructions>
+                </configuration>
+            </plugin>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-surefire-plugin</artifactId>
+        		<configuration>
+          			<skipTests>${skipTests}</skipTests>
+        		</configuration>
+      		</plugin>
+        </plugins>
+    </build>
+
+</project>

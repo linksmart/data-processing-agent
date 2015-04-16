@@ -5,8 +5,12 @@ select
 	thermometer.about as thermometerID,
 	toyBin.about as toyBinID
 from topics
-		{/almanac/observation/iotentity/_a2ae2f57_1362_3339_a7e4_d29799029cc5}(cast(properties[0].ioTStateObservation[0].value,double) >10.0).std:lastevent() as toyBin,
-		{/almanac/observation/iotentity/_239d094b_7d77_3f32_8f43_7079a5634af3}(cast(properties[0].ioTStateObservation[0].value,double) >80.0).std:lastevent() as binB,
-		{/almanac/observation/iotentity/_21cec1c6_3b8e_3d84_901e_3aaae1655c4b}(cast(properties[0].ioTStateObservation[0].value,double) >80.0).std:lastevent() as binC,
-		{/almanac/observation/iotentity/_2ee611f1_a0f5_3f59_8aa7_a7ccaf7409a4}(cast(properties[0].ioTStateObservation[0].value,double) >80.0).std:lastevent() as binD,
-		{/almanac/observation/iotentity/_53ce16a8_6f26_38c4_8c29_ffa551ee42a9}(cast(properties[0].ioTStateObservation[0].value,double) >= 30.0).std:lastevent() as thermometer 
+		{/almanac/observation/iotentity/_a2ae2f57_1362_3339_a7e4_d29799029cc5}.std:lastevent() as toyBin,
+		{/almanac/observation/iotentity/_89319db8_9d3f_315c_a4c6_9e2132ae6a44}.std:lastevent() as binB,
+		{/almanac/observation/iotentity/_a1be5ba7_bb8a_3b69_b376_06d89fbecee6}.std:lastevent() as binC,
+		{/almanac/observation/iotentity/_597438b1_a750_3832_9205_57ede636ba67}.std:lastevent() as binD,
+		{/almanac/observation/iotentity/_8e298178_bccf_390b_b612_8d5d5d990e40}.std:lastevent() as thermometer 
+where 
+		cast(toyBin.properties[0].ioTStateObservation[0].value,double) > 2.0 and 
+		cast(thermometer.properties[0].ioTStateObservation[0].value,double) > 30.0
+

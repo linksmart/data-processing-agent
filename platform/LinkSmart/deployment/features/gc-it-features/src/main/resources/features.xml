@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<features name="${project.artifactId}" xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
+
+	<!--  INTEGRATION FEATURES -->
+	
+	<feature name="gc-network-manager-rest-it" version="${linksmart.gc.version}">
+    	<feature version="${linksmart.gc.version}">gc-network-manager-rest</feature>
+    	<bundle>mvn:eu.linksmart.gc.examples/eu.linksmart.gc.examples.weather.service/${linksmart.gc.version}</bundle>
+    	<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/${commons-codec.version}</bundle>
+    	<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-httpclient/${apache.httpclient.version}</bundle>
+        <feature version="${linksmart.gc.version}">gc-backbone-mqtt</feature>
+    </feature>
+    
+    <feature name="gc-backbone-zmq-it" version="${linksmart.gc.version}">
+    	<feature version="${linksmart.gc.version}">gc-backbone-zmq</feature>   
+    </feature>
+    
+    <feature name="gc-http-tunneling-it" version="${linksmart.gc.version}">
+    	<feature version="${linksmart.gc.version}">gc-network-manager-rest</feature>
+    	<feature version="${linksmart.gc.version}">gc-backbone-http</feature>
+    	<feature version="${linksmart.gc.version}">gc-http-tunneling</feature>
+
+
+        <bundle>mvn:eu.linksmart.gc.examples/eu.linksmart.gc.examples.weather.service/${linksmart.gc.version}</bundle>
+    </feature>
+    <feature name="gc-mqtt-tunneling-it" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-network-manager-rest</feature>
+        <feature version="${linksmart.gc.version}">gc-http-tunneling</feature>
+        <feature version="${linksmart.gc.version}">gc-backbone-http</feature>
+        <feature version="${linksmart.gc.version}">gc-backbone-mqtt</feature>
+
+
+        <bundle>mvn:eu.linksmart.gc.examples/eu.linksmart.gc.examples.weather.service/${linksmart.gc.version}</bundle>
+    </feature>
+    <feature name="gc-http-tunneling-dummy-it" version="${linksmart.gc.version}">
+    	<feature version="${linksmart.gc.version}">gc-osgi-http</feature>
+    	<feature version="${linksmart.gc.version}">gc-boot</feature>
+    	<bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.security.communication/${linksmart.gc.version}</bundle>
+   		<bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.backbone/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.backbone.router/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager.core/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager/${linksmart.gc.version}</bundle>
+        
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.network.backbone.router.dummy/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.network.networkmanager.dummy/${linksmart.gc.version}</bundle>
+        
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.types/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.backbone.protocol.http/${linksmart.gc.version}</bundle>
+        
+        <bundle>mvn:org.json/com.springsource.org.json/${org-json.version}</bundle> 
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/${commons-codec.version}</bundle>
+    	<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-httpclient/${apache.httpclient.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.networkmanager.rest/${linksmart.gc.version}</bundle>
+        
+        <bundle>mvn:eu.linksmart.gc.examples/eu.linksmart.gc.examples.weather.service/${linksmart.gc.version}</bundle>
+      
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.tunneling.http/${linksmart.gc.version}</bundle>
+    </feature>
+    
+</features>

@@ -1,0 +1,1464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws.network.linksmart.eu" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.network.linksmart.eu" xmlns:intf="http://ws.network.linksmart.eu" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="http://ws.network.linksmart.eu" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://xml.apache.org/xml-soap"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="NMResponse">
+    <sequence>
+     <element name="data" nillable="true" type="soapenc:string"/>
+     <element name="sessionID" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_soapenc_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="soapenc:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="CryptoHIDResult">
+    <sequence>
+     <element name="HID" nillable="true" type="soapenc:string"/>
+     <element name="certRef" nillable="true" type="soapenc:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema targetNamespace="http://xml.apache.org/xml-soap" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://ws.network.linksmart.eu"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="Vector">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getHIDsAsStringResponse">
+
+      <wsdl:part name="getHIDsAsStringReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setSessionParameterResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="stopNMRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getHostHIDsbyDescriptionResponse">
+
+      <wsdl:part name="getHostHIDsbyDescriptionReturn" type="impl:ArrayOf_soapenc_string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="removeAllHIDResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDsRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="createHIDResponse1">
+
+      <wsdl:part name="createHIDReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="stopNMResponse">
+
+      <wsdl:part name="stopNMReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="sendDataRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+      <wsdl:part name="in2" type="soapenc:string"/>
+
+      <wsdl:part name="in3" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createHIDwDescResponse1">
+
+      <wsdl:part name="createHIDwDescReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDsbyDescriptionRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNMPositionRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDsbyDescriptionAsStringRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getContextHIDsRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHostHIDsRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="receiveDataRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+      <wsdl:part name="in2" type="soapenc:string"/>
+
+      <wsdl:part name="in3" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDByAttributesRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+      <wsdl:part name="in2" type="soapenc:string"/>
+
+      <wsdl:part name="in3" type="xsd:long"/>
+
+      <wsdl:part name="in4" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNMPositionAuthResponse">
+
+      <wsdl:part name="getNMPositionAuthReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="synchronizeSessionsListResponse">
+
+      <wsdl:part name="synchronizeSessionsListReturn" type="apachesoap:Vector"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getContextHIDsAsStringResponse">
+
+      <wsdl:part name="getContextHIDsAsStringReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHostHIDsResponse">
+
+      <wsdl:part name="getHostHIDsReturn" type="apachesoap:Vector"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="closeSessionRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="startNMResponse">
+
+      <wsdl:part name="startNMReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createHIDResponse">
+
+      <wsdl:part name="createHIDReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createCryptoHIDResponse">
+
+      <wsdl:part name="createCryptoHIDReturn" type="impl:CryptoHIDResult"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getInformationAssociatedWithHIDRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="startNMRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getHostHIDsAsStringResponse">
+
+      <wsdl:part name="getHostHIDsAsStringReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDescriptionbyHIDResponse">
+
+      <wsdl:part name="getDescriptionbyHIDReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createHIDwDescRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addContextResponse">
+
+      <wsdl:part name="addContextReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="removeHIDRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getSessionParameterRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getContextHIDsResponse">
+
+      <wsdl:part name="getContextHIDsReturn" type="apachesoap:Vector"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addContextRequest">
+
+      <wsdl:part name="in0" type="xsd:long"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setSessionParameterRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+      <wsdl:part name="in2" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="openSessionRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createHIDwDescResponse">
+
+      <wsdl:part name="createHIDwDescReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addSessionRemoteClientResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDByAttributesResponse">
+
+      <wsdl:part name="getHIDByAttributesReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getContextHIDsAsStringRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="receiveDataResponse">
+
+      <wsdl:part name="receiveDataReturn" type="impl:NMResponse"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="closeSessionResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDsResponse">
+
+      <wsdl:part name="getHIDsReturn" type="apachesoap:Vector"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="removeHIDResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="createCryptoHIDRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHostHIDsbyDescriptionAsStringRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNMPositionAuthRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createHIDwDescRequest1">
+
+      <wsdl:part name="in0" type="xsd:long"/>
+
+      <wsdl:part name="in1" type="xsd:int"/>
+
+      <wsdl:part name="in2" type="soapenc:string"/>
+
+      <wsdl:part name="in3" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createCryptoHIDfromReferenceRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addSessionRemoteClientRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+      <wsdl:part name="in2" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createHIDRequest">
+
+      <wsdl:part name="in0" type="xsd:long"/>
+
+      <wsdl:part name="in1" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getSessionParameterResponse">
+
+      <wsdl:part name="getSessionParameterReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHostHIDsbyDescriptionRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNMPositionResponse">
+
+      <wsdl:part name="getNMPositionReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="renewHIDRequest">
+
+      <wsdl:part name="in0" type="xsd:long"/>
+
+      <wsdl:part name="in1" type="xsd:int"/>
+
+      <wsdl:part name="in2" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createCryptoHIDfromReferenceResponse">
+
+      <wsdl:part name="createCryptoHIDfromReferenceReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="renewHIDResponse">
+
+      <wsdl:part name="renewHIDReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getInformationAssociatedWithHIDResponse">
+
+      <wsdl:part name="getInformationAssociatedWithHIDReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="renewHIDInfoRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+      <wsdl:part name="in2" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="openSessionResponse">
+
+      <wsdl:part name="openSessionReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="renewHIDInfoResponse">
+
+      <wsdl:part name="renewHIDInfoReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDsAsStringRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getDescriptionbyHIDRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDsbyDescriptionResponse">
+
+      <wsdl:part name="getHIDsbyDescriptionReturn" type="apachesoap:Vector"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHostHIDsbyDescriptionAsStringResponse">
+
+      <wsdl:part name="getHostHIDsbyDescriptionAsStringReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createHIDRequest1">
+
+   </wsdl:message>
+
+   <wsdl:message name="sendDataResponse">
+
+      <wsdl:part name="sendDataReturn" type="impl:NMResponse"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="synchronizeSessionsListRequest">
+
+      <wsdl:part name="in0" type="soapenc:string"/>
+
+      <wsdl:part name="in1" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getHIDsbyDescriptionAsStringResponse">
+
+      <wsdl:part name="getHIDsbyDescriptionAsStringReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="removeAllHIDRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getHostHIDsAsStringRequest">
+
+   </wsdl:message>
+
+   <wsdl:portType name="NetworkManagerApplication">
+
+      <wsdl:operation name="openSession" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:openSessionRequest" name="openSessionRequest"/>
+
+         <wsdl:output message="impl:openSessionResponse" name="openSessionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="sendData" parameterOrder="in0 in1 in2 in3">
+
+         <wsdl:input message="impl:sendDataRequest" name="sendDataRequest"/>
+
+         <wsdl:output message="impl:sendDataResponse" name="sendDataResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="receiveData" parameterOrder="in0 in1 in2 in3">
+
+         <wsdl:input message="impl:receiveDataRequest" name="receiveDataRequest"/>
+
+         <wsdl:output message="impl:receiveDataResponse" name="receiveDataResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="closeSession" parameterOrder="in0">
+
+         <wsdl:input message="impl:closeSessionRequest" name="closeSessionRequest"/>
+
+         <wsdl:output message="impl:closeSessionResponse" name="closeSessionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getSessionParameter" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getSessionParameterRequest" name="getSessionParameterRequest"/>
+
+         <wsdl:output message="impl:getSessionParameterResponse" name="getSessionParameterResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setSessionParameter" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:setSessionParameterRequest" name="setSessionParameterRequest"/>
+
+         <wsdl:output message="impl:setSessionParameterResponse" name="setSessionParameterResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="synchronizeSessionsList" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:synchronizeSessionsListRequest" name="synchronizeSessionsListRequest"/>
+
+         <wsdl:output message="impl:synchronizeSessionsListResponse" name="synchronizeSessionsListResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addSessionRemoteClient" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:addSessionRemoteClientRequest" name="addSessionRemoteClientRequest"/>
+
+         <wsdl:output message="impl:addSessionRemoteClientResponse" name="addSessionRemoteClientResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createHID" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:createHIDRequest" name="createHIDRequest"/>
+
+         <wsdl:output message="impl:createHIDResponse" name="createHIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createHID">
+
+         <wsdl:input message="impl:createHIDRequest1" name="createHIDRequest1"/>
+
+         <wsdl:output message="impl:createHIDResponse1" name="createHIDResponse1"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createHIDwDesc" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:createHIDwDescRequest" name="createHIDwDescRequest"/>
+
+         <wsdl:output message="impl:createHIDwDescResponse" name="createHIDwDescResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createHIDwDesc" parameterOrder="in0 in1 in2 in3">
+
+         <wsdl:input message="impl:createHIDwDescRequest1" name="createHIDwDescRequest1"/>
+
+         <wsdl:output message="impl:createHIDwDescResponse1" name="createHIDwDescResponse1"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="renewHID" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:renewHIDRequest" name="renewHIDRequest"/>
+
+         <wsdl:output message="impl:renewHIDResponse" name="renewHIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="renewHIDInfo" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:renewHIDInfoRequest" name="renewHIDInfoRequest"/>
+
+         <wsdl:output message="impl:renewHIDInfoResponse" name="renewHIDInfoResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addContext" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:addContextRequest" name="addContextRequest"/>
+
+         <wsdl:output message="impl:addContextResponse" name="addContextResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHostHIDs">
+
+         <wsdl:input message="impl:getHostHIDsRequest" name="getHostHIDsRequest"/>
+
+         <wsdl:output message="impl:getHostHIDsResponse" name="getHostHIDsResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDs">
+
+         <wsdl:input message="impl:getHIDsRequest" name="getHIDsRequest"/>
+
+         <wsdl:output message="impl:getHIDsResponse" name="getHIDsResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getContextHIDs" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getContextHIDsRequest" name="getContextHIDsRequest"/>
+
+         <wsdl:output message="impl:getContextHIDsResponse" name="getContextHIDsResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDsbyDescription" parameterOrder="in0">
+
+         <wsdl:input message="impl:getHIDsbyDescriptionRequest" name="getHIDsbyDescriptionRequest"/>
+
+         <wsdl:output message="impl:getHIDsbyDescriptionResponse" name="getHIDsbyDescriptionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="removeHID" parameterOrder="in0">
+
+         <wsdl:input message="impl:removeHIDRequest" name="removeHIDRequest"/>
+
+         <wsdl:output message="impl:removeHIDResponse" name="removeHIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="removeAllHID">
+
+         <wsdl:input message="impl:removeAllHIDRequest" name="removeAllHIDRequest"/>
+
+         <wsdl:output message="impl:removeAllHIDResponse" name="removeAllHIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="startNM">
+
+         <wsdl:input message="impl:startNMRequest" name="startNMRequest"/>
+
+         <wsdl:output message="impl:startNMResponse" name="startNMResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="stopNM">
+
+         <wsdl:input message="impl:stopNMRequest" name="stopNMRequest"/>
+
+         <wsdl:output message="impl:stopNMResponse" name="stopNMResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHostHIDsAsString">
+
+         <wsdl:input message="impl:getHostHIDsAsStringRequest" name="getHostHIDsAsStringRequest"/>
+
+         <wsdl:output message="impl:getHostHIDsAsStringResponse" name="getHostHIDsAsStringResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDsAsString">
+
+         <wsdl:input message="impl:getHIDsAsStringRequest" name="getHIDsAsStringRequest"/>
+
+         <wsdl:output message="impl:getHIDsAsStringResponse" name="getHIDsAsStringResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getContextHIDsAsString" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getContextHIDsAsStringRequest" name="getContextHIDsAsStringRequest"/>
+
+         <wsdl:output message="impl:getContextHIDsAsStringResponse" name="getContextHIDsAsStringResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDsbyDescriptionAsString" parameterOrder="in0">
+
+         <wsdl:input message="impl:getHIDsbyDescriptionAsStringRequest" name="getHIDsbyDescriptionAsStringRequest"/>
+
+         <wsdl:output message="impl:getHIDsbyDescriptionAsStringResponse" name="getHIDsbyDescriptionAsStringResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getNMPosition">
+
+         <wsdl:input message="impl:getNMPositionRequest" name="getNMPositionRequest"/>
+
+         <wsdl:output message="impl:getNMPositionResponse" name="getNMPositionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDescriptionbyHID" parameterOrder="in0">
+
+         <wsdl:input message="impl:getDescriptionbyHIDRequest" name="getDescriptionbyHIDRequest"/>
+
+         <wsdl:output message="impl:getDescriptionbyHIDResponse" name="getDescriptionbyHIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHostHIDsbyDescription" parameterOrder="in0">
+
+         <wsdl:input message="impl:getHostHIDsbyDescriptionRequest" name="getHostHIDsbyDescriptionRequest"/>
+
+         <wsdl:output message="impl:getHostHIDsbyDescriptionResponse" name="getHostHIDsbyDescriptionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHostHIDsbyDescriptionAsString" parameterOrder="in0">
+
+         <wsdl:input message="impl:getHostHIDsbyDescriptionAsStringRequest" name="getHostHIDsbyDescriptionAsStringRequest"/>
+
+         <wsdl:output message="impl:getHostHIDsbyDescriptionAsStringResponse" name="getHostHIDsbyDescriptionAsStringResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getInformationAssociatedWithHID" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getInformationAssociatedWithHIDRequest" name="getInformationAssociatedWithHIDRequest"/>
+
+         <wsdl:output message="impl:getInformationAssociatedWithHIDResponse" name="getInformationAssociatedWithHIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getNMPositionAuth" parameterOrder="in0">
+
+         <wsdl:input message="impl:getNMPositionAuthRequest" name="getNMPositionAuthRequest"/>
+
+         <wsdl:output message="impl:getNMPositionAuthResponse" name="getNMPositionAuthResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDByAttributes" parameterOrder="in0 in1 in2 in3 in4">
+
+         <wsdl:input message="impl:getHIDByAttributesRequest" name="getHIDByAttributesRequest"/>
+
+         <wsdl:output message="impl:getHIDByAttributesResponse" name="getHIDByAttributesResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createCryptoHID" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:createCryptoHIDRequest" name="createCryptoHIDRequest"/>
+
+         <wsdl:output message="impl:createCryptoHIDResponse" name="createCryptoHIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createCryptoHIDfromReference" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:createCryptoHIDfromReferenceRequest" name="createCryptoHIDfromReferenceRequest"/>
+
+         <wsdl:output message="impl:createCryptoHIDfromReferenceResponse" name="createCryptoHIDfromReferenceResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="NetworkManagerApplicationSoapBinding" type="impl:NetworkManagerApplication">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="openSession">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="openSessionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="openSessionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="sendData">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="sendDataRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="sendDataResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="receiveData">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="receiveDataRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="receiveDataResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="closeSession">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="closeSessionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="closeSessionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getSessionParameter">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getSessionParameterRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getSessionParameterResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setSessionParameter">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setSessionParameterRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setSessionParameterResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="synchronizeSessionsList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="synchronizeSessionsListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="synchronizeSessionsListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addSessionRemoteClient">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addSessionRemoteClientRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addSessionRemoteClientResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createHID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createHIDRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createHIDResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createHID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createHIDRequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createHIDResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createHIDwDesc">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createHIDwDescRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createHIDwDescResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createHIDwDesc">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createHIDwDescRequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createHIDwDescResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="renewHID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="renewHIDRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="renewHIDResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="renewHIDInfo">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="renewHIDInfoRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="renewHIDInfoResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addContext">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addContextRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addContextResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHostHIDs">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHostHIDsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHostHIDsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDs">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHIDsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHIDsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getContextHIDs">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getContextHIDsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getContextHIDsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDsbyDescription">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHIDsbyDescriptionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHIDsbyDescriptionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="removeHID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="removeHIDRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="removeHIDResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="removeAllHID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="removeAllHIDRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="removeAllHIDResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="startNM">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="startNMRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="startNMResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="stopNM">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="stopNMRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="stopNMResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHostHIDsAsString">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHostHIDsAsStringRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHostHIDsAsStringResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDsAsString">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHIDsAsStringRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHIDsAsStringResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getContextHIDsAsString">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getContextHIDsAsStringRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getContextHIDsAsStringResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDsbyDescriptionAsString">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHIDsbyDescriptionAsStringRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHIDsbyDescriptionAsStringResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getNMPosition">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getNMPositionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getNMPositionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDescriptionbyHID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getDescriptionbyHIDRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getDescriptionbyHIDResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHostHIDsbyDescription">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHostHIDsbyDescriptionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHostHIDsbyDescriptionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHostHIDsbyDescriptionAsString">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHostHIDsbyDescriptionAsStringRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHostHIDsbyDescriptionAsStringResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getInformationAssociatedWithHID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getInformationAssociatedWithHIDRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getInformationAssociatedWithHIDResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getNMPositionAuth">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getNMPositionAuthRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getNMPositionAuthResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getHIDByAttributes">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getHIDByAttributesRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getHIDByAttributesResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createCryptoHID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createCryptoHIDRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createCryptoHIDResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createCryptoHIDfromReference">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createCryptoHIDfromReferenceRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createCryptoHIDfromReferenceResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.network.linksmart.eu" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="NetworkManagerApplicationService">
+
+      <wsdl:port binding="impl:NetworkManagerApplicationSoapBinding" name="NetworkManagerApplication">
+
+         <wsdlsoap:address location="http://localhost:8082/axis/services/NetworkManagerApplication"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

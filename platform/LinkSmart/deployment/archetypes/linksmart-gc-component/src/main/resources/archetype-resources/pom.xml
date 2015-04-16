@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+	<!-- 
+		every linksmart GC component is inherited from "eu.linksmart.gc.osgi.component" POM, this POM contains declaration for 
+		OSGi dependencies (osgi-core, config-admin) for developing OSGi bundles with the help of Apache Felix SCR & Maven Bundle plugins.
+		Log4J is also included. Test dependencies are inherited from linksmart-parent.
+	-->
+    <parent>
+        <groupId>eu.linksmart.gc</groupId>
+		<artifactId>eu.linksmart.gc.osgi.component</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+    
+    <name>LinkSmart GC OSGi Component - ${artifactId}</name>
+    <description>LinkSmart GC OSGi Component Description - ${artifactId}</description>
+
+    <packaging>bundle</packaging>
+
+    <build>
+        <plugins>
+        	<!-- 
+				this plugin is based on the BND tool and tries to set reasonable defaults for various BND instructions.
+				It creates an OSGi bundle from maven project by generating OSGi manifest
+			-->
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <!--
+					version of the bundle plugin is declared in dependencyManagement section of the linksmart-parent,
+					and inherited from there. It enforces the use of same version across all (sub) projects for consistency. 
+				-->
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${artifactId}</Bundle-SymbolicName>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    
+<!-- 
+	Below are some BND instructions for generating manifest headers,
+	for most of the time, we don't need to set these manifest headers by ourself,
+	maven-bundle-plugin's default behavior will do this job in a quite smart way. 
+-->
+
+<!-- 	    <instructions> -->
+		<!-- get the bundle symbolic name as groupId + "." + artifactId, with the 
+			following exceptions: - if groupId has only one section (no dots) and artifact.getFile 
+			is not null then the first package name with classes is returned eg. commons-logging:commons-logging 
+			-> org.apache.commons.logging - if artifactId is equal to last section of 
+			groupId then groupId is returned. eg. org.apache.maven:maven -> org.apache.maven 
+			- if artifactId starts with last section of groupId that portion is removed. 
+			eg. org.apache.maven:maven-core -> org.apache.maven.core -->
+<!-- 		<Bundle-SymbolicName>${artifactId}</Bundle-SymbolicName> -->
+<!-- 		<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName> -->
+<!-- 		<Bundle-Name>${project.name}</Bundle-Name> -->
+<!-- 		<Bundle-Version>${project.version}</Bundle-Version> -->
+<!-- 		<Bundle-Description>${project.description}</Bundle-Description> -->
+<!-- 		<Bundle-Vendor>${project.organization.name}</Bundle-Vendor> -->
+<!-- 		<Bundle-Activator>eu.linksmart.maven.examples.activator.HelloMavenBundle</Bundle-Activator> -->
+		<!-- <Export-Package> is assumed to be the set of packages in local Java 
+			sources, excluding the default package '.' and any packages containing 'impl' 
+			or 'internal' - package patterns can be specified using the '*' wildcard 
+			or '!' negation marks - list of package patterns is ordered and earlier patterns 
+			are applied before later patterns - if a package is selected by both the 
+			export and private package headers, then the export takes precedence. -->
+<!-- 		<Export-Package>!eu.linksmart.maven.examples.priv, eu.linksmart.maven.examples</Export-Package> -->
+		<!-- <Private-Package>{local-packages}</Private-Package> -->
+		<!-- <Import-Package> is assumed to be "*", which imports everything referred 
+			to by the bundle content, but not contained in the bundle. - this header 
+			rarely has to be explicitly specified -->
+<!-- 		<Import-Package>*</Import-Package> -->
+		<!-- <Include-Resource> instruction copies the project's Maven resource 
+			directories into the bundle JAR file. - actual file paths are relative to 
+			the pom.xml, while file copy destinations are relative to the root of the 
+			resulting bundle JAR file -->
+<!-- 		<Include-Resource>resources=src/main/resources/</Include-Resource> -->
+<!-- 	</instructions> -->
+    
+</project>

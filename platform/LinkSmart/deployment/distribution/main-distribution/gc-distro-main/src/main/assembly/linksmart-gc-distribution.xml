@@ -1,0 +1,41 @@
+<assembly>
+    <id>bin</id>
+    
+    <formats>
+        <format>zip</format>
+        <format>tar.gz</format>
+    </formats>
+    
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <fileSets>
+        <fileSet>
+            <directory>target/linksmart-gc-resources/apache-karaf-${karaf.version}</directory>
+			<outputDirectory>/</outputDirectory>
+			<fileMode>755</fileMode>
+			<excludes>
+                <exclude>/etc/org.apache.karaf.features.cfg</exclude>
+                <exclude>/etc/org.ops4j.pax.url.mvn.cfg</exclude>
+      		</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>target/linksmart-gc-resources/unpacked-resources/repository</directory>
+			<outputDirectory>system</outputDirectory>
+		</fileSet>
+		<fileSet>
+            <directory>src/main/resources/config</directory>
+            <outputDirectory>/etc</outputDirectory>
+            <filtered>true</filtered>
+        </fileSet>    
+    </fileSets>
+
+    <files>
+        <file>
+            <source>src/main/resources/doc/README</source>
+            <outputDirectory>/</outputDirectory>
+            <destName>README-GC</destName>
+            <filtered>true</filtered>
+        </file>
+    </files>
+    
+</assembly>

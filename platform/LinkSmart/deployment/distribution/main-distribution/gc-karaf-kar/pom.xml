@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+    	<groupId>eu.linksmart.gc.distribution</groupId>
+    	<artifactId>eu.linksmart.gc.distribution.main</artifactId>
+    	<version>0.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>eu.linksmart.gc.distribution.main.kar</artifactId>
+
+    <name>LS GC - main Karaf archive (KAR)</name>
+    <description>Triggers assembly of Karaf archive of GC main distribution</description>
+
+	<packaging>kar</packaging>
+	
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.karaf.tooling</groupId>
+                <artifactId>karaf-maven-plugin</artifactId>
+                <version>${karaf.version}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>features-create-kar</id>
+                        <goals>
+                            <goal>features-create-kar</goal>
+                        </goals>
+                        <configuration>
+                            <featuresFile>${gc.features.repository.url}</featuresFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,24 @@
+ --------------------------
+News 
+ --------------------------
+Fraunhofer FIT
+ --------------------------
+2014-11-05
+ --------------------------
+
+News
+
+* LinkSmart 2.2.1 available
+
+  Finally, LinkSmart 2.2.1 is now available. This major 
+  enhancements of this release are:
+  
+  * Apache Karaf based OSGi execution environment
+  * different deployment modes (full, light etc) are available
+  * New tunnel service
+  * New backbones for binary messages and for local OSGi services
+  * New component for handling large messages
+  * New handshake protocol between NetworkManagers
+  * Improved test coverage
+  * Internal handling of message encoding improved
+  * Many, many bug fixes

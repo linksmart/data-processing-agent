@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="LINKSMART">
+
+	<skin>
+      <groupId>org.apache.maven.skins</groupId>
+	  <artifactId>maven-stylus-skin</artifactId>
+	  <version>1.3</version>
+	</skin>
+	<bannerLeft>
+	    <name>LinkSmart</name>
+	    <src>images/linksmart_logo.png</src>
+	    <href>https://www.linksmart.eu/</href>
+	</bannerLeft>
+	<bannerRight>
+	    <name>${project.name} - Fraunhofer Institute FIT</name>
+	    <src>images/fit_logo.gif</src>
+	    <href>http://www.fit.fraunhofer.de</href>
+	</bannerRight>
+    <version position="right"/>
+    <publishDate position="navigation-bottom"/>
+	<body>
+    	<head>
+            <meta name="keywords" content="communication middleare" />
+	        <meta name="description" content="middleware for heterogenous communication environments" />
+		    <script type="text/javascript">
+			
+			  var _gaq = _gaq || [];
+			  _gaq.push(['_setAccount', 'UA-24948610-1']);
+			  _gaq.push(['_trackPageview']);
+			
+			  (function() {
+			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+			
+			</script>
+	      
+    	</head>
+    	
+	    <breadcrumbs>
+	      <item name="LinkSmart Site" href="http://www.linksmart.eu/doc" />
+	    </breadcrumbs>
+	        
+		<links>
+		  <item name="Fraunhofer" href="http://www.fit.fraunhofer.de"/>
+		</links>
+	 
+        <menu name="Main">
+          <item name="Overview" href="./index.html"/>
+        </menu>
+
+        <menu name="Get LinkSmart">
+          <item name="Download" href="./download.html"/>
+          <item name="License" href="./license.txt"/>
+        </menu>
+        
+        <menu name="Examples">
+        </menu>
+        
+        <menu name="Resources and Guides">
+            <item name="FAQ" href="./faq.html"/>
+	    </menu>
+	    
+	    <menu ref="reports"/>
+		
+    </body>
+</project>
