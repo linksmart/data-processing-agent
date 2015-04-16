@@ -30,14 +30,15 @@ module.exports = function (almanac) {
 			}
 			ioSockets[socket.id] = remoteAddress + ':' + remotePort;
 			ioClients[remoteAddress + ':' + remotePort] = socket.id;
-			almanac.webSocket.in('info').emit('info', 'Connected ' + ioSockets[socket.id]);
 			almanac.log.info('VL', 'Socket.IO: connected ' + ioSockets[socket.id]);
+			almanac.webSocket.in('info').emit('info', 'Connected ' + ioSockets[socket.id]);
 
 			var rooms = ['alert', 'DM', 'info', 'peering', 'scral'];
 			socket.on('subscribe', function(room) {
 					if (rooms.indexOf(room) >= 0) {
 						almanac.log.verbose('VL', 'Socket.IO: ' + ioSockets[socket.id] + ' joins room ' + room);
 						socket.join(room);
+						almanac.webSocket.in('info').emit('info', ioSockets[socket.id] + ' joins room ' + room);
 						if (room === 'info') {
 							socket.emit('info', 'Welcome ' + ioSockets[socket.id]);
 						}

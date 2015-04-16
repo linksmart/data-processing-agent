@@ -81,7 +81,10 @@
     _managedObjectContext = managedObjectContext;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"IoTEntity"];
-    request.predicate = nil;
+    
+    request.predicate = [NSPredicate predicateWithFormat:@"ANY cnTypeOf.cnValue like[c] \"*phone*\" or ANY cnTypeOf.cnValue like[c] \"*ipad*\""];;
+    // request.predicate = [NSPredicate predicateWithFormat:@"cnName like[c] \"*phone*\" or cnName like[c] \"*ipad*\""];;
+    // request.predicate = nil;
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"cnName"
                                                               ascending:NO
                                                                selector:@selector(localizedStandardCompare:)]];

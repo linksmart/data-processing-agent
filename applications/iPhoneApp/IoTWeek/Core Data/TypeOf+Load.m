@@ -44,6 +44,12 @@
      forPropertiesWithAbout:(NSString *)propertiesAbout
       forIoTEntityWithAbout:(NSString *)iotEntityAbout
 {
+    if ([typeOf isKindOfClass:[NSNull class]])
+        return;
+    
+    if (!typeOf || [typeOf count] == 0)
+        return;
+    
     Property *property = [Property propertyWithAbout:propertiesAbout forIoTEntityWithAbout:iotEntityAbout usingManagedContext:context];
     property.cnTypeOf = nil;
     

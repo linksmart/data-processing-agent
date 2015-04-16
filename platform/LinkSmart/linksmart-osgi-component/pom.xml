@@ -1,0 +1,132 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+		<groupId>eu.linksmart</groupId>
+		<artifactId>linksmart-parent</artifactId>
+		<version>2.2.2-SNAPSHOT</version>
+	</parent>
+	  
+    <artifactId>linksmart-osgi-component</artifactId>
+    
+    <name>LinkSmart OSGi Component Parent</name>
+    
+    <packaging>pom</packaging>
+
+	<!-- this section define only the versions used by dependencies and not the dependencies itself -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- OSGi/felix dependencies -->
+        	<dependency>
+                <groupId>org.apache.felix</groupId>
+            	<artifactId>org.osgi.core</artifactId>
+                <version>${felix.osgi.core.version}</version> 
+            </dependency>
+            <dependency>
+        		<groupId>org.apache.felix</groupId>
+        		<artifactId>org.apache.felix.configadmin</artifactId>
+        		<version>${felix.osgi.configadmin.version}</version>
+      		</dependency>
+      		<dependency>
+        		<groupId>org.apache.felix</groupId>
+        		<artifactId>org.apache.felix.scr</artifactId>
+        		<version>${felix.scr.version}</version>
+      		</dependency>
+        	<dependency>
+            	<groupId>org.apache.felix</groupId>
+            	<artifactId>org.apache.felix.scr.annotations</artifactId>
+            	<version>${felix.scr.annotations.version}</version>
+        	</dependency>
+        	<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.metatype</artifactId>
+				<version>${felix.metatype.version}</version>
+			</dependency>
+        	<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.http.jetty</artifactId>
+				<version>${felix.http.version}</version>
+			</dependency>
+            <!-- other dependencies -->
+        </dependencies>
+    </dependencyManagement>
+    
+	<!-- dependencies inherited in all (linksmart) projects -->
+    <dependencies>
+    	<!-- felix/osgi core dependencies -->
+    	<dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.osgi.core</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.apache.felix</groupId>
+        	<artifactId>org.apache.felix.configadmin</artifactId>
+      	</dependency>
+      	<dependency>
+        	<groupId>org.apache.felix</groupId>
+        	<artifactId>org.apache.felix.scr</artifactId>
+      	</dependency>
+      	<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.scr.annotations</artifactId>
+		</dependency>
+		<!-- logging dependencies -->
+		<dependency>
+        	<groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+            	<!-- bundle plugins -->
+            	<plugin>
+                	<groupId>org.apache.felix</groupId>
+                	<artifactId>maven-bundle-plugin</artifactId>
+                	<version>${felix.maven.bundle.version}</version>
+                	<extensions>true</extensions>
+            	</plugin>
+            	<plugin>
+            		<groupId>org.apache.felix</groupId>
+            		<artifactId>maven-scr-plugin</artifactId>
+            		<version>${felix.maven.scr.version}</version>
+        		</plugin>
+            </plugins>
+        </pluginManagement>
+        
+        <!-- plugins inherited in all projects -->
+        <plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<!-- no instructions are required, plugin default behavior will do the job -->
+					</instructions>
+				</configuration>
+			</plugin>
+			<!-- 
+				this plugin creates the necessary descriptors for the OSGi Declarative Services, and is based on the
+				SCR annotations from one of Apache Felix sub-project
+			-->
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-scr-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-scr-descriptions</id>
+						<goals>
+							<goal>scr</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+          
+    </build>
+
+</project>
