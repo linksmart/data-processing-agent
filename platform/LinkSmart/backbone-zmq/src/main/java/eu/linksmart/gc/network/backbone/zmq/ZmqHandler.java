@@ -397,8 +397,12 @@ public class ZmqHandler {
 
 				// add VAD of the sender to services
 				addServiceIfMissing(senderVA, zmqMessage.getSender());
+                NMResponse response = null;
+                if (ZmqUtil.isSync(zmqMessage.getPayload()))
+				     response = zmqBackbone.receiveDataSynch(senderVA, receiverVA, originalPayload);
+                else
+                    response = zmqBackbone.receiveDataAsynch(senderVA, receiverVA, originalPayload);
 
-				NMResponse response = zmqBackbone.receiveDataSynch(senderVA, receiverVA, originalPayload);
 				LOG.info("REQ: received response from nm/router for requestID: " + requestID);
 
 				//

@@ -15,6 +15,16 @@ public class ZmqUtil {
 		System.arraycopy(origData, 0, ret, 0, VirtualAddress.VIRTUAL_ADDRESS_BYTE_LENGTH - 0);
 		return new VirtualAddress(ret);
 	}
+    public static boolean isSync(byte[] origData) {
+        if(origData[VirtualAddress.VIRTUAL_ADDRESS_BYTE_LENGTH *2] == 1)
+            return true;
+        else if(origData[VirtualAddress.VIRTUAL_ADDRESS_BYTE_LENGTH *2] == 0)
+            return false;
+        else {
+            System.out.println("Unexpected value in the recovering of the message");
+            return false;
+        }
+    }
 	
 	public static byte[] removeSenderVAD(byte[] origData) {
 		int lengthWithoutVirtualAddress = origData.length - VirtualAddress.VIRTUAL_ADDRESS_BYTE_LENGTH;
@@ -25,12 +35,13 @@ public class ZmqUtil {
 	
 	public static byte[] addVADsToPayload(BackboneMessage bbMessage) {
 		byte[] payloadWithReceiverVAD = ArrayUtils.addAll(bbMessage.getReceiverVirtualAddress().getBytes(),bbMessage.getPayload());
-		byte[] payloadWithVADs = ArrayUtils.addAll(bbMessage.getSenderVirtualAddress().getBytes(),payloadWithReceiverVAD);
+        byte[] payloadWithReceiverVADiSync = ArrayUtils.addAll(payloadWithReceiverVAD,new byte[]{bbMessage.isSync()?(byte)1:(byte)0});
+		byte[] payloadWithVADs = ArrayUtils.addAll(bbMessage.getSenderVirtualAddress().getBytes(),payloadWithReceiverVADiSync);
 		return payloadWithVADs;
 	}
 	
 	public static byte[] removeVADsFromPayload(byte[] payload) {
-		int virtualAddressesLength = VirtualAddress.VIRTUAL_ADDRESS_BYTE_LENGTH * 2;
+		int virtualAddressesLength = VirtualAddress.VIRTUAL_ADDRESS_BYTE_LENGTH * 2 + 1;
 		int lengthWithoutVirtualAddress = payload.length - virtualAddressesLength;
 		byte[] ret = new byte[lengthWithoutVirtualAddress];
 		System.arraycopy(payload, virtualAddressesLength, ret, 0, payload.length - virtualAddressesLength);
