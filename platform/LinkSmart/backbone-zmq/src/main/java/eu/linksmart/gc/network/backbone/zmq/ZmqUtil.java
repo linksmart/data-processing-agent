@@ -22,7 +22,7 @@ public class ZmqUtil {
             return false;
         else {
             System.out.println("Unexpected value in the recovering of the message");
-            return false;
+            return true;
         }
     }
 	
