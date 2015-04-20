@@ -35,9 +35,9 @@ public class ZmqUtil {
 	
 	public static byte[] addVADsToPayload(BackboneMessage bbMessage) {
 		byte[] payloadWithReceiverVAD = ArrayUtils.addAll(bbMessage.getReceiverVirtualAddress().getBytes(),bbMessage.getPayload());
-        byte[] payloadWithReceiverVADiSync = ArrayUtils.addAll(payloadWithReceiverVAD,new byte[]{bbMessage.isSync()?(byte)1:(byte)0});
-		byte[] payloadWithVADs = ArrayUtils.addAll(bbMessage.getSenderVirtualAddress().getBytes(),payloadWithReceiverVADiSync);
-		return payloadWithVADs;
+		byte[] payloadWithVADs = ArrayUtils.addAll(bbMessage.getSenderVirtualAddress().getBytes(),payloadWithReceiverVAD);
+        byte[] payloadWithReceiverVADiSync = ArrayUtils.addAll(payloadWithVADs,new byte[]{bbMessage.isSync()?(byte)1:(byte)0});
+		return payloadWithReceiverVADiSync;
 	}
 	
 	public static byte[] removeVADsFromPayload(byte[] payload) {
