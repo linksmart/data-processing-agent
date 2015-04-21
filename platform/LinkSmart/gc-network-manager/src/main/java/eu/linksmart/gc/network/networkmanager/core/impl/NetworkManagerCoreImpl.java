@@ -666,9 +666,41 @@ public class NetworkManagerCoreImpl implements NetworkManagerCore, MessageDistri
 					return this.connectionManager.getDeclineHandshakeMessage(
 							this.getService(), receiverVirtualAddress);
 				} else {
+				/* TODO I remove security with this (ANGEL)
 					response.setStatus(NMResponse.STATUS_ERROR);
 					response.setMessage(COMMUNICATION_PARAMETERS_ERROR);
-					return response;
+					return response;*/
+                    response = this.backboneRouter.sendDataSynch(senderVirtualAddress,
+                            receiverVirtualAddress, data);
+
+                    if(response.getStatus() == NMResponse.STATUS_SUCCESS ) {
+                        // process response where message contains logical endpoints and
+                        // connection contains physical endpoints
+                        //turn around sender and receiver of the message as this is a response
+                        tempMessage = connection.processData(
+                                message.getReceiverVirtualAddress(),
+                                message.getSenderVirtualAddress(),
+                                (response.getMessage() != null)? response.getMessageBytes() : new byte[0]);
+                        // repeat sending and receiving until security protocol is over
+                        while (tempMessage != null
+                                && tempMessage
+                                .getTopic()
+                                .contentEquals(
+                                        CommunicationSecurityManager.SECURITY_PROTOCOL_TOPIC)) {
+                            response = this.backboneRouter.sendDataSynch(senderVirtualAddress,
+                                    receiverVirtualAddress, connection.processMessage(tempMessage));
+                            if(response.getStatus() == NMResponse.STATUS_SUCCESS) {
+                                //turn around sender and receiver of the message as this is a response
+                                tempMessage = connection.processData(message.getReceiverVirtualAddress(),
+                                        message.getSenderVirtualAddress(), response.getMessage()
+                                                .getBytes());
+                            } else {
+                                return response;
+                            }
+                        }
+                    } else {
+                        return response;
+                    }
 				}
 			}
 			// process outgoing message
