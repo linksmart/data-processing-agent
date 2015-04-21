@@ -154,10 +154,8 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
         String hostName= getHostName(), domain = conf.get(conf.DOMAIN);
 
         Part[] attributes = {
-                new Part("DESCRIPTION","Broker hosted in :"+hostName),
-                new Part("SID",MQTTProtocolID.toString()),
-                new Part("brokerName",hostName+"."+domain),
-                new Part("domain",domain)
+                new Part("DESCRIPTION","Broker:"+hostName+"."+domain),
+                new Part("UUID",MQTTProtocolID.toString())
 
         };
 
