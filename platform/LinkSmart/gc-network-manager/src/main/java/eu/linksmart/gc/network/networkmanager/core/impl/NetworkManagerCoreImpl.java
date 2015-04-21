@@ -624,11 +624,15 @@ public class NetworkManagerCoreImpl implements NetworkManagerCore, MessageDistri
 		} catch (Exception e) {
 			LOG.warn("Could not create packet from message from VirtualAddress: "
 					+ message.getSenderVirtualAddress());
-			NMResponse response = new NMResponse();
+		/* TODO: I remove security (ANGEL)
+			//NMResponse response = new NMResponse();
+
 			response.setStatus(NMResponse.STATUS_ERROR);
 			response.setMessage("Could not create packet from message from VirtualAddress: "
 					+ message.getSenderVirtualAddress());
-			return response;
+			return response;*/
+            NMResponse response = this.backboneRouter.sendDataAsynch(senderVirtualAddress,
+                    receiverVirtualAddress, data);
 		}
 		NMResponse response = this.backboneRouter.sendDataAsynch(senderVirtualAddress,
 				receiverVirtualAddress, data);
