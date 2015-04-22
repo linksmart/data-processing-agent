@@ -16,10 +16,10 @@ public class MqttBackboneProtocolConfigurator extends Configurator {
 	public static String CONFIGURATION_FILE = "/mqttprotocol.properties";
 
 	public static final String BACKBONE_DESCRIPTION = "BackboneMQTT.description";
-    public static final String DOMAIN = "BackboneMQTT.Domain";
+
     public static final String SECURITY_PARAMETERS = "BackboneMQTT.SecurityParameters";
 
-    public static String BROKER_URL = "BackboneMQTT.MQTT.BrokerURL";
+
 
     public static String QoS = "BackboneMQTT.MQTT.QoS";
 
@@ -37,6 +37,11 @@ public class MqttBackboneProtocolConfigurator extends Configurator {
     public static String MESSAGE_CONTROL_CLEANER_TIMEOUT = "BackboneMQTT.Timeout";
 
     public static String MESSAGE_REPETITION_CONTROL = "BackboneMQTT.advance.MessageRepetitionControl";
+
+    public static String BROKER_NAME = "BackboneMQTT.MQTT.BrokerName";
+
+    public static String BROKER_PORT = "BackboneMQTT.MQTT.BrokerPort";
+
 
 	private MqttBackboneProtocolImpl bbMqttImpl;
 

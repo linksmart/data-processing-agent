@@ -88,7 +88,10 @@
     <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
     <bundle>mvn:org.eclipse.paho/org.eclipse.paho.client.mqttv3/1.0.0</bundle>
     <feature version="${linksmart.gc.version}">gc-type-tunnelled</feature>
+  <!--  <configfile finalname="/etc/mqttBackboneProtocol.cfg" override="false">mvn:eu.linksmart.gc/backbone.mqtt.impl/${linksmart.gc.version}</configfile>
+    <configfile finalname="/etc/mqttBackboneProtocol.cfg">mvn:eu.linksmart.gc/backbone.mqtt.impl/${linksmart.gc.version}/mqttprotocol.properties</configfile>-->
     <bundle>mvn:eu.linksmart.gc/backbone.mqtt.impl/${linksmart.gc.version}</bundle>
+
 </feature>
     <feature name="gc-backbone-wrapper" version="${linksmart.gc.version}">
         <feature version="${linksmart.gc.version}">gc-backbone-mqtt</feature>

@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public class testingSubscriber {
 
-    private static String SUBSCRIBE_PEER_ID = "f28cd5b1-d30a-433d-a49d-e32ff8d718b9";
+    private static String SUBSCRIBE_PEER_ID = "BROADCAST";
 
 
     public static void main (String[] args) throws InterruptedException {
@@ -33,8 +33,8 @@ public class testingSubscriber {
 
             ZMQ.Socket socket = ctx.socket(ZMQ.SUB);
             //socket.su
-            socket.connect("tcp://localhost:7001");
-            System.out.println("sub thread connected to : tcp://localhost:7001");
+            socket.connect("tcp://magna:7001");
+            System.out.println("sub thread connected to : tcp://magna:7001");
 
             socket.subscribe(SUBSCRIBE_PEER_ID.getBytes());
             System.out.println("sub thread subscribed to " + SUBSCRIBE_PEER_ID);

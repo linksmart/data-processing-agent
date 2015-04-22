@@ -1,7 +1,6 @@
 package eu.linksmart.gc.network.backbone.protocol.mqtt;
 
 
-import eu.linksmart.gc.api.network.Registration;
 import eu.linksmart.gc.api.network.networkmanager.NetworkManager;
 import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import eu.linksmart.gc.api.types.TunnelRequest;
@@ -14,7 +13,6 @@ import eu.linksmart.gc.api.network.backbone.Backbone;
 import eu.linksmart.gc.api.network.routing.BackboneRouter;
 import eu.linksmart.gc.api.security.communication.SecurityProperty;
 
-import eu.linksmart.gc.api.utils.Part;
 import org.apache.felix.scr.annotations.*;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
@@ -22,9 +20,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentContext;
 
 import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -82,8 +77,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
     private Map<String, Set<VirtualAddress>> listeningVirtualAddresses = new HashMap<>();
     // this maps the topic which the listener who is haring it.
     private Map<String,ForwardingListener> openClients = new HashMap<>();
-    // this is the MQTT client to publish in the local broker
-    private MqttClient mqttClient;
+
     // controls if one message had been sent already
     private Map<String,Boolean> MessageHashControl = new HashMap<>();
     // keep clean the MessageHashControl structure
@@ -94,7 +88,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
     private Map<Integer,Map<String, Boolean>> repetitionControl = null;
     private MessageDigest md5 = null;
 
-    Registration brokerRegistrationInfo = null;
+    BrokerConnectionService brokerService;
 
     protected void bindConfigAdmin(ConfigurationAdmin configAdmin) {
         this.mConfigAdmin = configAdmin;
@@ -121,50 +115,22 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 
         try {
             LOG.info("Starting broker main client with name:" +MQTTProtocolID.toString());
-            mqttClient = new MqttClient(conf.get(conf.BROKER_URL),MQTTProtocolID.toString());
 
-            mqttClient.connect();
+            brokerService = new BrokerConnectionService(conf.get(conf.BROKER_NAME),conf.get(conf.BROKER_PORT), MQTTProtocolID,networkManager);
 
-        } catch (MqttException e) {
+            brokerService.connect();
+        } catch (Exception e) {
             LOG.error("Activating error:"+e.getMessage(),e);
+
             throw new Exception(e);
         }
         // TODO To be moved?
-        registerBroker();
+
 
     }
-    String getHostName(){
-        String hostname = "localhost";
 
-        try
-        {
-            InetAddress addr;
-            addr = InetAddress.getLocalHost();
-            hostname = addr.getHostName();
-        }
-        catch (UnknownHostException ex)
-        {
-            System.out.println("Hostname can not be resolved");
-        }
-        return hostname;
-    }
-    // TODO To be moved?
-    private void registerBroker() throws RemoteException {
 
-        String hostName= getHostName(), domain = conf.get(conf.DOMAIN);
 
-        Part[] attributes = {
-                new Part("DESCRIPTION","Broker:"+hostName+"."+domain),
-                new Part("UUID",MQTTProtocolID.toString())
-
-        };
-
-        brokerRegistrationInfo = networkManager.registerService(attributes,conf.get(conf.BROKER_URL), getName());
-    }
-    private void deRegisterBroker() throws RemoteException {
-
-        networkManager.removeService(brokerRegistrationInfo.getVirtualAddress());
-    }
 
     /**
      * TODO add description
@@ -246,10 +212,9 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
         disconnectAll();
 
         try {
-            mqttClient.disconnect();
-            mqttClient.close();
 
-            deRegisterBroker();
+            brokerService.destroy();
+
         }catch (Exception e){
             LOG.error(e.getMessage(),e);
         }
@@ -392,7 +357,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 
         // if there is no listener in this topic add one
         if(!openClients.containsKey(topic))
-            openClients.put(topic, new ForwardingListener(conf.get(conf.BROKER_URL), topic, MQTTProtocolID, this));
+            openClients.put(topic, new ForwardingListener(brokerService.getBrokerURL(), topic, MQTTProtocolID, this));
 
 
     }
@@ -431,23 +396,9 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
     }
     private void publish(MqttTunnelledMessage ms) throws Exception {
 
-
-        // check if I'm connected, if not try three times to connect.
-        for (int i =0; i<3 && !mqttClient.isConnected(); i++)
-            mqttClient.connect();
-
-        // if now I'm not connected then I  report the error
-        if (!mqttClient.isConnected()) {
-            throw new Exception("Unable to establish connection with the broker");
-        }
-
-
-
             // if the message is not repartition or local,and I successful recovered then is published.
             if(ms != null && uniqueMessagePerTopic(ms) && uniqueMessageControl(ms))
-                mqttClient.publish(ms.getTopic(),ms.getPayload(),ms.getQoS(),ms.isRetained());
-
-
+                brokerService.publish(ms.getTopic(),ms.getPayload(),ms.getQoS(),ms.isRetained());
 
 
     }
@@ -565,7 +516,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 	public NMResponse broadcastData(VirtualAddress senderVirtualAddress, byte[] data) {
         LOG.info("Making broadcast in the MQTT Protocol");
         try {
-            mqttClient.publish(
+            brokerService.publish(
                     conf.get(conf.BROADCAST),
                     data,
                     Integer.valueOf(conf.get(conf.QoS)),
@@ -670,7 +621,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 
             // send to all VAD who wants to receive this message
             for (VirtualAddress vad : listeningVirtualAddresses.get(data.getTopic()))
-                receiveDataAsynch(brokerRegistrationInfo.getVirtualAddress(), vad, data.toBytes());
+                receiveDataAsynch(brokerService.getVirtualAddress(), vad, data.toBytes());
 
     }
     /**
@@ -683,18 +634,28 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
             initMessageRepetitionControl();
 
 
-        if (map.containsKey(conf.BROKER_URL)) {
+        if (map.containsKey(conf.BROKER_NAME)|| map.containsKey(conf.BROKER_PORT)) {
+            try {
 
-            LOG.error("The broker had being change but the BackboneRouter don't support the reloading operation of a Backbone. This will make just a partial change");
+                if (map.containsKey(conf.BROKER_NAME))
+                    brokerService.setBrokerName(map.get(conf.BROKER_NAME).toString());
+                if (map.containsKey(conf.BROKER_PORT))
+                    brokerService.setBrokerName(map.get(conf.BROKER_PORT).toString());
+            }catch (Exception e){
+                LOG.error("Error while updating broker configuration :"+e.getMessage(),e);
+            }
+
 
             for (ForwardingListener fl : openClients.values())
                 try {
-                    fl.setBrokerURL(map.get(conf.BROKER_URL).toString());
+                    fl.setBrokerURL(brokerService.getBrokerURL());
                     fl.restart();
                 } catch (MqttException e) {
                     LOG.error("Error applying configuration: " + e.getMessage(), e);
                 }
         }
+
+        LOG.info("Configuration changes applied!");
     }
     /**
      * brief ENUM use to declare if a message is synchronous or asynchronous
