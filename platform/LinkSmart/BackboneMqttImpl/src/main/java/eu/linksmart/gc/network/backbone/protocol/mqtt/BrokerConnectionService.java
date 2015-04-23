@@ -4,6 +4,7 @@ import eu.linksmart.gc.api.network.Registration;
 import eu.linksmart.gc.api.network.VirtualAddress;
 import eu.linksmart.gc.api.network.networkmanager.NetworkManager;
 import eu.linksmart.gc.api.utils.Part;
+import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
  * Created by Caravajal on 22.04.2015.
  */
 public class BrokerConnectionService {
+    private Logger LOG = Logger.getLogger(MqttBackboneProtocolImpl.class.getName());
     // this is the MQTT client to publish in the local broker
     private MqttClient mqttClient;
     private NetworkManager networkManager;
@@ -127,7 +129,7 @@ public class BrokerConnectionService {
                         }
                         this.sleep(30000);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOG.error(e);
                     }
                 }
             }
@@ -169,7 +171,7 @@ public class BrokerConnectionService {
 
             };
 
-            brokerRegistrationInfo = networkManager.registerService(attributes,getBrokerURL(),brokerName);
+            brokerRegistrationInfo = networkManager.registerService(attributes,getBrokerURL(),MqttBackboneProtocolImpl.class.getName());
         }
     }
     private void deregisterBroker() throws RemoteException {
@@ -191,7 +193,7 @@ public class BrokerConnectionService {
         }
         catch (UnknownHostException ex)
         {
-            System.err.println("Hostname can not be resolved");
+            LOG.error(ex);
         }
         return hostname;
     }
