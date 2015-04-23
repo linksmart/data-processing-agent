@@ -243,7 +243,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 			LOG.debug("body: " + new String(tunnelRequest.getBody()));
 
 			// check if service endpoint is available
-			String uriEndpoint = tunnelRequest.getPath();
+			String uriEndpoint = tunnelRequest.getPath().replace("hash","#").replace("plus","+");
 
 			if (uriEndpoint == null) {
 				String message = "cannot send tunneled data to service at virtualAddress: " + receiverVirtualAddress.toString() + ", unknown endpoint";
