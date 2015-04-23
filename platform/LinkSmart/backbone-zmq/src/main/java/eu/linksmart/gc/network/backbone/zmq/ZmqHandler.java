@@ -280,7 +280,7 @@ public class ZmqHandler {
 				if(zmqMessage.getType() == ZmqConstants.MESSAGE_TYPE_SERVICE_DISCOVERY) {
 					processDiscovery();
 				} else if(zmqMessage.getType() == ZmqConstants.MESSAGE_TYPE_PEER_DOWN) {
-					processPeerDown();
+					;//processPeerDown();
 				}
 			} else if(zmqMessage.getTopic().equals(getPeerID())) {
 				processUnicast();
