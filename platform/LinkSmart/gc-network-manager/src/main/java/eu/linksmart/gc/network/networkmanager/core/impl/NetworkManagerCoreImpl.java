@@ -283,235 +283,142 @@ public class NetworkManagerCoreImpl implements NetworkManagerCore, MessageDistri
 	@Override
 	public NMResponse receiveDataSynch(VirtualAddress senderVirtualAddress, VirtualAddress receiverVirtualAddress,
 			byte[] data) {
-		// open message only if it is for local entity or is broadcast
-		Registration receiverRegistrationInfo = null;
-		Registration senderRegistrationInfo = identityManager.getServiceInfo(senderVirtualAddress);
-		if (receiverVirtualAddress != null) {
-			receiverRegistrationInfo = identityManager.getServiceInfo(receiverVirtualAddress);
-		}
-		if (receiverVirtualAddress == null
-				|| (receiverRegistrationInfo != null && identityManager.getLocalServices()
-				.contains(receiverRegistrationInfo))
-				|| (senderRegistrationInfo != null && identityManager.getLocalServices()
-				.contains(senderRegistrationInfo))) {
-			// get connection belonging to services
-			Connection conn;
-			try {
-				if (receiverVirtualAddress == null) {
-					// broadcast message
-					conn = connectionManager.getBroadcastConnection(senderVirtualAddress);
-				} else {
-					// to get proper connection use my VirtualAddress
-					conn = getConnection(myVirtualAddress, senderVirtualAddress, data);
-					//no common connection parameters could be established with the other end
-					if(conn == null) {
-						NMResponse response = new NMResponse(NMResponse.STATUS_ERROR);
-						if(this.connectionManager.isHandshakeMessage(
-								data, senderVirtualAddress, receiverVirtualAddress)) {
-							response = this.connectionManager.getDeclineHandshakeMessage(
-									senderVirtualAddress, getService());
-						} else {
-							response = createErrorMessage(receiverVirtualAddress, senderVirtualAddress,
-									COMMUNICATION_PARAMETERS_ERROR, ErrorMessage.ERROR, null); 
-						}
-						return response;
-					}
-				}
-			} catch (Exception e) {
-				LOG.warn(
-						"Error getting connection for services: "
-								+ senderVirtualAddress.toString() + " " + myVirtualAddress.toString(),
-								e);
-				NMResponse response = new NMResponse();
-				response.setStatus(NMResponse.STATUS_ERROR);
-				String errorMsg = "Error getting connection for services: "
-						+ senderVirtualAddress.toString() + " " + myVirtualAddress.toString();
-				response = createErrorMessage( 
-						receiverVirtualAddress,
-						senderVirtualAddress, errorMsg, ErrorMessage.RECEPTION_ERROR, null);
-				return response;
-			}
+        // open message only if it is for local entity or is broadcast
+        Registration receiverRegistrationInfo = null;
+        Registration senderRegistrationInfo = identityManager.getServiceInfo(senderVirtualAddress);
+        if (receiverVirtualAddress != null) {
+            receiverRegistrationInfo = identityManager.getServiceInfo(receiverVirtualAddress);
+        }
 
-			Message msg = conn.processData(senderVirtualAddress, receiverVirtualAddress, data);
+        Message msg = MessageSerializerUtiliy.unserializeMessage(
+                data, false, senderVirtualAddress, receiverVirtualAddress, true);
 
-			//drop error messages from further processing
-			if(msg instanceof ErrorMessage) {
-				NMResponse response = new NMResponse(NMResponse.STATUS_ERROR);
-				if(msg.getData() != null) {
-					response.setBytesPrimary(true);
-					try {
-						response.setMessageBytes(conn.processMessage(msg));
-					} catch (Exception e) {
-						response = createErrorMessage(
-								receiverVirtualAddress, 
-								senderVirtualAddress,
-								new String(msg.getData()), msg.getTopic(), conn);
-					}
-				}
-				return response;
-			}
-			String topic = msg.getTopic();
-			// go through MsgObservers for additional processing
-			List<MessageProcessor> observers = msgObservers.get(topic);
-			if (observers != null) {
-				for (MessageProcessor observer : observers) {
-					msg = observer.processMessage(msg);
-					if (msg == null || msg.getData() == null) {
-						NMResponse nmresp = new NMResponse();
-						nmresp.setStatus(NMResponse.STATUS_SUCCESS);
-						return nmresp;
-					}
-				}
-			}
+        //drop error messages from further processing
+        if (msg instanceof ErrorMessage) {
+            NMResponse response = new NMResponse(NMResponse.STATUS_ERROR);
+            if (msg.getData() != null) {
+                response.setBytesPrimary(true);
 
-			if (msg != null && msg.getData() != null
-					&& msg.getData().length != 0) {
+            }
+            return response;
+        }
+        String topic = msg.getTopic();
+        // go through MsgObservers for additional processing
+        List<MessageProcessor> observers = msgObservers.get(topic);
+        if (observers != null) {
+            for (MessageProcessor observer : observers) {
+                msg = observer.processMessage(msg);
+                if (msg == null || msg.getData() == null) {
+                    NMResponse nmresp = new NMResponse();
+                    nmresp.setStatus(NMResponse.STATUS_SUCCESS);
+                    return nmresp;
+                }
+            }
+        }
+
+        if (msg != null && msg.getData() != null
+                && msg.getData().length != 0) {
 				/*
 				 * check if message is not intended for host VirtualAddress, if yes and it
 				 * has not been processed drop it
 				 */
-				if (msg.getReceiverVirtualAddress() == null) {
-					LOG.warn(UNPROCESSED_MSG);
-					NMResponse response = createErrorMessage(
-							getVirtualAddress(), senderVirtualAddress,
-							UNPROCESSED_MSG,
-							ErrorMessage.RECEPTION_ERROR, conn);
-					return response;
-				} else {
-					// if this is not the response first forward it
-					if (!msg.getReceiverVirtualAddress().equals(senderVirtualAddress)) {
-						// forward over sendMessage method of this and return
-						// response
-						// here the response message should include a message
-						// object
-						LOG.trace("Forwarding received message to " + msg.getReceiverVirtualAddress());
-						msg = sendMessageSynch(msg, msg.getSenderVirtualAddress(),
-								msg.getReceiverVirtualAddress()).getMessageObject();
-					}
-					NMResponse nmresp = new NMResponse();
-					if (msg != null && msg.getReceiverVirtualAddress().equals(senderVirtualAddress)) {
-						// create response with connection and etc
-						nmresp.setStatus(NMResponse.STATUS_SUCCESS);
-						try {
-							nmresp.setBytesPrimary(true);
-							nmresp.setMessageBytes(conn.processMessage(msg));
-						} catch (Exception e) {
-							nmresp = createErrorMessage(
-									receiverVirtualAddress, senderVirtualAddress,
-									"Error receiving message: " + e.getMessage(),
-									ErrorMessage.ERROR, conn);
-						}
-					} else {
-						nmresp = createErrorMessage(
-								receiverVirtualAddress, senderVirtualAddress,
-								"Error processing message",
-								ErrorMessage.ERROR, conn);
-					}
-					return nmresp;
-				}
+            if (msg.getReceiverVirtualAddress() == null) {
+                LOG.warn(UNPROCESSED_MSG);
+                NMResponse response = createErrorMessage(
+                        getVirtualAddress(), senderVirtualAddress,
+                        UNPROCESSED_MSG,
+                        ErrorMessage.RECEPTION_ERROR, null);
+                return response;
+            } else {
+                // if this is not the response first forward it
+                if (!msg.getReceiverVirtualAddress().equals(senderVirtualAddress)) {
+                    // forward over sendMessage method of this and return
+                    // response
+                    // here the response message should include a message
+                    // object
+                    LOG.trace("Forwarding received message to " + msg.getReceiverVirtualAddress());
+                    msg = sendMessageSynch(msg, msg.getSenderVirtualAddress(),
+                            msg.getReceiverVirtualAddress()).getMessageObject();
+                }
+                NMResponse nmresp = new NMResponse();
+                if (msg != null && msg.getReceiverVirtualAddress().equals(senderVirtualAddress)) {
+                    // create response with connection and etc
+                    nmresp.setStatus(NMResponse.STATUS_SUCCESS);
+                    try {
+                        nmresp.setBytesPrimary(true);
+                        nmresp.setMessageBytes(MessageSerializerUtiliy.serializeMessage(msg, false, true));
+                    } catch (Exception e) {
+                        nmresp = createErrorMessage(
+                                receiverVirtualAddress, senderVirtualAddress,
+                                "Error receiving message: " + e.getMessage(),
+                                ErrorMessage.ERROR, null);
+                    }
+                } else {
+                    nmresp = createErrorMessage(
+                            receiverVirtualAddress, senderVirtualAddress,
+                            "Error processing message",
+                            ErrorMessage.ERROR, null);
+                }
+                return nmresp;
+            }
 
-			} else {
-				NMResponse response = new NMResponse();
-				response.setStatus(NMResponse.STATUS_SUCCESS);
-				return response;
-			}
-		} else {
-			return backboneRouter.sendDataSynch(senderVirtualAddress, receiverVirtualAddress, data);
-		}
-	}
+
+        } else {
+            return backboneRouter.sendDataSynch(senderVirtualAddress, receiverVirtualAddress, data);
+        }
+    }
 
 	@Override
 	public NMResponse receiveDataAsynch(VirtualAddress senderVirtualAddress, VirtualAddress receiverVirtualAddress,
 			byte[] data) {
-		// open message only if it is for local entity or is broadcast
-		Registration receiverRegistrationInfo = null;
-		Registration senderRegistrationInfo = identityManager.getServiceInfo(senderVirtualAddress);
-		if (receiverVirtualAddress != null) {
-			receiverRegistrationInfo = identityManager.getServiceInfo(receiverVirtualAddress);
-		}
-		if (receiverVirtualAddress == null
-				|| (receiverRegistrationInfo != null && identityManager.getLocalServices()
-				.contains(receiverRegistrationInfo))
-				|| (senderRegistrationInfo != null && identityManager.getLocalServices()
-				.contains(senderRegistrationInfo))) {
-			// get connection belonging to services
-			Connection conn;
-			try {
-				if (receiverVirtualAddress == null) {
-					// broadcast message
-					conn = connectionManager.getBroadcastConnection(senderVirtualAddress);
-				} else {
-					conn = getConnection(myVirtualAddress, senderVirtualAddress, data);
-					//no common connection parameters could be established with the other end
-					if(conn == null) {
-						if(this.connectionManager.isHandshakeMessage(
-								data, senderVirtualAddress, receiverVirtualAddress)) {
-							return this.connectionManager.getDeclineHandshakeMessage(
-									senderVirtualAddress, getService());
-						} else {
-							NMResponse response = new NMResponse(NMResponse.STATUS_ERROR);
-							response.setMessage(COMMUNICATION_PARAMETERS_ERROR);
-							return response;
-						}
-					}
-				}
-			} catch (Exception e) {
-				LOG.warn(
-						"Error getting connection for services: "
-								+ senderVirtualAddress.toString() + " "
-								+ receiverVirtualAddress.toString(), e);
-				NMResponse response = new NMResponse();
-				response.setStatus(NMResponse.STATUS_ERROR);
-				response.setMessage("Error getting connection for services: "
-						+ senderVirtualAddress.toString() + " " + receiverVirtualAddress.toString());
-				return response;
-			}
-
-			Message msg = conn.processData(senderVirtualAddress, receiverVirtualAddress, data);
-			String topic = msg.getTopic();
-			// go through MsgObservers for additional processing
-			List<MessageProcessor> observers = msgObservers.get(topic);
-			if (observers != null) {
-				for (MessageProcessor observer : observers) {
-					msg = observer.processMessage(msg);
-					if (msg == null || msg.getData() == null) {
-						NMResponse nmresp = new NMResponse();
-						nmresp.setStatus(NMResponse.STATUS_SUCCESS);
-						return nmresp;
-					}
-				}
-			}
-			// if message is still existing it has to be forwarded
-			if (msg != null && msg.getData() != null
-					&& msg.getData().length != 0) {
+        // open message only if it is for local entity or is broadcast
+        Registration receiverRegistrationInfo = null;
+        Registration senderRegistrationInfo = identityManager.getServiceInfo(senderVirtualAddress);
+        if (receiverVirtualAddress != null) {
+            receiverRegistrationInfo = identityManager.getServiceInfo(receiverVirtualAddress);
+        }
+        Message msg = MessageSerializerUtiliy.unserializeMessage(
+                data, false, senderVirtualAddress, receiverVirtualAddress, true);
+        String topic = msg.getTopic();
+        // go through MsgObservers for additional processing
+        List<MessageProcessor> observers = msgObservers.get(topic);
+        if (observers != null) {
+            for (MessageProcessor observer : observers) {
+                msg = observer.processMessage(msg);
+                if (msg == null || msg.getData() == null) {
+                    NMResponse nmresp = new NMResponse();
+                    nmresp.setStatus(NMResponse.STATUS_SUCCESS);
+                    return nmresp;
+                }
+            }
+        }
+        // if message is still existing it has to be forwarded
+        if (msg != null && msg.getData() != null
+                && msg.getData().length != 0) {
 				/*
 				 * check if message is not intended for host VirtualAddress, if yes and it
 				 * has not been processed drop it
 				 */
-				if (msg.getReceiverVirtualAddress() == null) {
-					//TODO #NM Mark remove or fix
-					// || msg.getReceiverHID().equals(this.myHID)) {
-					LOG.warn("Received a message which has not been processed");
-					NMResponse response = new NMResponse();
-					response.setStatus(NMResponse.STATUS_ERROR);
-					response.setMessage("Received a message which has not been processed");
-					return response;
-				}
+            if (msg.getReceiverVirtualAddress() == null) {
+                //TODO #NM Mark remove or fix
+                // || msg.getReceiverHID().equals(this.myHID)) {
+                LOG.warn("Received a message which has not been processed");
+                NMResponse response = new NMResponse();
+                response.setStatus(NMResponse.STATUS_ERROR);
+                response.setMessage("Received a message which has not been processed");
+                return response;
+            }
 				/*
 				 * send message over sendMessage method of this and return
 				 * response of it
 				 */
-				LOG.trace("Forwarding received message to " + msg.getReceiverVirtualAddress());
-				return sendMessageAsynch(msg, msg.getSenderVirtualAddress(), msg.getReceiverVirtualAddress());
-			} else {
-				NMResponse response = new NMResponse();
-				response.setStatus(NMResponse.STATUS_SUCCESS);
-				return response;
-			}
-		} else {
-			return backboneRouter.sendDataAsynch(senderVirtualAddress, receiverVirtualAddress, data);
-		}
-	}
+            LOG.trace("Forwarding received message to " + msg.getReceiverVirtualAddress());
+            return sendMessageAsynch(msg, msg.getSenderVirtualAddress(), msg.getReceiverVirtualAddress());
+
+        } else {
+            return backboneRouter.sendDataAsynch(senderVirtualAddress, receiverVirtualAddress, data);
+        }
+    }
 
 	/**
 	 * Updates the description of this NetworkManager instance. This update
@@ -603,37 +510,9 @@ public class NetworkManagerCoreImpl implements NetworkManagerCore, MessageDistri
 	 */
 	private NMResponse sendMessageAsynch(Message message, VirtualAddress senderVirtualAddress,
 			VirtualAddress receiverVirtualAddress) {
-		byte[] data = null;
-		try {
-			Connection connection = getConnection(
-					receiverVirtualAddress, myVirtualAddress, message.getData());
+        byte[] data = message.getData();
 
-			//no common connection parameters could be established with the other end
-			if(connection == null) {
-				if(this.connectionManager.isHandshakeMessage(
-						message.getData(), senderVirtualAddress, receiverVirtualAddress)) {
-					return this.connectionManager.getDeclineHandshakeMessage(
-							this.getService(), receiverVirtualAddress);
-				} else {
-					NMResponse response = new NMResponse(NMResponse.STATUS_ERROR);
-					response.setMessage(COMMUNICATION_PARAMETERS_ERROR);
-					return response;
-				}	
-			}
-			data = connection.processMessage(message);
-		} catch (Exception e) {
-			LOG.warn("Could not create packet from message from VirtualAddress: "
-					+ message.getSenderVirtualAddress());
-			NMResponse response = new NMResponse();
-			response.setStatus(NMResponse.STATUS_ERROR);
-			response.setMessage("Could not create packet from message from VirtualAddress: "
-					+ message.getSenderVirtualAddress());
-			return response;
-		}
-		NMResponse response = this.backboneRouter.sendDataAsynch(senderVirtualAddress,
-				receiverVirtualAddress, data);
-
-		return response;
+        return this.backboneRouter.sendDataAsynch(senderVirtualAddress, receiverVirtualAddress, data);
 	}
 
 	/**
@@ -651,77 +530,10 @@ public class NetworkManagerCoreImpl implements NetworkManagerCore, MessageDistri
 	 */
 	private NMResponse sendMessageSynch(Message message, VirtualAddress senderVirtualAddress,
 			VirtualAddress receiverVirtualAddress) {
-		byte[] data = null;
-		NMResponse response = new NMResponse();
-		Message tempMessage = message;
+		byte[] data = message.getData();
 
-		try {
-			Connection connection = getConnection(
-					receiverVirtualAddress, myVirtualAddress, message.getData());
+        return this.backboneRouter.sendDataSynch(senderVirtualAddress, receiverVirtualAddress, data);
 
-			//no common connection parameters could be established with the other end
-			if(connection == null) {
-				if(this.connectionManager.isHandshakeMessage(
-						message.getData(), senderVirtualAddress, receiverVirtualAddress)) {
-					return this.connectionManager.getDeclineHandshakeMessage(
-							this.getService(), receiverVirtualAddress);
-				} else {
-					response.setStatus(NMResponse.STATUS_ERROR);
-					response.setMessage(COMMUNICATION_PARAMETERS_ERROR);
-					return response;
-				}
-			}
-			// process outgoing message
-			data = connection.processMessage(tempMessage);
-			response = this.backboneRouter.sendDataSynch(senderVirtualAddress,
-					receiverVirtualAddress, data);
-
-			if(response.getStatus() == NMResponse.STATUS_SUCCESS ) {
-				// process response where message contains logical endpoints and
-				// connection contains physical endpoints
-				//turn around sender and receiver of the message as this is a response
-				tempMessage = connection.processData(
-						message.getReceiverVirtualAddress(),
-						message.getSenderVirtualAddress(),
-						(response.getMessage() != null)? response.getMessageBytes() : new byte[0]);
-				// repeat sending and receiving until security protocol is over
-				while (tempMessage != null
-						&& tempMessage
-						.getTopic()
-						.contentEquals(
-								CommunicationSecurityManager.SECURITY_PROTOCOL_TOPIC)) {
-					response = this.backboneRouter.sendDataSynch(senderVirtualAddress,
-							receiverVirtualAddress, connection.processMessage(tempMessage));
-					if(response.getStatus() == NMResponse.STATUS_SUCCESS) {
-						//turn around sender and receiver of the message as this is a response
-						tempMessage = connection.processData(message.getReceiverVirtualAddress(),
-								message.getSenderVirtualAddress(), response.getMessage()
-								.getBytes());
-					} else {
-						return response;
-					}
-				}
-			} else {
-				return response;
-			}
-		} catch (Exception e) {
-			LOG.warn("Error while sending message from VirtualAddress "
-					+ message.getSenderVirtualAddress() + "to VirtualAddress: " + message.getReceiverVirtualAddress());
-			response = new NMResponse();
-			response.setStatus(NMResponse.STATUS_ERROR);
-			response.setMessage("Error while sending message: " + e.getClass().getName() + ":" + e.getMessage());
-			return response;
-		}
-
-		if (tempMessage.getClass().equals(ErrorMessage.class)) {
-			response.setStatus(NMResponse.STATUS_ERROR);
-		} else {
-			response.setStatus(NMResponse.STATUS_SUCCESS);
-		}
-		response.setMessageObject(tempMessage);
-		response.setBytesPrimary(true);
-		response.setMessageBytes(tempMessage.getData());
-		return response;
 	}
 
 	/**
