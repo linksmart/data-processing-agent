@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Created by Caravajal on 22.04.2015.
@@ -22,6 +23,7 @@ public class BrokerConnectionService {
     private MqttClient mqttClient;
     private NetworkManager networkManager;
     private UUID ID;
+    private static final Pattern ipPattern = Pattern.compile("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+");
 
 
     private Boolean watchdog = false;
@@ -109,7 +111,11 @@ public class BrokerConnectionService {
         return getBrokerURL(brokerName, brokerPort);
     }
     public static String getBrokerURL(String brokerName, String brokerPort){
-        return "tcp://"+brokerName+":"+brokerPort;
+
+        if (ipPattern.matcher(brokerName).find())
+            return "tcp://"+brokerName+":"+brokerPort;
+        else
+            return "tcp://"+brokerName;
     }
     public void createClient() throws MqttException {
         mqttClient = new MqttClient(getBrokerURL(),ID.toString());
@@ -171,7 +177,7 @@ public class BrokerConnectionService {
 
             };
 
-            brokerRegistrationInfo = networkManager.registerService(attributes,getBrokerURL(),MqttBackboneProtocolImpl.class.getName());
+            brokerRegistrationInfo = networkManager.registerService(attributes,getBrokerName(),MqttBackboneProtocolImpl.class.getName());
             LOG.info("MQTT broker service is registered");
         }
     }
@@ -215,18 +221,10 @@ public class BrokerConnectionService {
     public void setBrokerName(String brokerName) throws Exception {
         boolean wasConnected =isConnect();
         if(!this.brokerName.equals(brokerName)) {
+
             this.brokerName = brokerName;
 
-            try {
-                destroy();
-            }catch (Exception e){
-                // TODO: add message
-            }
-
-            createClient();
-            if(wasConnected){
-                connect();
-            }
+          restart(wasConnected);
 
         }
 
@@ -237,11 +235,42 @@ public class BrokerConnectionService {
     }
 
     public void setBrokerPort(String brokerPort) throws Exception {
+        boolean wasConnected =isConnect();
+
         if(!this.brokerPort.equals(brokerPort)) {
             this.brokerPort = brokerPort;
 
-            destroy();
-            createClient();
+            restart(wasConnected);
         }
+    }
+    public void setBroker(String brokerName, String brokerPort) throws Exception {
+        boolean wasConnected =isConnect();
+        if(!this.brokerName.equals(brokerName) || !this.brokerPort.equals(brokerPort)) {
+
+            if (!this.brokerPort.equals(brokerPort)) {
+                this.brokerPort = brokerPort;
+
+            }
+            if (!this.brokerName.equals(brokerName)) {
+                this.brokerName = brokerName;
+
+            }
+
+            restart(wasConnected);
+        }
+
+    }
+    private void restart(boolean wasConnected) throws Exception {
+        try {
+            destroy();
+        }catch (Exception e){
+            // TODO: add message
+        }
+
+        createClient();
+        if(wasConnected){
+            connect();
+        }
+
     }
 }

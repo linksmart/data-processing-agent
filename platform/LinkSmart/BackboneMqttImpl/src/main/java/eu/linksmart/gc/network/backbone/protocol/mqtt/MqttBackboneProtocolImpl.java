@@ -358,7 +358,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 
         // if there is no listener in this topic add one
         if(!openClients.containsKey(topic))
-            openClients.put(topic, new ForwardingListener(brokerService.getBrokerURL(), topic, MQTTProtocolID, this));
+            openClients.put(topic, new ForwardingListener(brokerService.getBrokerName(),brokerService.getBrokerPort(), topic, MQTTProtocolID, this));
 
 
     }
@@ -641,7 +641,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
                 if (map.containsKey(conf.BROKER_NAME))
                     brokerService.setBrokerName(map.get(conf.BROKER_NAME).toString());
                 if (map.containsKey(conf.BROKER_PORT))
-                    brokerService.setBrokerName(map.get(conf.BROKER_PORT).toString());
+                    brokerService.setBrokerPort(map.get(conf.BROKER_PORT).toString());
             }catch (Exception e){
                 LOG.error("Error while updating broker configuration :"+e.getMessage(),e);
             }
@@ -649,9 +649,9 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 
             for (ForwardingListener fl : openClients.values())
                 try {
-                    fl.setBrokerURL(brokerService.getBrokerURL());
-                    fl.restart();
-                } catch (MqttException e) {
+                    fl.setBroker(brokerService.getBrokerName(),brokerService.getBrokerPort());
+
+                } catch (Exception e) {
                     LOG.error("Error applying configuration: " + e.getMessage(), e);
                 }
         }
