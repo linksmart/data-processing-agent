@@ -75,6 +75,9 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
     private Map<VirtualAddress, String>  endpointVirtualAddressTopic = new HashMap<VirtualAddress, String>();
     // this objects map how many clients/vad are hearing the same topic
     private Map<String, Set<VirtualAddress>> listeningVirtualAddresses = new HashMap<>();
+
+    // this objects map how many clients/vad are hearing the same topic
+    private Map<String, Set<VirtualAddress>> listeningWithWildcardVirtualAddresses = new HashMap<>();
     // this maps the topic which the listener who is haring it.
     private Map<String,ForwardingListener> openClients = new HashMap<>();
 
@@ -356,6 +359,16 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
         // add a virtual address to the listeners of this topic
         listeningVirtualAddresses.get(topic).add(senderVAD);
 
+
+        if (topic.contains("#") && topic.contains("+")) {
+            // create container structure if is needed
+            if (listeningWithWildcardVirtualAddresses.get(topic) == null)
+                listeningWithWildcardVirtualAddresses.put(topic, new HashSet<VirtualAddress>());
+
+            // add a virtual address to the listeners of this topic
+            listeningVirtualAddresses.get(topic).add(senderVAD);
+        }
+
         // if there is no listener in this topic add one
         if(!openClients.containsKey(topic))
             openClients.put(topic, new ForwardingListener(brokerService.getBrokerName(),brokerService.getBrokerPort(), topic, MQTTProtocolID, this));
@@ -620,10 +633,31 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
         // get the VAD which this topic is subscribed
        // VirtualAddress senderVAD =endpointTopicVirtualAddress.get(conf.get(conf.BROKER_URL));
 
+        if(!listeningWithWildcardVirtualAddresses.isEmpty()) {
+            boolean send = true;
+            String[] obtainTopicTokens = data.getTopic().split("/");
             // send to all VAD who wants to receive this message
-            for (VirtualAddress vad : listeningVirtualAddresses.get(data.getTopic()))
-                receiveDataAsynch(brokerService.getVirtualAddress(), vad, data.toBytes());
+            for (String topic : listeningWithWildcardVirtualAddresses.keySet()) {
+                String[] orgTopicTokens = topic.replace("#","").split("/");
 
+                if (obtainTopicTokens.length >= orgTopicTokens.length){
+
+                    for (int i= 0; i< orgTopicTokens.length;i++)
+                        if (!obtainTopicTokens[i].equals(obtainTopicTokens[i])) {
+                            send = false;
+                            break;
+                        }
+
+                }
+
+                if(send)
+                    for (VirtualAddress vad : listeningVirtualAddresses.get(topic))
+                        receiveDataAsynch(brokerService.getVirtualAddress(), vad, data.toBytes());
+
+            }
+        }
+        for (VirtualAddress vad : listeningVirtualAddresses.get(data.getTopic()))
+            receiveDataAsynch(brokerService.getVirtualAddress(), vad, data.toBytes());
     }
     /**
      * make the necessary steps needed to update the configuration of the broker
