@@ -119,7 +119,7 @@ public class ForwardingListener extends Observable implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-        LOG.info("Message arrived in listener");
+        LOG.info("Message arrived in listener:"+topic);
         observer.update(this, new MqttTunnelledMessage(topic,mqttMessage.getPayload(),mqttMessage.getQos(),mqttMessage.isRetained(),getMessageIdentifier(),originProtocol));
 
     }
