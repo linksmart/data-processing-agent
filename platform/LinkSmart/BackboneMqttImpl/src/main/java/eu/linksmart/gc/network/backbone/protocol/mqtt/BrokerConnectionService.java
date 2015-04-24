@@ -62,11 +62,11 @@ public class BrokerConnectionService {
             }
         }
         startWatchdog();
-
+        LOG.info("MQTT broker is connected");
     }
     public void disconnect() throws Exception {
 
-
+        stopWatchdog();
         try {
 
             mqttClient.disconnect();
@@ -82,7 +82,7 @@ public class BrokerConnectionService {
                 throw ex;
             }
         }
-       stopWatchdog();
+        LOG.info("MQTT broker is disconnected");
 
     }
     public VirtualAddress getVirtualAddress(){
@@ -172,12 +172,15 @@ public class BrokerConnectionService {
             };
 
             brokerRegistrationInfo = networkManager.registerService(attributes,getBrokerURL(),MqttBackboneProtocolImpl.class.getName());
+            LOG.info("MQTT broker service is registered");
         }
     }
     private void deregisterBroker() throws RemoteException {
         Registration[] registration = networkManager.getServiceByDescription(brokerRegistrationInfo.getDescription());
-        if(registration != null && registration.length > 0)
+        if(registration != null && registration.length > 0) {
             networkManager.removeService(brokerRegistrationInfo.getVirtualAddress());
+            LOG.info("MQTT broker service is deregistered");
+        }
 
 
     }
@@ -210,6 +213,7 @@ public class BrokerConnectionService {
     }
 
     public void setBrokerName(String brokerName) throws Exception {
+        boolean wasConnected =isConnect();
         if(!this.brokerName.equals(brokerName)) {
             this.brokerName = brokerName;
 
@@ -220,6 +224,10 @@ public class BrokerConnectionService {
             }
 
             createClient();
+            if(wasConnected){
+                connect();
+            }
+
         }
 
     }

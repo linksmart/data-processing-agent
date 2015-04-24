@@ -88,7 +88,8 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
     private Map<Integer,Map<String, Boolean>> repetitionControl = null;
     private MessageDigest md5 = null;
 
-    BrokerConnectionService brokerService;
+    private String PID = "";
+    private BrokerConnectionService brokerService;
 
     protected void bindConfigAdmin(ConfigurationAdmin configAdmin) {
         this.mConfigAdmin = configAdmin;
@@ -124,7 +125,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 
             throw new Exception(e);
         }
-        // TODO To be moved?
+
 
 
     }
@@ -243,7 +244,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 			LOG.debug("body: " + new String(tunnelRequest.getBody()));
 
 			// check if service endpoint is available
-			String uriEndpoint = tunnelRequest.getPath().replace("hash","#").replace("plus","+");
+			String uriEndpoint = tunnelRequest.getPath().replace("*","#");
 
 			if (uriEndpoint == null) {
 				String message = "cannot send tunneled data to service at virtualAddress: " + receiverVirtualAddress.toString() + ", unknown endpoint";
@@ -655,15 +656,14 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
                 }
         }
 
+        if (map.containsKey("pid") )
+            PID = map.get("pid").toString();
+
+        if(map.containsKey("PID"))
+            PID = map.get("PID").toString();
+
         LOG.info("Configuration changes applied!");
     }
-    /**
-     * brief ENUM use to declare if a message is synchronous or asynchronous
-     *
-     * */
-    private enum Type{
-        Sync,
-        Async,
-    }
+
 
 }
