@@ -32,7 +32,7 @@ public class MqttBBTest {
             e.printStackTrace();
         }
         try {
-            new ForwardingListener("tcp://localhost:1883", "test", UUID.randomUUID(), new Observer(){
+            new ForwardingListener("localhost","1883", "test", UUID.randomUUID(), new Observer(){
                 @Override
                 public void update(Observable o, Object arg) {
 
