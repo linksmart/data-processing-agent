@@ -26,6 +26,10 @@ import java.util.*;
 import java.io.IOException;
 
 
+
+import java.io.File;
+
+
 @Component(name="BackboneMQTT", immediate=true)
 @Service({Backbone.class})
 public class MqttBackboneProtocolImpl implements Backbone, Observer {
@@ -231,7 +235,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
             try {
                 client.disconnect();
             } catch (MqttException e) {
-                LOG.error("While disconnecting listeners: "+e.getMessage(),e);
+                LOG.error("While disconnecting listeners: " + e.getMessage(),e);
             }
     }
     @Override
@@ -700,6 +704,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 
         LOG.info("Configuration changes applied!");
     }
+
 
 
 }
