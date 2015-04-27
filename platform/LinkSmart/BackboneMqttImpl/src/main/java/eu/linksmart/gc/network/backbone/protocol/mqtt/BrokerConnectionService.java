@@ -7,6 +7,7 @@ import eu.linksmart.gc.api.utils.Part;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -118,7 +119,7 @@ public class BrokerConnectionService {
             return "tcp://"+brokerName;
     }
     public void createClient() throws MqttException {
-        mqttClient = new MqttClient(getBrokerURL(),ID.toString());
+        mqttClient = new MqttClient(getBrokerURL(),ID.toString(), new MemoryPersistence());
 
     }
 
@@ -135,7 +136,7 @@ public class BrokerConnectionService {
                         }
                         this.sleep(30000);
                     } catch (Exception e) {
-                        LOG.error(e);
+                        LOG.error("Error in the watch dog of broker service:"+e.getMessage(),e);
                     }
                 }
             }
@@ -202,7 +203,7 @@ public class BrokerConnectionService {
         }
         catch (UnknownHostException ex)
         {
-            LOG.error(ex);
+            LOG.error("Error while getting hostname:"+ex.getMessage(),ex);
         }
         return hostname;
     }

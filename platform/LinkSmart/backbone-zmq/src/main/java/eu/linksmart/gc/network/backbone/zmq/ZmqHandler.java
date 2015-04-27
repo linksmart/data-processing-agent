@@ -315,9 +315,9 @@ public class ZmqHandler {
 			try {
 				properties.loadFromXML(new ByteArrayInputStream(payload));
 			} catch (InvalidPropertiesFormatException e) {
-				LOG.error("processBroadcast: unable to load properties from XML data. Data is not valid XML: " + new String(payload));
+				LOG.error("processBroadcast: unable to load properties from XML data. Data is not valid XML: " + new String(payload),e);
 			} catch (IOException e) {
-				LOG.error("processBroadcast: unable to load properties from XML data: " + new String(payload));
+				LOG.error("processBroadcast: unable to load properties from XML data: " + new String(payload),e);
 			}
 			Message message = null;
 			try {
@@ -333,7 +333,7 @@ public class ZmqHandler {
 					}
 				}
 			} catch (Exception e) {
-				LOG.error("processBroadcast: error in deserializing broadcast payload: " + e.getMessage());
+				LOG.error("processBroadcast: error in deserializing broadcast payload: " + e.getMessage(),e);
 			}
 			if(message == null)
 				return;
@@ -352,7 +352,7 @@ public class ZmqHandler {
 						}
 					}
 				} catch (Exception e) {
-					LOG.error("processBroadcast: error in decoding payload's registration[] object: " + e.getMessage());
+					LOG.error("processBroadcast: error in decoding payload's registration[] object: " + e.getMessage(),e);
 				}		
 			} else if(message.getTopic().equals("IDManagerServiceListUpdate")) {
 				String updates = new String(message.getData()); 

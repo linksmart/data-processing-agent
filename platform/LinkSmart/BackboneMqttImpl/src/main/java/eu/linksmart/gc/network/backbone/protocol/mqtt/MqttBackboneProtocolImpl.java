@@ -231,7 +231,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
             try {
                 client.disconnect();
             } catch (MqttException e) {
-                LOG.info(e.getMessage());
+                LOG.error("While disconnecting listeners: "+e.getMessage(),e);
             }
     }
     @Override
@@ -352,18 +352,20 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
      * */
     private void subscribe( VirtualAddress senderVAD, String topic) throws Exception {
 
-        // create container structure if is needed
-        if(listeningVirtualAddresses.get(topic) == null  )
-            listeningVirtualAddresses.put(topic, new HashSet<VirtualAddress>());
-
-        // add a virtual address to the listeners of this topic
-        listeningVirtualAddresses.get(topic).add(senderVAD);
 
 
-        if (topic.contains("#") && topic.contains("+")) {
+
+        if (topic.contains("#") || topic.contains("+")) {
             // create container structure if is needed
             if (listeningWithWildcardVirtualAddresses.get(topic) == null)
                 listeningWithWildcardVirtualAddresses.put(topic, new HashSet<VirtualAddress>());
+
+            // add a virtual address to the listeners of this topic
+            listeningWithWildcardVirtualAddresses.get(topic).add(senderVAD);
+        }else{
+            // create container structure if is needed
+            if(listeningVirtualAddresses.get(topic) == null  )
+                listeningVirtualAddresses.put(topic, new HashSet<VirtualAddress>());
 
             // add a virtual address to the listeners of this topic
             listeningVirtualAddresses.get(topic).add(senderVAD);
@@ -651,7 +653,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
                 }
 
                 if(send)
-                    for (VirtualAddress vad : listeningVirtualAddresses.get(topic))
+                    for (VirtualAddress vad : listeningWithWildcardVirtualAddresses.get(topic))
                         receiveDataAsynch(brokerService.getVirtualAddress(), vad, data.toBytes());
 
             }

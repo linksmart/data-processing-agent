@@ -3,10 +3,13 @@ package eu.linksmart.gc.network.backbone.protocol.mqtt;
 import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.util.Observable;
 import java.util.Observer;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,8 +17,8 @@ public class ForwardingListener extends Observable implements MqttCallback {
 
     private Logger LOG = Logger.getLogger(MqttBackboneProtocolImpl.class.getName());
     private MqttClient client;
-
-
+    private Boolean watchdog =true;
+    private ExecutorService executor = Executors.newCachedThreadPool();
     public String getBrokerName() {
         return brokerName;
     }
@@ -73,15 +76,58 @@ public class ForwardingListener extends Observable implements MqttCallback {
         _fileName= ".~" + UUID.randomUUID().toString();
         this.originProtocol =originProtocol;
         init();
+       // connectionWatchdog();
+    }
+    private void connectionWatchdog(){
+        new Thread() {
+            @Override
+            public void run() {
+                while (watchdog){
+
+                    try {
+                        synchronized (watchdog) {
+                            if (!client.isConnected()){
+                                client.close();
+                                init();
+
+                            }
+                        }
+                        this.sleep(5000);
+                    } catch (Exception e) {
+                        LOG.error(e);
+                    }
+                }
+            }
+        }.start();
+
+    }
+    public boolean isWatchdog() {
+        return watchdog;
     }
 
+    public void startWatchdog() {
+        synchronized (watchdog) {
+            if (!this.watchdog) {
+                this.watchdog = true;
+                connectionWatchdog();
+            }
+        }
 
+    }
+    public void stopWatchdog() {
+        synchronized (watchdog) {
+            this.watchdog = false;
+        }
+
+    }
     private void init() throws MqttException {
 
-        client = new MqttClient(BrokerConnectionService.getBrokerURL(brokerName,brokerPort), _fileName);
+
+        client = new MqttClient(BrokerConnectionService.getBrokerURL(brokerName,brokerPort), _fileName,new MemoryPersistence());
         client.connect();
         client.setCallback(this);
         client.subscribe(listening);
+
 
 
     }
@@ -92,12 +138,19 @@ public class ForwardingListener extends Observable implements MqttCallback {
     @Override
     public void connectionLost(Throwable throwable) {
 
-        do {
+        while (!client.isConnected()) {
             try {
 
                 LOG.info("A listened was disconnected, no is trying to reconnect");
 
                 client.connect();
+                if(!client.isConnected()){
+                    try {
+                        client.close();
+                    }catch (Exception e){}
+                    init();
+                }
+
 
                 if(!client.isConnected())
                         Thread.sleep(1000);
@@ -108,20 +161,21 @@ public class ForwardingListener extends Observable implements MqttCallback {
                 LOG.error("Listener disconnected:"+e.getMessage(),e);
             }
 
-        }while (!client.isConnected());
+        }
 
 
     }
+
     private synchronized long getMessageIdentifier(){
         id = (id+1)%Long.MAX_VALUE;
         return id;
     }
-
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         LOG.info("Message arrived in listener:"+topic);
-        observer.update(this, new MqttTunnelledMessage(topic,mqttMessage.getPayload(),mqttMessage.getQos(),mqttMessage.isRetained(),getMessageIdentifier(),originProtocol));
 
+        executor.execute(new MessageDeliverer(new MqttTunnelledMessage(topic,mqttMessage.getPayload(),mqttMessage.getQos(),mqttMessage.isRetained(),getMessageIdentifier(),originProtocol),observer,this));
+        LOG.info("Message sent");
     }
 
     @Override

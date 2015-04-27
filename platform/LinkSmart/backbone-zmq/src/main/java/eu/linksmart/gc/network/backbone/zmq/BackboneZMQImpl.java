@@ -122,7 +122,7 @@ public class BackboneZMQImpl implements Backbone {
 				oneProperty = SecurityProperty.valueOf(s);
 				answer.add(oneProperty);
 			} catch (Exception e) {
-				LOGGER.error("Security property value from configuration is not recognized: " + s + ": " + e);
+				LOGGER.error("Security property value from configuration is not recognized: " + s + ": " + e.getMessage(),e);
 			}
 		}
 		return answer;
