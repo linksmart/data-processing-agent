@@ -19,20 +19,26 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentContext;
 
+import java.io.FileReader;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.io.IOException;
-
-
+/*
+import org.apache.felix.fileinstall.ArtifactInstaller;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
 
 import java.io.File;
+import java.util.Properties;*/
 
-
+//@Instantiate()
 @Component(name="BackboneMQTT", immediate=true)
 @Service({Backbone.class})
-public class MqttBackboneProtocolImpl implements Backbone, Observer {
+//@Provides(specifications = ArtifactInstaller.class)
+public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactInstaller */{
 
 
 
@@ -487,8 +493,14 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
                     openClients.get(uriEndpoint).disconnect();
                     openClients.remove(uriEndpoint);
                 }
-            }else {
-                LOG.info("Unexpected situation there is topic listeners that are not in the listener list");
+            }else if (listeningWithWildcardVirtualAddresses.containsKey(uriEndpoint)) {
+                listeningWithWildcardVirtualAddresses.remove(uriEndpoint);
+                if( listeningWithWildcardVirtualAddresses.isEmpty()) {
+                    openClients.get(uriEndpoint).disconnect();
+                    openClients.remove(uriEndpoint);
+                }
+            } else {
+                LOG.info("The unsubscription request cannot be handle because there is no sub with this topic");
             }
         }
 
@@ -704,7 +716,45 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer {
 
         LOG.info("Configuration changes applied!");
     }
+   /* @Override
+    public void install(File artifact) throws Exception {
+        logOutput("Installing",artifact);
+    }
 
+    @Override
+    public void update(File artifact) throws Exception {
+        logOutput("Updating",artifact);
+    }
+
+    @Override
+    public void uninstall(File artifact) throws Exception {
+        LOG.info("Uninstalling artifact: {"+artifact.getName()+"}");
+    }
+
+    @Override
+    public boolean canHandle(File artifact) {
+        return artifact.getName().endsWith(".props");
+    }
+
+    private void logOutput(String action, File artifact) throws IOException {
+        LOG.info(action + " artifact: {"+artifact.getName()+"}");
+        Properties props = new Properties();
+        FileReader in = null;
+        try {
+            in = new FileReader(artifact.getCanonicalFile());
+            props.load(in);
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+        }
+
+        // Do whatever you want here:
+
+        for(Object key: props.keySet()) {
+            LOG.info(action + " Property received: {"+key+"} {"+props.get(key)+"}");
+        }
+    }*/
 
 
 }

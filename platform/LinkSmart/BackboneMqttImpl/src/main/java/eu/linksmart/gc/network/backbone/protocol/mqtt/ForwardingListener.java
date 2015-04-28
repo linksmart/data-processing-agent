@@ -17,8 +17,8 @@ public class ForwardingListener extends Observable implements MqttCallback {
 
     private Logger LOG = Logger.getLogger(MqttBackboneProtocolImpl.class.getName());
     private MqttClient client;
-    private Boolean watchdog =true;
     private ExecutorService executor = Executors.newCachedThreadPool();
+    private MqttConnectOptions options;
     public String getBrokerName() {
         return brokerName;
     }
@@ -64,8 +64,8 @@ public class ForwardingListener extends Observable implements MqttCallback {
     private Observer observer;
     private long id = 0;
     private final UUID originProtocol;
-    // needed to remove the files created by the Paho client
-    private String _fileName;
+
+
 
 
     public ForwardingListener(String brokerName,String brokerPort, String listening,UUID originProtocol, Observer observer ) throws MqttException {
@@ -73,63 +73,18 @@ public class ForwardingListener extends Observable implements MqttCallback {
         this.brokerName = brokerName;
         this.observer = observer;
         this.listening = listening;
-        _fileName= ".~" + UUID.randomUUID().toString();
         this.originProtocol =originProtocol;
+        options = new MqttConnectOptions();
+        options.setCleanSession(false);
         init();
-       // connectionWatchdog();
-    }
-    private void connectionWatchdog(){
-        new Thread() {
-            @Override
-            public void run() {
-                while (watchdog){
-
-                    try {
-                        synchronized (watchdog) {
-                            if (!client.isConnected()){
-                                client.close();
-                                init();
-
-                            }
-                        }
-                        this.sleep(5000);
-                    } catch (Exception e) {
-                        LOG.error(e);
-                    }
-                }
-            }
-        }.start();
 
     }
-    public boolean isWatchdog() {
-        return watchdog;
-    }
 
-    public void startWatchdog() {
-        synchronized (watchdog) {
-            if (!this.watchdog) {
-                this.watchdog = true;
-                connectionWatchdog();
-            }
-        }
-
-    }
-    public void stopWatchdog() {
-        synchronized (watchdog) {
-            this.watchdog = false;
-        }
-
-    }
     private void init() throws MqttException {
-
-
-        client = new MqttClient(BrokerConnectionService.getBrokerURL(brokerName,brokerPort), _fileName,new MemoryPersistence());
-        client.connect();
+        client = new MqttClient(BrokerConnectionService.getBrokerURL(brokerName,brokerPort), originProtocol.toString()+listening,new MemoryPersistence());
+        client.connect(options);
         client.setCallback(this);
         client.subscribe(listening);
-
-
-
     }
     public void restart() throws MqttException {
         disconnect();
@@ -143,7 +98,7 @@ public class ForwardingListener extends Observable implements MqttCallback {
 
                 LOG.info("A listened was disconnected, no is trying to reconnect");
 
-                client.connect();
+                client.connect(options);
                 if(!client.isConnected()){
                     try {
                         client.close();

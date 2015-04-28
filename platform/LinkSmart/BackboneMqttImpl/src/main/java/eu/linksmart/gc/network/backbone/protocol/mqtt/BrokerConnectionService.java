@@ -6,7 +6,9 @@ import eu.linksmart.gc.api.network.networkmanager.NetworkManager;
 import eu.linksmart.gc.api.utils.Part;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttPersistable;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.net.InetAddress;
@@ -18,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Caravajal on 22.04.2015.
  */
-public class BrokerConnectionService {
+public class BrokerConnectionService  {
     private Logger LOG = Logger.getLogger(MqttBackboneProtocolImpl.class.getName());
     // this is the MQTT client to publish in the local broker
     private MqttClient mqttClient;
@@ -265,7 +267,7 @@ public class BrokerConnectionService {
         try {
             destroy();
         }catch (Exception e){
-            // TODO: add message
+            LOG.error("Error while restarting broker Service:"+e.getMessage(),e);
         }
 
         createClient();
