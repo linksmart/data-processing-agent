@@ -1,97 +1,101 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <features name="${project.artifactId}" xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
 
-<feature name="gc-osgi-core" version="${linksmart.gc.version}">
-    <!--
-    core OSGi bundles are provisioned by Karaf, hence no need to deploy these bundles
-      -->
-    <bundle>mvn:org.apache.felix/org.apache.felix.scr/${felix.scr.version}</bundle>
-    <bundle>mvn:org.apache.felix/org.apache.felix.metatype/${felix.metatype.version}</bundle>
-    <!--
-    no need to deploy configAdmin, Karaf already provision this bundle
-      <bundle>mvn:org.apache.felix/org.apache.felix.configadmin/${felix.osgi.configadmin.version}</bundle>
-      -->
-</feature>
+    <feature name="gc-osgi-core" version="${linksmart.gc.version}">
+        <!--
+        core OSGi bundles are provisioned by Karaf, hence no need to deploy these bundles
+          -->
+        <bundle>mvn:org.apache.felix/org.apache.felix.scr/${felix.scr.version}</bundle>
+        <bundle>mvn:org.apache.felix/org.apache.felix.metatype/${felix.metatype.version}</bundle>
+        <!--
+        no need to deploy configAdmin, Karaf already provision this bundle
+          <bundle>mvn:org.apache.felix/org.apache.felix.configadmin/${felix.osgi.configadmin.version}</bundle>
+          -->
+    </feature>
 
-<feature name="gc-osgi-http" version="${linksmart.gc.version}">
-    <feature version="${karaf.version}">http</feature>
-    <!--
-    <bundle>mvn:org.apache.felix/org.apache.felix.http.jetty/${felix.http.version}</bundle>
-    -->
-</feature>
+    <feature name="gc-osgi-http" version="${linksmart.gc.version}">
+        <feature version="${karaf.version}">http</feature>
+        <!--
+        <bundle>mvn:org.apache.felix/org.apache.felix.http.jetty/${felix.http.version}</bundle>
+        -->
+    </feature>
 
-<feature name="gc-boot" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-osgi-core</feature>
-    <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-lang/${servicemix.commons-lang.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.utils/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.network/${linksmart.gc.version}</bundle>
-</feature>
+    <feature name="gc-boot" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-osgi-core</feature>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-lang/${servicemix.commons-lang.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.utils/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.network/${linksmart.gc.version}</bundle>
+    </feature>
 
-<feature name="gc-identity-manager" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-boot</feature>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.identitymanager/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager.core/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.security.communication/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.identitymanager/${linksmart.gc.version}</bundle>
-</feature>
+    <feature name="gc-identity-manager" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-boot</feature>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.identitymanager/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager.core/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.security.communication/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.identitymanager/${linksmart.gc.version}</bundle>
+    </feature>
 
-<feature name="gc-backbone-router" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-boot</feature>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.backbone/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.backbone.router/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.security.communication/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager.core/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager/${linksmart.gc.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.backbone.router/${linksmart.gc.version}</bundle>
-</feature>
+    <feature name="gc-backbone-router" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-boot</feature>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.backbone/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.backbone.router/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.security.communication/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager.core/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.networkmanager/${linksmart.gc.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.backbone.router/${linksmart.gc.version}</bundle>
+    </feature>
 
-<feature name="gc-network-manager" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-boot</feature>
-    <feature version="${linksmart.gc.version}">gc-identity-manager</feature>
-    <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.networkmanager/${linksmart.gc.version}</bundle>
-</feature>
+    <feature name="gc-network-manager" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-boot</feature>
+        <feature version="${linksmart.gc.version}">gc-identity-manager</feature>
+        <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.networkmanager/${linksmart.gc.version}</bundle>
+    </feature>
 
-<feature name="gc-backbone-zmq" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
-    <bundle>mvn:org.zeromq/jeromq/${org.zeromq.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.backbone.zmq/${linksmart.gc.version}</bundle>
-</feature>
+    <feature name="gc-backbone-zmq" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
+        <bundle>mvn:org.zeromq/jeromq/${org.zeromq.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.backbone.zmq/${linksmart.gc.version}</bundle>
+    </feature>
 
 
-<feature name="gc-network-manager-rest" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-osgi-http</feature>
-    <feature version="${linksmart.gc.version}">gc-network-manager</feature>
-    <bundle>mvn:org.json/com.springsource.org.json/${org.json.version}</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.networkmanager.rest/${linksmart.gc.version}</bundle>
-</feature>
-<feature name="gc-type-tunnelled" version="${linksmart.gc.version}">
-    <bundle>mvn:com.google.code.gson/gson/1.7.1</bundle>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.types/${linksmart.gc.version}</bundle>
-</feature>
-<feature name="gc-backbone-http" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
-    <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/${commons-codec.version}</bundle>
-    <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-httpclient/${apache.httpclient.version}</bundle>
-    <feature version="${linksmart.gc.version}">gc-type-tunnelled</feature>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.backbone.protocol.http/${linksmart.gc.version}</bundle>
-</feature>
+    <feature name="gc-network-manager-rest" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-osgi-http</feature>
+        <feature version="${linksmart.gc.version}">gc-network-manager</feature>
+        <bundle>mvn:org.json/com.springsource.org.json/${org.json.version}</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.networkmanager.rest/${linksmart.gc.version}</bundle>
+    </feature>
+    <feature name="gc-type-tunnelled" version="${linksmart.gc.version}">
+        <bundle>mvn:com.google.code.gson/gson/1.7.1</bundle>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.api.types/${linksmart.gc.version}</bundle>
+    </feature>
+    <feature name="gc-backbone-http" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/${commons-codec.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-httpclient/${apache.httpclient.version}</bundle>
+        <feature version="${linksmart.gc.version}">gc-type-tunnelled</feature>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.backbone.protocol.http/${linksmart.gc.version}</bundle>
+    </feature>
 
-<feature name="gc-http-tunneling" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-osgi-http</feature>
-    <feature version="${linksmart.gc.version}">gc-network-manager</feature>
-    <feature version="${linksmart.gc.version}">gc-type-tunnelled</feature>
-    <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.tunneling.http/${linksmart.gc.version}</bundle>
-</feature>
-<feature name="gc-backbone-mqtt" version="${linksmart.gc.version}">
-    <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
-    <bundle>mvn:org.eclipse.paho/org.eclipse.paho.client.mqttv3/1.0.0</bundle>
-   <!-- <bundle>mvn:org.apache.felix/org.apache.felix.fileinstall/3.4.2</bundle>-->
-    <feature version="${linksmart.gc.version}">gc-type-tunnelled</feature>
-    <bundle>mvn:eu.linksmart.gc/backbone.mqtt.impl/${linksmart.gc.version}</bundle>
+    <feature name="gc-http-tunneling" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-osgi-http</feature>
+        <feature version="${linksmart.gc.version}">gc-network-manager</feature>
+        <feature version="${linksmart.gc.version}">gc-type-tunnelled</feature>
+        <bundle>mvn:eu.linksmart.gc/eu.linksmart.gc.network.tunneling.http/${linksmart.gc.version}</bundle>
+    </feature>
+    <feature name="gc-backbone-mqtt" version="${linksmart.gc.version}">
+        <feature version="${linksmart.gc.version}">gc-backbone-router</feature>
+        <bundle>mvn:org.eclipse.paho/org.eclipse.paho.client.mqttv3/1.0.0</bundle>
+       <!-- <bundle>mvn:org.apache.felix/org.apache.felix.fileinstall/3.4.2</bundle>-->
+        <bundle>mvn:commons-collections/commons-collections/3.2.1</bundle>
+        <!--<bundle>mvn:org.apache.felix/org.apache.felix.fileinstall/3.2.8</bundle>-->
+        <configfile finalname="/etc/MQTTBackboneProtocol.cfg">mvn:eu.linksmart.gc/network.backbone.protocol.mqtt.impl/${linksmart.gc.version}/cfg/configuration</configfile>
 
-</feature>
+        <feature version="${linksmart.gc.version}">gc-type-tunnelled</feature>
+        <bundle>mvn:eu.linksmart.gc/network.backbone.protocol.mqtt.impl/${linksmart.gc.version}</bundle>
+    </feature>
+
     <feature name="gc-backbone-wrapper" version="${linksmart.gc.version}">
         <feature version="${linksmart.gc.version}">gc-backbone-mqtt</feature>
         <feature version="${linksmart.gc.version}">gc-backbone-http</feature>
