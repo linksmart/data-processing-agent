@@ -10,12 +10,10 @@ import java.util.Observer;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class ForwardingListener extends Observable implements MqttCallback {
+public class ForwardingListener   implements MqttCallback {
 
-    private Logger LOG = Logger.getLogger(MqttBackboneProtocolImpl.class.getName());
+    private Logger LOG = Logger.getLogger(ForwardingListener.class.getName());
     private MqttClient client;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private MqttConnectOptions options;
@@ -81,7 +79,7 @@ public class ForwardingListener extends Observable implements MqttCallback {
     }
 
     private void init() throws MqttException {
-        client = new MqttClient(BrokerConnectionService.getBrokerURL(brokerName,brokerPort), originProtocol.toString()+listening,new MemoryPersistence());
+        client = new MqttClient(Utils.getBrokerURL(brokerName, brokerPort), originProtocol.toString()+listening,new MemoryPersistence());
         client.connect(options);
         client.setCallback(this);
         client.subscribe(listening);
@@ -129,7 +127,7 @@ public class ForwardingListener extends Observable implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         LOG.info("Message arrived in listener:"+topic);
 
-        executor.execute(new MessageDeliverer(new MqttTunnelledMessage(topic,mqttMessage.getPayload(),mqttMessage.getQos(),mqttMessage.isRetained(),getMessageIdentifier(),originProtocol),observer,this));
+        executor.execute(new MessageDeliverer(new MqttTunnelledMessage(topic,mqttMessage.getPayload(),mqttMessage.getQos(),mqttMessage.isRetained(),getMessageIdentifier(),originProtocol),observer,null));
         LOG.info("Message sent");
     }
 
@@ -163,6 +161,7 @@ public class ForwardingListener extends Observable implements MqttCallback {
         client.close();
 
     }
+
 
 
 }

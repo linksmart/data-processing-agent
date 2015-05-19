@@ -6,9 +6,7 @@ import eu.linksmart.gc.api.network.networkmanager.NetworkManager;
 import eu.linksmart.gc.api.utils.Part;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttPersistable;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.net.InetAddress;
@@ -34,8 +32,12 @@ public class BrokerConnectionService  {
     private String brokerName;
     private String brokerPort;
 
+
+
+    private boolean isService;
+
     private Registration brokerRegistrationInfo = null;
-    BrokerConnectionService(  String brokerName, String brokerPort , UUID ID, NetworkManager netMngr) throws Exception {
+    BrokerConnectionService(  String brokerName, String brokerPort , UUID ID, NetworkManager netMngr, boolean isService) throws Exception {
         if (brokerName.equals("*"))
             this.brokerName = getHostName();
         else
@@ -44,6 +46,7 @@ public class BrokerConnectionService  {
         this.brokerPort = brokerPort;
         this.ID = ID;
         this.networkManager = netMngr;
+        this.isService = isService;
        createClient();
 
     }
@@ -57,13 +60,15 @@ public class BrokerConnectionService  {
 
             mqttClient.connect();
 
-            try {
-                registerBroker();
+            if(isService) {
+                try {
+                    registerBroker();
 
-            } catch (Exception e) {
+                } catch (Exception e) {
 
-                disconnect();
-                throw e;
+                    disconnect();
+                    throw e;
+                }
             }
         }
         startWatchdog();
@@ -111,15 +116,9 @@ public class BrokerConnectionService  {
     }
 
     public String getBrokerURL(){
-        return getBrokerURL(brokerName, brokerPort);
+        return Utils.getBrokerURL(brokerName, brokerPort);
     }
-    public static String getBrokerURL(String brokerName, String brokerPort){
 
-        if (ipPattern.matcher(brokerName).find())
-            return "tcp://"+brokerName+":"+brokerPort;
-        else
-            return "tcp://"+brokerName;
-    }
     public void createClient() throws MqttException {
         mqttClient = new MqttClient(getBrokerURL(),ID.toString(), new MemoryPersistence());
 
@@ -275,5 +274,19 @@ public class BrokerConnectionService  {
             connect();
         }
 
+    }
+    public boolean isService() {
+        return isService;
+    }
+
+    public void setService(boolean isService) throws RemoteException {
+        if(this.isService!=isService) {
+            if(this.isService){
+                deregisterBroker();
+            }else {
+                registerBroker();
+            }
+            this.isService = isService;
+        }
     }
 }

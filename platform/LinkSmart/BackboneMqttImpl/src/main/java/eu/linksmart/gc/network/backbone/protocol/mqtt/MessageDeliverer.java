@@ -4,7 +4,7 @@ import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.UUID;
+
 
 /**
  * Created by Caravajal on 27.04.2015.
