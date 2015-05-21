@@ -42,7 +42,7 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
             if (!mqttClient.isConnected()) {
                 mqttClient.connect();
             }
-            mqttClient.publish("/" + topic, message.getBytes(), 0, false);
+            mqttClient.publish(topic, message.getBytes(), 0, false);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -110,7 +110,7 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
 
         // Does topic need to be checked out?
         setChanged();
-        notifyObservers(message.getPayload().toString());  // assuming message comes coded in Json
+        notifyObservers(message.getPayload());  // assuming message comes coded in Json
 
     }
 
