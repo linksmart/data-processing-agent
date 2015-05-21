@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
- * Created by Werner-Kytölä on 08.05.2015.
+ * Created by Werner-Kytï¿½lï¿½ on 08.05.2015.
  */
 public class Route {
-    private String id;
+    private String id = null;
     private RouteType type;
     private OptimizationCriteria criterion;
     private double capacity;

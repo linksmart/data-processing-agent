@@ -24,7 +24,13 @@
 
 <name>DataFusionAPI</name>
 <description>Set of interfaces to access the Data Fusion API</description>
-
+<dependencies>
+        <dependency>
+            <groupId>it.ismb.pertlab</groupId>
+            <artifactId>ogc.sensorthings.model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+</dependencies>
 
 <build>
     <plugins>

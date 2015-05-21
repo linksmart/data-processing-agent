@@ -5,10 +5,13 @@ import eu.almanac.event.datafusion.feeder.EventFeederImpl;
 import eu.almanac.event.datafusion.logging.LoggerHandler;
 import eu.linksmart.api.event.datafusion.EventFeeder;
 
+import java.util.UUID;
+
 /**
  * Created by Caravajal on 06.10.2014.
  */
 public class DataFusionManager {
+    public static UUID ID = UUID.randomUUID();
    // static String brokerURL = "tcp://localhost:1883";
 
     public static void main(String[] args) {

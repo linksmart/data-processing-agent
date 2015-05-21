@@ -18,6 +18,16 @@
             <groupId>org.eclipse.paho</groupId>
             <version>1.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>it.ismb.pertlab</groupId>
+            <artifactId>ogc.sensorthings.model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>

@@ -4,7 +4,10 @@ package org.fit.fraunhofer.almanac;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -36,7 +39,7 @@ public class IssueManagement implements Observer{
     }
 
 
-    public IssueManagement(WasteMqttClient wasteMqttClient){
+    public IssueManagement(WasteMqttClient  wasteMqttClient){
         issueMap = new HashMap();
         routeMap = new HashMap();
         vehicleMap = new HashMap();
@@ -59,7 +62,7 @@ public class IssueManagement implements Observer{
             addIssue();
         }
     }
-
+    private ObjectMapper mapper = new ObjectMapper();
     // This callback is invoked whenever a Data Fusion message comes in saying that a
     // waste bin fill level has surpassed the threshold and is full. A new issue is
     // to be created out of this event.
@@ -70,6 +73,17 @@ public class IssueManagement implements Observer{
         JsonParser parser = new JsonParser();
 
         JsonArray array = parser.parse(arg.toString()).getAsJsonArray();
+
+        Observation event = null;
+        try {
+            event = mapper.readValue(((byte[])arg),Observation.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        event.getResultValue(); // id
+
 
         String binId = gson.fromJson(array.get(0), String.class);
         double latitude = gson.fromJson(array.get(1), double.class);
@@ -133,6 +147,7 @@ public class IssueManagement implements Observer{
             // so that the Driver-App can listen to it, use Google DirectionsService to calculate the route and render it.
 
             issuePubSub.publish("route", issueGson);
+
         }
     }
 

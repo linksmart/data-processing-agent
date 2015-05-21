@@ -5,16 +5,21 @@ import com.google.gson.JsonParseException;
 import eu.almanac.event.datafusion.esper.EsperQuery;
 import eu.almanac.event.datafusion.logging.LoggerHandler;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
+import eu.almanac.event.datafusion.utils.payload.OGCSensorThing.ObservationNumber;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.EventFeeder;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import org.eclipse.paho.client.mqttv3.*;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.*;
+
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 /**
  * Created by Caravajal on 06.10.2014.
@@ -26,10 +31,11 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
     private final String MQTTConnectionID;
     private final String BROKER_URL;
     private final String DFM_QUERY_TOPIC = "#";
-    private final String EVENT_TOPIC = "/almanac/observation/iotentity/#";
+    private final String EVENT_TOPIC = "/federation1/trn/v2/observation/#";
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager";
     private Boolean toShutdown = false;
+    private ObjectMapper mapper = new ObjectMapper();
 
     private Boolean down =false;
 
@@ -41,7 +47,7 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
         try {
 
 
-            client = new MqttClient(BROKER_URL, MQTTConnectionID);
+            client = new MqttClient(BROKER_URL, MQTTConnectionID, new MemoryPersistence());
 
 
         } catch (MqttException e) {
@@ -179,16 +185,45 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
 
         LoggerHandler.report("info","message arrived with topic: "+topic);
 
-        String msg = new String(mqttMessage.getPayload(),"UTF-8");
 
 
-        Event event =null;
 
+        if (!topic.startsWith("/")) {
+            String msg = new String(mqttMessage.getPayload(),"UTF-8");
+            mangeDFMEvents(msg);
+
+        }else{
+
+            mangeEvents(mqttMessage.getPayload(),topic);
+        }
+
+    }
+    private void mangeEvents(byte[] rawEvent, String topic){
+        try {
+            ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
+
+            LoggerHandler.report("info","message arrived with ID: "+event.getSensor().getId());
+            if(event.getResultValue() == null) {
+                Observation event1 = mapper.readValue(rawEvent,Observation.class);
+
+                for (DataFusionWrapper i : dataFusionWrappers.values())
+                    i.addEvent(topic, event1, event1.getClass());
+            }else
+                for (DataFusionWrapper i : dataFusionWrappers.values())
+                    i.addEvent(topic, event, event.getClass());
+        }catch(Exception e){
+            e.printStackTrace();
+
+        }
+
+    }
+    private void mangeDFMEvents(String rawEvent){
         try {
 
-            event = new Event( parser.fromJson(msg, IoTEntityEvent.class));
+            Event event = new Event( parser.fromJson(rawEvent, IoTEntityEvent.class));
 
-            if(event.getBaseName()!=null) {
+
+            if (event.getBaseName() != null) {
                 if (/*topic.equals(DFM_QUERY_TOPIC)*/ event.getBaseName().equals("DataFusionManager")) {
 
 
@@ -210,22 +245,16 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
                         LoggerHandler.report("error", e);
                     }
 
-                } else {
-
-                    for (DataFusionWrapper i : dataFusionWrappers.values())
-                        i.addEvent(topic, event);
-                    // addEvent(topic,je.getProperties()[0].toMap());
                 }
-            }else{
-                LoggerHandler.report("JsonParseWarning", "No IoTEvent received instead received :" + msg,null);
+            } else {
+                LoggerHandler.report("JsonParseWarning", "No IoTEvent received instead received :" + rawEvent, null);
             }
-        }catch (JsonParseException e) {
+        }catch(JsonParseException e){
 
-            LoggerHandler.report("JsonParseError", "No IoTEvent received instead received :" + msg, e.getStackTrace().toString());
+            LoggerHandler.report("JsonParseError", "No IoTEvent received instead received :" + rawEvent, e.getStackTrace().toString());
 
 
-
-        }catch (Exception e){
+        }catch(Exception e){
             e.printStackTrace();
 
         }

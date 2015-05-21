@@ -61,7 +61,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>eu.almanac.client.event.datafusion.DFClient</mainClass>
+                            <mainClass>eu.almanac.client.event.datafusion.DFClientOld</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
