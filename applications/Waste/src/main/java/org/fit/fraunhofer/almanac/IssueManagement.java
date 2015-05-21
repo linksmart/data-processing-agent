@@ -146,6 +146,7 @@ public class IssueManagement implements Observer{
             // so that the Driver-App can listen to it, use Google DirectionsService to calculate the route and render it.
 
             issuePubSub.publish("route", issueGson);
+
         }
     }
 
