@@ -15,7 +15,7 @@
 
     <packaging>bundle</packaging>
     <name>LS GC - Protocol Wrapper (MQTT, HTML) for NetworkManager </name>
-    <description>LS GC - Protocol Wrapper (MQTT, HTML) for NetworkManager e</description>
+    <description>LS GC - Protocol Wrapper (MQTT, HTML) for NetworkManager</description>
 
     <dependencies>
         <dependency>
