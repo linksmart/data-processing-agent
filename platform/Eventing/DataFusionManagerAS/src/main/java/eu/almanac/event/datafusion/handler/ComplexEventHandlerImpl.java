@@ -1,6 +1,9 @@
 package eu.almanac.event.datafusion.handler;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
+import eu.almanac.event.datafusion.core.DataFusionManager;
 import eu.almanac.event.datafusion.logging.LoggerHandler;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
@@ -9,10 +12,21 @@ import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTValue;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigInteger;
 import java.rmi.RemoteException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,15 +38,14 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     private MqttClient CEPHandler;
     private final Statement query;
     private Event response;
-    private Gson parser;
-    private String dateOfCreation;
+    private ObjectMapper parser = new ObjectMapper();
     private Boolean sendPerProperty = false;
-    private UUID HandlerID = UUID.randomUUID();
+
 
     Class PAYLOAD_TYPE = IoTEntityEvent.class;
 
     private final String DFM_TOPIC = "/almanac/observation/iotentity/dataFusionManager/";
-    private final String EVENT_TOPIC = "/almanac/observation/iotentity/";
+    private final String EVENT_TOPIC = "/federation1/fit/v2/cep/";
     private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager/";
     private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager/";
 
@@ -44,13 +57,16 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         if(!knownInstances.containsKey("ismb_public") )
             knownInstances.put("ismb_public","tcp://130.192.86.227:1883");
         this.query=query;
-        parser = new Gson();
+       // parser = new Gson();
+        parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        parser.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         response = new Event();
         response.setBaseName(query.getName());
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
         df.setTimeZone(tz);
-        dateOfCreation = df.format(new Date());
+
+
         try {
             this.CEPHandler= new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()),query.getName());
         } catch (MqttException e) {
@@ -80,21 +96,21 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             if (!CEPHandler.isConnected())
                 CEPHandler.connect();
             // creating Event Response object
-            GenericCEP cepEvent = getCEPEnvelope();
+            //GenericCEP cepEvent = getCEPEnvelope();
 
             // if the events is an array of events then handle the event as array
             if (eventMap.values().toArray()[0] instanceof Object[])
-                update((Object[]) eventMap.values().toArray()[0]);
+                update2((Object[]) eventMap.values().toArray()[0]);
 
 
             if (sendPerProperty)
                 sendPerEntity(eventMap);
             else {
 
-                sendEvent(eventMap, cepEvent);
+                sendEvent(eventMap);
 
             }
-            publish(query.getSource(), cepEvent);
+//            publish(query.getSource(), cepEvent);
 
 
         } catch (MqttException e) {
@@ -115,7 +131,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         return ret;
     }
     GenericCEP addMetaData(GenericCEP cep){
-        cep.addValue(GenericCEP.GENERATED,HandlerID.toString());
+        cep.addValue(GenericCEP.GENERATED, DataFusionManager.ID.toString());
         cep.addValue(GenericCEP.TIMESTAMP,getDateNowString());
 
         return cep;
@@ -143,25 +159,26 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
         if (events[0].isGenerated())
             return;
-        update((Object[]) events);
+        update2((Object[]) events);
 
     }
     public void update(IoTEntityEvent[] events) {
         if (events[0].isGenerated())
             return;
 
-        update((Object[])events);
+        update2((Object[]) events);
 
     }
-    public void update(Object[] events) {
+    public void update2(Object[] events) {
 
         LoggerHandler.report("info", "Updating query: " + query.getName());
 
 
         try {
 
-            publish(events);
 
+            for(Integer i=0; i<events.length;i++)
+                packObservation(i,"Measure", i.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,6 +186,30 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         }
 
     }
+
+    public void packObservation(Object event, String resultType, String StreamID) {
+        Sensor sen = new Sensor();
+        sen.setId(query.getName());
+        sen.setObservations(null);
+        Datastream ds = new Datastream();
+        ds.setObservations(null);
+        ds.setId(StreamID);
+        Observation ob = new Observation();
+        ob.setDatastream(ds);
+        ob.setSensor(sen);
+        ob.setPhenomenonTime(new Date());
+        ob.setResultType(resultType);
+        ob.setResultValue(event);
+        ob.setFeatureOfInterest(null);
+
+
+        try {
+            publish(ob);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     String getDateNowString(){
         TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -180,7 +221,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
 
-    void sendEvent(Map eventMap, GenericCEP cepEvent) throws MqttException {
+    void sendEvent(Map eventMap, GenericCEP cepEvent) throws Exception {
 
 
         for(Object key : eventMap.keySet()) {
@@ -213,6 +254,46 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         }
 
         publish(cepEvent);
+
+    }
+    void sendEvent(Map eventMap) throws MqttException {
+
+
+
+
+        Integer i=0;
+        for(Object key : eventMap.keySet()) {
+
+            try {
+
+
+                    if (eventMap.get(key) instanceof Observation) {
+                        // ignore this event if was generated by a CEP
+
+                        Observation ob = (Observation) eventMap.get(key);
+                        Datastream ds = ob.getDatastream();
+                        ds.setId(DataFusionManager.ID.toString());
+                        publish(eventMap.get(key));
+
+
+                    } else {
+
+                        packObservation(eventMap.get(key),key.toString(),i.toString());
+
+
+                    }
+
+                i++;
+            } catch (Exception eEntity) {
+
+
+                eEntity.printStackTrace();
+
+
+            }
+        }
+
+      //  publish(cepEvent);
 
     }
     IoTEntityEvent sendPerEntity(Map eventMap){
@@ -250,20 +331,23 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         return cepEvent;
 
     }
-    private void publish(String endTopic, Object ent) throws MqttException {
+    private void publish(String endTopic, Object ent) throws Exception {
+        if(!CEPHandler.isConnected())
+            CEPHandler.connect();
         if (query.haveOutput())
             for (String output : query.getOutput()) {
-                CEPHandler.publish(output + "/" + endTopic, parser.toJson(ent).getBytes(), 0, false);
+                CEPHandler.publish(output + "/" + endTopic,   parser.writeValueAsString(ent).getBytes(), 0, false);
             }
         else
-            CEPHandler.publish(EVENT_TOPIC + endTopic, parser.toJson(ent).getBytes(), 0, false);
+            CEPHandler.publish(EVENT_TOPIC + endTopic, parser.writeValueAsString(ent).getBytes(), 0, false);
 
     }
-    private void publish( Object ent) throws MqttException {
+
+
+    private void publish( Object ent) throws Exception {
        publish(query.getName(),ent);
 
     }
-
 
 
     @Override

@@ -2,8 +2,7 @@ package eu.almanac.client.event.datafusion;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import eu.almanac.event.datafusion.utils.payload.SenML.Event;
+import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -12,14 +11,19 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
 /**
  * Created by Caravajal on 27.10.2014.
  */
-public class DFClient {
+public class DFClientOld {
 
-     static void main(String[] args) {
+    public static void main(String[] args) {
         CommandLine cmd = parseArg(args);
+        String queryNameHash="";
 
 
         if(cmd==null)
@@ -31,10 +35,16 @@ public class DFClient {
             client.connect();
 
 
-            Event query = new Event("DataFusionManager");
+            IoTEntityEvent query = new IoTEntityEvent("DataFusionManager");
             if (cmd.hasOption("name")) {
                 query.addProperty("Name");
-                query.getEbyName("Name").setSv(cmd.getOptionValue("name"));
+                try {
+                    MessageDigest SHA256 = MessageDigest.getInstance("SHA-256");
+                    queryNameHash =(new BigInteger(1,SHA256.digest(cmd.getOptionValue("name").getBytes()))).toString();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                query.getProperties("Name").addIoTStateObservation(queryNameHash);
             } else {
 
                 HelpFormatter formatter = new HelpFormatter();
@@ -45,13 +55,13 @@ public class DFClient {
             }
             if (cmd.hasOption("query")) {
                 query.addProperty("Statement");
-                query.getEbyName("Statement").setSv(cmd.getOptionValue("query"));
+                query.getProperties("Statement").addIoTStateObservation(cmd.getOptionValue("query"));
             } else if (cmd.hasOption("file")){
                 try {
                     String content = FileUtils.readFileToString(new File(cmd.getOptionValue("file")), "utf-8").replace("\n","".replace("\r",""));
 
                     query.addProperty("Statement");
-                    query.getEbyName("Statement").setSv(content);
+                    query.getProperties("Statement").addIoTStateObservation(content);
 
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
@@ -59,24 +69,25 @@ public class DFClient {
             }
             if (cmd.hasOption("entity")) {
                 query.addProperty("Source");
-                query.getEbyName("Source").setSv(cmd.getOptionValue("entity"));
+                query.getProperties("Source").addIoTStateObservation(cmd.getOptionValue("entity"));
             }
             if (cmd.hasOption("input")) {
                 query.addProperty("Input");
-                query.getEbyName("Input").setSv(cmd.getOptionValue("input"));
+                query.getProperties("Input").addIoTStateObservation(cmd.getOptionValue("input"));
             }
             if (cmd.hasOption("output")) {
                 query.addProperty("Output");
-                query.getEbyName("Output").setSv(cmd.getOptionValue("output"));
+                query.getProperties("Output").addIoTStateObservation(cmd.getOptionValue("output"));
             }
             if (cmd.hasOption("scope")) {
                 query.addProperty("Scope");
-                query.getEbyName("Scope").setSv(cmd.getOptionValue("scope"));
+                query.getProperties("Scope").addIoTStateObservation(cmd.getOptionValue("scope"));
             }
             Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
             client.publish("query", gson.toJson(query).getBytes(), 0, false);
 
+            System.out.println("Query sent successfully hash code for the query is:"+queryNameHash);
             client.disconnect();
             client.close();
         } catch (MqttException e) {

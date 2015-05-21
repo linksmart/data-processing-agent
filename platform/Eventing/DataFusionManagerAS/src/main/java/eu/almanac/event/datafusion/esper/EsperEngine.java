@@ -9,6 +9,7 @@ import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Statement;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -33,10 +34,10 @@ public class EsperEngine implements DataFusionWrapper {
         epService = EPServiceProviderManager.getDefaultProvider(config);
 
     }
-    private void defineIoTTypes(String esperTopic) {
+    private void defineIoTTypes(String esperTopic, Class type) {
 
 
-        epService.getEPAdministrator().getConfiguration().addEventType(esperTopic, Event.class);
+        epService.getEPAdministrator().getConfiguration().addEventType(esperTopic, type);
 
     }
     private void checkQueriesReadiness( String newEventWithTopic){
@@ -56,7 +57,9 @@ public class EsperEngine implements DataFusionWrapper {
     }
 
 
-    private boolean addEsperEvent(String esperTopic, Event event){
+
+
+    private boolean addEsperEvent(String esperTopic, Object event, Class type){
         try {
             synchronized (this) {
                 // if the topic type is already defined, then the event is send
@@ -68,7 +71,7 @@ public class EsperEngine implements DataFusionWrapper {
                 } else {
                     // The type is of the topic is not defined, then is defined now
 
-                    defineIoTTypes(esperTopic);
+                    defineIoTTypes(esperTopic, type);
 
                     epService.getEPRuntime().getEventSender(esperTopic).sendEvent(event);
 
@@ -83,31 +86,38 @@ public class EsperEngine implements DataFusionWrapper {
         }
         return true;
     }
+
+    public String[] getParentTopic(String topic){
+        String esperParentTopic ="";
+        if(topic.charAt(0)== '/')
+            topic = topic.substring(1);
+
+        String [] esperTopicArray = topic.split("/");
+
+        esperParentTopic = esperTopicArray[0];
+        for (int i=1; i<esperTopicArray.length-1;i++) {
+            esperParentTopic += "."+esperTopicArray[i];
+
+        }
+
+        return new String[]{esperParentTopic, esperTopicArray[esperTopicArray.length-1]};
+    }
     @Override
-    public boolean addEvent(String topic, Event event) {
+    public boolean addEvent(String topic, Object event,Class type) {
         try {
 
 
-            String esperParentTopic ="";
-            if(topic.charAt(0)== '/')
-                topic = topic.substring(1);
 
-            String [] esperTopcArray = topic.split("/");
 
-            esperParentTopic = esperTopcArray[0];
-            for (int i=1; i<esperTopcArray.length-1;i++) {
-                esperParentTopic += "."+esperTopcArray[i];
 
-            }
-
-            String esperTopic = topic.replace('/', '.');
 
            // addEsperEvent(esperTopic, event);
 
 
+            String[] parentTopicAndHead = getParentTopic(topic);
 
-            addEsperEvent(esperParentTopic+ ".hash",event);
-            insertStream(esperTopcArray[esperTopcArray.length-1],esperParentTopic);
+            addEsperEvent(parentTopicAndHead[0]+ ".hash",event, type );
+            insertStream('T'+((Observation)event).getSensor().getId(),parentTopicAndHead[0]);
 
         }catch(Exception e){
 
@@ -118,13 +128,15 @@ public class EsperEngine implements DataFusionWrapper {
         return true;
     }
 
+
+
     private Integer noTopics =0;
-    private boolean insertStream(String head, String parretTopic){
+    private boolean insertStream(String head, String paretTopic){
         if (epService.getEPAdministrator().getStatement(head)!=null)
             return false;
         EPStatement statement =null;
         try {
-             statement = epService.getEPAdministrator().createEPL("insert into "+parretTopic+"."+head+" select * from "+parretTopic+".hash (bn = '"+head+"')" , head);
+             statement = epService.getEPAdministrator().createEPL("insert into "+paretTopic+"."+head+" select * from "+paretTopic+".hash (id = '"+head+"')" , head);
 
 
         }catch (EPStatementSyntaxException Esyn){
@@ -183,96 +195,9 @@ public class EsperEngine implements DataFusionWrapper {
 
     }
 
-    /* @Override
-  *  public boolean addQuery(Query query) {
-
-         ComplexEventHandler handler;
-
-         try {
-              handler = new ComplexEventHandlerImpl(query);
-         } catch (RemoteException e) {
-             e.printStackTrace();
-             return false;
-         }
-         if(epService.getEPAdministrator().getStatement(query.getName())!=null)
-
-             handler.publishError("Query with name"+query.getName()+"already added");
-
-         try{
-             boolean allDefined = true, queryUpdate= false;
-
-             String esperTopic;
-             queryReady.put(query.getName(), true);
-             for(String topic : query.getInput()){
-
-                 // Adapt the topic to a Esper topic
-                 esperTopic = topic.substring(1).replace('/', '.');
-
-                 // changing state of the queries this could be made in several places in several threads!
-                 synchronized (this) {
-
-                     // if the type of the topic is defined
-                     if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(esperTopic)) {
-                         // the type of the topic is not defined
-
-                         allDefined = false;
-
-                         // set this query as not ready to be deploy
-                         //update status
-                         queryReady.put(query.getName(), false);
-                         //update query
-                         if(!queryUpdate) {
-                             nameQuery.put(query.getName(), query);
-                             queryUpdate = true;
-                         }
-                         // add the query to the wetting queries in this topic
-                         if (!topicName.containsKey(topic)) {
-                             topicName.put(topic, new HashMap<String, String>());
-                             topicName.get(topic).put(query.getName(), query.getName());
-
-                         } else {
-                             topicName.get(topic).put(query.getName(), query.getName());
-                         }
-                         if (!nameTopic.containsKey(query.getName())) {
-                             nameTopic.put(query.getName(), new HashMap<String, String>());
-                             nameTopic.get(query.getName()).put(topic, topic);
-
-                         } else {
-                             nameTopic.get(query.getName()).put(topic, topic);
-                         }
-
-
-                     }
-                 }
-             }
-             if(allDefined){
-                 try {
-                     // add the query and the listener for the query
-                     EPStatement statement = epService.getEPAdministrator().createEPL(query.getQuery(), query.getName());
-
-                     statement.setSubscriber(handler);
-
-                 }catch (Exception e){
-
-                     handler.publishError(e.getMessage());
-                 }
-             }
-
-
-             return true;
-
-         }catch(Exception e){
-
-             e.printStackTrace();
-
-             return false;
-         }
-
-     }
- */
     public boolean addQuery(Statement query) {
 
-        ComplexEventHandler handler;
+
 
 
         if(epService.getEPAdministrator().getStatement(query.getName())!=null) {
@@ -296,23 +221,25 @@ public class EsperEngine implements DataFusionWrapper {
 
                         // if the type of the topic is defined
                         if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(topic)) {
-                            defineIoTTypes(topic);
+                            // ToDO: this must be dynamic decided!
+                            defineIoTTypes(topic, Observation.class);
                         }
                     }
                 }
             }
                 try {
-                    // add the query and the listener for the query
-                    EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getName());
-                    try {
-                        handler = new ComplexEventHandlerImpl(query);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                    statement.setSubscriber(handler);
 
+                    addEsperStatement(query);
                 }catch (Exception e){
+                    try {
+
+                        if(e.getMessage().startsWith("Failed to resolve event type:")) {
+                            defineIoTTypes(e.getMessage().split("'")[1], Observation.class);
+                            addEsperStatement(query);
+                        }
+                    }catch (Exception ex){
+                        LoggerHandler.publish("queries/"+query.getName(),ex.getMessage(),null,true);
+                    }
                     LoggerHandler.publish("queries/"+query.getName(),e.getMessage(),null,true);
                 }
 
@@ -326,6 +253,19 @@ public class EsperEngine implements DataFusionWrapper {
             return false;
         }
 
+    }
+    private void addEsperStatement( Statement query){
+        ComplexEventHandler handler;
+        // add the query and the listener for the query
+        EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getName());
+        try {
+            handler = new ComplexEventHandlerImpl(query);
+
+            statement.setSubscriber(handler);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+
+        }
     }
 
     public boolean pauseQuery(String name) {
