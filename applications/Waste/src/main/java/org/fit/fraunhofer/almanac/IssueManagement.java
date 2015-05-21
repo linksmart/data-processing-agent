@@ -53,7 +53,8 @@ public class IssueManagement implements Observer{
         wasteMqttClient.addObserver(this);
         issuePubSub = wasteMqttClient;
 
-        Issue issue;
+        Issue issue;;
+
         for (int i = 0 ; i < count ; i++) {
             addIssue();
         }
