@@ -23,8 +23,8 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 /**
  * Created by Caravajal on 06.10.2014.
- */
-public  class EventFeederImpl extends Thread implements EventFeeder, EventFeederLogic, MqttCallback {
+
+public  class OldEventFeederImpl extends Thread implements EventFeeder, EventFeederLogic, MqttCallback {
     private MqttClient client;
     private Gson parser;
     private Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<String, DataFusionWrapper>();
@@ -39,7 +39,7 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
 
     private Boolean down =false;
 
-    public EventFeederImpl(String broker){
+    public OldEventFeederImpl(String broker){
         BROKER_URL = broker;
 
 
@@ -224,7 +224,7 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
 
 
             if (event.getBaseName() != null) {
-                if (/*topic.equals(DFM_QUERY_TOPIC)*/ event.getBaseName().equals("DataFusionManager")) {
+                if ( event.getBaseName().equals("DataFusionManager")) {
 
 
                     try {
@@ -266,3 +266,4 @@ public  class EventFeederImpl extends Thread implements EventFeeder, EventFeeder
 
     }
 }
+        */
