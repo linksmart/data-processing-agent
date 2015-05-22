@@ -1,6 +1,7 @@
 package eu.almanac.event.datafusion.esper;
 
 import com.espertech.esper.client.*;
+import com.espertech.esper.core.service.EPAdministratorImpl;
 import eu.almanac.event.datafusion.esper.utils.Tools;
 import eu.almanac.event.datafusion.handler.ComplexEventHandlerImpl;
 import eu.almanac.event.datafusion.logging.LoggerHandler;
@@ -205,7 +206,6 @@ public class EsperEngine implements DataFusionWrapper {
             LoggerHandler.publish("queries/"+query.getName(),"Query with name" + query.getName() + " already added",null, true);
             return false;
         }
-        try{
             boolean allDefined = true, queryUpdate= false;
 
             String esperTopic;
@@ -231,27 +231,19 @@ public class EsperEngine implements DataFusionWrapper {
 
                     addEsperStatement(query);
                 }catch (Exception e){
-                    try {
 
                         if(e.getMessage().startsWith("Failed to resolve event type:")) {
                             defineIoTTypes(e.getMessage().split("'")[1], Observation.class);
                             addEsperStatement(query);
-                        }
-                    }catch (Exception ex){
-                        LoggerHandler.publish("queries/"+query.getName(),ex.getMessage(),null,true);
-                    }
-                    LoggerHandler.publish("queries/"+query.getName(),e.getMessage(),null,true);
+                        }else
+                            throw e;
+
                 }
 
 
             return true;
 
-        }catch(Exception e){
 
-            e.printStackTrace();
-
-            return false;
-        }
 
     }
     private void addEsperStatement( Statement query){

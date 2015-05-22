@@ -1,8 +1,13 @@
 package eu.almanac.client.event.datafusion;
 
+import com.espertech.esper.epl.generated.EsperEPL2GrammarParser;
+import com.espertech.esper.epl.parse.ParseHelper;
+import com.espertech.esper.epl.parse.ParseRuleSelector;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.tree.Tree;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -21,7 +26,7 @@ import java.util.UUID;
  */
 public class DFClientOld {
 
-    public static void main(String[] args) {
+     static void main(String[] args) {
         CommandLine cmd = parseArg(args);
         String queryNameHash="";
 
@@ -58,8 +63,17 @@ public class DFClientOld {
                 query.getProperties("Statement").addIoTStateObservation(cmd.getOptionValue("query"));
             } else if (cmd.hasOption("file")){
                 try {
-                    String content = FileUtils.readFileToString(new File(cmd.getOptionValue("file")), "utf-8").replace("\n","".replace("\r",""));
+                    Boolean addPleaseCheck =true;
+                    String content = FileUtils.readFileToString(new File(cmd.getOptionValue("file")), "utf-8").replace("\n","").replace("\r","");
 
+                    ParseRuleSelector eplParseRule = new ParseRuleSelector()
+                    {
+                        public Tree invokeParseRule(EsperEPL2GrammarParser parser) throws RecognitionException
+                        {
+                            return parser.startEPLExpressionRule();
+                        }
+                    };
+                    ParseHelper.parse(content, content, true, eplParseRule, true);
                     query.addProperty("Statement");
                     query.getProperties("Statement").addIoTStateObservation(content);
 
@@ -90,8 +104,9 @@ public class DFClientOld {
             System.out.println("Query sent successfully hash code for the query is:"+queryNameHash);
             client.disconnect();
             client.close();
-        } catch (MqttException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            System.exit(1);
         }
 
 

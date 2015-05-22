@@ -235,7 +235,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
     private void disconnectAll(){
         for (ForwardingListener client : openClients.values() )
             try {
-                client.disconnect();
+                client.close();
             } catch (MqttException e) {
                 LOG.error("While disconnecting listeners: " + e.getMessage(),e);
             }
@@ -503,13 +503,13 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
             if (listeningVirtualAddresses.containsKey(uriEndpoint)) {
                 listeningVirtualAddresses.remove(uriEndpoint);
                 if( listeningVirtualAddresses.isEmpty()) {
-                    openClients.get(uriEndpoint).disconnect();
+                    openClients.get(uriEndpoint).close();
                     openClients.remove(uriEndpoint);
                 }
             }else if (listeningWithWildcardVirtualAddresses.containsKey(uriEndpoint)) {
                 listeningWithWildcardVirtualAddresses.remove(uriEndpoint);
                 if( listeningWithWildcardVirtualAddresses.isEmpty()) {
-                    openClients.get(uriEndpoint).disconnect();
+                    openClients.get(uriEndpoint).close();
                     openClients.remove(uriEndpoint);
                 }
             } else {
