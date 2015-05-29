@@ -185,6 +185,12 @@ public class EsperQuery implements Statement {
     public boolean haveScope(){
         return scope != null;
     }
+
+    @Override
+    public String getHash() {
+        return null;
+    }
+
     public String getInput(int index){
         return  input[index];
     }

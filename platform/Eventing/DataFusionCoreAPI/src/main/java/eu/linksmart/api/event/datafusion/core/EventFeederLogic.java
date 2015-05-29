@@ -24,5 +24,5 @@ public interface EventFeederLogic {
 	 * @return <code>true</code> if the feeding is possible. <code>false</code> otherwise.
 	 *  
 	 * */
-	public boolean suscribeToTopic(String topic);
+	public boolean subscribeToTopic(String topic);
 }

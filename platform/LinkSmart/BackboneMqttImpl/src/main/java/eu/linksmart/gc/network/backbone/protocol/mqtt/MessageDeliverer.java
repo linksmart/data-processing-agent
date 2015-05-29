@@ -9,11 +9,11 @@ import java.util.Observer;
 /**
  * Created by Caravajal on 27.04.2015.
  */
-public class MessageDeliverer extends Thread {
+public class MessageDeliverer implements Runnable {
     private MqttTunnelledMessage mqttMessage;
     private Observer observer;
     private Observable fwListener;
-    public  MessageDeliverer(MqttTunnelledMessage message, Observer observer, Observable fwListener){
+    private   MessageDeliverer(MqttTunnelledMessage message, Observer observer, Observable fwListener){
         super();
         this.mqttMessage = message;
         this.observer = observer;
@@ -22,7 +22,18 @@ public class MessageDeliverer extends Thread {
     }
     @Override
     public void run() {
-        observer.update(fwListener, new MqttTunnelledMessage(mqttMessage.getTopic(),mqttMessage.getPayload(),mqttMessage.getQoS(),mqttMessage.isRetained(),mqttMessage.getSequence(),mqttMessage.getOriginProtocol()));
+
+        try {
+
+            observer.update(fwListener, new MqttTunnelledMessage(mqttMessage.getTopic(),mqttMessage.getPayload(),mqttMessage.getQoS(),mqttMessage.isRetained(),mqttMessage.getSequence(),mqttMessage.getOriginProtocol()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static synchronized MessageDeliverer createMessageDeliverer(MqttTunnelledMessage message, Observer observer, Observable fwListener){
+        return new MessageDeliverer(message,observer,null);
     }
 
 }

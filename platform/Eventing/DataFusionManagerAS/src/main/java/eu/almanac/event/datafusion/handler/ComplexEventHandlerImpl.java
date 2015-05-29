@@ -177,8 +177,9 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         try {
 
 
+            String streamID = UUID.randomUUID().toString();
             for(Integer i=0; i<events.length;i++)
-                packObservation(i,"Measure", i.toString());
+                packObservation(i,"Measure", streamID);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -261,7 +262,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
 
-        Integer i=0;
+        String streamID = UUID.randomUUID().toString();
         for(Object key : eventMap.keySet()) {
 
             try {
@@ -272,18 +273,18 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
                         Observation ob = (Observation) eventMap.get(key);
                         Datastream ds = ob.getDatastream();
-                        ds.setId(DataFusionManager.ID.toString());
+                        ds.setId(streamID.toString());
+                        ob.getSensor().setId(DataFusionManager.ID.toString());
                         publish(eventMap.get(key));
 
 
                     } else {
 
-                        packObservation(eventMap.get(key),key.toString(),i.toString());
+                        packObservation(eventMap.get(key),key.toString(),streamID.toString());
 
 
                     }
 
-                i++;
             } catch (Exception eEntity) {
 
 

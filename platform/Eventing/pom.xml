@@ -13,6 +13,7 @@
     <module>DataFusionCoreAPI</module>
     <module>DataFusionManagerAS</module>
         <module>Client</module>
+        <module>SDKLibrary</module>
     </modules>
 	<repositories>
 		<repository>
