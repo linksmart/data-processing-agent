@@ -12,6 +12,7 @@ public class BeWaste {
         WasteMqttClient wasteMqttClient = new WasteMqttClient();
         IssueManagement issueMgmt = new IssueManagement(wasteMqttClient, 2);
 
+
         issueMgmt.print();
     }
 }

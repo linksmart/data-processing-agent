@@ -3,7 +3,7 @@ package org.fit.fraunhofer.almanac;
 /**
  * Created by Werner-Kytölä on 18.05.2015.
  */
-public class RouteEndpoints {
+public class RouteEndpoint {
 
     private String id;
     private double latitude;

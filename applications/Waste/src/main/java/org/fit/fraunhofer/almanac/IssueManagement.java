@@ -17,7 +17,7 @@ import java.util.*;
 public class IssueManagement implements Observer{
 
     /***************** CONSTANTS */
-    public static final int MIN_ISSUECOUNT = 10; // number of issues created until a route generation is triggered
+    public static final int MIN_ISSUECOUNT = 8; // number of issues created until a route generation is triggered
 
 
     private HashMap<String, Issue> issueMap;
@@ -48,7 +48,7 @@ public class IssueManagement implements Observer{
         issuePubSub = wasteMqttClient;
     }
     public IssueManagement(WasteMqttClient wasteMqttClient, int count){
-        // creates a map with a number (count) of issues
+        // creates a map with a number count of issues
         issueMap = new HashMap(count);
         routeMap = new HashMap();
         vehicleMap = new HashMap();
@@ -69,29 +69,22 @@ public class IssueManagement implements Observer{
     @Override
     public void update(Observable observable, Object arg) {
 
-        Gson gson = new Gson();
-        JsonParser parser = new JsonParser();
-
-        JsonArray array = parser.parse(arg.toString()).getAsJsonArray();
-
         Observation event = null;
         try {
-            event = mapper.readValue(((byte[])arg),Observation.class);
+            event = mapper.readValue(((byte[])arg), Observation.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
-        event.getResultValue(); // id
+        // get the waste bin id: event result value
+        String id = event.getResultValue().toString();
 
+        // Now the resource catalogue can be used to find the specific waste bin holding the id and then get
+        // its location and bin type, before a new issue can be created.
+        // Resource Catalogue API use is missing here!!!!
 
-        String binId = gson.fromJson(array.get(0), String.class);
-        double latitude = gson.fromJson(array.get(1), double.class);
-        double longitude = gson.fromJson(array.get(1), double.class);
-        String binType = gson.fromJson(array.get(2), String.class);
-        System.out.printf("Using Gson.fromJson() to get: %s, %.3f, %.3f, %s", binId, latitude, longitude, binType);
-
-        addIssue(binId, latitude, longitude, binType);  // need to give the location here to add issue
+        //addIssue(binId, latitude, longitude, binType);
     }
 
     private void addIssue(){
@@ -120,12 +113,14 @@ public class IssueManagement implements Observer{
         Route route = addRoute();
 
     //    route.generateRoute(issueMap);  // this is simplified: In the first go, the route will be generated out
-                                        // of all issues. It is assumed that all issues will belong to the same route.
+                                         // of all issues. It is assumed that all issues will belong to the same route.
 
 
         if(!issueMap.isEmpty()) {
-            ArrayList<RouteEndpoints> routeEndpointsList = new ArrayList();
-            RouteEndpoints aux = new RouteEndpoints();
+            //ArrayList<RouteEndpoints> routeEndpointsList = new ArrayList();
+            RouteEndpointsList routeEndpointsList = new RouteEndpointsList();
+
+            RouteEndpoint aux = new RouteEndpoint();
             for (Map.Entry<String, Issue> entry : issueMap.entrySet()) {
                 Issue values = entry.getValue();
 
@@ -141,11 +136,8 @@ public class IssueManagement implements Observer{
             String issueGson = gsonObj.toJson(routeEndpointsList);
 //            System.out.println(gsonObj.toJson(routeEndpointsList));
 
-            //    issueMap = g.fromJson(str,HashMap.class);
-
             // now it's about publishing the route (more specifically, the geolocation of the issues contained in the route),
             // so that the Driver-App can listen to it, use Google DirectionsService to calculate the route and render it.
-
             issuePubSub.publish("route", issueGson);
 
         }
@@ -238,7 +230,8 @@ public class IssueManagement implements Observer{
             System.out.println(key + " -  State " + (issueMap.get(key)).state());
             System.out.println(key + " -  Estimated Time " + (issueMap.get(key)).estimatedTime());
             System.out.println(key + " -  Priority " + (issueMap.get(key)).priority());
-            System.out.println(key + " -  Geolocation " + (issueMap.get(key)).geoLocation());
+//            System.out.println(key + " -  Geolocation " + (issueMap.get(key)).geoLocation());
+            System.out.println(key + " -  Geolocation: " + "lat: " + (issueMap.get(key)).latitude() + " long: " + (issueMap.get(key)).longitude() + "\n");
         }
         System.out.println();
     }
@@ -292,7 +285,7 @@ public class IssueManagement implements Observer{
 
 
         public Issue(){
-            uniqueID uId = new uniqueID();
+            UniqueId uId = new UniqueId();
             id = uId.generateUUID();
             if(!id.isEmpty()) {
                 creationDate = new Date();
@@ -307,7 +300,7 @@ public class IssueManagement implements Observer{
 
 
         public Issue(Location location){
-            uniqueID uId = new uniqueID();
+            UniqueId uId = new UniqueId();
             id = uId.generateUUID();
             if(!id.isEmpty()) {
                 creationDate = new Date();
@@ -322,7 +315,7 @@ public class IssueManagement implements Observer{
         }
 
         public Issue(String binId, double latitude, double longitude,  String binType) {
-            uniqueID uId = new uniqueID();
+            UniqueId uId = new UniqueId();
             id = uId.generateUUID();
             if(!id.isEmpty()) {
                 creationDate = new Date();
