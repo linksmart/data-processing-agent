@@ -17,22 +17,30 @@ public class EventFeeder extends Feeder {
 
     }
 
+    private static String getThingID(String topic){
+        String [] aux = topic.split("/");
+        return aux[aux.length-2];
+    }
     @Override
     protected void mangeEvent(String topic,byte[] rawEvent) {
         try {
+            String id= getThingID(topic);
             if(mapper==null)
                 mapper = new ObjectMapper();
-            ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
+           ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
 
             LoggerHandler.report("info", "message arrived with ID: " + event.getSensor().getId());
             if(event.getResultValue() == null) {
                 Observation event1 = mapper.readValue(rawEvent,Observation.class);
 
+                event1.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event1, event1.getClass());
-            }else
+            }else {
+                event.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event, event.getClass());
+            }
         }catch(Exception e){
             e.printStackTrace();
 

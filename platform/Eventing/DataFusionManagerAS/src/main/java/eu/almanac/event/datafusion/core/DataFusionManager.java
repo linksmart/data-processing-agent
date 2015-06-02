@@ -54,7 +54,7 @@ public class DataFusionManager {
             e.printStackTrace();
         }
         int i = 0;
-        while (feederEvents.isDown() || feederQuery.isDown()){
+        while (!feederEvents.isDown() || !feederQuery.isDown()){
             if (i == 0)
             LoggerHandler.publish("info","Data Fusion Manager is alive",null,false);
             i = (i+1)%6;

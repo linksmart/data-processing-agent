@@ -5,6 +5,7 @@ import com.espertech.esper.core.service.EPAdministratorImpl;
 import eu.almanac.event.datafusion.esper.utils.Tools;
 import eu.almanac.event.datafusion.handler.ComplexEventHandlerImpl;
 import eu.almanac.event.datafusion.logging.LoggerHandler;
+import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
@@ -96,12 +97,12 @@ public class EsperEngine implements DataFusionWrapper {
         String [] esperTopicArray = topic.split("/");
 
         esperParentTopic = esperTopicArray[0];
-        for (int i=1; i<esperTopicArray.length-1;i++) {
+        for (int i=1; i<esperTopicArray.length-2;i++) {
             esperParentTopic += "."+esperTopicArray[i];
 
         }
 
-        return new String[]{esperParentTopic, esperTopicArray[esperTopicArray.length-1]};
+        return new String[]{esperParentTopic, esperTopicArray[esperTopicArray.length-2]};
     }
     @Override
     public boolean addEvent(String topic, Object event,Class type) {
@@ -118,7 +119,8 @@ public class EsperEngine implements DataFusionWrapper {
             String[] parentTopicAndHead = getParentTopic(topic);
 
             addEsperEvent(parentTopicAndHead[0]+ ".hash",event, type );
-            insertStream('T'+((Observation)event).getSensor().getId(),parentTopicAndHead[0]);
+            insertStream(((Observation)event).getId(),parentTopicAndHead[0]);
+            //createPersistent(((Observation)event).getId(),parentTopicAndHead[0]);
 
         }catch(Exception e){
 
@@ -137,8 +139,37 @@ public class EsperEngine implements DataFusionWrapper {
             return false;
         EPStatement statement =null;
         try {
-             statement = epService.getEPAdministrator().createEPL("insert into "+paretTopic+"."+head+" select * from "+paretTopic+".hash (id = '"+head+"')" , head);
+             statement = epService.getEPAdministrator().createEPL("insert into "+paretTopic+".T"+head+" select * from "+paretTopic+".hash (id = '"+head+"')" , head);
 
+
+        }catch (EPStatementSyntaxException Esyn){
+            Esyn.printStackTrace();
+        }
+
+        return statement.getState() != EPStatementState.STARTED;
+    }
+    private boolean createPersistent(String id, String paretTopic){
+        if (epService.getEPAdministrator().getStatement("persistent_"+id)!=null)
+            return false;
+        EPStatement statement =null;
+        try {
+            EPLStatement eplStatement = new EPLStatement();
+            eplStatement.setScope(new String[]{"local"});
+            eplStatement.setSource(null);
+            eplStatement.setStatement("select * from "+paretTopic+".T"+id+" output last every 1 second ");
+            eplStatement.setInput(null);
+            eplStatement.setOutput(new String[]{LoggerHandler.getMQTTTopic()+"/v2/persistent/"});
+            eplStatement.setName("persistent_"+id);
+
+            statement = epService.getEPAdministrator().createEPL(eplStatement.getStatement() , eplStatement.getName());
+            try {
+               ComplexEventHandler handler = new ComplexEventHandlerImpl(eplStatement);
+
+                statement.setSubscriber(handler);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+
+            }
 
         }catch (EPStatementSyntaxException Esyn){
             Esyn.printStackTrace();

@@ -26,7 +26,7 @@ public class QueryFeeder extends Feeder {
     protected void mangeEvent(String topic,byte[] rawEvent) {
         try {
 
-            Statement statement = parser.fromJson(new String(rawEvent), EPLStatement.class);
+                Statement statement = parser.fromJson(new String(rawEvent), EPLStatement.class);
 
 
             if (statement != null) {
@@ -46,7 +46,7 @@ public class QueryFeeder extends Feeder {
                         success =false;
                     }
                     if (success)
-                        LoggerHandler.publish("queries/"+statement.getHash(),"Statement "+statement.getName() +" was successfully added",null,true);
+                        LoggerHandler.publish("queries/"+statement.getHash(),"Statement "+statement.getHash() +" was successfully added",null,true);
 
                 }
 

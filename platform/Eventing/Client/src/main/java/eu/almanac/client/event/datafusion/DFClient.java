@@ -54,16 +54,16 @@ public class DFClient {
                 return ;
             }
             if (cmd.hasOption("entity")) {
-                source = cmd.getOptionValue(cmd.getOptionValue("entity"));
+                source = cmd.getOptionValue("entity");
             }
             if (cmd.hasOption("input")) {
-                input = new String[]{cmd.getOptionValue(cmd.getOptionValue("input"))};
+                input = new String[]{cmd.getOptionValue("input")};
             }
             if (cmd.hasOption("output")) {
-                output = new String[]{cmd.getOptionValue(cmd.getOptionValue("output"))};
+                output = new String[]{cmd.getOptionValue("output")};
             }
             if (cmd.hasOption("scope")) {
-                scope = new String[]{cmd.getOptionValue(cmd.getOptionValue("scope"))};
+                scope = new String[]{cmd.getOptionValue("scope")};
             }
             if (cmd.hasOption("port")) {
                 port = cmd.getOptionValue("port");

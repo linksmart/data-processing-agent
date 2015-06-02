@@ -25,4 +25,5 @@ public interface EventFeederLogic {
 	 *  
 	 * */
 	public boolean subscribeToTopic(String topic);
+
 }

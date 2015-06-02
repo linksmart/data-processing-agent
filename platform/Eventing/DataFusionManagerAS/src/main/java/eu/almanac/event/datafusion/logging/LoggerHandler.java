@@ -16,6 +16,15 @@ public class LoggerHandler {
     public static  String LOG_TOPIC ="/eu/alamanac/event/datafusion/";
     public  static String BROKER_HOST ="localhost";
     public  static String BROKER_PORT ="1883";
+    public static String FEDERATION ="federation1";
+    public static String PI ="trn";
+
+    public static String getMQTTTopic(){
+        return "/"+FEDERATION+"/"+PI;
+    }
+    public static String getEsperTopic(){
+        return FEDERATION+"."+PI;
+    }
     public static void report(Map<String,String> info){
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
        System.out.println(gson.toJson(info));
