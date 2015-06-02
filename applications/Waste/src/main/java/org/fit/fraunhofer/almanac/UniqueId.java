@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Created by Werner-Kytölä on 08.05.2015.
  */
-public class uniqueID {
+public class UniqueId {
     public static String generateUUID(){
         try {
             return sha256(UUID.randomUUID().toString());
@@ -31,3 +31,4 @@ public class uniqueID {
         return sb.toString();
     }
 }
+

@@ -20,7 +20,7 @@ public class Vehicle {
     }
 
     public Vehicle(){
-        uniqueID uId = new uniqueID();
+        UniqueId uId = new UniqueId();
         id = uId.generateUUID();
         if(!id.isEmpty()) {
             type = VehicleType.NONE;
@@ -30,7 +30,7 @@ public class Vehicle {
     }
 
     public Vehicle(VehicleType Type){
-        uniqueID uId = new uniqueID();
+        UniqueId uId = new UniqueId();
         id = uId.generateUUID();
         if(!id.isEmpty()) {
             type = Type;
@@ -39,7 +39,7 @@ public class Vehicle {
         }
     }
     public Vehicle(VehicleType Type, int Capacity){
-        uniqueID uId = new uniqueID();
+        UniqueId uId = new UniqueId();
         id = uId.generateUUID();
         if(!id.isEmpty()) {
             type = Type;

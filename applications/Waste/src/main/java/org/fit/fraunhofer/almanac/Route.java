@@ -29,7 +29,7 @@ public class Route {
     }
 
     public Route(){
-        uniqueID uId = new uniqueID();
+        UniqueId uId = new UniqueId();
         id = uId.generateUUID();
         if(!id.isEmpty()) {
             type = RouteType.NONE;
@@ -40,7 +40,7 @@ public class Route {
     }
 
     public Route(RouteType type){
-        uniqueID uId = new uniqueID();
+        UniqueId uId = new UniqueId();
         id = uId.generateUUID();
         if(!id.isEmpty()) {
             this.type = type;
@@ -51,7 +51,7 @@ public class Route {
     }
 
     public Route(OptimizationCriteria criterion){
-        uniqueID uId = new uniqueID();
+        UniqueId uId = new UniqueId();
         id = uId.generateUUID();
         if(!id.isEmpty()) {
             type = RouteType.NONE;
@@ -62,7 +62,7 @@ public class Route {
     }
 
     public Route(RouteType type, OptimizationCriteria criteria){
-        uniqueID uId = new uniqueID();
+        UniqueId uId = new UniqueId();
         id = uId.generateUUID();
         if(!id.isEmpty()) {
             this.type = type;
