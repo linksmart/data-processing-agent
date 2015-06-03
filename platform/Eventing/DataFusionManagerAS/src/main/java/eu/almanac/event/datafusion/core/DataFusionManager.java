@@ -22,6 +22,7 @@ public class DataFusionManager {
     public static UUID ID = UUID.randomUUID();
    // static String brokerURL = "tcp://localhost:1883";
     public static void main(String[] args) {
+        String eventTopic = "/+/+/v2/observation/#";
         if(args.length>=1) {
             System.out.println(args[0]);
             //LoggerHandler.BROKER = args[0];
@@ -36,9 +37,12 @@ public class DataFusionManager {
                 return;
             }
         }
+        if(args.length>=2){
+            eventTopic = args[1];
+        }
         Feeder feederEvents = null,  feederQuery = null;
         try {
-            feederEvents = new EventFeeder(LoggerHandler.BROKER_HOST,LoggerHandler.BROKER_PORT,"/federation1/trn/v2/observation/#");
+            feederEvents = new EventFeeder(LoggerHandler.BROKER_HOST,LoggerHandler.BROKER_PORT,eventTopic);
 
             EsperEngine esper = new EsperEngine();
 

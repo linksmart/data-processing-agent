@@ -1,6 +1,7 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import eu.almanac.event.datafusion.logging.LoggerHandler;
 import eu.almanac.event.datafusion.utils.payload.OGCSensorThing.ObservationNumber;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
@@ -27,20 +28,27 @@ public class EventFeeder extends Feeder {
             String id= getThingID(topic);
             if(mapper==null)
                 mapper = new ObjectMapper();
-           ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
 
-            LoggerHandler.report("info", "message arrived with ID: " + event.getSensor().getId());
-            if(event.getResultValue() == null) {
+            try {
+
+                ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
+                event.setId(id);
+                for (DataFusionWrapper i : dataFusionWrappers.values())
+                    i.addEvent(topic, event, event.getClass());
+                LoggerHandler.report("info", "message arrived with ID: " + event.getSensor().getId());
+            }catch (InvalidFormatException e){
                 Observation event1 = mapper.readValue(rawEvent,Observation.class);
 
                 event1.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event1, event1.getClass());
-            }else {
-                event.setId(id);
-                for (DataFusionWrapper i : dataFusionWrappers.values())
-                    i.addEvent(topic, event, event.getClass());
+                LoggerHandler.report("info", "message arrived with ID: " + event1.getSensor().getId());
             }
+
+
+
+
+
         }catch(Exception e){
             e.printStackTrace();
 
