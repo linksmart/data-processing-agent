@@ -1,4 +1,4 @@
-package eu.almanac.event.datafusion.logging;
+package eu.almanac.event.datafusion.intern;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,24 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Caravajal on 16.10.2014.
+ * Created by Caravajal on 03.06.2015.
  */
-public class LoggerHandler {
-    public static  String LOG_TOPIC ="/eu/alamanac/event/datafusion/";
-    public  static String BROKER_HOST ="localhost";
-    public  static String BROKER_PORT ="1883";
-    public static String FEDERATION ="federation1";
-    public static String PI ="trn";
-
-    public static String getMQTTTopic(){
-        return "/"+FEDERATION+"/"+PI;
-    }
-    public static String getEsperTopic(){
-        return FEDERATION+"."+PI;
-    }
+public class LoggerService {
     public static void report(Map<String,String> info){
         Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-       System.out.println(gson.toJson(info));
+        System.out.println(gson.toJson(info));
     }
     public static void report(String source, String text){
         System.out.println(text);
@@ -52,21 +40,21 @@ public class LoggerHandler {
         boolean published =false;
         MqttClient client =null;
         try {
-             client = new MqttClient("tcp://"+BROKER_HOST+":"+BROKER_PORT,"LoggerHandler");
+            client = new MqttClient("tcp://"+ConfigurationManagement.BROKER_HOST+":"+ConfigurationManagement.BROKER_PORT,"LoggerHandler");
             client.connect();
             String subTopic = info.get("Topic");
             info.remove("Topic");
             try {
-            if (perTopic)
+                if (perTopic)
 
                     client.publish(subTopic,gson.toJson(info).getBytes("UTF-8"),0,false);
 
-            else
-                client.publish(LOG_TOPIC+subTopic,gson.toJson(info).getBytes("UTF-8"),0,false);
-        } catch (UnsupportedEncodingException e) {
-            report(info);
-            e.printStackTrace();
-        }
+                else
+                    client.publish(ConfigurationManagement.LOG_TOPIC+subTopic,gson.toJson(info).getBytes("UTF-8"),0,false);
+            } catch (UnsupportedEncodingException e) {
+                report(info);
+                e.printStackTrace();
+            }
             published =true;
 
         } catch (MqttException e) {

@@ -5,32 +5,37 @@ import eu.almanac.event.datafusion.feeder.EventFeeder;
 
 import eu.almanac.event.datafusion.feeder.Feeder;
 import eu.almanac.event.datafusion.feeder.QueryFeeder;
-import eu.almanac.event.datafusion.logging.LoggerHandler;
+import eu.almanac.event.datafusion.intern.ConfigurationManagement;
+import eu.almanac.event.datafusion.intern.LoggerService;
 
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 /**
  * Created by Caravajal on 06.10.2014.
  */
 public class DataFusionManager {
-    public static UUID ID = UUID.randomUUID();
-   // static String brokerURL = "tcp://localhost:1883";
+
     public static void main(String[] args) {
-        String eventTopic = "/+/+/v2/observation/#";
+        try {
+
+            URI url =new URI("tcp://localhost:1883");
+            ConfigurationManagement.BROKER_PORT = String.valueOf(url.getPort());
+            ConfigurationManagement.BROKER_HOST = url.getHost();
+
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
         if(args.length>=1) {
-            System.out.println(args[0]);
-            //LoggerHandler.BROKER = args[0];
+
             try {
 
                 URI url =new URI(args[0]);
-                LoggerHandler.BROKER_PORT = String.valueOf(url.getPort());
-                LoggerHandler.BROKER_HOST = url.getHost();
+                ConfigurationManagement.BROKER_PORT = String.valueOf(url.getPort());
+                ConfigurationManagement.BROKER_HOST = url.getHost();
 
             } catch (URISyntaxException e) {
                 e.printStackTrace();
@@ -38,18 +43,20 @@ public class DataFusionManager {
             }
         }
         if(args.length>=2){
-            eventTopic = args[1];
+            ConfigurationManagement.EVENT_TOPIC = args[1];
         }
+
+        System.out.println("The Data-Fusion Manager is starting with ID:" );
         Feeder feederEvents = null,  feederQuery = null;
         try {
-            feederEvents = new EventFeeder(LoggerHandler.BROKER_HOST,LoggerHandler.BROKER_PORT,eventTopic);
+            feederEvents = new EventFeeder(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.EVENT_TOPIC);
 
             EsperEngine esper = new EsperEngine();
 
             feederEvents.dataFusionWrapperSignIn(esper);
 
 
-            feederQuery = new QueryFeeder(LoggerHandler.BROKER_HOST,LoggerHandler.BROKER_PORT,"queries/add");
+            feederQuery = new QueryFeeder(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.STATEMENT_ADD_TOPIC);
 
 
             feederQuery.dataFusionWrapperSignIn(esper);
@@ -60,7 +67,7 @@ public class DataFusionManager {
         int i = 0;
         while (!feederEvents.isDown() || !feederQuery.isDown()){
             if (i == 0)
-            LoggerHandler.publish("info","Data Fusion Manager is alive",null,false);
+            LoggerService.publish("info", "Data Fusion Manager is alive", null, false);
             i = (i+1)%6;
 
             try {

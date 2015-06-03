@@ -5,6 +5,8 @@ import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
 import javax.xml.crypto.Data;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Tools {
@@ -217,5 +219,11 @@ public class Tools {
 
     }
 
-
+    static public String getDateNowString(){
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        df.setTimeZone(tz);
+        // creating DateTimeNow string
+        return df.format(new Date());
+    }
 }

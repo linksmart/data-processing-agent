@@ -2,53 +2,39 @@ package eu.almanac.event.datafusion.handler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.Gson;
-import eu.almanac.event.datafusion.core.DataFusionManager;
-import eu.almanac.event.datafusion.logging.LoggerHandler;
+import eu.almanac.event.datafusion.intern.ConfigurationManagement;
+import eu.almanac.event.datafusion.intern.LoggerService;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
-import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
-import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTValue;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
-import org.codehaus.jackson.map.SerializationConfig;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigInteger;
 import java.rmi.RemoteException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Created by Caravajal on 06.10.2014.
+ * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
 public class ComplexEventHandlerImpl implements ComplexEventHandler{
-    private MqttClient CEPHandler;
+    private MqttClient mqttClient;
     private final Statement query;
-    private Event response;
     private ObjectMapper parser = new ObjectMapper();
+    @Deprecated
+    private Event response;
+    @Deprecated
     private Boolean sendPerProperty = false;
 
-
-    Class PAYLOAD_TYPE = IoTEntityEvent.class;
-
-    private final String DFM_TOPIC = "/almanac/observation/iotentity/dataFusionManager/";
-    private final String EVENT_TOPIC = "/federation1/fit/v2/cep/";
-    private final String ERROR_TOPIC = "/almanac/error/json/dataFusionManager/";
-    private final String INFO_TOPIC = "/almanac/info/json/dataFusionManager/";
 
     public ComplexEventHandlerImpl(Statement query) throws RemoteException {
         if(!knownInstances.containsKey("local"))
@@ -69,7 +55,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
         try {
-            this.CEPHandler= new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()),query.getName(), new MemoryPersistence());
+            this.mqttClient = new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()),query.getName(), new MemoryPersistence());
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
         }
@@ -77,14 +63,14 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
     public void update(Map eventMap) {
 
-        LoggerHandler.report("info", "Updating query: " + query.getName());
+        LoggerService.report("info", "Updating query: " + query.getName());
 
         try {
 
-            if(eventMap.containsKey((Object)(new String("SetEventPerEntity")))){
-                sendPerProperty = (Boolean)eventMap.get((Object)(new String("SetEventPerEntity")));
+            if(eventMap.containsKey("SetEventPerEntity")){
+                sendPerProperty = (Boolean)eventMap.get(("SetEventPerEntity"));
 
-                eventMap.remove((Object) (new String("SetEventPerEntity")));
+                eventMap.remove( ("SetEventPerEntity"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -94,8 +80,8 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
             // checking if handler still connected to Broker
-            if (!CEPHandler.isConnected())
-                CEPHandler.connect();
+            if (!mqttClient.isConnected())
+                mqttClient.connect();
             // creating Event Response object
             //GenericCEP cepEvent = getCEPEnvelope();
 
@@ -120,37 +106,22 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
     }
-    GenericCEP getCEPEnvelope(){
-        GenericCEP ret =null;
-        if(PAYLOAD_TYPE == Event.class)
-            ret = new Event();
-        if(PAYLOAD_TYPE == IoTEntityEvent.class)
-            ret =  new IoTEntityEvent();
 
-       ret =addMetaData(ret);
-
-        return ret;
-    }
-    GenericCEP addMetaData(GenericCEP cep){
-        cep.addValue(GenericCEP.GENERATED, DataFusionManager.ID.toString());
-        cep.addValue(GenericCEP.TIMESTAMP,getDateNowString());
-
-        return cep;
-    }
     public void update(Event event) {
 
-        LoggerHandler.report("info", "Updating query: " + query.getName());
+        LoggerService.report("info", "Updating query: " + query.getName());
 
         try {
 
 
-            if (!CEPHandler.isConnected())
-                CEPHandler.connect();
+            if (!mqttClient.isConnected())
+                mqttClient.connect();
 
             publish(event);
 
         }catch (Exception e){
 
+            LoggerService.report("Error",e);
         }
 
     }
@@ -160,19 +131,19 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
         if (events[0].isGenerated())
             return;
-        update2((Object[]) events);
+        update2( events);
 
     }
     public void update(IoTEntityEvent[] events) {
         if (events[0].isGenerated())
             return;
 
-        update2((Object[]) events);
+        update2( events);
 
     }
     public void update2(Object[] events) {
 
-        LoggerHandler.report("info", "Updating query: " + query.getName());
+        LoggerService.report("info", "Updating query: " + query.getName());
 
 
         try {
@@ -212,17 +183,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         }
     }
 
-
-    String getDateNowString(){
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-        df.setTimeZone(tz);
-        // creating DateTimeNow string
-        return df.format(new Date());
-    }
-
-
-
+    @Deprecated
     void sendEvent(Map eventMap, GenericCEP cepEvent) throws Exception {
 
 
@@ -281,7 +242,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
                     } else {
 
-                        packObservation(eventMap.get(key),key.toString(),streamID.toString());
+                        packObservation(eventMap.get(key),key.toString(),streamID);
 
 
                     }
@@ -298,10 +259,11 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
       //  publish(cepEvent);
 
     }
+    @Deprecated
     IoTEntityEvent sendPerEntity(Map eventMap){
         IoTEntityEvent cepEvent = new IoTEntityEvent("DataFusionManager");
         cepEvent.setAbout(query.getSource());
-        int n=0;
+
 
         if(eventMap.values().toArray()[0] instanceof IoTEntityEvent[]) {
             IoTEntityEvent[] events = (IoTEntityEvent[]) eventMap.values().toArray()[0];
@@ -315,9 +277,9 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                     IoTEntityEvent ent = (IoTEntityEvent) eventMap.get(key);
 
 
-                      publish(ent.getAbout(),ent);
+                      publish(ent);
 
-                        continue;
+
 
                 }
 
@@ -333,29 +295,25 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         return cepEvent;
 
     }
-    private void publish(String endTopic, Object ent) throws Exception {
-        if(!CEPHandler.isConnected())
-            CEPHandler.connect();
+    private void publish( Object ent) throws Exception {
+        if(!mqttClient.isConnected())
+            mqttClient.connect();
         if (query.haveOutput())
             for (String output : query.getOutput()) {
-                CEPHandler.publish(output + "/" + query.getHash(),   parser.writeValueAsString(ent).getBytes(), 0, false);
+                mqttClient.publish(output + "/" + query.getHash(),   parser.writeValueAsString(ent).getBytes(), 0, false);
             }
         else
-            CEPHandler.publish(EVENT_TOPIC + query.getHash(), parser.writeValueAsString(ent).getBytes(), 0, false);
+            mqttClient.publish(ConfigurationManagement.FUSED_TOPIC + query.getHash(), parser.writeValueAsString(ent).getBytes(), 0, false);
 
     }
 
 
-    private void publish( Object ent) throws Exception {
-       publish(query.getName(),ent);
-
-    }
 
 
     @Override
     public boolean publishError(String errorMessage) {
 
-        LoggerHandler.publish("query/"+query.getName(),errorMessage,null,true);
+        LoggerService.publish("query/" + query.getName(), errorMessage, null, true);
 
         return true;
     }
@@ -363,15 +321,15 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     @Override
     public void destroy(){
         try {
-            if(CEPHandler.isConnected())
-                CEPHandler.disconnect();
+            if(mqttClient.isConnected())
+                mqttClient.disconnect();
 
         } catch (MqttException e) {
             e.printStackTrace();
         }
 
         try {
-            CEPHandler.close();
+            mqttClient.close();
         } catch (MqttException e) {
             e.printStackTrace();
         }

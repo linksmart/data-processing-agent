@@ -2,7 +2,8 @@ package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import eu.almanac.event.datafusion.logging.LoggerHandler;
+import eu.almanac.event.datafusion.intern.ConfigurationManagement;
+import eu.almanac.event.datafusion.intern.LoggerService;
 import eu.almanac.event.datafusion.utils.payload.OGCSensorThing.ObservationNumber;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
@@ -35,14 +36,14 @@ public class EventFeeder extends Feeder {
                 event.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event, event.getClass());
-                LoggerHandler.report("info", "message arrived with ID: " + event.getSensor().getId());
+                LoggerService.report("info", "message arrived with ID: " + event.getSensor().getId());
             }catch (InvalidFormatException e){
                 Observation event1 = mapper.readValue(rawEvent,Observation.class);
 
                 event1.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event1, event1.getClass());
-                LoggerHandler.report("info", "message arrived with ID: " + event1.getSensor().getId());
+                LoggerService.report("info", "message arrived with ID: " + event1.getSensor().getId());
             }
 
 

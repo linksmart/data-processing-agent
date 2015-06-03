@@ -2,16 +2,14 @@ package eu.almanac.event.datafusion.feeder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import eu.almanac.event.datafusion.esper.EsperQuery;
-import eu.almanac.event.datafusion.logging.LoggerHandler;
+import eu.almanac.event.datafusion.intern.ConfigurationManagement;
+import eu.almanac.event.datafusion.intern.LoggerService;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
-import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
-import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Statement;
 
 /**
- * Created by Caravajal on 22.05.2015.
+ * Created by José Ángel Carvajal on 22.05.2015 a researcher of Fraunhofer FIT.
  */
 public class QueryFeeder extends Feeder {
 
@@ -42,18 +40,18 @@ public class QueryFeeder extends Feeder {
                             i.addStatement(statement);
 
                     }catch (Exception e){
-                        LoggerHandler.publish("queries/" + statement.getHash(), e.getMessage(), null, true);
+                        LoggerService.publish(ConfigurationManagement.STATEMENT_BASE_TOPIC + statement.getHash(), e.getMessage(), null, true);
                         success =false;
                     }
                     if (success)
-                        LoggerHandler.publish("queries/"+statement.getHash(),"Statement "+statement.getHash() +" was successfully added",null,true);
+                        LoggerService.publish(ConfigurationManagement.STATEMENT_BASE_TOPIC + statement.getHash(), "Statement " + statement.getHash() + " was successfully added", null, true);
 
                 }
 
             }
         }catch(JsonParseException e){
 
-            LoggerHandler.report("JsonParseError", "No IoTEvent received instead received :" + rawEvent, e.getStackTrace().toString());
+            LoggerService.report("JsonParseError", "No IoTEvent received instead received :" + rawEvent.toString(), e.getStackTrace().toString());
 
 
         }catch(Exception e){

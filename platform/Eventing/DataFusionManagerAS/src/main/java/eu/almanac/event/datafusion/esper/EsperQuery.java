@@ -1,6 +1,7 @@
 package eu.almanac.event.datafusion.esper;
 
-import eu.almanac.event.datafusion.logging.LoggerHandler;
+import eu.almanac.event.datafusion.intern.ConfigurationManagement;
+import eu.almanac.event.datafusion.intern.LoggerService;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.Statement;
 
@@ -26,7 +27,7 @@ public class EsperQuery implements Statement {
         if(event.getEbyName("Name")!= null)
             this.name = event.getEbyName("Name").getStringValue();
         else{
-            LoggerHandler.publish("query/"+"anonymous", "IoTEntity Event Error: The query must have a name!", null,true);
+            LoggerService.publish("query/" + "anonymous", "IoTEntity Event Error: The query must have a name!", null, true);
             throw new Exception("IoTEntity Event Error: The query must have a name!");
         }
 
@@ -35,7 +36,7 @@ public class EsperQuery implements Statement {
 
             this.statement = getInputAndCleanStatement(event.getEbyName("Statement").getStringValue());
         }else{
-            LoggerHandler.publish("query/"+name,"IoTEntity Event Error: The query must have a name!",null,true);
+            LoggerService.publish("query/" + name, "IoTEntity Event Error: The query must have a name!", null, true);
             throw new Exception("IoTEntity Event Error: The query must have a statement!");
         }
         if(event.getEbyName("Source")!= null) {
@@ -157,7 +158,7 @@ public class EsperQuery implements Statement {
 
 
             }else{
-                LoggerHandler.publish("query/"+name, "missing '{' or '}' after the from in query:" + getName(), null,true);
+                LoggerService.publish("query/" + name, "missing '{' or '}' after the from in query:" + getName(), null, true);
             }
         }
 
