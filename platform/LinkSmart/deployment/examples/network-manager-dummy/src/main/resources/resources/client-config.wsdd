@@ -1,0 +1,35 @@
+<!-- 
+	This file adds Core LinkSmart security to all Axis calls. 
+-->
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+	xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<globalConfiguration>
+		<!-- 
+			Here the Core LinkSmart security handlers are bound to the service.
+			Use the "include" parameter to declare the endpoints that are able 
+			to speak Core LinkSmart security.
+			For integration, this will be list of dedicated endpoints. Later, this
+			parameter should be set to "*".
+		 -->
+	 	<requestFlow>
+			<handler name="URLMapper"
+				type="java:org.apache.axis.handlers.http.URLMapper" />
+			<handler type="java:eu.linksmart.security.axis.CoreSecurityRequestHandler">
+				<parameter name="include" value="NetworkManagerApplication EventManagerPort" />
+			</handler>
+		</requestFlow>
+		<responseFlow>
+			<handler name="URLMapper"
+				type="java:org.apache.axis.handlers.http.URLMapper" />
+			<handler type="java:eu.linksmart.security.axis.CoreSecurityResponseHandler">
+							<parameter name="include" value="NetworkManagerApplication EventManagerPort" />
+			</handler>
+		</responseFlow> 
+	</globalConfiguration>
+	<transport name="http"
+		pivot="java:org.apache.axis.transport.http.HTTPSender" />
+	<transport name="local"
+		pivot="java:org.apache.axis.transport.local.LocalSender" />
+	<transport name="java"
+		pivot="java:org.apache.axis.transport.java.JavaSender" />
+</deployment>

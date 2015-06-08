@@ -1,0 +1,81 @@
+LinkSmart ${linksmart.gc.version}
+------------------------------------------------------------
+
+Requirements
+------------
+Java 1.7
+JCE unlimited strength
+
+
+Starting and Stopping LinkSmart GC
+------------------------------------------------------------
+
+To start the server, run the following command in Windows:
+
+bin\karaf.bat
+
+respectively on Unix:
+
+bin/karaf
+
+upon successful startup, a welcome message would appear. 
+
+Please wait for a while (10-15 seconds) so that LinkSmart components are installed and activated by the container.
+
+you can view the the log from LinkSmart components: 
+karaf@root()> log:display
+or
+karaf@root()> log:tail
+
+to see the (OSGi) bundles status:
+karaf@root()> bundle:list
+
+
+LinkSmart status page can be viewed in a browser with the following URL:
+http://localhost:8082/LinkSmartStatus
+
+
+To stop Server from the console, enter ^D in the console:
+
+^D
+
+Alternatively, you can also run the following command:
+
+system:shutdown
+
+or simply
+
+shutdown -f
+
+LinkSmart GC Features
+------------------------------------------------------------
+LinkSmart provides different deployment modes with the help of Karaf's feature concept. Following are the currently available features:
+
+- linksmart-gc
+start all LinkSmart GC components (Tunneling, Zmq & Http backbones, NetworkManager, NetworkManageer_Rest etc)
+
+- gc-http-tunneling
+start jetty server, network manager & Tunneling servlet
+
+- gc-backbone-http
+start backbone router & Http implementation for Backbone interface
+
+- gc-backbone-zmq
+start backone router & ZMQ based implementation of Backbone interface
+
+- gc-network-manager
+start netwokr manager and associated components like identity-manager and backbone-router
+
+- gc-network-manager-rest
+provide HTTP based (REST) interface for Network Manager for registration, de-registration, and service discovery etc
+
+
+The feature:install command installs a feature as follows: 
+
+karaf@root()> feature:install linksmart-gc
+
+The feature:uninstall command uninstalls a feature as shown below: 
+
+karaf@root()> feature:uninstall linksmart-gc
+
+

@@ -1,0 +1,180 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from NetworkManagerApplicationService WSDL service -->
+
+  <service name="NetworkManagerApplication" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://ws.network.linksmart.eu"/>
+      <parameter name="wsdlServiceElement" value="NetworkManagerApplicationService"/>
+      <parameter name="schemaUnqualified" value="http://xml.apache.org/xml-soap,http://ws.network.linksmart.eu"/>
+      <parameter name="wsdlServicePort" value="NetworkManagerApplication"/>
+      <parameter name="className" value="eu.linksmart.network.ws.NetworkManagerApplicationSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="NetworkManagerApplication"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="openSession" qname="operNS:openSession" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="openSessionReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="sendData" qname="operNS:sendData" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="sendDataReturn" returnType="rtns:NMResponse" xmlns:rtns="http://ws.network.linksmart.eu" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in3" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="receiveData" qname="operNS:receiveData" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="receiveDataReturn" returnType="rtns:NMResponse" xmlns:rtns="http://ws.network.linksmart.eu" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in3" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="closeSession" qname="operNS:closeSession" xmlns:operNS="http://ws.network.linksmart.eu" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getSessionParameter" qname="operNS:getSessionParameter" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getSessionParameterReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="setSessionParameter" qname="operNS:setSessionParameter" xmlns:operNS="http://ws.network.linksmart.eu" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="synchronizeSessionsList" qname="operNS:synchronizeSessionsList" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="synchronizeSessionsListReturn" returnType="rtns:Vector" xmlns:rtns="http://xml.apache.org/xml-soap" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="addSessionRemoteClient" qname="operNS:addSessionRemoteClient" xmlns:operNS="http://ws.network.linksmart.eu" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="createHID" qname="operNS:createHID" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="createHIDReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="createHID" qname="operNS:createHID" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="createHIDReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+      </operation>
+      <operation name="createHIDwDesc" qname="operNS:createHIDwDesc" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="createHIDwDescReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="createHIDwDesc" qname="operNS:createHIDwDesc" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="createHIDwDescReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in3" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="renewHID" qname="operNS:renewHID" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="renewHIDReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="renewHIDInfo" qname="operNS:renewHIDInfo" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="renewHIDInfoReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="addContext" qname="operNS:addContext" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="addContextReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getHostHIDs" qname="operNS:getHostHIDs" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHostHIDsReturn" returnType="rtns:Vector" xmlns:rtns="http://xml.apache.org/xml-soap" soapAction="" >
+      </operation>
+      <operation name="getHIDs" qname="operNS:getHIDs" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHIDsReturn" returnType="rtns:Vector" xmlns:rtns="http://xml.apache.org/xml-soap" soapAction="" >
+      </operation>
+      <operation name="getContextHIDs" qname="operNS:getContextHIDs" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getContextHIDsReturn" returnType="rtns:Vector" xmlns:rtns="http://xml.apache.org/xml-soap" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getHIDsbyDescription" qname="operNS:getHIDsbyDescription" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHIDsbyDescriptionReturn" returnType="rtns:Vector" xmlns:rtns="http://xml.apache.org/xml-soap" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="removeHID" qname="operNS:removeHID" xmlns:operNS="http://ws.network.linksmart.eu" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="removeAllHID" qname="operNS:removeAllHID" xmlns:operNS="http://ws.network.linksmart.eu" soapAction="" >
+      </operation>
+      <operation name="startNM" qname="operNS:startNM" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="startNMReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+      </operation>
+      <operation name="stopNM" qname="operNS:stopNM" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="stopNMReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+      </operation>
+      <operation name="getHostHIDsAsString" qname="operNS:getHostHIDsAsString" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHostHIDsAsStringReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+      </operation>
+      <operation name="getHIDsAsString" qname="operNS:getHIDsAsString" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHIDsAsStringReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+      </operation>
+      <operation name="getContextHIDsAsString" qname="operNS:getContextHIDsAsString" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getContextHIDsAsStringReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getHIDsbyDescriptionAsString" qname="operNS:getHIDsbyDescriptionAsString" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHIDsbyDescriptionAsStringReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getNMPosition" qname="operNS:getNMPosition" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getNMPositionReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+      </operation>
+      <operation name="getDescriptionbyHID" qname="operNS:getDescriptionbyHID" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getDescriptionbyHIDReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getHostHIDsbyDescription" qname="operNS:getHostHIDsbyDescription" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHostHIDsbyDescriptionReturn" returnType="rtns:ArrayOf_soapenc_string" xmlns:rtns="http://ws.network.linksmart.eu" returnItemType="tns2:string" xmlns:tns2="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getHostHIDsbyDescriptionAsString" qname="operNS:getHostHIDsbyDescriptionAsString" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHostHIDsbyDescriptionAsStringReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getInformationAssociatedWithHID" qname="operNS:getInformationAssociatedWithHID" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getInformationAssociatedWithHIDReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getNMPositionAuth" qname="operNS:getNMPositionAuth" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getNMPositionAuthReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="getHIDByAttributes" qname="operNS:getHIDByAttributes" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="getHIDByAttributesReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in2" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in3" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in4" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="createCryptoHID" qname="operNS:createCryptoHID" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="createCryptoHIDReturn" returnType="rtns:CryptoHIDResult" xmlns:rtns="http://ws.network.linksmart.eu" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <operation name="createCryptoHIDfromReference" qname="operNS:createCryptoHIDfromReference" xmlns:operNS="http://ws.network.linksmart.eu" returnQName="createCryptoHIDfromReferenceReturn" returnType="rtns:string" xmlns:rtns="http://schemas.xmlsoap.org/soap/encoding/" soapAction="" >
+        <parameter qname="in0" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <parameter qname="in1" type="tns:string" xmlns:tns="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </operation>
+      <parameter name="allowedMethods" value="getNMPosition createHID removeAllHID getNMPositionAuth removeHID setSessionParameter getHostHIDsAsString getContextHIDs getHostHIDsbyDescriptionAsString getInformationAssociatedWithHID stopNM getHIDsbyDescription createCryptoHID renewHID getHostHIDs receiveData openSession closeSession addContext createHIDwDesc createCryptoHIDfromReference getDescriptionbyHID getContextHIDsAsString getHostHIDsbyDescription addSessionRemoteClient getSessionParameter getHIDsbyDescriptionAsString sendData startNM renewHIDInfo getHIDs getHIDByAttributes synchronizeSessionsList getHIDsAsString"/>
+
+      <arrayMapping
+        xmlns:ns="http://ws.network.linksmart.eu"
+        qname="ns:ArrayOf_soapenc_string"
+        type="java:java.lang.String[]"
+        innerType="cmp-ns:string" xmlns:cmp-ns="http://schemas.xmlsoap.org/soap/encoding/"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://ws.network.linksmart.eu"
+        qname="ns:NMResponse"
+        type="java:eu.linksmart.network.ws.NMResponse"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://ws.network.linksmart.eu"
+        qname="ns:CryptoHIDResult"
+        type="java:eu.linksmart.network.ws.CryptoHIDResult"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

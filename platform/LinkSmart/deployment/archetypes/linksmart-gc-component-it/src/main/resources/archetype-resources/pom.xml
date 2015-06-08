@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+        <groupId>eu.linksmart.gc.testing</groupId>
+		<artifactId>eu.linksmart.gc.testing.parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+	<groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+    
+    <name>LinkSmart OSGi Component Integration Testing - ${artifactId}</name>
+    <description>LinkSmart OSGi Component Integration Testing - ${artifactId}</description>
+
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<!-- add the dependency ((namely the given bundle)) under test -->
+	</dependencies>
+
+</project>

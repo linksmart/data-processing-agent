@@ -9,21 +9,19 @@
 	<description>ALMANAC Eventing and Data Fusion</description>
 
 	<modules>
+
     <module>DataFusionAPI</module>
     <module>DataFusionCoreAPI</module>
     <module>DataFusionManagerAS</module>
         <module>Client</module>
+        <module>SDKLibrary</module>
     </modules>
 	<repositories>
 		<repository>
 			<id>maven</id>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
- <!--  <repository>
-      <id>LS</id>
-      <url>http://greatfool.fit.fraunhofer.de:8081/nexus/content/groups/public</url>        
-    </repository>
-   &lt;!&ndash; Contains newest Esper &ndash;&gt;	-->
+
    <repository>
       <id>opencast-public</id>
       <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>

@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">DriverApp</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_voice_recognition">VoiceRecognitionActivity</string>
+
+    <string name="say_yes_or_no">Please answer "yes" or "no"!</string>
+    <string name="action_settings">Settings</string>
+    <string name="message_to_driver_on_new_root">There is a new issue located in your route. Please say \"yes\" if you want to update the route.
+        Please say \"no\" otherwise.</string>
+
+    <string name="message_on_no_nw_connection">Kindly enable internet connection through settings and start the application!!</string>
+    <string name="title_on_no_nw_connection">No Internet!!</string>
+    <string name="message_on_update_route_success">The route is updated successfully</string>
+    <string name="message_on_update_route_progress">Please wait while I update the route</string>
+    <string name="title_activity_custom_voice_recognizer">CustomVoiceRecognizer</string>
+    <string name="update_route">Update</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="message_on_user_reject">As you said no, route is not changed</string>
+    <string name="message_please_say_yes_no">Sorry, I did not get you..Please say \"yes\" or \"no\"</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_update">Update</string>
+</resources>

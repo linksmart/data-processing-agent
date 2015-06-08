@@ -23,4 +23,6 @@ public interface Statement {
     public boolean haveInput();
     public boolean haveOutput();
     public boolean haveScope();
+    public String getHash();
+
 }

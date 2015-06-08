@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>eu.linksmart.gc</groupId>
+		<artifactId>eu.linksmart.gc.parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>eu.linksmart.gc.testing</groupId>
+	<artifactId>eu.linksmart.gc.testing.utils</artifactId>
+   
+	<packaging>jar</packaging>
+
+	<name>GC Integration Testing Utils</name>
+	<description>GC Integration Testing Utils</description>
+	
+    <dependencies>
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-container-karaf</artifactId>
+            <scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+    <build>
+        <sourceDirectory>target/filtered-sources/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>true</filtering>
+                <targetPath>../filtered-sources/java</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+                <version>1.0-alpha-3</version>
+                <executions>
+                    <execution>
+                        <id>filter-src</id>
+                        <goals>
+                            <goal>filter-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+	
+</project>

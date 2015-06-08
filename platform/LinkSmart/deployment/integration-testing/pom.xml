@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eu.linksmart.gc</groupId>
+        <artifactId>eu.linksmart.gc.parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>eu.linksmart.gc.testing</groupId>
+    <artifactId>eu.linksmart.gc.testing.parent</artifactId>
+
+    <name>LS GC suite - all integration tests</name>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>backbone-zmq-it</module>
+        <module>network-manager-rest-it</module>
+        <module>http-tunneling-it</module>
+        <module>mqtt-tunnelling-it</module>
+    </modules>
+
+    <properties>
+        <javax.inject.version>1</javax.inject.version>
+    </properties>
+
+    <dependencies>
+        <!-- Integration Testing Utils -->
+        <dependency>
+            <groupId>eu.linksmart.gc.testing</groupId>
+            <artifactId>eu.linksmart.gc.testing.utils</artifactId>
+            <version>${linksmart.gc.version}</version>
+        </dependency>
+        <!-- PaxExam dependencies -->
+        <dependency>
+            <groupId>org.ops4j.pax.exam</groupId>
+            <artifactId>pax-exam-junit4</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.exam</groupId>
+            <artifactId>pax-exam-link-mvn</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>${javax.inject.version}</version>
+        </dependency>
+        <!-- PaxExam decides on a specific OSGi Container for testing based on the
+            maven dependecies, we are using Apache Karaf for in-container OSGi testing -->
+        <dependency>
+            <groupId>org.ops4j.pax.exam</groupId>
+            <artifactId>pax-exam-container-karaf</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- GC Features -->
+        <dependency>
+            <groupId>eu.linksmart.gc.deployment</groupId>
+            <artifactId>eu.linksmart.gc.deployment.features.core</artifactId>
+            <version>${linksmart.gc.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

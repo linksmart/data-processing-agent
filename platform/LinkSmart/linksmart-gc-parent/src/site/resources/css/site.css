@@ -1,0 +1,18 @@
+#contentBox img { 
+  align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#bannerRight {
+  height: 95px;
+  width: 220px;
+  background: #FFFFFF;
+}
+
+#banner {
+  height: 95px;
+  background: white;
+}
+

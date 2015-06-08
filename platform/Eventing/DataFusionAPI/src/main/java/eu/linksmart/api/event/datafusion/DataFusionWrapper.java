@@ -1,6 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
-import eu.almanac.event.datafusion.utils.IoTEntityEvent;
+import eu.almanac.event.datafusion.utils.payload.SenML.Event;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
 
 /**
@@ -33,8 +34,7 @@ public interface DataFusionWrapper {
 	 * 
 	 * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addEvent(String topic, IoTEntityEvent event);
-
+	public boolean addEvent(String topic, Object event, Class type);
 	/**
 	 * Configure a particular type in the engine.
 	 * 
