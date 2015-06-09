@@ -19,16 +19,7 @@ import java.util.UUID;
 public class DataFusionManager {
 
     public static void main(String[] args) {
-        try {
 
-            URI url =new URI("tcp://localhost:1883");
-            ConfigurationManagement.BROKER_PORT = String.valueOf(url.getPort());
-            ConfigurationManagement.BROKER_HOST = url.getHost();
-
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return;
-        }
         if(args.length>=1) {
 
             try {
@@ -46,7 +37,16 @@ public class DataFusionManager {
             ConfigurationManagement.EVENT_TOPIC = args[1];
         }
 
-        System.out.println("The Data-Fusion Manager is starting with ID:" );
+        if(args.length>=3){
+            ConfigurationManagement.STATEMENT_BASE_TOPIC = args[2];
+        }
+
+        System.out.println(
+                        "The Data-Fusion Manager is starting with ID: "+ConfigurationManagement.DFM_ID +";" +
+                        " with incoming events in broker tcp://"+ConfigurationManagement.BROKER_HOST+":"+ConfigurationManagement.BROKER_PORT+
+                        " waiting for events from the topic: "+ ConfigurationManagement.EVENT_TOPIC+";" +
+                        " waiting for queries from topic: " +ConfigurationManagement.STATEMENT_ADD_TOPIC
+        );
         Feeder feederEvents = null,  feederQuery = null;
         try {
             feederEvents = new EventFeeder(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.EVENT_TOPIC);

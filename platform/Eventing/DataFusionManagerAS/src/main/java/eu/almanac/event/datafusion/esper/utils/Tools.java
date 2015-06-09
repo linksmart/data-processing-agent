@@ -2,13 +2,17 @@ package eu.almanac.event.datafusion.esper.utils;
 
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
 
 import javax.xml.crypto.Data;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 public class Tools {
     static private Map<String, Object> variables= new HashMap<>();
     static public Random Random = new Random();
@@ -214,16 +218,92 @@ public class Tools {
 
        return accumulatedTruth;
    }
-    static public boolean compareObservationsInLapsedTime(Object ob2){
-        return true;
+    static public boolean cmpBinaryInWindow(Observation prev,Observation current,Observation first){
+        if(
+            prev== null ||
+            ((Observation)(variables.get("first"+first.getId()))).getPhenomenonTime().getTime()!= first.getPhenomenonTime().getTime()
+        ) {
+            variables.put(current.getId(),true);
+            variables.put("first"+current.getId(),first);
+        }
+
+        if( (Boolean)variables.get(current.getId()))
+            variables.put(current.getId(),(Double)prev.getResultValue()<(Double)current.getResultValue());
+        else if( !(Boolean)variables.get(current.getId()))
+            variables.put(current.getId(),false);
+
+
+        return (Boolean)variables.get(current.getId());
 
     }
 
+    static public String getIsoTimeFormat(){
+        return "yyyy-MM-dd'T'HH:mm:ss.S'Z'";
+    }
+    static public String getEsperTimeFormat(){
+        return "yyyy-MM-dd HH:mm:ss.SSS";
+    }
+    static private DateFormat dateFormat =null;
+
+    static private DateFormat getDateFormat(String timeFormat, String gmt){
+
+        if(dateFormat == null){
+            TimeZone tz = TimeZone.getTimeZone(gmt);
+            dateFormat  = new SimpleDateFormat(getIsoTimeFormat());
+            dateFormat.setTimeZone(tz);
+        }
+        if (!dateFormat.getTimeZone().getID().equals(gmt)){
+            TimeZone tz = TimeZone.getTimeZone(gmt);
+            dateFormat.setTimeZone(tz);
+        }
+
+
+        return dateFormat;
+
+    }
     static public String getDateNowString(){
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-        df.setTimeZone(tz);
-        // creating DateTimeNow string
-        return df.format(new Date());
+        return getDateFormat(getIsoTimeFormat(), "UTC").format(new Date());
+    }
+    static private String toTimestamp(Date date){
+
+        return getDateFormat(getEsperTimeFormat(), "UTC").format(date);
+
+    }
+    static public String hashIt(String string){
+        MessageDigest SHA256 = null;
+        try {
+            SHA256 = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
+    }
+    static public Observation generateObservation(String id, Date date, Object observation, String resultType){
+
+        Sensor sen = new Sensor();
+        sen.setId(id);
+        sen.setObservations(null);
+        Datastream ds = new Datastream();
+        ds.setObservations(null);
+        ds.setId(hashIt(UUID.randomUUID().toString()));
+        Observation ob = new Observation();
+        ob.setDatastream(ds);
+        ob.setSensor(sen);
+        ob.setPhenomenonTime(new Date());
+        ob.setResultType(observation);
+        ob.setResultValue(resultType);
+        ob.setFeatureOfInterest(null);
+        return ob;
+
+    }
+    static public Observation generateObservation( Date date, Object observation, String resultType){
+       return generateObservation(UUID.randomUUID().toString(),date,observation,resultType);
+    }
+    static public Observation generateObservation( Date date, Object observation){
+        return  generateObservation(new Date(),observation, "Measure");
+    }
+    static public Observation generateObservation(  Object observation){
+
+        return  generateObservation(new Date(),observation);
     }
 }

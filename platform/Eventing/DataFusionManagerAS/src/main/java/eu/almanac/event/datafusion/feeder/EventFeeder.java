@@ -32,7 +32,7 @@ public class EventFeeder extends Feeder {
 
             try {
 
-                ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
+                Observation event = mapper.readValue(rawEvent,Observation.class);
                 event.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event, event.getClass());
