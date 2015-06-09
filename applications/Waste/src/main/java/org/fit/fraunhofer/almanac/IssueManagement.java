@@ -5,7 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Thing;
 
 import java.io.IOException;
 import java.util.*;
@@ -23,6 +25,7 @@ public class IssueManagement implements Observer{
     private HashMap<String, Issue> issueMap;
     private HashMap<String, Route> routeMap;
     private HashMap<String, Vehicle> vehicleMap;
+    private ArrayList<Thing> thingList;
     private static WasteMqttClient issuePubSub;
 
 
@@ -40,18 +43,18 @@ public class IssueManagement implements Observer{
 
 
     public IssueManagement(WasteMqttClient  wasteMqttClient){
-        issueMap = new HashMap();
-        routeMap = new HashMap();
-        vehicleMap = new HashMap();
+        issueMap = new HashMap<String, Issue>();
+        routeMap = new HashMap<String, Route>();
+        vehicleMap = new HashMap<String, Vehicle>();
 
         wasteMqttClient.addObserver(this);
         issuePubSub = wasteMqttClient;
     }
     public IssueManagement(WasteMqttClient wasteMqttClient, int count){
         // creates a map with a number count of issues
-        issueMap = new HashMap(count);
-        routeMap = new HashMap();
-        vehicleMap = new HashMap();
+        issueMap = new HashMap<String, Issue>(count);
+        routeMap = new HashMap<String, Route>();
+        vehicleMap = new HashMap<String, Vehicle>();
 
         wasteMqttClient.addObserver(this);
         issuePubSub = wasteMqttClient;
@@ -62,6 +65,38 @@ public class IssueManagement implements Observer{
             addIssue();
         }
     }
+    public IssueManagement(WasteMqttClient wasteMqttClient, ArrayList<Thing> thingListMetadata){
+        // creates a map of issues with the same number of elements as in the metadata file
+        issueMap = new HashMap<String, Issue>();
+        routeMap = new HashMap<String, Route>();
+        vehicleMap = new HashMap<String, Vehicle>();
+        thingList = new ArrayList<Thing>();
+        thingList.addAll(thingListMetadata);
+
+        wasteMqttClient.addObserver(this);
+        issuePubSub = wasteMqttClient;
+
+        Issue issue;;
+
+        double thingLongitude = 0.0;
+        double thingLatitude = 0.0;
+        String thingId = null;
+//        for (Thing thing : thingList) {
+        for (int i = 0 ; i < MIN_ISSUECOUNT ; i++){
+
+            org.geojson.LngLatAlt point =
+                    ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thingList.get(i).getLocations().toArray()[0]).getGeometry()).getCoordinates();
+
+            System.out.println("Thing's Id: " + thingList.get(i).getId());
+            System.out.println("Thing's Metadata: " + thingList.get(i).getMetadata());
+            System.out.println("Thing's Longitude: " + point.getLongitude());
+            System.out.println("Thing's Latitude: " + point.getLatitude());
+            System.out.println();
+
+            addIssue(thingList.get(i).getId(), point.getLongitude(), point.getLatitude());
+        }
+    }
+
     private ObjectMapper mapper = new ObjectMapper();
     // This callback is invoked whenever a Data Fusion message comes in saying that a
     // waste bin fill level has surpassed the threshold and is full. A new issue is
@@ -69,22 +104,44 @@ public class IssueManagement implements Observer{
     @Override
     public void update(Observable observable, Object arg) {
 
-        Observation event = null;
-        try {
-            event = mapper.readValue(((byte[])arg), Observation.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        try{
+            MqttTunnelledMessage data = (MqttTunnelledMessage)arg;
+            Observation obs = mapper.readValue(data.getPayload(), Observation.class);
+
+            // get the waste bin id: event result value
+            String binId = obs.getResultValue().toString();
+
+            // Now the resource catalogue can be used to find the specific waste bin holding the id and then get
+            // its location and bin type, before a new issue can be created.
+            // Resource Catalogue API use is missing here!!!!
+
+            //addIssue(binId, latitude, longitude);
+
+            if(issueMap.size() <= MIN_ISSUECOUNT) {  // do not add the issue is there are already 9 or more items
+                org.geojson.LngLatAlt thingLocation = findThingLocation(binId);
+                if (thingLocation != null) {
+                    // GeoJson specification contains location in this order: longitude, latitude
+                    addIssue(binId, thingLocation.getLatitude(), thingLocation.getLongitude());
+                }
+            }
+
+        }catch(Exception e) {
+                e.printStackTrace();
         }
 
+ //           event = mapper.readValue(((byte[])arg), Observation.class);
 
-        // get the waste bin id: event result value
-        String id = event.getResultValue().toString();
+    }
 
-        // Now the resource catalogue can be used to find the specific waste bin holding the id and then get
-        // its location and bin type, before a new issue can be created.
-        // Resource Catalogue API use is missing here!!!!
+    private org.geojson.LngLatAlt findThingLocation(String binId){
+        for (Thing thing : thingList) {
+            if (thing.getId() == binId) {
+                org.geojson.LngLatAlt point =((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thingList.get(0).getLocations().toArray()[0]).getGeometry()).getCoordinates();
 
-        //addIssue(binId, latitude, longitude, binType);
+                return point;
+            }
+        }
+        return null;
     }
 
     private void addIssue(){
@@ -92,9 +149,18 @@ public class IssueManagement implements Observer{
         issueMap.put(issue.id(), issue);
 
         // Route generation starts automatically after at least 10 issues have been created
-//        if(issueMap.size() >= MIN_ISSUECOUNT){
-        if(issueMap.size() >= 2){
+        if(issueMap.size() >= MIN_ISSUECOUNT){
                 generateRoute();
+        }
+    }
+
+    private void addIssue(String binId, double latitude, double longitude){
+        Issue issue = new Issue(binId, latitude, longitude);
+        issueMap.put(issue.id(), issue);
+
+        // Route generation/re-generation starts automatically after at least 10 issues have been created
+        if(issueMap.size() >= MIN_ISSUECOUNT){
+            generateRoute();
         }
     }
 
@@ -103,8 +169,7 @@ public class IssueManagement implements Observer{
         issueMap.put(issue.id(), issue);
 
         // Route generation/re-generation starts automatically after at least 10 issues have been created
-//        if(issueMap.size() >= MIN_ISSUECOUNT){
-        if(issueMap.size() >= 2){
+        if(issueMap.size() >= MIN_ISSUECOUNT){
             generateRoute();
         }
     }
@@ -115,31 +180,28 @@ public class IssueManagement implements Observer{
     //    route.generateRoute(issueMap);  // this is simplified: In the first go, the route will be generated out
                                          // of all issues. It is assumed that all issues will belong to the same route.
 
+        if(!issueMap.isEmpty()){
+            ArrayList<RouteEndpoint> routeEndpointList = new ArrayList<RouteEndpoint>();
 
-        if(!issueMap.isEmpty()) {
-            //ArrayList<RouteEndpoints> routeEndpointsList = new ArrayList();
-            RouteEndpointsList routeEndpointsList = new RouteEndpointsList();
-
-            RouteEndpoint aux = new RouteEndpoint();
             for (Map.Entry<String, Issue> entry : issueMap.entrySet()) {
+                RouteEndpoint aux = new RouteEndpoint();
                 Issue values = entry.getValue();
 
-                aux.id(values.id());
-                aux.geoLocation(values.latitude(), values.longitude());
+                aux.setId(values.id());
+                aux.setGeoLocation(values.latitude(), values.longitude());
 
-                routeEndpointsList.add(aux);
+                routeEndpointList.add(aux);
             }
-
             // route endpoints will be formatted to Json: [{"id":"<id>","geoLocation":{"latitude":0.0,"longitude":0.0}},{
             Gson gsonObj = new Gson();
 
-            String issueGson = gsonObj.toJson(routeEndpointsList);
+            String issueGson = gsonObj.toJson(routeEndpointList);
 //            System.out.println(gsonObj.toJson(routeEndpointsList));
 
             // now it's about publishing the route (more specifically, the geolocation of the issues contained in the route),
             // so that the Driver-App can listen to it, use Google DirectionsService to calculate the route and render it.
             issuePubSub.publish("route", issueGson);
-
+            System.out.println("Route endpoints published under topic route!!");
         }
     }
 
@@ -309,6 +371,21 @@ public class IssueManagement implements Observer{
                 geoLocation = new Location();
                 geoLocation = location;
                 type = IssueType.NONE;
+
+                hookToObserver();
+            }
+        }
+
+        public Issue(String binId, double latitude, double longitude) {
+            UniqueId uId = new UniqueId();
+            id = uId.generateUUID();
+            if(!id.isEmpty()) {
+                creationDate = new Date();
+                state = State.OPEN;
+                priority = Priority.MINOR;
+                geoLocation = new Location(latitude, longitude);
+                //               type = getType(binType);       this can be specified later on, not relevant for IoT demo
+                resource = binId;
 
                 hookToObserver();
             }

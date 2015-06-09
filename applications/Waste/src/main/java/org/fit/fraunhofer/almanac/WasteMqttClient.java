@@ -28,10 +28,11 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
 
     private void openMqttConnection(){
         try {
-            mqttClient = new MqttClient("tcp://localhost:1883","waste", new MemoryPersistence());
+//            mqttClient = new MqttClient("tcp://localhost:1883","waste", new MemoryPersistence());
+            mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883","waste", new MemoryPersistence());
             mqttClient.setCallback(this);
             mqttClient.connect();
-            subscribe("/almanac/observation/iotentity/fullwastebins");
+            subscribe("/federation1/amiat/v2/cep/"); // after cep I need still the query code which Ángel will generate
         } catch (MqttException e) {
             e.printStackTrace();
         }
