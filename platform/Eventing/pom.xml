@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.almanac</groupId>
 	<artifactId>eu.almanac.eventing</artifactId>
@@ -7,36 +7,53 @@
 	<packaging>pom</packaging>
 	<name>Eventing</name>
 	<description>ALMANAC Eventing and Data Fusion</description>
-
 	<modules>
-
     <module>DataFusionAPI</module>
     <module>DataFusionCoreAPI</module>
     <module>DataFusionManagerAS</module>
-        <module>Client</module>
-        <module>SDKLibrary</module>
-    </modules>
+    <module>Client</module>
+    <module>SDKLibrary</module>
+  </modules>
 	<repositories>
 		<repository>
 			<id>maven</id>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
-
+    <repository>
+			<id>almanac-snapshots</id>
+			<url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>
+		</repository>
+	   <repository>
+		  <id>almanac-releases</id>
+		  <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>
+	  </repository>
    <repository>
       <id>opencast-public</id>
       <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>
     </repository>
-        <repository>
-            <id>central</id>
-            <url>https://linksmart.eu/repo/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
+    <repository>
+        <id>central</id>
+        <url>https://linksmart.eu/repo/content/groups/public/</url>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+        </snapshots>
+    </repository>
+  </repositories>
+  <distributionManagement>
+		<snapshotRepository>
+			<uniqueVersion>true</uniqueVersion>
+			<id>almanac-snapshots</id>
+			<url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>			
+		</snapshotRepository>
+		<repository>
+		  <uniqueVersion>false</uniqueVersion>
+			<id>almanac-releases</id>
+			<url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>			
+		</repository>
+	</distributionManagement>
 </project>
