@@ -1,0 +1,12 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:src="@drawable/speech"
+        android:layout_width="match_parent"
+        android:layout_height="512dp"
+        android:scaleType="center"
+        android:background="#FFFFFF"
+        android:contentDescription="@string/app_name" />
+</LinearLayout>
