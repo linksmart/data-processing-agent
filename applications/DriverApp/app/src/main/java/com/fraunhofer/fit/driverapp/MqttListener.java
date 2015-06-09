@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -17,7 +18,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.fit.fraunhofer.almanac.RouteEndpoint;
 import org.fit.fraunhofer.almanac.RouteEndpointsList;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by devasya on 26.05.2015.
@@ -25,13 +28,14 @@ import java.util.ArrayList;
 public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     private final String TAG = "MqttListener";
-    private final String TOPIC = "route";
+    private final String TOPIC = "/almanac/route";
     private MqttAndroidClient mClient ;
     private Context mContext;
     RouteUpdateHandler mRouteUpdateHandler;
 
     public void connect(Context context,RouteUpdateHandler routeUpdateHandler){
         mRouteUpdateHandler = routeUpdateHandler;
+        mContext = context;
         new MqttserviceTask().execute(context);
 
 
@@ -46,11 +50,16 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
 
         String issueGson = new String(mqttMessage.getPayload());
-
+        Log.i(TAG, "got message:" + issueGson );
         Gson gsonObj = new Gson();
-        RouteEndpointsList routeEndpointsList = gsonObj.fromJson(issueGson, RouteEndpointsList.class);
-        Log.i(TAG, "got message:" + issueGson + "object:" + routeEndpointsList.getString());
-        mRouteUpdateHandler.handleUpdateNodeList(routeEndpointsList.getRouteList());
+        Type listType = new TypeToken<List<RouteEndpoint>>() {
+        }.getType();
+        ArrayList<RouteEndpoint> routeEndpointsList = gsonObj.fromJson(issueGson,listType);
+        Log.i(TAG, "object:" + routeEndpointsList.size());
+        for(RouteEndpoint routeEndpoint:routeEndpointsList){
+            Log.i(TAG,routeEndpoint.getString());
+        }
+        mRouteUpdateHandler.handleUpdateNodeList(routeEndpointsList);
     }
 
     @Override
@@ -66,34 +75,32 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         } catch (MqttException e) {
             Log.e(TAG, "Failed to suscribe because " + e.toString());
         }
+        if(mContext.getResources().getBoolean(R.bool.testLocally)) {
+            try {
+                // String myMessage = "Hi hello how are you";
+                ArrayList<RouteEndpoint> routeEndpointsList = new ArrayList<RouteEndpoint>();
 
-        try {
-           // String myMessage = "Hi hello how are you";
-            ArrayList<RouteEndpoint>  routeEndpointsList = new ArrayList<RouteEndpoint>();
+
+                RouteEndpoint TOY_BIN = new RouteEndpoint();
+
+                TOY_BIN.geoLocation(45.061148, 7.700376);//45.064537048339844, 7.696494102478027);//45.06723305,    7.70074879);
+                TOY_BIN.setId("TOY_BIN");
+                routeEndpointsList.add(TOY_BIN);
 
 
-            RouteEndpoint SIEGBURG = new RouteEndpoint();
-            SIEGBURG.geoLocation(50.793748, 7.202097);
-            SIEGBURG.setId("SIEGBURG");
-            routeEndpointsList.add(SIEGBURG);
+                Gson gsonObj = new Gson();
+                String issueGson = gsonObj.toJson(routeEndpointsList);
 
-            RouteEndpoint TROISDORF = new RouteEndpoint();
-            TROISDORF.geoLocation(50.824345, 7.127174);
-            TROISDORF.setId("TROISDORF");
-            routeEndpointsList.add(TROISDORF);
-
-            Gson gsonObj = new Gson();
-            String issueGson = gsonObj.toJson(new RouteEndpointsList(routeEndpointsList));
-
-            mClient.publish(TOPIC, issueGson.getBytes(), 1, false);
-        } catch (MqttException e) {
-            Log.e(TAG, "Failed to publish because " + e.toString());
+                mClient.publish(TOPIC, issueGson.getBytes(), 1, false);
+            } catch (MqttException e) {
+                Log.e(TAG, "Failed to publish because " + e.toString());
+            }
         }
     }
 
     @Override
     public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-        Log.i(TAG, "connection  failed");
+        Log.i(TAG, "connection  failed" + throwable.getMessage());
     }
 
     public void disconnect() {
@@ -111,7 +118,8 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
         @Override
         protected String doInBackground(Context... params) {
-            mClient = new MqttAndroidClient(params[0],"tcp://m2m.eclipse.org:1883","FitClient");
+
+            mClient = new MqttAndroidClient(params[0],"tcp://m2m.eclipse.org:1883","FitClient");//tcp://m2m.eclipse.org:1883
 
 
             MqttConnectOptions connOpts = new MqttConnectOptions();

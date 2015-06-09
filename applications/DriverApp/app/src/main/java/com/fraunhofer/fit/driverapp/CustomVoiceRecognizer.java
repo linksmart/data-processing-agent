@@ -49,9 +49,12 @@ public class CustomVoiceRecognizer {
         sr.startListening(intent);
     }
 
-    public  void stopListening(){
+    public  void stopListening (){
         mStopListening = true;
-        sr.destroy();
+        if(sr != null) {
+            sr.destroy();
+            sr = null;
+        }
     }
     class VoiceActionListener implements RecognitionListener
     {
@@ -81,7 +84,6 @@ public class CustomVoiceRecognizer {
             Log.i(TAG, "error " + error);
             if(!mStopListening) {
                 mListener.onNoResult();
-                sr.destroy();
             }
         }
         public void onResults(Bundle results)
@@ -94,12 +96,12 @@ public class CustomVoiceRecognizer {
             for (String key:data)
             {
                 Log.i(TAG, "user said " + key);
-                if( key.equals("Ok, show me the route") || key.equals("show me the route")|| key.equals("yes")){
+                if( key.contains("yes")|| key.contains("okay")|| key.contains("ok") ){
                     Log.i(TAG, "Hurray!!User said Yes!!");
                     mListener.onPositive();
                     mStopListening = true;
                     break;
-                }else if(key.equals("no")){
+                }else if(key.contains("no")){
                     mListener.onNegative();
                     mStopListening = true;
                     break;
@@ -109,7 +111,6 @@ public class CustomVoiceRecognizer {
             if(!mStopListening){
                 mListener.onNoResult();
             }
-            sr.destroy();
         }
         public void onPartialResults(Bundle partialResults)
         {
