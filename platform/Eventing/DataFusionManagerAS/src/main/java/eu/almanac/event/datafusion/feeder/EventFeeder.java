@@ -1,7 +1,9 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.almanac.event.datafusion.logging.LoggerHandler;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import eu.almanac.event.datafusion.intern.ConfigurationManagement;
+import eu.almanac.event.datafusion.intern.LoggerService;
 import eu.almanac.event.datafusion.utils.payload.OGCSensorThing.ObservationNumber;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
@@ -17,22 +19,37 @@ public class EventFeeder extends Feeder {
 
     }
 
+    private static String getThingID(String topic){
+        String [] aux = topic.split("/");
+        return aux[aux.length-2];
+    }
     @Override
     protected void mangeEvent(String topic,byte[] rawEvent) {
         try {
+            String id= getThingID(topic);
             if(mapper==null)
                 mapper = new ObjectMapper();
-            ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
 
-            LoggerHandler.report("info", "message arrived with ID: " + event.getSensor().getId());
-            if(event.getResultValue() == null) {
-                Observation event1 = mapper.readValue(rawEvent,Observation.class);
+            try {
 
-                for (DataFusionWrapper i : dataFusionWrappers.values())
-                    i.addEvent(topic, event1, event1.getClass());
-            }else
+                ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
+                event.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event, event.getClass());
+                LoggerService.report("info", "message arrived with ID: " + event.getSensor().getId());
+            }catch (InvalidFormatException e){
+                Observation event1 = mapper.readValue(rawEvent,Observation.class);
+
+                event1.setId(id);
+                for (DataFusionWrapper i : dataFusionWrappers.values())
+                    i.addEvent(topic, event1, event1.getClass());
+                LoggerService.report("info", "message arrived with ID: " + event1.getSensor().getId());
+            }
+
+
+
+
+
         }catch(Exception e){
             e.printStackTrace();
 

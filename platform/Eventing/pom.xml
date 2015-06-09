@@ -9,6 +9,7 @@
 	<description>ALMANAC Eventing and Data Fusion</description>
 
 	<modules>
+
     <module>DataFusionAPI</module>
     <module>DataFusionCoreAPI</module>
     <module>DataFusionManagerAS</module>

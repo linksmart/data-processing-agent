@@ -2,10 +2,15 @@ package eu.almanac.event.datafusion.esper.utils;
 
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
+import javax.xml.crypto.Data;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Tools {
+    static private Map<String, Object> variables= new HashMap<>();
     static public Random Random = new Random();
         static public IoTEntityEvent CreateIoTEntity(String entity, String property, String observation ){
 
@@ -116,6 +121,10 @@ public class Tools {
         System.out.println(false);
         return false;
     }
+    static public long getMilliseconds(Date date){
+        return date.getTime();
+    }
+
     static public Boolean likeProperty(IoTEntityEvent entity, String property) {
 
 
@@ -157,6 +166,64 @@ public class Tools {
         System.out.println("test");
         return "hola";
     }
+   /* static public boolean growing(Object[] objects){
+        if (objects.length<2)
+            return true;
+        Observation[] observations = (Observation[])objects;
+        for (int i=1;i<objects.length;i++)
+            if((Double)observations[i-1].getResultValue()> (Double)observations[i].getResultValue())
+                return false;
 
+        return true;
+    }
+*/
+    static public boolean growing(Object[] objects){
+        if (objects.length<2)
+            return true;
+        Observation[] observations = (Observation[])objects;
+        Map<String,Map<Integer,Observation> > accumulatedTruth = new HashMap<>();
+        for (Observation observation: observations) {
+            if (!accumulatedTruth.containsKey(observation.getId()))
+                accumulatedTruth.put(observation.getId(), new HashMap<Integer, Observation>());
 
+            accumulatedTruth.get(observation.getId()).put(accumulatedTruth.get(observation.getId()).size() - 1, observation);
+        }
+        for (int i=1;i<objects.length;i++)
+            if((Double)observations[i-1].getResultValue()> (Double)observations[i].getResultValue())
+                return false;
+
+        return true;
+    }
+   static public Map growingSamples(Object[] objects){
+
+       Map<String,Double > lastPerID = new HashMap<>();
+       Map<String,Boolean > accumulatedTruth = new HashMap<>();
+       for (Observation ob :(Observation[])objects) {
+           if (lastPerID.containsKey(ob.getId())) {
+               if(accumulatedTruth.containsKey(ob.getId())) {
+                   if (accumulatedTruth.get(ob.getId())) {
+                       accumulatedTruth.put(ob.getId(), lastPerID.get(ob.getId()) < (Double) ob.getResultValue());
+                   }
+               }else
+                   accumulatedTruth.put(ob.getId(),lastPerID.get(ob.getId())<(Double)ob.getResultValue());
+
+           } else {
+               lastPerID.put(ob.getId(),(Double)ob.getResultValue());
+           }
+       }
+
+       return accumulatedTruth;
+   }
+    static public boolean compareObservationsInLapsedTime(Object ob2){
+        return true;
+
+    }
+
+    static public String getDateNowString(){
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        df.setTimeZone(tz);
+        // creating DateTimeNow string
+        return df.format(new Date());
+    }
 }
