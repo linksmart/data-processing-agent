@@ -26,6 +26,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -104,6 +105,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     MqttListener mqttListener;
     CustomVoiceRecognizer mCustomVoiceRecognizer;
     List<Polygon> mPolygonList = new LinkedList<>();
+    List<Marker> markerList = new LinkedList<>();
 
     CustomVoiceRecognizer.NoticeDialogListener mVoiceListener = new CustomVoiceRecognizer.NoticeDialogListener() {
         @Override
@@ -118,6 +120,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         public void onNegative() {
             Log.i(TAG, "onNegative");
             stopGettingUserInput();
+            removeUpdate();
             tellToDriver(UTTER_NOTHING_UPDATED);
 
         }
@@ -236,10 +239,29 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
                 .position(routeEndpoint.getLatLng())
                 .title(routeEndpoint.getId())
                 .icon(trashIcon);
-        mMap.addMarker(markerOptions);
+        Marker marker = mMap.addMarker(markerOptions);
+        markerList.add(marker);
         mRouteEndpointList.add(routeEndpoint);
 
     }
+
+    private void removeDustBinMap(RouteEndpoint routeEndpoint){
+
+        for (Marker marker:markerList){
+            if(marker.getPosition().latitude == routeEndpoint.getLatLng().latitude && marker.getPosition().longitude == routeEndpoint.getLatLng().longitude){
+                marker.remove();
+                markerList.remove(marker);
+                break;
+            }
+        }
+
+        for (RouteEndpoint routeEndpoint1:mRouteEndpointList){
+            if(routeEndpoint1.getLatLng().latitude == routeEndpoint.getLatLng().latitude && routeEndpoint1.getLatLng().longitude == routeEndpoint.getLatLng().longitude){
+                mRouteEndpointList.remove(routeEndpoint1);
+                break;
+            }
+        }
+     }
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
      * just add a marker near Africa.
@@ -332,51 +354,31 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
          request.setCallback(new PendingResult.Callback<DirectionsRoute[]>() {
              @Override
              public void onResult(DirectionsRoute[] result) {
-                 final List<PolygonOptions> polygonOptionsList = new LinkedList<PolygonOptions>();
-                // final PolygonOptions polygonOptions = new PolygonOptions();
-
-                 Resources res = getResources();
-                 int width =   res.getInteger(R.integer.map_polygon_width);
-                 Log.i(TAG, "setting width=" + width);
+                 final PolygonOptions polygonOptions = new PolygonOptions();
                  for (DirectionsRoute directionsRoute : result) {
                      Log.i(TAG, "got the result successfully");
 
                      Log.i(TAG, directionsRoute.summary);
                      List<com.google.maps.model.LatLng> pathlist = directionsRoute.overviewPolyline.decodePath();
-                     for (int i = 0; i<pathlist.size()-1;i++) {
-                         com.google.maps.model.LatLng curPt = pathlist.get(i);
-                         com.google.maps.model.LatLng nxtPt = pathlist.get(i+1);
-
-                         PolygonOptions polygonOptions = new PolygonOptions();
-
-                     //    polygonOptions.add(new LatLng(curPt.lat- 0.1 *(nxtPt.lng-curPt.lng), curPt.lng-0.1 *(nxtPt.lat-curPt.lat)));
-                       //  polygonOptions.add(new LatLng(curPt.lat+0.1 *(nxtPt.lng-curPt.lng), curPt.lng+0.1 *(nxtPt.lat-curPt.lat)));
-                         polygonOptions.add(new LatLng(curPt.lat, curPt.lng));
-                         polygonOptions.add(new LatLng(nxtPt.lat, nxtPt.lng));
-
-
-                         polygonOptions.strokeColor(color);
-                         polygonOptions.fillColor(Color.DKGRAY);
-
-
-                         polygonOptions.strokeWidth(width);
-                         polygonOptions.zIndex(zindex);
-
-                         polygonOptionsList.add(polygonOptions);
-
+                     for (com.google.maps.model.LatLng path : pathlist) {
+                         polygonOptions.add(new LatLng(path.lat, path.lng));
                      }
-
                  }
 
-
+                 Resources res = getResources();
+                 polygonOptions.strokeColor(res.getColor(R.color.polyline_color));
+                 Log.i(TAG, "setting width=" + res.getInteger(R.integer.map_polygon_width));
+                 polygonOptions.strokeWidth(res.getInteger(R.integer.map_polygon_width));
+                 polygonOptions.strokeColor(color);
+                 polygonOptions.zIndex(zindex);
 
                  runOnUiThread(new Runnable() {
                      @Override
                      public void run() {
-                         for(PolygonOptions polygonOptions:polygonOptionsList) {
-                             Polygon currentPolygon = mMap.addPolygon(polygonOptions);
-                            // mPolygonList.add(currentPolygon);
-                         }
+
+                         Polygon currentPolygon = mMap.addPolygon(polygonOptions);
+                         mPolygonList.add(currentPolygon);
+
                      }
                  });
 
@@ -397,7 +399,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         for(RouteEndpoint routeEndpoint:mPendingRoutesToAdd){
             addDustBinMap(routeEndpoint);
         }
-        mPendingRoutesToAdd.clear();
+     //   mPendingRoutesToAdd.clear();
         CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_update_route_color), 0, false);
         tellToDriver(UTTER_UPDATE_SUCCESS);
         // getUserConfirmationForUpdate();
@@ -406,15 +408,33 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
     public void updateMapWithNewRoute() {
         //TODO:Should this be synchronized for mPendingRoutesToAdd?
-        for(RouteEndpoint routeEndpoint:mPendingRoutesToAdd){
-            addDustBinMap(routeEndpoint);
-        }
         mPendingRoutesToAdd.clear();
-        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_update_route_color),0,false);
+        clearRoute();
+        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color),0,false);
         tellToDriver(UTTER_UPDATE_SUCCESS);
        // getUserConfirmationForUpdate();
 
     }
+
+    public void removeUpdate() {
+        //TODO:Should this be synchronized for mPendingRoutesToAdd?
+        for(RouteEndpoint routeEndpoint:mPendingRoutesToAdd){
+            removeDustBinMap(routeEndpoint);
+        }
+        mPendingRoutesToAdd.clear();
+        clearRoute();
+        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 0, false);
+        // getUserConfirmationForUpdate();
+
+    }
+    private void clearRoute() {
+        for (Polygon polygon:mPolygonList){
+            polygon.remove();
+        }
+        mPolygonList.clear();
+    }
+
+
 
     public void tellToDriver(String utterId){
         mUtteranceId =utterId;
@@ -574,22 +594,28 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
      @Override
      public void handleUpdateNodeList(ArrayList<RouteEndpoint> routeEndpointsList) {
-         if(mRouteEndpointList.isEmpty()){
-             for(RouteEndpoint routeEndpoint:routeEndpointsList){
-                 addDustBinMap(routeEndpoint);
-             }
-             CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
-             return;
 
-         }
          if(alreadyAdded(routeEndpointsList)) {
              Log.i(TAG, "already added");
              return;
          }
-             mPendingRoutesToAdd.addAll(routeEndpointsList);
-             tellToDriver(UTTER_ASK_FOR_UPDATE);
+        mPendingRoutesToAdd.addAll(routeEndpointsList);
+        addTemporaryPathForConfirmation();
+        tellToDriver(UTTER_ASK_FOR_UPDATE);
 
      }
+
+    @Override
+    public void handleInitNodeList(ArrayList<RouteEndpoint> routeEndpointsList) {
+        if(mRouteEndpointList.isEmpty()){
+            for(RouteEndpoint routeEndpoint:routeEndpointsList){
+                addDustBinMap(routeEndpoint);
+            }
+            CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
+            return;
+
+        }
+    }
 
     private boolean alreadyAdded(ArrayList<RouteEndpoint> routeEndpointsList) {
 

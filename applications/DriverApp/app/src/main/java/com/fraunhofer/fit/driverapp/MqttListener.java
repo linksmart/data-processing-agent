@@ -29,6 +29,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     private final String TAG = "MqttListener";
     private final String TOPIC = "/almanac/route";
+    private final String INIT_TOPIC = "/almanac/route/initial";
     private MqttAndroidClient mClient ;
     private Context mContext;
     RouteUpdateHandler mRouteUpdateHandler;
@@ -50,7 +51,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
 
         String issueGson = new String(mqttMessage.getPayload());
-        Log.i(TAG, "got message:" + issueGson );
+        Log.i(TAG, "got message:" +s +" "+ issueGson );
         Gson gsonObj = new Gson();
         Type listType = new TypeToken<List<RouteEndpoint>>() {
         }.getType();
@@ -59,7 +60,11 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         for(RouteEndpoint routeEndpoint:routeEndpointsList){
             Log.i(TAG,routeEndpoint.getString());
         }
-        mRouteUpdateHandler.handleUpdateNodeList(routeEndpointsList);
+        if(s.equals(TOPIC)) {
+            mRouteUpdateHandler.handleUpdateNodeList(routeEndpointsList);
+        }else if(s.equals(INIT_TOPIC)){
+            mRouteUpdateHandler.handleInitNodeList(routeEndpointsList);
+        }
     }
 
     @Override
@@ -72,6 +77,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         mClient.setCallback(this);
         try {
             mClient.subscribe(TOPIC,1);
+            mClient.subscribe(INIT_TOPIC,1);
         } catch (MqttException e) {
             Log.e(TAG, "Failed to suscribe because " + e.toString());
         }
