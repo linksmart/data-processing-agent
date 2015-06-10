@@ -309,7 +309,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                 mqttClient.publish(output + "/" + query.getHash(),   parser.writeValueAsString(ent).getBytes(), 0, false);
             }
         else
-            mqttClient.publish(ConfigurationManagement.FUSED_TOPIC + query.getHash(), gson.toJson(ent).getBytes(), 0, false);
+            mqttClient.publish(ConfigurationManagement.FUSED_TOPIC + query.getHash(), parser.writeValueAsString(ent).getBytes(), 0, false);
 
     }
 
