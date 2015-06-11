@@ -44,7 +44,7 @@ public class QueryFeeder extends Feeder {
                         success =false;
                     }
                     if (success)
-                        LoggerService.publish(ConfigurationManagement.STATEMENT_BASE_TOPIC + statement.getHash(), "Statement " + statement.getHash() + " was successfully added", null, true);
+                        LoggerService.publish(ConfigurationManagement.STATEMENT_BASE_TOPIC + statement.getHash(), "Statement " + statement.getHash() + " was successful", null, true);
 
                 }
 
