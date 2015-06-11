@@ -1,6 +1,6 @@
 //
-//  ViewController.swift
-//  Grapher
+//  ShowConsumptionVC.swift
+//  Water
 //
 //  Created by Thomas Gilbert on 07/05/15.
 //  Copyright (c) 2015 Thomas Gilbert. All rights reserved.
@@ -77,9 +77,8 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.dayView.graphPoints = [45,89,89,89,678,345,345]
-        self.containerView.setNeedsDisplay()
-        self.dayView.setNeedsDisplay()
+        self.dayView.graphPoints.append(self.dayView.graphPoints.last! + 10*Int(arc4random_uniform(500)))
+        self.dayView.graphPoints.removeAtIndex(0)
     }
 }
 
