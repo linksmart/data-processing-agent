@@ -314,7 +314,11 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         if(mMap != null) {
             mMap.clear();
         }
+
         mRouteEndpointList.clear();
+        mPendingRoutesToAdd.clear();
+        markerList.clear();
+        mPolygonList.clear();
     }
 
      private void startMqttListener(){
@@ -433,6 +437,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
     public void removeUpdate() {
         //TODO:Should this be synchronized for mPendingRoutesToAdd?
+        //Log.i(TAG,"pem")
         for(RouteEndpoint routeEndpoint:mPendingRoutesToAdd){
             removeDustBinMap(routeEndpoint);
         }

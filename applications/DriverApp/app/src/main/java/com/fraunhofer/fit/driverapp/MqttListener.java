@@ -27,6 +27,7 @@ import java.util.List;
 public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     private final String TAG = "MqttListener";
+    //TODO:topic and init_topic are not constants. should be read from strings.xml .. and the server URI too
     private final String topic = "/almanac/route";
     private final String init_topic = "/almanac/route/initial";
     private MqttAndroidClient mClient ;
@@ -74,7 +75,9 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     @Override
     public void onSuccess(IMqttToken iMqttToken) {
-
+        if(mClient == null || mClient.isConnected() == false){
+            return;
+        }
         mClient.setCallback(this);
         try {
             mClient.subscribe(topic,1);
@@ -146,7 +149,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         @Override
         protected String doInBackground(Context... params) {
             if(mClient == null) {
-                mClient = new MqttAndroidClient(params[0], "tcp://m2m.eclipse.org:1883", "FitClient");//tcp://m2m.eclipse.org:1883
+                mClient = new MqttAndroidClient(params[0], "tcp://almanac.fit.fraunhofer.de:1883", "FitClient");//tcp://m2m.eclipse.org:1883
 
 
                 MqttConnectOptions connOpts = new MqttConnectOptions();
