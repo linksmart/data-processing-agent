@@ -1,0 +1,1098 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04C9AC8DBEBAEF8969D9A5B6 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 175D995FF5C8140E854FB086 /* Alamofire.framework */; };
+		0991A1A2997E41B0EEE9141E /* AlmofireObjectMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6847AC8199B636AAF91A8AD /* AlmofireObjectMapper.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		0C67A27E80390A60C5D11770 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEFC0672EFE95F3A5798814B /* Foundation.framework */; };
+		10A5D5ECF0A156BEE30B9973 /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 327C0DA74D18CC95B672B9DB /* ObjectMapper.framework */; };
+		138F33440A18494EBC99F394 /* FromJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D4FC93DC402AC26D4FB30B /* FromJSON.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		1D8C127A1074E8DB91F83E3F /* Pods-Water-ObjectMapper-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CDCD9539D5F5AB0BB13F0A9A /* Pods-Water-ObjectMapper-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1ED9CBFBC3B543C0786AF5B1 /* EnumTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F3E5182ACF5D42C97A5B42 /* EnumTransform.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		200D58594B49740EC0878B3C /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C9CE3EAD6F54F39248BE05 /* Operators.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		24B4502843FC2609BE7F28C2 /* socket.io.js.h in Headers */ = {isa = PBXBuildFile; fileRef = DD1C6727063440FC8C61539F /* socket.io.js.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		268B12D8F6753AFE08136094 /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BC303AA344EA2019E745D6 /* ResponseSerialization.swift */; };
+		2C165ADD923F50EC867CBE19 /* SIOSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CC300866036C469B0D30F858 /* SIOSocket.m */; };
+		37CA26DDE237E3A0242902D7 /* Pods-Water-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AFB27D9785D97A2CBACF96F /* Pods-Water-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3FFE5F10CC374D0DA1BA11D7 /* Pods-Water-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C2BB874D65E33D170782F723 /* Pods-Water-Alamofire-dummy.m */; };
+		4055F733CDB016873B80BC17 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E143D9E56E155AD7B9C2F2FC /* Manager.swift */; };
+		44EA284A1CB05E42FBB08E05 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CA01B9F3B65E5DA8000AFF /* Alamofire.swift */; };
+		47F15ED8848E62BC86052FE1 /* ISO8601DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6081C6CC54DFE60E5962C6F /* ISO8601DateTransform.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		567A6F5525084E0C1394DB79 /* Pods-Water-AlamofireObjectMapper-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DB04481FACF433624B9B4457 /* Pods-Water-AlamofireObjectMapper-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6AB8966CF4C61D646D29D3AF /* Pods-Water-AlamofireObjectMapper-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 826BCF4E1082F2A5C29942B8 /* Pods-Water-AlamofireObjectMapper-dummy.m */; };
+		6C422E0A0EA619676C8FA27B /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A0E317B21C154CDCEFB6A7 /* Validation.swift */; };
+		7071EAE1E4ACF2FCEE250DF5 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D719ED9BAD954BDC94AAD0 /* Request.swift */; };
+		72282DFAD908B85C463D7D62 /* Pods-Water-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1934D298B3FEAA16C37F0159 /* Pods-Water-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		726E588D75EBB3DB16C7072A /* URLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787019B971D3B3C52216643A /* URLTransform.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		81084D945B0D535FEFFADA4B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEFC0672EFE95F3A5798814B /* Foundation.framework */; };
+		88CF26FBBE2A2966A7616915 /* SIOSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E3EF9D5F68076FBF0DE7630 /* SIOSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8BEDF4A734C1CA2910E6395E /* TransformType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E78787353D691A4D112E4C /* TransformType.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8E68AEBD21A836FDF45AFE85 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE92E31776FCEEB56D0128B /* ParameterEncoding.swift */; };
+		9FF6F2B6B7B05982975246B3 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE4CCC26DB7CC364079C75E /* DateTransform.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		AB376637DB312D2BB801C361 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEFC0672EFE95F3A5798814B /* Foundation.framework */; };
+		ADC20A3D9FA14D57BDB5B981 /* ToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC00313596E61EFFE019C97 /* ToJSON.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		AF7BF1ECCA8D8E1E5EB16A18 /* CustomDateFormatTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14648BF1F2163ED108AAC4EF /* CustomDateFormatTransform.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B13A848213FE8FBF40A75E3F /* Pods-Water-SIOSocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F9352F26A6F0D72B68AD752 /* Pods-Water-SIOSocket-dummy.m */; };
+		B6598C36DE89251AB1B27ECD /* Pods-Water-SIOSocket-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 95220FE0A2E7EB100839022D /* Pods-Water-SIOSocket-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BBB386FA520A9697D3B47A3C /* DateFormaterTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9FC5931A96A319053EE599 /* DateFormaterTransform.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C014AB3E295DA562A04C6C06 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB18B0F2D6DE9A8C180C023 /* Upload.swift */; };
+		DA8C42B832AB466CDAD2A1D8 /* Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2EC3A8F871CFA18CA8E7E0 /* Mapper.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DDC4DC779B65D8DAA2FEB6C5 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D24F54FCDB2BE23A320F861 /* Download.swift */; };
+		DFDB1758EDC1FDED46251A32 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEFC0672EFE95F3A5798814B /* Foundation.framework */; };
+		EC911EA34C69CE16402242FC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEFC0672EFE95F3A5798814B /* Foundation.framework */; };
+		FA53547ECF1CB830B6B66D14 /* TransformOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C02D52D178F197AD1F5AB /* TransformOf.swift */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FDD7DD783F4DBB8343677218 /* Pods-Water-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = DD24F468F98DE0C015F4284B /* Pods-Water-dummy.m */; };
+		FF5611AB8F6D8C5EECDDD871 /* Pods-Water-ObjectMapper-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 777B139732495DC098A52B7B /* Pods-Water-ObjectMapper-dummy.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0FE777C6D0AFD0DB80F6215A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B0487C842C7CAA70E75F951 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DEA811AC05AE34A296846892;
+			remoteInfo = "Pods-Water-Alamofire";
+		};
+		42EFD8E6B783FC1FC7DF508D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B0487C842C7CAA70E75F951 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7218A8CB3830035D7E3167A3;
+			remoteInfo = "Pods-Water-SIOSocket";
+		};
+		A66A5EB0E2A4D22DBE645923 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B0487C842C7CAA70E75F951 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C6867D9565E0780A4DB443D6;
+			remoteInfo = "Pods-Water-ObjectMapper";
+		};
+		C7BD509D6D1C67CAABFD7198 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B0487C842C7CAA70E75F951 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5AEB8C2AFFA561B9CE328FCD;
+			remoteInfo = "Pods-Water-AlamofireObjectMapper";
+		};
+		DAA631A9DBF7DC9544D7EE1A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B0487C842C7CAA70E75F951 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C6867D9565E0780A4DB443D6;
+			remoteInfo = "Pods-Water-ObjectMapper";
+		};
+		E53811694C470E8CFC3BE430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B0487C842C7CAA70E75F951 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DEA811AC05AE34A296846892;
+			remoteInfo = "Pods-Water-Alamofire";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		059AACE2E396FD000A24C6D8 /* Pods-Water-AlamofireObjectMapper.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Water-AlamofireObjectMapper.modulemap"; sourceTree = "<group>"; };
+		05B13BA9B93FBB0A54CF28CB /* AlamofireObjectMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AlamofireObjectMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		09C525E3DCD20B465A9BDA8D /* Pods-Water-AlamofireObjectMapper-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water-AlamofireObjectMapper-Private.xcconfig"; sourceTree = "<group>"; };
+		0AE92E31776FCEEB56D0128B /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
+		0B8A8E23F7DF91B827855D42 /* Pods-Water.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water.debug.xcconfig"; sourceTree = "<group>"; };
+		0C2EC3A8F871CFA18CA8E7E0 /* Mapper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Mapper.swift; path = ObjectMapper/Core/Mapper.swift; sourceTree = "<group>"; };
+		114B0352F4CA3A959052C5E9 /* Pods-Water-AlamofireObjectMapper.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water-AlamofireObjectMapper.xcconfig"; sourceTree = "<group>"; };
+		14648BF1F2163ED108AAC4EF /* CustomDateFormatTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CustomDateFormatTransform.swift; path = ObjectMapper/Transforms/CustomDateFormatTransform.swift; sourceTree = "<group>"; };
+		175D995FF5C8140E854FB086 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		17AE5B108DF624DB82D2C372 /* Pods-Water-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Water-frameworks.sh"; sourceTree = "<group>"; };
+		17CA01B9F3B65E5DA8000AFF /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
+		1934D298B3FEAA16C37F0159 /* Pods-Water-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-Alamofire-umbrella.h"; sourceTree = "<group>"; };
+		24D4FC93DC402AC26D4FB30B /* FromJSON.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FromJSON.swift; path = ObjectMapper/Core/FromJSON.swift; sourceTree = "<group>"; };
+		2739F751AEE6EA8548166B01 /* Pods-Water.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water.release.xcconfig"; sourceTree = "<group>"; };
+		30D719ED9BAD954BDC94AAD0 /* Request.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Source/Request.swift; sourceTree = "<group>"; };
+		327C0DA74D18CC95B672B9DB /* ObjectMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		353DF5B445F01467A2A62BAA /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		382D9BA5A6BEB08F21E362FC /* SIOSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SIOSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		39EBC53D9DD632F72E7EA2C0 /* Pods-Water-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Water-Alamofire.modulemap"; sourceTree = "<group>"; };
+		3AFB27D9785D97A2CBACF96F /* Pods-Water-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-umbrella.h"; sourceTree = "<group>"; };
+		3DC00313596E61EFFE019C97 /* ToJSON.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ToJSON.swift; path = ObjectMapper/Core/ToJSON.swift; sourceTree = "<group>"; };
+		3E3EF9D5F68076FBF0DE7630 /* SIOSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIOSocket.h; path = SocketIO/Source/SIOSocket.h; sourceTree = "<group>"; };
+		404C02D52D178F197AD1F5AB /* TransformOf.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TransformOf.swift; path = ObjectMapper/Transforms/TransformOf.swift; sourceTree = "<group>"; };
+		46E78787353D691A4D112E4C /* TransformType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TransformType.swift; path = ObjectMapper/Transforms/TransformType.swift; sourceTree = "<group>"; };
+		53D03FF70921496055769A6E /* ObjectMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BC9C99F5DAD3F925FA071A3 /* Pods-Water-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water-Alamofire.xcconfig"; sourceTree = "<group>"; };
+		5BE4CCC26DB7CC364079C75E /* DateTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DateTransform.swift; path = ObjectMapper/Transforms/DateTransform.swift; sourceTree = "<group>"; };
+		5F9352F26A6F0D72B68AD752 /* Pods-Water-SIOSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Water-SIOSocket-dummy.m"; sourceTree = "<group>"; };
+		6554FDA84C66869AECA62D66 /* Pods-Water-Alamofire-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water-Alamofire-Private.xcconfig"; sourceTree = "<group>"; };
+		68F31E447624AF4486569D0E /* Pods_Water.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Water.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B2568B3931D63C8FAF84699 /* Pods-Water-SIOSocket-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water-SIOSocket-Private.xcconfig"; sourceTree = "<group>"; };
+		6DD03CF7FD6D0A8A19EE3E0B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		777B139732495DC098A52B7B /* Pods-Water-ObjectMapper-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Water-ObjectMapper-dummy.m"; sourceTree = "<group>"; };
+		787019B971D3B3C52216643A /* URLTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = URLTransform.swift; path = ObjectMapper/Transforms/URLTransform.swift; sourceTree = "<group>"; };
+		7BAE97D1C11577F20510BF81 /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		7FC42934A78BE18BA6F25446 /* Pods-Water-AlamofireObjectMapper-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-AlamofireObjectMapper-prefix.pch"; sourceTree = "<group>"; };
+		80A0E317B21C154CDCEFB6A7 /* Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Source/Validation.swift; sourceTree = "<group>"; };
+		826BCF4E1082F2A5C29942B8 /* Pods-Water-AlamofireObjectMapper-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Water-AlamofireObjectMapper-dummy.m"; sourceTree = "<group>"; };
+		87A7F3804101743F2C53CBA9 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		88A4E6B388E68A0053CCA953 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A9FC5931A96A319053EE599 /* DateFormaterTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DateFormaterTransform.swift; path = ObjectMapper/Transforms/DateFormaterTransform.swift; sourceTree = "<group>"; };
+		8E6CFF076622E030E1943767 /* Pods-Water-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Water-acknowledgements.plist"; sourceTree = "<group>"; };
+		90F99EDBA28BA55D6D594921 /* Pods-Water-ObjectMapper.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water-ObjectMapper.xcconfig"; sourceTree = "<group>"; };
+		91C9CE3EAD6F54F39248BE05 /* Operators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Operators.swift; path = ObjectMapper/Core/Operators.swift; sourceTree = "<group>"; };
+		95220FE0A2E7EB100839022D /* Pods-Water-SIOSocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-SIOSocket-umbrella.h"; sourceTree = "<group>"; };
+		96BC303AA344EA2019E745D6 /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
+		9BAD43329D3090F95CAC3183 /* Pods-Water-ObjectMapper.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Water-ObjectMapper.modulemap"; sourceTree = "<group>"; };
+		9D24F54FCDB2BE23A320F861 /* Download.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Download.swift; path = Source/Download.swift; sourceTree = "<group>"; };
+		A6847AC8199B636AAF91A8AD /* AlmofireObjectMapper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlmofireObjectMapper.swift; path = AlamofireObjectMapper/AlmofireObjectMapper.swift; sourceTree = "<group>"; };
+		BBB18B0F2D6DE9A8C180C023 /* Upload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Upload.swift; path = Source/Upload.swift; sourceTree = "<group>"; };
+		BBCA7B3D69AB28D9431BAF30 /* Pods-Water-ObjectMapper-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-ObjectMapper-prefix.pch"; sourceTree = "<group>"; };
+		BE5AA9A972F4FD7BE82A8931 /* Pods-Water-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-Alamofire-prefix.pch"; sourceTree = "<group>"; };
+		C2BB874D65E33D170782F723 /* Pods-Water-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Water-Alamofire-dummy.m"; sourceTree = "<group>"; };
+		C6081C6CC54DFE60E5962C6F /* ISO8601DateTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ISO8601DateTransform.swift; path = ObjectMapper/Transforms/ISO8601DateTransform.swift; sourceTree = "<group>"; };
+		C9A65A0F272D1F43CAA3F413 /* Pods-Water-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-environment.h"; sourceTree = "<group>"; };
+		CC300866036C469B0D30F858 /* SIOSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIOSocket.m; path = SocketIO/Source/SIOSocket.m; sourceTree = "<group>"; };
+		CDCD9539D5F5AB0BB13F0A9A /* Pods-Water-ObjectMapper-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-ObjectMapper-umbrella.h"; sourceTree = "<group>"; };
+		D2F4A82BDAF1C96A85B749C4 /* Pods-Water-SIOSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-SIOSocket-prefix.pch"; sourceTree = "<group>"; };
+		D98CF42757C4CB81BDEDCA76 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DB04481FACF433624B9B4457 /* Pods-Water-AlamofireObjectMapper-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Water-AlamofireObjectMapper-umbrella.h"; sourceTree = "<group>"; };
+		DD1C6727063440FC8C61539F /* socket.io.js.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = socket.io.js.h; path = SocketIO/Source/socket.io.js.h; sourceTree = "<group>"; };
+		DD24F468F98DE0C015F4284B /* Pods-Water-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Water-dummy.m"; sourceTree = "<group>"; };
+		DE6813C533FE1485B538BC60 /* Pods-Water-SIOSocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Water-SIOSocket.modulemap"; sourceTree = "<group>"; };
+		E1189E2D6CB22B1663E4B46A /* Pods-Water-ObjectMapper-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water-ObjectMapper-Private.xcconfig"; sourceTree = "<group>"; };
+		E143D9E56E155AD7B9C2F2FC /* Manager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Manager.swift; path = Source/Manager.swift; sourceTree = "<group>"; };
+		EB0984AE3C80CFBB21E00497 /* Pods-Water.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Water.modulemap"; sourceTree = "<group>"; };
+		EC3F3E3A5109A600C52EDFB5 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED1B392EF06DFC6A8B0DC328 /* Pods-Water-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Water-acknowledgements.markdown"; sourceTree = "<group>"; };
+		EEFC0672EFE95F3A5798814B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		F15ED50E25AFE7603A637494 /* Pods-Water-SIOSocket.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Water-SIOSocket.xcconfig"; sourceTree = "<group>"; };
+		F5F3E5182ACF5D42C97A5B42 /* EnumTransform.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EnumTransform.swift; path = ObjectMapper/Transforms/EnumTransform.swift; sourceTree = "<group>"; };
+		F92AF86B084972D57D5236B6 /* Pods-Water-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Water-resources.sh"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		09E64DB79CA504C4E1C7AC72 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81084D945B0D535FEFFADA4B /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1EFA6775DEFD68E215668F02 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC911EA34C69CE16402242FC /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27B057945F0FB8532257B49E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB376637DB312D2BB801C361 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CC2FA5A0900578865E95A66 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C67A27E80390A60C5D11770 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1DA6208E41FF618084739C7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04C9AC8DBEBAEF8969D9A5B6 /* Alamofire.framework in Frameworks */,
+				DFDB1758EDC1FDED46251A32 /* Foundation.framework in Frameworks */,
+				10A5D5ECF0A156BEE30B9973 /* ObjectMapper.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1F9DEB0A1C9E6EFD2AAC16E0 = {
+			isa = PBXGroup;
+			children = (
+				7BAE97D1C11577F20510BF81 /* Podfile */,
+				ADF9060A762616B642EAC0F0 /* Frameworks */,
+				E311A717D70F80FF9465995F /* Pods */,
+				EE064965395FDD2E01EFC41D /* Products */,
+				9FD85D3E87B2AF55EDDF2070 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		2F263B7FF00D298F4988BB5D /* SIOSocket */ = {
+			isa = PBXGroup;
+			children = (
+				3E3EF9D5F68076FBF0DE7630 /* SIOSocket.h */,
+				CC300866036C469B0D30F858 /* SIOSocket.m */,
+				DD1C6727063440FC8C61539F /* socket.io.js.h */,
+				5FE98DE392544B0FDFA05BA1 /* Support Files */,
+			);
+			path = SIOSocket;
+			sourceTree = "<group>";
+		};
+		5FE98DE392544B0FDFA05BA1 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				EC3F3E3A5109A600C52EDFB5 /* Info.plist */,
+				DE6813C533FE1485B538BC60 /* Pods-Water-SIOSocket.modulemap */,
+				F15ED50E25AFE7603A637494 /* Pods-Water-SIOSocket.xcconfig */,
+				6B2568B3931D63C8FAF84699 /* Pods-Water-SIOSocket-Private.xcconfig */,
+				5F9352F26A6F0D72B68AD752 /* Pods-Water-SIOSocket-dummy.m */,
+				D2F4A82BDAF1C96A85B749C4 /* Pods-Water-SIOSocket-prefix.pch */,
+				95220FE0A2E7EB100839022D /* Pods-Water-SIOSocket-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-Water-SIOSocket";
+			sourceTree = "<group>";
+		};
+		6AB8699BED477DBAF574DE87 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				D98CF42757C4CB81BDEDCA76 /* Info.plist */,
+				059AACE2E396FD000A24C6D8 /* Pods-Water-AlamofireObjectMapper.modulemap */,
+				114B0352F4CA3A959052C5E9 /* Pods-Water-AlamofireObjectMapper.xcconfig */,
+				09C525E3DCD20B465A9BDA8D /* Pods-Water-AlamofireObjectMapper-Private.xcconfig */,
+				826BCF4E1082F2A5C29942B8 /* Pods-Water-AlamofireObjectMapper-dummy.m */,
+				7FC42934A78BE18BA6F25446 /* Pods-Water-AlamofireObjectMapper-prefix.pch */,
+				DB04481FACF433624B9B4457 /* Pods-Water-AlamofireObjectMapper-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-Water-AlamofireObjectMapper";
+			sourceTree = "<group>";
+		};
+		73DD768034D1526A46E279A2 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				EEFC0672EFE95F3A5798814B /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		8AAD2BC6A41FAE10E0440589 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				88A4E6B388E68A0053CCA953 /* Info.plist */,
+				39EBC53D9DD632F72E7EA2C0 /* Pods-Water-Alamofire.modulemap */,
+				5BC9C99F5DAD3F925FA071A3 /* Pods-Water-Alamofire.xcconfig */,
+				6554FDA84C66869AECA62D66 /* Pods-Water-Alamofire-Private.xcconfig */,
+				C2BB874D65E33D170782F723 /* Pods-Water-Alamofire-dummy.m */,
+				BE5AA9A972F4FD7BE82A8931 /* Pods-Water-Alamofire-prefix.pch */,
+				1934D298B3FEAA16C37F0159 /* Pods-Water-Alamofire-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-Water-Alamofire";
+			sourceTree = "<group>";
+		};
+		9C4D3D7E044F3C58F176A6C2 /* AlamofireObjectMapper */ = {
+			isa = PBXGroup;
+			children = (
+				A6847AC8199B636AAF91A8AD /* AlmofireObjectMapper.swift */,
+				6AB8699BED477DBAF574DE87 /* Support Files */,
+			);
+			path = AlamofireObjectMapper;
+			sourceTree = "<group>";
+		};
+		9FD85D3E87B2AF55EDDF2070 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				DAA6C4D693BE5D27EDD3A140 /* Pods-Water */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		ADF9060A762616B642EAC0F0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				175D995FF5C8140E854FB086 /* Alamofire.framework */,
+				327C0DA74D18CC95B672B9DB /* ObjectMapper.framework */,
+				73DD768034D1526A46E279A2 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DAA6C4D693BE5D27EDD3A140 /* Pods-Water */ = {
+			isa = PBXGroup;
+			children = (
+				6DD03CF7FD6D0A8A19EE3E0B /* Info.plist */,
+				EB0984AE3C80CFBB21E00497 /* Pods-Water.modulemap */,
+				ED1B392EF06DFC6A8B0DC328 /* Pods-Water-acknowledgements.markdown */,
+				8E6CFF076622E030E1943767 /* Pods-Water-acknowledgements.plist */,
+				DD24F468F98DE0C015F4284B /* Pods-Water-dummy.m */,
+				C9A65A0F272D1F43CAA3F413 /* Pods-Water-environment.h */,
+				17AE5B108DF624DB82D2C372 /* Pods-Water-frameworks.sh */,
+				F92AF86B084972D57D5236B6 /* Pods-Water-resources.sh */,
+				3AFB27D9785D97A2CBACF96F /* Pods-Water-umbrella.h */,
+				0B8A8E23F7DF91B827855D42 /* Pods-Water.debug.xcconfig */,
+				2739F751AEE6EA8548166B01 /* Pods-Water.release.xcconfig */,
+			);
+			name = "Pods-Water";
+			path = "Target Support Files/Pods-Water";
+			sourceTree = "<group>";
+		};
+		E311A717D70F80FF9465995F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F56B671A7DEF2F53D632AEEC /* Alamofire */,
+				9C4D3D7E044F3C58F176A6C2 /* AlamofireObjectMapper */,
+				EF006297BDD493E228BDA7E1 /* ObjectMapper */,
+				2F263B7FF00D298F4988BB5D /* SIOSocket */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E68D1B1A82B30D38423B5F8F /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				87A7F3804101743F2C53CBA9 /* Info.plist */,
+				9BAD43329D3090F95CAC3183 /* Pods-Water-ObjectMapper.modulemap */,
+				90F99EDBA28BA55D6D594921 /* Pods-Water-ObjectMapper.xcconfig */,
+				E1189E2D6CB22B1663E4B46A /* Pods-Water-ObjectMapper-Private.xcconfig */,
+				777B139732495DC098A52B7B /* Pods-Water-ObjectMapper-dummy.m */,
+				BBCA7B3D69AB28D9431BAF30 /* Pods-Water-ObjectMapper-prefix.pch */,
+				CDCD9539D5F5AB0BB13F0A9A /* Pods-Water-ObjectMapper-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-Water-ObjectMapper";
+			sourceTree = "<group>";
+		};
+		EE064965395FDD2E01EFC41D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				353DF5B445F01467A2A62BAA /* Alamofire.framework */,
+				05B13BA9B93FBB0A54CF28CB /* AlamofireObjectMapper.framework */,
+				53D03FF70921496055769A6E /* ObjectMapper.framework */,
+				68F31E447624AF4486569D0E /* Pods_Water.framework */,
+				382D9BA5A6BEB08F21E362FC /* SIOSocket.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EF006297BDD493E228BDA7E1 /* ObjectMapper */ = {
+			isa = PBXGroup;
+			children = (
+				14648BF1F2163ED108AAC4EF /* CustomDateFormatTransform.swift */,
+				8A9FC5931A96A319053EE599 /* DateFormaterTransform.swift */,
+				5BE4CCC26DB7CC364079C75E /* DateTransform.swift */,
+				F5F3E5182ACF5D42C97A5B42 /* EnumTransform.swift */,
+				24D4FC93DC402AC26D4FB30B /* FromJSON.swift */,
+				C6081C6CC54DFE60E5962C6F /* ISO8601DateTransform.swift */,
+				0C2EC3A8F871CFA18CA8E7E0 /* Mapper.swift */,
+				91C9CE3EAD6F54F39248BE05 /* Operators.swift */,
+				3DC00313596E61EFFE019C97 /* ToJSON.swift */,
+				404C02D52D178F197AD1F5AB /* TransformOf.swift */,
+				46E78787353D691A4D112E4C /* TransformType.swift */,
+				787019B971D3B3C52216643A /* URLTransform.swift */,
+				E68D1B1A82B30D38423B5F8F /* Support Files */,
+			);
+			path = ObjectMapper;
+			sourceTree = "<group>";
+		};
+		F56B671A7DEF2F53D632AEEC /* Alamofire */ = {
+			isa = PBXGroup;
+			children = (
+				17CA01B9F3B65E5DA8000AFF /* Alamofire.swift */,
+				9D24F54FCDB2BE23A320F861 /* Download.swift */,
+				E143D9E56E155AD7B9C2F2FC /* Manager.swift */,
+				0AE92E31776FCEEB56D0128B /* ParameterEncoding.swift */,
+				30D719ED9BAD954BDC94AAD0 /* Request.swift */,
+				96BC303AA344EA2019E745D6 /* ResponseSerialization.swift */,
+				BBB18B0F2D6DE9A8C180C023 /* Upload.swift */,
+				80A0E317B21C154CDCEFB6A7 /* Validation.swift */,
+				8AAD2BC6A41FAE10E0440589 /* Support Files */,
+			);
+			path = Alamofire;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		150D0E51C1ACC1DA10BA58A6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D8C127A1074E8DB91F83E3F /* Pods-Water-ObjectMapper-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		220BCE9A4FE6B26ECD9F801C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				567A6F5525084E0C1394DB79 /* Pods-Water-AlamofireObjectMapper-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2873DC8BED052DBF5506F3A6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72282DFAD908B85C463D7D62 /* Pods-Water-Alamofire-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C1304E5ACF31DA96121BAB3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				37CA26DDE237E3A0242902D7 /* Pods-Water-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92D57D3736D3A8EBB25D3C30 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6598C36DE89251AB1B27ECD /* Pods-Water-SIOSocket-umbrella.h in Headers */,
+				88CF26FBBE2A2966A7616915 /* SIOSocket.h in Headers */,
+				24B4502843FC2609BE7F28C2 /* socket.io.js.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5AEB8C2AFFA561B9CE328FCD /* Pods-Water-AlamofireObjectMapper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C68F11C36C5F93825B9A2955 /* Build configuration list for PBXNativeTarget "Pods-Water-AlamofireObjectMapper" */;
+			buildPhases = (
+				EDD48BC7B916D1BB96D49360 /* Sources */,
+				D1DA6208E41FF618084739C7 /* Frameworks */,
+				220BCE9A4FE6B26ECD9F801C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7297C7D182440648C1A5F2C3 /* PBXTargetDependency */,
+				A7B99F885D317703FB71DCAA /* PBXTargetDependency */,
+			);
+			name = "Pods-Water-AlamofireObjectMapper";
+			productName = "Pods-Water-AlamofireObjectMapper";
+			productReference = 05B13BA9B93FBB0A54CF28CB /* AlamofireObjectMapper.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7218A8CB3830035D7E3167A3 /* Pods-Water-SIOSocket */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6624C3B07D073490A8F1315 /* Build configuration list for PBXNativeTarget "Pods-Water-SIOSocket" */;
+			buildPhases = (
+				5A0E6E72EB2A8C837DE0F16B /* Sources */,
+				5CC2FA5A0900578865E95A66 /* Frameworks */,
+				92D57D3736D3A8EBB25D3C30 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Water-SIOSocket";
+			productName = "Pods-Water-SIOSocket";
+			productReference = 382D9BA5A6BEB08F21E362FC /* SIOSocket.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C6867D9565E0780A4DB443D6 /* Pods-Water-ObjectMapper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 862840543501DD344AFFC6C1 /* Build configuration list for PBXNativeTarget "Pods-Water-ObjectMapper" */;
+			buildPhases = (
+				15D2B6AC88369C86EC98209D /* Sources */,
+				1EFA6775DEFD68E215668F02 /* Frameworks */,
+				150D0E51C1ACC1DA10BA58A6 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Water-ObjectMapper";
+			productName = "Pods-Water-ObjectMapper";
+			productReference = 53D03FF70921496055769A6E /* ObjectMapper.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D104C4F6C667B6394DC5AB5B /* Pods-Water */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56250659763CD6F5C692E17C /* Build configuration list for PBXNativeTarget "Pods-Water" */;
+			buildPhases = (
+				A227CC197F94AF2CAC143A2C /* Sources */,
+				09E64DB79CA504C4E1C7AC72 /* Frameworks */,
+				4C1304E5ACF31DA96121BAB3 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3FF6AFA1CCF6D6207C9F7FB9 /* PBXTargetDependency */,
+				1C806574FF370FC708D42E6C /* PBXTargetDependency */,
+				BA8139928D983A0EF7AB1F53 /* PBXTargetDependency */,
+				B0F7218C5B34410E2CED6726 /* PBXTargetDependency */,
+			);
+			name = "Pods-Water";
+			productName = "Pods-Water";
+			productReference = 68F31E447624AF4486569D0E /* Pods_Water.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DEA811AC05AE34A296846892 /* Pods-Water-Alamofire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 739D5810E3E2CB7007011741 /* Build configuration list for PBXNativeTarget "Pods-Water-Alamofire" */;
+			buildPhases = (
+				94FBD63FDF839CA92799EA9C /* Sources */,
+				27B057945F0FB8532257B49E /* Frameworks */,
+				2873DC8BED052DBF5506F3A6 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Water-Alamofire";
+			productName = "Pods-Water-Alamofire";
+			productReference = 353DF5B445F01467A2A62BAA /* Alamofire.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9B0487C842C7CAA70E75F951 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+			};
+			buildConfigurationList = AAAE0F13BB6E513C6A022A31 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 1F9DEB0A1C9E6EFD2AAC16E0;
+			productRefGroup = EE064965395FDD2E01EFC41D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D104C4F6C667B6394DC5AB5B /* Pods-Water */,
+				DEA811AC05AE34A296846892 /* Pods-Water-Alamofire */,
+				5AEB8C2AFFA561B9CE328FCD /* Pods-Water-AlamofireObjectMapper */,
+				C6867D9565E0780A4DB443D6 /* Pods-Water-ObjectMapper */,
+				7218A8CB3830035D7E3167A3 /* Pods-Water-SIOSocket */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		15D2B6AC88369C86EC98209D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF7BF1ECCA8D8E1E5EB16A18 /* CustomDateFormatTransform.swift in Sources */,
+				BBB386FA520A9697D3B47A3C /* DateFormaterTransform.swift in Sources */,
+				9FF6F2B6B7B05982975246B3 /* DateTransform.swift in Sources */,
+				1ED9CBFBC3B543C0786AF5B1 /* EnumTransform.swift in Sources */,
+				138F33440A18494EBC99F394 /* FromJSON.swift in Sources */,
+				47F15ED8848E62BC86052FE1 /* ISO8601DateTransform.swift in Sources */,
+				DA8C42B832AB466CDAD2A1D8 /* Mapper.swift in Sources */,
+				200D58594B49740EC0878B3C /* Operators.swift in Sources */,
+				FF5611AB8F6D8C5EECDDD871 /* Pods-Water-ObjectMapper-dummy.m in Sources */,
+				ADC20A3D9FA14D57BDB5B981 /* ToJSON.swift in Sources */,
+				FA53547ECF1CB830B6B66D14 /* TransformOf.swift in Sources */,
+				8BEDF4A734C1CA2910E6395E /* TransformType.swift in Sources */,
+				726E588D75EBB3DB16C7072A /* URLTransform.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A0E6E72EB2A8C837DE0F16B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B13A848213FE8FBF40A75E3F /* Pods-Water-SIOSocket-dummy.m in Sources */,
+				2C165ADD923F50EC867CBE19 /* SIOSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94FBD63FDF839CA92799EA9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44EA284A1CB05E42FBB08E05 /* Alamofire.swift in Sources */,
+				DDC4DC779B65D8DAA2FEB6C5 /* Download.swift in Sources */,
+				4055F733CDB016873B80BC17 /* Manager.swift in Sources */,
+				8E68AEBD21A836FDF45AFE85 /* ParameterEncoding.swift in Sources */,
+				3FFE5F10CC374D0DA1BA11D7 /* Pods-Water-Alamofire-dummy.m in Sources */,
+				7071EAE1E4ACF2FCEE250DF5 /* Request.swift in Sources */,
+				268B12D8F6753AFE08136094 /* ResponseSerialization.swift in Sources */,
+				C014AB3E295DA562A04C6C06 /* Upload.swift in Sources */,
+				6C422E0A0EA619676C8FA27B /* Validation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A227CC197F94AF2CAC143A2C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDD7DD783F4DBB8343677218 /* Pods-Water-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EDD48BC7B916D1BB96D49360 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0991A1A2997E41B0EEE9141E /* AlmofireObjectMapper.swift in Sources */,
+				6AB8966CF4C61D646D29D3AF /* Pods-Water-AlamofireObjectMapper-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1C806574FF370FC708D42E6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Water-AlamofireObjectMapper";
+			target = 5AEB8C2AFFA561B9CE328FCD /* Pods-Water-AlamofireObjectMapper */;
+			targetProxy = C7BD509D6D1C67CAABFD7198 /* PBXContainerItemProxy */;
+		};
+		3FF6AFA1CCF6D6207C9F7FB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Water-Alamofire";
+			target = DEA811AC05AE34A296846892 /* Pods-Water-Alamofire */;
+			targetProxy = 0FE777C6D0AFD0DB80F6215A /* PBXContainerItemProxy */;
+		};
+		7297C7D182440648C1A5F2C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Water-Alamofire";
+			target = DEA811AC05AE34A296846892 /* Pods-Water-Alamofire */;
+			targetProxy = E53811694C470E8CFC3BE430 /* PBXContainerItemProxy */;
+		};
+		A7B99F885D317703FB71DCAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Water-ObjectMapper";
+			target = C6867D9565E0780A4DB443D6 /* Pods-Water-ObjectMapper */;
+			targetProxy = A66A5EB0E2A4D22DBE645923 /* PBXContainerItemProxy */;
+		};
+		B0F7218C5B34410E2CED6726 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Water-SIOSocket";
+			target = 7218A8CB3830035D7E3167A3 /* Pods-Water-SIOSocket */;
+			targetProxy = 42EFD8E6B783FC1FC7DF508D /* PBXContainerItemProxy */;
+		};
+		BA8139928D983A0EF7AB1F53 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Water-ObjectMapper";
+			target = C6867D9565E0780A4DB443D6 /* Pods-Water-ObjectMapper */;
+			targetProxy = DAA631A9DBF7DC9544D7EE1A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4F585D14AC8A5C9C896E8C0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1189E2D6CB22B1663E4B46A /* Pods-Water-ObjectMapper-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Water-ObjectMapper/Pods-Water-ObjectMapper-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Water-ObjectMapper/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water-ObjectMapper/Pods-Water-ObjectMapper.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = ObjectMapper;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		5E074CC39AFB57BB5A5C9477 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6554FDA84C66869AECA62D66 /* Pods-Water-Alamofire-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Water-Alamofire/Pods-Water-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Water-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water-Alamofire/Pods-Water-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		5FF5D32902E9CB82296CD4AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2739F751AEE6EA8548166B01 /* Pods-Water.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Water/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water/Pods-Water.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_Water;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		721102BD43DA1F38F8992930 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B2568B3931D63C8FAF84699 /* Pods-Water-SIOSocket-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Water-SIOSocket/Pods-Water-SIOSocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Water-SIOSocket/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water-SIOSocket/Pods-Water-SIOSocket.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = SIOSocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7F4A4B1BA8500472F2DE39EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09C525E3DCD20B465A9BDA8D /* Pods-Water-AlamofireObjectMapper-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Water-AlamofireObjectMapper/Pods-Water-AlamofireObjectMapper-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Water-AlamofireObjectMapper/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water-AlamofireObjectMapper/Pods-Water-AlamofireObjectMapper.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = AlamofireObjectMapper;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		93127A1565B5CCDAD98F9BCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		986EB0D38DB3188DAB7B5216 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B3333B187336A43F6C279730 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0B8A8E23F7DF91B827855D42 /* Pods-Water.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Water/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water/Pods-Water.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_Water;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C267D5D2A2FA0A13E3973AC8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6554FDA84C66869AECA62D66 /* Pods-Water-Alamofire-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Water-Alamofire/Pods-Water-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Water-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water-Alamofire/Pods-Water-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		F02F9D6888DCF06070FBBC5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B2568B3931D63C8FAF84699 /* Pods-Water-SIOSocket-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Water-SIOSocket/Pods-Water-SIOSocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Water-SIOSocket/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water-SIOSocket/Pods-Water-SIOSocket.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = SIOSocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		F17500F2A2D16B91434606A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09C525E3DCD20B465A9BDA8D /* Pods-Water-AlamofireObjectMapper-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Water-AlamofireObjectMapper/Pods-Water-AlamofireObjectMapper-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Water-AlamofireObjectMapper/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water-AlamofireObjectMapper/Pods-Water-AlamofireObjectMapper.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = AlamofireObjectMapper;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FB817B7A6D24DB38EBF21B17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1189E2D6CB22B1663E4B46A /* Pods-Water-ObjectMapper-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Water-ObjectMapper/Pods-Water-ObjectMapper-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Water-ObjectMapper/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Water-ObjectMapper/Pods-Water-ObjectMapper.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = ObjectMapper;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		56250659763CD6F5C692E17C /* Build configuration list for PBXNativeTarget "Pods-Water" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3333B187336A43F6C279730 /* Debug */,
+				5FF5D32902E9CB82296CD4AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		739D5810E3E2CB7007011741 /* Build configuration list for PBXNativeTarget "Pods-Water-Alamofire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C267D5D2A2FA0A13E3973AC8 /* Debug */,
+				5E074CC39AFB57BB5A5C9477 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		862840543501DD344AFFC6C1 /* Build configuration list for PBXNativeTarget "Pods-Water-ObjectMapper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB817B7A6D24DB38EBF21B17 /* Debug */,
+				4F585D14AC8A5C9C896E8C0D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AAAE0F13BB6E513C6A022A31 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93127A1565B5CCDAD98F9BCE /* Debug */,
+				986EB0D38DB3188DAB7B5216 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C68F11C36C5F93825B9A2955 /* Build configuration list for PBXNativeTarget "Pods-Water-AlamofireObjectMapper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F17500F2A2D16B91434606A6 /* Debug */,
+				7F4A4B1BA8500472F2DE39EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D6624C3B07D073490A8F1315 /* Build configuration list for PBXNativeTarget "Pods-Water-SIOSocket" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				721102BD43DA1F38F8992930 /* Debug */,
+				F02F9D6888DCF06070FBBC5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9B0487C842C7CAA70E75F951 /* Project object */;
+}

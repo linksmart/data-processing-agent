@@ -10,14 +10,16 @@ import UIKit
 import AlamofireObjectMapper
 import Alamofire
 
-class ShowConsumptionVC: UIViewController {
+class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var alertTableView: UITableView!
     
     var isGraphViewShowing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
         
         let URL = "http://cnet002.cloudapp.net/StorageManagerY2/SensorThings/DataStreams(fa947067e70f41279d8eaae89330cf18a400f76efbd0ae1ef58214bd5bafb8fc)/Observations"
@@ -29,9 +31,19 @@ class ShowConsumptionVC: UIViewController {
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("AlertCell", forIndexPath: indexPath) as! UITableViewCell
+        
+        cell.textLabel?.text = "Thomas er sej"
+        return cell
     }
 }
 

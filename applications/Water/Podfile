@@ -1,0 +1,7 @@
+platform :ios, '8.3'
+use_frameworks!
+
+target 'Water' do
+  pod 'AlamofireObjectMapper', '>= 0.2'
+  pod 'SIOSocket', '>= 0.2.0'
+end
