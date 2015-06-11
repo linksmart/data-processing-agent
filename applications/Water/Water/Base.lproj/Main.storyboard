@@ -122,6 +122,7 @@
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="Xqp-FZ-ls5" firstAttribute="height" secondItem="PPJ-MR-ukz" secondAttribute="height" id="9wK-PB-Atm"/>
                                     <constraint firstAttribute="height" secondItem="gpZ-zB-rFl" secondAttribute="height" id="KNL-m2-Wwm"/>
@@ -134,8 +135,11 @@
                                     <constraint firstAttribute="width" secondItem="gpZ-zB-rFl" secondAttribute="width" id="yX2-3c-p3o"/>
                                     <constraint firstAttribute="centerY" secondItem="gpZ-zB-rFl" secondAttribute="centerY" id="yvL-8h-Alb"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="liR-IM-3Fr" appends="YES" id="NBe-5d-R8J"/>
+                                </connections>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month view" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K20-u8-MWD">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day view" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K20-u8-MWD">
                                 <rect key="frame" x="16" y="28" width="568" height="20"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -189,10 +193,17 @@
                     <connections>
                         <outlet property="alertTableView" destination="V71-5x-KfP" id="639-Ep-dd5"/>
                         <outlet property="containerView" destination="PPJ-MR-ukz" id="g8f-dq-8h3"/>
+                        <outlet property="dayView" destination="gpZ-zB-rFl" id="yrM-ge-6rd"/>
+                        <outlet property="monthView" destination="Xqp-FZ-ls5" id="1RG-Uu-Pid"/>
+                        <outlet property="periodInGraphLabel" destination="K20-u8-MWD" id="gSd-jk-66P"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xqB-uC-yDY" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="liR-IM-3Fr"/>
+                <tapGestureRecognizer id="liR-IM-3Fr">
+                    <connections>
+                        <action selector="counterViewTap:" destination="l7j-bY-4ZX" id="E9d-og-twr"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-828" y="652"/>
         </scene>

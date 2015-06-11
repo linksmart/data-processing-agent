@@ -14,8 +14,11 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
 
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var alertTableView: UITableView!
+    @IBOutlet weak var dayView: GraphView!
+    @IBOutlet weak var monthView: GraphView!
+    @IBOutlet weak var periodInGraphLabel: UILabel!
     
-    var isGraphViewShowing = false
+    var isDayShowing = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,8 +30,31 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         Alamofire.request(.GET, URL, parameters: nil)
             .responseObject { (response: ObservationsResponse?, error: NSError?) in
                 println(error?.description)
-                // self.monthGraphView.graphPoints = [123,45,456,567,678,345,345]
+                //self.dayView.setNeedsDisplay()
         }
+    }
+    
+    @IBAction func counterViewTap(gesture:UITapGestureRecognizer?) {
+        if (isDayShowing) {
+            
+            //hide Graph
+            UIView.transitionFromView(dayView,
+                toView: monthView,
+                duration: 1.0,
+                options: UIViewAnimationOptions.TransitionFlipFromLeft
+                    | UIViewAnimationOptions.ShowHideTransitionViews,
+                completion:nil)
+        } else {
+            
+            //show Graph
+            UIView.transitionFromView(monthView,
+                toView: dayView,
+                duration: 1.0,
+                options: UIViewAnimationOptions.TransitionFlipFromRight
+                    | UIViewAnimationOptions.ShowHideTransitionViews,
+                completion: nil)
+        }
+        isDayShowing = !isDayShowing
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -44,6 +70,12 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         
         cell.textLabel?.text = "Thomas er sej"
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.dayView.graphPoints = [45,89,89,89,678,345,345]
+        self.containerView.setNeedsDisplay()
+        self.dayView.setNeedsDisplay()
     }
 }
 

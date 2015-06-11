@@ -3,7 +3,11 @@ import UIKit
 @IBDesignable class GraphView: UIView {
   
   //Weekly sample data
-  var graphPoints:[Int] = [4, 2, 6, 4, 5, 8, 3]
+    var graphPoints:[Int] = [4, 2, 6, 4, 5, 8, 3] {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
   
   //1 - the properties for the gradient
   @IBInspectable var startColor: UIColor = UIColor.redColor()
@@ -154,8 +158,6 @@ import UIKit
     color.setStroke()
     
     linePath.lineWidth = 1.0
-    linePath.stroke()
-    
-    
+    linePath.stroke()    
   }
 }
