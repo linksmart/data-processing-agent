@@ -18,6 +18,7 @@
 		E93ECC871B16020900A0073D /* WaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93ECC861B16020900A0073D /* WaterTests.swift */; };
 		E94F20671B2A291400CDE58B /* LineChartTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */; };
 		E94F206B1B2A37CD00CDE58B /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F206A1B2A37CD00CDE58B /* Alert.swift */; };
+		E94F206D1B2A3D6900CDE58B /* WaterEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F206C1B2A3D6900CDE58B /* WaterEventCell.swift */; };
 		E992BAEB1B25BB4B007227F2 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E992BAEA1B25BB4B007227F2 /* GraphView.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		E93ECC861B16020900A0073D /* WaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterTests.swift; sourceTree = "<group>"; };
 		E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartTestViewController.swift; sourceTree = "<group>"; };
 		E94F206A1B2A37CD00CDE58B /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		E94F206C1B2A3D6900CDE58B /* WaterEventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaterEventCell.swift; sourceTree = "<group>"; };
 		E992BAEA1B25BB4B007227F2 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,9 +114,10 @@
 			children = (
 				E920ADEE1B161645004B93D3 /* LoginVC.swift */,
 				E920ADF31B161801004B93D3 /* ShowConsumptionVC.swift */,
+				E94F206C1B2A3D6900CDE58B /* WaterEventCell.swift */,
 				E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */,
-				E94F20691B2A37B900CDE58B /* Model */,
 				E93ECC741B16020900A0073D /* Main.storyboard */,
+				E94F20691B2A37B900CDE58B /* Model */,
 				E920ADF21B1617F1004B93D3 /* UIViews */,
 				E93ECC6E1B16020900A0073D /* Supporting Files */,
 			);
@@ -322,6 +325,7 @@
 				E94F20671B2A291400CDE58B /* LineChartTestViewController.swift in Sources */,
 				E920ADF41B161801004B93D3 /* ShowConsumptionVC.swift in Sources */,
 				E920ADEB1B1602E4004B93D3 /* Thing.swift in Sources */,
+				E94F206D1B2A3D6900CDE58B /* WaterEventCell.swift in Sources */,
 				E920ADEF1B161645004B93D3 /* LoginVC.swift in Sources */,
 				E93ECC711B16020900A0073D /* AppDelegate.swift in Sources */,
 				E94F206B1B2A37CD00CDE58B /* Alert.swift in Sources */,

@@ -145,29 +145,58 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="V71-5x-KfP">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="69" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="V71-5x-KfP">
                                 <rect key="frame" x="16" y="364" width="568" height="228"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AlertCell" textLabel="2C4-kk-aua" detailTextLabel="zWU-pn-5B8" style="IBUITableViewCellStyleValue1" id="9c8-3Y-28r">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AlertCell" rowHeight="69" id="9c8-3Y-28r" customClass="WaterEventCell" customModule="Water" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9c8-3Y-28r" id="WqS-3z-fH2">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2C4-kk-aua">
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Leak" translatesAutoresizingMaskIntoConstraints="NO" id="CeU-ww-c5n">
+                                                    <rect key="frame" x="8" y="8" width="61" height="52"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="61" id="rYH-nN-rsA"/>
+                                                        <constraint firstAttribute="height" constant="47" id="sWW-qt-VMt"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="sWW-qt-VMt"/>
+                                                        </mask>
+                                                    </variation>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text fra vandsystemet" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oO3-d6-CUf">
+                                                    <rect key="frame" x="77" y="8" width="227" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="227" id="GET-jH-T2E"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zWU-pn-5B8">
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tidspunkt for alarm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ThW-OQ-20D">
+                                                    <rect key="frame" x="77" y="36" width="227" height="20"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ThW-OQ-20D" firstAttribute="leading" secondItem="oO3-d6-CUf" secondAttribute="leading" id="BLe-3G-cfR"/>
+                                                <constraint firstItem="oO3-d6-CUf" firstAttribute="top" secondItem="WqS-3z-fH2" secondAttribute="topMargin" id="CkA-CI-e2b"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="CeU-ww-c5n" secondAttribute="bottom" id="E4t-CA-U8n"/>
+                                                <constraint firstItem="oO3-d6-CUf" firstAttribute="leading" secondItem="CeU-ww-c5n" secondAttribute="trailing" constant="8" id="LyS-zg-zQv"/>
+                                                <constraint firstItem="CeU-ww-c5n" firstAttribute="leading" secondItem="WqS-3z-fH2" secondAttribute="leadingMargin" id="dDt-wg-EKQ"/>
+                                                <constraint firstItem="CeU-ww-c5n" firstAttribute="top" secondItem="WqS-3z-fH2" secondAttribute="topMargin" id="r38-mO-tvy"/>
+                                                <constraint firstItem="ThW-OQ-20D" firstAttribute="top" secondItem="oO3-d6-CUf" secondAttribute="bottom" constant="8" id="tMo-Th-8HJ"/>
+                                                <constraint firstItem="ThW-OQ-20D" firstAttribute="width" secondItem="oO3-d6-CUf" secondAttribute="width" id="uUE-7c-mtf"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="alertTimeStamp" destination="ThW-OQ-20D" id="U20-xw-rrp"/>
+                                            <outlet property="utilityTextLabel" destination="oO3-d6-CUf" id="d5j-Rc-YLg"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -229,4 +258,7 @@
             <point key="canvasLocation" x="-1027" y="1545"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Leak" width="207" height="165"/>
+    </resources>
 </document>
