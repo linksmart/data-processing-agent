@@ -17,6 +17,7 @@
 		E93ECC7B1B16020900A0073D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E93ECC791B16020900A0073D /* LaunchScreen.xib */; };
 		E93ECC871B16020900A0073D /* WaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93ECC861B16020900A0073D /* WaterTests.swift */; };
 		E94F20671B2A291400CDE58B /* LineChartTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */; };
+		E94F206B1B2A37CD00CDE58B /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F206A1B2A37CD00CDE58B /* Alert.swift */; };
 		E992BAEB1B25BB4B007227F2 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E992BAEA1B25BB4B007227F2 /* GraphView.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,7 @@
 		E93ECC851B16020900A0073D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E93ECC861B16020900A0073D /* WaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterTests.swift; sourceTree = "<group>"; };
 		E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartTestViewController.swift; sourceTree = "<group>"; };
+		E94F206A1B2A37CD00CDE58B /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		E992BAEA1B25BB4B007227F2 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,7 +113,7 @@
 				E920ADEE1B161645004B93D3 /* LoginVC.swift */,
 				E920ADF31B161801004B93D3 /* ShowConsumptionVC.swift */,
 				E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */,
-				E920ADEA1B1602E4004B93D3 /* Thing.swift */,
+				E94F20691B2A37B900CDE58B /* Model */,
 				E93ECC741B16020900A0073D /* Main.storyboard */,
 				E920ADF21B1617F1004B93D3 /* UIViews */,
 				E93ECC6E1B16020900A0073D /* Supporting Files */,
@@ -145,6 +147,15 @@
 				E93ECC851B16020900A0073D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E94F20691B2A37B900CDE58B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E920ADEA1B1602E4004B93D3 /* Thing.swift */,
+				E94F206A1B2A37CD00CDE58B /* Alert.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		FA2CD148C9A2265BA33424B7 /* Pods */ = {
@@ -313,6 +324,7 @@
 				E920ADEB1B1602E4004B93D3 /* Thing.swift in Sources */,
 				E920ADEF1B161645004B93D3 /* LoginVC.swift in Sources */,
 				E93ECC711B16020900A0073D /* AppDelegate.swift in Sources */,
+				E94F206B1B2A37CD00CDE58B /* Alert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

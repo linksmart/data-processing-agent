@@ -19,6 +19,12 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var monthView: GraphView!
     @IBOutlet weak var periodInGraphLabel: UILabel!
     
+    var alertList: [Alert] = [] {
+        didSet {
+            self.alertTableView.reloadData()
+        }
+    }
+    
     var isDayShowing = true
     
     override func viewDidLoad() {
@@ -58,6 +64,12 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 completion: nil)
                 periodInGraphLabel.text = "Day View"
         }
+        
+        var tmpAlert: Alert = Alert()
+        tmpAlert.Title = "CRAP"
+        tmpAlert.Subtitle = "Oops I did it again"
+        tmpAlert.TimeStamp = NSDate()
+        alertList.insert(tmpAlert, atIndex: 0)
         isDayShowing = !isDayShowing
     }
 
@@ -66,13 +78,16 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return alertList.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("AlertCell", forIndexPath: indexPath) as! UITableViewCell
         
-        cell.textLabel?.text = "Thomas er sej"
+        cell.textLabel?.text = alertList[indexPath.row].Title
+        cell.detailTextLabel?.text = NSDateFormatter.localizedStringFromDate(alertList[indexPath.row].TimeStamp!, dateStyle: .MediumStyle, timeStyle: .MediumStyle)
+
+        
         return cell
     }
     
