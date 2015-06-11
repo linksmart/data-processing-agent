@@ -20,7 +20,7 @@ public abstract class Feeder extends Thread implements EventFeeder, EventFeederL
 
     protected Boolean toShutdown = false;
 
-    private Boolean down =false;
+    static protected Boolean down =false;
 
     public Feeder(String brokerName,String brokerPort, String topic){
         try {
