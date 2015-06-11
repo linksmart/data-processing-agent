@@ -226,7 +226,7 @@ public class EsperEngine implements DataFusionWrapper {
 
         if(epService.getEPAdministrator().getStatement(query.getName())!=null) {
 
-            LoggerService.publish("queries/" + query.getName(), "Query with name" + query.getName() + " already added", null, true);
+            LoggerService.publish("queries/" + query.getHash(), "Query with name" + query.getName() + " already added", null, true);
             return false;
         }
             boolean allDefined = true, queryUpdate= false;
