@@ -9,6 +9,7 @@
 import UIKit
 import AlamofireObjectMapper
 import Alamofire
+import Charts
 
 class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -23,6 +24,9 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.dayView.graphPoints = [45,46,46,46,46,47,47,47,47,47,47,47,47,49,50]
+        self.monthView.graphPoints = [45,57,60,75,90]
+        
         // Do any additional setup after loading the view, typically from a nib.
         
         let URL = "http://cnet002.cloudapp.net/StorageManagerY2/SensorThings/DataStreams(fa947067e70f41279d8eaae89330cf18a400f76efbd0ae1ef58214bd5bafb8fc)/Observations"
@@ -32,27 +36,27 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 println(error?.description)
                 //self.dayView.setNeedsDisplay()
         }
+        
+        counterViewTap(nil)
     }
     
     @IBAction func counterViewTap(gesture:UITapGestureRecognizer?) {
         if (isDayShowing) {
-            
-            //hide Graph
             UIView.transitionFromView(dayView,
                 toView: monthView,
                 duration: 1.0,
                 options: UIViewAnimationOptions.TransitionFlipFromLeft
                     | UIViewAnimationOptions.ShowHideTransitionViews,
                 completion:nil)
+                periodInGraphLabel.text = "Month View"
         } else {
-            
-            //show Graph
-            UIView.transitionFromView(monthView,
+                UIView.transitionFromView(monthView,
                 toView: dayView,
                 duration: 1.0,
                 options: UIViewAnimationOptions.TransitionFlipFromRight
                     | UIViewAnimationOptions.ShowHideTransitionViews,
                 completion: nil)
+                periodInGraphLabel.text = "Day View"
         }
         isDayShowing = !isDayShowing
     }

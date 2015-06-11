@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Water-Charts.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Water-ObjectMapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,27 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>058A074A430F340718AD45DC</key>
+		<key>0965EBB45D376FA1CF55C21F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>07755DA079A1C952F75026C2</key>
+		<key>9C149625F5AB114ED601308A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8DD2B037B5EB1CF36F59D3E5</key>
+		<key>C725BDE99E64BBB0CD1F8471</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B868A15E47C5897C80FBE7B8</key>
+		<key>D853781D309F63CD6A0ABCAF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BA73E091DF287A457CADA900</key>
+		<key>DF76C50313773D3792B4E6FE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F7F94C3F19252D88CB38AF4E</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -3,16 +3,19 @@ PODS:
   - AlamofireObjectMapper (0.2):
     - Alamofire (~> 1.2)
     - ObjectMapper (~> 0.10)
+  - Charts (2.1.0)
   - ObjectMapper (0.12)
   - SIOSocket (0.2.0)
 
 DEPENDENCIES:
   - AlamofireObjectMapper (>= 0.2)
+  - Charts (>= 2.1)
   - SIOSocket (>= 0.2.0)
 
 SPEC CHECKSUMS:
   Alamofire: 11a6022f5089887d92ffb5a3014c97a0a915ab98
   AlamofireObjectMapper: 0ed3f7b154a9b35bded72b2fa6adeee7ac49a9a2
+  Charts: 8b677edafaad44c439d67cee0b8eaf7a76f9b4df
   ObjectMapper: ef4a369cbab75546029ceb7e8155772b5f8e8841
   SIOSocket: 2facc0bd02ae72d98c223634a46dd8ebdf9be321
 
