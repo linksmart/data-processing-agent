@@ -11,7 +11,6 @@ import eu.almanac.event.datafusion.intern.LoggerService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.UUID;
 
 /**
  * Created by Caravajal on 06.10.2014.

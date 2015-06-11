@@ -8,6 +8,7 @@ import com.espertech.esper.epl.parse.ParseRuleSelector;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import eu.linksmart.gc.network.backbone.protocol.mqtt.ForwardingListener;
@@ -106,9 +107,17 @@ public class StatementSender implements Observer{
 
     }
     public static Statement factory(String name, String Statement, String[] Scope, String source, String[] Input, String[] Output) throws EPStatementSyntaxException {
-        ParseHelper.parse(Statement, Statement, true, eplParseRule, true);
-        EPLStatement st = new EPLStatement();
 
+        EPLStatement st = new EPLStatement();
+        if(
+            !(Statement.toLowerCase().equals("pause") ||
+            Statement.toLowerCase().equals("start") ||
+            Statement.toLowerCase().equals("remove") ||
+            Statement.toLowerCase().contains("add instance ") ||
+            Statement.toLowerCase().equals("shutdown"))
+        ) {
+            ParseHelper.parse(Statement, Statement, true, eplParseRule, true);
+        }
 
         st.setName(name);
         st.setScope(Scope);
