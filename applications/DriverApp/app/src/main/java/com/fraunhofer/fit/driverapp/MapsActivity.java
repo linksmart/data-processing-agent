@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.speech.RecognizerIntent;
@@ -248,7 +249,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     private void removeDustBinMap(RouteEndpoint routeEndpoint){
 
         for (Marker marker:markerList){
-            if(marker.getPosition().latitude == routeEndpoint.getLatLng().latitude && marker.getPosition().longitude == routeEndpoint.getLatLng().longitude){
+            if(marker.getTitle().equals(routeEndpoint.getId())){
                 marker.remove();
                 markerList.remove(marker);
                 break;
@@ -256,7 +257,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         }
 
         for (RouteEndpoint routeEndpoint1:mRouteEndpointList){
-            if(routeEndpoint1.getLatLng().latitude == routeEndpoint.getLatLng().latitude && routeEndpoint1.getLatLng().longitude == routeEndpoint.getLatLng().longitude){
+            if(routeEndpoint1.getId().equals(routeEndpoint.getId())){
                 mRouteEndpointList.remove(routeEndpoint1);
                 break;
             }
@@ -290,6 +291,8 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
             CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
         }
+
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.ToastOnStartup), Toast.LENGTH_SHORT).show();   // shows a toast with the text spoken
       /*  PolygonOptions polygonOptions = new PolygonOptions();
 
         for(MarkerOptions markerOptions:mMarkerOptionsList ){
@@ -308,17 +311,23 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     }
     private void clearMap(){
         stopMqttListener();
-        mMap.clear();
+        if(mMap != null) {
+            mMap.clear();
+        }
         mRouteEndpointList.clear();
     }
 
      private void startMqttListener(){
+         final ImageView logoImage = (ImageView) findViewById(R.id.logo);
+         logoImage.setClickable(false);
          mqttListener = new MqttListener();
          mqttListener.connect(getApplicationContext(), MapsActivity.this);
      }
 
     private void stopMqttListener(){
-        mqttListener.disconnect();
+        if(mqttListener != null) {
+            mqttListener.disconnect();
+        }
     }
      public void CreateRoute(final List<RouteEndpoint> routeEndpointList, final int color, final int zindex, boolean optimize){
          Log.i("DriverApp", "Sending requests");
@@ -378,6 +387,12 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
                          Polygon currentPolygon = mMap.addPolygon(polygonOptions);
                          mPolygonList.add(currentPolygon);
+                      /*   List<LatLng> pointList = currentPolygon.getPoints();
+                         double distance = 0;
+                        LatLng prev = pointList.get(0);
+                         for(int i=1;i<pointList.size()){
+                            distance += Location.distanceBetween();
+                         }*/
 
                      }
                  });
@@ -400,7 +415,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
             addDustBinMap(routeEndpoint);
         }
      //   mPendingRoutesToAdd.clear();
-        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_update_route_color), 0, false);
+        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_update_route_color), 0, true);
         tellToDriver(UTTER_UPDATE_SUCCESS);
         // getUserConfirmationForUpdate();
 
@@ -410,7 +425,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         //TODO:Should this be synchronized for mPendingRoutesToAdd?
         mPendingRoutesToAdd.clear();
         clearRoute();
-        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color),0,false);
+        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color),1,true);
         tellToDriver(UTTER_UPDATE_SUCCESS);
        // getUserConfirmationForUpdate();
 
@@ -423,7 +438,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         }
         mPendingRoutesToAdd.clear();
         clearRoute();
-        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 0, false);
+        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
         // getUserConfirmationForUpdate();
 
     }
@@ -594,15 +609,15 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
      @Override
      public void handleUpdateNodeList(ArrayList<RouteEndpoint> routeEndpointsList) {
+         if(!mRouteEndpointList.isEmpty()) {
+             if (alreadyAdded(routeEndpointsList)) {
+                 Log.i(TAG, "already added");
+                 return;
+             }
 
-         if(alreadyAdded(routeEndpointsList)) {
-             Log.i(TAG, "already added");
-             return;
+             addTemporaryPathForConfirmation();
+             tellToDriver(UTTER_ASK_FOR_UPDATE);
          }
-        mPendingRoutesToAdd.addAll(routeEndpointsList);
-        addTemporaryPathForConfirmation();
-        tellToDriver(UTTER_ASK_FOR_UPDATE);
-
      }
 
     @Override
@@ -612,21 +627,28 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
                 addDustBinMap(routeEndpoint);
             }
             CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
-            return;
-
+            final ImageView logoImage = (ImageView) findViewById(R.id.logo);
+            logoImage.setClickable(true);
         }
     }
 
     private boolean alreadyAdded(ArrayList<RouteEndpoint> routeEndpointsList) {
-
+        boolean bRetVal = true;
         for(RouteEndpoint routeEndpoint:routeEndpointsList){
+            boolean alreadyAdded = false;
             for(RouteEndpoint addedNode:mRouteEndpointList){
                 if(routeEndpoint.getId().equals(addedNode.getId())){
-                    return true;
+                    alreadyAdded = true;
+                    break;
                 }
             }
+            if(!alreadyAdded) {
+                mPendingRoutesToAdd.add(routeEndpoint);
+                bRetVal = false;
+            }
+
         }
-        return false;
+        return bRetVal;
     }
 
 

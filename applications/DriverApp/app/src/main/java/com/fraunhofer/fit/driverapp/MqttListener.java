@@ -16,7 +16,6 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.fit.fraunhofer.almanac.RouteEndpoint;
-import org.fit.fraunhofer.almanac.RouteEndpointsList;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -28,8 +27,8 @@ import java.util.List;
 public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     private final String TAG = "MqttListener";
-    private final String TOPIC = "/almanac/route";
-    private final String INIT_TOPIC = "/almanac/route/initial";
+    private final String topic = "/almanac/route";
+    private final String init_topic = "/almanac/route/initial";
     private MqttAndroidClient mClient ;
     private Context mContext;
     RouteUpdateHandler mRouteUpdateHandler;
@@ -45,6 +44,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     @Override
     public void connectionLost(Throwable throwable) {
         Log.e(TAG, "Connection lost");
+        mClient = null;
     }
 
     @Override
@@ -60,9 +60,9 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         for(RouteEndpoint routeEndpoint:routeEndpointsList){
             Log.i(TAG,routeEndpoint.getString());
         }
-        if(s.equals(TOPIC)) {
+        if(s.equals(topic)) {
             mRouteUpdateHandler.handleUpdateNodeList(routeEndpointsList);
-        }else if(s.equals(INIT_TOPIC)){
+        }else if(s.equals(init_topic)){
             mRouteUpdateHandler.handleInitNodeList(routeEndpointsList);
         }
     }
@@ -74,10 +74,11 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     @Override
     public void onSuccess(IMqttToken iMqttToken) {
+
         mClient.setCallback(this);
         try {
-            mClient.subscribe(TOPIC,1);
-            mClient.subscribe(INIT_TOPIC,1);
+            mClient.subscribe(topic,1);
+            mClient.subscribe(init_topic,1);
         } catch (MqttException e) {
             Log.e(TAG, "Failed to suscribe because " + e.toString());
         }
@@ -87,6 +88,21 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
                 ArrayList<RouteEndpoint> routeEndpointsList = new ArrayList<RouteEndpoint>();
 
 
+                RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
+                routeEndpointsList.add(LOC_C1);
+                RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
+                routeEndpointsList.add(LOC_B);
+                RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
+
+                routeEndpointsList.add(LOC_C);
+                RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
+                routeEndpointsList.add(LOC_D);
+                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091,    7.66843825 );//45.06818793,7.70531799);
+                routeEndpointsList.add(LOC_E);
+                RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
+                routeEndpointsList.add(LOC_F);
+                RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+                routeEndpointsList.add(LOC_G);
                 RouteEndpoint TOY_BIN = new RouteEndpoint();
 
                 TOY_BIN.geoLocation(45.061148, 7.700376);//45.064537048339844, 7.696494102478027);//45.06723305,    7.70074879);
@@ -97,7 +113,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
                 Gson gsonObj = new Gson();
                 String issueGson = gsonObj.toJson(routeEndpointsList);
 
-                mClient.publish(TOPIC, issueGson.getBytes(), 1, false);
+                mClient.publish(topic, issueGson.getBytes(), 1, false);
             } catch (MqttException e) {
                 Log.e(TAG, "Failed to publish because " + e.toString());
             }
@@ -112,10 +128,15 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public void disconnect() {
 
         try {
-            mClient.disconnect();
+            if(mClient != null) {
+                if(mClient.isConnected()){
+                    mClient.disconnect();
+                }
+            }
         } catch (MqttException e) {
             Log.e(TAG, "Failed to disconnect because " + e.toString());
         }
+        mClient = null;
 
     }
 
@@ -124,17 +145,18 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
         @Override
         protected String doInBackground(Context... params) {
+            if(mClient == null) {
+                mClient = new MqttAndroidClient(params[0], "tcp://m2m.eclipse.org:1883", "FitClient");//tcp://m2m.eclipse.org:1883
 
-            mClient = new MqttAndroidClient(params[0],"tcp://m2m.eclipse.org:1883","FitClient");//tcp://m2m.eclipse.org:1883
 
+                MqttConnectOptions connOpts = new MqttConnectOptions();
+                connOpts.setCleanSession(true);
+                try {
+                    mClient.connect(connOpts, null, MqttListener.this);
+                } catch (MqttException e) {
+                    Log.e(TAG, "Failed to connect because " + e.toString());
 
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-            try {
-                mClient.connect(connOpts, null, MqttListener.this);
-            } catch (MqttException e) {
-                Log.e(TAG,"Failed to connect because "+e.toString());
-
+                }
             }
             return null;
         }
