@@ -43,7 +43,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
     public ComplexEventHandlerImpl(Statement query) throws RemoteException {
         if(!knownInstances.containsKey("local"))
-            knownInstances.put("local","tcp://localhost:1883");
+            knownInstances.put("local","tcp://almanac:1883");
 
 
         if(!knownInstances.containsKey("ismb_public") )
@@ -57,7 +57,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
         try {
-            this.mqttClient = new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()),query.getName(), new MemoryPersistence());
+            this.mqttClient = new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()+ConfigurationManagement.DFM_ID),query.getName(), new MemoryPersistence());
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
         }
@@ -65,7 +65,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
     public void update(Map eventMap) {
 
-        LoggerService.report("info", "Updating query: " + query.getName());
+        LoggerService.report("info", Tools.getDateNowString()+" Updating query: " + query.getName());
 
         try {
 
@@ -82,8 +82,8 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
             // checking if handler still connected to Broker
-            if (!mqttClient.isConnected())
-                mqttClient.connect();
+           // if (!mqttClient.isConnected())
+            //    mqttClient.connect();
             // creating Event Response object
             //GenericCEP cepEvent = getCEPEnvelope();
 
@@ -301,15 +301,28 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         return cepEvent;
 
     }
-    private void publish( Object ent) throws Exception {
-        if(!mqttClient.isConnected())
-            mqttClient.connect();
+    private synchronized void  publish( Object ent) throws Exception {
+
+        while (!mqttClient.isConnected()) {
+
+
+            try {
+                mqttClient.connect();
+                Thread.sleep(1000);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+
         if (query.haveOutput())
             for (String output : query.getOutput()) {
                 mqttClient.publish(output + "/" + query.getHash(),   parser.writeValueAsString(ent).getBytes(), 0, false);
             }
         else
             mqttClient.publish(ConfigurationManagement.FUSED_TOPIC + query.getHash(), parser.writeValueAsString(ent).getBytes(), 0, false);
+
+
 
     }
 
