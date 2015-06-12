@@ -16,6 +16,7 @@
 		E93ECC781B16020900A0073D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E93ECC771B16020900A0073D /* Images.xcassets */; };
 		E93ECC7B1B16020900A0073D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E93ECC791B16020900A0073D /* LaunchScreen.xib */; };
 		E93ECC871B16020900A0073D /* WaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93ECC861B16020900A0073D /* WaterTests.swift */; };
+		E94F20671B2A291400CDE58B /* LineChartTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */; };
 		E992BAEB1B25BB4B007227F2 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E992BAEA1B25BB4B007227F2 /* GraphView.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		E93ECC801B16020900A0073D /* WaterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E93ECC851B16020900A0073D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E93ECC861B16020900A0073D /* WaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterTests.swift; sourceTree = "<group>"; };
+		E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartTestViewController.swift; sourceTree = "<group>"; };
 		E992BAEA1B25BB4B007227F2 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,6 +110,7 @@
 			children = (
 				E920ADEE1B161645004B93D3 /* LoginVC.swift */,
 				E920ADF31B161801004B93D3 /* ShowConsumptionVC.swift */,
+				E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */,
 				E920ADEA1B1602E4004B93D3 /* Thing.swift */,
 				E93ECC741B16020900A0073D /* Main.storyboard */,
 				E920ADF21B1617F1004B93D3 /* UIViews */,
@@ -305,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E992BAEB1B25BB4B007227F2 /* GraphView.swift in Sources */,
+				E94F20671B2A291400CDE58B /* LineChartTestViewController.swift in Sources */,
 				E920ADF41B161801004B93D3 /* ShowConsumptionVC.swift in Sources */,
 				E920ADEB1B1602E4004B93D3 /* Thing.swift in Sources */,
 				E920ADEF1B161645004B93D3 /* LoginVC.swift in Sources */,
