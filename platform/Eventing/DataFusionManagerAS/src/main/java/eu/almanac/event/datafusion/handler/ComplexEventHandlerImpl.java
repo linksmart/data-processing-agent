@@ -301,7 +301,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         return cepEvent;
 
     }
-    private void publish( Object ent) throws Exception {
+    private synchronized void  publish( Object ent) throws Exception {
 
         while (!mqttClient.isConnected()) {
 
@@ -323,12 +323,6 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             mqttClient.publish(ConfigurationManagement.FUSED_TOPIC + query.getHash(), parser.writeValueAsString(ent).getBytes(), 0, false);
 
 
-        try {
-            mqttClient.disconnect();
-            Thread.sleep(1000);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
     }
 
