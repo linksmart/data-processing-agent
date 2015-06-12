@@ -1,5 +1,6 @@
 package eu.almanac.event.datafusion.feeder;
 
+import eu.almanac.event.datafusion.esper.utils.Tools;
 import eu.almanac.event.datafusion.intern.ConfigurationManagement;
 import eu.almanac.event.datafusion.intern.LoggerService;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
@@ -107,7 +108,7 @@ public abstract class Feeder extends Thread implements EventFeeder, EventFeederL
     @Override
     public void update(Observable topic, Object mqttMessage)  {
 
-        LoggerService.report("info", "message arrived with topic: " + ((MqttTunnelledMessage) mqttMessage).getTopic());
+        LoggerService.report("info", Tools.getDateNowString()+" message arrived with topic: " + ((MqttTunnelledMessage) mqttMessage).getTopic());
 
         mangeEvent(((MqttTunnelledMessage)mqttMessage).getTopic(), ((MqttTunnelledMessage)mqttMessage).getPayload() );
 
