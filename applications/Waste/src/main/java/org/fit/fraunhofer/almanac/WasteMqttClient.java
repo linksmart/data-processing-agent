@@ -25,8 +25,9 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
 //            mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883","waste", new MemoryPersistence());
             mqttClient.setCallback(this);
             mqttClient.connect();
-            subscribe("/federation1/amiat/v2/cep/test123"); // "test123" after cep still to be replaced by the query code which Ángel will generate
+//            subscribe("/federation1/amiat/v2/cep/test123"); // "test123" after cep still to be replaced by the query code which Ángel will generate
 //            subscribe("/+/+/+/cep/108797012059995192299003590625306557191293393213306404837883519641824178766181");
+            subscribe("/+/+/+/cep/+");
         } catch (MqttException e) {
             e.printStackTrace();
         }
