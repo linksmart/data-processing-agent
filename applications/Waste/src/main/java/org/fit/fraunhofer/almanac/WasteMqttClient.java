@@ -18,21 +18,16 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
         openMqttConnection();
     }
 
-/*    private void hookToObserver(){
-        this.addObserver(WasteMqttClient.getObserver());
-    }
-
-    static public WasteMqttClient getObserver(){
-        return super.;
-    }*/
-
     private void openMqttConnection(){
         try {
 //            mqttClient = new MqttClient("tcp://localhost:1883","waste", new MemoryPersistence());
-            mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883","waste", new MemoryPersistence());
+            mqttClient = new MqttClient("tcp://almanac.fit.fraunhofer.de:1883","waste", new MemoryPersistence());
+//            mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883","waste", new MemoryPersistence());
             mqttClient.setCallback(this);
             mqttClient.connect();
-            subscribe("/federation1/amiat/v2/cep/"); // after cep I need still the query code which Ángel will generate
+//            subscribe("/federation1/amiat/v2/cep/test123"); // "test123" after cep still to be replaced by the query code which Ángel will generate
+//            subscribe("/+/+/+/cep/108797012059995192299003590625306557191293393213306404837883519641824178766181");
+            subscribe("/+/+/+/cep/+");
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -43,8 +38,9 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
             if (!mqttClient.isConnected()) {
                 mqttClient.connect();
             }
+
             mqttClient.publish(topic, message.getBytes(), 0, false);
-        } catch (MqttException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -54,7 +50,7 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
             if (!mqttClient.isConnected()) {
                 mqttClient.connect();
             }
-            mqttClient.subscribe("/" + topic);
+            mqttClient.subscribe(topic);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -109,10 +105,8 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
 
         // When this mesg arrives from DF, the update method in IssueManagement creates a new issue out of it!!
 
-        // Does topic need to be checked out?
         setChanged();
-        notifyObservers(message.getPayload());  // assuming message comes coded in Json
-
+        notifyObservers(message);
     }
 
 
