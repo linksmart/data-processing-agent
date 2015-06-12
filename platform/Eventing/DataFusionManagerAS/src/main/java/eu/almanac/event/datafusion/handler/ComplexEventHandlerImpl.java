@@ -57,7 +57,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
         try {
-            this.mqttClient = new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()+ConfigurationManagement.DFM_ID),query.getName(), new MemoryPersistence());
+            this.mqttClient = new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()),query.getName()+ConfigurationManagement.DFM_ID, new MemoryPersistence());
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
         }
