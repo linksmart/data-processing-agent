@@ -21,13 +21,13 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
     private void openMqttConnection(){
         try {
 //            mqttClient = new MqttClient("tcp://localhost:1883","waste", new MemoryPersistence());
-            mqttClient = new MqttClient("tcp://almanac.fit.fraunhofer.de:1883","waste", new MemoryPersistence());
+            mqttClient = new MqttClient("tcp://almanac.fit.fraunhofer.de:1883","wasteBackEnd", new MemoryPersistence());
 //            mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883","waste", new MemoryPersistence());
             mqttClient.setCallback(this);
             mqttClient.connect();
 //            subscribe("/federation1/amiat/v2/cep/test123"); // "test123" after cep still to be replaced by the query code which Ángel will generate
-//            subscribe("/+/+/+/cep/108797012059995192299003590625306557191293393213306404837883519641824178766181");
-            subscribe("/+/+/+/cep/+");
+            subscribe("/+/+/+/cep/5296850124791908742793477709595434718264213518621513551279291212674474587702"); // Data Fusion query
+//            subscribe("/+/+/+/cep/+");
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -60,7 +60,7 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
      // This callback is invoked upon losing the MQTT connection
     @Override
     public void connectionLost(Throwable t) {
-        System.out.println("Connection lost!");
+        System.out.println("Connection lost! Cause: " + t.getCause().toString() + " Message: " + t.getMessage());
 
         // reconnect to the broker
         while (!mqttClient.isConnected()) {
