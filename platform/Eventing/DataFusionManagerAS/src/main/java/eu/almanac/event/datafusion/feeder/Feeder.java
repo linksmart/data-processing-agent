@@ -108,7 +108,7 @@ public abstract class Feeder extends Thread implements EventFeeder, EventFeederL
     @Override
     public void update(Observable topic, Object mqttMessage)  {
 
-        LoggerService.report("info", Tools.getDateNowString()+"message arrived with topic: " + ((MqttTunnelledMessage) mqttMessage).getTopic());
+        LoggerService.report("info", Tools.getDateNowString()+" message arrived with topic: " + ((MqttTunnelledMessage) mqttMessage).getTopic());
 
         mangeEvent(((MqttTunnelledMessage)mqttMessage).getTopic(), ((MqttTunnelledMessage)mqttMessage).getPayload() );
 
