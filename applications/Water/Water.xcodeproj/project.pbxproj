@@ -16,7 +16,6 @@
 		E93ECC781B16020900A0073D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E93ECC771B16020900A0073D /* Images.xcassets */; };
 		E93ECC7B1B16020900A0073D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E93ECC791B16020900A0073D /* LaunchScreen.xib */; };
 		E93ECC871B16020900A0073D /* WaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93ECC861B16020900A0073D /* WaterTests.swift */; };
-		E94F20671B2A291400CDE58B /* LineChartTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */; };
 		E94F206B1B2A37CD00CDE58B /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F206A1B2A37CD00CDE58B /* Alert.swift */; };
 		E94F206D1B2A3D6900CDE58B /* WaterEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94F206C1B2A3D6900CDE58B /* WaterEventCell.swift */; };
 		E992BAEB1B25BB4B007227F2 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E992BAEA1B25BB4B007227F2 /* GraphView.swift */; };
@@ -48,7 +47,6 @@
 		E93ECC801B16020900A0073D /* WaterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WaterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E93ECC851B16020900A0073D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E93ECC861B16020900A0073D /* WaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterTests.swift; sourceTree = "<group>"; };
-		E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartTestViewController.swift; sourceTree = "<group>"; };
 		E94F206A1B2A37CD00CDE58B /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		E94F206C1B2A3D6900CDE58B /* WaterEventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaterEventCell.swift; sourceTree = "<group>"; };
 		E992BAEA1B25BB4B007227F2 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
@@ -115,7 +113,6 @@
 				E920ADEE1B161645004B93D3 /* LoginVC.swift */,
 				E920ADF31B161801004B93D3 /* ShowConsumptionVC.swift */,
 				E94F206C1B2A3D6900CDE58B /* WaterEventCell.swift */,
-				E94F20661B2A291400CDE58B /* LineChartTestViewController.swift */,
 				E93ECC741B16020900A0073D /* Main.storyboard */,
 				E94F20691B2A37B900CDE58B /* Model */,
 				E920ADF21B1617F1004B93D3 /* UIViews */,
@@ -217,11 +214,13 @@
 		E93ECC631B16020900A0073D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Thomas Gilbert";
 				TargetAttributes = {
 					E93ECC6A1B16020900A0073D = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = MS98VENSMS;
 					};
 					E93ECC7F1B16020900A0073D = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -322,7 +321,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E992BAEB1B25BB4B007227F2 /* GraphView.swift in Sources */,
-				E94F20671B2A291400CDE58B /* LineChartTestViewController.swift in Sources */,
 				E920ADF41B161801004B93D3 /* ShowConsumptionVC.swift in Sources */,
 				E920ADEB1B1602E4004B93D3 /* Thing.swift in Sources */,
 				E94F206D1B2A3D6900CDE58B /* WaterEventCell.swift in Sources */,
@@ -458,6 +456,7 @@
 			baseConfigurationReference = 57FDB98DA59CBD8AE7566AE9 /* Pods-Water.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Water/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -469,6 +468,7 @@
 			baseConfigurationReference = 45B7E1D174BAF293CE31A532 /* Pods-Water.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Water/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

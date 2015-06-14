@@ -10,6 +10,5 @@ import UIKit
 
 class WaterEventCell: UITableViewCell {
     @IBOutlet weak var utilityTextLabel: UILabel!
-
     @IBOutlet weak var alertTimeStamp: UILabel!
 }
