@@ -11,6 +11,7 @@
 		E920ADEB1B1602E4004B93D3 /* Thing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E920ADEA1B1602E4004B93D3 /* Thing.swift */; };
 		E920ADEF1B161645004B93D3 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E920ADEE1B161645004B93D3 /* LoginVC.swift */; };
 		E920ADF41B161801004B93D3 /* ShowConsumptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E920ADF31B161801004B93D3 /* ShowConsumptionVC.swift */; };
+		E92F29BF1B2DF05C005BF773 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92F29BE1B2DF05C005BF773 /* TestViewController.swift */; };
 		E93ECC711B16020900A0073D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93ECC701B16020900A0073D /* AppDelegate.swift */; };
 		E93ECC761B16020900A0073D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E93ECC741B16020900A0073D /* Main.storyboard */; };
 		E93ECC781B16020900A0073D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E93ECC771B16020900A0073D /* Images.xcassets */; };
@@ -38,6 +39,7 @@
 		E920ADEA1B1602E4004B93D3 /* Thing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thing.swift; sourceTree = "<group>"; };
 		E920ADEE1B161645004B93D3 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		E920ADF31B161801004B93D3 /* ShowConsumptionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowConsumptionVC.swift; sourceTree = "<group>"; };
+		E92F29BE1B2DF05C005BF773 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		E93ECC6B1B16020900A0073D /* Water.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Water.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E93ECC6F1B16020900A0073D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E93ECC701B16020900A0073D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				E920ADEE1B161645004B93D3 /* LoginVC.swift */,
 				E920ADF31B161801004B93D3 /* ShowConsumptionVC.swift */,
 				E94F206C1B2A3D6900CDE58B /* WaterEventCell.swift */,
+				E92F29BE1B2DF05C005BF773 /* TestViewController.swift */,
 				E93ECC741B16020900A0073D /* Main.storyboard */,
 				E94F20691B2A37B900CDE58B /* Model */,
 				E920ADF21B1617F1004B93D3 /* UIViews */,
@@ -322,6 +325,7 @@
 			files = (
 				E992BAEB1B25BB4B007227F2 /* GraphView.swift in Sources */,
 				E920ADF41B161801004B93D3 /* ShowConsumptionVC.swift in Sources */,
+				E92F29BF1B2DF05C005BF773 /* TestViewController.swift in Sources */,
 				E920ADEB1B1602E4004B93D3 /* Thing.swift in Sources */,
 				E94F206D1B2A3D6900CDE58B /* WaterEventCell.swift in Sources */,
 				E920ADEF1B161645004B93D3 /* LoginVC.swift in Sources */,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4zE-jX-Bwq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="l7j-bY-4ZX">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -146,7 +146,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="69" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="V71-5x-KfP">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="69" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="V71-5x-KfP">
                                 <rect key="frame" x="16" y="364" width="568" height="228"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -236,6 +236,53 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-828" y="652"/>
+        </scene>
+        <!--Test View Controller-->
+        <scene sceneID="6jR-mj-8FU">
+            <objects>
+                <viewController id="sma-8R-Irq" customClass="TestViewController" customModule="Water" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xxc-TW-dDu"/>
+                        <viewControllerLayoutGuide type="bottom" id="3rx-Cq-uEQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="GtV-pu-R6s">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TFX-DU-7fF" customClass="JBLineChartView">
+                                <rect key="frame" x="150" y="28" width="300" height="300"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="lcz-rn-u7p"/>
+                                    <constraint firstAttribute="height" constant="300" id="lsu-QB-3g2"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jbc-gQ-pzy">
+                                <rect key="frame" x="277" y="336" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnAddStuff:" destination="sma-8R-Irq" eventType="touchUpInside" id="2b0-Yj-mJD"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="jbc-gQ-pzy" firstAttribute="top" secondItem="TFX-DU-7fF" secondAttribute="bottom" constant="8" symbolic="YES" id="MzP-q4-pDh"/>
+                            <constraint firstItem="jbc-gQ-pzy" firstAttribute="centerX" secondItem="TFX-DU-7fF" secondAttribute="centerX" id="bUy-48-ZyJ"/>
+                            <constraint firstAttribute="centerX" secondItem="TFX-DU-7fF" secondAttribute="centerX" id="mYT-ub-1gY"/>
+                            <constraint firstAttribute="centerY" secondItem="TFX-DU-7fF" secondAttribute="centerY" constant="122" id="ws1-49-pXY"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="firstLayerView" destination="GtV-pu-R6s" id="ucC-tk-1ga"/>
+                        <outlet property="lineChart" destination="TFX-DU-7fF" id="3YR-9j-pLR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BDC-JC-Djj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-828" y="1330"/>
         </scene>
     </scenes>
     <resources>

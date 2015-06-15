@@ -5,6 +5,15 @@ import UIKit
     //Weekly sample data
     var graphPoints:[Int] = [4, 2, 6, 4, 5, 8, 3] {
         didSet {
+            let minValue = minElement(graphPoints)
+            var calculatedValues = [Int]()
+            
+            for number in graphPoints {
+                calculatedValues.append(number - minValue)
+            }
+            
+            graphPoints = calculatedValues
+            
             setNeedsDisplay()
         }
     }
@@ -67,10 +76,12 @@ import UIKit
         let bottomBorder:CGFloat = 50
         let graphHeight = height - topBorder - bottomBorder
         let maxValue = maxElement(graphPoints)
+        let minValue = minElement(graphPoints)
         var columnYPoint = { (graphPoint:Int) -> CGFloat in
             var y:CGFloat = CGFloat(graphPoint) /
                 CGFloat(maxValue) * graphHeight
             y = graphHeight + topBorder - y // Flip the graph
+            println(y)
             return y
         }
         

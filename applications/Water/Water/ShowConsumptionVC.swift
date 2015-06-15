@@ -13,7 +13,7 @@ import Charts
 import SIOSocket
 
 class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var alertTableView: UITableView!
     @IBOutlet weak var dayView: GraphView!
@@ -29,21 +29,23 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     var isDayShowing = true
     var socket = SIOSocket()
     
+    var alertShown = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.dayView.graphPoints = [0,1,2]//45,46,46,46,46,47,47,47,47,47,47,47,47,49,50]
-        self.monthView.graphPoints = [0,1,2]//45,57,60,75,90]
+        self.dayView.graphPoints = [0,1,2]
+        self.monthView.graphPoints = [0,1,2]
         
         // Do any additional setup after loading the view, typically from a nib.
         
-//        let URL = "http://cnet002.cloudapp.net/StorageManagerY2/SensorThings/DataStreams(fa947067e70f41279d8eaae89330cf18a400f76efbd0ae1ef58214bd5bafb8fc)/Observations"
-//        
-//        Alamofire.request(.GET, URL, parameters: nil)
-//            .responseObject { (response: ObservationsResponse?, error: NSError?) in
-//                println(error?.description)
-//                //self.dayView.setNeedsDisplay()
-//        }
+        //        let URL = "http://cnet002.cloudapp.net/StorageManagerY2/SensorThings/DataStreams(fa947067e70f41279d8eaae89330cf18a400f76efbd0ae1ef58214bd5bafb8fc)/Observations"
+        //
+        //        Alamofire.request(.GET, URL, parameters: nil)
+        //            .responseObject { (response: ObservationsResponse?, error: NSError?) in
+        //                println(error?.description)
+        //                //self.dayView.setNeedsDisplay()
+        //        }
         
         connetctToWebsocket()
         counterViewTap(nil)
@@ -51,7 +53,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func connetctToWebsocket() {
         println("Connecting to WS")
-
+        
         SIOSocket.socketWithHost("http://almanac.alexandra.dk:80", response: { (socket: SIOSocket!) in
             self.socket = socket
             
@@ -73,32 +75,42 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
             
             socket.on("alert", callback: { (package) -> Void in
                 NSLog("SocketIO alert: %@", package.description)
+                
+                if self.alertShown == false {
+                    
+                    var tmpAlert: Alert = Alert()
+                    tmpAlert.Title = "Leak detected"
+                    tmpAlert.Subtitle = "Oops I did it again"
+                    tmpAlert.TimeStamp = NSDate()
+                    self.alertList.insert(tmpAlert, atIndex: 0)
+                    
+                    self.alertShown = true
+                }
             })
             
             socket.on("scral", callback: { (package) -> Void in
-//                NSLog("SocketIO mqtt: %@", package.description);
-                
-                var tmpAlert: Alert = Alert()
-                tmpAlert.Title = "Leak detected"
-                tmpAlert.Subtitle = "Oops I did it again"
-                tmpAlert.TimeStamp = NSDate()
-                self.alertList.insert(tmpAlert, atIndex: 0)
+                //                NSLog("SocketIO mqtt: %@", package.description);
                 
                 let stuff: NSDictionary = package[0] as! NSDictionary
                 // println("\(stuff)")
                 let thing = stuff.valueForKeyPath("body.ResultValue") as! Double?
                 println("\(thing)")
                 
-                if let result = thing where result > 0{
-                    let measurement:Int = Int( floor(result*10000) )
+                if let result = thing {
+                    let measurement:Int = Int( floor(result) )
+                    if measurement == 0 {
+                        self.alertShown = false
+                    }
                     println("Setting point at: \(measurement)")
                     self.dayView.graphPoints.append(measurement)
+                    self.monthView.graphPoints.append(measurement)
+                    
                     
                     if self.dayView.graphPoints.count > 10 {
                         self.dayView.graphPoints.removeAtIndex(0)
                     }
                     
-                    if self.monthView.graphPoints.count > 10 {
+                    if self.monthView.graphPoints.count > 1000 {
                         self.monthView.graphPoints.removeAtIndex(0)
                     }
                 }
@@ -116,25 +128,28 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 options: UIViewAnimationOptions.TransitionFlipFromLeft
                     | UIViewAnimationOptions.ShowHideTransitionViews,
                 completion:nil)
-                periodInGraphLabel.text = "Month View"
+            periodInGraphLabel.text = "Month View"
         } else {
-                UIView.transitionFromView(monthView,
+            UIView.transitionFromView(monthView,
                 toView: dayView,
                 duration: 1.0,
                 options: UIViewAnimationOptions.TransitionFlipFromRight
                     | UIViewAnimationOptions.ShowHideTransitionViews,
                 completion: nil)
-                periodInGraphLabel.text = "Day View"
+            periodInGraphLabel.text = "Day View"
         }
         
+        #if debug
         var tmpAlert: Alert = Alert()
         tmpAlert.Title = "Leak detected"
         tmpAlert.Subtitle = "Oops I did it again"
         tmpAlert.TimeStamp = NSDate()
-        alertList.insert(tmpAlert, atIndex: 0)
+        self.alertList.insert(tmpAlert, atIndex: 0)
+        #endif
+
         isDayShowing = !isDayShowing
     }
-
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -148,21 +163,23 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         
         cell.utilityTextLabel.text = alertList[indexPath.row].Title
         cell.alertTimeStamp?.text = NSDateFormatter.localizedStringFromDate(alertList[indexPath.row].TimeStamp!, dateStyle: .MediumStyle, timeStyle: .MediumStyle)
-
+        
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        #if debug
         self.dayView.graphPoints.append(self.dayView.graphPoints.last! + 10*Int(arc4random_uniform(500)))
         self.monthView.graphPoints.append(self.monthView.graphPoints.last! + 10*Int(arc4random_uniform(500)))
-
+        
         if self.dayView.graphPoints.count > 30 {
             self.dayView.graphPoints.removeAtIndex(0)
         }
         
-        if self.monthView.graphPoints.count > 10 {
+        if self.monthView.graphPoints.count > 1000 {
             self.monthView.graphPoints.removeAtIndex(0)
         }
+        #endif
     }
 }
 
