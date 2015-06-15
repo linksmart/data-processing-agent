@@ -20,4 +20,6 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_update">Update</string>
     <string name="ToastOnStartup">It may take some seconds to load the map.............</string>
+    <string name="DistanceMessagePre">approximately </string>
+    <string name="DistanceMessagePost">meters more!!</string>
 </resources>

@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,8 +40,11 @@ import com.google.maps.model.DirectionsRoute;
 
 import org.fit.fraunhofer.almanac.RouteEndpoint;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -107,6 +111,8 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     CustomVoiceRecognizer mCustomVoiceRecognizer;
     List<Polygon> mPolygonList = new LinkedList<>();
     List<Marker> markerList = new LinkedList<>();
+
+    double mCurDistance = 0;
 
     CustomVoiceRecognizer.NoticeDialogListener mVoiceListener = new CustomVoiceRecognizer.NoticeDialogListener() {
         @Override
@@ -319,6 +325,8 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         mPendingRoutesToAdd.clear();
         markerList.clear();
         mPolygonList.clear();
+        mCurDistance = 0;
+
     }
 
      private void startMqttListener(){
@@ -391,12 +399,36 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
                          Polygon currentPolygon = mMap.addPolygon(polygonOptions);
                          mPolygonList.add(currentPolygon);
-                      /*   List<LatLng> pointList = currentPolygon.getPoints();
+                         List<LatLng> pointList = currentPolygon.getPoints();
                          double distance = 0;
-                        LatLng prev = pointList.get(0);
-                         for(int i=1;i<pointList.size()){
-                            distance += Location.distanceBetween();
-                         }*/
+
+                         Iterator<LatLng> iter = pointList.iterator();
+
+                         if(iter.hasNext()){
+                             LatLng prev = iter.next();
+                             float[] results = new float[3];
+                             while (iter.hasNext()){
+                                 LatLng cur = iter.next();
+
+
+                                 Location.distanceBetween(prev.latitude,prev.longitude,cur.latitude,cur.longitude,results);
+                                 distance+= results[0];
+                                 prev = cur;
+                             }
+
+                             TextView distancetext = (TextView) findViewById(R.id.distanceText);
+                             if(mCurDistance == 0){
+                                 distancetext.setText("");
+                             }else {
+                                 NumberFormat formatter = new DecimalFormat("#0.00");
+                                 distancetext.setText( formatter.format((distance - mCurDistance)/1000) + " kms " + "("+(int) ((distance - mCurDistance)*100.0/mCurDistance)+
+                                         "%) " + " more!");
+                             }
+                             mCurDistance =  distance;
+
+                         }
+
+
 
                      }
                  });
@@ -585,10 +617,11 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
          Button updateButton = (Button) findViewById(R.id.updateButton);
          Button cancelButton = (Button) findViewById(R.id.cancelButton);
          ImageView diversionView = (ImageView) findViewById(R.id.diversion);
-
+         TextView textView = (TextView) findViewById(R.id.distanceText);
          updateButton.setVisibility(visibility);
          cancelButton.setVisibility(visibility);
          diversionView.setVisibility(visibility);
+         textView.setVisibility(visibility);
 
      }
 

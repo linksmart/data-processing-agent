@@ -21,19 +21,30 @@
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:src="@drawable/logo_black"/>
+        <TextView android:id="@+id/distanceText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="20sp"
+
+            android:textStyle="bold"
+            android:textColor="@color/update_distance_text_color"
+            android:visibility="gone"
+            android:layout_below="@+id/logo"
+        />
         <ImageView android:id="@+id/diversion"
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:src="@drawable/diversion_sign"
             android:visibility="gone"
-            android:layout_below="@+id/logo"/>/>
+            android:layout_below="@+id/distanceText"/>
+
         <Button  android:id="@+id/updateButton"
             android:text="@string/button_update"
             android:textSize="40sp"
             android:layout_width="match_parent"
 
             android:layout_height="128dp"
-            android:background="#90009000"
+            android:background="@color/update_button_color"
             android:layout_centerHorizontal="true"
             android:visibility="gone"
             android:layout_below="@+id/diversion"
@@ -42,7 +53,7 @@
         <Button  android:id="@+id/cancelButton"
             android:text="@string/button_cancel"
             android:textSize="40sp"
-            android:background="#90FF0000"
+            android:background="@color/cancel_button_color"
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:visibility="gone"

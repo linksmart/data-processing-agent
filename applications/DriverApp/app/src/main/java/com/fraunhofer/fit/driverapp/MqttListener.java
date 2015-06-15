@@ -65,6 +65,19 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
             mRouteUpdateHandler.handleUpdateNodeList(routeEndpointsList);
         }else if(s.equals(init_topic)){
             mRouteUpdateHandler.handleInitNodeList(routeEndpointsList);
+            Log.i(TAG, "got init "+ mContext.getResources().getBoolean(R.bool.testLocally));
+            if(mContext.getResources().getBoolean(R.bool.testLocally)) {
+                ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
+                RouteEndpoint TOY_BIN = new RouteEndpoint();
+                TOY_BIN.geoLocation(45.061148, 7.700376);//45.064537048339844, 7.696494102478027);//45.06723305,    7.70074879);
+                TOY_BIN.setId("TOY_BIN");
+                routeEndpointsListToPub.add(TOY_BIN);
+
+
+                String issueGsonToPub = gsonObj.toJson(routeEndpointsListToPub);
+                Log.i(TAG, "publishing toy bin");
+                mClient.publish(topic, issueGsonToPub.getBytes(), 1, false);
+            }
         }
     }
 
@@ -100,23 +113,20 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
                 routeEndpointsList.add(LOC_C);
                 RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
                 routeEndpointsList.add(LOC_D);
-                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091,    7.66843825 );//45.06818793,7.70531799);
+                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091, 7.66843825 );//45.06818793,7.70531799);
                 routeEndpointsList.add(LOC_E);
                 RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
                 routeEndpointsList.add(LOC_F);
                 RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
                 routeEndpointsList.add(LOC_G);
-                RouteEndpoint TOY_BIN = new RouteEndpoint();
 
-                TOY_BIN.geoLocation(45.061148, 7.700376);//45.064537048339844, 7.696494102478027);//45.06723305,    7.70074879);
-                TOY_BIN.setId("TOY_BIN");
-                routeEndpointsList.add(TOY_BIN);
+
 
 
                 Gson gsonObj = new Gson();
                 String issueGson = gsonObj.toJson(routeEndpointsList);
 
-                mClient.publish(topic, issueGson.getBytes(), 1, false);
+                mClient.publish(init_topic, issueGson.getBytes(), 1, false);
             } catch (MqttException e) {
                 Log.e(TAG, "Failed to publish because " + e.toString());
             }
@@ -149,7 +159,12 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         @Override
         protected String doInBackground(Context... params) {
             if(mClient == null) {
-                mClient = new MqttAndroidClient(params[0], "tcp://almanac.fit.fraunhofer.de:1883", "FitClient");//tcp://m2m.eclipse.org:1883
+                if(mContext.getResources().getBoolean(R.bool.testLocally)) {
+                    Log.i(TAG, "connecting to eclipse");
+                    mClient = new MqttAndroidClient(params[0], "tcp://m2m.eclipse.org:1883", "FitClient");//tcp://m2m.eclipse.org:1883
+                }else {
+                    mClient = new MqttAndroidClient(params[0], "tcp://almanac.fit.fraunhofer.de:1883", "FitClient");//tcp://m2m.eclipse.org:1883
+                }
 
 
                 MqttConnectOptions connOpts = new MqttConnectOptions();
