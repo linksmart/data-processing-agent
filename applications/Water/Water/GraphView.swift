@@ -1,20 +1,44 @@
 import UIKit
 
 @IBDesignable class GraphView: UIView {
+    private var numberOfTimesCalled = 0
     
     //Weekly sample data
-    var graphPoints:[Int] = [4, 2, 6, 4, 5, 8, 3] {
+    private var graphPoints:[Int] = [4, 2, 6, 4, 5, 8, 3] {
         didSet {
-            let minValue = minElement(graphPoints)
-            var calculatedValues = [Int]()
+            setNeedsDisplay()
+        }
+    }
+    
+    var graphData:[Int] = [4, 2, 6, 4, 5, 8, 3] {
+        didSet {
+            numberOfTimesCalled++
             
-            for number in graphPoints {
-                calculatedValues.append(number - minValue)
+            let minValue = minElement(graphData)
+            if minValue > 0 {
+                
+                var calculatedValues = [Int]()
+
+                for number in graphData {
+                    if calculatedValues.last == ( number - minValue ) {
+                        calculatedValues.append(number - minValue + 1)
+                    } else {
+                        calculatedValues.append(number - minValue)
+                    }
+                }
+                
+                // println("Old: \(graphPoints)")
+                graphPoints = calculatedValues
+                // println("New: \(graphPoints)")
+            } else {
+                graphPoints = graphData
             }
             
-            graphPoints = calculatedValues
-            
-            setNeedsDisplay()
+            if numberOfTimesCalled == 10 {
+                graphData.removeAtIndex(0)
+                graphData.removeAtIndex(0)
+                graphData.removeAtIndex(0)
+            }
         }
     }
     
@@ -81,7 +105,6 @@ import UIKit
             var y:CGFloat = CGFloat(graphPoint) /
                 CGFloat(maxValue) * graphHeight
             y = graphHeight + topBorder - y // Flip the graph
-            println(y)
             return y
         }
         
@@ -172,6 +195,6 @@ import UIKit
         color.setStroke()
         
         linePath.lineWidth = 1.0
-        linePath.stroke()    
+        linePath.stroke()
     }
 }

@@ -31,21 +31,13 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     var alertShown = false
     
+    var latestValue: Int?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.dayView.graphPoints = [0,1,2]
-        self.monthView.graphPoints = [0,1,2]
-        
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        //        let URL = "http://cnet002.cloudapp.net/StorageManagerY2/SensorThings/DataStreams(fa947067e70f41279d8eaae89330cf18a400f76efbd0ae1ef58214bd5bafb8fc)/Observations"
-        //
-        //        Alamofire.request(.GET, URL, parameters: nil)
-        //            .responseObject { (response: ObservationsResponse?, error: NSError?) in
-        //                println(error?.description)
-        //                //self.dayView.setNeedsDisplay()
-        //        }
+        self.dayView.graphData = [0,1,2]
+        self.monthView.graphData = [0,1,2]
         
         connetctToWebsocket()
         counterViewTap(nil)
@@ -74,7 +66,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
             }
             
             socket.on("alert", callback: { (package) -> Void in
-                NSLog("SocketIO alert: %@", package.description)
+                //NSLog("SocketIO alert: %@", package.description)
                 
                 if self.alertShown == false {
                     
@@ -94,25 +86,27 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 let stuff: NSDictionary = package[0] as! NSDictionary
                 // println("\(stuff)")
                 let thing = stuff.valueForKeyPath("body.ResultValue") as! Double?
-                println("\(thing)")
+                // println("\(thing)")
                 
                 if let result = thing {
                     let measurement:Int = Int( floor(result) )
-                    if measurement == 0 {
+                    if measurement == self.latestValue {
                         self.alertShown = false
                     }
                     println("Setting point at: \(measurement)")
-                    self.dayView.graphPoints.append(measurement)
-                    self.monthView.graphPoints.append(measurement)
+                    self.dayView.graphData.append(measurement)
+                    self.monthView.graphData.append(measurement)
                     
                     
-                    if self.dayView.graphPoints.count > 10 {
-                        self.dayView.graphPoints.removeAtIndex(0)
+                    if self.dayView.graphData.count > 50 {
+                        self.dayView.graphData.removeAtIndex(0)
                     }
                     
-                    if self.monthView.graphPoints.count > 1000 {
-                        self.monthView.graphPoints.removeAtIndex(0)
+                    if self.monthView.graphData.count > 500 {
+                        self.monthView.graphData.removeAtIndex(0)
                     }
+                    
+                    self.latestValue = measurement
                 }
                 
                 // Start the load of event package
@@ -138,14 +132,6 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 completion: nil)
             periodInGraphLabel.text = "Day View"
         }
-        
-        #if debug
-        var tmpAlert: Alert = Alert()
-        tmpAlert.Title = "Leak detected"
-        tmpAlert.Subtitle = "Oops I did it again"
-        tmpAlert.TimeStamp = NSDate()
-        self.alertList.insert(tmpAlert, atIndex: 0)
-        #endif
 
         isDayShowing = !isDayShowing
     }
@@ -168,18 +154,18 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        #if debug
-        self.dayView.graphPoints.append(self.dayView.graphPoints.last! + 10*Int(arc4random_uniform(500)))
-        self.monthView.graphPoints.append(self.monthView.graphPoints.last! + 10*Int(arc4random_uniform(500)))
-        
-        if self.dayView.graphPoints.count > 30 {
-            self.dayView.graphPoints.removeAtIndex(0)
-        }
-        
-        if self.monthView.graphPoints.count > 1000 {
-            self.monthView.graphPoints.removeAtIndex(0)
-        }
-        #endif
+//        self.dayView.graphData.append(self.dayView.graphData.last! + 10*Int(arc4random_uniform(500)))
+//        self.monthView.graphData.append(self.monthView.graphData.last! + 10*Int(arc4random_uniform(500)))
+//        
+//        if self.dayView.graphData.count > 30 {
+//            self.dayView.graphData.removeAtIndex(0)
+//        }
+//        
+//        if self.monthView.graphData.count > 1000 {
+//            self.monthView.graphData.removeAtIndex(0)
+//        }
+        alertList = []
+        //self.dayView.graphData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     }
 }
 
