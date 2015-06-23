@@ -36,7 +36,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.dayView.graphData = [0,1,2]
+        self.dayView.graphData = [0,1,2,3,4,7,10,10,10,13,14,15,18,20,22,22,22,22,23,23,24,24,25,25,26,26]
         self.monthView.graphData = [0,1,2]
         
         connetctToWebsocket()
@@ -132,6 +132,13 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 completion: nil)
             periodInGraphLabel.text = "Day View"
         }
+        
+        var tmpAlert: Alert = Alert()
+        tmpAlert.Title = "Leak detected"
+        tmpAlert.Subtitle = "Oops I did it again"
+        tmpAlert.TimeStamp = NSDate()
+        self.alertList.insert(tmpAlert, atIndex: 0)
+
 
         isDayShowing = !isDayShowing
     }

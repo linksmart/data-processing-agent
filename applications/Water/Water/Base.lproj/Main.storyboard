@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4zE-jX-Bwq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E36b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="l7j-bY-4ZX">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -255,29 +255,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TFX-DU-7fF" customClass="JBLineChartView">
-                                <rect key="frame" x="150" y="28" width="300" height="300"/>
+                                <rect key="frame" x="16" y="28" width="568" height="552"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="lcz-rn-u7p"/>
-                                    <constraint firstAttribute="height" constant="300" id="lsu-QB-3g2"/>
-                                </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jbc-gQ-pzy">
-                                <rect key="frame" x="277" y="336" width="46" height="30"/>
-                                <state key="normal" title="Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="btnAddStuff:" destination="sma-8R-Irq" eventType="touchUpInside" id="2b0-Yj-mJD"/>
-                                </connections>
-                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="jbc-gQ-pzy" firstAttribute="top" secondItem="TFX-DU-7fF" secondAttribute="bottom" constant="8" symbolic="YES" id="MzP-q4-pDh"/>
-                            <constraint firstItem="jbc-gQ-pzy" firstAttribute="centerX" secondItem="TFX-DU-7fF" secondAttribute="centerX" id="bUy-48-ZyJ"/>
-                            <constraint firstAttribute="centerX" secondItem="TFX-DU-7fF" secondAttribute="centerX" id="mYT-ub-1gY"/>
-                            <constraint firstAttribute="centerY" secondItem="TFX-DU-7fF" secondAttribute="centerY" constant="122" id="ws1-49-pXY"/>
+                            <constraint firstItem="TFX-DU-7fF" firstAttribute="top" secondItem="xxc-TW-dDu" secondAttribute="bottom" constant="8" symbolic="YES" id="E2P-Jy-tzQ"/>
+                            <constraint firstItem="TFX-DU-7fF" firstAttribute="trailing" secondItem="GtV-pu-R6s" secondAttribute="trailingMargin" id="cY1-dh-NxZ"/>
+                            <constraint firstAttribute="bottom" secondItem="TFX-DU-7fF" secondAttribute="bottom" constant="20" symbolic="YES" id="dc8-Cw-fMs"/>
+                            <constraint firstItem="TFX-DU-7fF" firstAttribute="leading" secondItem="GtV-pu-R6s" secondAttribute="leadingMargin" id="thh-S2-uM7"/>
                         </constraints>
                     </view>
                     <connections>
@@ -288,6 +275,33 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BDC-JC-Djj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-828" y="1330"/>
+        </scene>
+        <!--BackgroundJB Chart View Controller-->
+        <scene sceneID="l95-CN-eEQ">
+            <objects>
+                <viewController id="l73-u0-VIx" customClass="BackgroundJBChartViewController" customModule="Water" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8aN-gL-Xe3"/>
+                        <viewControllerLayoutGuide type="bottom" id="5Uh-2E-05P"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kPk-QS-Y17">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oO0-Tp-Jbf" userLabel="Background">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="myGraphView" destination="oO0-Tp-Jbf" id="KUC-Jn-3uy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tze-jX-fFK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-828" y="2025"/>
         </scene>
     </scenes>
     <resources>
