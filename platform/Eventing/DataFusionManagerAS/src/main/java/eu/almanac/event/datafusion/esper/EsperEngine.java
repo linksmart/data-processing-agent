@@ -6,6 +6,7 @@ import eu.almanac.event.datafusion.handler.ComplexEventHandlerImpl;
 import eu.almanac.event.datafusion.intern.ConfigurationManagement;
 import eu.almanac.event.datafusion.intern.LoggerService;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.payload.OGCSensorThing.ObservationNumber;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Statement;
@@ -32,12 +33,14 @@ public class EsperEngine implements DataFusionWrapper {
         config.addImport(Tools.class);
         config.addImport(UUID.class);
         epService = EPServiceProviderManager.getDefaultProvider(config);
+       defineIoTTypes("observation", Observation.class);
 
     }
     private void defineIoTTypes(String esperTopic, Class type) {
 
 
         epService.getEPAdministrator().getConfiguration().addEventType(esperTopic, type);
+
 
     }
     private void checkQueriesReadiness( String newEventWithTopic){
@@ -63,20 +66,12 @@ public class EsperEngine implements DataFusionWrapper {
         try {
             synchronized (this) {
                 // if the topic type is already defined, then the event is send
-                if (epService.getEPAdministrator().getConfiguration().isEventTypeExists(esperTopic)) {
+                //if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists("observation"))
+
+                  //  defineIoTTypes("observation", type);
 
 
-                    epService.getEPRuntime().getEventSender(esperTopic).sendEvent(event);
-
-                } else {
-                    // The type is of the topic is not defined, then is defined now
-
-                    defineIoTTypes(esperTopic, type);
-
-                    epService.getEPRuntime().getEventSender(esperTopic).sendEvent(event);
-
-                }
-
+                epService.getEPRuntime().getEventSender("observation").sendEvent(event);
             }
         }catch(Exception e){
 
@@ -131,13 +126,12 @@ public class EsperEngine implements DataFusionWrapper {
 
 
 
-    private Integer noTopics =0;
     private boolean insertStream(String head, String paretTopic){
         if (epService.getEPAdministrator().getStatement(head)!=null)
             return false;
         EPStatement statement =null;
         try {
-             statement = epService.getEPAdministrator().createEPL("insert into "+paretTopic+".T"+head+" select * from "+paretTopic+".hash (id = '"+head+"')" , head);
+             statement = epService.getEPAdministrator().createEPL("insert into O"+head+" select * from observation(id = '"+head+"')" , head);
 
 
         }catch (EPStatementSyntaxException Esyn){
@@ -232,39 +226,39 @@ public class EsperEngine implements DataFusionWrapper {
 
         if(epService.getEPAdministrator().getStatement(query.getName())!=null) {
 
-            LoggerService.publish("queries/" + query.getName(), "Query with name" + query.getName() + " already added", null, true);
+            LoggerService.publish("queries/" + query.getHash(), "Query with name" + query.getName() + " already added", null, true);
             return false;
         }
             boolean allDefined = true, queryUpdate= false;
 
             String esperTopic;
             queryReady.put(query.getName(), true);
-            if (query.haveInput()) {
+            /* if (query.haveInput()) {
                 for (String topic : query.getInput()) {
 
                     // Adapt the topic to a Esper topic
                     //esperTopic = topic.substring(1).replace('/', '.');
 
                     // changing state of the queries this could be made in several places in several threads!
-                    synchronized (this) {
+                   synchronized (this) {
 
                         // if the type of the topic is defined
-                        if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(topic)) {
+                        if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(topic) && topic.contains("/federation")) {
                             // ToDO: this must be dynamic decided!
-                            defineIoTTypes(topic, Observation.class);
+                           // defineIoTTypes("observation", Observation.class);
                         }
                     }
                 }
-            }
+            }*/
                 try {
 
                     addEsperStatement(query);
                 }catch (Exception e){
 
-                        if(e.getMessage().startsWith("Failed to resolve event type:")) {
-                            defineIoTTypes(e.getMessage().split("'")[1], Observation.class);
+                           /* if(e.getMessage().startsWith("Failed to resolve event type: Event type or class named 'observation' was not found")) {
+                            defineIoTTypes("observation", Observation.class);
                             addEsperStatement(query);
-                        }else
+                        }else*/
                             throw e;
 
                 }

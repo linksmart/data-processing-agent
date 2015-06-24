@@ -32,18 +32,18 @@ public class EventFeeder extends Feeder {
 
             try {
 
-                ObservationNumber event = mapper.readValue(rawEvent,ObservationNumber.class);
+                Observation event = mapper.readValue(rawEvent,Observation.class);
                 event.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event, event.getClass());
-                LoggerService.report("info", "message arrived with ID: " + event.getSensor().getId());
+               // LoggerService.report("info", "message arrived with ID: " + event.getSensor().getId());
             }catch (InvalidFormatException e){
                 Observation event1 = mapper.readValue(rawEvent,Observation.class);
 
                 event1.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event1, event1.getClass());
-                LoggerService.report("info", "message arrived with ID: " + event1.getSensor().getId());
+            //    LoggerService.report("info", "message arrived with ID: " + event1.getSensor().getId());
             }
 
 

@@ -28,7 +28,7 @@ public class EPLStatement implements Statement {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return (new BigInteger(1,SHA256.digest((uuid+name).getBytes()))).toString();
+        return (new BigInteger(1,SHA256.digest((name).getBytes()))).toString();
     }
 
 

@@ -9,17 +9,17 @@ public class RouteEndpoint {
     private double latitude;
     private double longitude;
 
-    public void id(String id){ this.id = id; }
-    public void geoLocation(double lat, double longi) {
+    public void setId(String id){ this.id = id; }
+    public void setGeoLocation(double lat, double longi) {
         this.latitude = lat;
         this.longitude = longi;
     }
 
-    public void latitude(double lat) {
+    public void setLatitude(double lat) {
         this.latitude = lat;
     }
 
-    public void longitude(double longi) {
+    public void setLongitude(double longi) {
         this.longitude = longi;
     }
 }

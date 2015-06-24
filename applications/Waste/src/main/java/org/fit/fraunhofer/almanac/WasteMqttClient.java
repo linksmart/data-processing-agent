@@ -18,20 +18,16 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
         openMqttConnection();
     }
 
-/*    private void hookToObserver(){
-        this.addObserver(WasteMqttClient.getObserver());
-    }
-
-    static public WasteMqttClient getObserver(){
-        return super.;
-    }*/
-
     private void openMqttConnection(){
         try {
-            mqttClient = new MqttClient("tcp://localhost:1883","waste", new MemoryPersistence());
+//            mqttClient = new MqttClient("tcp://localhost:1883","waste", new MemoryPersistence());
+            mqttClient = new MqttClient("tcp://almanac.fit.fraunhofer.de:1883","wasteBackEnd", new MemoryPersistence());
+//            mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883","waste", new MemoryPersistence());
             mqttClient.setCallback(this);
             mqttClient.connect();
-            subscribe("/almanac/observation/iotentity/fullwastebins");
+//            subscribe("/federation1/amiat/v2/cep/test123"); // "test123" after cep still to be replaced by the query code which Ángel will generate
+            subscribe("/+/+/+/cep/5296850124791908742793477709595434718264213518621513551279291212674474587702"); // Data Fusion query
+//            subscribe("/+/+/+/cep/+");
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -42,8 +38,9 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
             if (!mqttClient.isConnected()) {
                 mqttClient.connect();
             }
+
             mqttClient.publish(topic, message.getBytes(), 0, false);
-        } catch (MqttException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -53,7 +50,7 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
             if (!mqttClient.isConnected()) {
                 mqttClient.connect();
             }
-            mqttClient.subscribe("/" + topic);
+            mqttClient.subscribe(topic);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -63,7 +60,7 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
      // This callback is invoked upon losing the MQTT connection
     @Override
     public void connectionLost(Throwable t) {
-        System.out.println("Connection lost!");
+        System.out.println("Connection lost! Cause: " + t.getCause().toString() + " Message: " + t.getMessage());
 
         // reconnect to the broker
         while (!mqttClient.isConnected()) {
@@ -108,10 +105,8 @@ public class WasteMqttClient extends Observable implements Observer, MqttCallbac
 
         // When this mesg arrives from DF, the update method in IssueManagement creates a new issue out of it!!
 
-        // Does topic need to be checked out?
         setChanged();
-        notifyObservers(message.getPayload());  // assuming message comes coded in Json
-
+        notifyObservers(message);
     }
 
 
