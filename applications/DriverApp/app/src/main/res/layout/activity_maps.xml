@@ -24,7 +24,7 @@
         <TextView android:id="@+id/distanceText"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:textSize="20sp"
+            android:textSize="17sp"
 
             android:textStyle="bold"
             android:textColor="@color/update_distance_text_color"

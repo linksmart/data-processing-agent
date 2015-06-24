@@ -421,8 +421,8 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
                                  distancetext.setText("");
                              }else {
                                  NumberFormat formatter = new DecimalFormat("#0.00");
-                                 distancetext.setText( formatter.format((distance - mCurDistance)/1000) + " kms " + "("+(int) ((distance - mCurDistance)*100.0/mCurDistance)+
-                                         "%) " + " more!");
+                                 distancetext.setText( formatter.format((distance - mCurDistance)/1000) + " km extension " + "("+(int) ((distance - mCurDistance)*100.0/mCurDistance)+
+                                         "%) ");
                              }
                              mCurDistance =  distance;
 
