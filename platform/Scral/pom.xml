@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.almanac</groupId>
+  <artifactId>Scral</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Scral parent</name>
+  <modules>
+    <module>pwal-api</module>
+    <module>pwal</module>
+    <module>smartsantander-manager</module>
+    <module>wastebinsimulator</module>
+    <module>owm-lib</module>
+    <module>pusher.mqtt</module>
+    <module>mqttclient</module>
+    <module>smartcity-api</module>
+    <module>file-utilities</module>    
+    <module>connectors.rest</module>
+  </modules>
+  <distributionManagement>
+    <snapshotRepository>
+      <uniqueVersion>true</uniqueVersion>
+      <id>almanac-snapshots</id>
+      <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>almanac-releases</id>
+      <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>
+    </repository>
+  </distributionManagement>
+</project>
