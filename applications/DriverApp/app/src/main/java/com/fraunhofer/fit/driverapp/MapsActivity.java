@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.speech.RecognizerIntent;
@@ -17,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,6 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -36,8 +40,11 @@ import com.google.maps.model.DirectionsRoute;
 
 import org.fit.fraunhofer.almanac.RouteEndpoint;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -45,7 +52,7 @@ import java.util.Locale;
 public class MapsActivity extends FragmentActivity implements TextToSpeech.OnInitListener, RouteUpdateHandler {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    PolygonOptions mPolygonOptions;
+   // PolygonOptions mPolygonOptions;
     private List<RouteEndpoint> mRouteEndpointList = new LinkedList<RouteEndpoint>();
     private List<RouteEndpoint> mPendingRoutesToAdd = new LinkedList<RouteEndpoint>();
     private RouteEndpoint mOriginalLocation;
@@ -60,11 +67,40 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     static final String UTTER_NOTHING_UPDATED = "Updatenothing";
     static final String UTTER_YES_NO = "PleaseSayYesNo";
 
-    RouteEndpoint BETHOVEN_HAUS = new RouteEndpoint("BETHOVEN_HAUS",50.737207, 7.101218);
-    RouteEndpoint SANKT_AUGUSTIN = new RouteEndpoint("SANKT_AUGUSTIN",50.748273, 7.199395);
-    RouteEndpoint HANGELAR = new RouteEndpoint("HANGELAR",50.758089,7.172432);
-    RouteEndpoint ZEITHSTRASSE = new RouteEndpoint("ZEITHSTRASSE",50.811548, 7.237281);
-    RouteEndpoint AULGASSE = new RouteEndpoint("AULGASSE",50.814422, 7.205180);
+   /* RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",50.737207, 7.101218);
+    RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",50.748273, 7.199395);
+    RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",50.758089,7.172432);
+    RouteEndpoint LOC_D = new RouteEndpoint("LOC_D",50.811548, 7.237281);
+    RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",50.814422, 7.205180);*/
+
+
+
+    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
+
+    RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
+
+    RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
+
+    RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
+
+
+    RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
+
+    RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091,    7.66843825 );//45.06818793,7.70531799);
+
+    RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
+
+    RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+
+
+
+   // RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.06748203,7.70223518);
+
+         /*   45.06814859
+            7.69576776
+
+            45.06694006
+            7.69901877*/
 
     private static final int REQUEST_CODE = 1001;
 
@@ -73,6 +109,11 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     private String mUtteranceId;/*To store the utter for temporarily for the first time*/
     MqttListener mqttListener;
     CustomVoiceRecognizer mCustomVoiceRecognizer;
+    List<Polygon> mPolygonList = new LinkedList<>();
+    List<Marker> markerList = new LinkedList<>();
+
+    double mCurDistance = 0;
+
     CustomVoiceRecognizer.NoticeDialogListener mVoiceListener = new CustomVoiceRecognizer.NoticeDialogListener() {
         @Override
         public void onPositive() {
@@ -86,15 +127,19 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         public void onNegative() {
             Log.i(TAG, "onNegative");
             stopGettingUserInput();
+            removeUpdate();
             tellToDriver(UTTER_NOTHING_UPDATED);
 
         }
 
         @Override
         public void onNoResult() {
+            stopGettingUserInput();
             tellToDriver(UTTER_YES_NO);
         }
     };
+    private int mVisibility = View.GONE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,22 +188,6 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     protected void onResume() {
         Log.i(TAG_LIFE, "onResume called");
         super.onResume();
-        /*if(isConnectedtoNetwork()) {
-            setUpMapIfNeeded();
-        }else{
-            AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
-
-            dlgAlert.setMessage(getString(R.string.message_on_no_nw_connection));
-            dlgAlert.setTitle(getString(R.string.title_on_no_nw_connection));
-            dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-            dlgAlert.create().show();
-
-        }*/
     }
 
     @Override
@@ -167,7 +196,9 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         Log.i(TAG_LIFE, "onDestroy called");
         clearMap();
         stopGettingUserInput();
-        ttObj.shutdown();  // releases resources used by TextToSpeech engine
+        if(ttObj != null) {
+            ttObj.shutdown();  // releases resources used by TextToSpeech engine
+        }
     }
 
     /**
@@ -179,7 +210,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
      * install/update the Google Play services APK on their device.
      * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
+     * LOC_F user can return to this FragmentActivity after following the prompt and correctly
      * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
      * have been completely destroyed during this process (it is likely that it would only be
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
@@ -209,16 +240,35 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     }
 
     private void addDustBinMap(RouteEndpoint routeEndpoint){
-        BitmapDescriptor trashIcon = BitmapDescriptorFactory.fromResource(R.drawable.bin_container_32);
+        BitmapDescriptor trashIcon = BitmapDescriptorFactory.fromResource(R.drawable.waste_container);
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(routeEndpoint.getLatLng())
                 .title(routeEndpoint.getId())
                 .icon(trashIcon);
-        mMap.addMarker(markerOptions);
+        Marker marker = mMap.addMarker(markerOptions);
+        markerList.add(marker);
         mRouteEndpointList.add(routeEndpoint);
 
     }
+
+    private void removeDustBinMap(RouteEndpoint routeEndpoint){
+
+        for (Marker marker:markerList){
+            if(marker.getTitle().equals(routeEndpoint.getId())){
+                marker.remove();
+                markerList.remove(marker);
+                break;
+            }
+        }
+
+        for (RouteEndpoint routeEndpoint1:mRouteEndpointList){
+            if(routeEndpoint1.getId().equals(routeEndpoint.getId())){
+                mRouteEndpointList.remove(routeEndpoint1);
+                break;
+            }
+        }
+     }
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
      * just add a marker near Africa.
@@ -226,20 +276,29 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        BitmapDescriptor curLocIcon = BitmapDescriptorFactory.fromResource(R.drawable.favicon);
+        BitmapDescriptor curLocIcon = BitmapDescriptorFactory.fromResource(R.drawable.waste_truck);
 
-        mOriginalLocation = BETHOVEN_HAUS;
+        mOriginalLocation = LOC_A;
         mMap.addMarker(new MarkerOptions()
                 .position(mOriginalLocation.getLatLng())
-                .title("Bethoven haus")
-                .icon(curLocIcon));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mOriginalLocation.getLatLng(), 12));
-        addDustBinMap(HANGELAR);
-        addDustBinMap(SANKT_AUGUSTIN);
-        addDustBinMap(ZEITHSTRASSE);
-        addDustBinMap(AULGASSE);
+                .title("Your location")
+                .icon(curLocIcon).rotation(300));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mOriginalLocation.getLatLng(), (float) 15));
+        if(getResources().getBoolean(R.bool.testLocally)) {
+            addDustBinMap(LOC_C1);
+            addDustBinMap(LOC_B);
 
-        CreateRoute();
+            addDustBinMap(LOC_C);
+
+            addDustBinMap(LOC_D);
+            addDustBinMap(LOC_E);
+            addDustBinMap(LOC_F);
+            addDustBinMap(LOC_G);
+
+            CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
+        }
+
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.ToastOnStartup), Toast.LENGTH_SHORT).show();   // shows a toast with the text spoken
       /*  PolygonOptions polygonOptions = new PolygonOptions();
 
         for(MarkerOptions markerOptions:mMarkerOptionsList ){
@@ -258,27 +317,33 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     }
     private void clearMap(){
         stopMqttListener();
-        mMap.clear();
+        if(mMap != null) {
+            mMap.clear();
+        }
+
         mRouteEndpointList.clear();
+        mPendingRoutesToAdd.clear();
+        markerList.clear();
+        mPolygonList.clear();
+        mCurDistance = 0;
 
     }
 
      private void startMqttListener(){
-     //    new Thread(new Runnable() {
-     //        public void run() {
-                 mqttListener = new MqttListener();
-                 mqttListener.connect(getApplicationContext(), MapsActivity.this);
-     //        }
-     //    });
-
+         final ImageView logoImage = (ImageView) findViewById(R.id.logo);
+         logoImage.setClickable(false);
+         mqttListener = new MqttListener();
+         mqttListener.connect(getApplicationContext(), MapsActivity.this);
      }
 
     private void stopMqttListener(){
-        mqttListener.disconnect();
+        if(mqttListener != null) {
+            mqttListener.disconnect();
+        }
     }
-     public void CreateRoute(){
+     public void CreateRoute(final List<RouteEndpoint> routeEndpointList, final int color, final int zindex, boolean optimize){
          Log.i("DriverApp", "Sending requests");
-         if(mRouteEndpointList.isEmpty()){ /*Nothing to do*/
+         if(routeEndpointList.isEmpty()){ /*Nothing to do*/
              Log.i("DriverApp","Empty marker list");
              return;
          }
@@ -294,7 +359,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
 
          List<String> wayPointList = new LinkedList<String>();
-         for(RouteEndpoint routeEndpoint:mRouteEndpointList){
+         for(RouteEndpoint routeEndpoint:routeEndpointList){
              String nextElement = routeEndpoint.getLatLngString();
              Log.i("DriverApp",nextElement);
              wayPointList.add(nextElement);
@@ -302,30 +367,69 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
          }
 
          request.waypoints(wayPointList.toArray(new String[wayPointList.size()]));
-         request.optimizeWaypoints(true);
+        if(optimize)
+             request.optimizeWaypoints(true);
+         else
+             request.optimizeWaypoints(false);
 
          request.setCallback(new PendingResult.Callback<DirectionsRoute[]>() {
              @Override
              public void onResult(DirectionsRoute[] result) {
-                 mPolygonOptions = new PolygonOptions();
+                 final PolygonOptions polygonOptions = new PolygonOptions();
                  for (DirectionsRoute directionsRoute : result) {
                      Log.i(TAG, "got the result successfully");
 
                      Log.i(TAG, directionsRoute.summary);
                      List<com.google.maps.model.LatLng> pathlist = directionsRoute.overviewPolyline.decodePath();
                      for (com.google.maps.model.LatLng path : pathlist) {
-                         mPolygonOptions.add(new LatLng(path.lat, path.lng));
+                         polygonOptions.add(new LatLng(path.lat, path.lng));
                      }
                  }
 
                  Resources res = getResources();
-                 mPolygonOptions.strokeColor(res.getColor(R.color.polyline_color));
+                 polygonOptions.strokeColor(res.getColor(R.color.polyline_color));
                  Log.i(TAG, "setting width=" + res.getInteger(R.integer.map_polygon_width));
-                 mPolygonOptions.strokeWidth(res.getInteger(R.integer.map_polygon_width));
+                 polygonOptions.strokeWidth(res.getInteger(R.integer.map_polygon_width));
+                 polygonOptions.strokeColor(color);
+                 polygonOptions.zIndex(zindex);
+
                  runOnUiThread(new Runnable() {
                      @Override
                      public void run() {
-                         Polygon polygon = mMap.addPolygon(mPolygonOptions);
+
+                         Polygon currentPolygon = mMap.addPolygon(polygonOptions);
+                         mPolygonList.add(currentPolygon);
+                         List<LatLng> pointList = currentPolygon.getPoints();
+                         double distance = 0;
+
+                         Iterator<LatLng> iter = pointList.iterator();
+
+                         if(iter.hasNext()){
+                             LatLng prev = iter.next();
+                             float[] results = new float[3];
+                             while (iter.hasNext()){
+                                 LatLng cur = iter.next();
+
+
+                                 Location.distanceBetween(prev.latitude,prev.longitude,cur.latitude,cur.longitude,results);
+                                 distance+= results[0];
+                                 prev = cur;
+                             }
+
+                             TextView distancetext = (TextView) findViewById(R.id.distanceText);
+                             if(mCurDistance == 0){
+                                 distancetext.setText("");
+                             }else {
+                                 NumberFormat formatter = new DecimalFormat("#0.00");
+                                 distancetext.setText( formatter.format((distance - mCurDistance)/1000) + " km extension " + "("+(int) ((distance - mCurDistance)*100.0/mCurDistance)+
+                                         "%) ");
+                             }
+                             mCurDistance =  distance;
+
+                         }
+
+
+
                      }
                  });
 
@@ -341,17 +445,48 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
      }
 
 
-    public void updateMapWithNewRoute() {
+    public void addTemporaryPathForConfirmation() {
         //TODO:Should this be synchronized for mPendingRoutesToAdd?
         for(RouteEndpoint routeEndpoint:mPendingRoutesToAdd){
             addDustBinMap(routeEndpoint);
         }
+     //   mPendingRoutesToAdd.clear();
+        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_update_route_color), 0, true);
+        tellToDriver(UTTER_UPDATE_SUCCESS);
+        // getUserConfirmationForUpdate();
+
+    }
+
+    public void updateMapWithNewRoute() {
+        //TODO:Should this be synchronized for mPendingRoutesToAdd?
         mPendingRoutesToAdd.clear();
-        CreateRoute();
+        clearRoute();
+        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color),1,true);
         tellToDriver(UTTER_UPDATE_SUCCESS);
        // getUserConfirmationForUpdate();
 
     }
+
+    public void removeUpdate() {
+        //TODO:Should this be synchronized for mPendingRoutesToAdd?
+        //Log.i(TAG,"pem")
+        for(RouteEndpoint routeEndpoint:mPendingRoutesToAdd){
+            removeDustBinMap(routeEndpoint);
+        }
+        mPendingRoutesToAdd.clear();
+        clearRoute();
+        CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
+        // getUserConfirmationForUpdate();
+
+    }
+    private void clearRoute() {
+        for (Polygon polygon:mPolygonList){
+            polygon.remove();
+        }
+        mPolygonList.clear();
+    }
+
+
 
     public void tellToDriver(String utterId){
         mUtteranceId =utterId;
@@ -374,6 +509,8 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
             /*disable restarting in this stage because the UI may go to unwanted state */
             final ImageView logoImage = (ImageView) findViewById(R.id.logo);
             logoImage.setClickable(false);
+            //customVoiceRecognizer.show(getFragmentManager(),"Say yes or no!!");
+            setVisibilityForUserConfirmation(View.VISIBLE);
         }else if(UTTER_UPDATE_SUCCESS.equals(utterId)){
             toSpeak = getString(R.string.message_on_update_route_success);
 
@@ -383,6 +520,8 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
             toSpeak = getString(R.string.message_on_user_reject);
         }else if(UTTER_YES_NO.equals(utterId)){
             toSpeak = getString(R.string.message_please_say_yes_no);
+            //customVoiceRecognizer.show(getFragmentManager(),"Say yes or no!!");
+            setVisibilityForUserConfirmation(View.VISIBLE);
         }
         if(toSpeak != null ) {
             param.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, mUtteranceId);
@@ -391,6 +530,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
             //ttObj.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, "ToDriver");
             ttObj.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, param);//TODO enable above code for API level 21
         }
+
     }
     @Override
     public void onInit(int status) {
@@ -415,7 +555,8 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
                             // when the route change message has been spoken, it's time for the driver to answer
 
                             if (utteranceId.equals(UTTER_ASK_FOR_UPDATE) || utteranceId.equals(UTTER_YES_NO)) {
-                                getUserConfirmationForUpdate();
+                                if(mVisibility == View.VISIBLE)
+                                    getUserConfirmationForUpdate();
                                 final ImageView logoImage = (ImageView) findViewById(R.id.logo);
                                 logoImage.setClickable(true);
                             }
@@ -449,8 +590,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
                    if (null == mCustomVoiceRecognizer)
                        mCustomVoiceRecognizer = new CustomVoiceRecognizer(mVoiceListener, getApplicationContext());
 
-                   //customVoiceRecognizer.show(getFragmentManager(),"Say yes or no!!");
-                   setVisibilityForUserConfirmation(View.VISIBLE);
+
                    mCustomVoiceRecognizer.startListening();
                }
            });
@@ -459,25 +599,29 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
     }
 
     private void stopGettingUserInput(){
+        if(mCustomVoiceRecognizer != null){
+            mCustomVoiceRecognizer.stopListening();
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                  setVisibilityForUserConfirmation(View.GONE);
-                 mCustomVoiceRecognizer.stopListening();
+
             }
         });
 
      }
 
      private void setVisibilityForUserConfirmation(final int visibility) {
-
+         mVisibility = visibility;
          Button updateButton = (Button) findViewById(R.id.updateButton);
          Button cancelButton = (Button) findViewById(R.id.cancelButton);
          ImageView diversionView = (ImageView) findViewById(R.id.diversion);
-
+         TextView textView = (TextView) findViewById(R.id.distanceText);
          updateButton.setVisibility(visibility);
          cancelButton.setVisibility(visibility);
          diversionView.setVisibility(visibility);
+         textView.setVisibility(visibility);
 
      }
 
@@ -491,37 +635,6 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
          }
      }
 
-  /*  @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-
-            // get recognition results in descending order of speech recognizer confidence
-            ArrayList<String> spokenText = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            boolean userSaidSomethingICanUnderstand = false;
-            for (String key : spokenText) {
-                if( key.equals("Ok, show me the route") || key.equals("show me the route")|| key.equals("yes")){
-                    Log.i(TAG_TTS, "Hurray!!User said Yes!!");
-                    tellToDriver(UTTER_UPDATING_PROGRESS);
-                    updateMapWithNewRoute();
-
-                    userSaidSomethingICanUnderstand = true;
-                    break;
-                }else if(key.equals("no")){
-                    Log.i(TAG_TTS, "User said no");
-                    userSaidSomethingICanUnderstand = true;
-                    break;
-                }else{
-                    Log.i(TAG_TTS, "User said:"+key);
-                }
-            }
-
-            if(!userSaidSomethingICanUnderstand){
-                tellToDriver(UTTER_ASK_FOR_UPDATE);
-            }
-
-        }
-    }*/
-
      private boolean isConnectedtoNetwork() {
          ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
          NetworkInfo net = connectMgr.getActiveNetworkInfo();
@@ -534,9 +647,171 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
      @Override
      public void handleUpdateNodeList(ArrayList<RouteEndpoint> routeEndpointsList) {
-         mPendingRoutesToAdd.addAll(routeEndpointsList);
-         tellToDriver(UTTER_ASK_FOR_UPDATE);
+         if(!mRouteEndpointList.isEmpty()) {
+             if (alreadyAdded(routeEndpointsList)) {
+                 Log.i(TAG, "already added");
+                 return;
+             }
+
+             addTemporaryPathForConfirmation();
+             tellToDriver(UTTER_ASK_FOR_UPDATE);
+         }
      }
 
+    @Override
+    public void handleInitNodeList(ArrayList<RouteEndpoint> routeEndpointsList) {
+        if(mRouteEndpointList.isEmpty()){
+            for(RouteEndpoint routeEndpoint:routeEndpointsList){
+                addDustBinMap(routeEndpoint);
+            }
+            CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
+            final ImageView logoImage = (ImageView) findViewById(R.id.logo);
+            logoImage.setClickable(true);
+        }
+    }
 
- }
+    private boolean alreadyAdded(ArrayList<RouteEndpoint> routeEndpointsList) {
+        boolean bRetVal = true;
+        for(RouteEndpoint routeEndpoint:routeEndpointsList){
+            boolean alreadyAdded = false;
+            for(RouteEndpoint addedNode:mRouteEndpointList){
+                if(routeEndpoint.getId().equals(addedNode.getId())){
+                    alreadyAdded = true;
+                    break;
+                }
+            }
+            if(!alreadyAdded) {
+                mPendingRoutesToAdd.add(routeEndpoint);
+                bRetVal = false;
+            }
+
+        }
+        return bRetVal;
+    }
+
+
+}
+ /* private final double degreesPerRadian = 180.0 / Math.PI;
+
+    private void DrawArrowHead(GoogleMap mMap, LatLng from, LatLng to){
+        // obtain the bearing between the last two points
+        double bearing = GetBearing(from, to);
+
+        // round it to a multiple of 3 and cast out 120s
+        double adjBearing = Math.round(bearing / 3) * 3;
+        while (adjBearing >= 120) {
+            adjBearing -= 120;
+        }
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        // Get the corresponding triangle marker from Google
+        URL url;
+        Bitmap image = null;
+
+        try {
+            url = new URL("http://www.google.com/intl/en_ALL/mapfiles/dir_" + String.valueOf((int)adjBearing) + ".png");
+            try {
+                image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        if (image != null){
+
+            // Anchor is ratio in range [0..1] so value of 0.5 on x and y will center the marker image on the lat/long
+            float anchorX = 0.5f;
+            float anchorY = 0.5f;
+
+            int offsetX = 0;
+            int offsetY = 0;
+
+            // images are 24px x 24px
+            // so transformed image will be 48px x 48px
+
+            //315 range -- 22.5 either side of 315
+            if (bearing >= 292.5 && bearing < 335.5){
+                offsetX = 24;
+                offsetY = 24;
+            }
+            //270 range
+            else if (bearing >= 247.5 && bearing < 292.5){
+                offsetX = 24;
+                offsetY = 12;
+            }
+            //225 range
+            else if (bearing >= 202.5 && bearing < 247.5){
+                offsetX = 24;
+                offsetY = 0;
+            }
+            //180 range
+            else if (bearing >= 157.5 && bearing < 202.5){
+                offsetX = 12;
+                offsetY = 0;
+            }
+            //135 range
+            else if (bearing >= 112.5 && bearing < 157.5){
+                offsetX = 0;
+                offsetY = 0;
+            }
+            //90 range
+            else if (bearing >= 67.5 && bearing < 112.5){
+                offsetX = 0;
+                offsetY = 12;
+            }
+            //45 range
+            else if (bearing >= 22.5 && bearing < 67.5){
+                offsetX = 0;
+                offsetY = 24;
+            }
+            //0 range - 335.5 - 22.5
+            else {
+                offsetX = 12;
+                offsetY = 24;
+            }
+
+            Bitmap wideBmp;
+            Canvas wideBmpCanvas;
+            Rect src, dest;
+
+            // Create larger bitmap 4 times the size of arrow head image
+            wideBmp = Bitmap.createBitmap(image.getWidth() * 2, image.getHeight() * 2, image.getConfig());
+
+            wideBmpCanvas = new Canvas(wideBmp);
+
+            src = new Rect(0, 0, image.getWidth(), image.getHeight());
+            dest = new Rect(src);
+            dest.offset(offsetX, offsetY);
+
+            wideBmpCanvas.drawBitmap(image, src, dest, null);
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(to)
+                    .icon(BitmapDescriptorFactory.fromBitmap(wideBmp))
+                    .anchor(anchorX, anchorY));
+        }
+    }
+
+    private double GetBearing(LatLng from, LatLng to){
+        double lat1 = from.latitude * Math.PI / 180.0;
+        double lon1 = from.longitude * Math.PI / 180.0;
+        double lat2 = to.latitude * Math.PI / 180.0;
+        double lon2 = to.longitude * Math.PI / 180.0;
+
+        // Compute the angle.
+        double angle = - Math.atan2( Math.sin( lon1 - lon2 ) * Math.cos( lat2 ), Math.cos( lat1 ) * Math.sin( lat2 ) - Math.sin( lat1 ) * Math.cos( lat2 ) * Math.cos( lon1 - lon2 ) );
+
+        if (angle < 0.0)
+            angle += Math.PI * 2.0;
+
+        // And convert result to degrees.
+        angle = angle * degreesPerRadian;
+
+        return angle;
+    }*/

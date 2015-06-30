@@ -1,18 +1,21 @@
 //
 //  LoginVC.swift
-//  iGive
+//  Water
 //
 //  Created by Thomas Gilbert on 03/03/15.
 //  Copyright (c) 2015 Thomas Gilbert. All rights reserved.
 //
 
 import UIKit
+import SIOSocket
 
 class LoginVC: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
     let imageData = UIImage(named: "4-1")
     var maxScale: CGFloat?
     private var imageView = UIImageView()
+    
+    let scralSocket = SIOSocket()
     
     @IBOutlet weak var imageScrollView: UIScrollView!
     @IBOutlet weak var txtUsername: UITextField!
