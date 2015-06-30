@@ -1,10 +1,10 @@
 package eu.almanac.event.datafusion.core;
 
 import eu.almanac.event.datafusion.esper.EsperEngine;
-import eu.almanac.event.datafusion.feeders.EventFeederImpl;
+import eu.almanac.event.datafusion.feeder.EventFeederImpl;
 
-import eu.almanac.event.datafusion.feeders.FeederImpl;
-import eu.almanac.event.datafusion.feeders.QueryFeederImpl;
+import eu.almanac.event.datafusion.feeder.FeederImpl;
+import eu.almanac.event.datafusion.feeder.QueryFeederImpl;
 import eu.almanac.event.datafusion.intern.ConfigurationManagement;
 import eu.almanac.event.datafusion.intern.LoggerService;
 
