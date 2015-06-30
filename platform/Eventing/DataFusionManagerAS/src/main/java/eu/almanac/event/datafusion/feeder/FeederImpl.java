@@ -1,4 +1,4 @@
-package eu.almanac.event.datafusion.feeders;
+package eu.almanac.event.datafusion.feeder;
 
 import eu.almanac.event.datafusion.esper.utils.Tools;
 import eu.almanac.event.datafusion.intern.LoggerService;

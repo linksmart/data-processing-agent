@@ -2,19 +2,16 @@ package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import eu.almanac.event.datafusion.intern.ConfigurationManagement;
-import eu.almanac.event.datafusion.intern.LoggerService;
-import eu.almanac.event.datafusion.utils.payload.OGCSensorThing.ObservationNumber;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
 /**
  * Created by Caravajal on 22.05.2015.
  */
-public class EventFeeder extends Feeder {
+public class EventFeederImpl extends FeederImpl {
     private ObjectMapper mapper = new ObjectMapper();
 
-    public EventFeeder(String brokerName, String brokerPort, String topic) {
+    public EventFeederImpl(String brokerName, String brokerPort, String topic) {
         super(brokerName, brokerPort, topic);
 
     }

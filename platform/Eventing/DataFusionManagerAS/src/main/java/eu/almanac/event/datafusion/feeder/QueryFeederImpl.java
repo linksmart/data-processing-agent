@@ -11,11 +11,11 @@ import eu.linksmart.api.event.datafusion.Statement;
 /**
  * Created by José Ángel Carvajal on 22.05.2015 a researcher of Fraunhofer FIT.
  */
-public class QueryFeeder extends Feeder {
+public class QueryFeederImpl extends EventFeederImpl {
 
     private Gson parser = new Gson();
 
-    public QueryFeeder(String brokerName, String brokerPort, String topic) {
+    public QueryFeederImpl(String brokerName, String brokerPort, String topic) {
         super(brokerName, brokerPort, topic);
     }
 
