@@ -1,10 +1,10 @@
 package eu.almanac.event.datafusion.core;
 
 import eu.almanac.event.datafusion.esper.EsperEngine;
-import eu.almanac.event.datafusion.feeder.EventFeeder;
+import eu.almanac.event.datafusion.feeders.EventFeederImpl;
 
-import eu.almanac.event.datafusion.feeder.Feeder;
-import eu.almanac.event.datafusion.feeder.QueryFeeder;
+import eu.almanac.event.datafusion.feeders.FeederImpl;
+import eu.almanac.event.datafusion.feeders.QueryFeederImpl;
 import eu.almanac.event.datafusion.intern.ConfigurationManagement;
 import eu.almanac.event.datafusion.intern.LoggerService;
 
@@ -37,34 +37,35 @@ public class DataFusionManager {
         }
 
         if(args.length>=3){
-            ConfigurationManagement.STATEMENT_BASE_TOPIC = args[2];
+            ConfigurationManagement.FUSED_TOPIC = args[2];
         }
 
         System.out.println(
                         "The Data-Fusion Manager is starting with ID: "+ConfigurationManagement.DFM_ID +";" +
                         " with incoming events in broker tcp://"+ConfigurationManagement.BROKER_HOST+":"+ConfigurationManagement.BROKER_PORT+
                         " waiting for events from the topic: "+ ConfigurationManagement.EVENT_TOPIC+";" +
-                        " waiting for queries from topic: " +ConfigurationManagement.STATEMENT_ADD_TOPIC
+                        " waiting for queries from topic: " +ConfigurationManagement.STATEMENT_ADD_TOPIC +
+                        " generating event in: "+ConfigurationManagement.FUSED_TOPIC
         );
-        Feeder feederEvents = null,  feederQuery = null;
+        FeederImpl feederImplEvents = null,  feederImplQuery = null;
         try {
-            feederEvents = new EventFeeder(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.EVENT_TOPIC);
+            feederImplEvents = new EventFeederImpl(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.EVENT_TOPIC);
 
             EsperEngine esper = new EsperEngine();
 
-            feederEvents.dataFusionWrapperSignIn(esper);
+            feederImplEvents.dataFusionWrapperSignIn(esper);
 
 
-            feederQuery = new QueryFeeder(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.STATEMENT_ADD_TOPIC);
+            feederImplQuery = new QueryFeederImpl(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.STATEMENT_ADD_TOPIC);
 
 
-            feederQuery.dataFusionWrapperSignIn(esper);
+            feederImplQuery.dataFusionWrapperSignIn(esper);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         int i = 0;
-        while (!feederEvents.isDown() || !feederQuery.isDown()){
+        while (!feederImplEvents.isDown() || !feederImplQuery.isDown()){
             if (i == 0)
             LoggerService.publish("info", "Data Fusion Manager is alive", null, false);
             i = (i+1)%6;

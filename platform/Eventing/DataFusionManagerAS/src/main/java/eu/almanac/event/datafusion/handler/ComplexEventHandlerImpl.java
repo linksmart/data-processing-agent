@@ -12,6 +12,7 @@ import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
+import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Statement;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
@@ -63,6 +64,8 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
         }
     }
 
+
+    @Override
     public void update(Map eventMap) {
 
         LoggerService.report("info", Tools.getDateNowString()+" Updating query: " + query.getName());
@@ -329,7 +332,6 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
 
-    @Override
     public boolean publishError(String errorMessage) {
 
         LoggerService.publish("query/" + query.getName(), errorMessage, null, true);
