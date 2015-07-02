@@ -9,6 +9,7 @@
   <modules>
     <module>pwal-api</module>
     <module>pwal</module>
+    <module>etsi-m2m-manager</module>
     <module>smartsantander-manager</module>
     <module>wastebinsimulator</module>
     <module>owm-lib</module>
