@@ -15,9 +15,39 @@
     <module>pusher.mqtt</module>
     <module>mqttclient</module>
     <module>smartcity-api</module>
-    <module>file-utilities</module>    
+    <module>file-utilities</module>
     <module>connectors.rest</module>
   </modules>
+  <repositories>
+    <repository>
+      <id>maven_default</id>
+      <url>http://repo.maven.apache.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>linksmart</id>
+      <url>https://linksmart.eu/repo/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>thirdparty</id>
+      <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/thirdparty/</url>
+    </repository>
+    <repository>
+      <id>almanac-snapshots</id>
+      <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>
+    </repository>
+    <repository>
+      <id>almanac-releases</id>
+      <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>
+    </repository>
+  </repositories>
   <distributionManagement>
     <snapshotRepository>
       <uniqueVersion>true</uniqueVersion>
