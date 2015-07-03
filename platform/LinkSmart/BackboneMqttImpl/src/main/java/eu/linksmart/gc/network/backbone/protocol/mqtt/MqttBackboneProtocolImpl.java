@@ -139,6 +139,18 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
 
     }
 
+    protected void startBroadcastPropagation(){
+        try {
+            if (!Boolean.valueOf(conf.get(conf.BROKER_AS_SERVICE)))
+                throw new UnsupportedOperationException("The propagation broadcast propagation service is just available in combination with the Broker as a service setting");
+            if(!openClients.containsKey(conf.get(conf.BROADCAST_TOPIC))){
+                openClients.put(conf.get(conf.BROADCAST_TOPIC),new ForwardingListener( brokerService.getBrokerName(), brokerService.getBrokerPort(), conf.get(conf.BROADCAST_TOPIC), MQTTProtocolID, this));
+
+            }
+        }catch (Exception e){
+            LOG.error("Error while starting Broadcast Propagation service: "+e.getMessage(),e);
+        }
+    }
 
 
 
@@ -562,7 +574,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
         LOG.info("Making broadcast in the MQTT Protocol");
         try {
             brokerService.publish(
-                    conf.get(MqttBackboneProtocolConfigurator.BROADCAST),
+                    conf.get(MqttBackboneProtocolConfigurator.BROADCAST_TOPIC),
                     data,
                     Integer.valueOf(conf.get(MqttBackboneProtocolConfigurator.QoS)),
                     Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.PERSISTENCE))
@@ -699,6 +711,11 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
         for (VirtualAddress vad : listeningVirtualAddresses.get(data.getTopic()))
             receiveDataAsynch((VirtualAddress)endpointVirtualAddressTopic.getKey(data.getTopic()), vad, data.toBytes());
     }
+    private void handleBroadcast(MqttTunnelledMessage data){
+
+        receiveDataAsynch(brokerService.getVirtualAddress(),null,data.toBytes());
+
+    }
     /**
      * make the necessary steps needed to update the configuration of the broker
      * @param map the updated info
@@ -737,6 +754,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
                 LOG.error("Error applying configuration: " + e.getMessage(), e);
             }
 
+        // TODO: Apply configuration changes regarding broadcast settings
 
 
         LOG.info("Configuration changes applied!");

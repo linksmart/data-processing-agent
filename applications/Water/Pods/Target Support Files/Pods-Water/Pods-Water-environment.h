@@ -24,6 +24,12 @@
 #define COCOAPODS_VERSION_MINOR_Charts 1
 #define COCOAPODS_VERSION_PATCH_Charts 0
 
+// JBChartView
+#define COCOAPODS_POD_AVAILABLE_JBChartView
+#define COCOAPODS_VERSION_MAJOR_JBChartView 2
+#define COCOAPODS_VERSION_MINOR_JBChartView 8
+#define COCOAPODS_VERSION_PATCH_JBChartView 14
+
 // ObjectMapper
 #define COCOAPODS_POD_AVAILABLE_ObjectMapper
 #define COCOAPODS_VERSION_MAJOR_ObjectMapper 0

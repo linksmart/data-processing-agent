@@ -10,4 +10,5 @@ import java.util.ArrayList;
  */
 public interface RouteUpdateHandler {
     public void handleUpdateNodeList(ArrayList<RouteEndpoint> routeEndpointsList);
+    public void handleInitNodeList(ArrayList<RouteEndpoint> routeEndpointsList);
 }

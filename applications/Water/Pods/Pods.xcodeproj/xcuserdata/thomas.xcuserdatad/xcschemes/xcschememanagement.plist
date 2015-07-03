@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Water-JBChartView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Water-ObjectMapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,32 +42,37 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0965EBB45D376FA1CF55C21F</key>
+		<key>38CFEC74ED87E764224118AC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9C149625F5AB114ED601308A</key>
+		<key>3AA291E7119D701122FF5979</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C725BDE99E64BBB0CD1F8471</key>
+		<key>836234E0562F9BED680CC424</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D853781D309F63CD6A0ABCAF</key>
+		<key>88CC0D2483029855620509E1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DF76C50313773D3792B4E6FE</key>
+		<key>BC0C15335F42A909A7C2CF83</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F7F94C3F19252D88CB38AF4E</key>
+		<key>E1C4CCF1AB1D3EED514C99F7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F666A452A10E2CBD61C5C7D8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
