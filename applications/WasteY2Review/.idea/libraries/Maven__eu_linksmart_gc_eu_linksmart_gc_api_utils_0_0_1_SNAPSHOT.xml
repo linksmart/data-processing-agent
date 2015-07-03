@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: eu.linksmart.gc:eu.linksmart.gc.api.utils:0.0.1-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/linksmart/gc/eu.linksmart.gc.api.utils/0.0.1-SNAPSHOT/eu.linksmart.gc.api.utils-0.0.1-20150626.093956-85.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/linksmart/gc/eu.linksmart.gc.api.utils/0.0.1-SNAPSHOT/eu.linksmart.gc.api.utils-0.0.1-20150626.093956-85-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/linksmart/gc/eu.linksmart.gc.api.utils/0.0.1-SNAPSHOT/eu.linksmart.gc.api.utils-0.0.1-20150626.093956-85-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
