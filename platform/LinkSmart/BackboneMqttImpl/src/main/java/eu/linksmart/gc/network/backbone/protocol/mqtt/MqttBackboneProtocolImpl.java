@@ -126,9 +126,12 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
         try {
             LOG.info("Starting broker main client with name:" +MQTTProtocolID.toString());
 
-            brokerService = new BrokerConnectionService(conf.get(MqttBackboneProtocolConfigurator.BROKER_NAME),conf.get(MqttBackboneProtocolConfigurator.BROKER_PORT), MQTTProtocolID,networkManager,Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE)));
+            brokerService = new BrokerConnectionService(conf.get(MqttBackboneProtocolConfigurator.BROKER_NAME),conf.get(MqttBackboneProtocolConfigurator.BROKER_PORT), MQTTProtocolID,networkManager,Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE)),conf.get(conf.BACKBONE_DESCRIPTION));
 
             brokerService.connect();
+
+            startBroadcastPropagation();
+
         } catch (Exception e) {
             LOG.error("Activating error:"+e.getMessage(),e);
 
@@ -142,11 +145,12 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
     protected void startBroadcastPropagation(){
         try {
             if (!Boolean.valueOf(conf.get(conf.BROKER_AS_SERVICE)))
-                throw new UnsupportedOperationException("The propagation broadcast propagation service is just available in combination with the Broker as a service setting");
+                throw new UnsupportedOperationException("The  broadcast propagation service is just available in combination with the Broker as a service setting");
             if(!openClients.containsKey(conf.get(conf.BROADCAST_TOPIC))){
                 openClients.put(conf.get(conf.BROADCAST_TOPIC),new ForwardingListener( brokerService.getBrokerName(), brokerService.getBrokerPort(), conf.get(conf.BROADCAST_TOPIC), MQTTProtocolID, this));
 
-            }
+            }else
+                throw new UnsupportedOperationException("The  broadcast propagation service needs a broadcast topic");
         }catch (Exception e){
             LOG.error("Error while starting Broadcast Propagation service: "+e.getMessage(),e);
         }
@@ -571,8 +575,12 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
     
     @Override
 	public NMResponse broadcastData(VirtualAddress senderVirtualAddress, byte[] data) {
+        if(senderVirtualAddress.equals(brokerService.getVirtualAddress()))
+            return new NMResponse(NMResponse.STATUS_SUCCESS);
+
         LOG.info("Making broadcast in the MQTT Protocol");
         try {
+
             brokerService.publish(
                     conf.get(MqttBackboneProtocolConfigurator.BROADCAST_TOPIC),
                     data,
@@ -674,7 +682,9 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
         // get the VAD which this topic is subscribed
        // VirtualAddress senderVAD =endpointTopicVirtualAddress.get(conf.get(conf.BROKER_URL));
 
-        if(Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE)))
+        if(data.getTopic().equals(conf.get(conf.BROADCAST_TOPIC)))
+            bbRouter.broadcastData(brokerService.getVirtualAddress(), data.toBytes());
+        else if (Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE)))
             receiveDataBrokerBase(data);
         else
             receiveDataTopicBase(data);
@@ -712,8 +722,8 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
             receiveDataAsynch((VirtualAddress)endpointVirtualAddressTopic.getKey(data.getTopic()), vad, data.toBytes());
     }
     private void handleBroadcast(MqttTunnelledMessage data){
+        bbRouter.broadcastData(brokerService.getVirtualAddress(),data.toBytes());
 
-        receiveDataAsynch(brokerService.getVirtualAddress(),null,data.toBytes());
 
     }
     /**
@@ -755,6 +765,10 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
             }
 
         // TODO: Apply configuration changes regarding broadcast settings
+
+        if(map.containsKey(conf.BACKBONE_DESCRIPTION))
+            this.brokerService.setServiceDescription(map.get(conf.BACKBONE_DESCRIPTION).toString());
+
 
 
         LOG.info("Configuration changes applied!");
