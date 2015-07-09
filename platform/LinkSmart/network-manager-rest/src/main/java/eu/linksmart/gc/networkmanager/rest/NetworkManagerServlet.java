@@ -66,7 +66,7 @@ public class NetworkManagerServlet extends HttpServlet {
 				int separatorIndex = queryAttribute.indexOf("=");
 				String attributeName = queryAttribute.substring(0, separatorIndex);
 				String attributeValue = queryAttribute.substring(separatorIndex + 1);
-				if(attributeName.equals("description")) {
+				if(attributeName.toLowerCase().contains("description")) {
 					registrations = this.networkManagerPort.getNetworkManager().getServiceByDescription(removeCharacters(attributeValue));	
 				} else if(attributeName.equals("pid")) {
 					Registration registration = this.networkManagerPort.getNetworkManager().getServiceByPID(removeCharacters(attributeValue));
