@@ -1,12 +1,11 @@
 package eu.linksmart.gc.network.backbone.protocol.mqtt;
 
+import eu.linksmart.gc.api.network.*;
+import eu.linksmart.gc.api.network.networkmanager.core.NetworkManagerCore;
 import eu.linksmart.gc.api.utils.Configurator;
 import eu.linksmart.gc.network.backbone.protocol.mqtt.conf.MqttBackboneProtocolConfigurator;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
-import eu.linksmart.gc.api.network.Message;
-import eu.linksmart.gc.api.network.NMResponse;
-import eu.linksmart.gc.api.network.VirtualAddress;
 import eu.linksmart.gc.api.network.backbone.Backbone;
 import eu.linksmart.gc.api.network.networkmanager.NetworkManager;
 import eu.linksmart.gc.api.network.routing.BackboneRouter;
@@ -25,6 +24,7 @@ import org.osgi.service.component.ComponentContext;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -32,7 +32,7 @@ import java.util.*;
 
 @Component(name="BackboneMQTT", immediate=true)
 @Service({Backbone.class})
-public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurable {
+public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurable, MessageProcessor {
 
 
 
@@ -43,6 +43,9 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
             unbind="unbindConfigAdmin",
             policy= ReferencePolicy.STATIC)
     private ConfigurationAdmin mConfigAdmin = null;
+
+
+
     protected void bindConfigAdmin(ConfigurationAdmin configAdmin) {
         this.mConfigAdmin = configAdmin;
     }
@@ -59,20 +62,20 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
             policy= ReferencePolicy.STATIC)
 	private BackboneRouter bbRouter;
 
-    // TODO maybe this will move to other service or to other bundle
-    @Reference(name="NetworkManager",
+
+    @Reference(name="NetworkManagerCore",
             cardinality = ReferenceCardinality.MANDATORY_UNARY,
             bind="bindNetworkManager",
             unbind="unbindNetworkManager",
             policy= ReferencePolicy.DYNAMIC)
-    protected NetworkManager networkManager;
+    protected NetworkManagerCore networkManager;
 
-    protected void bindNetworkManager(NetworkManager networkManager) {
+    protected void bindNetworkManager(NetworkManagerCore networkManager) {
         LOG.debug("NetworkManagerRestPort::binding network-manager");
         this.networkManager = networkManager;
     }
 
-    protected void unbindNetworkManager(NetworkManager networkManager) {
+    protected void unbindNetworkManager(NetworkManagerCore networkManager) {
         LOG.debug("NetworkManagerRestPort::un-binding network-manager");
         this.networkManager = null;
     }
@@ -148,6 +151,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
                 throw new UnsupportedOperationException("The  broadcast propagation service is just available in combination with the Broker as a service setting");
             if(!openClients.containsKey(conf.get(conf.BROADCAST_TOPIC))){
                 openClients.put(conf.get(conf.BROADCAST_TOPIC),new ForwardingListener( brokerService.getBrokerName(), brokerService.getBrokerPort(), conf.get(conf.BROADCAST_TOPIC), MQTTProtocolID, this));
+                ((MessageDistributor)networkManager).subscribe("mqttBroadcast",this);
 
             }else
                 throw new UnsupportedOperationException("The  broadcast propagation service needs a broadcast topic");
@@ -454,7 +458,8 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
             // if the message is not repartition or local,and I successful recovered then is published.
             if(ms != null && uniqueMessagePerTopic(ms) && uniqueMessageControl(ms))
                 brokerService.publish(ms.getTopic(),ms.getPayload(),ms.getQoS(),ms.isRetained());
-
+            else
+                LOG.warn("Message with topic "+ms.getTopic()+" discarded considered duplicated");
 
     }
     boolean uniqueMessagePerTopic(MqttTunnelledMessage ms){
@@ -575,7 +580,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
     
     @Override
 	public NMResponse broadcastData(VirtualAddress senderVirtualAddress, byte[] data) {
-        if(senderVirtualAddress.equals(brokerService.getVirtualAddress()))
+        /*if(senderVirtualAddress.equals(brokerService.getVirtualAddress()))
             return new NMResponse(NMResponse.STATUS_SUCCESS);
 
         LOG.info("Making broadcast in the MQTT Protocol");
@@ -592,7 +597,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
         }catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
-
+*/
         return new NMResponse(NMResponse.STATUS_SUCCESS);
 
     }
@@ -683,7 +688,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
        // VirtualAddress senderVAD =endpointTopicVirtualAddress.get(conf.get(conf.BROKER_URL));
 
         if(data.getTopic().equals(conf.get(conf.BROADCAST_TOPIC)))
-            bbRouter.broadcastData(brokerService.getVirtualAddress(), data.toBytes());
+            handleBroadcast(data);
         else if (Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE)))
             receiveDataBrokerBase(data);
         else
@@ -722,7 +727,16 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
             receiveDataAsynch((VirtualAddress)endpointVirtualAddressTopic.getKey(data.getTopic()), vad, data.toBytes());
     }
     private void handleBroadcast(MqttTunnelledMessage data){
-        bbRouter.broadcastData(brokerService.getVirtualAddress(),data.toBytes());
+
+
+
+        BroadcastMessage msg = new BroadcastMessage(
+					"mqttBroadcast",
+					brokerService.getVirtualAddress(),
+					data.toBytes());
+
+
+        networkManager.broadcastMessage(msg);
 
 
     }
@@ -774,4 +788,16 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurabl
         LOG.info("Configuration changes applied!");
     }
 
+    @Override
+    public Message processMessage(Message msg) {
+        if(!msg.getSenderVirtualAddress().equals(brokerService.getVirtualAddress())) {
+            MqttTunnelledMessage mqttmsg = getAsyncMessage(msg.getData());
+            try {
+                publish(mqttmsg);
+            } catch (Exception e) {
+                LOG.error("While makig a broadcast: " + e.getMessage(), e);
+            }
+        }
+        return null;
+    }
 }
