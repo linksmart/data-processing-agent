@@ -14,6 +14,7 @@ import java.util.Observer;
  */
 //public class WasteMqttClient extends Observable implements Observer, MqttCallback {
 public class WasteMqttClient extends Observable implements MqttCallback {
+
     private static WasteMqttClient instancePub = null;
     private static WasteMqttClient instanceSub = null;
 
@@ -53,9 +54,6 @@ public class WasteMqttClient extends Observable implements MqttCallback {
             mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883", clientId, new MemoryPersistence());
             mqttClient.setCallback(this);
             mqttClient.connect();
-//            subscribe(DF_WASTEBINFULL_TOPIC); // Data Fusion query
-//            subscribe("/+/+/+/cep/+");
-//            subscribe(CITIZENAPP_TOPIC); // get notified by a CitizenApp about issues
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -86,6 +84,16 @@ public class WasteMqttClient extends Observable implements MqttCallback {
         }
     }
 
+    public void unsubscribe(String topic){
+        try{
+            if (!mqttClient.isConnected()) {
+                mqttClient.connect();
+            }
+            mqttClient.unsubscribe(topic);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
 
      // This callback is invoked upon losing the MQTT connection
     @Override
@@ -130,7 +138,7 @@ public class WasteMqttClient extends Observable implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         System.out.println("Message arrived  --------------------------------------------");
         System.out.println("| Topic:" + topic);
-        System.out.println("| Message: " + new String(message.getPayload()));
+//        System.out.println("| Message: " + new String(message.getPayload()));
         System.out.println("-------------------------------------------------");
 
         //wraps the message into an internal class MqttMessageWithTopic to contain the topic the message

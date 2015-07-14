@@ -32,7 +32,10 @@ public class Issue {
     }
 
     public enum Priority {
-        MINOR, MAJOR, CRITICAL
+        UNCLASSIFIED_PRIORITY,   // green in the UI
+        MINOR,                   // yellow
+        MAJOR,                   // orange
+        CRITICAL                 // red
     }
 
     public enum IssueType {
@@ -101,6 +104,18 @@ public class Issue {
             priority = Priority.MINOR;
             geoLocation = new Location(latitude, longitude);
 //            type = getType(binType);       this can be specified later on, not relevant for IoT demo
+            resource = binId;
+        }
+    }
+
+    public Issue(Priority priority, String binId, double latitude, double longitude){
+        UniqueId uId = new UniqueId();
+        id = uId.generateUUID();
+        if(!id.isEmpty()) {
+            creationDate = new Date();
+            state = State.OPEN;
+            this.priority = priority;
+            geoLocation = new Location(latitude, longitude);
             resource = binId;
         }
     }
