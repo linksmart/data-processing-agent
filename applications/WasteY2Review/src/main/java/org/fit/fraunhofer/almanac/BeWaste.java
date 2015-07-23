@@ -33,18 +33,13 @@ public class BeWaste {
         System.out.println("***bins in vicinity with location: " + locationBinsInVicinity.size());
 
         ArrayList<Thing> binsInVicinityWithThreshold = wasteHttpClient.getBinsInVicinityWithFillLevelAboveThreshold(100, 45.06920467, 7.70862809, 20);
-        System.out.println("***binsin vicinity with threshold: " + binsInVicinityWithThreshold.size());
+        System.out.println("***bins in vicinity with threshold: " + binsInVicinityWithThreshold.size());
 */
 
         // create issues out of the bins in the specific neighborhood
         if(!binsInVicinity.isEmpty()) {
             IssueManager issueMgmt = new IssueManager(binsInVicinity);
         }
-
-
-
-
-
 
 
 

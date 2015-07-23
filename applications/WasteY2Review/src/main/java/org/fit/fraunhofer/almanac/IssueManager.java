@@ -21,15 +21,20 @@ public class IssueManager implements Observer{
     /***************** CONSTANTS */
     public static final int MIN_ISSUECOUNT = 7; // number of issues created until a route generation is triggered
 
+    // Data Fusion query id: all waste bins with fill level greater than 80%
+    public static final String DF_INITALLFULLBINS_TOPIC = "almanac/";  // FIXME
     // Data Fusion query id: waste bins whose fill level has now surpassed 80%
     public static final String DF_WASTEBINFULL_TOPIC = "/+/+/+/cep/5296850124791908742793477709595434718264213518621513551279291212674474587702";
-    // Data Fusion query id: all waste bins with fill level greater than 80%
-    public static final String DF_INITALLFULLBINS_TOPIC = "";
+    // Data Fusion query id: waste bins whose fill level has now gotten less than 80%
+    public static final String DF_WASTEBINEMPTY_TOPIC = "almanac/+";   // FIXME
 
     public static final String CITIZENAPP_TOPIC = "almanac/citizenapp";  // issues coming from a CitizenApp
 
-    public static final String SMARTWASTE_TOPIC = "almanac/smartwaste/+"; //all smartwaste one-level sub-topics
-    public static final String SMARTWASTE_DUPLICATE_TOPIC = "almanac/smartwaste/duplicate";  // duplicate notification coming from the SmartWaste application
+    public static final String SMARTWASTE_TOPIC = "almanac/smartwaste/+";                     //all smartwaste one-level sub-topics
+    public static final String SMARTWASTE_CREATE_TOPIC = "almanac/smartwaste/create";
+    public static final String SMARTWASTE_UPDATE_TOPIC = "almanac/smartwaste/update";
+    public static final String SMARTWASTE_DUPLICATE_TOPIC = "almanac/smartwaste/duplicate";  // duplicate notification coming from SmartWaste
+    public static final String SMARTWASTE_ACCEPT_TOPIC = "almanac/smartwaste/accept";        // accept notification coming from SmartWaste
 
     public static final String ISSUE = "issue/";
     public static final String UPDATE = "/update";
@@ -72,7 +77,7 @@ public class IssueManager implements Observer{
         // this is the initial data read from the Resource Catalogue: bins in the vicinity (within 100m radius) of a specific location
         // These bins are first not known to be issues (fill levels have not been reported yet).
         for (Thing thing : wasteBinList) {
-            addIssue(Issue.Priority.UNCLASSIFIED_PRIORITY,
+            addIssue(Issue.Priority.UNCLASSIFIED,
                      thing.getId(),
                      ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thing.getLocations().toArray()[0]).getGeometry()).getCoordinates().getLatitude(),
                      ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thing.getLocations().toArray()[0]).getGeometry()).getCoordinates().getLongitude());
@@ -134,8 +139,10 @@ public class IssueManager implements Observer{
     private void mqttClientsSetup() {
         subClient = WasteMqttClient.getInstanceSub();
 
-        subClient.subscribe(DF_WASTEBINFULL_TOPIC);
         subClient.subscribe(DF_INITALLFULLBINS_TOPIC);
+        subClient.subscribe(DF_WASTEBINFULL_TOPIC);
+        subClient.subscribe(DF_WASTEBINEMPTY_TOPIC);
+
         subClient.subscribe(CITIZENAPP_TOPIC);      // get notified by a CitizenApp about issues
         subClient.subscribe(SMARTWASTE_TOPIC);      // get notified by the SmartWaste application
 
@@ -161,18 +168,29 @@ public class IssueManager implements Observer{
             WasteMqttClient.MqttMessageWithTopic data = (WasteMqttClient.MqttMessageWithTopic)arg;
 
             switch(data.Topic()){
-                case DF_WASTEBINFULL_TOPIC:
-                    handleDFWastebinFull(data.Payload());
-                    break;
                 case DF_INITALLFULLBINS_TOPIC:
                     handleDFInitAllFullBins(data.Payload());
                     subClient.unsubscribe(DF_INITALLFULLBINS_TOPIC);
                     break;
+                case DF_WASTEBINFULL_TOPIC:
+                    handleDFWastebinFull(data.Payload());
+                    break;
+                case DF_WASTEBINEMPTY_TOPIC:
+                    handleDFWastebinEmpty(data.Payload());
+                    break;
                 case CITIZENAPP_TOPIC:
                     handleCitizenApp(data.Payload());
                     break;
+                case SMARTWASTE_CREATE_TOPIC:
+                    break;
+                case SMARTWASTE_UPDATE_TOPIC:
+                    handleSmartWasteUpdate(data.Payload());
+                    break;
                 case SMARTWASTE_DUPLICATE_TOPIC:
                     handleSmartWasteDuplicate(data.Payload());
+                    break;
+                case SMARTWASTE_ACCEPT_TOPIC:
+                    handleSmartWasteAccept(data.Payload());
                     break;
                 default:
                     break;
@@ -194,6 +212,28 @@ public class IssueManager implements Observer{
         return null;
     }
 
+    // The incoming message is Data Fusion related: it gives out all full waste bins in the neighborhood,
+    // i.e. full bins within 100m radius from a given location. New issues are to be created out
+    // of these observations. This will be the initial state of the BEWaste back-end. After reading this
+    // in, issues will be created and the back-end will unsubscribe from the query.
+    private void handleDFInitAllFullBins(MqttMessage message){
+        try{
+            it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation obs[] =
+                    mapper.readValue(message.getPayload(), it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation[].class);
+
+            String binId;
+            for (Observation observation : obs) {
+                binId = observation.getResultValue().toString();
+                org.geojson.LngLatAlt location = wasteHttpClient.getBinGeolocation(binId);
+
+                // an issue will be created. The bin is full, so priority is critical
+                addIssue(Issue.Priority.CRITICAL, binId, location.getLatitude(), location.getLongitude());
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // The incoming message is Data Fusion related: a waste bin fill level has
     // surpassed the threshold and is full. A new issue is to be created out
     // of this observation.
@@ -206,12 +246,12 @@ public class IssueManager implements Observer{
             String binId = obs.getResultValue().toString();
 
             // Now the resource catalogue can be used to find the specific waste bin holding the id and then get
-            // its location and bin type, before a new issue can be created.
+            // its location (and bin type?), before a new issue can be created.
 
             System.out.println("A Data Fusion message has arrived. The waste bin " + binId + " is full!");
 
             org.geojson.LngLatAlt location = wasteHttpClient.getBinGeolocation(binId);
-            System.out.println("***Bin: " + binId + " Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
+            System.out.println("***Full Bin: " + binId + " Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
 
             addIssue(binId, location.getLatitude(), location.getLongitude());
 
@@ -229,23 +269,22 @@ public class IssueManager implements Observer{
         }
     }
 
-    // The incoming message is Data Fusion related: it gives out all full waste bins in the neighborhood,
-    // i.e. full bins within 100m radius from a given location. New issues are to be created out
-    // of these observations. This will be the initial state of the BEWaste back-end. After reading this
-    // in, issues will be created and the back-end will unsubscribe to the query.
-    private void handleDFInitAllFullBins(MqttMessage message){
+    // The incoming message is Data Fusion related: a full waste bin has just been
+    // emptied. The corresponding issue is to be removed.
+    private void handleDFWastebinEmpty(MqttMessage message){
         try{
-            it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation obs[] =
-                    mapper.readValue(message.getPayload(), it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation[].class);
+            it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation obs =
+                    mapper.readValue(message.getPayload(), it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation.class);
 
-            String binId;
-            for (Observation observation : obs) {
-                binId = observation.getResultValue().toString();
-                org.geojson.LngLatAlt location = wasteHttpClient.getBinGeolocation(binId);
+            // get the waste bin id: event result value
+            String binId = obs.getResultValue().toString();
 
-                // an issue will be created. The bin is full, so priority is critical
-                addIssue(Issue.Priority.CRITICAL, binId, location.getLatitude(), location.getLongitude());
-            }
+            System.out.println("A Data Fusion message has arrived. The waste bin " + binId + " has just been emptied!");
+
+            org.geojson.LngLatAlt location = wasteHttpClient.getBinGeolocation(binId);
+            System.out.println("***Empty Bin: " + binId + " Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
+
+            removeIssue(binIssueMap.get(binId));
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -269,6 +308,29 @@ public class IssueManager implements Observer{
             // its issueId will be sent to BeWaste under the topic almanac/smartwaste/duplicate.
             addPicIssue(picIssue);
 
+            // A resource creation towards the ALMANAC platform needs to wait... since at this point it is
+            // unknown if the issue is going to be accepted after its triage or if it is for example going
+            // to be marked as a duplicate. The SmartWaste application needs still to publish an
+            // "acceptance" of the issue. Only then an ALMANAC resource can be created.
+
+        }catch(UnsupportedEncodingException e) {
+        }
+    }
+
+    // The incoming message is SmartWaste related: it tells about issues which have been updated
+    private void handleSmartWasteUpdate(MqttMessage message){
+
+        Gson gsonObj = new Gson();
+
+        String json = "";
+        try {
+            json = new String((byte[]) message.getPayload(), "UTF-8");
+            Issue issues[] = gsonObj.fromJson(json, Issue[].class);
+
+            for (Issue issue : issues) {
+                issue.update(issueMap.get(issue.id()));
+            }
+
         }catch(UnsupportedEncodingException e) {
         }
     }
@@ -291,6 +353,27 @@ public class IssueManager implements Observer{
 
             json = gsonObj.toJson(dupIssue);
             pubClient.publish(topic, json);
+
+        }catch(UnsupportedEncodingException e) {
+        }
+    }
+
+    // The incoming message is SmartWaste related: it tells about an issue which has been accepted
+    private void handleSmartWasteAccept(MqttMessage message){
+
+        Gson gsonObj = new Gson();
+
+        String json = "";
+        try {
+            json = new String((byte[]) message.getPayload(), "UTF-8");
+            Issue issue = gsonObj.fromJson(json, Issue.class);
+
+            // An issue created implicitly by a CitizenApp has been accepted. Now it is about updating
+            // its properties and creating an ALMANAC resource out of it.
+
+            issue.update(issueMap.get(issue.id()));
+
+            // FIXME: HERE Dario's API call for an ALMANAC resource creation missing!!!!
 
         }catch(UnsupportedEncodingException e) {
         }

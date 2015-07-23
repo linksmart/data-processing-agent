@@ -32,10 +32,10 @@ public class Issue {
     }
 
     public enum Priority {
-        UNCLASSIFIED_PRIORITY,   // green in the UI
-        MINOR,                   // yellow
-        MAJOR,                   // orange
-        CRITICAL                 // red
+        UNCLASSIFIED,        // green in the UI
+        MINOR,               // yellow
+        MAJOR,               // orange
+        CRITICAL             // red
     }
 
     public enum IssueType {
@@ -184,6 +184,21 @@ public class Issue {
             this.priority = priority;
 
             publishUpdate("The issue priority has been updated from " + previous.toString() + " to " + priority.toString());
+        }
+    }
+
+    protected void update(Issue updatedIssue){
+        if(this.priority() != updatedIssue.priority()){
+            update(updatedIssue.priority());
+        }else if(this.state() != updatedIssue.state()){
+            update(updatedIssue.state());
+        }else if(this.estimatedTime() != updatedIssue.estimatedTime()){
+            update(updatedIssue.estimatedTime());
+        } else {
+            this.assignee = updatedIssue.assignee();
+            this.state = updatedIssue.state();
+            this.etc = updatedIssue.estimatedTime();
+            this.priority = updatedIssue.priority();
         }
     }
 
