@@ -1,10 +1,9 @@
 package eu.almanac.event.datafusion.feeder;
 
 import eu.almanac.event.datafusion.esper.utils.Tools;
-import eu.almanac.event.datafusion.intern.ConfigurationManagement;
 import eu.almanac.event.datafusion.intern.LoggerService;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
-import eu.linksmart.api.event.datafusion.EventFeeder;
+import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import eu.linksmart.gc.network.backbone.protocol.mqtt.ForwardingListener;
@@ -15,7 +14,7 @@ import java.util.*;
 /**
  * Created by Caravajal on 22.05.2015.
  */
-public abstract class Feeder extends Thread implements EventFeeder, EventFeederLogic, Observer {
+public abstract class FeederImpl extends Thread implements Feeder, EventFeederLogic, Observer {
     protected ForwardingListener forwardingListener ;
     protected Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<String, DataFusionWrapper>();
 
@@ -23,7 +22,7 @@ public abstract class Feeder extends Thread implements EventFeeder, EventFeederL
 
     static protected Boolean down =false;
 
-    public Feeder(String brokerName,String brokerPort, String topic){
+    public FeederImpl(String brokerName, String brokerPort, String topic){
         try {
             forwardingListener = new ForwardingListener(brokerName,brokerPort,topic,this);
         } catch (MqttException e) {

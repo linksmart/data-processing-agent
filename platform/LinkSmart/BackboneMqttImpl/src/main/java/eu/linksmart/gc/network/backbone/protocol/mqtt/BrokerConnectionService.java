@@ -33,11 +33,12 @@ public class BrokerConnectionService  {
     private String brokerPort;
 
 
+    private String serviceDescription;
 
     private boolean isService;
 
     private Registration brokerRegistrationInfo = null;
-    BrokerConnectionService(  String brokerName, String brokerPort , UUID ID, NetworkManager netMngr, boolean isService) throws Exception {
+    BrokerConnectionService(  String brokerName, String brokerPort , UUID ID, NetworkManager netMngr, boolean isService, String serviceDescription) throws Exception {
         if (brokerName.equals("*"))
             this.brokerName = getHostName();
         else
@@ -47,6 +48,7 @@ public class BrokerConnectionService  {
         this.ID = ID;
         this.networkManager = netMngr;
         this.isService = isService;
+        this.serviceDescription = serviceDescription;
        createClient();
 
     }
@@ -168,7 +170,7 @@ public class BrokerConnectionService  {
         String description = "Broker:"+getBrokerURL();
 
 
-        Registration[] registration = networkManager.getServiceByDescription(description);
+        Registration[] registration = networkManager.getServiceByDescription(serviceDescription);
         if(registration != null && registration.length > 0){
             new RemoteException("There is already a service with this description");
 
@@ -214,6 +216,20 @@ public class BrokerConnectionService  {
             connect();
 
          mqttClient.publish(topic,payload,qos,retained);
+    }
+
+    public void setServiceDescription(String serviceDescription) {
+        try {
+            deregisterBroker();
+        } catch (RemoteException e) {
+            LOG.error("Error while changing service description: "+e.getMessage(),e);
+        }
+        this.serviceDescription = serviceDescription;
+        try {
+            registerBroker();
+        } catch (RemoteException e) {
+            LOG.error("Error while changing service description: "+e.getMessage(),e);
+        }
     }
 
     public String getBrokerName() {
