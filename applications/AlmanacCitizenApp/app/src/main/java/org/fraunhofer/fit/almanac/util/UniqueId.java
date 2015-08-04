@@ -7,8 +7,26 @@ import java.util.UUID;
 /**
  * Created by Werner-Kytölä on 08.05.2015.
  */
+
 public class UniqueId {
+    static int  count = 0;
     public static String generateUUID(){
+       /* try {
+
+
+            if(count % 2 == 1 ){
+                count++;
+                return  "456";//sha256(UUID.randomUUID().toString());
+            }else{
+                count++;
+                return "123";
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }*/
         try {
             return sha256(UUID.randomUUID().toString());
         } catch (NoSuchAlgorithmException e) {

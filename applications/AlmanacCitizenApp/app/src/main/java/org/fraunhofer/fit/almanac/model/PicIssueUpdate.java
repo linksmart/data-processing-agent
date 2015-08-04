@@ -39,11 +39,17 @@ public class PicIssueUpdate {
         }
     }
 
+    //Id of the issue
     public String id;
-    public String topic;
+
+
+    public String topic;//Need to know why this was added
+
     public State state;
     public Priority priority;
     public Date timeToCompletion;
+
+    public String comment;//Textual feedback from the Almanac system employee.
 
     public String getString(){
         return "Id:"+id+" name:"+topic+" state:"+state +" priority:" + priority+ " Timeforcompletion:"+timeToCompletion;

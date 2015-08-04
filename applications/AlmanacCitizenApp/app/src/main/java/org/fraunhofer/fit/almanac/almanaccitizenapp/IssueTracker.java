@@ -46,7 +46,13 @@ public class IssueTracker {
         IssueStatus newIssue = new IssueStatus();
         newIssue.setPicIssue(picIssue,filePath,subscribe);
 
-        mIssueMap.put(picIssue.id,newIssue);
+        mIssueMap.put(picIssue.id, newIssue);
+        mIssueStatusDBWrapper.addIssue(newIssue);
+    }
+
+    public  void deleteIssue(String id){
+        mIssueStatusDBWrapper.deleteIssue(id );
+        mIssueMap.remove(id);
     }
     public Collection<IssueStatus> getAllIssues(){
         return mIssueMap.values();
@@ -64,8 +70,10 @@ public class IssueTracker {
     }
 
     public void updateIssue(PicIssueUpdate picIssueUpdate){
-       IssueStatus issueStatus =  mIssueMap.get(picIssueUpdate.id);
-       issueStatus.updateStatus(picIssueUpdate);
+        IssueStatus issueStatus =  mIssueMap.get(picIssueUpdate.id);
+        issueStatus.updateStatus(picIssueUpdate);
+        mIssueStatusDBWrapper.updateIssue(issueStatus.id,issueStatus);
+
     }
 
     //When the issue is duplicate, we replace the id with the original issue id
@@ -75,6 +83,8 @@ public class IssueTracker {
         //TODO update the DB
         mIssueMap.remove(id);
         mIssueMap.put(OriginalId,issueStatus);
+        mIssueStatusDBWrapper.updateIssue(id,issueStatus);
+
     }
 
 

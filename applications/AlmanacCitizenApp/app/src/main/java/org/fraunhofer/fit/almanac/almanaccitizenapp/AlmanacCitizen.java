@@ -1,36 +1,21 @@
 package org.fraunhofer.fit.almanac.almanaccitizenapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.fraunhofer.fit.almanac.model.DuplicateIssue;
 import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
-import org.fraunhofer.fit.almanac.mqtt.MqttListener;
-import org.fraunhofer.fit.almanac.util.UniqueId;
+import org.fraunhofer.fit.almanac.protocols.MqttListener;
 
 import java.util.LinkedList;
 
@@ -69,6 +54,15 @@ public class AlmanacCitizen extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                R.drawable.ic_drawer,
+                R.string.app_name,
+                R.string.app_name);
+        drawerLayout.setDrawerListener(drawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(false);
 
         setupMqtt();
         initializeIssueTracker();
@@ -198,7 +192,7 @@ public class AlmanacCitizen extends AppCompatActivity
     private String getClientId() {
         //TODO:make this persistent
         if(mClientID == null)
-            mClientID =  UniqueId.generateUUID().substring(0,5);
+            mClientID = ((TelephonyManager) getBaseContext().getSystemService(getApplicationContext().TELEPHONY_SERVICE)).getDeviceId()+"almanac";
         return  mClientID;
     }
 
@@ -220,4 +214,8 @@ public class AlmanacCitizen extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 }

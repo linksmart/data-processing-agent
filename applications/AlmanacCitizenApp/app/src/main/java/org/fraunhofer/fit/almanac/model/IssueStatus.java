@@ -31,6 +31,7 @@ public class IssueStatus {
         id = picIssue.id;
         picPath = filePath;
         isSubscribed = subscribe;
+        state = PicIssueUpdate.State.OPEN;
     }
 
     public void setId(String id){

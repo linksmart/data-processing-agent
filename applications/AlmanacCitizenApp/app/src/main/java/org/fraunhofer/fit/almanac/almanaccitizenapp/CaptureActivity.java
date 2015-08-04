@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 import org.fraunhofer.fit.almanac.model.PicIssue;
 
 
-import org.fraunhofer.fit.almanac.mqtt.MqttListener;
+import org.fraunhofer.fit.almanac.protocols.MqttListener;
 import org.fraunhofer.fit.almanac.util.UniqueId;
 
 import java.io.ByteArrayOutputStream;
@@ -44,7 +45,7 @@ public class CaptureActivity extends Activity{
 
     MqttListener.MqttPublishResultListener mqttPublishResultListener = new MqttListener.MqttPublishResultListener() {
         @Override
-        public void onPublishSuccess() {
+        public void onPublishSuccess(final String response) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -52,13 +53,13 @@ public class CaptureActivity extends Activity{
                     uploadButton.setEnabled(true);
                     Toast.makeText(getApplicationContext(), "Uploaded successfully", Toast.LENGTH_LONG).show();
 
-                    ImageView imageView = (ImageView) findViewById(R.id.capturedImage);
-                    Bitmap bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                    String filepath = storeImageToFile(bmp, mPicissue.name);
+
+                    String filepath = storeImageToFile(mPictureBitmap, UniqueId.generateUUID().substring(1,5));
 
                     final CheckBox checkBox = (CheckBox) findViewById(R.id.checkSubscribe);
+                    mPicissue.id = response;
                     if (checkBox.isChecked()) {//TODO:This is to be done by the issueTracker
-                        mqttListener.subscribeIssue(mPicissue.id);
+                        mqttListener.subscribeIssue(mPicissue.origin);
                     }
                     if (filepath != null) {
                         IssueTracker.getInstance().addNewIssue(mPicissue,checkBox.isChecked(),filepath);
@@ -87,6 +88,7 @@ public class CaptureActivity extends Activity{
 
     }   ;
     private PicIssue mPicissue;
+    private Bitmap mPictureBitmap;
 
     //returns complete path of the file after storage. null on failure
     private String storeImageToFile(Bitmap bmp, String fileName) {
@@ -124,11 +126,19 @@ public class CaptureActivity extends Activity{
                 onclickUploadButton(v);
             }
         });
-
+        final Button cancelBotton = (Button) findViewById(R.id.cancelButton);
+        cancelBotton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onclickcancelBotton(v);
+            }
+        });
         startCameraActivity();
 
 
     }
+
+
 
     private Location getLastKnownLocation() {
         LocationManager locationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
@@ -164,7 +174,7 @@ public class CaptureActivity extends Activity{
                 picIssue.latitude = lastKnownLocation.getLatitude();
                 picIssue.longitude = lastKnownLocation.getLongitude();
 
-                picIssue.id = UniqueId.generateUUID();
+                picIssue.origin = ((TelephonyManager) getBaseContext().getSystemService(getApplicationContext().TELEPHONY_SERVICE)).getDeviceId();
 
                 ImageView imageView = (ImageView) findViewById(R.id.capturedImage);
                 Log.i(TAG, "publishing " + picIssue.getString());
@@ -172,6 +182,7 @@ public class CaptureActivity extends Activity{
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 picIssue.pic = stream.toByteArray();
+                picIssue.contentType="image/jpeg";
                 EditText nameOfIssue = (EditText) findViewById(R.id.issueName);
                 picIssue.name = nameOfIssue.getText().toString();
 
@@ -180,8 +191,9 @@ public class CaptureActivity extends Activity{
 
                 v.setEnabled(false);
 
-                mqttListener.publishIssue(picIssue,mqttPublishResultListener);
                 mPicissue = picIssue;
+                mqttListener.publishIssue(picIssue,mqttPublishResultListener);
+
 
             }
             else{
@@ -190,7 +202,13 @@ public class CaptureActivity extends Activity{
         }
     }
 
+    private void onclickcancelBotton(View v) {
+        Log.i(TAG,"Cancel pressed. Finishing the activity");
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
 
+    }
 
     public void startCameraActivity() {
 
@@ -206,9 +224,10 @@ public class CaptureActivity extends Activity{
         {
 
             if(data.getExtras() != null) {
-                Bitmap picture = (Bitmap) data.getExtras().get("data");
+                mPictureBitmap = (Bitmap) data.getExtras().get("data");
                 ImageView image = (ImageView) findViewById(R.id.capturedImage);
-                image.setImageBitmap(picture);
+                image.setImageBitmap(mPictureBitmap);
+
             }else{
                 Toast.makeText(getApplicationContext(), "No picture taken", Toast.LENGTH_LONG).show();
                 runOnUiThread(new Runnable() {

@@ -1,7 +1,8 @@
-package org.fraunhofer.fit.almanac.mqtt;
+package org.fraunhofer.fit.almanac.protocols;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
@@ -23,10 +24,15 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.fraunhofer.fit.almanac.model.CreationResponse;
 import org.fraunhofer.fit.almanac.model.DuplicateIssue;
 import org.fraunhofer.fit.almanac.model.PicIssue;
 import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -46,7 +52,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     }
 
     public static interface MqttPublishResultListener{
-        public void onPublishSuccess();
+        public void onPublishSuccess(String response);
         public void  onPublishFailure();
     }
     private static final String TAG = "MqttListener";
@@ -62,8 +68,8 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     List<String> mSubscribeIds = new LinkedList<>();
 
-    Gson mGsonObj = new GsonBuilder().registerTypeHierarchyAdapter(byte[].class,
-            new ByteArrayToBase64TypeAdapter()).create();
+    Gson mGsonObj = new GsonBuilder().registerTypeAdapter(byte[].class,
+            new ByteArrayToBase64TypeAdapter()).disableHtmlEscaping().create();
     private HashMap<IMqttDeliveryToken,MqttPublishResultListener> mPublishListenerMap = new HashMap<>();
 
 
@@ -86,15 +92,16 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 //    }
 
     // Using Android's base64 libraries. This can be replaced with any base64 library.
-    private class ByteArrayToBase64TypeAdapter implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
+    private static class ByteArrayToBase64TypeAdapter implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
         public byte[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             return Base64.decode(json.getAsString(), Base64.NO_WRAP);
         }
 
         public JsonElement serialize(byte[] src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(Base64.encodeToString(src, Base64.NO_WRAP));
+            return new JsonPrimitive(Base64.encodeToString(src, Base64.DEFAULT));
         }
     }
+
 
 
     public void connect(Context context,String clientID,List<String> subscribeTopics){
@@ -109,19 +116,35 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public  void addNotificationListener(MqttNotificationListener mqttNotificationListener){
         this.mqttNotificationListenerList.add(mqttNotificationListener);
     }
-    public boolean publishIssue(PicIssue picIssue,MqttPublishResultListener listener){
+    public boolean publishIssue(final PicIssue picIssue,final MqttPublishResultListener listener){
 
 
-        String issueGson = mGsonObj.toJson(picIssue);
-        Log.i(TAG,"Publishing:"+picIssue);
-        try {
-            IMqttDeliveryToken mqttDeliveryToken= mClient.publish(PUBLISH_TOPIC, issueGson.getBytes(), 1, false);
-            mPublishListenerMap.put(mqttDeliveryToken,listener);
-        } catch (MqttException e) {
-            Log.e(TAG, "Failed to publish because " + e.toString());
-            listener.onPublishFailure();
-            return  false;
-        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                String issueGson = mGsonObj.toJson(picIssue);
+
+                Log.i(TAG,"Publishing:");
+                for(int i=0; i<issueGson.length();i+=500){
+                    Log.i(TAG,issueGson.substring(i,i+500>issueGson.length()?issueGson.length():i+500));
+                }
+
+                HttpRequester requester = new HttpRequester();
+                String response = requester.publishIssue(issueGson);
+
+                if(response == null){
+                    listener.onPublishFailure();
+                }else{
+                    listener.onPublishSuccess(response);
+                }
+            }
+        }).start();
+        //IMqttDeliveryToken mqttDeliveryToken= mClient.publish(PUBLISH_TOPIC, issueGson.getBytes(), 1, false);
+
+
+
 
 
         return true;
@@ -129,14 +152,14 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     public void subscribeIssue(String subscribeId){
         try {
-            mClient.subscribe("issue/" + subscribeId + "/#", 1);
+            mClient.subscribe("almanac/" + subscribeId + "/issue", 1);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
     public  void  unsubscribeIssue(String subscribeId){
         try {
-            mClient.unsubscribe("issue/" + subscribeId + "/#");
+            mClient.unsubscribe("issue/" + subscribeId + "/issue");
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -154,18 +177,18 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         Log.i(TAG, "got message:" + s);
         String issueGson = new String(mqttMessage.getPayload());
         Log.i(TAG,"Json:"+issueGson);
-        if(s.endsWith(UPDATE)){
+      //  if(s.endsWith(UPDATE)){
             PicIssueUpdate issueUpdate = mGsonObj.fromJson(issueGson,PicIssueUpdate.class);
             for(MqttNotificationListener mqttNotificationListener:mqttNotificationListenerList){
                 mqttNotificationListener.onIssueUpdate(issueUpdate);
             }
-        }else if(s.endsWith(DUPLICATE)){
-            DuplicateIssue duplicateIssue = mGsonObj.fromJson(issueGson,DuplicateIssue.class);
+        //}else if(s.endsWith(DUPLICATE)){
+          //  DuplicateIssue duplicateIssue = mGsonObj.fromJson(issueGson,DuplicateIssue.class);
 
-            for(MqttNotificationListener mqttNotificationListener:mqttNotificationListenerList){
-                mqttNotificationListener.onDuplicateIssue(duplicateIssue);
-            }
-        }
+//            for(MqttNotificationListener mqttNotificationListener:mqttNotificationListenerList){
+  //              mqttNotificationListener.onDuplicateIssue(duplicateIssue);
+    //        }
+      //  }
 
 
     }
@@ -174,9 +197,9 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
         Log.i(TAG, "Publish successfull");
 
-        MqttPublishResultListener mqttPublishResultListener = mPublishListenerMap.get(iMqttDeliveryToken);
-        mqttPublishResultListener.onPublishSuccess();
-        mPublishListenerMap.remove(iMqttDeliveryToken);//we need it no more
+//        MqttPublishResultListener mqttPublishResultListener = mPublishListenerMap.get(iMqttDeliveryToken);
+//        mqttPublishResultListener.onPublishSuccess(response);
+//        mPublishListenerMap.remove(iMqttDeliveryToken);//we need it no more
         /*if(mIssueToken.equals(iMqttDeliveryToken)) {
             PicIssueUpdate issueUpdate = new PicIssueUpdate();
             issueUpdate.timeToCompletion = new Date();;
@@ -261,4 +284,35 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
             //do nothing
         }
 
-    }}
+    }
+    private void StoretoSdcard(String jsonString){
+        File root = Environment.getExternalStorageDirectory();
+        FileOutputStream f = null;
+        try {
+            String folderpath = "/storage/emulated/0/myCiti/";
+
+
+            File folder = new File(folderpath);
+            folder.mkdirs(); //create folders where write files
+
+            File file = new File(folderpath, "citi.json");
+            f = new FileOutputStream(file);
+            try {
+                f.write(jsonString.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
+            }
+            try {
+                f.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+}
