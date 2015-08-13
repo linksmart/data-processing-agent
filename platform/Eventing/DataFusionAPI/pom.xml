@@ -20,11 +20,12 @@
 <artifactId>eu.almanac.api.event.datafusion</artifactId>
 
 
-<packaging>bundle</packaging>
+
 
 <name>DataFusionAPI</name>
 <description>Set of interfaces to access the Data Fusion API</description>
-<dependencies>
+    <packaging>bundle</packaging>
+    <dependencies>
         <dependency>
             <groupId>it.ismb.pertlab</groupId>
             <artifactId>ogc.sensorthings.model</artifactId>

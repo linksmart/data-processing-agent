@@ -1,14 +1,14 @@
 package eu.linksmart.api.event.datafusion;
 
 
-import java.util.HashMap;
+
 import java.util.Map;
 
 /**
  * Interfaces which represents the API of the Complex Event Handler (CEH).
  * 
  * The CEH make an abstraction between the CEP-Engine/s and the action taken by the Handler.<p>
- * In this case the action of the fusion of events is a "complex event" which is publish in the same manner as the events which trigger
+ * In this case the action of the fusion of events is a "complex event" which is broker in the same manner as the events which trigger
  *  the complex event.<p>
  *  
  * The CEH have two duties. One is the action taken after the event was triggered (the handling of the event).<p>
@@ -23,10 +23,7 @@ import java.util.Map;
 
 public interface ComplexEventHandler {
 
-    /***
-     * Location are the brokers knwon with an alias by the Handlers
-     * */
-    static Map<String,String> knownInstances= new HashMap<String,String>();
+
 
     /**
      * This function is called after as a response of a Statement from an CEP engine.
@@ -42,5 +39,6 @@ public interface ComplexEventHandler {
      *
      * */
     public void destroy();
+
 
 }

@@ -8,7 +8,6 @@ import com.espertech.esper.epl.parse.ParseRuleSelector;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
-import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import eu.linksmart.gc.network.backbone.protocol.mqtt.ForwardingListener;
@@ -18,7 +17,6 @@ import org.antlr.v4.runtime.tree.Tree;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Observable;
 import java.util.Observer;
@@ -29,7 +27,7 @@ public class StatementSender implements Observer{
     private MqttClient mqtt;
     private String queryHash =null;
     private ForwardingListener forwardingListener;
-    static private Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    static private Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().create();
     static private ParseRuleSelector eplParseRule = new ParseRuleSelector(){
         public Tree invokeParseRule(EsperEPL2GrammarParser parser) throws RecognitionException
         {
@@ -56,7 +54,7 @@ public class StatementSender implements Observer{
         forwardingListener.setListening("queries/"+queryHash);
 
 
-        mqtt.publish("queries/add",gson.toJson((EPLStatement)statement).getBytes(),0,false);
+        mqtt.publish("queries/add",gson.toJson(statement).getBytes(),0,false);
 
         feedback = "Timeout error: the connection between the Data-Fusion Manager was not possible";
 

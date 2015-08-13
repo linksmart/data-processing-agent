@@ -6,59 +6,92 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.almanac.event.datafusion.esper.utils.Tools;
-import eu.almanac.event.datafusion.intern.ConfigurationManagement;
-import eu.almanac.event.datafusion.intern.LoggerService;
+import eu.almanac.event.datafusion.intern.Const;
+import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
-import eu.linksmart.api.event.datafusion.ComplexEventHandler;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
 import eu.linksmart.api.event.datafusion.Statement;
+import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.gc.utils.logging.LoggerService;
+import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
-import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.net.MalformedURLException;
 import java.rmi.RemoteException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
-public class ComplexEventHandlerImpl implements ComplexEventHandler{
-    private MqttClient mqttClient;
-    private final Statement query;
-    private ObjectMapper parser = new ObjectMapper();
+public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
+    protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+    protected StaticBrokerService brokerService;
+    protected final Statement query;
+    protected ObjectMapper parser = new ObjectMapper();
     @Deprecated
-    private Event response;
-    @Deprecated
-    private Boolean sendPerProperty = false;
+    protected boolean sendPerProperty;
     Gson gson;
 
 
-    public ComplexEventHandlerImpl(Statement query) throws RemoteException {
+    static {
+        List<String> hosts = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_CONF_PATH),
+                ports = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_PORT_CONF_PATH),
+                aliases = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_ALIASES_CONF_PATH);
+        if(hosts.size() == ports.size() && hosts.size() == aliases.size()) {
+            Iterator<String> host = hosts.iterator(),port = ports.iterator(),alias = aliases.iterator();
+            while (port.hasNext() && host.hasNext() && alias.hasNext()) {
+
+                knownInstances.put(alias.next(), new AbstractMap.SimpleImmutableEntry<>(
+                                host.next(),
+                                port.next()
+                        )
+                );
+            }
+        }else if(ports.size()==1&& hosts.size() == aliases.size()){
+            Iterator<String> host = hosts.iterator(),alias = aliases.iterator();
+            String port = ports.get(0);
+            while ( host.hasNext()) {
+
+                knownInstances.put(alias.next(), new AbstractMap.SimpleImmutableEntry<>(
+                                host.next(),
+                                port
+                        )
+                );
+            }
+        }
+    }
+    public ComplexEventHandlerImpl(Statement query) throws RemoteException, MalformedURLException {
         if(!knownInstances.containsKey("local"))
-            knownInstances.put("local","tcp://almanac:1883");
+
+            knownInstances.put("local",new  AbstractMap.SimpleImmutableEntry<>("almanac","1883"));
+
 
 
         if(!knownInstances.containsKey("ismb_public") )
-            knownInstances.put("ismb_public","tcp://130.192.86.227:1883");
+            knownInstances.put("local",new  AbstractMap.SimpleImmutableEntry<>("130.192.86.227","1883"));
+
         this.query=query;
         gson = new GsonBuilder().setDateFormat(Tools.getIsoTimeFormat()).create();
         parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         parser.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        response = new Event();
-        response.setBaseName(query.getName());
+
 
 
         try {
-            this.mqttClient = new MqttClient(knownInstances.get(query.getScope(0).toLowerCase()),query.getName()+ConfigurationManagement.DFM_ID, new MemoryPersistence());
+
+            brokerService =  StaticBrokerService.getBrokerService(
+                    this.getClass().getCanonicalName(),
+                    knownInstances.get(query.getScope(0).toLowerCase()).getKey(),
+                    knownInstances.get(query.getScope(0).toLowerCase()).getValue()
+            );
+
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
         }
@@ -68,7 +101,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     @Override
     public void update(Map eventMap) {
 
-        LoggerService.report("info", Tools.getDateNowString()+" Updating query: " + query.getName());
+        loggerService.info( Tools.getDateNowString() + " Updating query: " + query.getName());
 
         try {
 
@@ -78,19 +111,10 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                 eventMap.remove( ("SetEventPerEntity"));
             }
         }catch (Exception e){
-            e.printStackTrace();
+            loggerService.error(e.getMessage(),e);
         }
         try {
-            // constructing the date formatter
 
-
-            // checking if handler still connected to Broker
-           // if (!mqttClient.isConnected())
-            //    mqttClient.connect();
-            // creating Event Response object
-            //GenericCEP cepEvent = getCEPEnvelope();
-
-            // if the events is an array of events then handle the event as array
             if (eventMap.values().toArray()[0] instanceof Object[])
                 update2((Object[]) eventMap.values().toArray()[0]);
 
@@ -102,36 +126,34 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                 sendEvent(eventMap);
 
             }
-//            publish(query.getSource(), cepEvent);
 
 
         } catch (MqttException e) {
-            e.printStackTrace();
+            loggerService.error(e.getMessage(), e);
         }
 
 
     }
 
+    @Deprecated
     public void update(Event event) {
 
-        LoggerService.report("info", "Updating query: " + query.getName());
+        loggerService.info("Updating query: " + query.getName());
 
         try {
 
-
-            if (!mqttClient.isConnected())
-                mqttClient.connect();
 
             publish(event);
 
         }catch (Exception e){
 
-            LoggerService.report("Error",e);
+            loggerService.error(e.getMessage(), e);
         }
 
     }
 
 
+    @Deprecated
     public void update(Event[] events) {
 
         if (events[0].isGenerated())
@@ -148,7 +170,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     }
     public void update2(Object[] events) {
 
-        LoggerService.report("info", "Updating query: " + query.getName());
+        loggerService.info("Updating query: " + query.getName());
 
 
         try {
@@ -159,7 +181,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                 packObservation(i,"Measure", streamID);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            loggerService.error(e.getMessage(),e);
 
         }
 
@@ -198,9 +220,6 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
                     if (((GenericCEP)eventMap.get(key)).isGenerated())
                         return;
 
-                    ((GenericCEP)eventMap.get(key)).aggregateToAnEvent(cepEvent);
-
-
 
                 } else {
 
@@ -211,7 +230,8 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             } catch (Exception eEntity) {
 
 
-                eEntity.printStackTrace();
+                loggerService.error(eEntity.getMessage(),eEntity);
+
 
 
             }
@@ -249,7 +269,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             } catch (Exception eEntity) {
 
 
-                eEntity.printStackTrace();
+                loggerService.error(eEntity.getMessage(), eEntity);
 
 
             }
@@ -263,7 +283,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             try {
                 publish(handleObject(arrayList, "complex", streamID));
             } catch (Exception e) {
-                e.printStackTrace();
+                loggerService.error(e.getMessage(), e);
             }
         }
 
@@ -295,7 +315,7 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
             } catch (Exception eEntity) {
 
 
-                eEntity.printStackTrace();
+                loggerService.error(eEntity.getMessage(),eEntity);
 
 
             }
@@ -306,24 +326,14 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
     }
     private synchronized void  publish( Object ent) throws Exception {
 
-        while (!mqttClient.isConnected()) {
 
-
-            try {
-                mqttClient.connect();
-                Thread.sleep(1000);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
 
         if (query.haveOutput())
             for (String output : query.getOutput()) {
-                mqttClient.publish(output + "/" + query.getHash(),   parser.writeValueAsString(ent).getBytes(), 0, false);
+                brokerService.publish(output + "/" + query.getHash(),   parser.writeValueAsString(ent).getBytes());
             }
         else
-            mqttClient.publish(ConfigurationManagement.FUSED_TOPIC + query.getHash(), parser.writeValueAsString(ent).getBytes(), 0, false);
+            brokerService.publish(Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH) + query.getHash(), parser.writeValueAsString(ent).getBytes());
 
 
 
@@ -332,27 +342,16 @@ public class ComplexEventHandlerImpl implements ComplexEventHandler{
 
 
 
-    public boolean publishError(String errorMessage) {
 
-        LoggerService.publish("query/" + query.getName(), errorMessage, null, true);
-
-        return true;
-    }
 
     @Override
     public void destroy(){
-        try {
-            if(mqttClient.isConnected())
-                mqttClient.disconnect();
-
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
 
         try {
-            mqttClient.close();
-        } catch (MqttException e) {
-            e.printStackTrace();
+            brokerService.destroy(this.getClass().getCanonicalName());
+
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
         }
     }
 
