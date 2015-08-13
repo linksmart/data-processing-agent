@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">AlmanacCitizenApp</string>
+
+    <string name="title_section1">All issues</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="folderPath">/issues/</string>
+    <string name="new_issue">Create a new issue</string>
+
+    <string name="ok_dialog">OK</string>
+    <string name="Name_Of_issue_Text">subject:</string>
+    <string name="locationFail">Failed to get location. Enable location from settings</string>
+    <string name="createNewIssue">Create a new issue</string>
+    <string name="add_comment_text">comments:</string>
+    <string name="no_dialog">No</string>
+    <string name="dialog_duplicate_title">Duplicate Issue</string>
+    <string name="dialog_duplicate_message">The issue you just raised has been already registered. Do you want to subscribe to already raised issue?</string>
+    <string name="randomClientId">fglnkdfgodngdfngdfsnkgms</string>
+    <string name="action_previous">previous</string>
+
+    <!--actions-->
+    <string name="action_next">Next</string>
+    <string name="action_finish">Finish</string>
+    <string name="viewIssues">Issues</string>
+</resources>

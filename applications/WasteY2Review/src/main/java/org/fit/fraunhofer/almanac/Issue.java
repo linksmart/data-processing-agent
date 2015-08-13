@@ -32,7 +32,10 @@ public class Issue {
     }
 
     public enum Priority {
-        MINOR, MAJOR, CRITICAL
+        UNCLASSIFIED,        // green in the UI
+        MINOR,               // yellow
+        MAJOR,               // orange
+        CRITICAL             // red
     }
 
     public enum IssueType {
@@ -105,6 +108,18 @@ public class Issue {
         }
     }
 
+    public Issue(Priority priority, String binId, double latitude, double longitude){
+        UniqueId uId = new UniqueId();
+        id = uId.generateUUID();
+        if(!id.isEmpty()) {
+            creationDate = new Date();
+            state = State.OPEN;
+            this.priority = priority;
+            geoLocation = new Location(latitude, longitude);
+            resource = binId;
+        }
+    }
+
     public Issue(String id, String name, String comment, double latitude, double longitude, byte[] pic){
         this.id = id;
         if(!id.isEmpty()) {
@@ -169,6 +184,21 @@ public class Issue {
             this.priority = priority;
 
             publishUpdate("The issue priority has been updated from " + previous.toString() + " to " + priority.toString());
+        }
+    }
+
+    protected void update(Issue updatedIssue){
+        if(this.priority() != updatedIssue.priority()){
+            update(updatedIssue.priority());
+        }else if(this.state() != updatedIssue.state()){
+            update(updatedIssue.state());
+        }else if(this.estimatedTime() != updatedIssue.estimatedTime()){
+            update(updatedIssue.estimatedTime());
+        } else {
+            this.assignee = updatedIssue.assignee();
+            this.state = updatedIssue.state();
+            this.etc = updatedIssue.estimatedTime();
+            this.priority = updatedIssue.priority();
         }
     }
 
