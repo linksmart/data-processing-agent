@@ -43,7 +43,7 @@ public class PicIssueUpdate {
     public String id;
 
 
-    public String topic;//Need to know why this was added
+    public String name;
 
     public State state;
     public Priority priority;
@@ -52,7 +52,7 @@ public class PicIssueUpdate {
     public String comment;//Textual feedback from the Almanac system employee.
 
     public String getString(){
-        return "Id:"+id+" name:"+topic+" state:"+state +" priority:" + priority+ " Timeforcompletion:"+timeToCompletion;
+        return "Id:"+id+" name:"+ name +" state:"+state +" priority:" + priority+ " Timeforcompletion:"+timeToCompletion;
     }
     public String displayString(){
         return "State:"+state +"\nPriority:" + priority+ "\nDue Time:"+timeToCompletion;

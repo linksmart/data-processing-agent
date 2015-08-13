@@ -54,15 +54,7 @@ public class AlmanacCitizen extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                R.drawable.ic_drawer,
-                R.string.app_name,
-                R.string.app_name);
-        drawerLayout.setDrawerListener(drawerToggle);
-        drawerToggle.setDrawerIndicatorEnabled(false);
+
 
         setupMqtt();
         initializeIssueTracker();
@@ -160,7 +152,7 @@ public class AlmanacCitizen extends AppCompatActivity
                 public void run() {
                     //Toast.makeText(getActivity().getApplicationContext(),"Got a message on name"+issueUpdate.name,Toast.LENGTH_SHORT).show();
                     new AlertDialog.Builder(getApplicationContext())
-                            .setTitle(issueUpdate.topic)
+                            .setTitle(issueUpdate.name)
                             .setMessage(issueUpdate.displayString())
                             .setPositiveButton(R.string.ok_dialog, null)
                             .show();

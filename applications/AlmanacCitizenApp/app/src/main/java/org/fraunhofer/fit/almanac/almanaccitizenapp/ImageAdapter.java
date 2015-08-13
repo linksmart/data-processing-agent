@@ -1,6 +1,7 @@
 package org.fraunhofer.fit.almanac.almanaccitizenapp;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.Selection;
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import org.fraunhofer.fit.almanac.model.IssueStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -70,10 +73,15 @@ public class ImageAdapter extends BaseAdapter {
             } else {
                 gridItem = (View) convertView;
             }
-            imageView = (ImageView) gridItem.findViewById(R.id.imageView);
+
             IssueStatus issueStatus = mIssueList.get(position);
-            Uri imgUri=Uri.parse("file://"+ issueStatus.picPath);
-            imageView.setImageURI(imgUri);
+            imageView = (ImageView) gridItem.findViewById(R.id.imageView);
+            if(issueStatus.picPath != null) {
+                Uri imgUri = Uri.parse("file://" + issueStatus.picPath);
+                imageView.setImageURI(imgUri);
+            }else{
+                imageView.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),R.drawable.waste_container));
+            }
 
             TextView nameOfIssue = (TextView) gridItem.findViewById(R.id.nameOfIssue);
             nameOfIssue.setText("Name:"+ issueStatus.name);
@@ -95,7 +103,15 @@ public class ImageAdapter extends BaseAdapter {
         private List<IssueStatus> getIssueIds(){
 
             List<IssueStatus> issueList = new ArrayList<IssueStatus>(mIssueTracker.getAllIssues());
-
+            Collections.sort(issueList, new Comparator<IssueStatus>() {
+                @Override
+                public int compare(IssueStatus lhs, IssueStatus rhs) {
+                    if(lhs.creationDate.after(rhs.creationDate))
+                        return -1;
+                    else
+                        return 1;
+                }
+            });
             return issueList;
         }
 

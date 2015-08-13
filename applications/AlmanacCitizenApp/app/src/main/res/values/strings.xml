@@ -30,4 +30,17 @@
     <string name="action_next">Next</string>
     <string name="action_finish">Finish</string>
     <string name="viewIssues">Issues</string>
+    <string name="upload">Upload</string>
+    <string name="title_activity_dsplay_image">DsplayImageActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="selectall">Select All</string>
+    <string name="delete_all">Delete All</string>
+    <string name="alert_confirm_unsubsccribe">Unsubscribe &amp; delete</string>
+    <string name="alert_cancel_unsubscribe">Don\'t delete</string>
+    <string name="alert_dialog_message">You have opted to unsubscribe from the issue and delete the issue contents from the phone. The complaint will be still tracked by the authority</string>
 </resources>

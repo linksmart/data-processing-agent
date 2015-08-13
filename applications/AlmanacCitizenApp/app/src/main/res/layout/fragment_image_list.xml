@@ -16,15 +16,22 @@
     android:paddingTop="20dp"
 
 
-    />
-    <Button
+        style="@android:style/MediaButton" />
+
+    <ImageButton
         android:id="@+id/newIssue"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:text="@string/new_issue"
-        android:layout_gravity="bottom|right"
-        android:paddingBottom="20dp"
-        android:paddingRight="20dp"
-        />
+        android:layout_gravity="right|bottom"
+        android:paddingBottom="0dp"
+        android:paddingRight="0dp"
+        android:src="@android:drawable/ic_input_add"
+        android:adjustViewBounds="true"
+        android:background="@drawable/shape_round_button"
+        android:tintMode="src_atop"
+        android:baselineAlignBottom="false"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp" />
 
 </FrameLayout>

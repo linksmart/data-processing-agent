@@ -39,6 +39,7 @@ public class IssueStatusDBWrapper {
                 FeedReaderContract.FeedEntry.COLUMN_INT_PRIORITY,
                 FeedReaderContract.FeedEntry.COLUMN_INT_STATE,
                 FeedReaderContract.FeedEntry.COLUMN_DATE_TIMETOCOMPLETION,
+                FeedReaderContract.FeedEntry.COLUMN_DATE_CREATIONDATE,
                 FeedReaderContract.FeedEntry.COLUMN_BOOL_SUBSCRIBED,
         };
         // How you want the results sorted in the resulting Cursor
@@ -69,6 +70,7 @@ public class IssueStatusDBWrapper {
                 issueStatus.state = PicIssueUpdate.State.fromInteger(cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_INT_STATE)));
                 issueStatus.priority = PicIssueUpdate.Priority.fromInteger(cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_INT_PRIORITY)));
                 issueStatus.timeToCompletion = new Date(cursor.getLong(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_DATE_TIMETOCOMPLETION)));
+                issueStatus.creationDate = new Date(cursor.getLong(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_DATE_CREATIONDATE)));
                 issueStatus.isSubscribed = cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_BOOL_SUBSCRIBED))>0;
                 issueStatusList.add(issueStatus);
                 cursor.moveToNext();
@@ -95,6 +97,8 @@ public class IssueStatusDBWrapper {
             values.put(FeedReaderContract.FeedEntry.COLUMN_INT_PRIORITY, issueStatus.priority.ordinal());
         if(issueStatus.timeToCompletion != null)
             values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_TIMETOCOMPLETION, issueStatus.timeToCompletion.getTime());
+        if(issueStatus.creationDate != null)
+            values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_CREATIONDATE, issueStatus.creationDate.getTime());
         values.put(FeedReaderContract.FeedEntry.COLUMN_BOOL_SUBSCRIBED, issueStatus.isSubscribed);
 
         // Insert the new row, returning the primary key value of the new row
@@ -120,6 +124,8 @@ public class IssueStatusDBWrapper {
             values.put(FeedReaderContract.FeedEntry.COLUMN_INT_PRIORITY, issueStatus.priority.ordinal());
         if(issueStatus.timeToCompletion != null)
             values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_TIMETOCOMPLETION, issueStatus.timeToCompletion.getTime());
+        if(issueStatus.creationDate != null)
+            values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_CREATIONDATE, issueStatus.creationDate.getTime());
         values.put(FeedReaderContract.FeedEntry.COLUMN_BOOL_SUBSCRIBED, issueStatus.isSubscribed);
 
         // Which row to update, based on the ID

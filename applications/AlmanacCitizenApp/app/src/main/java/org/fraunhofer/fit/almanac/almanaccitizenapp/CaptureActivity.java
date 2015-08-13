@@ -4,16 +4,15 @@ import android.app.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -49,21 +48,21 @@ public class CaptureActivity extends Activity{
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    final Button uploadButton = (Button) findViewById(R.id.uploadButton);
+                    final ImageButton uploadButton = (ImageButton) findViewById(R.id.uploadButton);
                     uploadButton.setEnabled(true);
                     Toast.makeText(getApplicationContext(), "Uploaded successfully", Toast.LENGTH_LONG).show();
-
-
-                    String filepath = storeImageToFile(mPictureBitmap, UniqueId.generateUUID().substring(1,5));
+                    String filepath = null;
+                    if(null != mPictureBitmap)
+                        filepath = storeImageToFile(mPictureBitmap, UniqueId.generateUUID().substring(1,5));
 
                     final CheckBox checkBox = (CheckBox) findViewById(R.id.checkSubscribe);
                     mPicissue.id = response;
                     if (checkBox.isChecked()) {//TODO:This is to be done by the issueTracker
                         mqttListener.subscribeIssue(mPicissue.origin);
                     }
-                    if (filepath != null) {
-                        IssueTracker.getInstance().addNewIssue(mPicissue,checkBox.isChecked(),filepath);
-                    }
+
+                    IssueTracker.getInstance().addNewIssue(mPicissue,checkBox.isChecked(),filepath);
+
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(RESULT_FIELD, "publish_success");
 
@@ -119,22 +118,30 @@ public class CaptureActivity extends Activity{
 
         mqttListener = MqttListener.getInstance();
 
-        final Button uploadButton = (Button) findViewById(R.id.uploadButton);
+        final ImageButton uploadButton = (ImageButton) findViewById(R.id.uploadButton);
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onclickUploadButton(v);
             }
         });
-        final Button cancelBotton = (Button) findViewById(R.id.cancelButton);
+        final ImageButton cancelBotton = (ImageButton) findViewById(R.id.cancelButton);
         cancelBotton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onclickcancelBotton(v);
             }
         });
-        startCameraActivity();
+        final ImageButton startCameraBotton = (ImageButton) findViewById(R.id.captureImage);
+        startCameraBotton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startCameraActivity();
+            }
+        });
 
+
+        mPictureBitmap = null;
 
     }
 
@@ -176,13 +183,14 @@ public class CaptureActivity extends Activity{
 
                 picIssue.origin = ((TelephonyManager) getBaseContext().getSystemService(getApplicationContext().TELEPHONY_SERVICE)).getDeviceId();
 
-                ImageView imageView = (ImageView) findViewById(R.id.capturedImage);
+
                 Log.i(TAG, "publishing " + picIssue.getString());
-                Bitmap bmp = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                picIssue.pic = stream.toByteArray();
-                picIssue.contentType="image/jpeg";
+                if(null != mPictureBitmap) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    mPictureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    picIssue.pic = stream.toByteArray();
+                    picIssue.contentType = "image/jpeg";
+                }
                 EditText nameOfIssue = (EditText) findViewById(R.id.issueName);
                 picIssue.name = nameOfIssue.getText().toString();
 
@@ -223,19 +231,24 @@ public class CaptureActivity extends Activity{
         if(req == REQUEST_CAPTURE_IMAGE_BY_APP)
         {
 
-            if(data.getExtras() != null) {
+            if(data != null && data.getExtras() != null) {
                 mPictureBitmap = (Bitmap) data.getExtras().get("data");
-                ImageView image = (ImageView) findViewById(R.id.capturedImage);
+                final ImageView image = (ImageView) findViewById(R.id.capturedImage);
                 image.setImageBitmap(mPictureBitmap);
-
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        displayImage();
+                    }
+                });
             }else{
                 Toast.makeText(getApplicationContext(), "No picture taken", Toast.LENGTH_LONG).show();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Intent returnIntent = new Intent();
-                        setResult(RESULT_CANCELED, returnIntent);
-                        finish();
+                        //setResult(RESULT_CANCELED, returnIntent);
+                       // finish();
                     }
                 });
             }
@@ -243,7 +256,11 @@ public class CaptureActivity extends Activity{
 
     }//onActivityResult
 
-
+    private void displayImage( ) {
+        Intent intent = new Intent(this,DisplayImageActivity.class);
+        intent.putExtra(DisplayImageActivity.IMAGE_BITMAP,mPictureBitmap);
+        startActivity(intent);
+    }
 
 
 }

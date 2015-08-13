@@ -16,7 +16,8 @@
 
 package org.fraunhofer.fit.almanac.slider;
 
-import android.app.Fragment;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,11 +26,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.fraunhofer.fit.almanac.almanaccitizenapp.DisplayImageActivity;
 import org.fraunhofer.fit.almanac.almanaccitizenapp.IssueTracker;
 import org.fraunhofer.fit.almanac.almanaccitizenapp.R;
 import org.fraunhofer.fit.almanac.model.IssueStatus;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -86,12 +89,37 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
 
         List<IssueStatus> issueList = new ArrayList<IssueStatus>(IssueTracker.getInstance().getAllIssues());
         mIssueStatus = issueList.get(getPageNumber()>=issueList.size()?issueList.size()-1:getPageNumber());
-        imageView.setImageURI(Uri.parse(mIssueStatus.picPath));
+        if(mIssueStatus.picPath != null)
+            imageView.setImageURI(Uri.parse(mIssueStatus.picPath));
+        else
+            imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.waste_container));
 
-        rootView.findViewById(R.id.deleteImage).setOnClickListener(new View.OnClickListener() {
+        TextView nameOfIssue = (TextView) rootView.findViewById(R.id.nameOfIssue);
+        nameOfIssue.setText("Name:"+mIssueStatus.name);
+
+        if(mIssueStatus.priority != null) {
+            TextView issuePriority = (TextView) rootView.findViewById(R.id.issuePriority);
+            issuePriority.setText("Priority:" + mIssueStatus.priority.toString());
+        }
+
+        Date now = new Date();
+        if(mIssueStatus.timeToCompletion!= null  && mIssueStatus.timeToCompletion.after(now)) {
+            TextView completionDate = (TextView) rootView.findViewById(R.id.completionDate);
+            completionDate.setText("completionDate:" + mIssueStatus.timeToCompletion.toString());
+            ;
+        }
+
+        rootView.findViewById(R.id.unsubscribeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onDeleteItem();
+            }
+        });
+
+        rootView.findViewById(R.id.capturedImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayImage();
             }
         });
         return rootView;
@@ -107,5 +135,13 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
     private void onDeleteItem(){
         IssueTracker.getInstance().deleteIssue(mIssueStatus.id);
         eventHandler.onDeleteEvent(getArguments().getInt(ARG_PAGE));
+    }
+
+    private void displayImage( ) {
+        if(mIssueStatus.picPath != null) {
+            Intent intent = new Intent(getActivity(), DisplayImageActivity.class);
+            intent.putExtra(DisplayImageActivity.IMAGE_BITMAP, BitmapFactory.decodeFile(mIssueStatus.picPath));
+            startActivity(intent);
+        }
     }
 }

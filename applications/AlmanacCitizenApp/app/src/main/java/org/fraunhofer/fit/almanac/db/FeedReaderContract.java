@@ -21,5 +21,6 @@ public class FeedReaderContract{
         public static final String COLUMN_INT_STATE = "state";
         public static final String COLUMN_DATE_TIMETOCOMPLETION = "timeToCompletion";
         public static final String COLUMN_BOOL_SUBSCRIBED = "isSubscribed";
+        public static final String COLUMN_DATE_CREATIONDATE = "creationDate";
     }
 }
