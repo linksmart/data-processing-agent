@@ -24,7 +24,6 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.fraunhofer.fit.almanac.model.CreationResponse;
 import org.fraunhofer.fit.almanac.model.DuplicateIssue;
 import org.fraunhofer.fit.almanac.model.PicIssue;
 import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
@@ -205,7 +204,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
             issueUpdate.timeToCompletion = new Date();;
             issueUpdate.priority = PicIssueUpdate.Priority.CRITICAL;
             issueUpdate.state = PicIssueUpdate.State.OPEN;
-            issueUpdate.topic = "SomeTopic";
+            issueUpdate.name = "SomeTopic";
             issueUpdate.id = "47f445429e523cc992b50e69f418c6b26451150c97cabadca68fa4921bedbba5";
             String jsonString = mGsonObj.toJson(issueUpdate);
             try {

@@ -21,10 +21,15 @@ public class HttpRequester {
     String TAG = "CitizenApp/HttpRequester";
     static int count = 1;
 
+    /*
+    * Returns ID of the newly created issue
+    * Can throw Runtime exception if the function is called from UI thread
+    * */
     public String publishIssue(String issueJSON){
         if(Config.TESTLOCALLY) {
             count =(int) (Math.random()*1000.0);
-            return " { \"ticketId\" : \"" + Integer.toString(count) + "\", \"eventType\": \"created\" } ";
+            return Integer.toString(count);
+            //return " { \"ticketId\" : \"" + Integer.toString(count) + "\", \"eventType\": \"created\" } ";
         }else {
 
             String retStr = null;
@@ -44,7 +49,7 @@ public class HttpRequester {
                 os.flush();
 
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    Log.e(TAG,"Something terribly went wrong in server");
+                    Log.e(TAG,"Something terribly went wrong in server Response code "+conn.getResponseCode());
                     return null;
                 }
 

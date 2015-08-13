@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.fraunhofer.fit.almanac.almanaccitizenapp.DisplayImageActivity"
+    android:background="#00000000">
+
+
+
+        <ImageView
+            android:id="@+id/capturedImage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#00000000"
+
+
+            />
+
+        <!-- <ImageView
+             android:id="@+id/deleteImage"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentLeft="true"
+             android:layout_alignParentBottom="true"
+             android:src="@drawable/abc_ic_clear_mtrl_alpha"
+             android:scaleX="2"
+             android:scaleY="2"
+             android:paddingBottom="20dp"
+             android:paddingLeft="10dp" /> -->
+
+
+</RelativeLayout>

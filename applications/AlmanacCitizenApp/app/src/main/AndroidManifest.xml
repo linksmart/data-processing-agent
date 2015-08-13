@@ -3,9 +3,10 @@
     package="org.fraunhofer.fit.almanac.almanaccitizenapp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +16,7 @@
         <!-- Mqtt Service -->
         <service android:name="org.eclipse.paho.android.service.MqttService" >
         </service>
+
         <activity
             android:name=".AlmanacCitizen"
             android:label="@string/app_name" >
@@ -24,13 +26,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CaptureActivity"
-            android:label="@string/createNewIssue">
-
+        <activity
+            android:name=".CaptureActivity"
+            android:label="@string/createNewIssue" >
         </activity>
-        <activity android:name="org.fraunhofer.fit.almanac.slider.ScreenSlideActivity" android:theme="@style/GalleryAppTheme"
-            android:label="@string/viewIssues">
-
+        <activity
+            android:name="org.fraunhofer.fit.almanac.slider.ScreenSlideActivity"
+            android:label="@string/viewIssues"
+            android:theme="@style/GalleryAppTheme" >
+        </activity>
+        <activity
+            android:name=".DisplayImageActivity"
+            android:label="@string/title_activity_dsplay_image"
+            android:theme="@style/GalleryAppTheme" >
         </activity>
     </application>
 

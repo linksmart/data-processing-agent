@@ -15,6 +15,7 @@ public class IssueStatus {
     public PicIssueUpdate.Priority priority;
     public Date timeToCompletion;
     public boolean isSubscribed;
+    public Date creationDate;
 
     public String displayString(){
         return "State:"+state +"\nPriority:" + priority+ "\nDue Time:"+timeToCompletion;
@@ -32,6 +33,7 @@ public class IssueStatus {
         picPath = filePath;
         isSubscribed = subscribe;
         state = PicIssueUpdate.State.OPEN;
+        creationDate= new Date(); //set the date to be current date
     }
 
     public void setId(String id){
