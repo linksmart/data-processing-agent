@@ -4,14 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
+import org.eclipse.paho.client.mqttv3.MqttException;
+
+import java.net.MalformedURLException;
 
 /**
  * Created by Caravajal on 22.05.2015.
  */
 public class EventFeederImpl extends FeederImpl {
     private ObjectMapper mapper = new ObjectMapper();
-
-    public EventFeederImpl(String brokerName, String brokerPort, String topic) {
+    public EventFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException {
         super(brokerName, brokerPort, topic);
 
     }
@@ -33,14 +35,14 @@ public class EventFeederImpl extends FeederImpl {
                 event.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event, event.getClass());
-               // LoggerService.report("info", "message arrived with ID: " + event.getSensor().getId());
+
             }catch (InvalidFormatException e){
                 Observation event1 = mapper.readValue(rawEvent,Observation.class);
 
                 event1.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event1, event1.getClass());
-            //    LoggerService.report("info", "message arrived with ID: " + event1.getSensor().getId());
+
             }
 
 
@@ -48,7 +50,7 @@ public class EventFeederImpl extends FeederImpl {
 
 
         }catch(Exception e){
-            e.printStackTrace();
+            loggerService.error(e.getMessage(),e);
 
         }
     }

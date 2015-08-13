@@ -4,76 +4,75 @@ import eu.almanac.event.datafusion.esper.EsperEngine;
 import eu.almanac.event.datafusion.feeder.EventFeederImpl;
 
 import eu.almanac.event.datafusion.feeder.FeederImpl;
-import eu.almanac.event.datafusion.feeder.QueryFeederImpl;
-import eu.almanac.event.datafusion.intern.ConfigurationManagement;
-import eu.almanac.event.datafusion.intern.LoggerService;
-
-
-import java.net.URI;
-import java.net.URISyntaxException;
+import eu.almanac.event.datafusion.feeder.StatementFeederImpl;
+import eu.almanac.event.datafusion.intern.Utils;
+import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.almanac.event.datafusion.intern.Const;
+import eu.linksmart.gc.utils.logging.LoggerService;
 
 /**
- * Created by Caravajal on 06.10.2014.
+ * Created by J. Angel Caravajal on 06.10.2014.
+ *
  */
 public class DataFusionManager {
 
     public static void main(String[] args) {
+        Configurator conf;
+
+
 
         if(args.length>=1) {
 
-            try {
 
-                URI url =new URI(args[0]);
-                ConfigurationManagement.BROKER_PORT = String.valueOf(url.getPort());
-                ConfigurationManagement.BROKER_HOST = url.getHost();
+            Const.DEFAULT_CONFIGURATION_FILE= args[1];
 
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-                return;
-            }
-        }
-        if(args.length>=2){
-            ConfigurationManagement.EVENT_TOPIC = args[1];
-        }
+        }else
+            Const.DEFAULT_CONFIGURATION_FILE = "dfm.cfg";
+        conf = Configurator.getDefaultConfig();
+        LoggerService loggerService = Utils.initDefaultLoggerService(DataFusionManager.class);
 
-        if(args.length>=3){
-            ConfigurationManagement.FUSED_TOPIC = args[2];
-        }
 
-        System.out.println(
-                        "The Data-Fusion Manager is starting with ID: "+ConfigurationManagement.DFM_ID +";" +
-                        " with incoming events in broker tcp://"+ConfigurationManagement.BROKER_HOST+":"+ConfigurationManagement.BROKER_PORT+
-                        " waiting for events from the topic: "+ ConfigurationManagement.EVENT_TOPIC+";" +
-                        " waiting for queries from topic: " +ConfigurationManagement.STATEMENT_ADD_TOPIC +
-                        " generating event in: "+ConfigurationManagement.FUSED_TOPIC
+        loggerService.info(
+                "The Data-Fusion Manager is starting with ID: " + Const.DFM_ID.toString() + ";\n" +
+                        " with incoming events in broker tcp://" + conf.get(Const.EVENTS_IN_BROKER_CONF_PATH) + ":" + conf.get(Const.EVENTS_IN_BROKER_PORT_CONF_PATH) +
+                        " waiting for events from the topic: " + conf.get(Const.EVENT_IN_TOPIC_CONF_PATH) + ";\n" +
+                        " waiting for queries from topic: " + conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH) +
+                        " generating event in: " + conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH)
         );
         FeederImpl feederImplEvents = null,  feederImplQuery = null;
         try {
-            feederImplEvents = new EventFeederImpl(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.EVENT_TOPIC);
+            feederImplEvents = new EventFeederImpl(conf.get(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.get(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
 
             EsperEngine esper = new EsperEngine();
 
             feederImplEvents.dataFusionWrapperSignIn(esper);
 
 
-            feederImplQuery = new QueryFeederImpl(ConfigurationManagement.BROKER_HOST, ConfigurationManagement.BROKER_PORT,ConfigurationManagement.STATEMENT_ADD_TOPIC);
+            feederImplQuery = new StatementFeederImpl(conf.get(Const.STATEMENT_INOUT_BROKER_CONF_PATH).toString(), conf.get(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH).toString());
 
 
             feederImplQuery.dataFusionWrapperSignIn(esper);
 
         } catch (Exception e) {
-            e.printStackTrace();
+           loggerService.error(e.getMessage(),e);
         }
-        int i = 0;
+
+        if(feederImplQuery == null  || feederImplEvents ==null){
+            loggerService.error("The feeders couldn't start! MDF now is stopping");
+            return;
+        }
+
+
         while (!feederImplEvents.isDown() || !feederImplQuery.isDown()){
-            if (i == 0)
-            LoggerService.publish("info", "Data Fusion Manager is alive", null, false);
-            i = (i+1)%6;
+
+
+            loggerService.info("Data Fusion Manager is alive");
+
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(conf.getInt(Const.LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH));
             } catch (InterruptedException e) {
-                e.printStackTrace();
+               loggerService.error(e.getMessage(),e);
             }
         }
     }

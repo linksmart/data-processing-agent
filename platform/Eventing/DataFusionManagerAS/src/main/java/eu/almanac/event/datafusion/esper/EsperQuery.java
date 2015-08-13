@@ -1,11 +1,11 @@
 package eu.almanac.event.datafusion.esper;
 
-import eu.almanac.event.datafusion.intern.ConfigurationManagement;
-import eu.almanac.event.datafusion.intern.LoggerService;
+import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.Statement;
+import eu.linksmart.api.event.datafusion.StatementException;
+import eu.linksmart.gc.utils.configuration.Configurator;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,15 +20,13 @@ public class EsperQuery implements Statement {
     protected String[] scope={"local"};
 
 
-
     public EsperQuery(Event event) throws Exception {
 
-        int n;
+
         if(event.getEbyName("Name")!= null)
             this.name = event.getEbyName("Name").getStringValue();
         else{
-            LoggerService.publish("query/" + "anonymous", "IoTEntity Event Error: The query must have a name!", null, true);
-            throw new Exception("IoTEntity Event Error: The query must have a name!");
+            throw new StatementException("IoTEntity Event Error: The query must have a name!",Configurator.getDefaultConfig().getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"unknown");
         }
 
         if(event.getEbyName("Statement")!= null) {
@@ -36,8 +34,7 @@ public class EsperQuery implements Statement {
 
             this.statement = getInputAndCleanStatement(event.getEbyName("Statement").getStringValue());
         }else{
-            LoggerService.publish("query/" + name, "IoTEntity Event Error: The query must have a name!", null, true);
-            throw new Exception("IoTEntity Event Error: The query must have a statement!");
+            throw new StatementException("IoTEntity Event Error: The query must have a name!",Configurator.getDefaultConfig().getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+name);
         }
         if(event.getEbyName("Source")!= null) {
             // this.satement = event.getProperties("Statement").getIoTStateObservation()[0].getValue().replace("{", "").replace("}", "");
@@ -48,8 +45,7 @@ public class EsperQuery implements Statement {
             this.source = name;
         }
         if(event.getEbyName("Output")!= null) {
-            String [] aux = event.getEbyName("Output").getStringValue().split(";");
-            this.output = aux;
+            this.output = event.getEbyName("Output").getStringValue().split(";");
            /* n = 0;
             for (IoTValue i : event.getEbyName("Output").getIoTStateObservation()) {
                 this.output[n] = i.getValue();
@@ -59,13 +55,11 @@ public class EsperQuery implements Statement {
 
         if(event.getEbyName("Input")!= null) {
 
-            String [] aux = event.getEbyName("Input").getStringValue().split(";");
-            this.input = aux;
+            this.input = event.getEbyName("Input").getStringValue().split(";");
         }
 
         if(event.getEbyName("Scope")!= null) {
-            String [] aux = event.getEbyName("Scope").getStringValue().split(";");
-            this.scope = aux;
+            this.scope = event.getEbyName("Scope").getStringValue().split(";");
         }
     }
 
@@ -106,14 +100,14 @@ public class EsperQuery implements Statement {
 
 
             }else{
-                LoggerHandler.publish("query/"+name, "missing '{' or '}' after the from in query:" + getName(), null,true);
+                LoggerHandler.broker("query/"+name, "missing '{' or '}' after the from in query:" + getName(), null,true);
             }
         }
 
 
         return ret;
     }*/
-    private String getInputAndCleanStatement(String statement) {
+    private String getInputAndCleanStatement(String statement) throws StatementException {
 
         String ret = statement ,lower=statement.toLowerCase();
 
@@ -130,8 +124,7 @@ public class EsperQuery implements Statement {
 
                 // Now create matcher object.
                 Matcher matcher = pattern.matcher(statement);
-                int k=matcher.groupCount();
-                ArrayList<String> inputs = new ArrayList<>();
+              //  ArrayList<String> inputs = new ArrayList<>();
                 int n = 0, m=0;
                 for (int i=0; matcher.find();i++) {
                     try {
@@ -141,7 +134,7 @@ public class EsperQuery implements Statement {
                            start =2;
                         aux = aux.substring(start,aux.length()-1).replace("#","hash").replace("/",".");
                        // if(m==1)
-                            inputs.add( aux );
+                          //  inputs.add( aux );
                        // else if(n!=0)
                             ret +=  aux+topics[n+1];
                     }catch (Exception e){
@@ -158,7 +151,8 @@ public class EsperQuery implements Statement {
 
 
             }else{
-                LoggerService.publish("query/" + name, "missing '{' or '}' after the from in query:" + getName(), null, true);
+                throw new StatementException("IoTEntity Event Error: The query must have a name!",Configurator.getDefaultConfig().getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+name);
+
             }
         }
 
