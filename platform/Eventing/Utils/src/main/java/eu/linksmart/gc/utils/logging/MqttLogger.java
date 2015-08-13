@@ -2,10 +2,12 @@ package eu.linksmart.gc.utils.logging;
 
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.constants.Const;
+import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -48,7 +50,7 @@ public class MqttLogger implements Logger {
 
         String ret = "";
         for(Object o: objects)
-            addColumn(ret,o.toString());
+            ret+=addColumn(Utils.getDateNowString(),o.toString());
         return ret;
 
 
@@ -59,7 +61,7 @@ public class MqttLogger implements Logger {
     protected String addColumn(String... columns){
         String string ="";
         for(String s:columns)
-            string+= "\n|"+s;
+            string+= "\t|"+s;
         return string;
     }
     @Override
@@ -136,7 +138,7 @@ public class MqttLogger implements Logger {
     public void debug(String s) {
 
         try {
-            publish( getTopic("DEBUG"),s.getBytes());
+            publish( getTopic("DEBUG"),format(s).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -220,7 +222,7 @@ public class MqttLogger implements Logger {
     @Override
     public void info(String s) {
         try {
-            publish(getTopic("INFO"), s.getBytes());
+            publish(getTopic("INFO"), format(s).getBytes());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -230,7 +232,7 @@ public class MqttLogger implements Logger {
     @Override
     public void info(String s, Object o) {
         try {
-            publish(getTopic("info"),addColumn(s,o.toString()).getBytes());
+            publish(getTopic("info"),format(s, o.toString()).getBytes());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -240,7 +242,7 @@ public class MqttLogger implements Logger {
     @Override
     public void info(String s, Object o, Object o1) {
         try {
-            publish(getTopic("info"),addColumn(s,format(o,o1)).getBytes());
+            publish(getTopic("info"),format(s, format(o, o1)).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -249,7 +251,7 @@ public class MqttLogger implements Logger {
     @Override
     public void info(String s, Object... objects) {
         try {
-            publish(getTopic("info"),addColumn(s,format(objects)).getBytes());
+            publish(getTopic("info"),format(s, format(objects)).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -258,7 +260,7 @@ public class MqttLogger implements Logger {
     @Override
     public void info(String s, Throwable throwable) {
         try {
-            publish(getTopic("info"),addColumn(s,throwable.getLocalizedMessage()).getBytes());
+            publish(getTopic("info"),format(s, throwable.getLocalizedMessage()).getBytes());
            } catch (Exception e) {
             e.printStackTrace();
         }
@@ -302,7 +304,7 @@ public class MqttLogger implements Logger {
     @Override
     public void warn(String s) {
         try {
-            publish(getTopic("warn"),s.getBytes());
+            publish(getTopic("warn"),format(s).getBytes());
            } catch (Exception e) {
             e.printStackTrace();
         }
@@ -385,7 +387,7 @@ public class MqttLogger implements Logger {
     @Override
     public void error(String s) {
         try {
-            publish(getTopic("error"),s.getBytes());
+            publish(getTopic("error"),format(s).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }

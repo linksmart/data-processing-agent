@@ -1,4 +1,0 @@
-java -jar Client\target\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "QuerySimulate" -b tcp://130.192.86.227:1883 -S ismb_public -f DataFusionManagerAS\tutorials\deployment\QuerySimulate.sql
-
-java -jar Client\target\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "Level-Alert-single" -b tcp://130.192.86.227:1883 -S ismb_public -f DataFusionManagerAS\tutorials\deployment\query.sql
-java -jar Client\target\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "Level-Alert-real" -b tcp://130.192.86.227:1883 -S ismb_public -f DataFusionManagerAS\tutorials\deployment\RealQuery.sql

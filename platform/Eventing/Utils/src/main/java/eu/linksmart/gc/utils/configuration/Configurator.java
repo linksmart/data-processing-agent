@@ -17,31 +17,34 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 06.08.2015 a researcher of Fraunhofer FIT.
  */
-public class Configurator {
+public class Configurator extends ConfigurationConst {
 
     static protected Configurator def= init();
 
     static public Configurator getDefaultConfig(){
-        if(
-                !ConfigurationConst.DEFAULT_CONFIGURATION_FILE.equals(ConfigurationConst.DEFAULT_INTERN_CONFIGURATION_FILE) &&
-                        ( !def.confPath.contains(ConfigurationConst.DEFAULT_CONFIGURATION_FILE)||!def.confPath.contains(ConfigurationConst.DEFAULT_INTERN_CONFIGURATION_FILE))
-                ){
-            def.appendConfig(new Configurator(ConfigurationConst.DEFAULT_CONFIGURATION_FILE));
-        }
+
+            for(String confFile: ConfigurationConst.DEFAULT_CONFIGURATION_FILE)
+                if(confFile!=null)
+                    if(!DEFAULT_INTERN_CONFIGURATION_FILE.equals(confFile))
+                        def.appendConfig(new Configurator(confFile));
+
 
         return def;
     }
-    static public void setDefaultConfig(Configurator configurator){
+    static public boolean addConfFile(String filePath) {
+        return !DEFAULT_CONFIGURATION_FILE.contains(filePath) && DEFAULT_CONFIGURATION_FILE.add(filePath);
+    }
+    static protected void setDefaultConfig(Configurator configurator){
          def= configurator;
     }
-    static public Configurator appendDefaultConfig(Configurator configurator){
+    static protected Configurator appendDefaultConfig(Configurator configurator){
 
         appendConfig(def,configurator);
 
         return def;
 
     }
-    static public void appendConfig( Configurator conf, Configurator configurator){
+    static protected void appendConfig( Configurator conf, Configurator configurator){
 
         Iterator<String> stringIterator = configurator.config.getKeys();
         for(String key = null ;stringIterator.hasNext(); key = stringIterator.next() ) {
@@ -52,7 +55,6 @@ public class Configurator {
                     conf.config.setProperty(key, configurator.config.get(Object.class, key));
 
         }
-        conf.confPath.addAll(configurator.confPath);
 
     }
      public Configurator appendConfig(Configurator configurator){
@@ -64,17 +66,21 @@ public class Configurator {
 
     }
     static protected Configurator init(){
+        Configurator configurator = new Configurator();
 
-        if(!ConfigurationConst.DEFAULT_CONFIGURATION_FILE.equals(ConfigurationConst.DEFAULT_INTERN_CONFIGURATION_FILE)){
-            return new Configurator().appendConfig(new Configurator(ConfigurationConst.DEFAULT_CONFIGURATION_FILE));
-        }
-        return new Configurator();
+
+        for(String confFile: DEFAULT_CONFIGURATION_FILE)
+            if(!DEFAULT_INTERN_CONFIGURATION_FILE.equals(confFile))
+                if(confFile!=null)
+                    configurator.appendConfig(new Configurator(confFile));
+
+
+        return configurator;
 
     }
     protected Configurator() {
-        confPath.add( ConfigurationConst.DEFAULT_INTERN_CONFIGURATION_FILE);
         Configurations  configs = new Configurations();
-        File propertiesFile = new File(ConfigurationConst.DEFAULT_INTERN_CONFIGURATION_FILE);
+        File propertiesFile = new File(DEFAULT_INTERN_CONFIGURATION_FILE);
 
         FileBasedConfigurationBuilder<PropertiesConfiguration> builder = configs.propertiesBuilder(propertiesFile);
 
@@ -91,8 +97,7 @@ public class Configurator {
             cex.printStackTrace();
         }
     }
-    public Configurator(String configurationFile) {
-        confPath.add( configurationFile);
+    protected Configurator(String configurationFile) {
         Parameters params = new Parameters();
 
         builder = new ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
@@ -143,5 +148,4 @@ public class Configurator {
         return  config.getList(String.class, key);
 
     }
-    protected ArrayList<String> confPath = new ArrayList<String>();
 }
