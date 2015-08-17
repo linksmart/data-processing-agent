@@ -63,7 +63,7 @@
         <cxf.version>2.7.9</cxf.version>
         <cxf.dosgi.version>1.6.0</cxf.dosgi.version>
         <!-- site plugins -->
-        <project-info-reports.version>2.7</project-info-reports.version>
+        <project-info-reports.version>2.8</project-info-reports.version>
         <site.plugin.version>3.4</site.plugin.version>
         <maven.javadoc.version>2.10</maven.javadoc.version>
         <!-- distribution related plugins -->
@@ -121,9 +121,17 @@
 
     <repositories>
         <repository>
+            <id>almanac-snapshots</id>
+            <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>
+        </repository>
+        <repository>
+            <id>almanac-releases</id>
+            <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>
+        </repository>
+        <!--<repository>
             <id>linksmart-repo</id>
             <name>liksmart artifacts repository</name>
-            <url>https://linksmart.eu/repo/content/groups/public/</url>
+            <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/groups/public/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>daily</updatePolicy>
@@ -132,14 +140,14 @@
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
             </releases>
-        </repository>
+        </repository>-->
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
-            <id>linksmart-repo</id>
+            <id>linksmart-release</id>
             <name>linksmart (maven) plugins repository</name>
-            <url>https://linksmart.eu/repo/content/repositories/central/</url>
+            <url>http://central.maven.org/maven2/org/apache/maven/plugins/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>daily</updatePolicy>
@@ -153,14 +161,14 @@
 
     <distributionManagement>
         <repository>
-            <id>releases</id>
+            <id>almanac-releases</id>
             <name>Releases</name>
-            <url>https://linksmart.eu/repo/content/repositories/releases/</url>
+            <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>snapshots</id>
+            <id>almanac-snapshots</id>
             <name>Snapshots</name>
-            <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+            <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <site>
@@ -172,7 +180,7 @@
 
     <ciManagement>
         <system>Jenkins</system>
-        <url>http://greatfool.fit.fraunhofer.de:8080</url>
+        <url>https://greencom-ci.fit.fraunhofer.de/jenkins/</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -189,12 +197,12 @@
         <system>Jira</system>
         <url>https://jira.fit.fraunhofer.de/</url>
     </issueManagement>
-
+<!--
     <scm>
         <connection>scm:git:https://linksmart.eu/redmine/linksmart-opensource/globalconnect.git</connection>
         <developerConnection>scm:git:https://linksmart.eu/redmine/linksmart-opensource/globalconnect.git</developerConnection>
         <url>scm:git:https://linksmart.eu/redmine/linksmart-opensource/globalconnect.git</url>
-    </scm>
+    </scm>-->
 
 	<!-- this section define only the versions used by dependencies and not the dependencies itself -->
     <dependencyManagement>
@@ -539,9 +547,9 @@
 						<configuration>
 							<remoteRepositories>
 								<repository>
-									<id>linksmart-repo</id>
+                                    <id>almanac-snapshots</id>
 									<name>LinkSmart - Nexus Managed Snapshot Repository</name>
-									<url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+                                    <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>
 									<releases>
 										<enabled>true</enabled>
 										<updatePolicy>never</updatePolicy>

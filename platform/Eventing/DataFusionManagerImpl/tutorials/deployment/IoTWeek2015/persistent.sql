@@ -1,0 +1,1 @@
+select * from observation.std:unique(id) output snapshot every 30 seconds

@@ -1,7 +1,5 @@
 package eu.linksmart.api.event.datafusion;
 
-import eu.almanac.event.datafusion.utils.payload.SenML.Event;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
 
 /**
@@ -10,9 +8,9 @@ import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
  * This API can be accessed natively in a OSGi environment or by Web Services,
  *  allowing the a high decupled infrastructure in which any engine could be added so long implement a Wrapper which interact through Web Services. 
  * 
- * @author Jos� �ngel Carvajal Soto
- * @version     0.01
- * @since       0.01
+ * @author Jose Angel Carvajal Soto
+ * @version     0.03
+ * @since       0.03
  * @see  DataFusionWrapper
  * 
  * */
@@ -69,8 +67,12 @@ public interface DataFusionWrapper {
 	 * 
 	 * @return <code>true</code> if the query is successfully deployed in the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addStatement( Statement query);
-
+	public boolean addStatement( Statement query) throws StatementException;
+    /***
+     *
+     * Terminate the Wrapper, releasing any resource us by it.
+     *
+     * */
     public void destroy();
 
 

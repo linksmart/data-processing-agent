@@ -36,7 +36,7 @@ public class MqttBackboneProtocolConfigurator extends Configurator{
 
     public static final String PERSISTENCE = "BackboneMQTT.MQTT.Persistence";
 
-    public static final String BROADCAST = "BackboneMQTT.Broadcast";
+    public static final String BROADCAST_TOPIC = "BackboneMQTT.Broadcast.Topic";
 
     public static final String ALLOWED_LOCAL_MESSAGING_LOOP = "BackboneMQTT.AllowingLocalLoop";
 
@@ -53,6 +53,7 @@ public class MqttBackboneProtocolConfigurator extends Configurator{
 
     public static String BROKER_PORT = "BackboneMQTT.MQTT.BrokerPort";
 
+    public static final String BROADCAST_PROPAGATION ="BackboneMQTT.Broadcast.PropagationFeature";
 
     private static final String FELIX_CONST_FILENAME = "felix.fileinstall.filename";
 

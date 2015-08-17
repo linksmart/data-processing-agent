@@ -1,7 +1,7 @@
 package eu.linksmart.api.event.datafusion.core;
 
 /**
- * This interface represent the inner logic needed by the core of the API of the feeder. <p> 
+ * This interface represent the inner logic needed by the core of the API of the feeder. <p>
  * The EventsFeeder component make an abstraction layer between the event provider/s and the CEP-engines. <p>
  * This allows a separation of the CEP-Wrappers and the event brokers so one or the other can be exchange. <p>
  * This means if the event provider is change the event feeder should be change but not the different wrappers. <p>
@@ -12,7 +12,7 @@ package eu.linksmart.api.event.datafusion.core;
  * @author José Ángel Carvajal Soto
  * @version     0.01
  * @since       0.01
- * @see DataFusionWrapper
+ * @see eu.linksmart.api.event.datafusion.DataFusionWrapper
  * 
  * */
 public interface EventFeederLogic {

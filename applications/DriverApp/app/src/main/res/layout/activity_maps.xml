@@ -21,27 +21,46 @@
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:src="@drawable/logo_black"/>
+        <TextView android:id="@+id/distanceText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="17sp"
+
+            android:textStyle="bold"
+            android:textColor="@color/update_distance_text_color"
+            android:visibility="gone"
+            android:layout_below="@+id/logo"
+        />
         <ImageView android:id="@+id/diversion"
             android:layout_width="match_parent"
             android:layout_height="128dp"
             android:src="@drawable/diversion_sign"
             android:visibility="gone"
-            android:layout_below="@+id/logo"/>/>
+            android:layout_below="@+id/distanceText"/>
+
         <Button  android:id="@+id/updateButton"
             android:text="@string/button_update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:textSize="40sp"
+            android:layout_width="match_parent"
+
+            android:layout_height="128dp"
+            android:background="@color/update_button_color"
+            android:layout_centerHorizontal="true"
             android:visibility="gone"
-            android:layout_toLeftOf="@+id/cancelButton"
-            android:layout_below="@+id/diversion"/>
+            android:layout_below="@+id/diversion"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"/>
         <Button  android:id="@+id/cancelButton"
             android:text="@string/button_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:background="@color/cancel_button_color"
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
             android:visibility="gone"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/diversion"/>
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/updateButton"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"/>
 
     </RelativeLayout>
 

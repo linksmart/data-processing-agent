@@ -128,6 +128,7 @@ void setup()
   digitalWrite(DIR_B, HIGH);*/
   calc =0;
   Serial.begin(9600);     // opens serial port, sets data rate to 9600 bps
+  analogWrite(PWM_A, 255);
 }
 
 // The main function. First reads incoming data from the serial port, 
@@ -146,10 +147,12 @@ void loop()
   sei();        // Enable interrupts
   delay (1000); // Wait 1 second
   cli();        // Disable interrupts
-   calc += (pulses / (8.2)); // (Pulse frequency x 60) / 8.2 = flow rate in L/min 
+   calc += (pulses / (8.2)*10); // (Pulse frequency x 60) / 8.2 = flow rate in L/min 
   pulses=0;
   String data = "";
-  data += (int)calc;
+  if(calc >=32748 or calc<0)
+    calc=0.0;
+  data = String((int)calc);
   //sendValue("f1",data);
   Serial.print("idFlowSensor {\"type\":\"ac:FlowSensor\","); Serial.print("\"flow\":\""); Serial.print(data); Serial.println("\"}");
 /*
