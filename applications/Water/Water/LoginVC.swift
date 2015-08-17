@@ -11,7 +11,7 @@ import SIOSocket
 
 class LoginVC: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
-    let imageData = UIImage(named: "4-1")
+    let imageData = UIImage(named: "aarhusvand_splash_03_rgb")
     var maxScale: CGFloat?
     private var imageView = UIImageView()
     

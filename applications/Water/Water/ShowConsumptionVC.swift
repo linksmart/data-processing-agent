@@ -71,7 +71,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 if self.alertShown == false {
                     
                     var tmpAlert: Alert = Alert()
-                    tmpAlert.Title = "Leak detected"
+                    tmpAlert.Title = "Lækage Alarm"
                     tmpAlert.Subtitle = "Oops I did it again"
                     tmpAlert.TimeStamp = NSDate()
                     self.alertList.insert(tmpAlert, atIndex: 0)
@@ -122,7 +122,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 options: UIViewAnimationOptions.TransitionFlipFromLeft
                     | UIViewAnimationOptions.ShowHideTransitionViews,
                 completion:nil)
-            periodInGraphLabel.text = "Month View"
+            periodInGraphLabel.text = "Månedens Forbrug"
         } else {
             UIView.transitionFromView(monthView,
                 toView: dayView,
@@ -130,11 +130,11 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 options: UIViewAnimationOptions.TransitionFlipFromRight
                     | UIViewAnimationOptions.ShowHideTransitionViews,
                 completion: nil)
-            periodInGraphLabel.text = "Day View"
+            periodInGraphLabel.text = "Dagens Forbrug"
         }
         
         var tmpAlert: Alert = Alert()
-        tmpAlert.Title = "Leak detected"
+        tmpAlert.Title = "Lækage Alarm"
         tmpAlert.Subtitle = "Oops I did it again"
         tmpAlert.TimeStamp = NSDate()
         self.alertList.insert(tmpAlert, atIndex: 0)

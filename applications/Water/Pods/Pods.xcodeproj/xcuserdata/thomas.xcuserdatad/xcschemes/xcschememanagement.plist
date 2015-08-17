@@ -4,32 +4,27 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-Water-Alamofire.xcscheme</key>
+		<key>Alamofire.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Water-AlamofireObjectMapper.xcscheme</key>
+		<key>AlamofireObjectMapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Water-Charts.xcscheme</key>
+		<key>Charts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Water-JBChartView.xcscheme</key>
+		<key>JBChartView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Water-ObjectMapper.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-Water-SIOSocket.xcscheme</key>
+		<key>ObjectMapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -39,40 +34,45 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SIOSocket.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>38CFEC74ED87E764224118AC</key>
+		<key>1B4089734EF159C5A7D7E6DE4841CCEB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3AA291E7119D701122FF5979</key>
+		<key>2305B5CE94183E49CAA2D96D583085E8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>836234E0562F9BED680CC424</key>
+		<key>7B1B845A600129993FD8412392C68DB0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>88CC0D2483029855620509E1</key>
+		<key>8BC45734973FFEEB3BF7299D526E7E57</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BC0C15335F42A909A7C2CF83</key>
+		<key>AE60F5F1EAE514EBF47736B5AFBE94C3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E1C4CCF1AB1D3EED514C99F7</key>
+		<key>CB60F33CF9229DBCB290EFEFED8BF93E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F666A452A10E2CBD61C5C7D8</key>
+		<key>E5A71B490B6EC4183CED97E130769023</key>
 		<dict>
 			<key>primary</key>
 			<true/>
