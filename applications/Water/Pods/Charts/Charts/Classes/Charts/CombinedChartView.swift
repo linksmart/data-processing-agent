@@ -12,7 +12,7 @@
 //
 
 import Foundation
-import CoreGraphics.CGBase
+import CoreGraphics
 
 /// This chart class allows the combination of lines, bars, scatter and candle data all displayed in one chart area.
 public class CombinedChartView: BarLineChartViewBase
@@ -33,42 +33,47 @@ public class CombinedChartView: BarLineChartViewBase
     
     public override func initialize()
     {
-        super.initialize();
+        super.initialize()
         
-        _fillFormatter = BarLineChartFillFormatter(chart: self);
+        _fillFormatter = BarLineChartFillFormatter(chart: self)
         
-        renderer = CombinedChartRenderer(chart: self, animator: _animator, viewPortHandler: _viewPortHandler);
+        renderer = CombinedChartRenderer(chart: self, animator: _animator, viewPortHandler: _viewPortHandler)
     }
     
     override func calcMinMax()
     {
-        super.calcMinMax();
+        super.calcMinMax()
         
         if (self.barData !== nil || self.candleData !== nil || self.bubbleData !== nil)
         {
-            _chartXMin = -0.5;
-            _chartXMax = Float(_data.xVals.count) - 0.5;
+            _chartXMin = -0.5
+            _chartXMax = Double(_data.xVals.count) - 0.5
             
             if (self.bubbleData !== nil)
             {
                 for set in self.bubbleData.dataSets as! [BubbleChartDataSet]
                 {
-                    let xmin = set.xMin;
-                    let xmax = set.xMax;
+                    let xmin = set.xMin
+                    let xmax = set.xMax
                     
                     if (xmin < chartXMin)
                     {
-                        _chartXMin = xmin;
+                        _chartXMin = xmin
                     }
                     
                     if (xmax > chartXMax)
                     {
-                        _chartXMax = xmax;
+                        _chartXMax = xmax
                     }
                 }
             }
+            else
+            {
+                _chartXMin = 0.0
+                _chartXMax = Double(_data.xValCount - 1)
+            }
 
-            _deltaX = CGFloat(abs(_chartXMax - _chartXMin));
+            _deltaX = CGFloat(abs(_chartXMax - _chartXMin))
         }
     }
     
@@ -76,12 +81,12 @@ public class CombinedChartView: BarLineChartViewBase
     {
         get
         {
-            return super.data;
+            return super.data
         }
         set
         {
-            super.data = newValue;
-            (renderer as! CombinedChartRenderer?)!.createRenderers();
+            super.data = newValue
+            (renderer as! CombinedChartRenderer?)!.createRenderers()
         }
     }
     
@@ -89,14 +94,14 @@ public class CombinedChartView: BarLineChartViewBase
     {
         get
         {
-            return _fillFormatter;
+            return _fillFormatter
         }
         set
         {
-            _fillFormatter = newValue;
+            _fillFormatter = newValue
             if (_fillFormatter === nil)
             {
-                _fillFormatter = BarLineChartFillFormatter(chart: self);
+                _fillFormatter = BarLineChartFillFormatter(chart: self)
             }
         }
     }
@@ -107,9 +112,9 @@ public class CombinedChartView: BarLineChartViewBase
         {
             if (_data === nil)
             {
-                return nil;
+                return nil
             }
-            return (_data as! CombinedChartData!).lineData;
+            return (_data as! CombinedChartData!).lineData
         }
     }
     
@@ -119,9 +124,9 @@ public class CombinedChartView: BarLineChartViewBase
         {
             if (_data === nil)
             {
-                return nil;
+                return nil
             }
-            return (_data as! CombinedChartData!).barData;
+            return (_data as! CombinedChartData!).barData
         }
     }
     
@@ -131,9 +136,9 @@ public class CombinedChartView: BarLineChartViewBase
         {
             if (_data === nil)
             {
-                return nil;
+                return nil
             }
-            return (_data as! CombinedChartData!).scatterData;
+            return (_data as! CombinedChartData!).scatterData
         }
     }
     
@@ -143,9 +148,9 @@ public class CombinedChartView: BarLineChartViewBase
         {
             if (_data === nil)
             {
-                return nil;
+                return nil
             }
-            return (_data as! CombinedChartData!).candleData;
+            return (_data as! CombinedChartData!).candleData
         }
     }
     
@@ -155,9 +160,9 @@ public class CombinedChartView: BarLineChartViewBase
         {
             if (_data === nil)
             {
-                return nil;
+                return nil
             }
-            return (_data as! CombinedChartData!).bubbleData;
+            return (_data as! CombinedChartData!).bubbleData
         }
     }
     
@@ -177,13 +182,6 @@ public class CombinedChartView: BarLineChartViewBase
         set { (renderer as! CombinedChartRenderer!).drawValueAboveBarEnabled = newValue; }
     }
     
-    /// if set to true, all values of a stack are drawn individually, and not just their sum
-    public var drawValuesForWholeStackEnabled: Bool
-    {
-        get { return (renderer as! CombinedChartRenderer!).drawValuesForWholeStackEnabled; }
-        set { (renderer as! CombinedChartRenderer!).drawValuesForWholeStackEnabled = newValue; }
-    }
-    
     /// if set to true, a grey area is darawn behind each bar that indicates the maximum value
     public var drawBarShadowEnabled: Bool
     {
@@ -197,9 +195,6 @@ public class CombinedChartView: BarLineChartViewBase
     /// returns true if drawing values above bars is enabled, false if not
     public var isDrawValueAboveBarEnabled: Bool { return (renderer as! CombinedChartRenderer!).drawValueAboveBarEnabled; }
     
-    /// returns true if all values of a stack are drawn, and not just their sum
-    public var isDrawValuesForWholeStackEnabled: Bool { return (renderer as! CombinedChartRenderer!).drawValuesForWholeStackEnabled; }
-    
     /// returns true if drawing shadows (maxvalue) for each bar is enabled, false if not
     public var isDrawBarShadowEnabled: Bool { return (renderer as! CombinedChartRenderer!).drawBarShadowEnabled; }
     
@@ -210,11 +205,11 @@ public class CombinedChartView: BarLineChartViewBase
     {
         get
         {
-            return (renderer as! CombinedChartRenderer!).drawOrder.map { $0.rawValue };
+            return (renderer as! CombinedChartRenderer!).drawOrder.map { $0.rawValue }
         }
         set
         {
-            (renderer as! CombinedChartRenderer!).drawOrder = newValue.map { CombinedChartDrawOrder(rawValue: $0)! };
+            (renderer as! CombinedChartRenderer!).drawOrder = newValue.map { CombinedChartDrawOrder(rawValue: $0)! }
         }
     }
 }
