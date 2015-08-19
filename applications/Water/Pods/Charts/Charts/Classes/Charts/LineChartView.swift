@@ -12,33 +12,29 @@
 //
 
 import Foundation
-import CoreGraphics.CGBase
+import CoreGraphics
 
 /// Chart that draws lines, surfaces, circles, ...
 public class LineChartView: BarLineChartViewBase, LineChartRendererDelegate
 {
-    /// the width of the highlighning line
-    /// :default: 3.0
-    internal var highlightWidth: CGFloat = 3.0
-
     private var _fillFormatter: ChartFillFormatter!
     
     internal override func initialize()
     {
-        super.initialize();
+        super.initialize()
         
-        renderer = LineChartRenderer(delegate: self, animator: _animator, viewPortHandler: _viewPortHandler);
+        renderer = LineChartRenderer(delegate: self, animator: _animator, viewPortHandler: _viewPortHandler)
         
-        _fillFormatter = BarLineChartFillFormatter(chart: self);
+        _fillFormatter = BarLineChartFillFormatter(chart: self)
     }
     
     internal override func calcMinMax()
     {
-        super.calcMinMax();
+        super.calcMinMax()
         
         if (_deltaX == 0.0 && _data.yValCount > 0)
         {
-            _deltaX = 1.0;
+            _deltaX = 1.0
         }
     }
     
@@ -46,17 +42,17 @@ public class LineChartView: BarLineChartViewBase, LineChartRendererDelegate
     {
         get
         {
-            return _fillFormatter;
+            return _fillFormatter
         }
         set
         {
             if (newValue === nil)
             {
-                _fillFormatter = BarLineChartFillFormatter(chart: self);
+                _fillFormatter = BarLineChartFillFormatter(chart: self)
             }
             else
             {
-                _fillFormatter = newValue;
+                _fillFormatter = newValue
             }
         }
     }
@@ -65,46 +61,46 @@ public class LineChartView: BarLineChartViewBase, LineChartRendererDelegate
     
     public func lineChartRendererData(renderer: LineChartRenderer) -> LineChartData!
     {
-        return _data as! LineChartData!;
+        return _data as! LineChartData!
     }
     
     public func lineChartRenderer(renderer: LineChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
     {
-        return self.getTransformer(which);
+        return self.getTransformer(which)
     }
     
     public func lineChartRendererFillFormatter(renderer: LineChartRenderer) -> ChartFillFormatter
     {
-        return self.fillFormatter;
+        return self.fillFormatter
     }
     
     public func lineChartDefaultRendererValueFormatter(renderer: LineChartRenderer) -> NSNumberFormatter!
     {
-        return self._defaultValueFormatter;
+        return self._defaultValueFormatter
     }
     
-    public func lineChartRendererChartYMax(renderer: LineChartRenderer) -> Float
+    public func lineChartRendererChartYMax(renderer: LineChartRenderer) -> Double
     {
-        return self.chartYMax;
+        return self.chartYMax
     }
     
-    public func lineChartRendererChartYMin(renderer: LineChartRenderer) -> Float
+    public func lineChartRendererChartYMin(renderer: LineChartRenderer) -> Double
     {
-        return self.chartYMin;
+        return self.chartYMin
     }
     
-    public func lineChartRendererChartXMax(renderer: LineChartRenderer) -> Float
+    public func lineChartRendererChartXMax(renderer: LineChartRenderer) -> Double
     {
-        return self.chartXMax;
+        return self.chartXMax
     }
     
-    public func lineChartRendererChartXMin(renderer: LineChartRenderer) -> Float
+    public func lineChartRendererChartXMin(renderer: LineChartRenderer) -> Double
     {
-        return self.chartXMin;
+        return self.chartXMin
     }
     
     public func lineChartRendererMaxVisibleValueCount(renderer: LineChartRenderer) -> Int
     {
-        return self.maxVisibleValueCount;
+        return self.maxVisibleValueCount
     }
 }

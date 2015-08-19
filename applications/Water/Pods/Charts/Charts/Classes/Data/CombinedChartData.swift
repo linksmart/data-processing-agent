@@ -23,35 +23,40 @@ public class CombinedChartData: BarLineScatterCandleChartData
     
     public override init()
     {
-        super.init();
+        super.init()
     }
     
-    public override init(xVals: [String]?)
+    public override init(xVals: [String?]?, dataSets: [ChartDataSet]?)
     {
-        super.init(xVals: xVals);
+        super.init(xVals: xVals, dataSets: dataSets)
+    }
+    
+    public override init(xVals: [NSObject]?, dataSets: [ChartDataSet]?)
+    {
+        super.init(xVals: xVals, dataSets: dataSets)
     }
     
     public var lineData: LineChartData!
     {
         get
         {
-            return _lineData;
+            return _lineData
         }
         set
         {
-            _lineData = newValue;
+            _lineData = newValue
             for dataSet in newValue.dataSets
             {
-                _dataSets.append(dataSet);
+                _dataSets.append(dataSet)
             }
             
-            checkIsLegal(newValue.dataSets);
+            checkIsLegal(newValue.dataSets)
             
-            calcMinMax();
-            calcYValueSum();
-            calcYValueCount();
+            calcMinMax(start: _lastStart, end: _lastEnd)
+            calcYValueSum()
+            calcYValueCount()
             
-            calcXValAverageLength();
+            calcXValAverageLength()
         }
     }
     
@@ -59,23 +64,23 @@ public class CombinedChartData: BarLineScatterCandleChartData
     {
         get
         {
-            return _barData;
+            return _barData
         }
         set
         {
-            _barData = newValue;
+            _barData = newValue
             for dataSet in newValue.dataSets
             {
-                _dataSets.append(dataSet);
+                _dataSets.append(dataSet)
             }
             
-            checkIsLegal(newValue.dataSets);
+            checkIsLegal(newValue.dataSets)
             
-            calcMinMax();
-            calcYValueSum();
-            calcYValueCount();
+            calcMinMax(start: _lastStart, end: _lastEnd)
+            calcYValueSum()
+            calcYValueCount()
             
-            calcXValAverageLength();
+            calcXValAverageLength()
         }
     }
     
@@ -83,23 +88,23 @@ public class CombinedChartData: BarLineScatterCandleChartData
     {
         get
         {
-            return _scatterData;
+            return _scatterData
         }
         set
         {
-            _scatterData = newValue;
+            _scatterData = newValue
             for dataSet in newValue.dataSets
             {
-                _dataSets.append(dataSet);
+                _dataSets.append(dataSet)
             }
             
-            checkIsLegal(newValue.dataSets);
+            checkIsLegal(newValue.dataSets)
             
-            calcMinMax();
-            calcYValueSum();
-            calcYValueCount();
+            calcMinMax(start: _lastStart, end: _lastEnd)
+            calcYValueSum()
+            calcYValueCount()
         
-            calcXValAverageLength();
+            calcXValAverageLength()
         }
     }
     
@@ -107,23 +112,23 @@ public class CombinedChartData: BarLineScatterCandleChartData
     {
         get
         {
-            return _candleData;
+            return _candleData
         }
         set
         {
-            _candleData = newValue;
+            _candleData = newValue
             for dataSet in newValue.dataSets
             {
-                _dataSets.append(dataSet);
+                _dataSets.append(dataSet)
             }
             
-            checkIsLegal(newValue.dataSets);
+            checkIsLegal(newValue.dataSets)
             
-            calcMinMax();
-            calcYValueSum();
-            calcYValueCount();
+            calcMinMax(start: _lastStart, end: _lastEnd)
+            calcYValueSum()
+            calcYValueCount()
             
-            calcXValAverageLength();
+            calcXValAverageLength()
         }
     }
     
@@ -131,32 +136,47 @@ public class CombinedChartData: BarLineScatterCandleChartData
     {
         get
         {
-            return _bubbleData;
+            return _bubbleData
         }
         set
         {
-            _bubbleData = newValue;
+            _bubbleData = newValue
             for dataSet in newValue.dataSets
             {
-                _dataSets.append(dataSet);
+                _dataSets.append(dataSet)
             }
             
-            checkIsLegal(newValue.dataSets);
+            checkIsLegal(newValue.dataSets)
             
-            calcMinMax();
-            calcYValueSum();
-            calcYValueCount();
+            calcMinMax(start: _lastStart, end: _lastEnd)
+            calcYValueSum()
+            calcYValueCount()
             
-            calcXValAverageLength();
+            calcXValAverageLength()
         }
     }
     
     public override func notifyDataChanged()
     {
-        _lineData.notifyDataChanged();
-        _barData.notifyDataChanged();
-        _scatterData.notifyDataChanged();
-        _candleData.notifyDataChanged();
-        _bubbleData.notifyDataChanged();
+        if (_lineData !== nil)
+        {
+            _lineData.notifyDataChanged()
+        }
+        if (_barData !== nil)
+        {
+            _barData.notifyDataChanged()
+        }
+        if (_scatterData !== nil)
+        {
+            _scatterData.notifyDataChanged()
+        }
+        if (_candleData !== nil)
+        {
+            _candleData.notifyDataChanged()
+        }
+        if (_bubbleData !== nil)
+        {
+            _bubbleData.notifyDataChanged()
+        }
     }
 }

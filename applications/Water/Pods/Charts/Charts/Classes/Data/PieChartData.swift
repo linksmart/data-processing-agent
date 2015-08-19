@@ -17,35 +17,34 @@ public class PieChartData: ChartData
 {
     public override init()
     {
-        super.init();
-        
+        super.init()
     }
-
-    public override init(xVals: [String]?, dataSets: [ChartDataSet]?)
+    
+    public override init(xVals: [String?]?, dataSets: [ChartDataSet]?)
     {
         super.init(xVals: xVals, dataSets: dataSets)
     }
 
-    public convenience init(xVals: [String]?, dataSet: ChartDataSet?)
+    public override init(xVals: [NSObject]?, dataSets: [ChartDataSet]?)
     {
-        self.init(xVals: xVals, dataSets: dataSet === nil ? nil : [dataSet!]);
+        super.init(xVals: xVals, dataSets: dataSets)
     }
 
     var dataSet: PieChartDataSet?
     {
         get
         {
-            return dataSets.count > 0 ? dataSets[0] as? PieChartDataSet : nil;
+            return dataSets.count > 0 ? dataSets[0] as? PieChartDataSet : nil
         }
         set
         {
             if (newValue != nil)
             {
-                dataSets = [newValue!];
+                dataSets = [newValue!]
             }
             else
             {
-                dataSets = [];
+                dataSets = []
             }
         }
     }
@@ -54,32 +53,32 @@ public class PieChartData: ChartData
     {
         if (index != 0)
         {
-            return nil;
+            return nil
         }
-        return super.getDataSetByIndex(index);
+        return super.getDataSetByIndex(index)
     }
     
     public override func getDataSetByLabel(label: String, ignorecase: Bool) -> ChartDataSet?
     {
-        if (dataSets.count == 0)
+        if (dataSets.count == 0 || dataSets[0].label == nil)
         {
-            return nil;
+            return nil
         }
         
         if (ignorecase)
         {
-            if (label.caseInsensitiveCompare(dataSets[0].label) == NSComparisonResult.OrderedSame)
+            if (label.caseInsensitiveCompare(dataSets[0].label!) == NSComparisonResult.OrderedSame)
             {
-                return dataSets[0];
+                return dataSets[0]
             }
         }
         else
         {
             if (label == dataSets[0].label)
             {
-                return dataSets[0];
+                return dataSets[0]
             }
         }
-        return nil;
+        return nil
     }
 }

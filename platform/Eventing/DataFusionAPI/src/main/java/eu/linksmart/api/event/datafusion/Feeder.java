@@ -19,9 +19,9 @@ public interface Feeder {
 
 
 	/**
-	 * The feeders do not have an awareness of which engines are available. <p>
-	 * For the feeders is enable to interact with a Data Fusion Engine,
-	 * the wrapper of the engine has to explicitly subscribe to the feeders as a Data Fusion engine.<p>
+	 * The feeder do not have an awareness of which engines are available. <p>
+	 * For the feeder is enable to interact with a Data Fusion Engine,
+	 * the wrapper of the engine has to explicitly subscribe to the feeder as a Data Fusion engine.<p>
 	 * Doing so through this function
 	 * @param dfw is the {@link DataFusionWrapper} which what to be subscribed.
 	 * 

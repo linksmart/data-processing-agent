@@ -8,12 +8,15 @@
 	<name>Eventing</name>
 	<description>ALMANAC Eventing and Data Fusion</description>
 	<modules>
-    <module>DataFusionAPI</module>
-    <module>DataFusionCoreAPI</module>
-    <module>DataFusionManagerAS</module>
-    <module>Client</module>
-    <module>SDKLibrary</module>
-  </modules>
+        <module>DataFusionAPI</module>
+        <module>DataFusionCoreAPI</module>
+        <module>Utils</module>
+        <module>DataFusionManagerImpl</module>
+        <module>DataFusionManager</module>
+        <module>DataFusionRestManager</module>
+        <module>Client</module>
+        <module>SDKLibrary</module>
+    </modules>
 	<repositories>
 		<repository>
 			<id>maven</id>
@@ -43,6 +46,7 @@
             <updatePolicy>daily</updatePolicy>
         </snapshots>
     </repository>
+
   </repositories>
   <distributionManagement>
 		<snapshotRepository>

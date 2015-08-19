@@ -15,30 +15,45 @@ import UIKit
 
 public class ScatterChartData: BarLineScatterCandleChartData
 {
+    public override init()
+    {
+        super.init()
+    }
+    
+    public override init(xVals: [String?]?, dataSets: [ChartDataSet]?)
+    {
+        super.init(xVals: xVals, dataSets: dataSets)
+    }
+    
+    public override init(xVals: [NSObject]?, dataSets: [ChartDataSet]?)
+    {
+        super.init(xVals: xVals, dataSets: dataSets)
+    }
+    
     /// Returns the maximum shape-size across all DataSets.
     public func getGreatestShapeSize() -> CGFloat
     {
-        var max = CGFloat(0.0);
+        var max = CGFloat(0.0)
         
         for set in _dataSets
         {
-            let scatterDataSet = set as? ScatterChartDataSet;
+            let scatterDataSet = set as? ScatterChartDataSet
             
             if (scatterDataSet == nil)
             {
-                println("ScatterChartData: Found a DataSet which is not a ScatterChartDataSet");
+                println("ScatterChartData: Found a DataSet which is not a ScatterChartDataSet")
             }
             else
             {
-                let size = scatterDataSet!.scatterShapeSize;
+                let size = scatterDataSet!.scatterShapeSize
                 
                 if (size > max)
                 {
-                    max = size;
+                    max = size
                 }
             }
         }
         
-        return max;
+        return max
     }
 }

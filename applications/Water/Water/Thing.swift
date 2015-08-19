@@ -13,8 +13,10 @@ import AlamofireObjectMapper
 class ObservationsResponse: Mappable {
     var observations: [Observations]?
     
-    init() {
-        
+    init() {}
+    
+    class func newInstance(map: Map) -> Mappable? {
+        return ObservationsResponse()
     }
     
     required init?(_ map: Map) {
@@ -31,8 +33,10 @@ class Observations: Mappable {
     var ResultValue: String?
     var ResultType: String?
     
-    init() {
-        
+    init() {}
+    
+    class func newInstance(map: Map) -> Mappable? {
+        return Observations()
     }
     
     required init?(_ map: Map) {

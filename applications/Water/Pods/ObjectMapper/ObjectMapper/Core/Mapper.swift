@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol Mappable {
-	init?(_ map: Map)
+	static func newInstance(map: Map) -> Mappable?
 	mutating func mapping(map: Map)
 }
 
@@ -17,7 +17,6 @@ public enum MappingType {
 	case FromJSON
 	case ToJSON
 }
-
 
 /// A class used for holding mapping data
 public final class Map {
@@ -42,7 +41,7 @@ public final class Map {
 		// save key and value associated to it
 		currentKey = key
 		// break down the components of the key
-		currentValue = valueFor(key.componentsSeparatedByString("."), JSONDictionary)
+		currentValue = valueFor(ArraySlice(split(key) { $0 == "." }), JSONDictionary)
 		
 		return self
 	}
@@ -56,7 +55,7 @@ public final class Map {
 	public func valueOr<T>(@autoclosure defaultValue: () -> T) -> T {
 		return value() ?? defaultValue()
 	}
-
+	
 	/// Returns current JSON value of type `T` if it is existing, or returns a
 	/// unusable proxy value for `T` and collects failed count.
 	public func valueOrFail<T>() -> T {
@@ -65,14 +64,14 @@ public final class Map {
 		} else {
 			// Collects failed count
 			failedCount++
-
+			
 			// Returns dummy memory as a proxy for type `T`
 			let pointer = UnsafeMutablePointer<T>.alloc(0)
 			pointer.dealloc(0)
 			return pointer.memory
 		}
 	}
-
+	
 	/// Returns whether the receiver is success or failure.
 	public var isValid: Bool {
 		return failedCount == 0
@@ -80,7 +79,7 @@ public final class Map {
 }
 
 /// Fetch value from JSON dictionary, loop through them until we reach the desired object.
-private func valueFor(keyPathComponents: [String], dictionary: [String : AnyObject]) -> AnyObject? {
+private func valueFor(keyPathComponents: ArraySlice<String>, dictionary: [String : AnyObject]) -> AnyObject? {
 	// Implement it as a tail recursive function.
 
 	if keyPathComponents.isEmpty {
@@ -93,7 +92,7 @@ private func valueFor(keyPathComponents: [String], dictionary: [String : AnyObje
 			return nil
 
 		case let dict as [String : AnyObject] where keyPathComponents.count > 1:
-			let tail = Array(keyPathComponents[1..<keyPathComponents.count])
+			let tail = dropFirst(keyPathComponents)
 			return valueFor(tail, dict)
 
 		default:
@@ -167,8 +166,11 @@ public final class Mapper<N: Mappable> {
 	/// Maps a JSON dictionary to an object that conforms to Mappable
 	public func map(JSONDictionary: [String : AnyObject]) -> N? {
 		let map = Map(mappingType: .FromJSON, JSONDictionary: JSONDictionary)
-		let object = N(map)
-		return object
+		if var object = N.newInstance(map) as? N {
+			object.mapping(map)
+			return object
+		}
+		return nil
 	}
 
 	//MARK: Mapping functions for Arrays and Dictionaries
@@ -360,8 +362,9 @@ extension Dictionary {
 		var mapped = [Key : U]()
 
 		for (key, value) in self {
-			let newValue = f(value)
-			mapped[key] = newValue
+			if let newValue = f(value){
+				mapped[key] = newValue
+			}
 		}
 
 		return mapped

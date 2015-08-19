@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="selection_blue">#FF0000FF</color>
+    <color name="transparent">#00000000</color>
+    <color name="textbox_border">#FFFFFFFF</color>
+
+    <color name="black_overlay">#66000000</color>
+</resources>

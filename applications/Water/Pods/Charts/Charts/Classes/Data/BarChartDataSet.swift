@@ -12,8 +12,8 @@
 //
 
 import Foundation
-import CoreGraphics.CGBase
-import UIKit.UIColor
+import CoreGraphics
+import UIKit
 
 public class BarChartDataSet: BarLineScatterCandleChartDataSet
 {
@@ -36,47 +36,47 @@ public class BarChartDataSet: BarLineScatterCandleChartDataSet
     /// array of labels used to describe the different values of the stacked bars
     public var stackLabels: [String] = ["Stack"]
     
-    public override init(yVals: [ChartDataEntry]?, label: String)
+    public override init(yVals: [ChartDataEntry]?, label: String?)
     {
-        super.init(yVals: yVals, label: label);
+        super.init(yVals: yVals, label: label)
         
-        self.highlightColor = UIColor.blackColor();
+        self.highlightColor = UIColor.blackColor()
         
-        self.calcStackSize(yVals as! [BarChartDataEntry]?);
-        self.calcEntryCountIncludingStacks(yVals as! [BarChartDataEntry]?);
+        self.calcStackSize(yVals as! [BarChartDataEntry]?)
+        self.calcEntryCountIncludingStacks(yVals as! [BarChartDataEntry]?)
     }
     
     // MARK: NSCopying
     
     public override func copyWithZone(zone: NSZone) -> AnyObject
     {
-        var copy = super.copyWithZone(zone) as! BarChartDataSet;
-        copy.barSpace = barSpace;
-        copy._stackSize = _stackSize;
-        copy.barShadowColor = barShadowColor;
-        copy.highLightAlpha = highLightAlpha;
-        copy._entryCountStacks = _entryCountStacks;
-        copy.stackLabels = stackLabels;
-        return copy;
+        var copy = super.copyWithZone(zone) as! BarChartDataSet
+        copy.barSpace = barSpace
+        copy._stackSize = _stackSize
+        copy.barShadowColor = barShadowColor
+        copy.highLightAlpha = highLightAlpha
+        copy._entryCountStacks = _entryCountStacks
+        copy.stackLabels = stackLabels
+        return copy
     }
     
     /// Calculates the total number of entries this DataSet represents, including
     /// stacks. All values belonging to a stack are calculated separately.
     private func calcEntryCountIncludingStacks(yVals: [BarChartDataEntry]!)
     {
-        _entryCountStacks = 0;
+        _entryCountStacks = 0
         
         for (var i = 0; i < yVals.count; i++)
         {
-            var vals = yVals[i].values;
+            var vals = yVals[i].values
             
             if (vals == nil)
             {
-                _entryCountStacks++;
+                _entryCountStacks++
             }
             else
             {
-                _entryCountStacks += vals.count;
+                _entryCountStacks += vals!.count
             }
         }
     }
@@ -86,30 +86,98 @@ public class BarChartDataSet: BarLineScatterCandleChartDataSet
     {
         for (var i = 0; i < yVals.count; i++)
         {
-            var vals = yVals[i].values;
-            
-            if (vals != nil && vals.count > _stackSize)
+            if let vals = yVals[i].values
             {
-                _stackSize = vals.count;
+                if vals.count > _stackSize
+                {
+                    _stackSize = vals.count
+                }
             }
+        }
+    }
+    
+    internal override func calcMinMax(#start : Int, end: Int)
+    {
+        let yValCount = _yVals.count
+        
+        if yValCount == 0
+        {
+            return
+        }
+        
+        var endValue : Int
+        
+        if end == 0 || end >= yValCount
+        {
+            endValue = yValCount - 1
+        }
+        else
+        {
+            endValue = end
+        }
+        
+        _lastStart = start
+        _lastEnd = endValue
+        
+        _yMin = DBL_MAX
+        _yMax = -DBL_MAX
+        
+        for (var i = start; i <= endValue; i++)
+        {
+            if let e = _yVals[i] as? BarChartDataEntry
+            {
+                if !e.value.isNaN
+                {
+                    if e.values == nil
+                    {
+                        if e.value < _yMin
+                        {
+                            _yMin = e.value
+                        }
+                        
+                        if e.value > _yMax
+                        {
+                            _yMax = e.value
+                        }
+                    }
+                    else
+                    {
+                        if -e.negativeSum < _yMin
+                        {
+                            _yMin = -e.negativeSum
+                        }
+                        
+                        if e.positiveSum > _yMax
+                        {
+                            _yMax = e.positiveSum
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (_yMin == DBL_MAX)
+        {
+            _yMin = 0.0
+            _yMax = 0.0
         }
     }
     
     /// Returns the maximum number of bars that can be stacked upon another in this DataSet.
     public var stackSize: Int
     {
-        return _stackSize;
+        return _stackSize
     }
     
     /// Returns true if this DataSet is stacked (stacksize > 1) or not.
     public var isStacked: Bool
     {
-        return _stackSize > 1 ? true : false;
+        return _stackSize > 1 ? true : false
     }
     
     /// returns the overall entry count, including counting each stack-value individually
     public var entryCountStacks: Int
     {
-        return _entryCountStacks;
+        return _entryCountStacks
     }
 }
