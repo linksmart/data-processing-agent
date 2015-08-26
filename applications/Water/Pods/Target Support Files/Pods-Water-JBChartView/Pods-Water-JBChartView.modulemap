@@ -1,6 +1,0 @@
-framework module JBChartView {
-  umbrella header "Pods-Water-JBChartView-umbrella.h"
-
-  export *
-  module * { export * }
-}

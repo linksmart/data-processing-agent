@@ -12,12 +12,12 @@
 //
 
 import Foundation
-import UIKit;
+import UIKit
 
 public class BarLineScatterCandleChartDataSet: ChartDataSet
 {
     public var highlightColor = UIColor(red: 255.0/255.0, green: 187.0/255.0, blue: 115.0/255.0, alpha: 1.0)
-    public var highlightLineWidth = CGFloat(1.0)
+    public var highlightLineWidth = CGFloat(0.5)
     public var highlightLineDashPhase = CGFloat(0.0)
     public var highlightLineDashLengths: [CGFloat]?
     
@@ -25,11 +25,11 @@ public class BarLineScatterCandleChartDataSet: ChartDataSet
     
     public override func copyWithZone(zone: NSZone) -> AnyObject
     {
-        var copy = super.copyWithZone(zone) as! BarLineScatterCandleChartDataSet;
-        copy.highlightColor = highlightColor;
-        copy.highlightLineWidth = highlightLineWidth;
-        copy.highlightLineDashPhase = highlightLineDashPhase;
-        copy.highlightLineDashLengths = highlightLineDashLengths;
-        return copy;
+        var copy = super.copyWithZone(zone) as! BarLineScatterCandleChartDataSet
+        copy.highlightColor = highlightColor
+        copy.highlightLineWidth = highlightLineWidth
+        copy.highlightLineDashPhase = highlightLineDashPhase
+        copy.highlightLineDashLengths = highlightLineDashLengths
+        return copy
     }
 }

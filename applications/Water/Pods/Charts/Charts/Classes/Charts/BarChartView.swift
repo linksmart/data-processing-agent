@@ -12,7 +12,7 @@
 //
 
 import Foundation
-import CoreGraphics.CGBase
+import CoreGraphics
 
 /// Chart that draws bars.
 public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
@@ -22,219 +22,105 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
     
     /// if set to true, all values are drawn above their bars, instead of below their top
     private var _drawValueAboveBarEnabled = true
-
-    /// if set to true, all values of a stack are drawn individually, and not just their sum
-    private var _drawValuesForWholeStackEnabled = true
     
     /// if set to true, a grey area is darawn behind each bar that indicates the maximum value
     private var _drawBarShadowEnabled = false
     
     internal override func initialize()
     {
-        super.initialize();
+        super.initialize()
         
-        renderer = BarChartRenderer(delegate: self, animator: _animator, viewPortHandler: _viewPortHandler);
-        _xAxisRenderer = ChartXAxisRendererBarChart(viewPortHandler: _viewPortHandler, xAxis: _xAxis, transformer: _leftAxisTransformer, chart: self);
+        renderer = BarChartRenderer(delegate: self, animator: _animator, viewPortHandler: _viewPortHandler)
+        _xAxisRenderer = ChartXAxisRendererBarChart(viewPortHandler: _viewPortHandler, xAxis: _xAxis, transformer: _leftAxisTransformer, chart: self)
         
-        _chartXMin = -0.5;
+        _highlighter = BarChartHighlighter(chart: self)
+        
+        _chartXMin = -0.5
     }
     
     internal override func calcMinMax()
     {
-        super.calcMinMax();
+        super.calcMinMax()
         
         if (_data === nil)
         {
-            return;
+            return
         }
         
-        var barData = _data as! BarChartData;
+        var barData = _data as! BarChartData
         
         // increase deltax by 1 because the bars have a width of 1
-        _deltaX += 0.5;
+        _deltaX += 0.5
         
         // extend xDelta to make space for multiple datasets (if ther are one)
-        _deltaX *= CGFloat(_data.dataSetCount);
+        _deltaX *= CGFloat(_data.dataSetCount)
         
-        var maxEntry = 0;
-        
-        for (var i = 0, count = barData.dataSetCount; i < count; i++)
-        {
-            var set = barData.getDataSetByIndex(i);
-            
-            if (maxEntry < set!.entryCount)
-            {
-                maxEntry = set!.entryCount;
-            }
-        }
-        
-        var groupSpace = barData.groupSpace;
-        _deltaX += CGFloat(maxEntry) * groupSpace;
-        _chartXMax = Float(_deltaX) - _chartXMin;
+        var groupSpace = barData.groupSpace
+        _deltaX += CGFloat(barData.xValCount) * groupSpace
+        _chartXMax = Double(_deltaX) - _chartXMin
     }
     
     /// Returns the Highlight object (contains x-index and DataSet index) of the selected value at the given touch point inside the BarChart.
-    public override func getHighlightByTouchPoint(var pt: CGPoint) -> ChartHighlight!
+    public override func getHighlightByTouchPoint(pt: CGPoint) -> ChartHighlight?
     {
         if (_dataNotSet || _data === nil)
         {
-            println("Can't select by touch. No data set.");
-            return nil;
+            println("Can't select by touch. No data set.")
+            return nil
         }
         
-        _leftAxisTransformer.pixelToValue(&pt);
-        
-        if (pt.x < CGFloat(_chartXMin) || pt.x > CGFloat(_chartXMax))
-        {
-            return nil;
-        }
-        
-        return getHighlight(xPosition: pt.x, yPosition: pt.y);
-    }
-    
-    /// Returns the correct Highlight object (including xIndex and dataSet-index) for the specified touch position.
-    internal func getHighlight(#xPosition: CGFloat, yPosition: CGFloat) -> ChartHighlight!
-    {
-        if (_dataNotSet || _data === nil)
-        {
-            return nil;
-        }
-        
-        var barData = _data as! BarChartData!;
-        
-        var setCount = barData.dataSetCount;
-        var valCount = barData.xValCount;
-        var dataSetIndex = 0;
-        var xIndex = 0;
-        
-        if (!barData.isGrouped)
-        { // only one dataset exists
-            
-            xIndex = Int(round(xPosition));
-            
-            // check bounds
-            if (xIndex < 0)
-            {
-                xIndex = 0;
-            }
-            else if (xIndex >= valCount)
-            {
-                xIndex = valCount - 1;
-            }
-        }
-        else
-        { // if this bardata is grouped into more datasets
-            
-            // calculate how often the group-space appears
-            var steps = Int(xPosition / (CGFloat(setCount) + CGFloat(barData.groupSpace)));
-            
-            var groupSpaceSum = barData.groupSpace * CGFloat(steps);
-            
-            var baseNoSpace = xPosition - groupSpaceSum;
-            
-            dataSetIndex = Int(baseNoSpace) % setCount;
-            xIndex = Int(baseNoSpace) / setCount;
-
-            // check bounds
-            if (xIndex < 0)
-            {
-                xIndex = 0;
-                dataSetIndex = 0;
-            }
-            else if (xIndex >= valCount)
-            {
-                xIndex = valCount - 1;
-                dataSetIndex = setCount - 1;
-            }
-
-            // check bounds
-            if (dataSetIndex < 0)
-            {
-                dataSetIndex = 0;
-            }
-            else if (dataSetIndex >= setCount)
-            {
-                dataSetIndex = setCount - 1;
-            }
-        }
-        
-        var dataSet = barData.getDataSetByIndex(dataSetIndex) as! BarChartDataSet!;
-        if (!dataSet.isStacked)
-        {
-            return ChartHighlight(xIndex: xIndex, dataSetIndex: dataSetIndex);
-        }
-        else
-        {
-            return getStackedHighlight(xIndex: xIndex, dataSetIndex: dataSetIndex, yValue: Float(yPosition));
-        }
-    }
-    
-    /// This method creates the Highlight object that also indicates which value of a stacked BarEntry has been selected.
-    internal func getStackedHighlight(#xIndex: Int, dataSetIndex: Int, yValue: Float) -> ChartHighlight!
-    {
-        var dataSet = _data.getDataSetByIndex(dataSetIndex);
-        var entry = dataSet.entryForXIndex(xIndex) as! BarChartDataEntry!;
-
-        if (entry !== nil)
-        {
-            var stackIndex = entry.getClosestIndexAbove(yValue);
-            return ChartHighlight(xIndex: xIndex, dataSetIndex: dataSetIndex, stackIndex: stackIndex);
-        }
-        else
-        {
-            return nil;
-        }
+        return _highlighter?.getHighlight(x: Double(pt.x), y: Double(pt.y))
     }
     
     /// Returns the bounding box of the specified Entry in the specified DataSet. Returns null if the Entry could not be found in the charts data.
     public func getBarBounds(e: BarChartDataEntry) -> CGRect!
     {
-        var set = _data.getDataSetForEntry(e) as! BarChartDataSet!;
+        var set = _data.getDataSetForEntry(e) as! BarChartDataSet!
         
         if (set === nil)
         {
-            return nil;
+            return nil
         }
         
-        var barspace = set.barSpace;
-        var y = CGFloat(e.value);
-        var x = CGFloat(e.xIndex);
+        var barspace = set.barSpace
+        var y = CGFloat(e.value)
+        var x = CGFloat(e.xIndex)
         
-        var barWidth: CGFloat = 0.5;
+        var barWidth: CGFloat = 0.5
         
-        var spaceHalf = barspace / 2.0;
-        var left = x - barWidth + spaceHalf;
-        var right = x + barWidth - spaceHalf;
-        var top = y >= 0.0 ? y : 0.0;
-        var bottom = y <= 0.0 ? y : 0.0;
+        var spaceHalf = barspace / 2.0
+        var left = x - barWidth + spaceHalf
+        var right = x + barWidth - spaceHalf
+        var top = y >= 0.0 ? y : 0.0
+        var bottom = y <= 0.0 ? y : 0.0
         
-        var bounds = CGRect(x: left, y: top, width: right - left, height: bottom - top);
+        var bounds = CGRect(x: left, y: top, width: right - left, height: bottom - top)
         
-        getTransformer(set.axisDependency).rectValueToPixel(&bounds);
+        getTransformer(set.axisDependency).rectValueToPixel(&bounds)
         
-        return bounds;
+        return bounds
     }
     
     public override var lowestVisibleXIndex: Int
     {
-        var step = CGFloat(_data.dataSetCount);
-        var div = (step <= 1.0) ? 1.0 : step + (_data as! BarChartData).groupSpace;
+        var step = CGFloat(_data.dataSetCount)
+        var div = (step <= 1.0) ? 1.0 : step + (_data as! BarChartData).groupSpace
         
-        var pt = CGPoint(x: _viewPortHandler.contentLeft, y: _viewPortHandler.contentBottom);
-        getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt);
+        var pt = CGPoint(x: _viewPortHandler.contentLeft, y: _viewPortHandler.contentBottom)
+        getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
         
-        return Int(((pt.x <= 0.0) ? 0.0 : pt.x / div) + 1.0);
+        return Int((pt.x <= CGFloat(chartXMin)) ? 0.0 : (pt.x / div) + 1.0)
     }
 
     public override var highestVisibleXIndex: Int
     {
-        var step = CGFloat(_data.dataSetCount);
-        var div = (step <= 1.0) ? 1.0 : step + (_data as! BarChartData).groupSpace;
+        var step = CGFloat(_data.dataSetCount)
+        var div = (step <= 1.0) ? 1.0 : step + (_data as! BarChartData).groupSpace
         
-        var pt = CGPoint(x: _viewPortHandler.contentRight, y: _viewPortHandler.contentBottom);
-        getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt);
+        var pt = CGPoint(x: _viewPortHandler.contentRight, y: _viewPortHandler.contentBottom)
+        getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
         
-        return Int((pt.x >= CGFloat(chartXMax)) ? CGFloat(chartXMax) / div : (pt.x / div));
+        return Int((pt.x >= CGFloat(chartXMax)) ? CGFloat(chartXMax) / div : (pt.x / div))
     }
 
     // MARK: Accessors
@@ -245,8 +131,8 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
         get { return _drawHighlightArrowEnabled; }
         set
         {
-            _drawHighlightArrowEnabled = newValue;
-            setNeedsDisplay();
+            _drawHighlightArrowEnabled = newValue
+            setNeedsDisplay()
         }
     }
     
@@ -256,19 +142,8 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
         get { return _drawValueAboveBarEnabled; }
         set
         {
-            _drawValueAboveBarEnabled = newValue;
-            setNeedsDisplay();
-        }
-    }
-    
-    /// if set to true, all values of a stack are drawn individually, and not just their sum
-    public var drawValuesForWholeStackEnabled: Bool
-    {
-        get { return _drawValuesForWholeStackEnabled; }
-        set
-        {
-            _drawValuesForWholeStackEnabled = newValue;
-            setNeedsDisplay();
+            _drawValueAboveBarEnabled = newValue
+            setNeedsDisplay()
         }
     }
     
@@ -278,8 +153,8 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
         get { return _drawBarShadowEnabled; }
         set
         {
-            _drawBarShadowEnabled = newValue;
-            setNeedsDisplay();
+            _drawBarShadowEnabled = newValue
+            setNeedsDisplay()
         }
     }
     
@@ -289,9 +164,6 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
     /// returns true if drawing values above bars is enabled, false if not
     public var isDrawValueAboveBarEnabled: Bool { return drawValueAboveBarEnabled; }
     
-    /// returns true if all values of a stack are drawn, and not just their sum
-    public var isDrawValuesForWholeStackEnabled: Bool { return drawValuesForWholeStackEnabled; }
-    
     /// returns true if drawing shadows (maxvalue) for each bar is enabled, false if not
     public var isDrawBarShadowEnabled: Bool { return drawBarShadowEnabled; }
     
@@ -299,66 +171,61 @@ public class BarChartView: BarLineChartViewBase, BarChartRendererDelegate
     
     public func barChartRendererData(renderer: BarChartRenderer) -> BarChartData!
     {
-        return _data as! BarChartData!;
+        return _data as! BarChartData!
     }
     
     public func barChartRenderer(renderer: BarChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
     {
-        return getTransformer(which);
+        return getTransformer(which)
     }
     
     public func barChartRendererMaxVisibleValueCount(renderer: BarChartRenderer) -> Int
     {
-        return maxVisibleValueCount;
+        return maxVisibleValueCount
     }
     
     public func barChartDefaultRendererValueFormatter(renderer: BarChartRenderer) -> NSNumberFormatter!
     {
-        return valueFormatter;
+        return valueFormatter
     }
     
-    public func barChartRendererChartYMax(renderer: BarChartRenderer) -> Float
+    public func barChartRendererChartYMax(renderer: BarChartRenderer) -> Double
     {
-        return chartYMax;
+        return chartYMax
     }
     
-    public func barChartRendererChartYMin(renderer: BarChartRenderer) -> Float
+    public func barChartRendererChartYMin(renderer: BarChartRenderer) -> Double
     {
-        return chartYMin;
+        return chartYMin
     }
     
-    public func barChartRendererChartXMax(renderer: BarChartRenderer) -> Float
+    public func barChartRendererChartXMax(renderer: BarChartRenderer) -> Double
     {
-        return chartXMax;
+        return chartXMax
     }
     
-    public func barChartRendererChartXMin(renderer: BarChartRenderer) -> Float
+    public func barChartRendererChartXMin(renderer: BarChartRenderer) -> Double
     {
-        return chartXMin;
+        return chartXMin
     }
     
     public func barChartIsDrawHighlightArrowEnabled(renderer: BarChartRenderer) -> Bool
     {
-        return drawHighlightArrowEnabled;
+        return drawHighlightArrowEnabled
     }
     
     public func barChartIsDrawValueAboveBarEnabled(renderer: BarChartRenderer) -> Bool
     {
-        return drawValueAboveBarEnabled;
-    }
-    
-    public func barChartIsDrawValuesForWholeStackEnabled(renderer: BarChartRenderer) -> Bool
-    {
-        return drawValuesForWholeStackEnabled;
+        return drawValueAboveBarEnabled
     }
     
     public func barChartIsDrawBarShadowEnabled(renderer: BarChartRenderer) -> Bool
     {
-        return drawBarShadowEnabled;
+        return drawBarShadowEnabled
     }
     
     public func barChartIsInverted(renderer: BarChartRenderer, axis: ChartYAxis.AxisDependency) -> Bool
     {
-        return getAxis(axis).isInverted;
+        return getAxis(axis).isInverted
     }
 }

@@ -11,7 +11,9 @@
         <module>DataFusionAPI</module>
         <module>DataFusionCoreAPI</module>
         <module>Utils</module>
-        <module>DataFusionManagerAS</module>
+        <module>DataFusionManagerImpl</module>
+        <module>DataFusionManager</module>
+        <module>DataFusionRestManager</module>
         <module>Client</module>
         <module>SDKLibrary</module>
     </modules>

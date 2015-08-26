@@ -1,0 +1,1 @@
+select * from federation1.trn.v2.observation.hash.std:unique(id) output snapshot every 30 seconds
