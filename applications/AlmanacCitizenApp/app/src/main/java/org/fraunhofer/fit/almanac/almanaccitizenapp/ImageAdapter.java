@@ -3,14 +3,11 @@ package org.fraunhofer.fit.almanac.almanaccitizenapp;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.text.Selection;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,7 +18,6 @@ import org.fraunhofer.fit.almanac.model.IssueStatus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,7 +42,9 @@ public class ImageAdapter extends BaseAdapter {
 
         public int getCount() {
             mIssueList = getIssueIds();
+            Log.i(TAG,"number of issues:"+mIssueList.size());
             return  mIssueList.size();
+
         }
 
         public Object getItem(int position) {
@@ -84,29 +82,48 @@ public class ImageAdapter extends BaseAdapter {
             }
 
             TextView nameOfIssue = (TextView) gridItem.findViewById(R.id.nameOfIssue);
-            nameOfIssue.setText("Name:"+ issueStatus.name);
+            if(issueStatus.name.length()>13)
+                nameOfIssue.setText(issueStatus.name.substring(0,10)+"...");
+            else
+                nameOfIssue.setText(issueStatus.name);
+            TextView issuePriority = (TextView) gridItem.findViewById(R.id.issuePriority);
             if(issueStatus.priority != null){
-                TextView issuePriority = (TextView) gridItem.findViewById(R.id.issuePriority);
-                issuePriority.setText("Priority:"+ issueStatus.name);
+                issuePriority.setText("Priority:"+ issueStatus.priority);
+            }else{
+                issuePriority.setText("Priority: NOT SET");
             }
-            Date now = new Date();
-            if(issueStatus.timeToCompletion!= null  && issueStatus.timeToCompletion.after(now)){
-                TextView completionDate = (TextView) gridItem.findViewById(R.id.completionDate);
-                completionDate.setText("completionDate:"+ issueStatus.timeToCompletion);
+            TextView issueState = (TextView) gridItem.findViewById(R.id.issueStatus);
+            if(issueStatus.status != null){
+                issueState.setText("Status:"+ issueStatus.status);
+            }else{
+                issueState.setText("Status: CREATED");
             }
+
   //          gridItem.setOnClickListener(clickListener);
 //            gridItem.setOnLongClickListener(longClickListener);
+            RelativeLayout detailsView = (RelativeLayout)gridItem.findViewById(R.id.containerLayout);
+            if(issueStatus.isUpdated){
+
+                detailsView.setBackground(mContext.getResources().getDrawable(R.drawable.grid_item_selector_highlighted,null));
+                //IssueTracker.getInstance().resetUpdated(issueStatus.id);
+                //detailsView.setSelected(true);
+                Log.i(TAG, "the issue is updated");
+            }else{
+                detailsView.setBackground(mContext.getResources().getDrawable(R.drawable.grid_item_selector,null));
+//                detailsView.setSelected(false);
+            }
+            Log.i(TAG, "returning position:"+position);
             return gridItem;
         }
 
 
         private List<IssueStatus> getIssueIds(){
-
+            Log.i(TAG,"inside getIssueIds");
             List<IssueStatus> issueList = new ArrayList<IssueStatus>(mIssueTracker.getAllIssues());
             Collections.sort(issueList, new Comparator<IssueStatus>() {
                 @Override
                 public int compare(IssueStatus lhs, IssueStatus rhs) {
-                    if(lhs.creationDate.after(rhs.creationDate))
+                    if(lhs.updationDate.after(rhs.updationDate))
                         return -1;
                     else
                         return 1;

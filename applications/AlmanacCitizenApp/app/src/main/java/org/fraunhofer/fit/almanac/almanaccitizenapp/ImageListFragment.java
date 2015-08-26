@@ -2,11 +2,10 @@ package org.fraunhofer.fit.almanac.almanaccitizenapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ActionMode;
@@ -18,54 +17,60 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import org.fraunhofer.fit.almanac.model.IssueStatus;
 import org.fraunhofer.fit.almanac.slider.ScreenSlideActivity;
-import org.fraunhofer.fit.almanac.slider.ScreenSlidePageFragment;
 
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class ImageListFragment extends Fragment {
+public class ImageListFragment extends Fragment implements IssueTracker.ChangeListener {
 
     private static final String TAG = "ImageListFragment" ;
     private static final Object SHOW_IMAGE = 32;
+    private static final String ARG_SECTION_NUMBER = "SectionNumber";
+    private static final int BIN_COLLECTION = 1;
     private GridView mGridview;
+    private int mSectionNumber;
+
 
 
     public void setVisibility(int visibility) {
         getView().setVisibility(visibility);
     }
 
-    public static ImageListFragment newInstance(int i) {
-        return new ImageListFragment();
+    public static ImageListFragment newInstance(int sectionNumber) {
+        ImageListFragment fragment;
+        if(sectionNumber == BIN_COLLECTION){
+            fragment = new WasteImageListFragment();
+        }else{
+            fragment = new WaterImageListFragment();
+        }
+        return fragment;
     }
 
-    public interface OnNewIssueRequestListener{
-        public void onNewIssueSelected();
-    }
 
-    OnNewIssueRequestListener mCallback ;
+    AlmanacCitizen mCallback ;
 
     public ImageListFragment() {
         // Required empty public constructor
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
+     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (OnNewIssueRequestListener) activity;
+            mCallback = (AlmanacCitizen) activity;
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnNewIssueRequestListener");
@@ -74,10 +79,19 @@ public class ImageListFragment extends Fragment {
     }
 
     @Override
+    public void setHasOptionsMenu(boolean hasMenu) {
+        super.setHasOptionsMenu(hasMenu);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_image_list, container, false);
+
+        View rootView =  inflater.inflate(R.layout.fragment_image_list, container, false);
+
+        return rootView;
+
     }
 
     @Override
@@ -136,11 +150,13 @@ public class ImageListFragment extends Fragment {
 
 
                 int selectCount = mGridview.getCheckedItemCount();
-                Log.i(TAG, "One item long clicked2");
+
+                Log.i(TAG, "One item long clicked position:"+position + " child count:"+mGridview.getChildCount());
                 //   RelativeLayout item = (RelativeLayout) gridview.getChildAt(position);
                 //   item.setSelected(gridview.isItemChecked(position));
                 //   item.setActivated(gridview.isItemChecked(position));
                 // gridview.setItemChecked(position,gridview.isItemChecked(position));
+             //   mGridview.getChildAt(position).findViewById(R.id.containerLayout);
                 switch (selectCount) {
                     case 1:
                         mode.setSubtitle("One item selected");
@@ -156,14 +172,18 @@ public class ImageListFragment extends Fragment {
         mGridview.setOnItemLongClickListener(itemLongClickListener);
         mGridview.setOnItemClickListener(itemClickListener);
         // gridview.sele
-        ImageButton createIssueButton = (ImageButton) getView().findViewById(R.id.newIssue);
+        FloatingActionButton createIssueButton = (FloatingActionButton) getView().findViewById(R.id.newIssue);
         createIssueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallback.onNewIssueSelected();
             }
         });
+
+
     }
+
+
 
     private void onDeleteSelected() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -209,9 +229,9 @@ public class ImageListFragment extends Fragment {
     }
 
     public void publishDone(){
-
+        Log.i(TAG, "publish done");
         mGridview.invalidateViews();//this is to redraw the grid view
-
+//        setUpdatedItems();
     }
 
     AdapterView.OnItemLongClickListener itemLongClickListener = new AdapterView.OnItemLongClickListener() {
@@ -226,16 +246,37 @@ public class ImageListFragment extends Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.i(TAG, "Clicked");
             Intent intent = new Intent(getActivity(), ScreenSlideActivity.class);
-            intent.putExtra(ScreenSlideActivity.INDEX_POSITION,position);
+            intent.putExtra(ScreenSlideActivity.INDEX_POSITION, position);
+//            IssueTracker.getInstance().resetUpdated();
             getActivity().startActivity(intent);
         }
     };
+
 
     @Override
     public void onResume() {
         super.onResume();
         mGridview.invalidateViews();//this is to redraw the grid view
+//        setUpdatedItems();
+        IssueTracker.getInstance().subscribeChange(this);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        IssueTracker.getInstance().unSubscribeChange(this);
+    }
 
+    @Override
+    public void onChange() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                mGridview.invalidateViews();
+
+            }
+        });
+
+    }
 }

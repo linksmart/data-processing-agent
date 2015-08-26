@@ -7,18 +7,18 @@
     android:id="@+id/gridview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnWidth="350dp"
     android:numColumns="2"
-    android:verticalSpacing="10dp"
-    android:horizontalSpacing="10dp"
+    android:verticalSpacing="5dp"
+    android:horizontalSpacing="5dp"
     android:stretchMode="columnWidth"
     android:gravity="center"
-    android:paddingTop="20dp"
+    android:paddingTop="5dp"
+    android:layout_marginRight="7dp"
+    android:layout_marginLeft="7.5dp"
 
+ />
 
-        style="@android:style/MediaButton" />
-
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/newIssue"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -26,12 +26,11 @@
         android:layout_gravity="right|bottom"
         android:paddingBottom="0dp"
         android:paddingRight="0dp"
-        android:src="@android:drawable/ic_input_add"
         android:adjustViewBounds="true"
-        android:background="@drawable/shape_round_button"
         android:tintMode="src_atop"
         android:baselineAlignBottom="false"
         android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/add_icon" />
 
 </FrameLayout>

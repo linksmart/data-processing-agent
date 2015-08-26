@@ -4,11 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import org.fraunhofer.fit.almanac.db.IssueStatusDBWrapper;
+import org.fraunhofer.fit.almanac.model.IssueEvent;
 import org.fraunhofer.fit.almanac.model.IssueStatus;
 import org.fraunhofer.fit.almanac.model.PicIssue;
 import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +26,33 @@ public class IssueTracker {
 
     private HashMap<String,IssueStatus> mIssueMap = new HashMap<>();
 
+    public void resetUpdated(String id) {
+        IssueStatus issueStatus =  mIssueMap.get(id);
+        issueStatus.setUpdated(false);
+        mIssueStatusDBWrapper.updateIssue(issueStatus.id, issueStatus);
+        //do not notify here
+    }
 
+
+    public static interface ChangeListener{
+        public void onChange();
+    }
+
+    private List<ChangeListener> mChangeListeners = new LinkedList<>();
+
+    public void subscribeChange(ChangeListener changeListener){
+        mChangeListeners.add(changeListener);
+    }
+
+    public void unSubscribeChange(ChangeListener changeListener){
+        mChangeListeners.remove(changeListener);
+    }
+
+    private void notifyChange(){
+        for(ChangeListener changeListener:mChangeListeners){
+            changeListener.onChange();
+        }
+    }
     public  static IssueTracker getInstance(){
         if(mInstance == null){
             mInstance = new IssueTracker();
@@ -38,7 +67,14 @@ public class IssueTracker {
         List<IssueStatus> issueStatusList = mIssueStatusDBWrapper.getAllIssues();
 
         for (IssueStatus issueStatus:issueStatusList){
-            mIssueMap.put(issueStatus.id,issueStatus);
+            mIssueMap.put(issueStatus.id, issueStatus);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.DAY_OF_YEAR, -1);
+            Date yesterday = cal.getTime();
+            if(issueStatus.updationDate.before(yesterday)){
+                resetUpdated(issueStatus.id);
+            }
         }
     }
 
@@ -48,15 +84,18 @@ public class IssueTracker {
 
         mIssueMap.put(picIssue.id, newIssue);
         mIssueStatusDBWrapper.addIssue(newIssue);
+        notifyChange();
     }
 
     public  void deleteIssue(String id){
-        mIssueStatusDBWrapper.deleteIssue(id );
+        mIssueStatusDBWrapper.deleteIssue(id);
         mIssueMap.remove(id);
+        notifyChange();
     }
     public Collection<IssueStatus> getAllIssues(){
         return mIssueMap.values();
     }
+
 
     public Collection<IssueStatus> getSubScribedIssues(){
         Collection<IssueStatus> issueList = mIssueMap.values();
@@ -69,10 +108,15 @@ public class IssueTracker {
         return subscribedIssues;
     }
 
-    public void updateIssue(PicIssueUpdate picIssueUpdate){
-        IssueStatus issueStatus =  mIssueMap.get(picIssueUpdate.id);
-        issueStatus.updateStatus(picIssueUpdate);
-        mIssueStatusDBWrapper.updateIssue(issueStatus.id,issueStatus);
+    public IssueStatus getIssue(String id){
+        return  mIssueMap.get(id);
+    }
+    public void updateIssue(IssueEvent issueEvent){
+        IssueStatus issueStatus =  mIssueMap.get(issueEvent.ticketId);
+        issueStatus.updateStatus(issueEvent);
+        issueStatus.setUpdated(true);
+        mIssueStatusDBWrapper.updateIssue(issueStatus.id, issueStatus);
+        notifyChange();
 
     }
 
@@ -84,6 +128,7 @@ public class IssueTracker {
         mIssueMap.remove(id);
         mIssueMap.put(OriginalId,issueStatus);
         mIssueStatusDBWrapper.updateIssue(id,issueStatus);
+        notifyChange();
 
     }
 

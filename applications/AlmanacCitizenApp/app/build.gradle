@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "org.fraunhofer.fit.almanac.almanaccitizenapp"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -38,5 +38,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:design:22.2.0'
 }
 

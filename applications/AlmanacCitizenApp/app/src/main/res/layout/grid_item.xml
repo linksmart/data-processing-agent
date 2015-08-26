@@ -1,42 +1,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/containerLayout"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:paddingLeft="20dp"
     android:checkable="true"
-    android:background="@drawable/grid_item_selector"
-    >
+    android:background="@drawable/grid_item_selector">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="150dp" android:layout_height="190dp"
+        android:layout_width="170dp" android:layout_height="170dp"
         android:background="#FF999999"
-        android:scaleType="fitXY"
-        android:src="@drawable/waste_container" />
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"/>
     <LinearLayout
         android:id="@+id/details"
-        android:layout_width="150dp" android:layout_height="190dp"
-        android:orientation="horizontal"
-        >
+        android:layout_width="170dp" android:layout_height="130dp"
+        android:orientation="vertical"
+        android:background="@color/semi_transparent_item_background"
+        android:gravity="center_vertical"
+        android:layout_marginTop="20dp">
         <TextView
             android:id="@+id/nameOfIssue"
             android:layout_width="fill_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textColor="#FF000000"
-            android:textSize="32dp"
-            />
+            android:textSize="22dp"
+            android:text="abcdefg ijk"
+            android:padding="2dp"
+            android:textStyle="bold"
+            android:maxLines="1" />
         <TextView
             android:id="@+id/issuePriority"
             android:layout_width="fill_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textColor="#FF000000"
-            android:textSize="32dp"
-            />
+            android:textSize="16dp"
+            android:text="abcdefg ijk"
+            android:padding="5dp" />
+
         <TextView
-            android:id="@+id/completionDate"
+            android:id="@+id/issueStatus"
             android:layout_width="fill_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textColor="#FF000000"
-            android:textSize="32dp"
-            />
+            android:textSize="16dp"
+            android:text="abcdefg ijk"
+            android:padding="5dp" />
     </LinearLayout>
 </RelativeLayout>

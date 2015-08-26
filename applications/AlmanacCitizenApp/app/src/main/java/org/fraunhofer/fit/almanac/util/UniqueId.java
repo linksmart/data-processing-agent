@@ -1,14 +1,18 @@
 package org.fraunhofer.fit.almanac.util;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /**
- * Created by Werner-Kytölä on 08.05.2015.
+ * Created by Werner-Kytoelae on 08.05.2015.
  */
 
 public class UniqueId {
+
     static int  count = 0;
     public static String generateUUID(){
        /* try {
@@ -47,5 +51,13 @@ public class UniqueId {
         }
 
         return sb.toString();
+    }
+
+    public static String getDeviceId(Context context) {
+        return ((TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE)).getDeviceId();
+    }
+
+    public static String getClientId(Context context) {
+      return  getDeviceId(context) +"almanac";
     }
 }

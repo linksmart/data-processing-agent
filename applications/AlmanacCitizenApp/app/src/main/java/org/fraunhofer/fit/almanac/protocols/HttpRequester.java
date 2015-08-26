@@ -25,7 +25,7 @@ public class HttpRequester {
     * Returns ID of the newly created issue
     * Can throw Runtime exception if the function is called from UI thread
     * */
-    public String publishIssue(String issueJSON){
+    public String publishIssue(String issueJSON, boolean subscribe){
         if(Config.TESTLOCALLY) {
             count =(int) (Math.random()*1000.0);
             return Integer.toString(count);
@@ -78,5 +78,25 @@ public class HttpRequester {
             }
             return retStr;
         }
+    }
+
+    public void requestForUnsubscribe(String subscribeId) {
+        URL url = null;
+        try {
+            url = new URL("http://almanac.fit.fraunhofer.de:8888/waste/ticket/"+subscribeId);
+            HttpURLConnection conn = null;
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("DELETE");
+        } catch (MalformedURLException e) {
+
+            Log.e(TAG, e.toString());
+
+        } catch (IOException e) {
+
+            Log.e(TAG, e.toString());
+
+        }
+
     }
 }

@@ -1,45 +1,234 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="org.fraunhofer.fit.almanac.almanaccitizen.CaptureActivityFragment">
 
-   <ImageView
-       android:id="@+id/capturedImage"
-       android:layout_width="200dp"
-       android:layout_height="200dp"
-       android:layout_alignParentTop="true"/>
-    <TextView
-        android:id="@+id/nameOfIssue"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_below="@+id/capturedImage"
-        android:text="@string/Name_Of_issue_Text"
-        />
-    <EditText
-        android:id="@+id/issueName"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/capturedImage"
-        android:layout_toRightOf="@+id/nameOfIssue"
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    tools:context="org.fraunhofer.fit.almanac.almanaccitizen.CaptureActivityFragment"
+    >
 
-        />
-    <CheckBox
-        android:id="@+id/checkSubscribe"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:id="@+id/buttonholder"
+        android:background="#FF009688"
+        android:layout_alignParentLeft="false"
+        android:orientation="horizontal"
+        >
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/cancelButton"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:background="#FF009688"
+            android:layout_gravity="bottom|left"
+            />
+
+        <ImageButton
+            android:id="@+id/uploadButton"
+            android:layout_width="60dp"
+            android:layout_height="fill_parent"
+            android:text="@string/upload"
+            android:src="@android:drawable/ic_menu_upload_you_tube"
+            android:background="#FF009688"
+
+            android:layout_gravity="right|top"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Suscribe for this issue"
-        android:layout_below="@+id/issueName"
-        />
-    <Button
-        android:id="@+id/uploadButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload"
-        android:layout_below="@+id/checkSubscribe"
-        />
+        android:layout_height="match_parent" android:paddingLeft="@dimen/abc_action_bar_default_padding_material"
+        android:paddingRight="@dimen/abc_action_bar_default_padding_material"
+        android:paddingTop="@dimen/abc_action_bar_default_padding_material"
+        android:paddingBottom="@dimen/abc_action_bar_default_padding_material"
+        tools:context="org.fraunhofer.fit.almanac.almanaccitizen.CaptureActivityFragment"
+        android:layout_below="@+id/buttonholder"
+        >
+        <TextView
+            android:id="@+id/nameOfIssue"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textSize="18dp"
 
+            android:text="@string/Name_Of_issue_Text"
+            />
+        <EditText
+            android:id="@+id/issueName"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/nameOfIssue"
 
+            android:singleLine="true"
+            android:nextFocusDown="@+id/commentBox"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+        <TextView
+            android:id="@+id/commentText"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textSize="18dp"
+            android:text="@string/add_comment_text"
+            android:layout_below="@+id/checkSubscribe"
+            android:layout_alignParentStart="true" />
+        <EditText
+            android:id="@+id/commentBox"
+            android:layout_width="200dp"
+            android:layout_height="400dp"
+            android:background="@color/textbox_border"
+            android:nextFocusDown="@+id/uploadButton"
+            android:ems="5"
+            android:imeOptions="actionNext"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:inputType="textMultiLine|textAutoCorrect"
+
+            android:textIsSelectable="false"
+            android:gravity="top"
+            android:layout_below="@+id/commentText"
+            android:layout_alignParentStart="true"
+            android:layout_alignEnd="@+id/capturedImage" />
+        <CheckBox
+            android:id="@+id/checkSubscribe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Suscribe for this issue"
+            android:checked="true"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_below="@+id/issueName"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/capturedImage" />
+
+        <ImageView
+            android:id="@+id/capturedImage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#00000000"
+            android:adjustViewBounds="true"
+            android:layout_toEndOf="@+id/issueName"
+            android:layout_alignTop="@+id/nameOfIssue"
+            android:layout_above="@+id/commentBox"
+            android:src="@android:drawable/ic_menu_camera"
+            android:padding="2dp"
+            android:paddingLeft="2dp"
+            android:paddingTop="2dp"
+            android:paddingRight="2dp"
+            android:paddingBottom="2dp" />
+    </RelativeLayout>
 </RelativeLayout>
+<!--<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"-->
+    <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+    <!--android:paddingTop="@dimen/activity_vertical_margin"-->
+    <!--android:paddingBottom="@dimen/activity_vertical_margin"-->
+    <!--tools:context="org.fraunhofer.fit.almanac.almanaccitizen.CaptureActivityFragment"-->
+    <!-->-->
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:id="@+id/buttonholder"-->
+        <!--android:background="#FF009688"-->
+        <!--android:layout_alignParentLeft="false"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_alignEnd="@+id/commentBox"-->
+        <!-->-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="60dp"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:id="@+id/captureImage"-->
+            <!--android:src="@android:drawable/ic_menu_camera"-->
+            <!--android:background="#FF009688"-->
+            <!--android:layout_gravity="bottom|left"-->
+            <!--/>-->
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/uploadButton"-->
+            <!--android:layout_width="60dp"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:text="@string/upload"-->
+            <!--android:src="@android:drawable/ic_menu_upload_you_tube"-->
+            <!--android:background="#FF009688"-->
+
+            <!--android:layout_gravity="right|top"-->
+            <!--android:layout_alignParentEnd="true" />-->
+    <!--</RelativeLayout>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/nameOfIssue"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:textSize="18dp"-->
+
+        <!--android:text="@string/Name_Of_issue_Text"-->
+        <!--android:layout_below="@+id/buttonholder"/>-->
+    <!--<EditText-->
+        <!--android:id="@+id/issueName"-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_below="@+id/nameOfIssue"-->
+
+        <!--android:singleLine="true"-->
+        <!--android:nextFocusDown="@+id/commentBox"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:paddingBottom="10dp" />-->
+    <!--<TextView-->
+        <!--android:id="@+id/commentText"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:textSize="18dp"-->
+        <!--android:text="@string/add_comment_text"-->
+        <!--android:layout_below="@+id/checkSubscribe"-->
+        <!--android:layout_alignParentStart="true" />-->
+    <!--<EditText-->
+        <!--android:id="@+id/commentBox"-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="400dp"-->
+        <!--android:background="@color/textbox_border"-->
+        <!--android:nextFocusDown="@+id/uploadButton"-->
+        <!--android:ems="5"-->
+        <!--android:imeOptions="actionNext"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:paddingBottom="10dp"-->
+        <!--android:inputType="textMultiLine|textAutoCorrect"-->
+
+        <!--android:textIsSelectable="false"-->
+        <!--android:gravity="top"-->
+        <!--android:layout_below="@+id/commentText"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignEnd="@+id/capturedImage" />-->
+    <!--<CheckBox-->
+        <!--android:id="@+id/checkSubscribe"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Suscribe for this issue"-->
+        <!--android:checked="true"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:paddingBottom="10dp"-->
+        <!--android:layout_below="@+id/issueName"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_toStartOf="@+id/capturedImage" />-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/capturedImage"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:background="#00000000"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--android:layout_toEndOf="@+id/issueName"-->
+        <!--android:layout_alignTop="@+id/nameOfIssue"-->
+        <!--android:layout_above="@+id/commentBox"-->
+        <!--android:src="@drawable/waste_container"-->
+        <!--android:padding="2dp"-->
+        <!--android:paddingLeft="2dp"-->
+        <!--android:paddingTop="2dp"-->
+        <!--android:paddingRight="2dp"-->
+        <!--android:paddingBottom="2dp" />-->
+
+<!--</RelativeLayout>-->
