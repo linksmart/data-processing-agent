@@ -1,15 +1,16 @@
 package eu.almanac.event.datafusion.esper;
 
 import eu.almanac.event.datafusion.intern.Const;
+import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
-import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EsperQuery implements Statement {
+public class EsperQuery extends EPLStatement {
 
     protected String name;
     protected String statement;
@@ -63,50 +64,7 @@ public class EsperQuery implements Statement {
         }
     }
 
- /*   private String getInputAndCleanStatement(String statement) {
 
-        String ret = statement ,lower=statement.toLowerCase();
-
-        if(lower.contains("topics")) {
-            String fromStatement = statement.substring(lower.indexOf("topics"));
-
-            if (fromStatement.contains("{") && fromStatement.contains("}")) {
-                ret = statement.substring(0, lower.indexOf("topics"));
-                String aux[] = statement.substring( lower.indexOf("topics")).split("\\}");
-                String topics[] =fromStatement.substring(fromStatement.indexOf("{"),fromStatement.indexOf("}")).split(",");
-
-                ArrayList<String> inputs = new ArrayList<>();
-                int n = 0;
-                for (String i : topics) {
-                    try {
-
-                        inputs.add( i.substring(i.indexOf("[")+1, i.indexOf("]")));
-
-                        ret += inputs.get(inputs.size()-1)+i.substring(i.indexOf("]")+1);
-                    }catch (Exception e){
-                        ret += i;
-                    }
-
-
-
-                    if(n<topics.length-1)
-                        ret += ", ";
-
-                    n++;
-                }
-
-                if (aux.length>1)
-                    ret += aux[1];
-
-
-            }else{
-                LoggerHandler.broker("query/"+name, "missing '{' or '}' after the from in query:" + getName(), null,true);
-            }
-        }
-
-
-        return ret;
-    }*/
     private String getInputAndCleanStatement(String statement) throws StatementException {
 
         String ret = statement ,lower=statement.toLowerCase();
@@ -158,49 +116,6 @@ public class EsperQuery implements Statement {
 
 
         return ret;
-    }
-    public String getName(){
-        return  name;
-    }
-    public String getStatement(){
-        return  statement;
-    }
-    public String[] getInput(){
-        return  input;
-    }
-    public String[] getScope(){
-        return  scope;
-    }
-    public boolean haveInput(){
-        return input != null;
-    }
-    public boolean haveOutput(){
-        return output != null;
-    }
-    public boolean haveScope(){
-        return scope != null;
-    }
-
-    @Override
-    public String getHash() {
-        return null;
-    }
-
-    public String getInput(int index){
-        return  input[index];
-    }
-    public String getScope(int index){
-        return  scope[index];
-    }
-
-    @Override
-    public String[] getOutput() {
-        return output;
-    }
-
-    @Override
-    public String getSource() {
-        return source;
     }
 
 }

@@ -1,9 +1,9 @@
 package eu.almanac.event.datafusion.utils.epl;
 
 
+import com.sun.istack.internal.NotNull;
 import eu.linksmart.api.event.datafusion.Statement;
 
-import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -21,14 +21,21 @@ public class EPLStatement implements Statement {
     protected String[] scope={"local"};
     protected String uuid =UUID.randomUUID().toString();
 
-    public String getHash() {
-        MessageDigest  SHA256 = null;
+    public static String hashIt(@NotNull String string){
+        if(string == null)
+            return "";
+        MessageDigest SHA256 = null;
         try {
             SHA256 = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            return "";
         }
-        return (new BigInteger(1,SHA256.digest((name).getBytes()))).toString();
+        return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
+    }
+
+    public String getHash() {
+        return hashIt(name + statement);
     }
 
 
@@ -71,6 +78,9 @@ public class EPLStatement implements Statement {
     }
     @Override
     public String getScope(int index){
+        if (scope==null)
+            initScope();
+
         return  scope[index];
     }
 
@@ -84,7 +94,11 @@ public class EPLStatement implements Statement {
         return source;
     }
 
-    public void setName(String name) {
+    private void initScope(){
+        scope =new String[1];
+        scope[0] ="local";
+    }
+   /* public void setName(String name) {
         this.name = name;
     }
 
@@ -103,8 +117,7 @@ public class EPLStatement implements Statement {
     public void setOutput(String[] output) {
         this.output = output;
     }
-
     public void setScope(String[] scope) {
         this.scope = scope;
-    }
+    }*/
 }

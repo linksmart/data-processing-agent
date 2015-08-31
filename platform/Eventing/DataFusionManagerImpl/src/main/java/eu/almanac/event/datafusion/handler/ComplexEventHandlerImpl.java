@@ -68,14 +68,6 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
         }
     }
     public ComplexEventHandlerImpl(Statement query) throws RemoteException, MalformedURLException {
-        if(!knownInstances.containsKey("local"))
-
-            knownInstances.put("local",new  AbstractMap.SimpleImmutableEntry<>("almanac","1883"));
-
-
-
-        if(!knownInstances.containsKey("ismb_public") )
-            knownInstances.put("local",new  AbstractMap.SimpleImmutableEntry<>("130.192.86.227","1883"));
 
         this.query=query;
         gson = new GsonBuilder().setDateFormat(Tools.getIsoTimeFormat()).create();

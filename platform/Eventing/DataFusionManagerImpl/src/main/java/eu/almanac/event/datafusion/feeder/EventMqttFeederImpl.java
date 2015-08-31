@@ -1,7 +1,6 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -29,21 +28,21 @@ public class EventMqttFeederImpl extends MqttFeederImpl {
             if(mapper==null)
                 mapper = new ObjectMapper();
 
-            try {
+            //try {
 
                 Observation event = mapper.readValue(rawEvent,Observation.class);
                 event.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event, event.getClass());
 
-            }catch (InvalidFormatException e){
+            /*}catch (InvalidFormatException e){
                 Observation event1 = mapper.readValue(rawEvent,Observation.class);
 
                 event1.setId(id);
                 for (DataFusionWrapper i : dataFusionWrappers.values())
                     i.addEvent(topic, event1, event1.getClass());
 
-            }
+            }*/
 
 
 
