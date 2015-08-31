@@ -1,8 +1,9 @@
-**Version 2.1.0**, synced to [MPAndroidChart #aa7cbce](https://github.com/PhilJay/MPAndroidChart/commit/82d8881)
+**Version 2.1.3**, synced to [MPAndroidChart #62f192e](https://github.com/PhilJay/MPAndroidChart/commit/62f192e)
 
 ![alt tag](https://raw.github.com/danielgindi/ios-charts/master/Assets/feature_graphic.png)
+[![CodeHunt.io](https://img.shields.io/badge/vote-codehunt.io-02AFD1.svg)](http://codehunt.io/sub/ios-charts/?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)   
 
-* Xcode 6.3 / Swift 1.2
+* Xcode 6.3 / Swift 1.2 (Swift 2.0 for Xcode 7 beta is available currently on the `swift-2.0` branch)
 * iOS 7.0 (Drag .swift files to your project)
 * iOS 8.0 (Use as an **Embedded** Framework)
 
@@ -18,13 +19,17 @@ In order to correctly compile:
 
 1. Drag the `Charts.xcodeproj` to your project  
 2. Go to your target's settings, hit the "+" under the "Embedded Binaries" section, and select the Charts.framework  
-3. `@import Charts`  
-4.  When using Swift in an ObjC project:
+3. **Temporary workaround**: Xcode 6.3.1 has a bug, where you have to build your project once before actually writing the `@import` line. So hit "Build" now!  
+4. `@import Charts`  
+5.  When using Swift in an ObjC project:
    - You need to import your Bridging Header. Usually it is "*YourProject-Swift.h*", so in ChartsDemo it's "*ChartsDemo-Swift.h*". Do not try to actually include "*ChartsDemo-Swift.h*" in your project :-)
    - Under "Build Options", mark "Embedded Content Contains Swift Code"
 
 
-If you want to compile for iOS 7, then you just need to drag the code itself (.swift files) to your project. As sadly, Swift currently does not support compiling Frameworks for iOS 7.
+If you want to compile for iOS 7:
+
+1. Drag the code itself (.swift files) to your project. As sadly, Swift currently does not support compiling Frameworks for iOS 7.
+2. Make sure that the files are added to the Target membership.
 
 ## Help
 
@@ -32,7 +37,7 @@ If you like what you see here, and want to support the work being done in this r
 * Contribute code, issues and pull requests
 * Let people know this library exists (spread the word!)
 * 
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CHRDHZE79YTMQ) (As much or as little as you like/can.)
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=68UL6Y8KUPS96) (You can buy me a beer, or you can buy me dinner :-)
 
 **Note:** The author of [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) is the reason that this library exists, and is accepting [donations](https://github.com/PhilJay/MPAndroidChart#donations) on his page. He deserves them!
 
@@ -72,6 +77,7 @@ Features
 
 *Screenshots are currently taken from the original repository, as they render exactly the same :-)*
 
+
  - **LineChart (with legend, simple design)**
 ![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/simpledesign_linechart4.png)
  - **LineChart (with legend, simple design)**
@@ -96,7 +102,7 @@ Features
 
  - **Horizontal-BarChart**
 
-![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/horizontal_barchart.jpg)
+![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/horizontal_barchart.png)
 
 
  - **PieChart (with selection, ...)**
@@ -131,8 +137,9 @@ Or you can see the [**ChartsDemo**](https://github.com/danielgindi/ios-charts/tr
 Special Thanks
 =======
 
-Goes to @petester42 (Pierre-Marc Airoldi) for implementing a Bubble chart!  
-And of course thanks to all of those contibuting small fixes here and there! You are all appreciated!
+Goes to [@petester42](https://github.com/petester42) (Pierre-Marc Airoldi) for implementing a Bubble chart!  
+To [@AlBirdie](https://github.com/AlBirdie) for his contributions and his involvement in our small community!  
+And of course thanks to all of those contibuting small fixes here and there! You are all appreciated!  
 
 License
 =======

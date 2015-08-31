@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">AlmanacCitizenApp</string>
+    <string name="app_name">ALMANAC CitizenApp</string>
 
-    <string name="title_section1">All issues</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Waste</string>
+    <string name="title_section2">Water</string>
+    <!--<string name="title_section3">Section 3</string>-->
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -43,4 +43,10 @@
     <string name="alert_confirm_unsubsccribe">Unsubscribe &amp; delete</string>
     <string name="alert_cancel_unsubscribe">Don\'t delete</string>
     <string name="alert_dialog_message">You have opted to unsubscribe from the issue and delete the issue contents from the phone. The complaint will be still tracked by the authority</string>
+    <string name="show_picture">Show the picture</string>
+    <string name="take_another_picuture">Take another one</string>
+    <string name="completionDateString">Action By:</string>
+    <string name="PriorityString">Priority:</string>
+    <string name="StatusString">Status:</string>
+    <string name="comentString">comment:\n</string>
 </resources>

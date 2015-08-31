@@ -24,9 +24,9 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.fraunhofer.fit.almanac.model.DuplicateIssue;
+import org.fraunhofer.fit.almanac.model.IssueEvent;
 import org.fraunhofer.fit.almanac.model.PicIssue;
-import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
+import org.fraunhofer.fit.almanac.model.Status;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,8 +46,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public static final String DUPLICATE = "duplicate";
 
     public static interface MqttNotificationListener {
-        public void onIssueUpdate(PicIssueUpdate issueUpdate);
-        public void onDuplicateIssue(DuplicateIssue duplicateIssue);
+        public void onIssueUpdate(IssueEvent issueUpdate);
     }
 
     public static interface MqttPublishResultListener{
@@ -65,7 +64,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     private Context mContext;
     List<MqttNotificationListener> mqttNotificationListenerList = new LinkedList<>();
 
-    List<String> mSubscribeIds = new LinkedList<>();
+    String mSubscribeId ;
 
     Gson mGsonObj = new GsonBuilder().registerTypeAdapter(byte[].class,
             new ByteArrayToBase64TypeAdapter()).disableHtmlEscaping().create();
@@ -103,11 +102,11 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
 
 
-    public void connect(Context context,String clientID,List<String> subscribeTopics){
+    public void connect(Context context,String clientID,String subscribeTopic){
         if(mClient == null) {
             mContext = context;
             mClientId = clientID;
-            mSubscribeIds.addAll(subscribeTopics);
+            mSubscribeId = subscribeTopic;
             new MqttserviceTask().execute(context);
         }
     }
@@ -115,7 +114,10 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public  void addNotificationListener(MqttNotificationListener mqttNotificationListener){
         this.mqttNotificationListenerList.add(mqttNotificationListener);
     }
-    public boolean publishIssue(final PicIssue picIssue,final MqttPublishResultListener listener){
+    public  void removeNotificationListener(MqttNotificationListener mqttNotificationListener){
+        this.mqttNotificationListenerList.remove(mqttNotificationListener);
+    }
+    public boolean publishIssue(final PicIssue picIssue,final MqttPublishResultListener listener, final boolean subscribe){
 
 
 
@@ -131,16 +133,30 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
                 }
 
                 HttpRequester requester = new HttpRequester();
-                String response = requester.publishIssue(issueGson);
+                String response = requester.publishIssue(issueGson,subscribe);
 
                 if(response == null){
                     listener.onPublishFailure();
                 }else{
                     listener.onPublishSuccess(response);
                 }
+
+                try {
+                    IssueEvent issueEvent = new IssueEvent();
+                    issueEvent.eventType = "UPDATED";
+                    issueEvent.ticketId = response;
+                    issueEvent.property = IssueEvent.STATUS;
+                    issueEvent.value = Status.ACTIVE.name();
+
+                    issueGson = mGsonObj.toJson(issueEvent);
+                    IMqttDeliveryToken mqttDeliveryToken= mClient.publish("almanac/" + mSubscribeId + "/issue", issueGson.getBytes(), 1, false);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
-        //IMqttDeliveryToken mqttDeliveryToken= mClient.publish(PUBLISH_TOPIC, issueGson.getBytes(), 1, false);
+
+
 
 
 
@@ -149,7 +165,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         return true;
     }
 
-    public void subscribeIssue(String subscribeId){
+    public void subscribeForIssues(String subscribeId){
         try {
             mClient.subscribe("almanac/" + subscribeId + "/issue", 1);
         } catch (MqttException e) {
@@ -157,16 +173,13 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         }
     }
     public  void  unsubscribeIssue(String subscribeId){
-        try {
-            mClient.unsubscribe("issue/" + subscribeId + "/issue");
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
+            HttpRequester requester = new HttpRequester();
+            requester.requestForUnsubscribe(subscribeId);
     }
     @Override
     public void connectionLost(Throwable throwable) {
         Log.e(TAG, "Connection lost");
-        mSubscribeIds.clear();
+
         mClient = null;
     }
 
@@ -177,9 +190,9 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         String issueGson = new String(mqttMessage.getPayload());
         Log.i(TAG,"Json:"+issueGson);
       //  if(s.endsWith(UPDATE)){
-            PicIssueUpdate issueUpdate = mGsonObj.fromJson(issueGson,PicIssueUpdate.class);
+        IssueEvent issueEvent = mGsonObj.fromJson(issueGson,IssueEvent.class);
             for(MqttNotificationListener mqttNotificationListener:mqttNotificationListenerList){
-                mqttNotificationListener.onIssueUpdate(issueUpdate);
+                mqttNotificationListener.onIssueUpdate(issueEvent);
             }
         //}else if(s.endsWith(DUPLICATE)){
           //  DuplicateIssue duplicateIssue = mGsonObj.fromJson(issueGson,DuplicateIssue.class);
@@ -203,7 +216,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
             PicIssueUpdate issueUpdate = new PicIssueUpdate();
             issueUpdate.timeToCompletion = new Date();;
             issueUpdate.priority = PicIssueUpdate.Priority.CRITICAL;
-            issueUpdate.state = PicIssueUpdate.State.OPEN;
+            issueUpdate.status = PicIssueUpdate.Status.OPEN;
             issueUpdate.name = "SomeTopic";
             issueUpdate.id = "47f445429e523cc992b50e69f418c6b26451150c97cabadca68fa4921bedbba5";
             String jsonString = mGsonObj.toJson(issueUpdate);
@@ -224,9 +237,8 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         }
         Log.i(TAG, "connected successfully" );
         mClient.setCallback(this);
-        for(String subscribeId: mSubscribeIds){
-            subscribeIssue(subscribeId);
-        }
+
+        subscribeForIssues(mSubscribeId);
 
 
     }
@@ -263,8 +275,6 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
                 Log.i(TAG, "connecting to eclipse");
                 mClient = new MqttAndroidClient(params[0], "tcp://m2m.eclipse.org:1883", mClientId);//tcp://m2m.eclipse.org:1883
-
-
 
                 MqttConnectOptions connOpts = new MqttConnectOptions();
                 connOpts.setCleanSession(true);

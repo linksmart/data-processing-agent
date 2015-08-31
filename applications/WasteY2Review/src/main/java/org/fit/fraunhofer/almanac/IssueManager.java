@@ -24,17 +24,19 @@ public class IssueManager implements Observer{
     // Data Fusion query id: all waste bins with fill level greater than 80%
     public static final String DF_INITALLFULLBINS_TOPIC = "almanac/";  // FIXME
     // Data Fusion query id: waste bins whose fill level has now surpassed 80%
-    public static final String DF_WASTEBINFULL_TOPIC = "/+/+/+/cep/5296850124791908742793477709595434718264213518621513551279291212674474587702";
+    public static final String DF_WASTEBINFULL_TOPIC = "/+/+/+/cep/83250305333180387975123256258981791578694565511568769404136168336422530276207";
+    // Data Fusion query id: toy bin has surpassed 80%
+    //    public static final String DF_TOYBINFULL_TOPIC = "/+/+/+/cep/5296850124791908742793477709595434718264213518621513551279291212674474587702";
     // Data Fusion query id: waste bins whose fill level has now gotten less than 80%
-    public static final String DF_WASTEBINEMPTY_TOPIC = "almanac/+";   // FIXME
+    public static final String DF_WASTEBINEMPTY_TOPIC = "/+/+/+/cep/29209155414186072684277550074426799939015276077705618840238266929304645319757";
 
     public static final String CITIZENAPP_TOPIC = "almanac/citizenapp";  // issues coming from a CitizenApp
 
     public static final String SMARTWASTE_TOPIC = "almanac/smartwaste/+";                     //all smartwaste one-level sub-topics
     public static final String SMARTWASTE_CREATE_TOPIC = "almanac/smartwaste/create";
     public static final String SMARTWASTE_UPDATE_TOPIC = "almanac/smartwaste/update";
-    public static final String SMARTWASTE_DUPLICATE_TOPIC = "almanac/smartwaste/duplicate";  // duplicate notification coming from SmartWaste
-    public static final String SMARTWASTE_ACCEPT_TOPIC = "almanac/smartwaste/accept";        // accept notification coming from SmartWaste
+    public static final String SMARTWASTE_DUPLICATE_TOPIC = "almanac/smartwaste/duplicate";  // duplicate notification coming from OTRS
+    public static final String SMARTWASTE_ACCEPT_TOPIC = "almanac/smartwaste/accept";        // accept notification coming from OTRS
 
     public static final String ISSUE = "issue/";
     public static final String UPDATE = "/update";

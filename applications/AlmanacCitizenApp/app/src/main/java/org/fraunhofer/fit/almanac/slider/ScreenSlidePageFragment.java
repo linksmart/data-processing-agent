@@ -16,10 +16,14 @@
 
 package org.fraunhofer.fit.almanac.slider;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +36,8 @@ import org.fraunhofer.fit.almanac.almanaccitizenapp.R;
 import org.fraunhofer.fit.almanac.model.IssueStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +47,8 @@ import java.util.List;
  *
  */
 public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
+
+    private static final String TAG ="ScreenSlidePageFragment";
 
     public interface FragmentEventHandler{
         public void onDeleteEvent(int position);
@@ -79,6 +87,13 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        IssueTracker.getInstance().resetUpdated(mIssueStatus.id);
+        Log.i(TAG,"updating issue "+mIssueStatus.id);//TODO, this is called for all issues. find a better place
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout containing a title and body text.
@@ -88,26 +103,57 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
         ImageView imageView = (ImageView) rootView.findViewById(R.id.capturedImage);
 
         List<IssueStatus> issueList = new ArrayList<IssueStatus>(IssueTracker.getInstance().getAllIssues());
+        Collections.sort(issueList, new Comparator<IssueStatus>() {
+            @Override
+            public int compare(IssueStatus lhs, IssueStatus rhs) {
+                if (lhs.updationDate.after(rhs.updationDate))
+                    return -1;
+                else
+                    return 1;
+            }
+        });
         mIssueStatus = issueList.get(getPageNumber()>=issueList.size()?issueList.size()-1:getPageNumber());
+
         if(mIssueStatus.picPath != null)
             imageView.setImageURI(Uri.parse(mIssueStatus.picPath));
         else
             imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.waste_container));
 
         TextView nameOfIssue = (TextView) rootView.findViewById(R.id.nameOfIssue);
-        nameOfIssue.setText("Name:"+mIssueStatus.name);
+        nameOfIssue.setText(mIssueStatus.name);
 
+        TextView issuePriority = (TextView) rootView.findViewById(R.id.issuePriority);
         if(mIssueStatus.priority != null) {
-            TextView issuePriority = (TextView) rootView.findViewById(R.id.issuePriority);
-            issuePriority.setText("Priority:" + mIssueStatus.priority.toString());
+            issuePriority.setText(getActivity().getString(R.string.PriorityString) + mIssueStatus.priority.toString());
+        }else{
+            issuePriority.setText(getActivity().getString(R.string.PriorityString) +"Not Set");
         }
 
         Date now = new Date();
+        TextView completionDate = (TextView) rootView.findViewById(R.id.completionDate);
         if(mIssueStatus.timeToCompletion!= null  && mIssueStatus.timeToCompletion.after(now)) {
-            TextView completionDate = (TextView) rootView.findViewById(R.id.completionDate);
-            completionDate.setText("completionDate:" + mIssueStatus.timeToCompletion.toString());
-            ;
+
+            completionDate.setText(getActivity().getString(R.string.completionDateString) + mIssueStatus.timeToCompletion.toString());
+
+        }else{
+            completionDate.setText(getActivity().getString(R.string.completionDateString)+"Not set");
         }
+
+
+        TextView issueState = (TextView) rootView.findViewById(R.id.issueStatus);
+        if(mIssueStatus.status != null){
+            issueState.setText(getActivity().getString(R.string.StatusString)+ mIssueStatus.status);
+        }else{
+            issueState.setText(getActivity().getString(R.string.StatusString)+" CREATED");
+        }
+
+        TextView comment = (TextView) rootView.findViewById(R.id.issueComment);
+        if(mIssueStatus.comment!= null ) {
+            comment.setText(getActivity().getString(R.string.comentString) + mIssueStatus.comment);
+        }else{
+
+        }
+
 
         rootView.findViewById(R.id.unsubscribeButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +168,13 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
                 displayImage();
             }
         });
+
+        rootView.findViewById(R.id.backbutton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
         return rootView;
     }
 
@@ -133,8 +186,22 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
     }
 
     private void onDeleteItem(){
-        IssueTracker.getInstance().deleteIssue(mIssueStatus.id);
-        eventHandler.onDeleteEvent(getArguments().getInt(ARG_PAGE));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setPositiveButton(R.string.alert_confirm_unsubsccribe, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                IssueTracker.getInstance().deleteIssue(mIssueStatus.id);
+                eventHandler.onDeleteEvent(getArguments().getInt(ARG_PAGE));
+            }
+        });
+        builder.setNegativeButton(R.string.alert_cancel_unsubscribe, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //do nothing
+            }
+        });
+        builder.setMessage(getString(R.string.alert_dialog_message));
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     private void displayImage( ) {

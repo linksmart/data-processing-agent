@@ -10,29 +10,31 @@
 //
 
 import Foundation
+import CoreGraphics
 
 public class BubbleChartView: BarLineChartViewBase, BubbleChartRendererDelegate
 {
     public override func initialize()
     {
-        super.initialize();
+        super.initialize()
         
-        renderer = BubbleChartRenderer(delegate: self, animator: _animator, viewPortHandler: _viewPortHandler);
+        renderer = BubbleChartRenderer(delegate: self, animator: _animator, viewPortHandler: _viewPortHandler)
     }
     
     public override func calcMinMax()
     {
-        super.calcMinMax();
+        super.calcMinMax()
         
         if (_deltaX == 0.0 && _data.yValCount > 0)
         {
-            _deltaX = 1.0;
+            _deltaX = 1.0
         }
         
         _chartXMin = -0.5
-        _chartXMax = Float(_data.xVals.count) - 0.5
+        _chartXMax = Double(_data.xVals.count) - 0.5
         
-        if let r = renderer as? BubbleChartRenderer, sets = _data.dataSets as? [BubbleChartDataSet]
+        if renderer as? BubbleChartRenderer !== nil,
+            let sets = _data.dataSets as? [BubbleChartDataSet]
         {
             for set in sets {
                 
@@ -41,63 +43,63 @@ public class BubbleChartView: BarLineChartViewBase, BubbleChartRendererDelegate
                 
                 if (xmin < _chartXMin)
                 {
-                    _chartXMin = xmin;
+                    _chartXMin = xmin
                 }
                 
                 if (xmax > _chartXMax)
                 {
-                    _chartXMax = xmax;
+                    _chartXMax = xmax
                 }
             }
         }
         
-        _deltaX = CGFloat(abs(_chartXMax - _chartXMin));
+        _deltaX = CGFloat(abs(_chartXMax - _chartXMin))
     }
 
     // MARK: - BubbleChartRendererDelegate
     
     public func bubbleChartRendererData(renderer: BubbleChartRenderer) -> BubbleChartData!
     {
-        return _data as! BubbleChartData!;
+        return _data as! BubbleChartData!
     }
     
     public func bubbleChartRenderer(renderer: BubbleChartRenderer, transformerForAxis which: ChartYAxis.AxisDependency) -> ChartTransformer!
     {
-        return getTransformer(which);
+        return getTransformer(which)
     }
     
     public func bubbleChartDefaultRendererValueFormatter(renderer: BubbleChartRenderer) -> NSNumberFormatter!
     {
-        return self._defaultValueFormatter;
+        return self._defaultValueFormatter
     }
     
-    public func bubbleChartRendererChartYMax(renderer: BubbleChartRenderer) -> Float
+    public func bubbleChartRendererChartYMax(renderer: BubbleChartRenderer) -> Double
     {
-        return self.chartYMax;
+        return self.chartYMax
     }
     
-    public func bubbleChartRendererChartYMin(renderer: BubbleChartRenderer) -> Float
+    public func bubbleChartRendererChartYMin(renderer: BubbleChartRenderer) -> Double
     {
-        return self.chartYMin;
+        return self.chartYMin
     }
     
-    public func bubbleChartRendererChartXMax(renderer: BubbleChartRenderer) -> Float
+    public func bubbleChartRendererChartXMax(renderer: BubbleChartRenderer) -> Double
     {
-        return self.chartXMax;
+        return self.chartXMax
     }
     
-    public func bubbleChartRendererChartXMin(renderer: BubbleChartRenderer) -> Float
+    public func bubbleChartRendererChartXMin(renderer: BubbleChartRenderer) -> Double
     {
-        return self.chartXMin;
+        return self.chartXMin
     }
     
     public func bubbleChartRendererMaxVisibleValueCount(renderer: BubbleChartRenderer) -> Int
     {
-        return self.maxVisibleValueCount;
+        return self.maxVisibleValueCount
     }
     
     public func bubbleChartRendererXValCount(renderer: BubbleChartRenderer) -> Int
     {
-        return _data.xValCount;
+        return _data.xValCount
     }
 }
