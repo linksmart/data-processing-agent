@@ -1,7 +1,8 @@
 package eu.linksmart.api.event.datafusion;
 
-import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 
+
+import java.util.Map;
 
 /**
  * 
@@ -9,9 +10,9 @@ import eu.almanac.event.datafusion.utils.payload.SenML.Event;
  * This API can be accessed natively in a OSGi environment or by Web Services,
  *  allowing the a high decupled infrastructure in which any engine could be added so long implement a Wrapper which interact through Web Services. 
  * 
- * @author Jos� �ngel Carvajal Soto
- * @version     0.01
- * @since       0.01
+ * @author Jose Angel Carvajal Soto
+ * @version     0.03
+ * @since       0.03
  * @see  DataFusionWrapper
  * 
  * */
@@ -33,8 +34,7 @@ public interface DataFusionWrapper {
 	 * 
 	 * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addEvent(String topic, Event event);
-
+	public boolean addEvent(String topic, Object event, Class type);
 	/**
 	 * Configure a particular type in the engine.
 	 * 
@@ -69,9 +69,17 @@ public interface DataFusionWrapper {
 	 * 
 	 * @return <code>true</code> if the query is successfully deployed in the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addStatement( Statement query);
+	public boolean addStatement( Statement query) throws StatementException;
 
+    public boolean removeStatement( String id) throws StatementException;
+    /***
+     *
+     * Terminate the Wrapper, releasing any resource us by it.
+     *
+     * */
     public void destroy();
+
+    public Map<String,Statement> getStatements();
 
 
 }

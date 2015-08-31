@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Caravajal on 02.04.2015.
  */
 
-@Component(name="BackboneMQTT", immediate=true)
+@Component(name="BackboneWrapper", immediate=true)
 @Service({Backbone.class})
 public class WrapperProtocolImpl implements Backbone {
     private Logger LOG = Logger

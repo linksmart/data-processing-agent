@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>eu.almanac.eventing</artifactId>
+        <groupId>eu.almanac</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>datafusion.sdk.client</artifactId>
+
+    <packaging>bundle</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>eu.almanac</groupId>
+            <artifactId>eu.almanac.api.event.datafusion</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+        <dependency>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <groupId>org.eclipse.paho</groupId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.espertech</groupId>
+            <artifactId>esper</artifactId>
+            <version> 5.2.0 </version>
+        </dependency>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>4.5</version>
+        </dependency>
+        <dependency>
+            <groupId> eu.linksmart.gc </groupId>
+            <artifactId>network.backbone.protocol.mqtt.impl</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.4.0</version>
+                <extensions>true</extensions>
+
+                <configuration>
+                    <instructions>
+                        <export-package>
+                            org.antlr.v4.runtime.RecognitionException,
+                            org.antlr.v4.runtime.tree.Tree
+                        </export-package>
+                        <embedded-dependency>
+                            antlr4-runtime
+                        </embedded-dependency>
+
+                    </instructions>
+
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+</project>

@@ -31,8 +31,8 @@ public class ZmqHandler {
 	private static Logger LOG = Logger.getLogger(ZmqHandler.class.getName());
 
 	private String peerID = null;
-	private String xsubUri = "tcp://gando.fit.fraunhofer.de:7000";
-	private String xpubUri = "tcp://gando.fit.fraunhofer.de:7001";
+	private String xsubUri = "tcp://almanac.fit.fraunhofer.de:7000";
+	private String xpubUri = "tcp://almanac.fit.fraunhofer.de:7001";
 	
 	private int HEART_BEAT_INTERVAL = 5000;
 	

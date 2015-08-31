@@ -1,0 +1,25 @@
+PODS:
+  - Alamofire (1.3.1)
+  - AlamofireObjectMapper (0.7):
+    - Alamofire (~> 1.3)
+    - ObjectMapper (~> 0.12)
+  - Charts (2.1.3)
+  - JBChartView (2.8.15)
+  - ObjectMapper (0.15)
+  - SIOSocket (0.2.0)
+
+DEPENDENCIES:
+  - AlamofireObjectMapper (>= 0.2)
+  - Charts (>= 2.1)
+  - JBChartView
+  - SIOSocket (>= 0.2.0)
+
+SPEC CHECKSUMS:
+  Alamofire: e4ab637e3195b645c814b87a652373439e59f2a4
+  AlamofireObjectMapper: b07339a5ce5f609230df61080e55c1f6fc9551ee
+  Charts: 7af03baa4642bfde9745214daf109efac11977fe
+  JBChartView: d77d6a713a32547b24ccfaeba90958e7274f0c9d
+  ObjectMapper: 0656dc1c155825897e5acfcd25362c6b61786dcb
+  SIOSocket: 2facc0bd02ae72d98c223634a46dd8ebdf9be321
+
+COCOAPODS: 0.38.2

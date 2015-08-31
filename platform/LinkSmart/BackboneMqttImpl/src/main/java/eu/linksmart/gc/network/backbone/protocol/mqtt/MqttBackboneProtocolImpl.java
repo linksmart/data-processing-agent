@@ -1,55 +1,59 @@
 package eu.linksmart.gc.network.backbone.protocol.mqtt;
 
-
+import eu.linksmart.gc.api.network.*;
+import eu.linksmart.gc.api.network.networkmanager.core.NetworkManagerCore;
+import eu.linksmart.gc.api.utils.Configurator;
+import eu.linksmart.gc.network.backbone.protocol.mqtt.conf.MqttBackboneProtocolConfigurator;
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
+import eu.linksmart.gc.api.network.backbone.Backbone;
 import eu.linksmart.gc.api.network.networkmanager.NetworkManager;
+import eu.linksmart.gc.api.network.routing.BackboneRouter;
+import eu.linksmart.gc.api.security.communication.SecurityProperty;
+import eu.linksmart.gc.api.types.Configurable;
 import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import eu.linksmart.gc.api.types.TunnelRequest;
 import eu.linksmart.gc.api.types.TunnelResponse;
 import eu.linksmart.gc.api.types.utils.SerializationUtil;
-import eu.linksmart.gc.api.network.Message;
-import eu.linksmart.gc.api.network.NMResponse;
-import eu.linksmart.gc.api.network.VirtualAddress;
-import eu.linksmart.gc.api.network.backbone.Backbone;
-import eu.linksmart.gc.api.network.routing.BackboneRouter;
-import eu.linksmart.gc.api.security.communication.SecurityProperty;
-
 import org.apache.felix.scr.annotations.*;
 import org.apache.log4j.Logger;
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentContext;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.io.IOException;
-/*
-import org.apache.felix.fileinstall.ArtifactInstaller;
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
 
-import java.io.File;
-import java.util.Properties;*/
 
-//@Instantiate()
 @Component(name="BackboneMQTT", immediate=true)
 @Service({Backbone.class})
-//@Provides(specifications = ArtifactInstaller.class)
-public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactInstaller */{
+public class MqttBackboneProtocolImpl implements Backbone, Observer, Configurable, MessageProcessor {
 
 
 
 	private MqttBackboneProtocolConfigurator conf = null;
-	
-	@Reference(name="ConfigurationAdmin",
+    @Reference(name="ConfigurationAdmin",
             cardinality = ReferenceCardinality.MANDATORY_UNARY,
             bind="bindConfigAdmin",
             unbind="unbindConfigAdmin",
             policy= ReferencePolicy.STATIC)
     private ConfigurationAdmin mConfigAdmin = null;
+
+
+
+    protected void bindConfigAdmin(ConfigurationAdmin configAdmin) {
+        this.mConfigAdmin = configAdmin;
+    }
+
+    protected void unbindConfigAdmin(ConfigurationAdmin configAdmin) {
+        this.mConfigAdmin = null;
+    }
+
 	
 	@Reference(name="BackboneRouter",
             cardinality = ReferenceCardinality.MANDATORY_UNARY,
@@ -58,31 +62,36 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
             policy= ReferencePolicy.STATIC)
 	private BackboneRouter bbRouter;
 
-    // TODO maybe this will move to other service or to other bundle
-    @Reference(name="NetworkManager",
+
+    @Reference(name="NetworkManagerCore",
             cardinality = ReferenceCardinality.MANDATORY_UNARY,
             bind="bindNetworkManager",
             unbind="unbindNetworkManager",
             policy= ReferencePolicy.DYNAMIC)
-    protected NetworkManager networkManager;
+    protected NetworkManagerCore networkManager;
 
-    protected void bindNetworkManager(NetworkManager networkManager) {
+    protected void bindNetworkManager(NetworkManagerCore networkManager) {
         LOG.debug("NetworkManagerRestPort::binding network-manager");
         this.networkManager = networkManager;
     }
 
-    protected void unbindNetworkManager(NetworkManager networkManager) {
+    protected void unbindNetworkManager(NetworkManagerCore networkManager) {
         LOG.debug("NetworkManagerRestPort::un-binding network-manager");
         this.networkManager = null;
+    }
+
+
+    protected void unbindMQTTConfigurator(Configurator conf) {
+        this.conf = null;
     }
 
 
     private Logger LOG = Logger.getLogger(MqttBackboneProtocolImpl.class.getName());
 
     // this object map Broker with VAD
-    private Map<String, VirtualAddress>  endpointTopicVirtualAddress = new HashMap<String, VirtualAddress>();
+    //private Map<String, VirtualAddress>  endpointTopicVirtualAddress = new HashMap<String, VirtualAddress>();
     // this object map VAD with Broker
-    private Map<VirtualAddress, String>  endpointVirtualAddressTopic = new HashMap<VirtualAddress, String>();
+    private BidiMap endpointVirtualAddressTopic = new DualHashBidiMap();
     // this objects map how many clients/vad are hearing the same topic
     private Map<String, Set<VirtualAddress>> listeningVirtualAddresses = new HashMap<>();
 
@@ -101,17 +110,8 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
     private Map<Integer,Map<String, Boolean>> repetitionControl = null;
     private MessageDigest md5 = null;
 
-    private String PID = "";
     private BrokerConnectionService brokerService;
 
-    protected void bindConfigAdmin(ConfigurationAdmin configAdmin) {
-        this.mConfigAdmin = configAdmin;
-    }
-
-    protected void unbindConfigAdmin(ConfigurationAdmin configAdmin) {
-        this.mConfigAdmin = null;
-    }
-    
     protected void bindBackboneRouter(BackboneRouter bbRouter) {
         this.bbRouter = bbRouter;
     }
@@ -123,16 +123,18 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
 	protected void activate(ComponentContext context) throws Exception {
     	LOG.info("[activating Backbone MQTTProtocol]");
     	this.conf = new MqttBackboneProtocolConfigurator(this, context.getBundleContext(), mConfigAdmin);
-		this.conf.registerConfiguration();
 
         startKeepCleanMessageControl();
 
         try {
             LOG.info("Starting broker main client with name:" +MQTTProtocolID.toString());
 
-            brokerService = new BrokerConnectionService(conf.get(conf.BROKER_NAME),conf.get(conf.BROKER_PORT), MQTTProtocolID,networkManager);
+            brokerService = new BrokerConnectionService(conf.get(MqttBackboneProtocolConfigurator.BROKER_NAME),conf.get(MqttBackboneProtocolConfigurator.BROKER_PORT), MQTTProtocolID,networkManager,Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE)),conf.get(conf.BACKBONE_DESCRIPTION));
 
             brokerService.connect();
+
+            startBroadcastPropagation();
+
         } catch (Exception e) {
             LOG.error("Activating error:"+e.getMessage(),e);
 
@@ -143,6 +145,20 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
 
     }
 
+    protected void startBroadcastPropagation(){
+        try {
+            if (!Boolean.valueOf(conf.get(conf.BROKER_AS_SERVICE)))
+                throw new UnsupportedOperationException("The  broadcast propagation service is just available in combination with the Broker as a service setting");
+            if(!openClients.containsKey(conf.get(conf.BROADCAST_TOPIC))){
+                openClients.put(conf.get(conf.BROADCAST_TOPIC),new ForwardingListener( brokerService.getBrokerName(), brokerService.getBrokerPort(), conf.get(conf.BROADCAST_TOPIC), MQTTProtocolID, this));
+                ((MessageDistributor)networkManager).subscribe("mqttBroadcast",this);
+
+            }else
+                throw new UnsupportedOperationException("The  broadcast propagation service needs a broadcast topic");
+        }catch (Exception e){
+            LOG.error("Error while starting Broadcast Propagation service: "+e.getMessage(),e);
+        }
+    }
 
 
 
@@ -151,7 +167,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
      * */
     void startKeepCleanMessageControl(){
 
-        if (Boolean.valueOf(conf.get(conf.MESSAGE_REPETITION_CONTROL))) {
+        if (Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.MESSAGE_REPETITION_CONTROL))) {
             initMessageRepetitionControl();
         }
 
@@ -175,7 +191,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
                             }
                         }
                     }
-                    if (Boolean.valueOf(conf.get(conf.MESSAGE_REPETITION_CONTROL)))
+                    if (Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.MESSAGE_REPETITION_CONTROL)))
                         synchronized (repetitionControl) {
                             if (!repetitionControl.isEmpty()) {
                                 // for all messages already sent
@@ -196,7 +212,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
                             }
                         }
                     try {
-                        this.sleep(Integer.valueOf(conf.get(conf.MESSAGE_CONTROL_CLEANER_TIMEOUT)));
+                        this.sleep(Integer.valueOf(conf.get(MqttBackboneProtocolConfigurator.MESSAGE_CONTROL_CLEANER_TIMEOUT)));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -214,7 +230,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
             repetitionControl = new HashMap<>();
         } catch (NoSuchAlgorithmException e) {
             LOG.error(e.getMessage(),e);
-            conf.setConfiguration(conf.MESSAGE_REPETITION_CONTROL,"false");
+            conf.setConfiguration(MqttBackboneProtocolConfigurator.MESSAGE_REPETITION_CONTROL,"false");
         }
     }
 
@@ -239,7 +255,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
     private void disconnectAll(){
         for (ForwardingListener client : openClients.values() )
             try {
-                client.disconnect();
+                client.close();
             } catch (MqttException e) {
                 LOG.error("While disconnecting listeners: " + e.getMessage(),e);
             }
@@ -266,13 +282,16 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
 			}
 
 			// determine HTTP method
-			if(tunnelRequest.getMethod().equals(conf.get(conf.SUBSCRIBE_TO))) {
-				subscribe(senderVirtualAddress, uriEndpoint);
-			} else if(tunnelRequest.getMethod().equals(conf.get(conf.PUBLISH_TO))) {
+			if(tunnelRequest.getMethod().equals(conf.get(MqttBackboneProtocolConfigurator.SUBSCRIBE_TO))) {
+                if(Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE)))
+				    subscribe(senderVirtualAddress, uriEndpoint);
+                else
+                    subscribe(senderVirtualAddress,receiverVirtualAddress);
+			} else if(tunnelRequest.getMethod().equals(conf.get(MqttBackboneProtocolConfigurator.PUBLISH_TO))) {
 				publish(getSyncMessage(uriEndpoint, tunnelRequest.getBody()));
-			} else if(tunnelRequest.getMethod().equals(conf.get(conf.RESUBSCRIBE_TO))) {
+			} else if(tunnelRequest.getMethod().equals(conf.get(MqttBackboneProtocolConfigurator.RESUBSCRIBE_TO))) {
 				resubscribe(senderVirtualAddress, uriEndpoint);
-			} else if(tunnelRequest.getMethod().equals(conf.get(conf.UNSUBSCRIBE_TO))) {
+			} else if(tunnelRequest.getMethod().equals(conf.get(MqttBackboneProtocolConfigurator.UNSUBSCRIBE_TO))) {
 				unsubscribe( uriEndpoint);
 			} else {
 				throw new Exception("unsupported MQTT method for endpoint:" + uriEndpoint);
@@ -360,31 +379,45 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
     /**
      * TODO add description
      * */
-    private void subscribe( VirtualAddress senderVAD, String topic) throws Exception {
 
 
-
+     private void subscribe( VirtualAddress senderVAD, String topic) throws Exception {
 
         if (topic.contains("#") || topic.contains("+")) {
-            // create container structure if is needed
-            if (listeningWithWildcardVirtualAddresses.get(topic) == null)
-                listeningWithWildcardVirtualAddresses.put(topic, new HashSet<VirtualAddress>());
-
-            // add a virtual address to the listeners of this topic
-            listeningWithWildcardVirtualAddresses.get(topic).add(senderVAD);
-        }else{
-            // create container structure if is needed
-            if(listeningVirtualAddresses.get(topic) == null  )
-                listeningVirtualAddresses.put(topic, new HashSet<VirtualAddress>());
-
-            // add a virtual address to the listeners of this topic
-            listeningVirtualAddresses.get(topic).add(senderVAD);
+            addVadListener(listeningWithWildcardVirtualAddresses,senderVAD, topic);
+        } else {
+            addVadListener(listeningVirtualAddresses,senderVAD,topic);
         }
 
-        // if there is no listener in this topic add one
-        if(!openClients.containsKey(topic))
-            openClients.put(topic, new ForwardingListener(brokerService.getBrokerName(),brokerService.getBrokerPort(), topic, MQTTProtocolID, this));
+         subscribe(topic);
 
+    }
+    private void subscribe( VirtualAddress senderVAD,VirtualAddress receiverVAD) throws Exception {
+
+        if(endpointVirtualAddressTopic.containsKey(receiverVAD)) {
+            String topic = endpointVirtualAddressTopic.get(receiverVAD).toString();
+
+            addVadListener(listeningVirtualAddresses,senderVAD,topic);
+
+            subscribe(topic);
+
+        }
+
+    }
+    private void subscribe( String topic ) throws Exception {
+        // if there is no listener in this topic add one
+        if (!openClients.containsKey(topic))
+            openClients.put(topic, new ForwardingListener(brokerService.getBrokerName(), brokerService.getBrokerPort(), topic, MQTTProtocolID, this));
+
+    }
+    private static void addVadListener(Map<String, Set<VirtualAddress>> listeningVirtualAddresses,VirtualAddress vad, String topic){
+        // create container structure if is needed
+        if (listeningVirtualAddresses.get(topic) == null)
+            listeningVirtualAddresses.put(topic, new HashSet<VirtualAddress>());
+
+        if (!listeningVirtualAddresses.containsKey(vad))
+            // add a virtual address to the listeners of this topic
+            listeningVirtualAddresses.get(topic).add(vad);
 
     }
     /**
@@ -409,8 +442,8 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
 
                 ms = new MqttTunnelledMessage(
                          topic,
-                        data,Integer.valueOf(conf.get(conf.QoS)),
-                        Boolean.valueOf(conf.get(conf.PERSISTENCE)),
+                        data,Integer.valueOf(conf.get(MqttBackboneProtocolConfigurator.QoS)),
+                        Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.PERSISTENCE)),
                         -1,
                         MQTTProtocolID
                 );
@@ -425,7 +458,8 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
             // if the message is not repartition or local,and I successful recovered then is published.
             if(ms != null && uniqueMessagePerTopic(ms) && uniqueMessageControl(ms))
                 brokerService.publish(ms.getTopic(),ms.getPayload(),ms.getQoS(),ms.isRetained());
-
+            else
+                LOG.warn("Message with topic "+ms.getTopic()+" discarded considered duplicated");
 
     }
     boolean uniqueMessagePerTopic(MqttTunnelledMessage ms){
@@ -433,7 +467,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
 
         if(!ms.isGenerated())
             // if the local loop is not allowed, check if this message was sent by this protocol, otherwise don't test if the message is local.
-            if(!ms.getOriginProtocol().equals(MQTTProtocolID)  || (Boolean.valueOf(conf.get(conf.ALLOWED_LOCAL_MESSAGING_LOOP)))){
+            if(!ms.getOriginProtocol().equals(MQTTProtocolID)  || (Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.ALLOWED_LOCAL_MESSAGING_LOOP)))){
                 // check if this message was already send
                 synchronized (MessageHashControl){
                     // if was sent, mark to no send it again
@@ -453,7 +487,7 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
         boolean send = true;
 
 
-            if (Boolean.valueOf(conf.get(conf.MESSAGE_REPETITION_CONTROL))){
+            if (Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.MESSAGE_REPETITION_CONTROL))){
                 String hash = (new BigInteger(1,md5.digest(ms.getPayload()))).toString();
                 synchronized (repetitionControl){
 
@@ -490,13 +524,13 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
             if (listeningVirtualAddresses.containsKey(uriEndpoint)) {
                 listeningVirtualAddresses.remove(uriEndpoint);
                 if( listeningVirtualAddresses.isEmpty()) {
-                    openClients.get(uriEndpoint).disconnect();
+                    openClients.get(uriEndpoint).close();
                     openClients.remove(uriEndpoint);
                 }
             }else if (listeningWithWildcardVirtualAddresses.containsKey(uriEndpoint)) {
                 listeningWithWildcardVirtualAddresses.remove(uriEndpoint);
                 if( listeningWithWildcardVirtualAddresses.isEmpty()) {
-                    openClients.get(uriEndpoint).disconnect();
+                    openClients.get(uriEndpoint).close();
                     openClients.remove(uriEndpoint);
                 }
             } else {
@@ -546,20 +580,24 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
     
     @Override
 	public NMResponse broadcastData(VirtualAddress senderVirtualAddress, byte[] data) {
+        /*if(senderVirtualAddress.equals(brokerService.getVirtualAddress()))
+            return new NMResponse(NMResponse.STATUS_SUCCESS);
+
         LOG.info("Making broadcast in the MQTT Protocol");
         try {
+
             brokerService.publish(
-                    conf.get(conf.BROADCAST),
+                    conf.get(MqttBackboneProtocolConfigurator.BROADCAST_TOPIC),
                     data,
-                    Integer.valueOf(conf.get(conf.QoS)),
-                    Boolean.valueOf(conf.get(conf.PERSISTENCE))
+                    Integer.valueOf(conf.get(MqttBackboneProtocolConfigurator.QoS)),
+                    Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.PERSISTENCE))
 
             );
 
         }catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
-
+*/
         return new NMResponse(NMResponse.STATUS_SUCCESS);
 
     }
@@ -591,13 +629,12 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
 
 	@Override
 	public boolean addEndpoint(VirtualAddress virtualAddress, String endpoint) {
-        if (this.endpointVirtualAddressTopic.containsKey(virtualAddress) || endpointTopicVirtualAddress.containsKey(endpoint)) {
+        if (this.endpointVirtualAddressTopic.containsKey(virtualAddress) || endpointVirtualAddressTopic.containsValue(endpoint)) {
         	LOG.info("virtual-address is already store for endpoint: " + endpoint);
             return false;
         }
 
         this.endpointVirtualAddressTopic.put(virtualAddress, endpoint);
-        this.endpointTopicVirtualAddress.put(endpoint,virtualAddress);
 
         LOG.info("virtual-address is added for endpoint: " + endpoint);
         return true;
@@ -607,7 +644,6 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
 	@Override
     public boolean removeEndpoint(VirtualAddress virtualAddress) {
 
-        this.endpointTopicVirtualAddress.remove(endpointVirtualAddressTopic.get(virtualAddress));
         this.endpointVirtualAddressTopic.remove(virtualAddress);
         return true;
 	}
@@ -651,6 +687,15 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
         // get the VAD which this topic is subscribed
        // VirtualAddress senderVAD =endpointTopicVirtualAddress.get(conf.get(conf.BROKER_URL));
 
+        if(data.getTopic().equals(conf.get(conf.BROADCAST_TOPIC)))
+            handleBroadcast(data);
+        else if (Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE)))
+            receiveDataBrokerBase(data);
+        else
+            receiveDataTopicBase(data);
+    }
+    private void receiveDataBrokerBase(MqttTunnelledMessage data){
+
         if(!listeningWithWildcardVirtualAddresses.isEmpty()) {
             boolean send = true;
             String[] obtainTopicTokens = data.getTopic().split("/");
@@ -677,23 +722,41 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
         for (VirtualAddress vad : listeningVirtualAddresses.get(data.getTopic()))
             receiveDataAsynch(brokerService.getVirtualAddress(), vad, data.toBytes());
     }
+    private void receiveDataTopicBase(MqttTunnelledMessage data){
+        for (VirtualAddress vad : listeningVirtualAddresses.get(data.getTopic()))
+            receiveDataAsynch((VirtualAddress)endpointVirtualAddressTopic.getKey(data.getTopic()), vad, data.toBytes());
+    }
+    private void handleBroadcast(MqttTunnelledMessage data){
+
+
+
+        BroadcastMessage msg = new BroadcastMessage(
+					"mqttBroadcast",
+					brokerService.getVirtualAddress(),
+					data.toBytes());
+
+
+        networkManager.broadcastMessage(msg);
+
+
+    }
     /**
      * make the necessary steps needed to update the configuration of the broker
      * @param map the updated info
      *
      * */
     public void applyConfigurations(Hashtable map){
-        if (Boolean.valueOf(conf.get(conf.MESSAGE_REPETITION_CONTROL)))
+        if (Boolean.valueOf(conf.get(MqttBackboneProtocolConfigurator.MESSAGE_REPETITION_CONTROL)))
             initMessageRepetitionControl();
 
 
-        if (map.containsKey(conf.BROKER_NAME)|| map.containsKey(conf.BROKER_PORT)) {
+        if (map.containsKey(MqttBackboneProtocolConfigurator.BROKER_NAME)|| map.containsKey(MqttBackboneProtocolConfigurator.BROKER_PORT)) {
             try {
 
-                if (map.containsKey(conf.BROKER_NAME))
-                    brokerService.setBrokerName(map.get(conf.BROKER_NAME).toString());
-                if (map.containsKey(conf.BROKER_PORT))
-                    brokerService.setBrokerPort(map.get(conf.BROKER_PORT).toString());
+                if (map.containsKey(MqttBackboneProtocolConfigurator.BROKER_NAME))
+                    brokerService.setBrokerName(map.get(MqttBackboneProtocolConfigurator.BROKER_NAME).toString());
+                if (map.containsKey(MqttBackboneProtocolConfigurator.BROKER_PORT))
+                    brokerService.setBrokerPort(map.get(MqttBackboneProtocolConfigurator.BROKER_PORT).toString());
             }catch (Exception e){
                 LOG.error("Error while updating broker configuration :"+e.getMessage(),e);
             }
@@ -708,53 +771,33 @@ public class MqttBackboneProtocolImpl implements Backbone, Observer/*, ArtifactI
                 }
         }
 
-        if (map.containsKey("pid") )
-            PID = map.get("pid").toString();
+        if(map.containsKey(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE))
+            try {
+                brokerService.setService(Boolean.valueOf(map.get(MqttBackboneProtocolConfigurator.BROKER_AS_SERVICE).toString()));
+            }catch (Exception e) {
+                LOG.error("Error applying configuration: " + e.getMessage(), e);
+            }
 
-        if(map.containsKey("PID"))
-            PID = map.get("PID").toString();
+        // TODO: Apply configuration changes regarding broadcast settings
+
+        if(map.containsKey(conf.BACKBONE_DESCRIPTION))
+            this.brokerService.setServiceDescription(map.get(conf.BACKBONE_DESCRIPTION).toString());
+
+
 
         LOG.info("Configuration changes applied!");
     }
-   /* @Override
-    public void install(File artifact) throws Exception {
-        logOutput("Installing",artifact);
-    }
 
     @Override
-    public void update(File artifact) throws Exception {
-        logOutput("Updating",artifact);
-    }
-
-    @Override
-    public void uninstall(File artifact) throws Exception {
-        LOG.info("Uninstalling artifact: {"+artifact.getName()+"}");
-    }
-
-    @Override
-    public boolean canHandle(File artifact) {
-        return artifact.getName().endsWith(".props");
-    }
-
-    private void logOutput(String action, File artifact) throws IOException {
-        LOG.info(action + " artifact: {"+artifact.getName()+"}");
-        Properties props = new Properties();
-        FileReader in = null;
-        try {
-            in = new FileReader(artifact.getCanonicalFile());
-            props.load(in);
-        } finally {
-            if (in != null) {
-                in.close();
+    public Message processMessage(Message msg) {
+        if(!msg.getSenderVirtualAddress().equals(brokerService.getVirtualAddress())) {
+            MqttTunnelledMessage mqttmsg = getAsyncMessage(msg.getData());
+            try {
+                publish(mqttmsg);
+            } catch (Exception e) {
+                LOG.error("While makig a broadcast: " + e.getMessage(), e);
             }
         }
-
-        // Do whatever you want here:
-
-        for(Object key: props.keySet()) {
-            LOG.info(action + " Property received: {"+key+"} {"+props.get(key)+"}");
-        }
-    }*/
-
-
+        return null;
+    }
 }

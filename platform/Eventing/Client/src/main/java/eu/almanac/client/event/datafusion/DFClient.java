@@ -1,17 +1,11 @@
 package eu.almanac.client.event.datafusion;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import eu.almanac.event.datafusion.utils.payload.SenML.Event;
+import datafusion.sdk.client.epl.StatementSender;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 /**
  * Created by Caravajal on 27.10.2014.
  */
@@ -22,66 +16,75 @@ public class DFClient {
 
 
         if(cmd==null)
-            return;
+            return ;
 
         try {
-            MqttClient client = new MqttClient(cmd.hasOption("b") ? cmd.getOptionValue("b") : "tcp://localhost:1883", UUID.randomUUID().toString().replace("-", "_").replace("#", "_"));
 
-            client.connect();
-
-
-            Event query = new Event("DataFusionManager");
+            String name , statement , source = null, hostname = "localhost", port="1883";
+            String[] input = null, output = null, scope = null;
             if (cmd.hasOption("name")) {
-                query.addProperty("Name");
-                query.getEbyName("Name").setSv(cmd.getOptionValue("name"));
+                name = cmd.getOptionValue("name");
             } else {
 
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("DFClient", getCommandArgsOptions());
-                client.disconnect();
-                client.close();
-                return;
+
+                System.exit(-1);
+                return ;
             }
             if (cmd.hasOption("query")) {
-                query.addProperty("Statement");
-                query.getEbyName("Statement").setSv(cmd.getOptionValue("query"));
+                statement = cmd.getOptionValue("query");
+
+
             } else if (cmd.hasOption("file")){
                 try {
-                    String content = FileUtils.readFileToString(new File(cmd.getOptionValue("file")), "utf-8").replace("\n","".replace("\r",""));
+                    statement = FileUtils.readFileToString(new File(cmd.getOptionValue("file")), "utf-8").replace("\n", "").replace("\r","");
 
-                    query.addProperty("Statement");
-                    query.getEbyName("Statement").setSv(content);
 
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
+                    System.exit(-1);
+                    return ;
                 }
+            }else {
+
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp("DFClient", getCommandArgsOptions());
+                System.exit(-1);
+                return ;
             }
             if (cmd.hasOption("entity")) {
-                query.addProperty("Source");
-                query.getEbyName("Source").setSv(cmd.getOptionValue("entity"));
+                source = cmd.getOptionValue("entity");
             }
             if (cmd.hasOption("input")) {
-                query.addProperty("Input");
-                query.getEbyName("Input").setSv(cmd.getOptionValue("input"));
+                input = new String[]{cmd.getOptionValue("input")};
             }
             if (cmd.hasOption("output")) {
-                query.addProperty("Output");
-                query.getEbyName("Output").setSv(cmd.getOptionValue("output"));
+                output = new String[]{cmd.getOptionValue("output")};
             }
             if (cmd.hasOption("scope")) {
-                query.addProperty("Scope");
-                query.getEbyName("Scope").setSv(cmd.getOptionValue("scope"));
+                scope = new String[]{cmd.getOptionValue("scope")};
             }
-            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+            if (cmd.hasOption("port")) {
+                port = cmd.getOptionValue("port");
+            }
+            if (cmd.hasOption("hostname")) {
+                hostname =cmd.getOptionValue("hostname");
+            }
 
-            client.publish("query", gson.toJson(query).getBytes(), 0, false);
+            StatementSender statementSender = new StatementSender (hostname,port);
 
-            client.disconnect();
-            client.close();
-        } catch (MqttException e) {
+            String feedback = statementSender.send(StatementSender.factory(name, statement, scope, source, input, output));
+
+            System.out.println(feedback);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
+
+
+        System.exit(0);
 
     }
     public static Options getCommandArgsOptions(){
@@ -89,11 +92,19 @@ public class DFClient {
 
         options.addOption(
                 OptionBuilder
-                        .withLongOpt("broker")
-                        .withArgName("URL")
+                        .withLongOpt("hostname")
+                        .withArgName("hostname")
                         .hasArg()
-                        .withDescription(  "URL of the broker where the statements will be send (Default: tcp://localhost:1883)" )
-                        .create( "b" )
+                        .withDescription(  "hostname of the broker where the statements will be send (Default: localhost)" )
+                        .create( "h" )
+        );
+        options.addOption(
+                OptionBuilder
+                        .withLongOpt("port")
+                        .withArgName("port")
+                        .hasArg()
+                        .withDescription(  "port of the broker where the statements will be send (Default: 1883)" )
+                        .create( "p" )
         );
         options.addOption(
                 OptionBuilder

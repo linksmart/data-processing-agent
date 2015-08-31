@@ -12,13 +12,15 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>backbone.mqtt.impl</artifactId>
+    <artifactId>network.backbone.protocol.mqtt.impl</artifactId>
 
     <packaging>bundle</packaging>
-    <name>LS GC - MQTT Protocol Backbone</name>
-    <description>LS GC MQTT Protocol Backbone</description>
+    <name>LS GC - MQTT Protocol Backbone Impl</name>
+    <description>LS GC MQTT Protocol Backbone Impl</description>
+    <version>${linksmart.gc.version}</version>
 
     <dependencies>
+
         <dependency>
             <groupId>eu.linksmart.gc</groupId>
             <artifactId>eu.linksmart.gc.api.utils</artifactId>
@@ -43,12 +45,29 @@
             <groupId>eu.linksmart.gc</groupId>
             <artifactId>eu.linksmart.gc.api.types</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.fileinstall</artifactId>
+            <version>3.2.8</version>
+            <scope>provided</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+            <version>1.12.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -62,7 +81,30 @@
                 </includes>
             </resource>
         </resources>
+
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>src/main/resources/mqttprotocol.properties</file>
+                                    <type>cfg</type>
+                                    <classifier>configuration</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -70,7 +112,9 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+
                     </instructions>
+
                 </configuration>
             </plugin>
 

@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "org.fraunhofer.fit.almanac.almanaccitizenapp"
+        minSdkVersion 21
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+}
+//repositories {
+  //  maven {
+  //      url "http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots"
+   //  }
+//}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+   // compile group: 'it.ismb.pertlab', name: 'ogc.sensorthings.model', version: '0.0.1-SNAPSHOT'
+   // compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
+    compile files('libs/org.eclipse.paho.android.service-1.0.3.jar')
+    compile files('libs/org.eclipse.paho.client.mqttv3-1.0.2.jar')
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.google.android.gms:play-services:7.5.0'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:design:22.2.0'
+}
+

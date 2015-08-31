@@ -10,15 +10,16 @@ import java.util.Observer;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class ForwardingListener extends Observable implements MqttCallback {
+public class ForwardingListener    implements MqttCallback {
 
-    private Logger LOG = Logger.getLogger(MqttBackboneProtocolImpl.class.getName());
+    private Logger LOG = Logger.getLogger(ForwardingListener.class.getName());
     private MqttClient client;
     private ExecutorService executor = Executors.newCachedThreadPool();
-    private MqttConnectOptions options;
+
+
+
+
     public String getBrokerName() {
         return brokerName;
     }
@@ -67,27 +68,42 @@ public class ForwardingListener extends Observable implements MqttCallback {
 
 
 
-
-    public ForwardingListener(String brokerName,String brokerPort, String listening,UUID originProtocol, Observer observer ) throws MqttException {
+    private void createObject(String brokerName,String brokerPort, String listening, Observer observer, boolean connect ) throws MqttException{
         this.brokerPort = brokerPort;
         this.brokerName = brokerName;
         this.observer = observer;
         this.listening = listening;
-        this.originProtocol =originProtocol;
-        options = new MqttConnectOptions();
-        options.setCleanSession(false);
-        init();
-
+       if(connect)
+            init();
     }
 
+    public ForwardingListener(String brokerName,String brokerPort, String listening,UUID originProtocol, Observer observer ) throws MqttException {
+
+        this.originProtocol =originProtocol;
+        createObject(brokerName, brokerPort, listening, observer,true);
+    }
+    public ForwardingListener(String brokerName,String brokerPort, String listening, Observer observer ) throws MqttException {
+        this.originProtocol = UUID.randomUUID();
+        createObject(brokerName, brokerPort, listening, observer, true);
+
+    }
+    public ForwardingListener(String brokerName,String brokerPort, Observer observer ) throws MqttException {
+        this.originProtocol = UUID.randomUUID();
+        createObject(brokerName, brokerPort, listening, observer, false);
+
+    }
     private void init() throws MqttException {
-        client = new MqttClient(BrokerConnectionService.getBrokerURL(brokerName,brokerPort), originProtocol.toString()+listening,new MemoryPersistence());
-        client.connect(options);
+        client = new MqttClient(Utils.getBrokerURL(brokerName, brokerPort), originProtocol.toString()+listening,new MemoryPersistence());
+        start();
+    }
+    private void start() throws MqttException {
+
+        client.connect();
         client.setCallback(this);
         client.subscribe(listening);
     }
     public void restart() throws MqttException {
-        disconnect();
+        close();
         init();
     }
     @Override
@@ -98,7 +114,7 @@ public class ForwardingListener extends Observable implements MqttCallback {
 
                 LOG.info("A listened was disconnected, no is trying to reconnect");
 
-                client.connect(options);
+                client.connect();
                 if(!client.isConnected()){
                     try {
                         client.close();
@@ -129,7 +145,7 @@ public class ForwardingListener extends Observable implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         LOG.info("Message arrived in listener:"+topic);
 
-        executor.execute(new MessageDeliverer(new MqttTunnelledMessage(topic,mqttMessage.getPayload(),mqttMessage.getQos(),mqttMessage.isRetained(),getMessageIdentifier(),originProtocol),observer,this));
+        executor.execute( MessageDeliverer.createMessageDeliverer(new MqttTunnelledMessage(topic,mqttMessage.getPayload(),mqttMessage.getQos(),mqttMessage.isRetained(),getMessageIdentifier(),originProtocol),observer,null));
         LOG.info("Message sent");
     }
 
@@ -153,16 +169,41 @@ public class ForwardingListener extends Observable implements MqttCallback {
         return listening;
     }
 
-    public void setListening(String listening) {
+    public void setListening(String listening)  throws MqttException{
+        if(client!=null)
+            disconnect();
+
+
         this.listening = listening;
+
+        if(client==null)
+            init();
+        else
+            connect();
     }
-    public void disconnect() throws MqttException {
+    private void disconnect() throws MqttException {
 
         client.unsubscribe(listening);
         client.disconnect();
-        client.close();
+
 
     }
+    private void connect() throws MqttException {
+
+        client.subscribe(listening);
+        client.connect();
+
+
+    }
+    public void close() throws MqttException {
+
+        disconnect();
+        client.close();
+        executor.shutdownNow();
+
+    }
+
+
 
 
 }

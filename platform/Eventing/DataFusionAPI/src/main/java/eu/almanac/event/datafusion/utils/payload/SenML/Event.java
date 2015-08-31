@@ -5,6 +5,8 @@ import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -70,6 +72,7 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
         bu = null;
         ver = 1;
     }
+
     public String getBn() {
         return bn;
     }
@@ -191,13 +194,17 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
 
         indexing();
 
-        return e.get(index.get(name));
+        try {
+
+            return e.get(index.get(name));
+        }catch (Exception e){}
+        return null;
     }
     private  void  indexing(){
         synchronized(eNameChanged) {
             if (index.size() != e.size() || eNameChanged)
                 for (int i = 0; i < e.size(); i++) {
-                    index.put(e.get(i).getSv(), i);
+                    index.put(e.get(i).getName(), i);
                 }
             eNameChanged = false;
         }

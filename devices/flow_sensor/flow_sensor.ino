@@ -11,9 +11,9 @@
 #define THERMISTOR_PIN_ANALOG 5
 
 // Pin for water flow sensor in uno or duemilanove
-//#define HALL_SENSOR_PIN_DIGITAL 2
+#define HALL_SENSOR_PIN_DIGITAL 2
 // Pin for water flow sensor in leonardo, with interrupt 1
-#define HALL_SENSOR_PIN_DIGITAL 1
+//#define HALL_SENSOR_PIN_DIGITAL 1
 
 
 
@@ -108,25 +108,27 @@ void parseInput(int in) {
     state = STATE_UNDEF;
   }
 }
-
+double calc;
 // initialize pins and state
 void setup()
 {
   // set up water flow sensor
   pinMode(HALL_SENSOR_PIN_DIGITAL, INPUT); // initializes digital pin 2 as an input
-  attachInterrupt(1, rpm, RISING);         // and the interrupt is attached. N.B. Leonardo interrupt 1 is in pin 2, duemilanove is interrupt zero
+  attachInterrupt(0, rpm, RISING);         // and the interrupt is attached. N.B. Leonardo interrupt 1 is in pin 2, duemilanove is interrupt zero
 
   // set up motor shield
   pinMode(DIR_A, OUTPUT);   // sets the pin as output
   pinMode(PWM_A, OUTPUT);   // sets the pin as output
   pinMode(BRK_A, OUTPUT);   // sets the pin as output
+  digitalWrite(DIR_A, HIGH);
+  /*
   pinMode(DIR_B, OUTPUT);   // sets the pin as output
   pinMode(PWM_B, OUTPUT);   // sets the pin as output
   pinMode(BRK_B, OUTPUT);   // sets the pin as output
-  digitalWrite(DIR_A, HIGH);
-  digitalWrite(DIR_B, HIGH);
-  
+  digitalWrite(DIR_B, HIGH);*/
+  calc =0;
   Serial.begin(9600);     // opens serial port, sets data rate to 9600 bps
+  analogWrite(PWM_A, 255);
 }
 
 // The main function. First reads incoming data from the serial port, 
@@ -145,12 +147,15 @@ void loop()
   sei();        // Enable interrupts
   delay (1000); // Wait 1 second
   cli();        // Disable interrupts
-  int calc = (pulses * 60 / 8.2); // (Pulse frequency x 60) / 8.2 = flow rate in L/min 
+   calc += (pulses / (8.2)*10); // (Pulse frequency x 60) / 8.2 = flow rate in L/min 
+  pulses=0;
   String data = "";
-  data += calc;
+  if(calc >=32748 or calc<0)
+    calc=0.0;
+  data = String((int)calc);
   //sendValue("f1",data);
   Serial.print("idFlowSensor {\"type\":\"ac:FlowSensor\","); Serial.print("\"flow\":\""); Serial.print(data); Serial.println("\"}");
-
+/*
   // Sense temperature
   int therm;   
   therm=analogRead(THERMISTOR_PIN_ANALOG);
@@ -161,7 +166,7 @@ void loop()
   celsius = (celsius - (int) celsius) * 10;
   data += (int) celsius;
   //sendValue("t1",data);
-
+*/
 }
 
 // Actuator function. Implements the action conditionally on the key and value received.

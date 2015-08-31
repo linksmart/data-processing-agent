@@ -1,0 +1,36 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.fraunhofer.fit.almanac.almanaccitizen.ImageListFragment">
+
+    <GridView
+    android:id="@+id/gridview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:numColumns="2"
+    android:verticalSpacing="5dp"
+    android:horizontalSpacing="5dp"
+    android:stretchMode="columnWidth"
+    android:gravity="center"
+    android:paddingTop="5dp"
+    android:layout_marginRight="7dp"
+    android:layout_marginLeft="7.5dp"
+
+ />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/newIssue"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="@string/new_issue"
+        android:layout_gravity="right|bottom"
+        android:paddingBottom="0dp"
+        android:paddingRight="0dp"
+        android:adjustViewBounds="true"
+        android:tintMode="src_atop"
+        android:baselineAlignBottom="false"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/add_icon" />
+
+</FrameLayout>
