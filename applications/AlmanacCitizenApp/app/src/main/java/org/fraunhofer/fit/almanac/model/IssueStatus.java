@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import eu.linksmart.smartcity.issue.Issue;
+import eu.linksmart.smartcity.issue.TicketEvent;
+
 /**
  * Created by devasya on 01.07.2015.
  */
@@ -30,14 +33,13 @@ public class IssueStatus {
     public String displayString(){
         return "Status:"+ status +"\nPriority:" + priority+ "\nDue Time:"+timeToCompletion;
     }
-    public void updateStatus(IssueEvent issueEvent){
+    public void updateStatus(TicketEvent issueEvent){
 
        // priority = issueEvent.priority;
         //priority =  issueEvent.priority;
         //timeToCompletion = picIssueUpdate.timeToCompletion;
-        Log.i(TAG, "Updating issue eventType: " + issueEvent.eventType);
-        Event event = Event.valueOf(issueEvent.eventType);
-        switch (event){
+        Log.i(TAG, "Updating issue eventType: " + issueEvent.getEventType());
+        switch (issueEvent.getEventType()){
             case CREATED:
                 status = Status.NEW;
                 break;
@@ -46,19 +48,19 @@ public class IssueStatus {
                 break;
 
             case UPDATED:
-                switch (issueEvent.property){
+                switch (issueEvent.getProperty()){
                     case IssueEvent.STATUS:
-                        status = Status.valueOf(issueEvent.value);
+                        status = Status.valueOf(issueEvent.getValue());
                         break;
                     case IssueEvent.PRIORITY:
-                        priority = Priority.valueOf(issueEvent.value);
+                        priority = Priority.valueOf(issueEvent.getValue());
                         break;
                     case IssueEvent.TIME2COMPL:
                         DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy", Locale.ENGLISH);
                         try {
-                            timeToCompletion = (df).parse(issueEvent.value);
+                            timeToCompletion = (df).parse(issueEvent.getValue());
                         } catch (ParseException e) {
-                            Log.e(TAG, "unable to parese date format"+ issueEvent.value);
+                            Log.e(TAG, "unable to parese date format"+ issueEvent.getValue());
                         }
                         break;
                 }
@@ -69,10 +71,10 @@ public class IssueStatus {
         updationDate = new Date();
     }
 
-    public void setPicIssue(PicIssue picIssue, String filePath,boolean subscribe){
-        name = picIssue.name;
-        comment = picIssue.comment;
-        id = picIssue.id;
+    public void setPicIssue(String id, Issue picIssue, String filePath, boolean subscribe){
+        name = picIssue.getLabel();
+        comment = picIssue.getDescription();
+        this.id = id;
         picPath = filePath;
         isSubscribed = subscribe;
         status = Status.NEW;

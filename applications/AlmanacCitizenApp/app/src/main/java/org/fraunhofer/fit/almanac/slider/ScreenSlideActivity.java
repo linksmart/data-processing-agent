@@ -35,6 +35,12 @@ import android.view.ViewGroup;
 import org.fraunhofer.fit.almanac.almanaccitizenapp.AlmanacCitizen;
 import org.fraunhofer.fit.almanac.almanaccitizenapp.IssueTracker;
 import org.fraunhofer.fit.almanac.almanaccitizenapp.R;
+import org.fraunhofer.fit.almanac.model.IssueStatus;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Demonstrates a "screen-slide" animation using a {@link ViewPager}. Because {@link ViewPager}
@@ -83,6 +89,37 @@ public class ScreenSlideActivity extends FragmentActivity implements ScreenSlide
                 // fragment expose actions itself (rather than the activity exposing actions),
                 // but for simplicity, the activity provides the actions in this sample.
                 invalidateOptionsMenu();
+            }
+        });
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.i(TAG, "onPageScrolled " + position);
+                List<IssueStatus> issueList = new ArrayList<IssueStatus>(IssueTracker.getInstance().getAllIssues());
+                Collections.sort(issueList, new Comparator<IssueStatus>() {
+                    @Override
+                    public int compare(IssueStatus lhs, IssueStatus rhs) {
+                        if (lhs.updationDate.after(rhs.updationDate))
+                            return -1;
+                        else
+                            return 1;
+                    }
+                });
+                IssueStatus issueStatus = issueList.get(position >= issueList.size() ? issueList.size() - 1 : position);
+
+                IssueTracker.getInstance().resetUpdated(issueStatus.id);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.i(TAG, "onpageselected " + position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.i(TAG, "onPageScrollStateChanged " + state);
             }
         });
         mPager.setCurrentItem(getIntent().getIntExtra(INDEX_POSITION,0));
@@ -136,11 +173,12 @@ public class ScreenSlideActivity extends FragmentActivity implements ScreenSlide
 
         Log.i(TAG, "deleting the item " + position);
 
-        if(mPagerAdapter.getCount()==0){
+        if (mPagerAdapter.getCount() == 0) {
             finish();
         }
         mPager.setAdapter(mPagerAdapter);
-        mPager.setCurrentItem(mPager.getCurrentItem() + 1);
+
+        mPager.setCurrentItem(position);
     }
 
     /**
@@ -155,7 +193,7 @@ public class ScreenSlideActivity extends FragmentActivity implements ScreenSlide
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
             return ScreenSlidePageFragment.create(position);
-        }
+            }
 
         @Override
         public int getCount() {

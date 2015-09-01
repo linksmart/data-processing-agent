@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.fraunhofer.fit.almanac.almanaccitizenapp.DisplayImageActivity;
@@ -89,9 +90,9 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        IssueTracker.getInstance().resetUpdated(mIssueStatus.id);
-        Log.i(TAG,"updating issue "+mIssueStatus.id);//TODO, this is called for all issues. find a better place
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,17 +115,20 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
         });
         mIssueStatus = issueList.get(getPageNumber()>=issueList.size()?issueList.size()-1:getPageNumber());
 
-        if(mIssueStatus.picPath != null)
+        if(mIssueStatus.picPath != null) {
             imageView.setImageURI(Uri.parse(mIssueStatus.picPath));
-        else
-            imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.waste_container));
+        }
+        else {
+            imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.waste_container));
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
+        }
 
         TextView nameOfIssue = (TextView) rootView.findViewById(R.id.nameOfIssue);
         nameOfIssue.setText(mIssueStatus.name);
 
         TextView issuePriority = (TextView) rootView.findViewById(R.id.issuePriority);
         if(mIssueStatus.priority != null) {
-            issuePriority.setText(getActivity().getString(R.string.PriorityString) + mIssueStatus.priority.toString());
+            issuePriority.setText( mIssueStatus.priority.toString());
         }else{
             issuePriority.setText(getActivity().getString(R.string.PriorityString) +"Not Set");
         }
@@ -133,25 +137,26 @@ public class ScreenSlidePageFragment extends android.support.v4.app.Fragment {
         TextView completionDate = (TextView) rootView.findViewById(R.id.completionDate);
         if(mIssueStatus.timeToCompletion!= null  && mIssueStatus.timeToCompletion.after(now)) {
 
-            completionDate.setText(getActivity().getString(R.string.completionDateString) + mIssueStatus.timeToCompletion.toString());
+            completionDate.setText(mIssueStatus.timeToCompletion.toString());
 
         }else{
-            completionDate.setText(getActivity().getString(R.string.completionDateString)+"Not set");
+            completionDate.setText("Not set");
         }
 
 
         TextView issueState = (TextView) rootView.findViewById(R.id.issueStatus);
         if(mIssueStatus.status != null){
-            issueState.setText(getActivity().getString(R.string.StatusString)+ mIssueStatus.status);
+            issueState.setText( mIssueStatus.status.toString());
         }else{
-            issueState.setText(getActivity().getString(R.string.StatusString)+" CREATED");
+            issueState.setText("CREATED");
         }
 
         TextView comment = (TextView) rootView.findViewById(R.id.issueComment);
-        if(mIssueStatus.comment!= null ) {
-            comment.setText(getActivity().getString(R.string.comentString) + mIssueStatus.comment);
+        if(mIssueStatus.comment!= null && !mIssueStatus.comment.isEmpty() ) {
+            comment.setText(mIssueStatus.comment);
         }else{
-
+            LinearLayout commentLayout = (LinearLayout) rootView.findViewById(R.id.commentLayout);
+            commentLayout.setVisibility(View.GONE);
         }
 
 
