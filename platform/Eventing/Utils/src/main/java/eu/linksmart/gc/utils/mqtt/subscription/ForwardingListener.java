@@ -21,7 +21,7 @@ public  class ForwardingListener implements MqttCallback {
 
     protected long sequence ;
     protected ExecutorService executor = Executors.newCachedThreadPool();
-    protected Map<String, Observable> observables;
+    protected Map<Topic, Observable> observables;
 
     protected CurrentStatus status;
 
@@ -38,21 +38,23 @@ public  class ForwardingListener implements MqttCallback {
     public ForwardingListener( Observer connectionListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
         this.connectionListener = connectionListener;
-        observables = new Hashtable<String, Observable>();
+        observables = new Hashtable<Topic, Observable>();
     }
 
 
     protected void initObserver(String listening, Observer mqttEventsListener){
-        observables = new Hashtable<String, Observable>();
-        observables.put(listening, new Observable());
+        observables = new Hashtable<Topic, Observable>();
+        observables.put(new Topic(listening), new Observable());
     }
     public void addObserver(String topic, Observer listener){
-        if(!observables.containsKey(topic))
-            observables.put(topic, new Observable());
+        Topic t = new Topic(topic);
+        if(!observables.containsKey(t))
+            observables.put(t, new Observable());
 
-        observables.get(topic).addObserver(listener);
+        observables.get(t).addObserver(listener);
 
     }
+    @SuppressWarnings("SuspiciousMethodCalls")
     public boolean removeObserver(String topic, Observer listener){
         if(observables.containsKey(topic))
             observables.get(topic).deleteObserver(listener);
@@ -66,9 +68,10 @@ public  class ForwardingListener implements MqttCallback {
 
         return true;
     }
-    public Set<String> getListeningTopics(){
+    public Set<Topic> getListeningTopics(){
         return observables.keySet();
     }
+    @SuppressWarnings("SuspiciousMethodCalls")
     public boolean isObserversEmpty(String topic){
         return observables.containsKey(topic);
     }
@@ -84,18 +87,30 @@ public  class ForwardingListener implements MqttCallback {
 
     }
 
+
     private synchronized long getMessageIdentifier(){
         sequence = (sequence + 1) % Long.MAX_VALUE;
         return sequence;
     }
     @Override
-    public void messageArrived(String topic, org.eclipse.paho.client.mqttv3.MqttMessage mqttMessage)  {
+    public void messageArrived(String topic, org.eclipse.paho.client.mqttv3.MqttMessage mqttMessage) {
         LOG.debug("Message arrived in listener:" + topic);
 
-        if (observables.containsKey(topic))
-            executor.execute( MessageDeliverer.createMessageDeliverer(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(),originProtocol),observables.get(topic)));
+        boolean processed= false;
+     //if (observables.containsKey(topic))
+        for(Topic t: observables.keySet()) {
+            if(t.equals(topic)) {
+                executor.execute(
+                        MessageDeliverer.createMessageDeliverer(
+                                new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol),
+                                observables.get(t)
+                        )
+                );
+                processed= true;
+            }
+        }
 
-        else
+        if(!processed)
             LOG.warn("A message arrived and no one listening to it");
     }
 

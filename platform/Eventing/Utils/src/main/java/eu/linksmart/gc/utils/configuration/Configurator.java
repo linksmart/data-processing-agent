@@ -7,10 +7,10 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.ReloadingFileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -82,12 +82,16 @@ public class Configurator extends ConfigurationConst {
         Configurations  configs = new Configurations();
         File propertiesFile = new File(DEFAULT_INTERN_CONFIGURATION_FILE);
 
+
         FileBasedConfigurationBuilder<PropertiesConfiguration> builder = configs.propertiesBuilder(propertiesFile);
 
 
         try
         {
-             config = builder.getConfiguration();
+            PropertiesConfiguration aux = builder.getConfiguration();
+            aux.setListDelimiterHandler(new DefaultListDelimiterHandler(','));
+
+            config = aux;
 
 
         }
@@ -100,13 +104,19 @@ public class Configurator extends ConfigurationConst {
     protected Configurator(String configurationFile) {
         Parameters params = new Parameters();
 
+
         builder = new ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
                 .configure(params.properties()
                         .setFileName(configurationFile));
+
         try
         {
             //NOTE: The loading configuration has not loaded yet. Therefore, I print directly on the standard error output
-            config = builder.getConfiguration();
+            PropertiesConfiguration aux = builder.getConfiguration();
+            aux.setListDelimiterHandler(new DefaultListDelimiterHandler(','));
+
+            config = aux;
+
 
         }
         catch(ConfigurationException cex)

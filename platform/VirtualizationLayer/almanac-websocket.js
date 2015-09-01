@@ -14,6 +14,7 @@ module.exports = function (almanac) {
 
 	almanac.webSocket = require('socket.io')(almanac.server, {
 			path: '/socket.io',
+			//transports: ['websocket'],	//Possibility to force the use of WebSocket solely (needs to be done on the client too)
 		});
 
 	var ioClients = {},
