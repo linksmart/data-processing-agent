@@ -1,3 +1,4 @@
 [submodule "platform/LinkSmart"]
 	path = platform/LinkSmart
-	url = https://linksmart.eu/redmine/linksmart-opensource/globalconnect.git
+    url = https://linksmart.eu/redmine/linksmart-opensource/globalconnect.git
+    branch = almanac
