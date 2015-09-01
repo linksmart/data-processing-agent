@@ -3,7 +3,7 @@ package org.fraunhofer.fit.almanac.protocols;
 import android.util.Log;
 
 import org.fraunhofer.fit.almanac.almanaccitizenapp.Config;
-import org.fraunhofer.fit.almanac.model.PicIssue;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +35,8 @@ public class HttpRequester {
             String retStr = null;
             try {
 
-                URL url = new URL("http://almanac.fit.fraunhofer.de:8888/waste/ticket");
+                //URL url = new URL("http://almanac.fit.fraunhofer.de:8888/waste/ticket");
+                URL url = new URL("http://almanac.fit.fraunhofer.de:8888/OTRS/Ticket");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("POST");
@@ -48,7 +49,7 @@ public class HttpRequester {
                 os.write(issueJSON.getBytes());
                 os.flush();
 
-                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
                     Log.e(TAG,"Something terribly went wrong in server Response code "+conn.getResponseCode());
                     return null;
                 }
@@ -83,7 +84,8 @@ public class HttpRequester {
     public void requestForUnsubscribe(String subscribeId) {
         URL url = null;
         try {
-            url = new URL("http://almanac.fit.fraunhofer.de:8888/waste/ticket/"+subscribeId);
+           // url = new URL("http://almanac.fit.fraunhofer.de:8888/waste/ticket/"+subscribeId);
+            url = new URL("http://almanac.fit.fraunhofer.de:8888/OTRS/Ticket/"+subscribeId);
             HttpURLConnection conn = null;
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);

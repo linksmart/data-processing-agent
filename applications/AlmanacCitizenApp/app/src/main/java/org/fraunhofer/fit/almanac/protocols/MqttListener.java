@@ -25,7 +25,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.fraunhofer.fit.almanac.model.IssueEvent;
-import org.fraunhofer.fit.almanac.model.PicIssue;
+
 import org.fraunhofer.fit.almanac.model.Status;
 
 import java.io.File;
@@ -37,6 +37,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import eu.linksmart.smartcity.issue.Issue;
+import eu.linksmart.smartcity.issue.TicketEvent;
+
 /**
  * Created by devasya on 26.05.2015.
  */
@@ -46,12 +49,12 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public static final String DUPLICATE = "duplicate";
 
     public static interface MqttNotificationListener {
-        public void onIssueUpdate(IssueEvent issueUpdate);
+        public void onIssueUpdate(TicketEvent issueUpdate);
     }
 
     public static interface MqttPublishResultListener{
         public void onPublishSuccess(String response);
-        public void  onPublishFailure();
+        public void  onPublishFailure(String cause);
     }
     private static final String TAG = "MqttListener";
     //TODO:name and init_topic are not constants. should be read from strings.xml .. and the server URI too
@@ -117,7 +120,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     public  void removeNotificationListener(MqttNotificationListener mqttNotificationListener){
         this.mqttNotificationListenerList.remove(mqttNotificationListener);
     }
-    public boolean publishIssue(final PicIssue picIssue,final MqttPublishResultListener listener, final boolean subscribe){
+    public boolean publishIssue(final Issue picIssue,final MqttPublishResultListener listener, final boolean subscribe){
 
 
 
@@ -126,33 +129,31 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
             public void run() {
 
                 String issueGson = mGsonObj.toJson(picIssue);
-
+               // StoretoSdcard(issueGson);
                 Log.i(TAG,"Publishing:");
                 for(int i=0; i<issueGson.length();i+=500){
                     Log.i(TAG,issueGson.substring(i,i+500>issueGson.length()?issueGson.length():i+500));
                 }
 
+
                 HttpRequester requester = new HttpRequester();
                 String response = requester.publishIssue(issueGson,subscribe);
 
                 if(response == null){
-                    listener.onPublishFailure();
+                    listener.onPublishFailure("Server Error");
                 }else{
                     listener.onPublishSuccess(response);
                 }
 
-                try {
-                    IssueEvent issueEvent = new IssueEvent();
-                    issueEvent.eventType = "UPDATED";
-                    issueEvent.ticketId = response;
-                    issueEvent.property = IssueEvent.STATUS;
-                    issueEvent.value = Status.ACTIVE.name();
-
-                    issueGson = mGsonObj.toJson(issueEvent);
-                    IMqttDeliveryToken mqttDeliveryToken= mClient.publish("almanac/" + mSubscribeId + "/issue", issueGson.getBytes(), 1, false);
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    TicketEvent issueEvent = new TicketEvent(TicketEvent.Type.UPDATED,response,IssueEvent.STATUS,Status.ACTIVE.name());
+//
+//
+//                    issueGson = mGsonObj.toJson(issueEvent);
+//                    IMqttDeliveryToken mqttDeliveryToken= mClient.publish("almanac/" + mSubscribeId + "/issue", issueGson.getBytes(), 1, false);
+//                } catch (MqttException e) {
+//                    e.printStackTrace();
+//                }
             }
         }).start();
 
@@ -167,7 +168,8 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     public void subscribeForIssues(String subscribeId){
         try {
-            mClient.subscribe("almanac/" + subscribeId + "/issue", 1);
+            Log.i(TAG,"Subscribing to  " +"almanac/" + subscribeId + "/ticket");
+            mClient.subscribe("almanac/" + subscribeId + "/ticket", 1);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -190,7 +192,8 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         String issueGson = new String(mqttMessage.getPayload());
         Log.i(TAG,"Json:"+issueGson);
       //  if(s.endsWith(UPDATE)){
-        IssueEvent issueEvent = mGsonObj.fromJson(issueGson,IssueEvent.class);
+
+        TicketEvent issueEvent = mGsonObj.fromJson(issueGson, TicketEvent.class);
             for(MqttNotificationListener mqttNotificationListener:mqttNotificationListenerList){
                 mqttNotificationListener.onIssueUpdate(issueEvent);
             }

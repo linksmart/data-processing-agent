@@ -33,7 +33,10 @@
         <activity
             android:name=".CaptureActivity"
             android:label="@string/createNewIssue"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:parentActivityName=".AlmanacCitizen"
+            android:theme="@style/captureActivitytheme">
+            >
         </activity>
         <activity
             android:name="org.fraunhofer.fit.almanac.slider.ScreenSlideActivity"
