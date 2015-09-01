@@ -1,7 +1,6 @@
 package eu.almanac.event.datafusion.utils.epl;
 
 
-import com.sun.istack.internal.NotNull;
 import eu.linksmart.api.event.datafusion.Statement;
 
 
@@ -18,10 +17,12 @@ public class EPLStatement implements Statement {
     protected String source = null;
     protected String[] input =null;
     protected String[] output=null;
+
+
     protected String[] scope={"local"};
     protected String uuid =UUID.randomUUID().toString();
 
-    public static String hashIt(@NotNull String string){
+    public static String hashIt( String string){
         if(string == null)
             return "";
         MessageDigest SHA256 = null;

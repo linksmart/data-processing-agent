@@ -3,11 +3,12 @@ package eu.linksmart.gc.utils.mqtt.broker;
 
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.constants.Const;
+import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.subscription.ForwardingListener;
-import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -15,7 +16,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class BrokerService implements Observer {
-    protected Logger LOG = null;
+    protected static LoggerService loggerService;
     // this is the MQTT client to broker in the local broker
     private Configurator conf = Configurator.getDefaultConfig();
     protected MqttClient mqttClient;
@@ -34,10 +35,10 @@ public class BrokerService implements Observer {
 
 
 
-    BrokerService(String brokerName, String brokerPort, UUID ID, String serviceDescription) throws MqttException {
+    public BrokerService(String brokerName, String brokerPort, UUID ID, String serviceDescription) throws MqttException {
         listener = new ForwardingListener(this,ID);
 
-        LOG = Logger.getLogger(BrokerService.class.getName()+":"+serviceDescription);
+         loggerService = new LoggerService(LoggerFactory.getLogger(BrokerService.class));
         if (brokerName.equals("*"))
             this.brokerName = getHostName();
         else
@@ -59,8 +60,8 @@ public class BrokerService implements Observer {
             mqttClient.connect();
 
         }
-        startWatchdog();
-        LOG.info("MQTT broker is connected");
+       // startWatchdog();
+        loggerService.info("MQTT broker is connected");
     }
     protected void _disconnect() throws Exception {
 
@@ -69,9 +70,10 @@ public class BrokerService implements Observer {
 
             mqttClient.disconnect();
         }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
             throw e;
         }
-        LOG.info("MQTT broker is disconnected");
+        loggerService.info("MQTT broker is disconnected");
 
     }
     protected void _destroy() throws Exception {
@@ -80,10 +82,11 @@ public class BrokerService implements Observer {
         try {
 
             if(isConnect())
-                disconnect();
+                _disconnect();
 
             mqttClient.close();
         }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
             throw e;
         }
 
@@ -117,7 +120,7 @@ public class BrokerService implements Observer {
     }
 
     public void createClient() throws MqttException {
-        mqttClient = new MqttClient(getBrokerURL(),ID.toString(), new MemoryPersistence());
+        mqttClient = new MqttClient(getBrokerURL(),ID.toString()+":"+UUID.randomUUID().toString(), new MemoryPersistence());
 
         mqttClient.setCallback(listener);
     }
@@ -133,11 +136,16 @@ public class BrokerService implements Observer {
                         //noinspection SynchronizeOnNonFinalField
                         synchronized (watchdog) {
                             if (!isConnect())
-                                connect();
+                                _connect();
                         }
-                        Thread.sleep(conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT));
                     } catch (Exception e) {
-                        LOG.error("Error in the watch dog of broker service:"+e.getMessage(),e);
+                        loggerService.error("Error in the watch dog of broker service:"+e.getMessage(),e);
+                    }
+                    try {
+
+                        Thread.sleep(conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT));
+                    }catch (Exception e){
+                        loggerService.error(e.getMessage(),e);
                     }
                 }
             }
@@ -180,7 +188,7 @@ public class BrokerService implements Observer {
         }
         catch (UnknownHostException ex)
         {
-            LOG.error("Error while getting hostname:"+ex.getMessage(),ex);
+            loggerService.error("Error while getting hostname:"+ex.getMessage(),ex);
         }
         return hostname;
     }
@@ -256,7 +264,7 @@ public class BrokerService implements Observer {
         try {
             destroy();
         }catch (Exception e){
-            LOG.error("Error while restarting broker Service:"+e.getMessage(),e);
+            loggerService.error("Error while restarting broker Service:"+e.getMessage(),e);
         }
 
         createClient();
@@ -269,11 +277,15 @@ public class BrokerService implements Observer {
 
 
         try {
-            mqttClient.subscribe(topic);
-            listener.addObserver(topic, stakeholder);
+
+            _connect();
+
             topics.add(topic);
-        } catch (MqttException e) {
-                LOG.error(e.getMessage(), e);
+            String[] aux = topics.toArray(new String[topics.size()] ) ;
+            mqttClient.subscribe(aux);
+            listener.addObserver(topic, stakeholder);
+        } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
                 return false;
             }
         return true;
@@ -303,12 +315,12 @@ public class BrokerService implements Observer {
                         mqttClient.connect();
 
                     } catch (MqttException e) {
-                        LOG.error(e.getMessage(), e);
+                        loggerService.error(e.getMessage(), e);
                     }
                     try {
                         Thread.sleep(conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME));
                     } catch (InterruptedException e) {
-                        LOG.error(e.getMessage(), e);
+                        loggerService.error(e.getMessage(), e);
                     }
                 }
 

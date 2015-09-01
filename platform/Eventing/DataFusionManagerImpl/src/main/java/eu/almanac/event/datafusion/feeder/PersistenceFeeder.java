@@ -1,10 +1,7 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import eu.almanac.event.datafusion.esper.EsperQuery;
 import eu.almanac.event.datafusion.feeder.type.PersistentBean;
-import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Feeder;

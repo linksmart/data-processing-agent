@@ -113,6 +113,9 @@ public class DataFusionManagerCore {
             return false;
         }
 
+        feeders.add(feederImplEvents);
+        feeders.add(feederImplQuery);
+
         return true;
 
     }

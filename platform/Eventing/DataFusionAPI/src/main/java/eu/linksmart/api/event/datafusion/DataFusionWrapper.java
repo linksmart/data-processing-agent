@@ -1,7 +1,5 @@
 package eu.linksmart.api.event.datafusion;
 
-
-
 import java.util.Map;
 
 /**

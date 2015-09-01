@@ -121,7 +121,7 @@ public class RestStatementFeeder implements Feeder {
         else if (!error.equals("")&&statements.size()!=0)
             return new ResponseEntity<>(gson.toJson(statements)+error,HttpStatus.MULTI_STATUS);
 
-        return new ResponseEntity<>("Error 500"+error,HttpStatus.MULTI_STATUS);
+        return new ResponseEntity<>("Error 500: "+error,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -142,7 +142,9 @@ public class RestStatementFeeder implements Feeder {
                     statements.put(dfw.getName(), aux.get(id));
                 }
 
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
+
                 loggerService.error(e.getMessage(),e);
                 error+=e.getMessage()+"\n";
             }
@@ -162,16 +164,18 @@ public class RestStatementFeeder implements Feeder {
     }
     private static ResponseEntity<String> getStandardResponse(String engines,String error, String success, int count, int dfwCount){
 
-        if (count==0 && error.equals("") )
+        if(dfwCount==0)
+            return new ResponseEntity<>("There is no CEP engine available to process your request",HttpStatus.SERVICE_UNAVAILABLE);
+        else if (count==0 && error.equals("") )
             return new ResponseEntity<>("The provided ID no not exist",HttpStatus.BAD_REQUEST);
-        else  if(count== dfwCount)
+        else  if(count== dfwCount && error.equals(""))
             return new ResponseEntity<>("OK 200: Process with Statement ID "+success+" took place successfully in "+String.valueOf(count)+" engines",HttpStatus.OK);
         else if(error.equals(""))
             return new ResponseEntity<>("Multi-status 207: some of the engines did not found the requested ID ("+engines+") with your request",HttpStatus.MULTI_STATUS);
-        else if (!error.equals("")&&count!=0)
+        else if (!error.equals("")&&count!=dfwCount)
             return new ResponseEntity<>("Multi-status 207: some of the engines did not succeed  ("+engines+") with your request. Errors below:\n"+error,HttpStatus.MULTI_STATUS);
 
-        return new ResponseEntity<>("Error 500"+error,HttpStatus.MULTI_STATUS);
+        return new ResponseEntity<>("Error 500: "+error,HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @RequestMapping(value="/statement/add", method= RequestMethod.POST)
     public ResponseEntity<String> addStatement(
@@ -184,8 +188,12 @@ public class RestStatementFeeder implements Feeder {
         String engines="",error="";
         for(DataFusionWrapper dfw:dataFusionWrappers.values())
             try {
-                dfw.addStatement(statement);
+                if(!dfw.addStatement(statement)) {
+                    error += "Ups we have a problem." + "\n";
+                }
                 count++;
+            }catch (StatementException se){
+                return new ResponseEntity<>(se.getMessage(),HttpStatus.BAD_REQUEST);
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
                 error+=e.getMessage()+"\n";
