@@ -31,54 +31,64 @@
         <RelativeLayout
             android:id="@+id/Imagecontainer"
             android:layout_width="fill_parent"
-            android:layout_height="400dp"
+            android:layout_height="360dp"
             android:layout_alignParentEnd="true"
-
-
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="#00000000"
+
             >
 
             <ImageView
                 android:id="@+id/capturedImage"
                 android:layout_width="fill_parent"
-                android:layout_height="400dp"
-                android:scaleType="fitXY"
+                android:layout_height="fill_parent"
                 android:layout_alignParentStart="true"
-            />
+                android:scaleType="centerCrop" />
 
-            <TextView
-                android:id="@+id/nameOfIssue"
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:textColor="#FFFFFFFF"
-                android:textSize="32dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:textStyle="bold"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp" />
+                android:background="@drawable/shape_image_fader">
 
-            <ImageButton
-                android:id="@+id/unsubscribeButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:text="@string/upload"
-                android:src="@android:drawable/ic_menu_delete"
-                android:layout_gravity="right|top"
-                android:layout_alignParentEnd="true"
-                android:background="#00000000" />
+                <TextView
+                    android:id="@+id/nameOfIssue"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="32dp" />
+            </LinearLayout>
 
-            <ImageButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:id="@+id/backbutton"
-                android:src="@drawable/abc_ic_ab_back_mtrl_am_alpha"
-                android:background="#00000000"
-                android:layout_gravity="bottom|left"
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:background="@drawable/shape_image_fader">
+
+                <ImageButton
+                    android:id="@+id/unsubscribeButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="right|top"
+                    android:background="#00000000"
+                    android:src="@android:drawable/ic_menu_delete"
+                    android:text="@string/upload" />
+
+                <ImageButton
+                    android:id="@+id/backbutton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="bottom|left"
+                    android:background="#00000000"
+                    android:src="@drawable/abc_ic_ab_back_mtrl_am_alpha" />
+            </RelativeLayout>
         </RelativeLayout>
 
         <LinearLayout
@@ -86,42 +96,107 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Imagecontainer"
-            android:orientation="vertical"
-            android:background="@drawable/shape_itemdescription"
             android:layout_margin="2dp"
+            android:background="@drawable/shape_itemdescription"
+            android:orientation="vertical"
             android:padding="2dp">
-            <TextView
-                android:id="@+id/issueStatus"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:textColor="#FF000000"
-                android:textSize="16dp"
-                android:background="@drawable/shape_itemdescription"/>
-            <TextView
-                android:id="@+id/issuePriority"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:textColor="#FF000000"
-                android:textSize="16dp"
-                android:background="@drawable/shape_itemdescription"
-                android:text="fsdfdsfgdg" />
 
-            <TextView
-                android:id="@+id/completionDate"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:textColor="#FF000000"
-                android:textSize="16dp"
-                android:background="@drawable/shape_itemdescription"/>
-
-            <TextView
-                android:id="@+id/issueComment"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FF000000"
-                android:textSize="16dp"
-                android:background="@drawable/shape_itemdescription"/>
+                android:background="@drawable/shape_itemdescription"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/issueStatusheading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/StatusString"
+                    android:textColor="@color/textDescriptionColor"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/issueStatus"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:textColor="@color/textDescriptionColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_itemdescription"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/issuePriorityheading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/PriorityString"
+                    android:textColor="@color/textDescriptionColor"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/issuePriority"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+
+                    android:layout_marginLeft="30dp"
+                    android:text="fsdfdsfgdg"
+                    android:textColor="@color/textDescriptionColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_itemdescription"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/completionDateHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/completionDateString"
+                    android:textColor="@color/textDescriptionColor"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/completionDate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+
+                    android:layout_marginLeft="30dp"
+                    android:textColor="@color/textDescriptionColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/commentLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_itemdescription"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/issueCommentHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/comentString"
+                    android:textColor="@color/textDescriptionColor"
+                    android:textSize="10dp" />
+
+                <TextView
+                    android:id="@+id/issueComment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="30dp"
+                    android:textColor="@color/textDescriptionColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>

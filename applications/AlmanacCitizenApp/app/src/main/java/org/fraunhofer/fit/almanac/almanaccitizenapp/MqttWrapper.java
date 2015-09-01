@@ -17,6 +17,8 @@ import org.fraunhofer.fit.almanac.model.Status;
 import org.fraunhofer.fit.almanac.protocols.MqttListener;
 import org.fraunhofer.fit.almanac.util.UniqueId;
 
+import eu.linksmart.smartcity.issue.TicketEvent;
+
 /**
  * Created by devasya on 20.08.2015.
  */
@@ -30,9 +32,16 @@ public class MqttWrapper implements MqttListener.MqttNotificationListener {
 
     private  MqttWrapper(Context context) {
         mContext = context;
-        mIssueTracker = initializeIssueTracker(context);;
+        mIssueTracker = initializeIssueTracker(context);
         mMqttListener = setupMqtt(context);
-        Log.i(TAG, this.toString());
+        mIssueTracker.subscribeDeletion(new IssueTracker.DeletionListener() {
+            @Override
+            public void onDelete(String IssueId) {
+                mMqttListener.unsubscribeIssue(IssueId);
+            }
+        });
+
+
     }
 
     protected IssueTracker  initializeIssueTracker(Context context){
@@ -57,7 +66,7 @@ public class MqttWrapper implements MqttListener.MqttNotificationListener {
         return mqttListener;
     }
     @Override
-        public void onIssueUpdate(final IssueEvent issueEvent) {
+        public void onIssueUpdate(final TicketEvent issueEvent) {
 
             //Toast.makeText(getActivity().getApplicationContext(),"Got a message on name"+issueUpdate.name,Toast.LENGTH_SHORT).show();
 //                    new AlertDialog.Builder(getApplicationContext())
@@ -68,7 +77,7 @@ public class MqttWrapper implements MqttListener.MqttNotificationListener {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i(TAG, "onIssueUpdate2:" + issueEvent.getString());
+                    Log.i(TAG, "onIssueUpdate2:" + issueEvent.getEventType());
                     notifyUser(issueEvent);
                     mIssueTracker.updateIssue(issueEvent);
 //                    runOnUiThread(new Runnable() {
@@ -89,22 +98,22 @@ public class MqttWrapper implements MqttListener.MqttNotificationListener {
 
 
 
-    public  String getNotificationMessage(IssueEvent issueEvent,IssueStatus issueStatus){
+    public  String getNotificationMessage(TicketEvent issueEvent,IssueStatus issueStatus){
 
-        Event event = Event.valueOf(issueEvent.eventType);
-        switch (event){
+        switch (issueEvent.getEventType()){
             case DELETED:
                 return "closed";
             case UPDATED:
-                switch (issueEvent.property){
+                switch (issueEvent.getProperty()){
                     case IssueEvent.STATUS:
-                        Status status = Status.valueOf(issueEvent.value);
+                        Status status = Status.valueOf(issueEvent.getValue());
                         return Status.toReadableString(status);
                     case IssueEvent.PRIORITY:
-                        Priority priority = Priority.valueOf(issueEvent.value);
-                        return "Priority changed from "+issueStatus.priority+" to "+ Priority.readableString(priority);
+                        Priority priority = Priority.valueOf(issueEvent.getValue());
+                        return "Priority changed from "+
+                                (issueStatus.priority==null?"unclassified":issueStatus.priority)+" to "+ Priority.readableString(priority);
                     case IssueEvent.TIME2COMPL:
-                        return "will be addressed within "+issueEvent.value;
+                        return "will be addressed within "+issueEvent.getValue();
 
                 }
                 break;
@@ -117,29 +126,30 @@ public class MqttWrapper implements MqttListener.MqttNotificationListener {
 
 
 
-    private void notifyUser(IssueEvent issueEvent) {
+    private void notifyUser(TicketEvent issueEvent) {
 
-        IssueStatus issueStatus = mIssueTracker.getIssue(issueEvent.ticketId);
-        String contentText = getNotificationMessage(issueEvent,issueStatus);
-        Log.i(TAG, "notify user:" + contentText);
-        if(contentText != null) {
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(mContext)
-                            .setSmallIcon(R.drawable.waste_container)
-                            .setContentTitle(issueStatus.name)
-                            .setContentText(contentText)
-                            .setAutoCancel(true);
-            Intent resultIntent = new Intent(mContext, AlmanacCitizen.class);
-            PendingIntent pIntent = PendingIntent.getActivity(mContext, 0, resultIntent, 0);
+        IssueStatus issueStatus = mIssueTracker.getIssue(issueEvent.getTicketId());
+        if(issueStatus != null) {
+            String contentText = getNotificationMessage(issueEvent, issueStatus);
+            Log.i(TAG, "notify user:" + contentText);
+            if (contentText != null) {
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(mContext)
+                                .setSmallIcon(R.drawable.waste_container)
+                                .setContentTitle(issueStatus.name)
+                                .setContentText(contentText)
+                                .setAutoCancel(true);
+                Intent resultIntent = new Intent(mContext, AlmanacCitizen.class);
+                PendingIntent pIntent = PendingIntent.getActivity(mContext, 0, resultIntent, 0);
 
-            mBuilder.setContentIntent(pIntent);
-            NotificationManager mNotificationManager =
-                    (NotificationManager) mContext.getSystemService(mContext.NOTIFICATION_SERVICE);
-            // mId allows you to update the notification later on.
-            mNotificationManager.notify(AlmanacCitizen.ID_NEW_UPDATE, mBuilder.build());
+                mBuilder.setContentIntent(pIntent);
+                NotificationManager mNotificationManager =
+                        (NotificationManager) mContext.getSystemService(mContext.NOTIFICATION_SERVICE);
+                // mId allows you to update the notification later on.
+                mNotificationManager.notify(AlmanacCitizen.ID_NEW_UPDATE, mBuilder.build());
 
+            }
         }
-
 
     }
 }

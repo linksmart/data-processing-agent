@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
 
 import org.fraunhofer.fit.almanac.model.DuplicateIssue;
 import org.fraunhofer.fit.almanac.model.Event;
@@ -27,6 +28,7 @@ import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
 import org.fraunhofer.fit.almanac.model.Priority;
 import org.fraunhofer.fit.almanac.model.Status;
 import org.fraunhofer.fit.almanac.protocols.MqttListener;
+import org.fraunhofer.fit.almanac.util.NetworkUtil;
 import org.fraunhofer.fit.almanac.util.UniqueId;
 
 import java.text.DateFormat;
@@ -98,9 +100,18 @@ public class AlmanacCitizen extends AppCompatActivity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         mImageListFragment = ImageListFragment.newInstance(position + 1);
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, mImageListFragment)
-                .commit();
+        Log.i(TAG,"onNavigationDrawerItemSelected pos: "+position);
+        if(position != 0) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, mImageListFragment)
+                    .addToBackStack("homepage")
+                    .commit();
+        }else{
+            fragmentManager.popBackStack("homepage", android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, mImageListFragment)
+                    .commit();
+        }
     }
 
     public void onSectionAttached(int number) {
@@ -163,6 +174,10 @@ public class AlmanacCitizen extends AppCompatActivity
 
 
     public void onNewIssueSelected() {
+        if(!NetworkUtil.isConnectionAvailable(getApplicationContext())){
+            Toast.makeText(getApplicationContext(), getString(R.string.this_needs_internet_connection), Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(this,CaptureActivity.class);
         startActivityForResult(intent,CAPTURE_AND_UPLOAD);
     }

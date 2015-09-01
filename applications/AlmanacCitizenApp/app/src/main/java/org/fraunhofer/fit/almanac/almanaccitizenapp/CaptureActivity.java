@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -21,29 +22,27 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import org.fraunhofer.fit.almanac.model.PicIssue;
-
-
 import org.fraunhofer.fit.almanac.protocols.MqttListener;
 import org.fraunhofer.fit.almanac.util.BitmapUtils;
+import org.fraunhofer.fit.almanac.util.NetworkUtil;
 import org.fraunhofer.fit.almanac.util.UniqueId;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
+
+import eu.linksmart.smartcity.issue.Attachment;
+import eu.linksmart.smartcity.issue.Issue;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class CaptureActivity extends Activity{
+public class CaptureActivity extends AppCompatActivity {
 
 
     public static final String RESULT_FIELD = "result";
@@ -60,8 +59,7 @@ public class CaptureActivity extends Activity{
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    final ImageButton uploadButton = (ImageButton) findViewById(R.id.uploadButton);
-                    uploadButton.setEnabled(true);
+                    getSupportActionBar().show();
                     Toast.makeText(getApplicationContext(), "Uploaded successfully", Toast.LENGTH_LONG).show();
 
                     final CheckBox checkBox = (CheckBox) findViewById(R.id.checkSubscribe);
@@ -72,8 +70,8 @@ public class CaptureActivity extends Activity{
                         if(null != mPictureBitmap)
                             filepath =  storeImageToFile(mPictureBitmap, UniqueId.generateUUID().substring(1,5));
 
-                        mPicissue.id = response;
-                        IssueTracker.getInstance().addNewIssue(mPicissue,checkBox.isChecked(),filepath);
+
+                        IssueTracker.getInstance().addNewIssue(response,mPicissue,checkBox.isChecked(),filepath);
                     }
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(RESULT_FIELD, "publish_success");
@@ -87,20 +85,26 @@ public class CaptureActivity extends Activity{
         }
 
         @Override
-        public void onPublishFailure() {
+        public void onPublishFailure(final String cause) {
             Log.i(TAG, "Publish failed");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getSupportActionBar().show();
+                    Toast.makeText(getApplicationContext(), "Uploading failed:"+cause , Toast.LENGTH_LONG).show();
+                }
+            });
 
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra(RESULT_FIELD, "publish_failed");
-            setResult(RESULT_OK, returnIntent);
-            finish();
+//            Intent returnIntent = new Intent();
+//            returnIntent.putExtra(RESULT_FIELD, "publish_failed");
+//            setResult(RESULT_OK, returnIntent);
+//            finish();
 
         }
 
     }   ;
-    private PicIssue mPicissue;
+    private Issue mPicissue;
     private Bitmap mPictureBitmap;
-    private ActionMode mActionMode;
     private Uri mImageUri;
 
     public String getRealPathFromURI(Uri contentUri) {
@@ -140,13 +144,7 @@ public class CaptureActivity extends Activity{
 
         mqttListener = MqttListener.getInstance();
 
-        final ImageButton uploadButton = (ImageButton) findViewById(R.id.uploadButton);
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onclickUploadButton(v);
-            }
-        });
+
 //        final ImageButton cancelBotton = (ImageButton) findViewById(R.id.cancelButton);
 //        cancelBotton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -154,13 +152,7 @@ public class CaptureActivity extends Activity{
 //                onclickcancelBotton(v);
 //            }
 //        });
-        final ImageButton cancelBotton = (ImageButton) findViewById(R.id.cancelButton);
-        cancelBotton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onclickcancelBotton(v);
-            }
-        });
+
         final ImageView image = (ImageView) findViewById(R.id.capturedImage);
         if (savedInstanceState != null) {
             mPictureBitmap = savedInstanceState.getParcelable(SAVED_CAPTURED_IMAGE);
@@ -195,9 +187,32 @@ public class CaptureActivity extends Activity{
         });
 
         registerForContextMenu(image);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // Enabling Up / Back navigation
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.capture_activity_menus, menu);
+        return super.onCreateOptionsMenu(menu);
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO Auto-generated method stub
+        // Respond to clicks on the actions in the CAB
+        switch (item.getItemId()) {
+            case R.id.menu_upload:
+                onclickUploadButton();
+                return true;
+            default:
+                return false;
+        }
+    }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -222,45 +237,57 @@ public class CaptureActivity extends Activity{
     }
 
 
-    private void onclickUploadButton(View v) {
+    private void onclickUploadButton() {
         {
 
             Log.i(TAG,"Im onclick");
 // Or use LocationManager.GPS_PROVIDER
             Location lastKnownLocation = getLastKnownLocation();
+            EditText nameOfIssue = (EditText) findViewById(R.id.issueName);
+            if(nameOfIssue.getText().toString().isEmpty()){
+                Toast.makeText(getApplicationContext(), getString(R.string.give_a_name), Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(!NetworkUtil.isConnectionAvailable(getApplicationContext())){
+                Toast.makeText(getApplicationContext(), getString(R.string.this_needs_internet_connection), Toast.LENGTH_LONG).show();
+                return;
+            }
             if (lastKnownLocation != null) {
                 Log.i(TAG,"locationManager is not null");
 
+                getSupportActionBar().hide();
+                Issue picIssue = new Issue(null,null,null);
 
-                PicIssue picIssue = new PicIssue();
+                eu.linksmart.smartcity.issue.Location location = new eu.linksmart.smartcity.issue.Location(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
+
+                picIssue.setLocation(location);
+
+                picIssue.setOrigin(UniqueId.getDeviceId(getApplicationContext()));
 
 
-                picIssue.latitude = lastKnownLocation.getLatitude();
-                picIssue.longitude = lastKnownLocation.getLongitude();
-
-                picIssue.origin = UniqueId.getDeviceId(getApplicationContext());
-
-
-                Log.i(TAG, "publishing " + picIssue.getString());
+                Log.i(TAG, "publishing " + picIssue.getLabel());
                 if(null != mPictureBitmap) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     mPictureBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    picIssue.pic = stream.toByteArray();
-                    picIssue.contentType = "image/jpeg";
+                    Attachment attachment = new Attachment(stream.toByteArray(),"image/jpeg","trash.jpg");
+                    picIssue.setAttachment(attachment);
+
                 }
-                EditText nameOfIssue = (EditText) findViewById(R.id.issueName);
-                picIssue.name = nameOfIssue.getText().toString();
+
+                picIssue.setLabel(nameOfIssue.getText().toString());
 
                 EditText commentBox = (EditText) findViewById(R.id.commentBox);
-                picIssue.comment = commentBox.getText().toString();
+                picIssue.setDescription(commentBox.getText().toString());
 
-                v.setEnabled(false);
+                final CheckBox checkBox = (CheckBox) findViewById(R.id.checkSubscribe);
+                picIssue.setSubscribed(checkBox.isChecked());
 
                 mPicissue = picIssue;
 
-                final CheckBox checkBox = (CheckBox) findViewById(R.id.checkSubscribe);
+
 
                 mqttListener.publishIssue(picIssue,mqttPublishResultListener,checkBox.isChecked());
+
             }
             else{
                 Toast.makeText(getApplicationContext(), getString(R.string.locationFail), Toast.LENGTH_LONG).show();
@@ -270,7 +297,7 @@ public class CaptureActivity extends Activity{
 
 
 
-    private void onclickcancelBotton(View v) {
+    private void onclickcancelBotton() {
         Log.i(TAG,"Cancel pressed. Finishing the activity");
         Intent returnIntent = new Intent();
         setResult(RESULT_CANCELED, returnIntent);

@@ -19,6 +19,9 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
 import org.fraunhofer.fit.almanac.model.IssueStatus;
 import org.fraunhofer.fit.almanac.slider.ScreenSlideActivity;
@@ -33,9 +36,9 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
     private static final Object SHOW_IMAGE = 32;
     private static final String ARG_SECTION_NUMBER = "SectionNumber";
     private static final int BIN_COLLECTION = 1;
-    private GridView mGridview;
+    private StickyGridHeadersGridView mGridview;
     private int mSectionNumber;
-
+    private ImageAdapter mGridAdapter;
 
 
     public void setVisibility(int visibility) {
@@ -90,6 +93,8 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
 
         View rootView =  inflater.inflate(R.layout.fragment_image_list, container, false);
 
+        TextView comingSoon = (TextView) rootView.findViewById(R.id.comingSoon);
+        comingSoon.setVisibility(View.GONE);
         return rootView;
 
     }
@@ -98,8 +103,9 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mGridview = (GridView) getView().findViewById(R.id.gridview);
-        mGridview.setAdapter(new ImageAdapter(getActivity().getApplicationContext()));
+        mGridview = (StickyGridHeadersGridView) getView().findViewById(R.id.gridview);
+        mGridAdapter = new ImageAdapter(getActivity().getApplicationContext());
+        mGridview.setAdapter(mGridAdapter);
         mGridview.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
 
         mGridview.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
@@ -151,12 +157,12 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
 
                 int selectCount = mGridview.getCheckedItemCount();
 
-                Log.i(TAG, "One item long clicked position:"+position + " child count:"+mGridview.getChildCount());
+                Log.i(TAG, "One item long clicked position:" + position + " child count:" + mGridview.getChildCount());
                 //   RelativeLayout item = (RelativeLayout) gridview.getChildAt(position);
                 //   item.setSelected(gridview.isItemChecked(position));
                 //   item.setActivated(gridview.isItemChecked(position));
                 // gridview.setItemChecked(position,gridview.isItemChecked(position));
-             //   mGridview.getChildAt(position).findViewById(R.id.containerLayout);
+                //   mGridview.getChildAt(position).findViewById(R.id.containerLayout);
                 switch (selectCount) {
                     case 1:
                         mode.setSubtitle("One item selected");
@@ -213,11 +219,17 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
     private void deleteSelectedItems() {
         int count = mGridview.getCount();
         List<IssueStatus> itemsTobeDeleted = new LinkedList(); //This is to avoid inconsistencies that occur in getItemAtPosition after deletion of items
+
         for(int i= 0; i < count; i++){
             if(mGridview.isItemChecked(i)) {
                 mGridview.setItemChecked(i, false);
-                Log.i(TAG, i + "th items to be deleted");
-                itemsTobeDeleted.add((IssueStatus) mGridview.getItemAtPosition(i));
+
+                int index = mGridAdapter.mapPositionToIndex(i,mGridview.getNumColumns());
+                Log.i(TAG, i + "th items to be deleted index =" +index);
+                if(index >= 0) {
+                    IssueStatus issueStatus = (IssueStatus) mGridAdapter.getItem(index);
+                    itemsTobeDeleted.add(issueStatus);
+                }
 
             }
         }
@@ -230,7 +242,7 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
 
     public void publishDone(){
         Log.i(TAG, "publish done");
-        mGridview.invalidateViews();//this is to redraw the grid view
+        onChange();
 //        setUpdatedItems();
     }
 
@@ -244,10 +256,10 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.i(TAG, "Clicked");
+            Log.i(TAG, "Clicked pos "+position);
             Intent intent = new Intent(getActivity(), ScreenSlideActivity.class);
             intent.putExtra(ScreenSlideActivity.INDEX_POSITION, position);
-//            IssueTracker.getInstance().resetUpdated();
+
             getActivity().startActivity(intent);
         }
     };
@@ -272,7 +284,7 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
+                Log.i(TAG, "calling invalidateViews");
                 mGridview.invalidateViews();
 
             }

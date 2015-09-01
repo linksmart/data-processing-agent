@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context="org.fraunhofer.fit.almanac.almanaccitizen.ImageListFragment">
 
-    <GridView
+    <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
     android:id="@+id/gridview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +13,7 @@
     android:stretchMode="columnWidth"
     android:gravity="center"
     android:paddingTop="20dp"
- />
+        android:alpha="1" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/newIssue"
@@ -30,5 +30,11 @@
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Coming soon!!"
+        android:id="@+id/comingSoon"
+        android:layout_gravity="center" />
 </FrameLayout>
