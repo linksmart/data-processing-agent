@@ -338,7 +338,9 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
 
             if (query.haveOutput())
                 for (String output : query.getOutput()) {
-                    brokerService.publish(output + "/" + query.getHash(),   parser.writeValueAsString(ent).getBytes());
+                    if(output.lastIndexOf(0)!='/')
+                        output+='/';
+                    brokerService.publish(output + query.getHash(),   parser.writeValueAsString(ent).getBytes());
                 }
             else
                 brokerService.publish(Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH) + query.getHash(), parser.writeValueAsString(ent).getBytes());
