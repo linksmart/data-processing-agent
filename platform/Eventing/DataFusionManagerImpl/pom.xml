@@ -11,7 +11,7 @@
     <artifactId>DataFusionManagerImpl</artifactId>
 
 
-    <name>DataFusionManagerCore</name>
+    <name>DataFusionManagerImpl</name>
     <description>Data Fusion Manager  - The implementation of the Data Fusion service in almanac</description>
 
     <dependencies>
@@ -89,10 +89,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
