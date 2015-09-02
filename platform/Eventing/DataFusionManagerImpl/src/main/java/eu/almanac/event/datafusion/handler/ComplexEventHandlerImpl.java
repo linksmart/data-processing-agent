@@ -82,14 +82,22 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
 
         try {
 
-            if(!knownInstances.containsKey(query.getScope(0).toLowerCase()))
-                throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(),"The selected scope ("+query.getScope(0)+") is unknown");
-            for(String scope: query.getScope())
-                brokerServices.add( StaticBrokerService.getBrokerService(
+            String[] scopes;
+
+            if(query.getScope().length==0){
+                scopes = new String[]{"local"};
+            }else
+                scopes = query.getScope();
+
+            for(String scope: scopes) {
+                if (!knownInstances.containsKey(scope.toLowerCase()))
+                    throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), "The selected scope (" + query.getScope(0) + ") is unknown");
+                brokerServices.add(StaticBrokerService.getBrokerService(
                         this.getClass().getCanonicalName(),
                         knownInstances.get(scope.toLowerCase()).getKey(),
                         knownInstances.get(scope.toLowerCase()).getValue()
                 ));
+            }
 
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
