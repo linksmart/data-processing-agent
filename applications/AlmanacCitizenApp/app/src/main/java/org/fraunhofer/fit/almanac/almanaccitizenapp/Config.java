@@ -5,4 +5,5 @@ package org.fraunhofer.fit.almanac.almanaccitizenapp;
  */
 public class Config {
     public static final boolean TESTLOCALLY = false;
+    public static final boolean HARDCODE_LOCATION = true;
 }

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -95,6 +96,10 @@ public class ImageListFragment extends Fragment implements IssueTracker.ChangeLi
 
         TextView comingSoon = (TextView) rootView.findViewById(R.id.comingSoon);
         comingSoon.setVisibility(View.GONE);
+
+        ImageView waterTap = (ImageView) rootView.findViewById(R.id.water_tap);
+        waterTap.setVisibility(View.GONE);
+
         return rootView;
 
     }

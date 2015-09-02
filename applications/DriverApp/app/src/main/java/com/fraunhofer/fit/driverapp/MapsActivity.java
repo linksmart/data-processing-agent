@@ -75,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
 
 
-    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
+    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.061669, 7.676637);//45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
 
     RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
 
@@ -284,19 +284,19 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
                 .title("Your location")
                 .icon(curLocIcon).rotation(300));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mOriginalLocation.getLatLng(), (float) 15));
-        if(getResources().getBoolean(R.bool.testLocally)) {
-            addDustBinMap(LOC_C1);
-            addDustBinMap(LOC_B);
-
-            addDustBinMap(LOC_C);
-
-            addDustBinMap(LOC_D);
-            addDustBinMap(LOC_E);
-            addDustBinMap(LOC_F);
-            addDustBinMap(LOC_G);
-
-            CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
-        }
+//        if(getResources().getBoolean(R.bool.testLocally)) {
+//            addDustBinMap(LOC_C1);
+//            addDustBinMap(LOC_B);
+//
+//            addDustBinMap(LOC_C);
+//
+//            addDustBinMap(LOC_D);
+//            addDustBinMap(LOC_E);
+//            addDustBinMap(LOC_F);
+//            addDustBinMap(LOC_G);
+//
+//            CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
+//        }
 
         Toast.makeText(getApplicationContext(), getResources().getString(R.string.ToastOnStartup), Toast.LENGTH_SHORT).show();   // shows a toast with the text spoken
       /*  PolygonOptions polygonOptions = new PolygonOptions();
@@ -464,6 +464,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color),1,true);
         tellToDriver(UTTER_UPDATE_SUCCESS);
        // getUserConfirmationForUpdate();
+        mqttListener.publishforTest();
 
     }
 
