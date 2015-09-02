@@ -75,22 +75,23 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
 
 
-    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.061669, 7.676637);//45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
-
-    RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
-
-    RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
-
-    RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
-
-
-    RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
-
-    RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091,    7.66843825 );//45.06818793,7.70531799);
-
-    RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
-
-    RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+//    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.061669, 7.676637);//45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
+//
+//    RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
+//
+//    RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
+//
+//    RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
+//
+//
+//    RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
+//
+//    RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091,    7.66843825 );//45.06818793,7.70531799);
+//
+//    RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
+//
+//    RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.054942, 7.672048);//45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
 
 
 

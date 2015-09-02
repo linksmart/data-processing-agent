@@ -248,8 +248,8 @@ public class CaptureActivity extends AppCompatActivity {
             Location lastKnownLocation;
             lastKnownLocation = getLastKnownLocation();
             if(Config.HARDCODE_LOCATION){
-                lastKnownLocation.setLatitude(45.0502000);
-                lastKnownLocation.setLongitude(7.6697440);
+                lastKnownLocation.setLatitude(45.048770);
+                lastKnownLocation.setLongitude(7.668163);
 
 
             }
