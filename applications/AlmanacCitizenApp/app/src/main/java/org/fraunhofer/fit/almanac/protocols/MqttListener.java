@@ -1,8 +1,10 @@
 package org.fraunhofer.fit.almanac.protocols;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 
@@ -276,9 +278,16 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         protected String doInBackground(Context... params) {
             if(mClient == null) {
 
-                Log.i(TAG, "connecting to eclipse");
-                mClient = new MqttAndroidClient(params[0], "tcp://m2m.eclipse.org:1883", mClientId);//tcp://m2m.eclipse.org:1883
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+                boolean eclispe_enabled = sharedPref.getBoolean("eclipse_enabled", false);
 
+                if(eclispe_enabled) {
+                    Log.i(TAG, "connecting to eclipse");
+                    mClient = new MqttAndroidClient(params[0], "tcp://m2m.eclipse.org:1883", mClientId);//tcp://m2m.eclipse.org:1883
+                }else {
+                    Log.i(TAG, "connecting to almanac");
+                    mClient = new MqttAndroidClient(params[0], "tcp://almanac.fit.fraunhofer.de:1883", mClientId);//tcp://m2m.eclipse.org:1883
+                }
                 MqttConnectOptions connOpts = new MqttConnectOptions();
                 connOpts.setCleanSession(true);
                 try {
