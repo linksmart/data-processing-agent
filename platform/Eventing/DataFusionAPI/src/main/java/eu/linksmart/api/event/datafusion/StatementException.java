@@ -1,7 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
 /**
- * Created by José Ángel Carvajal on 12.08.2015 a researcher of Fraunhofer FIT.
+ * Created by Jose Angel Carvajal on 12.08.2015 a researcher of Fraunhofer FIT.
  */
 public class StatementException extends Exception {
 
