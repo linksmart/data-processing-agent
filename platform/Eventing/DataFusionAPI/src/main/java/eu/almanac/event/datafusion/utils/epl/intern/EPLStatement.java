@@ -1,7 +1,7 @@
 package eu.almanac.event.datafusion.utils.epl.intern;
 
 /**
- * Created by José Ángel Carvajal on 31.08.2015 a researcher of Fraunhofer FIT.
+ * Created by Jose Angel Carvajal on 31.08.2015 a researcher of Fraunhofer FIT.
  */
 public class EPLStatement extends eu.almanac.event.datafusion.utils.epl.EPLStatement {
     public void setScope(String[] scope) {
