@@ -24,6 +24,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import org.fraunhofer.fit.almanac.protocols.MqttListener;
 import org.fraunhofer.fit.almanac.util.BitmapUtils;
 import org.fraunhofer.fit.almanac.util.NetworkUtil;
@@ -242,7 +245,14 @@ public class CaptureActivity extends AppCompatActivity {
 
             Log.i(TAG,"Im onclick");
 // Or use LocationManager.GPS_PROVIDER
-            Location lastKnownLocation = getLastKnownLocation();
+            Location lastKnownLocation;
+            lastKnownLocation = getLastKnownLocation();
+            if(Config.HARDCODE_LOCATION){
+                lastKnownLocation.setLatitude(45.048770);
+                lastKnownLocation.setLongitude(7.668163);
+
+
+            }
             EditText nameOfIssue = (EditText) findViewById(R.id.issueName);
             if(nameOfIssue.getText().toString().isEmpty()){
                 Toast.makeText(getApplicationContext(), getString(R.string.give_a_name), Toast.LENGTH_LONG).show();

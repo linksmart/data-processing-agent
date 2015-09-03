@@ -42,6 +42,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     private MqttAndroidClient mClient ;
     private Context mContext;
     RouteUpdateHandler mRouteUpdateHandler;
+    private boolean mUpdateDone;
 
 
     public void connect(Context context,RouteUpdateHandler routeUpdateHandler){
@@ -73,20 +74,36 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         }
         if(s.equals(topic)) {
             mRouteUpdateHandler.handleUpdateNodeList(routeEndpointsList);
+//            if(mContext.getResources().getBoolean(R.bool.testLocally) && !mUpdateDone) {
+//
+//                ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
+//                RouteEndpoint TOY_BIN = new RouteEndpoint();
+//                TOY_BIN.geoLocation(45.061148, 7.700376);//45.064537048339844, 7.696494102478027);//45.06723305,    7.70074879);
+//                TOY_BIN.setId("TOY_BIN");
+//                routeEndpointsListToPub.add(TOY_BIN);
+//
+//
+//                String issueGsonToPub = gsonObj.toJson(routeEndpointsListToPub);
+//                Log.i(TAG, "publishing toy bin2");
+//                mClient.publish(topic, issueGsonToPub.getBytes(), 1, false);
+//                mUpdateDone = true;
+//            }
         }else if(s.equals(init_topic)){
             mRouteUpdateHandler.handleInitNodeList(routeEndpointsList);
             Log.i(TAG, "got init "+ mContext.getResources().getBoolean(R.bool.testLocally));
             if(mContext.getResources().getBoolean(R.bool.testLocally)) {
+
                 ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
-                RouteEndpoint TOY_BIN = new RouteEndpoint();
-                TOY_BIN.geoLocation(45.061148, 7.700376);//45.064537048339844, 7.696494102478027);//45.06723305,    7.70074879);
-                TOY_BIN.setId("TOY_BIN");
+
+                RouteEndpoint TOY_BIN = new RouteEndpoint("LOC_G",45.048770, 7.668163);
+
                 routeEndpointsListToPub.add(TOY_BIN);
 
 
                 String issueGsonToPub = gsonObj.toJson(routeEndpointsListToPub);
                 Log.i(TAG, "publishing toy bin");
                 mClient.publish(topic, issueGsonToPub.getBytes(), 1, false);
+                mUpdateDone = false;
             }
         }
     }
@@ -114,21 +131,36 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
                 ArrayList<RouteEndpoint> routeEndpointsList = new ArrayList<RouteEndpoint>();
 
 
-                RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
-                routeEndpointsList.add(LOC_C1);
-                RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
+//                RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
+//                routeEndpointsList.add(LOC_C1);
+//                RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
+//                routeEndpointsList.add(LOC_B);
+//                RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
+//
+//                routeEndpointsList.add(LOC_C);
+//                RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
+//                routeEndpointsList.add(LOC_D);
+//                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091, 7.66843825 );//45.06818793,7.70531799);
+//                routeEndpointsList.add(LOC_E);
+//                RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
+//                routeEndpointsList.add(LOC_F);
+
+
+                RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.057015, 7.670879);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
                 routeEndpointsList.add(LOC_B);
-                RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
+                RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.062447, 7.674726 );
+                routeEndpointsList.add(LOC_C1);
+                RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.063079, 7.677705 );
 
                 routeEndpointsList.add(LOC_C);
-                RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
+                RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.062180, 7.680028 );
                 routeEndpointsList.add(LOC_D);
-                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091, 7.66843825 );//45.06818793,7.70531799);
+                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.060872, 7.679103 );//45.06818793,7.70531799);
                 routeEndpointsList.add(LOC_E);
-                RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
+                RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.053894, 7.675624);
                 routeEndpointsList.add(LOC_F);
-                RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
-                routeEndpointsList.add(LOC_G);
+//                RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+//                routeEndpointsList.add(LOC_G);
 
 
 
@@ -163,6 +195,27 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     }
 
+    public void  publishforTest(){
+        Gson gsonObj = new Gson();
+        if(mContext.getResources().getBoolean(R.bool.testLocally) && !mUpdateDone) {
+
+            ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
+            RouteEndpoint TOY_BIN = new RouteEndpoint();
+            TOY_BIN.geoLocation(45.053309, 7.665539);//(45.061148, 7.700376);
+            TOY_BIN.setId("TOY_BIN");
+            routeEndpointsListToPub.add(TOY_BIN);
+
+
+            String issueGsonToPub = gsonObj.toJson(routeEndpointsListToPub);
+            Log.i(TAG, "publishing toy bin2");
+            try {
+                mClient.publish(topic, issueGsonToPub.getBytes(), 1, false);
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+            mUpdateDone = true;
+        }
+    }
 
     private class MqttserviceTask extends AsyncTask<Context,Void,String> {
 

@@ -75,22 +75,23 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
 
 
 
-    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
-
-    RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
-
-    RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
-
-    RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
-
-
-    RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
-
-    RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091,    7.66843825 );//45.06818793,7.70531799);
-
-    RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
-
-    RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+//    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.061669, 7.676637);//45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
+//
+//    RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
+//
+//    RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
+//
+//    RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
+//
+//
+//    RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
+//
+//    RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091,    7.66843825 );//45.06818793,7.70531799);
+//
+//    RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
+//
+//    RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+    RouteEndpoint LOC_A = new RouteEndpoint("LOC_A",45.054942, 7.672048);//45.067104, 7.680549);//45.07277297973633, 7.693530082702637 );
 
 
 
@@ -284,19 +285,19 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
                 .title("Your location")
                 .icon(curLocIcon).rotation(300));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mOriginalLocation.getLatLng(), (float) 15));
-        if(getResources().getBoolean(R.bool.testLocally)) {
-            addDustBinMap(LOC_C1);
-            addDustBinMap(LOC_B);
-
-            addDustBinMap(LOC_C);
-
-            addDustBinMap(LOC_D);
-            addDustBinMap(LOC_E);
-            addDustBinMap(LOC_F);
-            addDustBinMap(LOC_G);
-
-            CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
-        }
+//        if(getResources().getBoolean(R.bool.testLocally)) {
+//            addDustBinMap(LOC_C1);
+//            addDustBinMap(LOC_B);
+//
+//            addDustBinMap(LOC_C);
+//
+//            addDustBinMap(LOC_D);
+//            addDustBinMap(LOC_E);
+//            addDustBinMap(LOC_F);
+//            addDustBinMap(LOC_G);
+//
+//            CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color), 1, true);
+//        }
 
         Toast.makeText(getApplicationContext(), getResources().getString(R.string.ToastOnStartup), Toast.LENGTH_SHORT).show();   // shows a toast with the text spoken
       /*  PolygonOptions polygonOptions = new PolygonOptions();
@@ -464,6 +465,7 @@ public class MapsActivity extends FragmentActivity implements TextToSpeech.OnIni
         CreateRoute(mRouteEndpointList, getResources().getColor(R.color.polyline_color),1,true);
         tellToDriver(UTTER_UPDATE_SUCCESS);
        // getUserConfirmationForUpdate();
+        mqttListener.publishforTest();
 
     }
 
