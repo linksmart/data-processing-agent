@@ -1,11 +1,13 @@
 package eu.almanac.event.datafusion.core;
 
-import eu.almanac.event.datafusion.esper.EsperEngine;
 import eu.almanac.event.datafusion.feeder.EventMqttFeederImpl;
 
-import eu.almanac.event.datafusion.feeder.MqttFeederImpl;
+
+import eu.almanac.event.datafusion.feeder.PersistenceFeeder;
 import eu.almanac.event.datafusion.feeder.StatementMqttFeederImpl;
 import eu.almanac.event.datafusion.intern.Utils;
+import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
  */
 public class DataFusionManagerCore {
 
-    protected static ArrayList<MqttFeederImpl> feeders = new ArrayList<>();
+    protected static ArrayList<Feeder> feeders = new ArrayList<>();
 
     public static boolean isActive() {
         return active;
@@ -51,7 +53,7 @@ public class DataFusionManagerCore {
         active = true;
         while (active){
 
-            for(MqttFeederImpl f:feeders)
+            for(Feeder f:feeders)
                 if (f.isDown())
                     active =false;
 
@@ -68,9 +70,6 @@ public class DataFusionManagerCore {
         }
     }
     protected static boolean init(String args[]){
-
-
-
 
         if(args.length>0) {
             for (String arg: args)
@@ -89,20 +88,32 @@ public class DataFusionManagerCore {
                         " waiting for queries from topic: " + conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH) +
                         " generating event in: " + conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH)
         );
-        MqttFeederImpl feederImplEvents = null,  feederImplQuery = null;
+
+        // loading the CEP engines
+        for (String engines: conf.getList(Const.CEP_ENGINES_PATH))
+            try {
+                Class.forName(engines);
+            } catch (ClassNotFoundException e) {
+                loggerService.error(e.getMessage(),e);
+            }
+
+        // TODO: change the loading of feeder the same way as the CEP engines are loaded
+        // loading of feeders
+        Feeder feederImplEvents = null,  feederImplQuery = null, persistentFeeder=null;
         try {
-            EsperEngine esper = EsperEngine.getEngine();
 
             feederImplEvents = new EventMqttFeederImpl(conf.get(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.get(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
-            feederImplEvents.dataFusionWrapperSignIn(esper);
-
 
             feederImplQuery = new StatementMqttFeederImpl(conf.get(Const.STATEMENT_INOUT_BROKER_CONF_PATH).toString(), conf.get(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH).toString());
 
 
-            feederImplQuery.dataFusionWrapperSignIn(esper);
+            persistentFeeder = new PersistenceFeeder(conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
-
+            for (DataFusionWrapper wrapper: DataFusionWrapper.instancedEngines.values()) {
+                feederImplEvents.dataFusionWrapperSignIn(wrapper);
+                feederImplQuery.dataFusionWrapperSignIn(wrapper);
+                persistentFeeder.dataFusionWrapperSignIn(wrapper);
+            }
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);

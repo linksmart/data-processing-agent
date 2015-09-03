@@ -1,5 +1,6 @@
 package eu.linksmart.api.event.datafusion;
 
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -18,6 +19,7 @@ import java.util.Map;
 
 public interface DataFusionWrapper {
 
+    static final public Map<String,DataFusionWrapper> instancedEngines= new Hashtable<String, DataFusionWrapper>();
 	/**
 	 * Return the name of the CEP which implement the interface
 	 * 

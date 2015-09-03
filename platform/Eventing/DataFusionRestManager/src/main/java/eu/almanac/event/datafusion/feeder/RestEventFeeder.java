@@ -1,7 +1,6 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.almanac.event.datafusion.esper.EsperEngine;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Feeder;
@@ -27,7 +26,8 @@ public class RestEventFeeder implements Feeder {
     private ObjectMapper mapper = new ObjectMapper();
 
     public RestEventFeeder() {
-        dataFusionWrapperSignIn(EsperEngine.getEngine());
+        for(DataFusionWrapper wrapper: DataFusionWrapper.instancedEngines.values())
+        dataFusionWrapperSignIn(wrapper);
     }
 
     @Override

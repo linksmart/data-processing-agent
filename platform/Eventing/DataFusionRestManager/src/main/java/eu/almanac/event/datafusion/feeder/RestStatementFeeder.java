@@ -5,7 +5,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.google.gson.Gson;
-import eu.almanac.event.datafusion.esper.EsperEngine;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
@@ -30,7 +29,9 @@ public class RestStatementFeeder implements Feeder {
 
     protected Gson gson = new Gson();
     public RestStatementFeeder(){
-        dataFusionWrapperSignIn(EsperEngine.getEngine());
+
+        for(DataFusionWrapper wrapper: DataFusionWrapper.instancedEngines.values())
+            dataFusionWrapperSignIn(wrapper);
     }
     @Override
     public boolean dataFusionWrapperSignIn(DataFusionWrapper dfw) {

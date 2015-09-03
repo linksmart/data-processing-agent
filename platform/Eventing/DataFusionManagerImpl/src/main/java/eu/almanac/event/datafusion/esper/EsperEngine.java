@@ -17,7 +17,8 @@ import java.util.*;
 /**
  * Created by Caravajal on 06.10.2014.
  */
-public class EsperEngine implements DataFusionWrapper {
+ class EsperEngine implements DataFusionWrapper {
+
     private static EPServiceProvider epService;
     @Deprecated
     Map<String, Map<String,String>> topicName = new HashMap<>();
@@ -28,7 +29,15 @@ public class EsperEngine implements DataFusionWrapper {
     Map<String,Statement> deployedStatements = new Hashtable<>();
     private  LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
-    static private EsperEngine ref= new EsperEngine();
+    static private EsperEngine ref= init();
+
+    static EsperEngine init(){
+        EsperEngine EE= new EsperEngine();
+
+        instancedEngines.put(EE.getName(),EE);
+
+        return EE;
+    }
 
     public static EsperEngine getEngine(){
         return  ref;
