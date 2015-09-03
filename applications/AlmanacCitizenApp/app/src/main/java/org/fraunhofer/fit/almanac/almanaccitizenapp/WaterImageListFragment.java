@@ -1,5 +1,6 @@
 package org.fraunhofer.fit.almanac.almanaccitizenapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -35,6 +36,14 @@ public class WaterImageListFragment extends  ImageListFragment {
 
         ImageView waterTap = (ImageView) rootView.findViewById(R.id.water_tap);
         waterTap.setVisibility(View.VISIBLE);
+        waterTap.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(),SettingsActivity.class);
+                startActivity(intent);
+                return  true;
+            }
+        });
         return  rootView;
     }
 }

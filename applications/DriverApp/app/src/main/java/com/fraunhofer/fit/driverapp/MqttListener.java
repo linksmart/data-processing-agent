@@ -1,19 +1,12 @@
 package com.fraunhofer.fit.driverapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Base64;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -95,7 +88,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
                 ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
 
-                RouteEndpoint TOY_BIN = new RouteEndpoint("LOC_G",45.048770, 7.668163);
+                RouteEndpoint TOY_BIN = new RouteEndpoint("LOC_G",45.061375, 7.693145);
 
                 routeEndpointsListToPub.add(TOY_BIN);
 
@@ -131,33 +124,18 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
                 ArrayList<RouteEndpoint> routeEndpointsList = new ArrayList<RouteEndpoint>();
 
 
-//                RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
-//                routeEndpointsList.add(LOC_C1);
-//                RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
-//                routeEndpointsList.add(LOC_B);
-//                RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
-//
-//                routeEndpointsList.add(LOC_C);
-//                RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
-//                routeEndpointsList.add(LOC_D);
-//                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091, 7.66843825 );//45.06818793,7.70531799);
-//                routeEndpointsList.add(LOC_E);
-//                RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
-//                routeEndpointsList.add(LOC_F);
-
-
-                RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.057015, 7.670879);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
-                routeEndpointsList.add(LOC_B);
-                RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.062447, 7.674726 );
+                RouteEndpoint LOC_C1 = new RouteEndpoint("LOC_C1",45.06967544555664, 7.682311058044434 );
                 routeEndpointsList.add(LOC_C1);
-                RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.063079, 7.677705 );
+                RouteEndpoint LOC_B = new RouteEndpoint("LOC_B",45.070838928222656,7.677274703979492);//45.06967544555664,7.682311058044434 );//45.07394027709961,7.687668323516846
+                routeEndpointsList.add(LOC_B);
+                RouteEndpoint LOC_C = new RouteEndpoint("LOC_C",45.072725, 7.671748 );
 
                 routeEndpointsList.add(LOC_C);
-                RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.062180, 7.680028 );
+                RouteEndpoint LOC_D = new RouteEndpoint("LOC_D", 45.06962585449219,7.665708541870117 );
                 routeEndpointsList.add(LOC_D);
-                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.060872, 7.679103 );//45.06818793,7.70531799);
+                RouteEndpoint LOC_E = new RouteEndpoint("LOC_E",  45.06730091, 7.66843825 );//45.06818793,7.70531799);
                 routeEndpointsList.add(LOC_E);
-                RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.053894, 7.675624);
+                RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
                 routeEndpointsList.add(LOC_F);
 //                RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
 //                routeEndpointsList.add(LOC_G);
@@ -201,7 +179,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
             ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
             RouteEndpoint TOY_BIN = new RouteEndpoint();
-            TOY_BIN.geoLocation(45.053309, 7.665539);//(45.061148, 7.700376);
+            TOY_BIN.geoLocation(45.049060, 7.667581);//(45.061148, 7.700376);
             TOY_BIN.setId("TOY_BIN");
             routeEndpointsListToPub.add(TOY_BIN);
 
@@ -222,10 +200,15 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         @Override
         protected String doInBackground(Context... params) {
             if(mClient == null) {
-                if(mContext.getResources().getBoolean(R.bool.testLocally)) {
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+                boolean eclispe_enabled = sharedPref.getBoolean("eclipse_enabled", false);
+
+                if(eclispe_enabled) {
                     Log.i(TAG, "connecting to eclipse");
                     mClient = new MqttAndroidClient(params[0], "tcp://m2m.eclipse.org:1883", "FitClient");//tcp://m2m.eclipse.org:1883
                 }else {
+                    Log.i(TAG, "connecting to almanac");
                     mClient = new MqttAndroidClient(params[0], "tcp://almanac.fit.fraunhofer.de:1883", "FitClient");//tcp://m2m.eclipse.org:1883
                 }
 
