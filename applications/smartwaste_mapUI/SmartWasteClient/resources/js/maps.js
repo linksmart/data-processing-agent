@@ -28,16 +28,23 @@ Initializer marker locations.
 This also makes sure that all the issues are within the map.
 Map zoom level is changed according to number of issues
 */
- function initializeMarkers(issues){
+ function initializeMarkers(issues, callback){
     var latlngbounds = new google.maps.LatLngBounds();//To set boundaries such that all the markers are included
    for (var i = 0, l = issues.length; i < l; i++) {
        var issue = issues[i];
-       issue.marker = new google.maps.Marker({
+       var marker = new google.maps.Marker({
              position: issue.geolocation,
              map: map,
              title: issue.resource,
 
             });
+       marker.issueid = issue.id;
+       with ({ curmark: marker }) {
+       curmark.addListener('click', function() {
+          callback(curmark.issueid);
+         });
+        }
+       issue.marker = marker;
        latlngbounds.extend(new google.maps.LatLng(issue.geolocation.lat,issue.geolocation.lng));
        updateMarkerProperties(issue);
 

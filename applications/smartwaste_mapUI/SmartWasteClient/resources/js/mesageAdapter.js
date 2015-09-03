@@ -16,9 +16,9 @@ function initclient(){
 
 function initMqttClient(){
 	// Create a client instance
-	//client = new Paho.MQTT.Client("test.mosquitto.org",8080,  "SmartWaste");
+	client = new Paho.MQTT.Client("test.mosquitto.org",8080,  "SmartWaste");
     //client = new Paho.MQTT.Client("iot.eclipse.org",1883, "", "SmartWaste");
-    client = new Paho.MQTT.Client("almanac",9001,  "SmartWaste");
+    //client = new Paho.MQTT.Client("almanac",9001,  "SmartWaste");
 //tcp://m2m.eclipse.org:1883
 //tcp://almanac.fit.fraunhofer.de:1883
 	// set callback handlers
@@ -36,7 +36,7 @@ function onConnect() {
   client.subscribe(TOPIC_INITIAL);
 
   var issue1 = {
-       id:"Jodfkrgldfgmldfbldblbldfknbldfbhn",
+       id:"Jodfkrgldfgmldfbldblbldfknbldfbhn1",
        date:new Date(),
        creator:"Shreekantha",
        resource:"Bin@Augustinum",
@@ -50,7 +50,7 @@ function onConnect() {
 
 
   var issue2 = {
-       id:"fgjkfgndflgevnldfgvdfmng",
+       id:"fgjkfgndflgevnldfgvdfmng2",
        date:new Date(),
        creator:"Shreekantha",
        resource:"Bin@Augustinum",
@@ -62,7 +62,7 @@ function onConnect() {
        geolocation:{lat:50.764534, lng:7.205693}
    };
      var issue3 = {
-          id:"fgjkfgndflegvfnldfgvdfmng",
+          id:"fgjkfgndflegvfnldfgvdfmng3",
           date:new Date(),
           creator:"Shreekantha",
           resource:"Bin@Augustinum",
@@ -74,7 +74,7 @@ function onConnect() {
           geolocation:{lat:50.760679, lng: 7.195222}
       };
            var issue4 = {
-                id:"fgjkfgfndeflgvnldfgvdfmng",
+                id:"fgjkfgfndeflgvnldfgvdfmng4",
                 date:new Date(),
                 creator:"Shreekantha",
                 resource:"Bin@Augustinum",
@@ -99,13 +99,17 @@ function onConnectionLost(responseObject) {
   }
 }
 
+function onMarkerClick(issueid){
+//TODO invoke webmethod
+console.log("cliecked " +issueid);
+}
 // called when a message arrives
 function onMessageArrived(message) {
     switch(message.destinationName) {
     case TOPIC_INITIAL:
         var issues = JSON.parse(message.payloadString);
         //	console.log("onMessageArrived:"+message.payloadString);
-        initializeMarkers(issues);
+        initializeMarkers(issues,onMarkerClick);
         break;
     case TOPIC_UPDATE:
         var  issue = JSON.parse(message.payloadString);
