@@ -143,7 +143,7 @@ void loop()
   String wp_speed_string = "";
   wp_speed_string += wp_pulses;
   Serial.print("idFlowSensor {\"type\":\"ac:FlowSensor\","); Serial.print("\"flow\":\""); Serial.print(flow_string); Serial.println("\"}");
-  Serial.print(wp_speed_string);
+  //Serial.print(wp_speed_string);
 }
 
 // Actuator function. Implements the action conditionally on the key and value received.
@@ -153,7 +153,7 @@ void action() {
     int pwm_value = value;
     if(pwm_value > 255)
       pwm_value = 255;
-    else if(pwm_value <= 100)
+    else if(pwm_value <= 10)
       pwm_value = 0;
     analogWrite(PWM_A, pwm_value);
 
