@@ -33,7 +33,10 @@
         <activity
             android:name=".CaptureActivity"
             android:label="@string/createNewIssue"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:parentActivityName=".AlmanacCitizen"
+            android:theme="@style/captureActivitytheme">
+            >
         </activity>
         <activity
             android:name="org.fraunhofer.fit.almanac.slider.ScreenSlideActivity"
@@ -45,7 +48,10 @@
             android:label="@string/title_activity_dsplay_image"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
-
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
         <receiver
             android:name=".BootupReceiver"
             android:enabled="true"

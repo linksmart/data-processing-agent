@@ -30,7 +30,7 @@
     <string name="action_next">Next</string>
     <string name="action_finish">Finish</string>
     <string name="viewIssues">Issues</string>
-    <string name="upload">Upload</string>
+    <string name="upload">SUBMIT</string>
     <string name="title_activity_dsplay_image">DsplayImageActivity</string>
 
     <string name="hello_world">Hello world!</string>
@@ -38,15 +38,18 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="selectall">Select All</string>
+    <string name="cancel">Cancel</string>
     <string name="delete_all">Delete All</string>
-    <string name="alert_confirm_unsubsccribe">Unsubscribe &amp; delete</string>
-    <string name="alert_cancel_unsubscribe">Don\'t delete</string>
-    <string name="alert_dialog_message">You have opted to unsubscribe from the issue and delete the issue contents from the phone. The complaint will be still tracked by the authority</string>
+    <string name="alert_confirm_unsubsccribe">Proceed</string>
+    <string name="alert_cancel_unsubscribe">Cancel</string>
+    <string name="alert_dialog_message">You have opted to unsubscribe from the issue and delete the contents from the phone. The issue will be still tracked by the authority</string>
     <string name="show_picture">Show the picture</string>
     <string name="take_another_picuture">Take another one</string>
-    <string name="completionDateString">Action By:</string>
-    <string name="PriorityString">Priority:</string>
-    <string name="StatusString">Status:</string>
+    <string name="completionDateString">Action By:\u0020\u0020</string>
+    <string name="PriorityString">Priority:\u0020\u0020</string>
+    <string name="StatusString">Status:\u0020\u0020</string>
     <string name="comentString">comment:\n</string>
+    <string name="give_a_name">Please enter a subject</string>
+    <string name="this_needs_internet_connection">Please enable internet!!</string>
+    <string name="hardcodedLocation">7.6697440,45.0502000</string>
 </resources>

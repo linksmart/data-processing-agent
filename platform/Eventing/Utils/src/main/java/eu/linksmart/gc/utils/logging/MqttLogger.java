@@ -7,7 +7,6 @@ import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -50,7 +49,8 @@ public class MqttLogger implements Logger {
 
         String ret = "";
         for(Object o: objects)
-            ret+=addColumn(Utils.getDateNowString(),o.toString());
+            if(o!=null)
+                ret+=addColumn(Utils.getDateNowString(),o.toString());
         return ret;
 
 

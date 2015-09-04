@@ -3,10 +3,7 @@ package com.fraunhofer.fit.driverapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.speech.RecognizerIntent;
-import android.widget.Toast;
 
 /**
  * Created by devasya on 27.05.2015.

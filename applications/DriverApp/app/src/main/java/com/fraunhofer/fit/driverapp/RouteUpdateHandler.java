@@ -1,7 +1,6 @@
 package com.fraunhofer.fit.driverapp;
 
 import org.fit.fraunhofer.almanac.RouteEndpoint;
-import org.fit.fraunhofer.almanac.RouteEndpointsList;
 
 import java.util.ArrayList;
 

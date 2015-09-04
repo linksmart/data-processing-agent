@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.Serializable;
 
 /**
- * Created by Werner-Kytölä on 18.05.2015.
+ * Created by Werner on 18.05.2015.
  */
 public class RouteEndpoint implements Serializable {
 

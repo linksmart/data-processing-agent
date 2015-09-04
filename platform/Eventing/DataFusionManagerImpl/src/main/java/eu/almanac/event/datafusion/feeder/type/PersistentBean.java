@@ -1,5 +1,6 @@
 package eu.almanac.event.datafusion.feeder.type;
 
+import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.linksmart.api.event.datafusion.Statement;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import org.antlr.v4.runtime.misc.Nullable;
@@ -12,20 +13,20 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 public class PersistentBean {
-    protected ArrayList<Statement> statements;
+    protected ArrayList<EPLStatement> statements;
     protected Map<String,Observation> observations;
     PersistentBean(){
         statements = null;
         observations = null;
     }
 
-    public ArrayList<Statement> getStatements() {
+    public ArrayList<EPLStatement> getStatements() {
 
         return statements;
 
     }
 
-    public void setStatements(ArrayList<Statement> statements) {
+    public void setStatements(ArrayList<EPLStatement> statements) {
         this.statements = statements;
     }
 
@@ -50,7 +51,7 @@ public class PersistentBean {
         if(statements==null)
             statements = new ArrayList<>();
 
-        statements.set(index, statement);
+        statements.set(index, (EPLStatement) statement);
 
     }
     @Nullable

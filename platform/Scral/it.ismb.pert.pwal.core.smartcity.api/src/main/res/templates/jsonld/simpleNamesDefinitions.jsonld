@@ -1,0 +1,44 @@
+"name":{
+  "@id":"rdfs:label",
+  "@type":"xsd:string"
+},
+"description":{
+"@id":"rdfs:comment",
+"@type":"xsd:string"
+},
+"address":{
+  "@id":"vcard:hasAddress",
+  "@type":"@id"
+},
+"street-address":{
+  "@id":"vcard:street-address",
+  "@type":"xsd:string"
+},
+"locality":{
+  "@id":"vcard:locality",
+  "@type":"xsd:string"
+},
+"wkt":{
+  "@id":"geo:asWKT",
+  "@type":"xsd:string"
+},
+"geometry":{
+  "@id":"geo:Geometry",
+  "@type":"@id"
+},
+"latitude":{
+  "@id":"s:latitude",
+  "type":"xsd:double"
+},
+"longitude":{
+  "@id":"s:longitude",
+  "@type":"xsd:double"
+},
+"within":{
+  "@id":"geo:sfWithin",
+  "@type":"@id"
+},
+"geonames-id":{
+  "@id":"owl:SameIndividual",
+  "@type":"@id"
+}

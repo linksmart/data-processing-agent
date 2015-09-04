@@ -10,12 +10,15 @@ import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
+import java.net.MalformedURLException;
+import java.rmi.RemoteException;
 import java.util.*;
 
 /**
  * Created by Caravajal on 06.10.2014.
  */
-public class EsperEngine implements DataFusionWrapper {
+ class EsperEngine implements DataFusionWrapper {
+
     private static EPServiceProvider epService;
     @Deprecated
     Map<String, Map<String,String>> topicName = new HashMap<>();
@@ -26,7 +29,15 @@ public class EsperEngine implements DataFusionWrapper {
     Map<String,Statement> deployedStatements = new Hashtable<>();
     private  LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
-    static private EsperEngine ref= new EsperEngine();
+    static private EsperEngine ref= init();
+
+    static EsperEngine init(){
+        EsperEngine EE= new EsperEngine();
+
+        instancedEngines.put(EE.getName(),EE);
+
+        return EE;
+    }
 
     public static EsperEngine getEngine(){
         return  ref;
@@ -152,7 +163,7 @@ public class EsperEngine implements DataFusionWrapper {
     }
 
     @Override
-    public boolean addStatement(Statement statement) throws StatementException{
+    public boolean addStatement(Statement statement) throws StatementException {
         Boolean ret = false;
         if(statement.getStatement().toLowerCase().equals("pause")){
             ret = pauseQuery(statement.getName());
@@ -178,9 +189,15 @@ public class EsperEngine implements DataFusionWrapper {
             }
 
         }else {
-            addQuery(statement);
-            // if there is no exception set add statement as success
-            ret =true;
+            try {
+                addQuery(statement);
+                // if there is no exception set add statement as success
+                ret =true;
+
+            }catch (MalformedURLException | RemoteException | NullPointerException e ){
+                loggerService.error(e.getMessage(),e);
+                ret =false;
+            }
 
         }
 
@@ -205,14 +222,14 @@ public class EsperEngine implements DataFusionWrapper {
         return deployedStatements;
     }
 
-    public void addQuery(Statement query) throws StatementException {
+    public void addQuery(Statement query) throws StatementException, MalformedURLException, RemoteException {
 
 
 
 
-        if(epService.getEPAdministrator().getStatement(query.getName())!=null) {
+        if(epService.getEPAdministrator().getStatement(query.getHash())!=null) {
 
-            throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), ("Query with name" + query.getName() + " already added"));
+            throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), ("Query with id " + query.getHash() + " already added"));
 
         }
 
@@ -222,17 +239,24 @@ public class EsperEngine implements DataFusionWrapper {
         addEsperStatement(query);
 
     }
-    private void addEsperStatement( Statement query){
+    private void addEsperStatement( Statement query) throws StatementException, MalformedURLException, RemoteException {
         ComplexEventHandler handler;
         // add the query and the listener for the query
-        EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
         try {
             handler = new ComplexEventHandlerImpl(query);
+            EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
 
             statement.setSubscriber(handler);
+            statement.start();
+
             deployedStatements.put(query.getHash(),query);
         } catch (Exception e) {
+            if(e instanceof StatementException)
+                throw (StatementException)e;
            loggerService.error(e.getMessage(),e);
+            throw e;
+
+
 
         }
     }
