@@ -11,6 +11,9 @@ module.exports = function (almanac) {
 	almanac.ssdpClient = new SsdpClient();
 
 	almanac.ssdpClient.on('response', function (headers, statusCode, rinfo) {
+		if (!almanac.recourceCatalogueUrl) {
+			almanac.log.info('VL', 'UPnP: discovered ' + JSON.stringify(headers));
+		}
 		if (headers && headers.ST === almanac.config.hosts.recourceCatalogueUrn &&
 			headers.LOCATION && headers.LOCATION !== almanac.recourceCatalogueUrl &&
 			(!almanac.recourceCatalogueUrl || almanac.recourceCatalogueUrl.indexOf('http://127.0.0.1') < 0)) {	//Priority to 127.0.0.1 address
@@ -24,6 +27,6 @@ module.exports = function (almanac) {
 		almanac.ssdpClient.search(almanac.config.hosts.recourceCatalogueUrn);
 	}
 
-	discoverResourceCatalogues();
+	almanac.ssdpClient.search('ssdp:all');
 	setInterval(discoverResourceCatalogues, 60000);
 };

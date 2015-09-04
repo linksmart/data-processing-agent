@@ -27,7 +27,7 @@ var hosts = {
 			host: 'localhost',
 			port: 8082,
 		},
-		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
+		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:OGCapplicationIoTresourcemanager:1',
 		scral: {
 			host: 'localhost',
 			port: 8080,
