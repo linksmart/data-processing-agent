@@ -1,0 +1,10 @@
+{
+	"@id" : "$prefix:$url",
+	"@type" : "wbin:District",
+	"name" : "$name",
+	"description" : "$description",
+	"geometry":{ 
+		"wkt":"$coordinates"
+	},
+	"within": ["$prefix:$city"]
+}

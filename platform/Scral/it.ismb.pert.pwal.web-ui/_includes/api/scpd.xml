@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+	<specVersion>
+		<major>1</major>
+		<minor>0</minor>
+	</specVersion>
+	<device>
+		<!--UPnP Elements-->
+		<deviceType>urn:schemas-upnp-org:IoTdevice:wastebin:1</deviceType>
+		<presentationURL>http://localhost:8080//devices/eba6b372-3e05-30c4-997e-6db4a076d612/scpd</presentationURL>
+		<friendlyName>Organico_79220707</friendlyName>
+		<manufacturer>WasteBinSimulator</manufacturer>
+		<manufacturerURL>http://www.ismb.it</manufacturerURL>
+		<modelDescription>A SCRALWasteBin device connected to a WasteBinSimulator network.</modelDescription>
+		<modelName>wastebin</modelName>
+		<modelNumber>1</modelNumber>
+		<UDN>uuid:eba6b372-3e05-30c4-997e-6db4a076d612</UDN>
+
+		<!--CNet extension Elements-->
+		<IoTresourceid xmlns="IoT">eba6b372-3e05-30c4-997e-6db4a076d612</IoTresourceid>
+		<gateway xmlns="IoT">localhost:8080</gateway>
+		<errormessage xmlns="IoT"></errormessage>
+				<networkType xmlns="IoT">WasteBinSimulator</networkType>
+				<location xmlns="IoT">7.64206727 45.07008799</location>
+				<id xmlns="IoT">Organico_79220707</id>
+				<unit xmlns="IoT">Celsius</unit>
+				<expiresAt xmlns="IoT">2014-10-17T14:30:36.457+0000</expiresAt>
+				<updatedAt xmlns="IoT">2014-10-17T14:27:36.457+0000</updatedAt>
+				<temperature xmlns="IoT">23.0</temperature>
+				<type xmlns="IoT">WasteBin</type>
+				<fillLevel xmlns="IoT">40</fillLevel>
+				<pwalId xmlns="IoT">eba6b372-3e05-30c4-997e-6db4a076d612</pwalId>
+		
+		<lastMeasurement xmlns="IoT">2014-10-17T14:27:36.457+0000</lastMeasurement>
+
+		<!--UPnP Elements-->
+		<serviceList>
+			<service>
+				<serviceType>urn:schemas-upnp-org:wastebinservice::1</serviceType>
+				<serviceId>urn:schemas-upnp-org:wastebinservice_eba6b372-3e05-30c4-997e-6db4a076d612:1</serviceId>
+				<SCPDURL>_urn:schemas-upnp-org:twastebinservice_eba6b372-3e05-30c4-997e-6db4a076d612:1_scpd.xml</SCPDURL>
+				<controlURL>_urn:schemas-upnp-org:wastebinservice_eba6b372-3e05-30c4-997e-6db4a076d612:1_control</controlURL>
+				<eventSubURL>_urn:schemas-upnp-org:wastebinservice_eba6b372-3e05-30c4-997e-6db4a076d612:1_event</eventSubURL>
+			</service>
+		</serviceList>
+	</device>
+</root>
