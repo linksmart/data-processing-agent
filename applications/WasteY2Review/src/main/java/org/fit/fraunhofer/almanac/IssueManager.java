@@ -2,10 +2,19 @@ package org.fit.fraunhofer.almanac;
 
 import com.google.gson.Gson;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.linksmart.data.DataManagementException;
+import eu.linksmart.smartcity.issue.Ticket;
+import eu.linksmart.smartcity.issue.TicketEvent;
+import eu.linksmart.smartcity.issue.service.TicketManager;
+
+import eu.linksmart.smartcity.issue.client.TicketAdapterClient;
+import eu.linksmart.smartcity.issue.Issue;
+import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Thing;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.internal.wire.MqttReceivedMessage;
+import org.geojson.GeoJsonObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.*;
@@ -21,39 +30,45 @@ public class IssueManager implements Observer{
     /***************** CONSTANTS */
     public static final int MIN_ISSUECOUNT = 7; // number of issues created until a route generation is triggered
 
-    // Data Fusion query id: all waste bins with fill level greater than 80%
-    public static final String DF_INITALLFULLBINS_TOPIC = "almanac/";  // FIXME
-    // Data Fusion query id: waste bins whose fill level has now surpassed 80%
-    public static final String DF_WASTEBINFULL_TOPIC = "/+/+/+/cep/83250305333180387975123256258981791578694565511568769404136168336422530276207";
+     // To simulate a DF event with fill level above 70%
+    public static final String SIMULATE_DF_TOPIC = "almanac/DF";
+    public static final String SIMULATE_TICKET_TOPIC= "almanac/ticket";
+    // Data Fusion query id: waste bins whose fill level has now surpassed 70%
+    public static final String DF_WASTEBINFULL_TOPIC = "/+/+/+/cep/86918461073161120583227673852984066215228465530507767448056485667068884010202";
     // Data Fusion query id: toy bin has surpassed 80%
     //    public static final String DF_TOYBINFULL_TOPIC = "/+/+/+/cep/5296850124791908742793477709595434718264213518621513551279291212674474587702";
-    // Data Fusion query id: waste bins whose fill level has now gotten less than 80%
-    public static final String DF_WASTEBINEMPTY_TOPIC = "/+/+/+/cep/29209155414186072684277550074426799939015276077705618840238266929304645319757";
+    // Data Fusion query id: waste bins whose fill level has now gotten less than 70%
+    public static final String DF_WASTEBINEMPTY_TOPIC = "/+/+/+/cep/109674137994894161254362755448038878130087099950442517320455058187787869606540";
 
-    public static final String CITIZENAPP_TOPIC = "almanac/citizenapp";  // issues coming from a CitizenApp
+    public static final String TICKETING_EVENTS = "almanac/+/ticket";
+//    public static final String CITIZENAPP_TOPIC = "almanac/citizenapp";  // issues coming from a CitizenApp
 
-    public static final String SMARTWASTE_TOPIC = "almanac/smartwaste/+";                     //all smartwaste one-level sub-topics
-    public static final String SMARTWASTE_CREATE_TOPIC = "almanac/smartwaste/create";
-    public static final String SMARTWASTE_UPDATE_TOPIC = "almanac/smartwaste/update";
-    public static final String SMARTWASTE_DUPLICATE_TOPIC = "almanac/smartwaste/duplicate";  // duplicate notification coming from OTRS
-    public static final String SMARTWASTE_ACCEPT_TOPIC = "almanac/smartwaste/accept";        // accept notification coming from OTRS
+//    public static final String SMARTWASTE_TOPIC = "almanac/smartwaste/+";                     //all smartwaste one-level sub-topics
+//    public static final String SMARTWASTE_CREATE_TOPIC = "almanac/smartwaste/create";
+//    public static final String SMARTWASTE_UPDATE_TOPIC = "almanac/smartwaste/update";
+//    public static final String SMARTWASTE_DUPLICATE_TOPIC = "almanac/smartwaste/duplicate";  // duplicate notification coming from OTRS
+//    public static final String SMARTWASTE_ACCEPT_TOPIC = "almanac/smartwaste/accept";        // accept notification coming from OTRS
 
-    public static final String ISSUE = "issue/";
-    public static final String UPDATE = "/update";
-    public static final String DUPLICATE = "/duplicate";
-    public static final String SUBSCRIBE = "/subscribe";
+//    public static final String ISSUE = "issue/";
+//    public static final String UPDATE = "/update";
+//    public static final String DUPLICATE = "/duplicate";
+//    public static final String SUBSCRIBE = "/subscribe";
 
 
 
-    private HashMap<String, Issue> issueMap;
+//    private HashMap<String, Issue> issueMap;
 //    private ArrayList<Issue> issueList;
-    private HashMap<String, String> binIssueMap;  // waste bin-issue relation
-    private HashMap<String, Route> routeMap;
-    private HashMap<String, Vehicle> vehicleMap;
+    private ArrayList<Thing> fullBins;
+    private HashMap<String, String> binIssueMap;   // waste bin-issue relation
+    private HashMap<String, String> binTicketMap;  // waste bin-ticket relation
+//    private HashMap<String, Route> routeMap;
+//    private HashMap<String, Vehicle> vehicleMap;
     private ArrayList<Thing> thingList;
     private WasteMqttClient pubClient;
     private WasteMqttClient subClient;
     private WasteHttpClient wasteHttpClient;
+
+    private TicketManager otrsTicketManager;
 
     private ExecutorService executor;
 
@@ -67,7 +82,7 @@ public class IssueManager implements Observer{
         httpClientsSetup();
     }
 
-    public IssueManager(ArrayList<Thing> wasteBinList){
+    public IssueManager(ArrayList<Thing> fullBinsInVicinityList){
 
         issueMembersInit();
 
@@ -76,17 +91,22 @@ public class IssueManager implements Observer{
         mqttClientsSetup();
         httpClientsSetup();
 
-        // this is the initial data read from the Resource Catalogue: bins in the vicinity (within 100m radius) of a specific location
-        // These bins are first not known to be issues (fill levels have not been reported yet).
-        for (Thing thing : wasteBinList) {
-            addIssue(Issue.Priority.UNCLASSIFIED,
-                     thing.getId(),
-                     ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thing.getLocations().toArray()[0]).getGeometry()).getCoordinates().getLatitude(),
-                     ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thing.getLocations().toArray()[0]).getGeometry()).getCoordinates().getLongitude());
-        }
+//         createTicket(fullBinsInVicinityList);  OTRS integration
+
+        fullBins = new ArrayList<Thing>(fullBinsInVicinityList);
+
+//        generateRoute("/almanac/route/initial");
+
+        // this is the initial data read from the Resource Catalogue: full bins in the vicinity (within 100m radius) of a specific location
+//        for (Thing thing : fullBinsInVicinityList) {
+//            addIssue(Issue.Priority.UNCLASSIFIED,
+//                     thing.getId(),
+//                     ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thing.getLocations().toArray()[0]).getGeometry()).getCoordinates().getLatitude(),
+//                     ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thing.getLocations().toArray()[0]).getGeometry()).getCoordinates().getLongitude());
+//        }
     }
 
- /*   public IssueManager(ArrayList<Thing> thingListMetadata){
+/*   public IssueManager(ArrayList<Thing> thingListMetadata){
 
         issueMap = new HashMap<String, Issue>();
         routeMap = new HashMap<String, Route>();
@@ -130,23 +150,78 @@ public class IssueManager implements Observer{
     }
 */
 
+    private void createTicket(ArrayList<Thing> fullBinsInVicinityList){
+        // this is the initial data read from the Resource Catalogue: full bins in the vicinity (within 100m radius) of a specific location
+//        eu.linksmart.smartcity.issue.Location location = new eu.linksmart.smartcity.issue.Location(0,0);
+
+        for (Thing thing : fullBinsInVicinityList) {
+            eu.linksmart.smartcity.issue.Location location = new eu.linksmart.smartcity.issue.Location(
+                    ((org.geojson.Point)((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location)(thing.getLocations().toArray()[0])).getGeometry()).getCoordinates().getLatitude(),
+                    ((org.geojson.Point)((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location)(thing.getLocations().toArray()[0])).getGeometry()).getCoordinates().getLongitude());
+
+            eu.linksmart.smartcity.issue.Issue issue = new Issue(thing.getId(), location);
+
+            try {
+                String ticketId = otrsTicketManager.create(issue);
+
+                binTicketMap.put(thing.getId(), ticketId);
+
+            } catch (DataManagementException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+
+    private void createTicket(eu.linksmart.smartcity.issue.Issue issue){
+
+        try {
+            String ticketId = otrsTicketManager.create(issue);
+
+            binTicketMap.put(issue.getResource(), ticketId);
+
+        } catch (DataManagementException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private void createTicket(String binId, double latitude, double longitude){
+        eu.linksmart.smartcity.issue.Location location = new eu.linksmart.smartcity.issue.Location(latitude, longitude);
+        eu.linksmart.smartcity.issue.Issue issue = new Issue(binId, location);
+
+        try {
+            String ticketId = otrsTicketManager.create(issue);
+
+            binTicketMap.put(issue.getResource(), ticketId);
+
+        } catch (DataManagementException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+
     private void issueMembersInit(){
-        issueMap = new HashMap<String, Issue>();
+//        issueMap = new HashMap<String, Issue>();
 //        issueList = new ArrayList<Issue>();
+
         binIssueMap = new HashMap<String, String>();
-        routeMap = new HashMap<String, Route>();
-        vehicleMap = new HashMap<String, Vehicle>();
+        binTicketMap = new HashMap<String, String>();
+//        routeMap = new HashMap<String, Route>();
+//        vehicleMap = new HashMap<String, Vehicle>();
+
+        otrsTicketManager = new TicketAdapterClient("http://almanac.fit.fraunhofer.de:8888/OTRS/Ticket");
     }
 
     private void mqttClientsSetup() {
         subClient = WasteMqttClient.getInstanceSub();
 
-        subClient.subscribe(DF_INITALLFULLBINS_TOPIC);
+        subClient.subscribe(SIMULATE_DF_TOPIC);        // FIXME: simulation
+        subClient.subscribe(SIMULATE_TICKET_TOPIC);    // FIXME: simulation
+
         subClient.subscribe(DF_WASTEBINFULL_TOPIC);
         subClient.subscribe(DF_WASTEBINEMPTY_TOPIC);
 
-        subClient.subscribe(CITIZENAPP_TOPIC);      // get notified by a CitizenApp about issues
-        subClient.subscribe(SMARTWASTE_TOPIC);      // get notified by the SmartWaste application
+//        subClient.subscribe(CITIZENAPP_TOPIC);      // get notified by a CitizenApp about issues
+//        subClient.subscribe(SMARTWASTE_TOPIC);      // get notified by the SmartWaste application
 
         subClient.addObserver(this);
 
@@ -170,17 +245,87 @@ public class IssueManager implements Observer{
             WasteMqttClient.MqttMessageWithTopic data = (WasteMqttClient.MqttMessageWithTopic)arg;
 
             switch(data.Topic()){
-                case DF_INITALLFULLBINS_TOPIC:
-                    handleDFInitAllFullBins(data.Payload());
-                    subClient.unsubscribe(DF_INITALLFULLBINS_TOPIC);
+                case SIMULATE_DF_TOPIC:  //FIXME: simulation
+                    System.out.println("Received simulated event from DF!");
+                    Thing bin = new Thing();
+                    bin.setId("6a2a241332749463701d4d9607c02bc903c8bea1");
+                    bin.setDescription("Waste resource created by a Data Fusion event.");
+                    bin.setMetadata("http://almanac-project.eu/ontologies/smartcity.owl#WasteBin");
+                    Location location = new Location();
+                    location.setTime(new Date());
+                    GeoJsonObject geometry = new org.geojson.Point(7.665539,45.053309);
+
+                    location.setGeometry(geometry);
+
+                    HashSet<Location> ob = new HashSet<Location>();
+                    ob.add(location);
+                    bin.setLocations(ob);
+
+                    fullBins.add(bin);
+
+ /*                   executor.execute(new Runnable() {
+                        public void run() {
+                            System.out.println("SIMULATE_DF_TOPIC: fullBins size: " + fullBins.size() + "!");
+                            generateRoute("/almanac/route");
+                        }
+                    });*/
+
+                    System.out.println("SIMULATE_DF_TOPIC: fullBins size: " + fullBins.size() + "!");
+                    generateRoute("/almanac/route");
+
+                    fullBins.remove(7);
+                    fullBins.remove(6);
                     break;
+
+                case SIMULATE_TICKET_TOPIC:
+                    // FIXME: create resource into SCRAL through SCRAL REST-API
+                    // FIXME: put it into binTicketMap
+                    // FIXME: use List<Ticket> selectTicketsInVicinity(String domain = WASTE, int distance, Location refLocation);
+                    // to find out if this issue should be scheduled to the same existing route
+
+//                String binId = getBinFromTicket(event);
+//                Thing bin = wasteHttpClient.getBin(binId);
+                    // For MeetIoT: hardcoding the CitizenApp Thing:
+                    System.out.println("ACCEPTED received!");
+                    Thing bin2 = new Thing();
+                    bin2.setId("0b60ab7ad145ba4204ae541aa4d428d87f558c1e");
+                    bin2.setDescription("Waste resource created by a CitizenApp issue.");
+                    bin2.setMetadata("http://almanac-project.eu/ontologies/smartcity.owl#WasteBin");
+                    Location location2 = new Location();
+                    location2.setTime(new Date());
+                    GeoJsonObject geometry2 = new org.geojson.Point(7.668163,45.048770);
+
+                    location2.setGeometry(geometry2);
+
+                    HashSet<Location> ob2 = new HashSet<Location>();
+                    ob2.add(location2);
+                    bin2.setLocations(ob2);
+
+
+                    fullBins.add(bin2);
+
+ /*                   executor.execute(new Runnable() {
+                        public void run() {
+                            System.out.println("SIMULATE_TICKET_TOPIC: fullBins size: " + fullBins.size() + "!");
+                            generateRoute("/almanac/route");
+                        }
+                    });*/
+
+                    System.out.println("SIMULATE_DF_TOPIC: fullBins size: " + fullBins.size() + "!");
+                    generateRoute("/almanac/route");
+
+                    break;
+
                 case DF_WASTEBINFULL_TOPIC:
                     handleDFWastebinFull(data.Payload());
                     break;
                 case DF_WASTEBINEMPTY_TOPIC:
                     handleDFWastebinEmpty(data.Payload());
                     break;
-                case CITIZENAPP_TOPIC:
+                case TICKETING_EVENTS:
+                    handleTicketingEvent(data.Payload());
+                    break;
+/*                case CITIZENAPP_TOPIC:
                     handleCitizenApp(data.Payload());
                     break;
                 case SMARTWASTE_CREATE_TOPIC:
@@ -194,6 +339,7 @@ public class IssueManager implements Observer{
                 case SMARTWASTE_ACCEPT_TOPIC:
                     handleSmartWasteAccept(data.Payload());
                     break;
+*/
                 default:
                     break;
             }
@@ -218,7 +364,7 @@ public class IssueManager implements Observer{
     // i.e. full bins within 100m radius from a given location. New issues are to be created out
     // of these observations. This will be the initial state of the BEWaste back-end. After reading this
     // in, issues will be created and the back-end will unsubscribe from the query.
-    private void handleDFInitAllFullBins(MqttMessage message){
+ /*   private void handleDFInitAllFullBins(MqttMessage message){
         try{
             it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation obs[] =
                     mapper.readValue(message.getPayload(), it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation[].class);
@@ -235,9 +381,9 @@ public class IssueManager implements Observer{
             e.printStackTrace();
         }
     }
-
+*/
     // The incoming message is Data Fusion related: a waste bin fill level has
-    // surpassed the threshold and is full. A new issue is to be created out
+    // surpassed the threshold and is full. A new ticket is to be created out
     // of this observation.
     private void handleDFWastebinFull(MqttMessage message){
         try{
@@ -252,27 +398,26 @@ public class IssueManager implements Observer{
 
             System.out.println("A Data Fusion message has arrived. The waste bin " + binId + " is full!");
 
+            Thing bin = wasteHttpClient.getBin(binId);
             org.geojson.LngLatAlt location = wasteHttpClient.getBinGeolocation(binId);
             System.out.println("***Full Bin: " + binId + " Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
 
-            addIssue(binId, location.getLatitude(), location.getLongitude());
+            createTicket(binId, location.getLatitude(), location.getLongitude());
 
-/*            org.geojson.LngLatAlt thingLocation = findThingLocation(binId);
-            if(thingLocation!= null){   // this is the toy bin, the only one relevant to the demo
-                executor.execute(new Runnable() {
-                    public void run() {
-                        generateRoute("/almanac/route");
-                    }
-                });
-            }
-*/
+            fullBins.add(bin);
+
+            executor.execute(new Runnable() {
+                public void run() {
+                    generateRoute("/almanac/route");
+                }
+            });
         }catch(Exception e) {
             e.printStackTrace();
         }
     }
 
     // The incoming message is Data Fusion related: a full waste bin has just been
-    // emptied. The corresponding issue is to be removed.
+    // emptied. The corresponding Ticket is to be deleted.
     private void handleDFWastebinEmpty(MqttMessage message){
         try{
             it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation obs =
@@ -286,15 +431,134 @@ public class IssueManager implements Observer{
             org.geojson.LngLatAlt location = wasteHttpClient.getBinGeolocation(binId);
             System.out.println("***Empty Bin: " + binId + " Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
 
-            removeIssue(binIssueMap.get(binId));
+            if(binTicketMap.containsKey(binId)) {
+                otrsTicketManager.delete(binTicketMap.get(binId));
+            }
+//            removeIssue(binIssueMap.get(binId));
         }catch(Exception e) {
             e.printStackTrace();
         }
     }
 
+    // The incoming message is related to the Ticketing system: a ticket has been created,
+    // deleted or updated. Payload has:
+    // {"eventType":"", "ticketId":""} or
+    // {"eventType":"", "property":"", "value":"", "ticketId":""} in case the eventType is "update".
+
+    // 1) eventType can be "deleted", "updated", "created".
+    // If the eventType's value is "updated", "property" tells what has been updated, "value" tells about the new property value.
+    // "property" can be "status", "priority" or "time2completion".
+
+    // 2) A ticket has been accepted by the city employee whenever its state
+    // changes from NEW into ACCEPTED => CitizenApp can now confirm to the citizen that the ticket has been created (as opposed
+    // to listening to a "created" message which has not been yet accepted by the city employee)
+
+    // 3) A ticket has been rejected by the city employee whenever its state
+    // changes from NEW into REJECTED => CitizenApp can now inform the citizen that the ticket has been rejected (as a duplicate?)
+    private void handleTicketingEvent(MqttMessage message){
+
+        Gson gsonObj = new Gson();
+
+        String json = "";
+        try {
+            json = new String((byte[]) message.getPayload(), "UTF-8");
+            TicketEvent event = gsonObj.fromJson(json, TicketEvent.class);
+//            TicketEvent.print();
+
+            switch(event.getEventType()){
+                case CREATED:
+                    handleCreatedEvent(event);
+                    break;
+                case DELETED:
+                    handleDeletedEvent(event);
+                    break;
+                case UPDATED:
+                    handleUpdatedEvent(event);
+                    break;
+            }
+        }catch(UnsupportedEncodingException e) {
+        }
+    }
+
+    private void handleUpdatedEvent(TicketEvent event){
+        switch(event.getProperty()){
+            case "STATUS":
+                handleStatusUpdated(event);
+                break;
+            case "PRIORITY":
+                break;
+            case "TIME2COMPLETION":
+                break;
+        }
+    }
+
+    private void handleCreatedEvent(TicketEvent event){
+
+    }
+
+    private void handleDeletedEvent(TicketEvent event){
+        for (Map.Entry<String, String> entry  : binTicketMap.entrySet()) {
+            if (entry.getValue() == event.getTicketId()) {
+                binTicketMap.remove(entry.getKey());
+                break;
+            }
+        }
+    }
+
+    private void handleStatusUpdated(TicketEvent event){
+        switch(event.getValue()){
+            case "ACCEPTED":
+                // FIXME: create resource into SCRAL through SCRAL REST-API
+                // FIXME: put it into binTicketMap
+                // FIXME: use List<Ticket> selectTicketsInVicinity(String domain = WASTE, int distance, Location refLocation);
+                // to find out if this issue should be scheduled to the same existing route
+
+//                String binId = getBinFromTicket(event);
+//                Thing bin = wasteHttpClient.getBin(binId);
+                // For MeetIoT: hardcoding the CitizenApp Thing:
+                System.out.println("ACCEPTED received!");
+                Thing bin = new Thing();
+                bin.setId("0b60ab7ad145ba4204ae541aa4d428d87f558c1e");
+                bin.setDescription("Waste resource created by a CitizenApp issue.");
+                bin.setMetadata("http://almanac-project.eu/ontologies/smartcity.owl#WasteBin");
+                Location location = new Location();
+                location.setTime(new Date());
+                GeoJsonObject geometry = new org.geojson.Point(45.048770, 7.668163);
+
+                location.setGeometry(geometry);
+
+                HashSet<Location> ob = new HashSet<Location>();
+                ob.add(location);
+                bin.setLocations(ob);
+
+
+                fullBins.add(bin);
+
+                executor.execute(new Runnable() {
+                    public void run() {
+                        generateRoute("/almanac/route");
+                    }
+                });
+
+                break;
+            case "REJECTED":
+                binTicketMap.remove(getBinFromTicket(event));
+                break;
+        }
+    }
+
+    String getBinFromTicket(TicketEvent event){
+        for (Map.Entry<String, String> entry  : binTicketMap.entrySet()) {
+            if (entry.getValue() == event.getTicketId()) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     // The incoming message is CitizenApp related: A new issue is to be created.
     // payload has issueId, geolocation, picture, name, and comment of a citizen's issue
-    private void handleCitizenApp(MqttMessage message){
+ /*   private void handleCitizenApp(MqttMessage message){
 
         // An issue generated by the CitizenApp comes in Json format
         Gson gsonObj = new Gson();
@@ -318,9 +582,9 @@ public class IssueManager implements Observer{
         }catch(UnsupportedEncodingException e) {
         }
     }
-
+*/
     // The incoming message is SmartWaste related: it tells about issues which have been updated
-    private void handleSmartWasteUpdate(MqttMessage message){
+/*    private void handleSmartWasteUpdate(MqttMessage message){
 
         Gson gsonObj = new Gson();
 
@@ -336,9 +600,9 @@ public class IssueManager implements Observer{
         }catch(UnsupportedEncodingException e) {
         }
     }
-
+*/
     // The incoming message is SmartWaste related: it tells about an issue being duplicated
-    private void handleSmartWasteDuplicate(MqttMessage message){
+/*    private void handleSmartWasteDuplicate(MqttMessage message){
 
         Gson gsonObj = new Gson();
 
@@ -359,9 +623,9 @@ public class IssueManager implements Observer{
         }catch(UnsupportedEncodingException e) {
         }
     }
-
+*/
     // The incoming message is SmartWaste related: it tells about an issue which has been accepted
-    private void handleSmartWasteAccept(MqttMessage message){
+ /*   private void handleSmartWasteAccept(MqttMessage message){
 
         Gson gsonObj = new Gson();
 
@@ -380,8 +644,8 @@ public class IssueManager implements Observer{
         }catch(UnsupportedEncodingException e) {
         }
     }
-
-    private void addIssue(){
+*/
+/*    private void addIssue(){
         Issue issue = new Issue();
         issueMap.put(issue.id(), issue);
     }
@@ -435,9 +699,41 @@ public class IssueManager implements Observer{
 
         issueMap.remove(issueId);
     }
+*/
 
     protected void generateRoute(String routeType){
-    /*
+        if(!fullBins.isEmpty()){
+
+            ArrayList<RouteEndpoint> routeEndpointList = new ArrayList<RouteEndpoint>();
+
+            for (Thing entry : fullBins){
+                RouteEndpoint endpoint = new RouteEndpoint();
+
+                endpoint.setId(entry.getId());
+                endpoint.setGeoLocation(
+                        ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) (entry.getLocations().toArray()[0])).getGeometry()).getCoordinates().getLatitude(),
+                        ((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) (entry.getLocations().toArray()[0])).getGeometry()).getCoordinates().getLongitude());
+
+                routeEndpointList.add(endpoint);
+            }
+//            if(routeType.equals("/almanac/route/initial") && routeEndpointList.size() > MIN_ISSUECOUNT) {
+//                routeEndpointList.remove(MIN_ISSUECOUNT);
+//            }
+            // route endpoints will be formatted to Json: [{"id":"<id>","geoLocation":{"latitude":0.0,"longitude":0.0}}]
+            Gson gsonObj = new Gson();
+
+            String issueGson = gsonObj.toJson(routeEndpointList);
+//            System.out.println(gsonObj.toJson(routeEndpointsList));
+
+            // now it's about publishing the route (more specifically, the geolocation of the issues contained in the route),
+            // so that the DriverApp can listen to it, use Google DirectionsService to calculate the route and render it.
+            pubClient.publish(routeType, issueGson);
+            System.out.println("Route endpoints published under topic " + routeType);
+        }
+    }
+
+/*    protected void generateRoute(String routeType){
+
 //        Route route = addRoute();
 
 //        route.generateRoute(issueMap);  // this is simplified: In the first go, the route will be generated out
@@ -473,10 +769,10 @@ public class IssueManager implements Observer{
             pubClient.publish(routeType, issueGson);
             System.out.println("Route endpoints published under topic " + routeType);
         }
-*/
-    }
 
-    public Route addRoute(){
+    }
+*/
+/*    public Route addRoute(){
         Route route = new Route();
         routeMap.put(route.id(), route);
 
@@ -489,6 +785,7 @@ public class IssueManager implements Observer{
         }
         return null;
     }
+*/
 
 /*    public void print(){
         // Iterate over all issues, using the keySet method.
