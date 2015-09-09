@@ -19,8 +19,7 @@ limitations under the License.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>org.bitpipeline.lib</groupId>
+  <groupId>org.bitpipeline.lib</groupId>
 	<artifactId>owm-lib</artifactId>
 	<name>OpenWeatherMap library</name>
 	<version>2.1.2</version>
