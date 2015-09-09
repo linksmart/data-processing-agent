@@ -63,11 +63,21 @@ cd /opt/virtualization-layer/
 nodejs index.js
 ```
 
+## Or by using "pm2" https://github.com/Unitech/pm2
+TODO: Finish documentation
+
+```sh
+sudo npm install -g pm2
+pm2 start /usr/bin/nodejs /opt/virtualization-layer/index.js -- -v
+pm2 save
+pm2 startup
+```
+
 ## Or from a cron at restart:
 Edit the file `/etc/cron.d/almanac` and add:
 
 ```sh
-@reboot root cd /opt/virtualization-layer/ && nodejs /opt/virtualization-layer/index.js >> /var/log/virtualization-layer/virtualization-layer.log 2>&1 &
+@reboot root cd /opt/virtualization-layer/ && /usr/bin/nodejs /opt/virtualization-layer/index.js >> /var/log/virtualization-layer/virtualization-layer.log 2>&1 &
 ```
 
 ## Or from a Linux Upstart service
@@ -94,5 +104,3 @@ And then use it a a service, such as:
 ```sh
 service virtualization-layer restart
 ```
-
-## TODO: Document using "forever" https://github.com/nodejitsu/forever
