@@ -11,7 +11,7 @@ module.exports = function (almanac) {
 
 	function registerInNetworkManager() {
 		almanac.request.post({
-				url: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/NetworkManager',
+				url: almanac.config.hosts.networkManagerUrl + '/NetworkManager',
 				json: true,
 				body: JSON.stringify({
 						'Endpoint': almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/',	//The port number must always be mentionned for LinkSmart
@@ -34,8 +34,8 @@ module.exports = function (almanac) {
 
 	function refreshInNetworkManager() {
 		almanac.request.get({
-				//url: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/NetworkManager?description="VirtualizationLayer"',
-				url: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/GetNetworkManagerStatus?method=getLocalServices',
+				//url: almanac.config.hosts.networkManagerUrl + '/NetworkManager?description="VirtualizationLayer"',
+				url: almanac.config.hosts.networkManagerUrl + '/GetNetworkManagerStatus?method=getLocalServices',
 				json: true,
 				timeout: 2000,
 			}, function (error, response, body) {
@@ -64,10 +64,30 @@ module.exports = function (almanac) {
 	refreshInNetworkManager();
 	setInterval(refreshInNetworkManager, 120000);
 
+	var os = require('os');
+
+	function updateMqttVirtualAddress() {
+		almanac.request.get({
+				url: almanac.config.hosts.networkManagerUrl + '/NetworkManager/?DESCRIPTION="Broker:tcp://' + os.hostname() + '"',
+				json: true,
+				timeout: 5000,
+			}, function (error, response, body) {
+				if (error || response.statusCode != 200 || !(body && body[0] && body[0].VirtualAddress)) {
+					almanac.mqttVirtualAddress = '';
+					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' getting broker virtual address from LinkSmart!');
+				} else {
+					almanac.mqttVirtualAddress = body[0].VirtualAddress;
+				}
+			});
+	}
+
+	updateMqttVirtualAddress();
+	setInterval(updateMqttVirtualAddress, 60000);
+
 	function proxyNetworkManagerTunnel(req, res) {
 		req.pipe(almanac.request({
 				method: req.method,
-				uri: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/Tunneling/0/' + req.url,
+				uri: almanac.config.hosts.networkManagerUrl + '/Tunneling/0/' + req.url,
 				timeout: 20000,
 			}, function (error, response, body) {
 				if (error || response.statusCode != 200 || !body) {

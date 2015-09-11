@@ -59,7 +59,7 @@ module.exports = function (almanac) {
 			req.addListener('end', function () {
 					try {
 						var json = JSON.parse(body);
-						almanac.webSocket.in('peering').emit('peering', json);	//Forward to Socket.IO clients (WebSocket)
+						//almanac.webSocket.in('peering').emit('peering', json);	//Forward to WebSocket clients	//TODO: Reimplement if needed
 						almanac.log.verbose('VL', 'Peering MQTT forwarded to WebSocket');
 						almanac.basicHttp.serveJson(req, res, {});
 					} catch (ex) {

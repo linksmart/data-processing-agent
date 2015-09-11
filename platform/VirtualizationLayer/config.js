@@ -19,14 +19,8 @@ var hosts = {
 			host: 'localhost',
 			port: 80,
 		},
-		mqttBroker: {
-			host: 'localhost',
-			port: 1883,
-		},
-		networkManager: {
-			host: 'localhost',
-			port: 8082,
-		},
+		mqttBrokerUrl: 'mqtt://localhost',
+		networkManagerUrl: 'http://localhost:8181',
 		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:OGCapplicationIoTresourcemanager:1',
 		scral: {
 			host: 'localhost',

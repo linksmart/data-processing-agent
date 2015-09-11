@@ -34,7 +34,7 @@ module.exports = function (almanac) {
 	function proxyDataManagement(req, res) {
 
 		if (req.method === 'POST') {
-			almanac.webSocket.forwardHttp(req, res, 'DM');	//Forward POST requests to Socket.IO clients (WebSocket)
+			//almanac.webSocket.forwardHttp(req, res, 'DM');	//Forward POST requests to WebSocket clients	//TODO: Re-implement if needed
 		}
 
 		req.pipe(almanac.request({

@@ -1,4 +1,6 @@
 # Installation of the Virtualization Layer
+Requires Node.js >= 10.40. For MQTT, works with protocol 3.1.1+ (e.g. Mosquitto version 1.3+).
+
 
 1. See http://nodejs.org.
 	* On Ubuntu:
@@ -37,7 +39,7 @@ Or if you want to perform continuous integration and other tests, leave out the 
 npm install
 ```
 
-> The main dependencies include `socket.io`, `mqtt`, `node-ssdp`, and `request`.
+> The main dependencies include `ws`, `mqtt`, `node-ssdp`, and `request`.
 
 
 # Setup of the Virtualization Layer

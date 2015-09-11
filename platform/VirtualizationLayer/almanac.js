@@ -52,7 +52,8 @@ It is now ' + now.toISOString() + '.\n\
 			version: almanac.version,
 			publicAddress: almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayerPublic.host + ':' + almanac.config.hosts.virtualizationLayerPublic.port + '/',
 			virtualAddress: almanac.virtualAddress,
-			networkManager: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/',
+			mqttVirtualAddress: almanac.mqttVirtualAddress,
+			networkManager: almanac.config.hosts.networkManagerUrl + '/',
 			storageManager: 'http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path,
 			mqttToHttpStorageManagerEnabled: almanac.config.mqttToHttpStorageManagerEnabled,
 			resourceCatalogue: almanac.recourceCatalogueUrl,
@@ -72,7 +73,7 @@ It is now ' + now.toISOString() + '.\n\
 		require('./almanac-santander.js')(almanac);
 
 		setTimeout(function() {
-				require('./almanac-websocket.js')(almanac);	//WebSocket (Socket.IO)
+				require('./almanac-websocket.js')(almanac);	//WebSocket
 				require('./almanac-mqtt.js')(almanac);	//MQTT
 				require('./almanac-upnp.js')(almanac);	//UPnP (SSDP)
 				require('./almanac-networkManager.js')(almanac);	//Register in the NetworkManager

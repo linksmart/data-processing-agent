@@ -8,34 +8,46 @@
 
 module.exports = function (almanac) {
 	var mqtt = require('mqtt');
-	almanac.mqttClient = mqtt.createClient(almanac.config.hosts.mqttBroker.port, almanac.config.hosts.mqttBroker.host);
+	almanac.log.info('VL', 'MQTT: connecting to: ' + almanac.config.hosts.mqttBrokerUrl);
+	almanac.mqttClient = mqtt.connect(almanac.config.hosts.mqttBrokerUrl);
+
+	almanac.mqttClient.on('error', function (error) {
+			almanac.log.warn('VL', 'MQTT: error: ' + error);
+		});
+
+	almanac.mqttClient.on('connect', function () {
+			almanac.log.info('VL', 'MQTT: connected to: ' + almanac.config.hosts.mqttBrokerUrl);
+			almanac.mqttClient.subscribe('/#');
+			almanac.mqttClient.publish('/almanac/0/info', JSON.stringify({
+					info: 'VirtualizationLayer MQTT started',
+				}));
+		});
 
 	almanac.mqttClient.on('message', function (topic, message) {
 		try {
 			almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
 			if (topic) {
-				var json = null;
+				var json = JSON.parse(message);
+				almanac.webSocket.forwardMqtt(topic, json);
 				if (topic.indexOf('/almanac/alert') === 0) {
-					json = JSON.parse(message);
-					almanac.webSocket.in('alert').emit('alert', {
-							instance: almanac.config.hosts.virtualizationLayerPublic,
-							topic: topic,
-							body: json,
-						});
+					//almanac.webSocket.in('alert').emit('alert', {	//TODO: Reimplement if needed
+					//		instance: almanac.config.hosts.virtualizationLayerPublic,
+					//		topic: topic,
+					//		body: json,
+					//	});
 					almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 				} else if (topic.indexOf('/iotentity') > 0) {
-					json = JSON.parse(message);
-					almanac.webSocket.in('scral').emit('scral', {
-							instance: almanac.config.hosts.virtualizationLayerPublic,
-							topic: topic,
-							body: json,
-						});
+					//almanac.webSocket.in('scral').emit('scral', {	//TODO: Reimplement if needed
+					//		instance: almanac.config.hosts.virtualizationLayerPublic,
+					//		topic: topic,
+					//		body: json,
+					//	});
 					if (almanac.config.mqttToHttpStorageManagerEnabled) {
 						almanac.storageManager.postMqttEvent(topic, json);	//Forward to StorageManager
 					}
 					almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 				} else if (topic.indexOf('/almanac/0/info') === 0) {
-					almanac.webSocket.in('info').emit('info', message);
+					//almanac.webSocket.in('info').emit('info', message);	//TODO: Re-implement if needeed
 				}
 			}
 		} catch (ex) {
@@ -43,16 +55,17 @@ module.exports = function (almanac) {
 		}
 	});
 
-	almanac.mqttClient.subscribe('/almanac/#');
-
-	setTimeout(function () {
-			almanac.mqttClient.publish('/almanac/0/info', JSON.stringify({
-					info: 'VirtualizationLayer MQTT started',
-				}));
-		}, 5000);
+	function broadcastAlive() {
+		almanac.mqttClient.publish('/broadcast', JSON.stringify({
+				'type': 'ALIVE',
+				'from': context.global.almanac.instance,
+				'mqttVirtualAddress': almanac.mqttVirtualAddress,
+				'date': Date.now(),
+			}));
+	}
 
 	setInterval(function () {
-			almanac.mqttClient.publish('/almanac/0/info', JSON.stringify({
+			almanac.mqttClient.publish('/broadcast', JSON.stringify({
 					info: 'VirtualizationLayer alive',
 				}));
 		}, 60000);
