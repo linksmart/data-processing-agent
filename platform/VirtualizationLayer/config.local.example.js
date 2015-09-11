@@ -6,6 +6,7 @@
 */
 
 var hosts = {
+		instanceName: 'YourPlace',
 		virtualizationLayerPublic: {	//Public IP of this Virtualization Layer, if any
 			host: 'example.org',
 			port: 8088,
@@ -13,6 +14,7 @@ var hosts = {
 		virtualizationLayer: {
 			port: 8088,
 		},
+		//recourceCatalogueUrl: 'http://localhost:44441/',
 		scral: {
 			host: 'example.com',
 			port: 8080,
@@ -23,5 +25,4 @@ var hosts = {
 exports.config = {
 	hosts: hosts,
 	logLevel: 'verbose',
-	mqttToHttpStorageManagerEnabled: false,
 };

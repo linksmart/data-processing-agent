@@ -1,9 +1,10 @@
 # Installation of the Virtualization Layer
-Requires Node.js >= 10.40. For MQTT, works with protocol 3.1.1+ (e.g. Mosquitto version 1.3+).
+Requires Node.js >= 10.40, and recommends the 10.x branch.
+For MQTT, works with protocol 3.1.1+ (e.g. Mosquitto version 1.3+).
 
 
 1. See http://nodejs.org.
-	* On Ubuntu:
+	* On Ubuntu or Debian jessie:
 	```sh
 	apt-get install nodejs npm
 	```

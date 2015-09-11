@@ -47,20 +47,25 @@ It is now ' + now.toISOString() + '.\n\
  ');
 	},
 
-	serveInfo: function (req, res) {
-		almanac.basicHttp.serveJson(req, res, {
+	info: function () {
+		return {
 			version: almanac.version,
-			publicAddress: almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayerPublic.host + ':' + almanac.config.hosts.virtualizationLayerPublic.port + '/',
+			instanceName: almanac.config.hosts.instanceName,
+			publicAddressUrl: almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayerPublic.host + ':' + almanac.config.hosts.virtualizationLayerPublic.port + '/',
 			virtualAddress: almanac.virtualAddress,
 			mqttVirtualAddress: almanac.mqttVirtualAddress,
-			networkManager: almanac.config.hosts.networkManagerUrl + '/',
-			storageManager: 'http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path,
+			networkManagerUrl: almanac.config.hosts.networkManagerUrl + '/',
+			storageManagerUrl: 'http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path,
 			mqttToHttpStorageManagerEnabled: almanac.config.mqttToHttpStorageManagerEnabled,
-			resourceCatalogue: almanac.recourceCatalogueUrl,
-			scral: 'http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path,
+			resourceCatalogueUrl: almanac.config.hosts.recourceCatalogueUrl,
+			scralUrl: 'http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path,
 			server: almanac.basicHttp.serverSignature,
 			nodejs: process.versions,
-		});
+		};
+	},
+
+	serveInfo: function (req, res) {
+		almanac.basicHttp.serveJson(req, res, almanac.info());
 	},
 
 	init: function() {
