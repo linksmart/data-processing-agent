@@ -94,7 +94,7 @@ module.exports = function (almanac) {
 					}
 				}
 			}
-		}
+		};
 
 	/*almanac.webSocket.forwardHttp = function (req, res, room) {
 		var body = '';
