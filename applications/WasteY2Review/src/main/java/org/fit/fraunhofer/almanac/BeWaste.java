@@ -27,18 +27,6 @@ public class BeWaste {
 
         // for test purposes: simulation
 
-/*        Set<String> XivelyBinIds = new HashSet<String>();
-        XivelyBinIds.add("e52118b45384c45280aab95edac54e4c9bab7169");
-        XivelyBinIds.add("49e306699d306b96cd171c5a00c3533720d27a43");
-        XivelyBinIds.add("91f010bb67ae1071433ff507a767afb3a3562b41");
-        XivelyBinIds.add("bbe4aef0289e002f6bc61f99405d0f28ba0fa878");
-        XivelyBinIds.add("56ffb0521865b165435f3e74ea25231d20e904c1");
-        XivelyBinIds.add("474e5f891912caf7cccb67e353cbee13b8c9b336");
-        XivelyBinIds.add("0b60ab7ad145ba4204ae541aa4d428d87f558c1e");
-        XivelyBinIds.add("6a2a241332749463701d4d9607c02bc903c8bea1");
-        XivelyBinIds.add("207aeb06506f2824dc1d30cfa4f6920722ca27ee");
-        XivelyBinIds.add("3427c3d6abe587552645504213fd222b7e151222");
-*/
         String[] XivelyBinIds = {"e52118b45384c45280aab95edac54e4c9bab7169", "49e306699d306b96cd171c5a00c3533720d27a43",
                                  "91f010bb67ae1071433ff507a767afb3a3562b41", "bbe4aef0289e002f6bc61f99405d0f28ba0fa878",
                                  "56ffb0521865b165435f3e74ea25231d20e904c1", "474e5f891912caf7cccb67e353cbee13b8c9b336"};
@@ -118,11 +106,11 @@ public class BeWaste {
                     e.printStackTrace();
                 }
                 // 1. OTRS integration sends an ACCEPTED in consequence of a ticket creation triggered by the CitizenApp:
-                Gson gsonObj = new Gson();
+/*                Gson gsonObj = new Gson();
                 String mesg = new String("ACCEPTED");
                 String json = gsonObj.toJson(mesg);
                 wasteMqttClient.publish("almanac/ticket", json);
-
+*/
                 try{
                     // pause for 10s
                     Thread.sleep(10000);
@@ -130,9 +118,9 @@ public class BeWaste {
                     e.printStackTrace();
                 }
                 // 2. DF event: the toy bin got full
-                mesg = "DF";
+/*                mesg = "DF";
                 json = gsonObj.toJson(mesg);
-                wasteMqttClient.publish("almanac/DF", json);
+                wasteMqttClient.publish("almanac/DF", json);*/
                 // end test purposes
 
                 try{

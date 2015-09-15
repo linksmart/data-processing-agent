@@ -15,7 +15,6 @@
     <orderEntry type="library" name="Maven: org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: it.ismb.pertlab:ogc.sensorthings.model:0.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: de.grundid.opendatalab:geojson-jackson:1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.5.0" level="project" />
     <orderEntry type="library" name="Maven: eu.linksmart.gc:network.backbone.protocol.mqtt.impl:0.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: eu.linksmart.gc:eu.linksmart.gc.api.utils:0.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: eu.linksmart.gc:eu.linksmart.gc.api.networkmanager:0.0.1-SNAPSHOT" level="project" />
@@ -59,6 +58,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.13" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.1" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
