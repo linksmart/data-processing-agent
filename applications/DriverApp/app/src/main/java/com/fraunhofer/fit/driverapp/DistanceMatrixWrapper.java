@@ -1,28 +1,5 @@
 package com.fraunhofer.fit.driverapp;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.fit.fraunhofer.almanac.RouteEndpoint;
-import org.fit.fraunhofer.almanac.RouteEndpointsList;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
-
 /**
  * Created by devasya on 10.06.2015.
  */

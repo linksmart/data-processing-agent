@@ -1,11 +1,13 @@
 package eu.linksmart.gc.utils.mqtt.subscription;
 
 
+import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.types.CurrentStatus;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -17,11 +19,11 @@ import java.util.concurrent.Executors;
 public  class ForwardingListener implements MqttCallback {
     protected final UUID originProtocol;
     protected  Observer  connectionListener = null;
-    protected final Logger LOG= Logger.getLogger(ForwardingListener.class.getName());
+    protected static final LoggerService LOG= new LoggerService(LoggerFactory.getLogger(ForwardingListener.class));
 
     protected long sequence ;
     protected ExecutorService executor = Executors.newCachedThreadPool();
-    protected Map<String, Observable> observables;
+    protected Map<Topic, MessageDeliverer> observables;
 
     protected CurrentStatus status;
 
@@ -38,21 +40,23 @@ public  class ForwardingListener implements MqttCallback {
     public ForwardingListener( Observer connectionListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
         this.connectionListener = connectionListener;
-        observables = new Hashtable<String, Observable>();
+        observables = new Hashtable<Topic, MessageDeliverer>();
     }
 
 
     protected void initObserver(String listening, Observer mqttEventsListener){
-        observables = new Hashtable<String, Observable>();
-        observables.put(listening, new Observable());
+        observables = new Hashtable<Topic, MessageDeliverer>();
+        observables.put(new Topic(listening), new MessageDeliverer());
     }
     public void addObserver(String topic, Observer listener){
-        if(!observables.containsKey(topic))
-            observables.put(topic, new Observable());
+        Topic t = new Topic(topic);
+        if(!observables.containsKey(t))
+            observables.put(t, new MessageDeliverer());
 
-        observables.get(topic).addObserver(listener);
+        observables.get(t).addObserver(listener);
 
     }
+    @SuppressWarnings("SuspiciousMethodCalls")
     public boolean removeObserver(String topic, Observer listener){
         if(observables.containsKey(topic))
             observables.get(topic).deleteObserver(listener);
@@ -66,9 +70,10 @@ public  class ForwardingListener implements MqttCallback {
 
         return true;
     }
-    public Set<String> getListeningTopics(){
+    public Set<Topic> getListeningTopics(){
         return observables.keySet();
     }
+    @SuppressWarnings("SuspiciousMethodCalls")
     public boolean isObserversEmpty(String topic){
         return observables.containsKey(topic);
     }
@@ -84,18 +89,27 @@ public  class ForwardingListener implements MqttCallback {
 
     }
 
+
     private synchronized long getMessageIdentifier(){
         sequence = (sequence + 1) % Long.MAX_VALUE;
         return sequence;
     }
     @Override
-    public void messageArrived(String topic, org.eclipse.paho.client.mqttv3.MqttMessage mqttMessage)  {
+    public void messageArrived(String topic, org.eclipse.paho.client.mqttv3.MqttMessage mqttMessage) {
         LOG.debug("Message arrived in listener:" + topic);
 
-        if (observables.containsKey(topic))
-            executor.execute( MessageDeliverer.createMessageDeliverer(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(),originProtocol),observables.get(topic)));
+        boolean processed= false;
+     //if (observables.containsKey(topic))
+        for(Topic t: observables.keySet()) {
+            if(t.equals(topic)) {
+               // observables.get(t).notifyObservers(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol));
+                observables.get(t).setMqttMessage(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol));
+                executor.execute(observables.get(t));
+                processed= true;
+            }
+        }
 
-        else
+        if(!processed)
             LOG.warn("A message arrived and no one listening to it");
     }
 

@@ -28,7 +28,7 @@ public class SystemUiHiderHoneycomb extends SystemUiHiderBase {
     /**
      * Flags to test against the first parameter in
      * {@link android.view.View.OnSystemUiVisibilityChangeListener#onSystemUiVisibilityChange(int)}
-     * to determine the system UI visibility state.
+     * to determine the system UI visibility status.
      */
     private int mTestFlags;
 
@@ -116,7 +116,7 @@ public class SystemUiHiderHoneycomb extends SystemUiHiderBase {
                 }
 
                 // Trigger the registered listener and cache the visibility
-                // state.
+                // status.
                 mOnVisibilityChangeListener.onVisibilityChange(false);
                 mVisible = false;
 
@@ -132,7 +132,7 @@ public class SystemUiHiderHoneycomb extends SystemUiHiderBase {
                 }
 
                 // Trigger the registered listener and cache the visibility
-                // state.
+                // status.
                 mOnVisibilityChangeListener.onVisibilityChange(true);
                 mVisible = true;
             }

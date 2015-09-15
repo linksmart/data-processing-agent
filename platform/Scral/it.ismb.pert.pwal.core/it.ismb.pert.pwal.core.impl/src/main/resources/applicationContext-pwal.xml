@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="PWAL" class="it.ismb.pertlab.pwal.PwalImpl">
+		<constructor-arg>
+			<list value-type="it.ismb.pertlab.pwal.api.devices.interfaces.DevicesManager">
+				<!-- <ref bean="thermometerFakeManager"/> -->
+				<!-- <ref bean="oxygenFakeManager"/> -->
+				<!-- <ref bean="bluetoothThermometerDriver"/> -->
+				<!-- <ref bean="wsnManager"/> -->
+				<!-- <ref bean="bluetoothManager"/> -->
+<!-- 				<ref bean="serialManager"/> -->
+<!-- 				<ref bean="SmartSantanderManager" /> -->
+  				<ref bean="xivelyManager"/>
+<!--  				<ref bean="m2mManager" /> -->
+<!-- 				<ref bean="WasteBinSimulatorManager" /> -->
+<!--				<ref bean="PhilipsHueManager" /> -->
+<!--				<ref bean="PlugwiseManager" /> -->
+<!--				<ref bean="FakeManager"/> -->
+			</list>
+		</constructor-arg>
+	</bean>
+<!--
+	<bean id="PhilipsHueManager" class="it.ismb.pertlab.pwal.philipshue.manager.PhilipsHueManager" depends-on="mqttPusher">
+		<constructor-arg value="true"/>
+		<constructor-arg>
+			<map key-type="java.lang.String" value-type="java.lang.String">
+	    		<entry key="Hue Lamp 2-3-LCT001" value="550,670"></entry>				
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="PlugwiseManager" class="it.ismb.pertlab.pwal.plugwise.manager.PlugwiseManager" depends-on="mqttPusher">
+		<constructor-arg value="http://192.168.86.90:8080/plugwisegateway/"/>
+		<constructor-arg>
+			<map key-type="java.lang.String" value-type="java.lang.String">
+	    		<entry key="4B9ED3-INSTANT_POWER" value="160,115"></entry>
+	   	 		<entry key="59AFCD-INSTANT_POWER" value="247,115"></entry>
+	   	 		<entry key="4BFA54-INSTANT_POWER" value="255,268"></entry>
+	   	 		<entry key="5510F6-INSTANT_POWER" value="265,265"></entry>  	
+	   	 		<entry key="551264-INSTANT_POWER" value="445,175"></entry>
+	   	 		<entry key="599C85-INSTANT_POWER" value="525,300"></entry>
+	   	 		<entry key="469594-INSTANT_POWER" value="780,265"></entry>
+	   	 		<entry key="11ECE4-INSTANT_POWER" value="577,567"></entry>
+	   	 		<entry key="599C85-INSTANT_POWER" value="795,567"></entry>
+	   	 		<entry key="113547-INSTANT_POWER" value="712,500"></entry>
+	   	 		<entry key="B1BDE9-INSTANT_POWER" value="577,500"></entry>
+	   	 		<entry key="4BC264-INSTANT_POWER" value="252,567"></entry>
+	   	 		<entry key="11EAF9-INSTANT_POWER" value="106,718"></entry>
+	   	 		<entry key="599664-INSTANT_POWER" value="1572,129"></entry>
+	   	 		<entry key="59882F-INSTANT_POWER" value="1264,571"></entry>
+	   	 		<entry key="59ADEC-INSTANT_POWER" value="1075,265"></entry>
+	   	 		<entry key="11BDBE-INSTANT_POWER" value="1770,624"></entry>
+	   	 		<entry key="11F084-INSTANT_POWER" value="1770,714"></entry>
+	   	 		<entry key="1A4446B-HUMIDITY" value="397,727"></entry>
+	   	 		<entry key="1A4446B-TEMPERATURE" value="464,750"></entry> 	
+	   	 		<entry key="11F024-TEMPERATURE" value="40,865"></entry> 
+	   	 		<entry key="4BFA6F-TEMPERATURE" value="100,865"></entry> 	 	
+			</map>
+		</constructor-arg>
+	</bean>
+ 	<bean id="FakeManager" class="it.ismb.pertlab.pwal.fakemanager.manager.FakeManager" depends-on="mqttPusher">
+		<constructor-arg value="20"/>
+		<constructor-arg value="25" />
+	</bean>
+-->
+<!-- 	<bean id="SmartSantanderManager" class="it.ismb.pertlab.pwal.smartsantander.manager.SmartSantanderManager" depends-on="mqttPusher" />  -->
+<!-- <bean id="wsnManager" class="it.ismb.pertlab.pwal.wsn.driver.WSNManager" /> 
+	<bean id="bluetoothManager" class="it.ismb.pertlab.pwal.manager.bluetooth.BluetoothManager"> 
+		<constructor-arg> 
+			<map> 
+				<entry key="00123EFF29DB" value="it.ismb.pertlab.pwal.manager.bluetooth.device.ThermometerDevice"/> 
+			</map> 
+		</constructor-arg> 
+	</bean> -->
+<!-- 	<bean id="serialManager" class="it.ismb.pertlab.pwal.serialmanager.SerialManager" depends-on="mqttPusher">  -->
+<!-- 		<constructor-arg>  -->
+<!-- 			<map> -->
+	<!-- List of sensors that can be provided by this serial device -->
+	<!-- key=sensor_id value=device_type -->
+<!-- 			<entry key="idFillLevelSensor" value="it.ismb.pertlab.pwal.manager.serial.device.FillLevelSensorFit" />  -->
+ <!-- 				<entry key="idFlowSensor" value="it.ismb.pertlab.pwal.manager.serial.device.FlowMeterSensorFit"	/>  --> 
+ <!-- 				<entry key="idWaterPump" value="it.ismb.pertlab.pwal.manager.serial.device.WaterPumpFit" />  --> 
+<!-- 			</map>  -->
+<!-- 		</constructor-arg>  -->
+<!-- 		<constructor-arg value="COM5" />  -->
+<!-- 	</bean> -->
+  	<bean id="xivelyManager" class="it.ismb.pertlab.pwal.xivelymanager.XivelyManager" depends-on="xmppPusher"/>
+<!-- 	<bean id="m2mManager" class="it.ismb.pertlab.pwal.etsi_m2m_manager.EtsiM2MManager" depends-on="mqttPusher"> -->
+<!-- 		<constructor-arg value="http://m2mtilab.dtdns.net/etsi/almanac" /> -->
+<!-- 	</bean>  -->
+<!-- 
+ 	<bean id="mqttPusher" class="it.ismb.pertlab.pwal.pusher.mqtt.MqttPusher">
+		<constructor-arg value="tcp://130.192.85.32:1883" />
+ -->
+<!-- 		<constructor-arg value="tcp://localhost:1883" /> -->
+<!-- 	<constructor-arg value="localrai"/>
+ 	</bean>
+-->
+<!--  	<bean id="xmppPusher" class="it.ismb.pertlab.pwal.pusher.xmpp.XmppPusher">
+		<constructor-arg value="127.0.0.1" />
+		<constructor-arg value="davide-pc" />
+		 
+ 	</bean>
+ 	-->
+<!--  	<bean id="WasteBinSimulatorManager" -->
+<!-- 		class="it.ismb.pertlab.pwal.wastebinsimulator.WasteBinSimulatorManager"> -->
+<!-- 		 <constructor-arg value="1000" />  -->
+<!--  		<constructor-arg -->
+<!-- 			value="http://www.almanac-project.eu/ontologies/smartcity/turin_waste.owl" /> -->
+<!-- 		<constructor-arg value="turin_waste.n3" /> -->
+<!-- 		<constructor-arg value="altow" /> -->
+<!-- 		<constructor-arg value="ontologies/" /> -->
+<!-- 		<constructor-arg value="600000"/> -->
+<!-- 	</bean> -->
+	<!-- <bean id="ResourceCatalogConnector" class="it.ismb.pertlab.pwal.resourcecatalog.connector.ResourceCatalogConnector">
+		<constructor-arg value="http://pertscrum.polito.it:44441/"/>
+		<constructor-arg value="http://almanac-showcase.ismb.it:8080/connectors.rest/"/>
+	</bean>-->
+</beans>

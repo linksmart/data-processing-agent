@@ -1,15 +1,14 @@
 package eu.almanac.event.datafusion.feeder;
 
 import eu.almanac.event.datafusion.esper.utils.Tools;
-import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
-import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
+import eu.linksmart.gc.utils.mqtt.subscription.MqttMessage;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.eclipse.paho.client.mqttv3.*;
 
@@ -137,11 +136,11 @@ public abstract class MqttFeederImpl implements Runnable, Feeder, EventFeederLog
     public void update(Observable topic, Object mqttMessage)  {
 
         debugCount=(debugCount+1)%Long.MAX_VALUE;
-        if(debugCount%conf.getInt(Const.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH) == 0)
-            loggerService.info(Tools.getDateNowString() + " message arrived with topic: " + ((MqttTunnelledMessage) mqttMessage).getTopic());
+        if(debugCount%conf.getInt(FeederConst.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH) == 0)
+            loggerService.info(Tools.getDateNowString() + " message arrived with topic: " + ((MqttMessage) mqttMessage).getTopic());
 
 
-        mangeEvent(((MqttTunnelledMessage)mqttMessage).getTopic(), ((MqttTunnelledMessage)mqttMessage).getPayload() );
+        mangeEvent(((MqttMessage)mqttMessage).getTopic(), ((MqttMessage)mqttMessage).getPayload() );
 
     }
 

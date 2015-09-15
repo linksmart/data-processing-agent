@@ -1,0 +1,47 @@
+---
+layout: map-leaflet
+title: SCRAL - Map
+---
+
+<div class="grid fluid full-height">
+	  <div class="search-control top-overlap" id="search-control">
+		<div class="span1"></div>
+		 <div class="span10"> 
+			<form class="inline" id="search-form">
+				<h3 class="fg-white">
+					<i class="icon-cloud"></i> {{ site.description }}
+				</h3>
+				<div class="input-control text size3">
+					<input type="text" placeholder="Where..." id="where" data-hint="Address to search around..."  data-hint-position="top"/>
+					<span class="btn-inline">
+						<i class="icon-earth"></i>
+					</span>
+				</div>
+				<div class="input-control text size3">
+					<input type="text" placeholder="What..." id="what"  data-hint="Type of sensor to search..."  data-hint-position="right"/>
+					<span class="btn-inline">
+						<i class="icon-help-2"></i>
+					</span>
+				</div>
+				<div class="input-control size3">
+				<button class="bg-white btn-text" id="nearToMe" data-hint="Sensor near to my current position (location must be enabled on the browser)...">
+					Near to me <i class="icon-target"></i>
+				</button>
+			</div>
+			</form>
+
+		</div>
+		<div class="span1">
+		</div>
+	</div>
+	<div class="no-margin row full-height">
+		<div class="span12 full-height">
+			<div id="spinner" class="spinner-container">
+				<i class="fa fa-5x fa-spinner fa-spin fg-white"></i>
+			</div>
+			 <div id="progress"><div id="progress-bar"></div></div>
+			<div id="map-canvas" class="map"></div>
+		</div>
+	</div>
+	<div id="legend" class="legend"></div>
+</div>

@@ -27,6 +27,9 @@ public interface Const extends eu.linksmart.gc.utils.constants.Const, FeederCons
 
     public static final String LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH = "LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH";
 
+    public static final String PERSISTENT_DATA_FILE = "PERSISTENT_FILES";
+
+    public static final String CEP_ENGINES_PATH = "CEP_ENGINES";
 
     public static final String DEFAULT_CONFIGURATION_FILE ="dfm.cfg";
     public static final UUID DFM_ID = UUID.randomUUID();

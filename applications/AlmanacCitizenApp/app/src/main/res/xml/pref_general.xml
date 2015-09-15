@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="eclipse_enabled"
+        android:title="@string/enable_eclipse"
+        android:summary="@string/enable_eclipse_server"
+        android:defaultValue="false" />
+
+
+
+
+
+</PreferenceScreen>

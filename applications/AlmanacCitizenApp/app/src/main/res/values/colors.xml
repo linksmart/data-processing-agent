@@ -5,4 +5,7 @@
     <color name="textbox_border">#FFFFFFFF</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="semi_transparent_item_background">#99c8c8c8</color>
+    <color name="updated_item_background">#ffffffff</color>
+    <color name="textDescriptionColor">#ff010902</color>
 </resources>

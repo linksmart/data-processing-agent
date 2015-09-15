@@ -1,19 +1,12 @@
 package com.fraunhofer.fit.driverapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Base64;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -42,6 +35,7 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
     private MqttAndroidClient mClient ;
     private Context mContext;
     RouteUpdateHandler mRouteUpdateHandler;
+    private boolean mUpdateDone;
 
 
     public void connect(Context context,RouteUpdateHandler routeUpdateHandler){
@@ -73,20 +67,36 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
         }
         if(s.equals(topic)) {
             mRouteUpdateHandler.handleUpdateNodeList(routeEndpointsList);
+//            if(mContext.getResources().getBoolean(R.bool.testLocally) && !mUpdateDone) {
+//
+//                ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
+//                RouteEndpoint TOY_BIN = new RouteEndpoint();
+//                TOY_BIN.geoLocation(45.061148, 7.700376);//45.064537048339844, 7.696494102478027);//45.06723305,    7.70074879);
+//                TOY_BIN.setId("TOY_BIN");
+//                routeEndpointsListToPub.add(TOY_BIN);
+//
+//
+//                String issueGsonToPub = gsonObj.toJson(routeEndpointsListToPub);
+//                Log.i(TAG, "publishing toy bin2");
+//                mClient.publish(topic, issueGsonToPub.getBytes(), 1, false);
+//                mUpdateDone = true;
+//            }
         }else if(s.equals(init_topic)){
             mRouteUpdateHandler.handleInitNodeList(routeEndpointsList);
             Log.i(TAG, "got init "+ mContext.getResources().getBoolean(R.bool.testLocally));
             if(mContext.getResources().getBoolean(R.bool.testLocally)) {
+
                 ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
-                RouteEndpoint TOY_BIN = new RouteEndpoint();
-                TOY_BIN.geoLocation(45.061148, 7.700376);//45.064537048339844, 7.696494102478027);//45.06723305,    7.70074879);
-                TOY_BIN.setId("TOY_BIN");
+
+                RouteEndpoint TOY_BIN = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+
                 routeEndpointsListToPub.add(TOY_BIN);
 
 
                 String issueGsonToPub = gsonObj.toJson(routeEndpointsListToPub);
                 Log.i(TAG, "publishing toy bin");
                 mClient.publish(topic, issueGsonToPub.getBytes(), 1, false);
+                mUpdateDone = false;
             }
         }
     }
@@ -127,8 +137,8 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
                 routeEndpointsList.add(LOC_E);
                 RouteEndpoint LOC_F = new RouteEndpoint("LOC_F",45.062345, 7.679798);
                 routeEndpointsList.add(LOC_F);
-                RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
-                routeEndpointsList.add(LOC_G);
+//                RouteEndpoint LOC_G = new RouteEndpoint("LOC_G",45.061375, 7.693145);
+//                routeEndpointsList.add(LOC_G);
 
 
 
@@ -163,16 +173,42 @@ public class MqttListener implements MqttCallback ,IMqttActionListener{
 
     }
 
+    public void  publishforTest(){
+        Gson gsonObj = new Gson();
+        if(mContext.getResources().getBoolean(R.bool.testLocally) && !mUpdateDone) {
+
+            ArrayList<RouteEndpoint> routeEndpointsListToPub = new ArrayList<RouteEndpoint>();
+            RouteEndpoint TOY_BIN = new RouteEndpoint();
+            TOY_BIN.geoLocation(45.049060, 7.667581);//(45.061148, 7.700376);
+            TOY_BIN.setId("TOY_BIN");
+            routeEndpointsListToPub.add(TOY_BIN);
+
+
+            String issueGsonToPub = gsonObj.toJson(routeEndpointsListToPub);
+            Log.i(TAG, "publishing toy bin2");
+            try {
+                mClient.publish(topic, issueGsonToPub.getBytes(), 1, false);
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+            mUpdateDone = true;
+        }
+    }
 
     private class MqttserviceTask extends AsyncTask<Context,Void,String> {
 
         @Override
         protected String doInBackground(Context... params) {
             if(mClient == null) {
-                if(mContext.getResources().getBoolean(R.bool.testLocally)) {
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+                boolean eclispe_enabled = sharedPref.getBoolean("eclipse_enabled", false);
+
+                if(eclispe_enabled) {
                     Log.i(TAG, "connecting to eclipse");
                     mClient = new MqttAndroidClient(params[0], "tcp://m2m.eclipse.org:1883", "FitClient");//tcp://m2m.eclipse.org:1883
                 }else {
+                    Log.i(TAG, "connecting to almanac");
                     mClient = new MqttAndroidClient(params[0], "tcp://almanac.fit.fraunhofer.de:1883", "FitClient");//tcp://m2m.eclipse.org:1883
                 }
 

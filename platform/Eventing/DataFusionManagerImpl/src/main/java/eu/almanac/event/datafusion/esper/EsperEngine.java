@@ -9,25 +9,35 @@ import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
-import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.rmi.RemoteException;
+import java.util.*;
 
 /**
  * Created by Caravajal on 06.10.2014.
  */
-public class EsperEngine implements DataFusionWrapper {
+ class EsperEngine implements DataFusionWrapper {
+
     private static EPServiceProvider epService;
+    @Deprecated
     Map<String, Map<String,String>> topicName = new HashMap<>();
+    @Deprecated
     Map<String, Map<String,String>> nameTopic = new HashMap<>();
+    @Deprecated
     Map<String, Boolean> queryReady = new HashMap<>();
+    Map<String,Statement> deployedStatements = new Hashtable<>();
     private  LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
-    static private EsperEngine ref= new EsperEngine();
+    static private EsperEngine ref= init();
+
+    static EsperEngine init(){
+        EsperEngine EE= new EsperEngine();
+
+        instancedEngines.put(EE.getName(),EE);
+
+        return EE;
+    }
 
     public static EsperEngine getEngine(){
         return  ref;
@@ -108,14 +118,6 @@ public class EsperEngine implements DataFusionWrapper {
     public boolean addEvent(String topic, Object event,Class type) {
         try {
 
-
-
-
-
-
-           // addEsperEvent(esperTopic, event);
-
-
             String[] parentTopicAndHead = getParentTopic(topic);
 
             addEsperEvent(parentTopicAndHead[0]+ ".hash",event, type );
@@ -161,7 +163,7 @@ public class EsperEngine implements DataFusionWrapper {
     }
 
     @Override
-    public boolean addStatement(Statement statement) throws StatementException{
+    public boolean addStatement(Statement statement) throws StatementException {
         Boolean ret = false;
         if(statement.getStatement().toLowerCase().equals("pause")){
             ret = pauseQuery(statement.getName());
@@ -187,10 +189,24 @@ public class EsperEngine implements DataFusionWrapper {
             }
 
         }else {
-             addQuery(statement);
+            try {
+                addQuery(statement);
+                // if there is no exception set add statement as success
+                ret =true;
+
+            }catch (MalformedURLException | RemoteException | NullPointerException e ){
+                loggerService.error(e.getMessage(),e);
+                ret =false;
+            }
+
         }
 
         return ret;
+    }
+
+    @Override
+    public boolean removeStatement(String id) throws StatementException {
+        return removeQuery(id);
     }
 
     @Override
@@ -201,55 +217,46 @@ public class EsperEngine implements DataFusionWrapper {
 
     }
 
-    public void addQuery(Statement query) throws StatementException {
+    @Override
+    public Map<String,Statement>  getStatements() {
+        return deployedStatements;
+    }
+
+    public void addQuery(Statement query) throws StatementException, MalformedURLException, RemoteException {
 
 
 
 
-        if(epService.getEPAdministrator().getStatement(query.getName())!=null) {
+        if(epService.getEPAdministrator().getStatement(query.getHash())!=null) {
 
-            throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), ("Query with name" + query.getName() + " already added"));
+            throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), ("Query with id " + query.getHash() + " already added"));
 
         }
 
-            queryReady.put(query.getName(), true);
-            /* if (query.haveInput()) {
-                for (String topic : query.getInput()) {
-
-                    // Adapt the topic to a Esper topic
-                    //esperTopic = topic.substring(1).replace('/', '.');
-
-                    // changing state of the queries this could be made in several places in several threads!
-                   synchronized (this) {
-
-                        // if the type of the topic is defined
-                        if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists(topic) && topic.contains("/federation")) {
-                            // ToDO: this must be dynamic decided!
-                           // defineIoTTypes("observation", Observation.class);
-                        }
-                    }
-                }
-            }*/
+        queryReady.put(query.getName(), true);
 
 
         addEsperStatement(query);
 
-
-
-
-
-
     }
-    private void addEsperStatement( Statement query){
+    private void addEsperStatement( Statement query) throws StatementException, MalformedURLException, RemoteException {
         ComplexEventHandler handler;
         // add the query and the listener for the query
-        EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getName());
         try {
             handler = new ComplexEventHandlerImpl(query);
+            EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
 
             statement.setSubscriber(handler);
+            statement.start();
+
+            deployedStatements.put(query.getHash(),query);
         } catch (Exception e) {
+            if(e instanceof StatementException)
+                throw (StatementException)e;
            loggerService.error(e.getMessage(),e);
+            throw e;
+
+
 
         }
     }
@@ -273,14 +280,16 @@ public class EsperEngine implements DataFusionWrapper {
         return true;
     }
 
-    public boolean removeQuery(String name) {
+    public boolean removeQuery(String id) {
 
-        if(epService.getEPAdministrator().getStatement(name)==null)
+        if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
 
-        ((ComplexEventHandlerImpl)epService.getEPAdministrator().getStatement(name).getSubscriber()).destroy();
+        ((ComplexEventHandlerImpl)epService.getEPAdministrator().getStatement(id).getSubscriber()).destroy();
 
-        epService.getEPAdministrator().getStatement(name).destroy();
+        epService.getEPAdministrator().getStatement(id).destroy();
+
+        deployedStatements.remove(id);
 
         return true;
     }

@@ -1,7 +1,11 @@
 package org.fraunhofer.fit.almanac.almanaccitizenapp;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -9,22 +13,37 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
 
 import org.fraunhofer.fit.almanac.model.DuplicateIssue;
+import org.fraunhofer.fit.almanac.model.Event;
+import org.fraunhofer.fit.almanac.model.IssueEvent;
+import org.fraunhofer.fit.almanac.model.IssueStatus;
 import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
+import org.fraunhofer.fit.almanac.model.Priority;
+import org.fraunhofer.fit.almanac.model.Status;
 import org.fraunhofer.fit.almanac.protocols.MqttListener;
+import org.fraunhofer.fit.almanac.util.NetworkUtil;
+import org.fraunhofer.fit.almanac.util.UniqueId;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.Locale;
 
 
 public class AlmanacCitizen extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,ImageListFragment.OnNewIssueRequestListener{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks{
 
     private static final String TAG = "AlmanacCitizen";
     private static final int CAPTURE_AND_UPLOAD = 0x11;
+    public static final int ID_NEW_UPDATE = 0;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -35,11 +54,9 @@ public class AlmanacCitizen extends AppCompatActivity
      */
     private CharSequence mTitle;
 
-    private String mClientID;//Client id to uniquely identify the client
+
 
     ImageListFragment mImageListFragment;
-
-    IssueTracker mIssueTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,40 +73,45 @@ public class AlmanacCitizen extends AppCompatActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
-        setupMqtt();
-        initializeIssueTracker();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disconnectMqtt();
+     //   disconnectMqtt();
+
     }
 
-    protected void  initializeIssueTracker(){
-        mIssueTracker = IssueTracker.getInstance();
-        mIssueTracker.setContext(getApplicationContext());
-    }
-    private void setupMqtt() {
-        MqttListener mqttListener = MqttListener.getInstance();
-        mqttListener.connect(getApplicationContext(),getClientId(),new LinkedList<String>());//TODO make a persistent list
-        mqttListener.addNotificationListener(mMqttNotificationListener );
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mImageListFragment.publishDone();
     }
 
-    private void disconnectMqtt(){
-        MqttListener mqttListener = MqttListener.getInstance();
-        if (mqttListener != null) {
-            mqttListener.disconnect();
-        }
-    }
+    //    private void disconnectMqtt(){
+//        MqttListener mqttListener = MqttListener.getInstance();
+//        if (mqttListener != null) {
+//            mqttListener.disconnect();
+//        }
+//    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         mImageListFragment = ImageListFragment.newInstance(position + 1);
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, mImageListFragment)
-                .commit();
+        Log.i(TAG,"onNavigationDrawerItemSelected pos: "+position);
+        if(position != 0) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, mImageListFragment)
+                    .addToBackStack("homepage")
+                    .commit();
+        }else{
+            fragmentManager.popBackStack("homepage", android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, mImageListFragment)
+                    .commit();
+        }
     }
 
     public void onSectionAttached(int number) {
@@ -100,9 +122,9 @@ public class AlmanacCitizen extends AppCompatActivity
             case 2:
                 mTitle = getString(R.string.title_section2);
                 break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
+//            case 3:
+//                mTitle = getString(R.string.title_section3);
+//                break;
         }
     }
 
@@ -110,7 +132,12 @@ public class AlmanacCitizen extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
+        Log.i(TAG, "title = " + mTitle);
         actionBar.setTitle(mTitle);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher); //also displays wide logo
+
     }
 
 
@@ -135,61 +162,22 @@ public class AlmanacCitizen extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
 
 
-    MqttListener.MqttNotificationListener mMqttNotificationListener = new MqttListener.MqttNotificationListener() {
 
-        @Override
-        public void onIssueUpdate(final PicIssueUpdate issueUpdate) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //Toast.makeText(getActivity().getApplicationContext(),"Got a message on name"+issueUpdate.name,Toast.LENGTH_SHORT).show();
-                    new AlertDialog.Builder(getApplicationContext())
-                            .setTitle(issueUpdate.name)
-                            .setMessage(issueUpdate.displayString())
-                            .setPositiveButton(R.string.ok_dialog, null)
-                            .show();
-                    Log.i(TAG, "onIssueUpdate:"+issueUpdate.getString());
-                    mIssueTracker.updateIssue(issueUpdate);
-                }
-            });
-        }
 
-        @Override
-        public void onDuplicateIssue(final DuplicateIssue duplicateIssue) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //Toast.makeText(getActivity().getApplicationContext(),"Got a message on name"+issueUpdate.name,Toast.LENGTH_SHORT).show();
-                    new AlertDialog.Builder(getApplicationContext())
-                            .setTitle(R.string.dialog_duplicate_title)
-                            .setMessage(R.string.dialog_duplicate_message)
-                            .setPositiveButton(R.string.ok_dialog, null)
-                            .setNegativeButton(R.string.no_dialog,null)
-                            .show();
-                    Log.i(TAG, "already raised issue "+duplicateIssue.issueId()+ " for the issue " + duplicateIssue.dupIssueId());
-                    mIssueTracker.updateIdToOriginalIssue(duplicateIssue.dupIssueId(),duplicateIssue.issueId());
-                }
-            });
-        }
-    };
 
-    private String getClientId() {
-        //TODO:make this persistent
-        if(mClientID == null)
-            mClientID = ((TelephonyManager) getBaseContext().getSystemService(getApplicationContext().TELEPHONY_SERVICE)).getDeviceId()+"almanac";
-        return  mClientID;
-    }
-
-    @Override
     public void onNewIssueSelected() {
+        if(!NetworkUtil.isConnectionAvailable(getApplicationContext())){
+            Toast.makeText(getApplicationContext(), getString(R.string.this_needs_internet_connection), Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(this,CaptureActivity.class);
         startActivityForResult(intent,CAPTURE_AND_UPLOAD);
     }
@@ -197,17 +185,20 @@ public class AlmanacCitizen extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CAPTURE_AND_UPLOAD){
-            if(resultCode == RESULT_OK){
-                mImageListFragment.publishDone();
-            }else if(resultCode== RESULT_CANCELED){
-
-            }
-        }
+//        if(requestCode == CAPTURE_AND_UPLOAD){
+//            if(resultCode == RESULT_OK){
+//                mImageListFragment.publishDone();
+//            }else if(resultCode== RESULT_CANCELED){
+//
+//            }
+//        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
     }
+
+
+
 }

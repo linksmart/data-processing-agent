@@ -27,7 +27,9 @@ li:nth-child(odd) { background: #eee; }
 <script>
 "use strict";
 
-var socket = io(),
+var socket = io({
+			//transports: ['websocket'],	//Possibility to force the use of WebSocket solely
+		}),
 	messages = document.getElementById('messages'),
 	messageBox = document.getElementById('m');
 

@@ -1,0 +1,176 @@
+---
+
+---
+
+var map;
+var markers;
+var extent = [ 0, 0, 1920, 1080 ];
+var draw;
+
+// Map views always need a projection. Here we just want to map image
+// coordinates directly to map coordinates, so we create a projection that uses
+// the image extent in pixels.
+
+var projection = new ol.proj.Projection({
+	// code : 'xkcd-image',
+	code : 'pixels',
+	units : 'pixels',
+	extent : extent
+});
+
+var iconFeature = new ol.Feature({
+	geometry : new ol.geom.Point([ 257, 525 ]),
+	name : 'http://www.google.it'
+});
+
+var iconFeature2 = new ol.Feature({
+	geometry : new ol.geom.Point([ 400, 700 ]),
+	name : 'http://www.ismb.it'
+});
+
+var iconStyle = new ol.style.Style({
+	image : new ol.style.Icon(/** @type {olx.style.IconOptions} */
+	({
+		anchor : [ 0.5, 47 ],
+		anchorXUnits : 'fraction',
+		anchorYUnits : 'pixels',
+		opacity : 0.75,
+		src : 'assets/img/maplocal/marker_rid.png'
+	}))
+});
+
+$(function() {
+	var requestedMap = getParameterByName("map");
+	init(requestedMap);
+});
+
+function getParameterByName(name) {
+	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+	var regexS = "[\\?&]" + name + "=([^&#]*)", regex = new RegExp(regexS), results = regex
+			.exec(window.location.href);
+	if (results == null) {
+		return "";
+	} else {
+		return decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+}
+
+iconFeature.setStyle(iconStyle);
+iconFeature2.setStyle(iconStyle);
+
+var vectorSource = new ol.source.Vector({
+	features : [ iconFeature, iconFeature2]
+});
+
+var vectorLayer = new ol.layer.Vector({
+	source : vectorSource
+});
+
+function init(requestedMap) {
+
+	var layerImage;
+	var sourceImage;
+	var urlImage;
+
+	switch (requestedMap) {
+	case "boella":
+		urlImage = 'assets/img/boella.jpg';
+		break;
+	case "pert":
+		urlImage = 'assets/img/pert.jpg';
+		break;
+	default:
+		urlImage = 'assets/img/boella.jpg';
+		break;
+	}
+
+	if (urlImage != undefined) {
+		sourceImage = new ol.source.ImageStatic({
+			url : urlImage,
+			projection : projection,
+			imageExtent : extent
+		});
+		layerImage = new ol.layer.Image(sourceImage);
+		map = new ol.Map(
+				{
+					renderer: 'canvas',
+					layers : [
+							new ol.layer.Image(
+									{
+										source : new ol.source.ImageStatic(
+												{
+													attributions : [ new ol.Attribution(
+															{
+																html : '&copy; <a href="http://xkcd.com/license.html">xkcd</a>'
+															}) ],
+													url : urlImage,
+													projection : projection,
+													imageExtent : extent,
+													imageSize: [1920, 1080]
+												})
+									}) ],
+					target : 'map',
+					// interactions:
+					// ol.interaction.defaults({mouseWheelZoom:false,
+					// doubleClickZoom:false, dragAndDrop:false}),
+					view : new ol.View({
+						projection : projection,
+						center : ol.extent.getCenter(extent),
+						zoom : 2
+					}),
+				// controls: []
+				});
+		drawLabRect(requestedMap);
+		map.on('click', function(evt) {
+			var feature = map.forEachFeatureAtPixel(evt.pixel, function(
+					feature, layer) {
+				return feature;
+			});
+			if (feature) {
+				var geometry = feature.getGeometry();
+				var coord = geometry.getCoordinates();
+				window.location = feature.get('name');
+			}
+		});
+	} else {
+		alert("ops...no maps!");
+	}
+}
+
+//draw pert rectangle
+function drawLabRect(requestedMap)
+{
+	switch (requestedMap) {
+	case "boella":
+		drawLabs();
+		break;
+	case "pert":
+		break;
+	default:
+		drawLabs();
+		break;
+	}
+}
+
+function drawLabs()
+{
+	var style = {
+			strokeColor : "#00FF00",
+			strokeOpacity : 1,
+			strokeWidth : 3,
+			fillColor : "#00FF00",
+			fillOpacity : 1
+	};
+	var p1 = new ol.geom.Point(1202, 98);
+	var p2 = new ol.geom.Point(1202, 223);
+	var p3 = new ol.geom.Point(1527, 98);
+	var p4 = new ol.geom.Point(1527, 223);
+	var p5 = new ol.geom.Point(1202, 98);
+
+	var pnt= [];
+	pnt.push(p1,p2,p3,p4,p5);
+
+	var ln = new ol.geom.LinearRing([pnt]);
+	var feature = new ol.Feature({geometry: ln});
+	feature.setStyle(style);
+}

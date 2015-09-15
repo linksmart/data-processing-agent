@@ -26,6 +26,8 @@ public class FeedReaderDbHelper  extends SQLiteOpenHelper {
                     FeedEntry.COLUMN_INT_STATE + INTEGER_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_DATE_TIMETOCOMPLETION + NUMERIC_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_DATE_CREATIONDATE + NUMERIC_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_DATE_UPDATEDATE + NUMERIC_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_BOOL_ISUPDATED +  NUMERIC_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_BOOL_SUBSCRIBED + NUMERIC_TYPE +
           " )";
 

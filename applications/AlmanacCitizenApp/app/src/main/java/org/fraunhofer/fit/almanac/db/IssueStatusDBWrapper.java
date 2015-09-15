@@ -8,6 +8,8 @@ import android.util.Log;
 
 import org.fraunhofer.fit.almanac.model.IssueStatus;
 import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
+import org.fraunhofer.fit.almanac.model.Priority;
+import org.fraunhofer.fit.almanac.model.Status;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -40,6 +42,8 @@ public class IssueStatusDBWrapper {
                 FeedReaderContract.FeedEntry.COLUMN_INT_STATE,
                 FeedReaderContract.FeedEntry.COLUMN_DATE_TIMETOCOMPLETION,
                 FeedReaderContract.FeedEntry.COLUMN_DATE_CREATIONDATE,
+                FeedReaderContract.FeedEntry.COLUMN_DATE_UPDATEDATE,
+                FeedReaderContract.FeedEntry.COLUMN_BOOL_ISUPDATED,
                 FeedReaderContract.FeedEntry.COLUMN_BOOL_SUBSCRIBED,
         };
         // How you want the results sorted in the resulting Cursor
@@ -67,10 +71,12 @@ public class IssueStatusDBWrapper {
                 issueStatus.comment = cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_STRING_COMMENT));
                 issueStatus.picPath = cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_STRING_PICPATH));
 
-                issueStatus.state = PicIssueUpdate.State.fromInteger(cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_INT_STATE)));
-                issueStatus.priority = PicIssueUpdate.Priority.fromInteger(cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_INT_PRIORITY)));
+                issueStatus.status = Status.fromInteger(cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_INT_STATE)));
+                issueStatus.priority = Priority.fromInteger(cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_INT_PRIORITY)));
                 issueStatus.timeToCompletion = new Date(cursor.getLong(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_DATE_TIMETOCOMPLETION)));
                 issueStatus.creationDate = new Date(cursor.getLong(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_DATE_CREATIONDATE)));
+                issueStatus.updationDate = new Date(cursor.getLong(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_DATE_UPDATEDATE)));
+                issueStatus.isUpdated = cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_BOOL_ISUPDATED))>0;
                 issueStatus.isSubscribed = cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_BOOL_SUBSCRIBED))>0;
                 issueStatusList.add(issueStatus);
                 cursor.moveToNext();
@@ -90,8 +96,8 @@ public class IssueStatusDBWrapper {
         values.put(FeedReaderContract.FeedEntry.COLUMN_STRING_NAME, issueStatus.name);
         values.put(FeedReaderContract.FeedEntry.COLUMN_STRING_COMMENT, issueStatus.comment);
         values.put(FeedReaderContract.FeedEntry.COLUMN_STRING_PICPATH, issueStatus.picPath);
-        if(issueStatus.state != null) {
-            values.put(FeedReaderContract.FeedEntry.COLUMN_INT_STATE, issueStatus.state.ordinal());
+        if(issueStatus.status != null) {
+            values.put(FeedReaderContract.FeedEntry.COLUMN_INT_STATE, issueStatus.status.ordinal());
         }
         if(issueStatus.priority != null)
             values.put(FeedReaderContract.FeedEntry.COLUMN_INT_PRIORITY, issueStatus.priority.ordinal());
@@ -99,6 +105,9 @@ public class IssueStatusDBWrapper {
             values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_TIMETOCOMPLETION, issueStatus.timeToCompletion.getTime());
         if(issueStatus.creationDate != null)
             values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_CREATIONDATE, issueStatus.creationDate.getTime());
+        if(issueStatus.updationDate != null)
+            values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_UPDATEDATE, issueStatus.updationDate.getTime());
+        values.put(FeedReaderContract.FeedEntry.COLUMN_BOOL_ISUPDATED, issueStatus.isUpdated);
         values.put(FeedReaderContract.FeedEntry.COLUMN_BOOL_SUBSCRIBED, issueStatus.isSubscribed);
 
         // Insert the new row, returning the primary key value of the new row
@@ -118,14 +127,17 @@ public class IssueStatusDBWrapper {
         values.put(FeedReaderContract.FeedEntry.COLUMN_STRING_NAME, issueStatus.name);
         values.put(FeedReaderContract.FeedEntry.COLUMN_STRING_COMMENT, issueStatus.comment);
         values.put(FeedReaderContract.FeedEntry.COLUMN_STRING_PICPATH, issueStatus.picPath);
-        if(issueStatus.state != null)
-            values.put(FeedReaderContract.FeedEntry.COLUMN_INT_STATE, issueStatus.state.ordinal());
+        if(issueStatus.status != null)
+            values.put(FeedReaderContract.FeedEntry.COLUMN_INT_STATE, issueStatus.status.ordinal());
         if(issueStatus.priority != null)
             values.put(FeedReaderContract.FeedEntry.COLUMN_INT_PRIORITY, issueStatus.priority.ordinal());
         if(issueStatus.timeToCompletion != null)
             values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_TIMETOCOMPLETION, issueStatus.timeToCompletion.getTime());
         if(issueStatus.creationDate != null)
             values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_CREATIONDATE, issueStatus.creationDate.getTime());
+        if(issueStatus.updationDate != null)
+            values.put(FeedReaderContract.FeedEntry.COLUMN_DATE_UPDATEDATE, issueStatus.updationDate.getTime());
+        values.put(FeedReaderContract.FeedEntry.COLUMN_BOOL_ISUPDATED, issueStatus.isUpdated);
         values.put(FeedReaderContract.FeedEntry.COLUMN_BOOL_SUBSCRIBED, issueStatus.isSubscribed);
 
         // Which row to update, based on the ID

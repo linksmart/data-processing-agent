@@ -13,6 +13,7 @@ import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
 import eu.linksmart.api.event.datafusion.Statement;
+import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
@@ -32,8 +33,10 @@ import java.util.*;
  */
 public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
-    protected StaticBrokerService brokerService;
+    protected ArrayList<StaticBrokerService> brokerServices;
     protected final Statement query;
+
+    private Configurator conf =  Configurator.getDefaultConfig();
     protected ObjectMapper parser = new ObjectMapper();
     @Deprecated
     protected boolean sendPerProperty;
@@ -67,30 +70,34 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
             }
         }
     }
-    public ComplexEventHandlerImpl(Statement query) throws RemoteException, MalformedURLException {
-        if(!knownInstances.containsKey("local"))
-
-            knownInstances.put("local",new  AbstractMap.SimpleImmutableEntry<>("almanac","1883"));
-
-
-
-        if(!knownInstances.containsKey("ismb_public") )
-            knownInstances.put("local",new  AbstractMap.SimpleImmutableEntry<>("130.192.86.227","1883"));
+    public ComplexEventHandlerImpl(Statement query) throws RemoteException, MalformedURLException, StatementException {
 
         this.query=query;
         gson = new GsonBuilder().setDateFormat(Tools.getIsoTimeFormat()).create();
         parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         parser.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        brokerServices = new ArrayList<>();
 
 
 
         try {
 
-            brokerService =  StaticBrokerService.getBrokerService(
-                    this.getClass().getCanonicalName(),
-                    knownInstances.get(query.getScope(0).toLowerCase()).getKey(),
-                    knownInstances.get(query.getScope(0).toLowerCase()).getValue()
-            );
+            String[] scopes;
+
+            if(query.getScope().length==0){
+                scopes = new String[]{"local"};
+            }else
+                scopes = query.getScope();
+
+            for(String scope: scopes) {
+                if (!knownInstances.containsKey(scope.toLowerCase()))
+                    throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), "The selected scope (" + query.getScope(0) + ") is unknown");
+                brokerServices.add(StaticBrokerService.getBrokerService(
+                        this.getClass().getCanonicalName(),
+                        knownInstances.get(scope.toLowerCase()).getKey(),
+                        knownInstances.get(scope.toLowerCase()).getValue()
+                ));
+            }
 
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
@@ -327,13 +334,16 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
     private synchronized void  publish( Object ent) throws Exception {
 
 
+        for(StaticBrokerService brokerService: brokerServices)
 
-        if (query.haveOutput())
-            for (String output : query.getOutput()) {
-                brokerService.publish(output + "/" + query.getHash(),   parser.writeValueAsString(ent).getBytes());
-            }
-        else
-            brokerService.publish(Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH) + query.getHash(), parser.writeValueAsString(ent).getBytes());
+            if (query.haveOutput())
+                for (String output : query.getOutput()) {
+                    if(output.lastIndexOf(0)!='/')
+                        output+='/';
+                    brokerService.publish(output + query.getHash(),   parser.writeValueAsString(ent).getBytes());
+                }
+            else
+                brokerService.publish(Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH) + query.getHash(), parser.writeValueAsString(ent).getBytes());
 
 
 
@@ -347,12 +357,13 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
     @Override
     public void destroy(){
 
-        try {
-            brokerService.destroy(this.getClass().getCanonicalName());
+            try {
+                for(StaticBrokerService brokerService: brokerServices)
+                    brokerService.destroy(this.getClass().getCanonicalName());
 
-        } catch (Exception e) {
-            loggerService.error(e.getMessage(),e);
-        }
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+            }
     }
 
 

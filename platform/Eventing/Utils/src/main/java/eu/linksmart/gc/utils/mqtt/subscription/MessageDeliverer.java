@@ -3,7 +3,8 @@ package eu.linksmart.gc.utils.mqtt.subscription;
 
 
 
-import org.apache.log4j.Logger;
+import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.LoggerFactory;
 
 import java.util.Observable;
 
@@ -11,31 +12,33 @@ import java.util.Observable;
 /**
  * Created by Caravajal on 27.04.2015.
  */
-public class MessageDeliverer implements Runnable {
-    private MqttMessage mqttMessage;
-    protected final Logger LOG= Logger.getLogger(ForwardingListener.class.getName());
-    private Observable fwListener;
-    private   MessageDeliverer(MqttMessage message, Observable fwListener){
-        super();
-        this.mqttMessage = message;
-
-        this.fwListener = fwListener;
-
+public class MessageDeliverer extends Observable implements Runnable {
+    public synchronized MqttMessage getMqttMessage() {
+        return mqttMessage;
     }
+
+    public synchronized void setMqttMessage(MqttMessage mqttMessage) {
+        this.mqttMessage = mqttMessage;
+    }
+
+    private MqttMessage mqttMessage;
+    protected static final LoggerService LOG= new LoggerService(LoggerFactory.getLogger(ForwardingListener.class));
+
+
     @Override
     public void run() {
 
         try {
+            setChanged();
+           notifyObservers(mqttMessage);
 
-            fwListener.notifyObservers(new MqttMessage(mqttMessage.getTopic(),mqttMessage.getPayload(),mqttMessage.getQoS(),mqttMessage.isRetained(),mqttMessage.getSequence(),mqttMessage.getOriginProtocol()));
+
         }catch (Exception e){
            LOG.error(e.getMessage(),e);
         }
 
     }
 
-    public static synchronized MessageDeliverer createMessageDeliverer(MqttMessage message, Observable fwListener){
-        return new MessageDeliverer(message,fwListener);
-    }
+
 
 }

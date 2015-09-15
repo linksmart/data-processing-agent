@@ -1,0 +1,13 @@
+.container{
+	padding-bottom:100px
+}
+
+.full-height {
+	height: 100%;
+}
+
+.metro .panel-content.map, .map
+{
+	height: 416px;
+	width: 100%;
+}

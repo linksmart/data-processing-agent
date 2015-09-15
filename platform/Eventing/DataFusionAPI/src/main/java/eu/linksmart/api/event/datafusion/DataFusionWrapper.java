@@ -1,6 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
-
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * 
@@ -18,6 +19,7 @@ package eu.linksmart.api.event.datafusion;
 
 public interface DataFusionWrapper {
 
+    static final public Map<String,DataFusionWrapper> instancedEngines= new Hashtable<String, DataFusionWrapper>();
 	/**
 	 * Return the name of the CEP which implement the interface
 	 * 
@@ -68,12 +70,16 @@ public interface DataFusionWrapper {
 	 * @return <code>true</code> if the query is successfully deployed in the CEP engine. <code>false</code> otherwise.
 	 * */
 	public boolean addStatement( Statement query) throws StatementException;
+
+    public boolean removeStatement( String id) throws StatementException;
     /***
      *
      * Terminate the Wrapper, releasing any resource us by it.
      *
      * */
     public void destroy();
+
+    public Map<String,Statement> getStatements();
 
 
 }

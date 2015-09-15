@@ -7,7 +7,7 @@ import com.espertech.esper.epl.parse.ParseHelper;
 import com.espertech.esper.epl.parse.ParseRuleSelector;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.api.types.MqttTunnelledMessage;
 import eu.linksmart.gc.network.backbone.protocol.mqtt.ForwardingListener;

@@ -4,14 +4,17 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import org.fraunhofer.fit.almanac.db.IssueStatusDBWrapper;
+import org.fraunhofer.fit.almanac.model.IssueEvent;
 import org.fraunhofer.fit.almanac.model.IssueStatus;
-import org.fraunhofer.fit.almanac.model.PicIssue;
-import org.fraunhofer.fit.almanac.model.PicIssueUpdate;
-
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import eu.linksmart.smartcity.issue.Issue;
+import eu.linksmart.smartcity.issue.TicketEvent;
 
 /**
  * Created by devasya on 01.07.2015.
@@ -24,6 +27,50 @@ public class IssueTracker {
     private HashMap<String,IssueStatus> mIssueMap = new HashMap<>();
 
 
+    public void resetUpdated(String id) {
+        IssueStatus issueStatus =  mIssueMap.get(id);
+        issueStatus.setUpdated(false);
+        mIssueStatusDBWrapper.updateIssue(issueStatus.id, issueStatus);
+        //do not notify here
+    }
+
+
+    public static interface ChangeListener{
+        public void onChange();
+    }
+    public static interface DeletionListener{
+        public void onDelete(String issueID);
+    }
+    private List<ChangeListener> mChangeListeners = new LinkedList<>();
+    private List<DeletionListener> mDeletionListeners = new LinkedList<>();
+
+    public void subscribeChange(ChangeListener changeListener){
+        mChangeListeners.add(changeListener);
+    }
+
+    public void unSubscribeDeletion(DeletionListener changeListener){
+        mDeletionListeners.remove(changeListener);
+    }
+
+    private void notifyChange(){
+        for(ChangeListener changeListener:mChangeListeners){
+            changeListener.onChange();
+        }
+    }
+
+    public void subscribeDeletion(DeletionListener changeListener){
+        mDeletionListeners.add(changeListener);
+    }
+
+    public void unSubscribeChange(ChangeListener changeListener){
+        mChangeListeners.remove(changeListener);
+    }
+
+    private void notifyDeletion(String issueId){
+        for(DeletionListener changeListener:mDeletionListeners){
+            changeListener.onDelete(issueId);
+        }
+    }
     public  static IssueTracker getInstance(){
         if(mInstance == null){
             mInstance = new IssueTracker();
@@ -38,25 +85,37 @@ public class IssueTracker {
         List<IssueStatus> issueStatusList = mIssueStatusDBWrapper.getAllIssues();
 
         for (IssueStatus issueStatus:issueStatusList){
-            mIssueMap.put(issueStatus.id,issueStatus);
+            mIssueMap.put(issueStatus.id, issueStatus);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.DAY_OF_YEAR, -1);
+            Date yesterday = cal.getTime();
+            if(issueStatus.updationDate.before(yesterday)){
+                resetUpdated(issueStatus.id);
+            }
         }
     }
 
-    public void addNewIssue(PicIssue picIssue,boolean subscribe,String filePath){
+    public void addNewIssue(String id, Issue picIssue, boolean subscribe, String filePath){
         IssueStatus newIssue = new IssueStatus();
-        newIssue.setPicIssue(picIssue,filePath,subscribe);
+        newIssue.setPicIssue(id,picIssue,filePath,subscribe);
 
-        mIssueMap.put(picIssue.id, newIssue);
+        mIssueMap.put(id, newIssue);
         mIssueStatusDBWrapper.addIssue(newIssue);
+        notifyChange();
     }
 
     public  void deleteIssue(String id){
-        mIssueStatusDBWrapper.deleteIssue(id );
+        mIssueStatusDBWrapper.deleteIssue(id);
         mIssueMap.remove(id);
+        notifyDeletion(id);
+        notifyChange();
+
     }
     public Collection<IssueStatus> getAllIssues(){
         return mIssueMap.values();
     }
+
 
     public Collection<IssueStatus> getSubScribedIssues(){
         Collection<IssueStatus> issueList = mIssueMap.values();
@@ -69,10 +128,17 @@ public class IssueTracker {
         return subscribedIssues;
     }
 
-    public void updateIssue(PicIssueUpdate picIssueUpdate){
-        IssueStatus issueStatus =  mIssueMap.get(picIssueUpdate.id);
-        issueStatus.updateStatus(picIssueUpdate);
-        mIssueStatusDBWrapper.updateIssue(issueStatus.id,issueStatus);
+    public IssueStatus getIssue(String id){
+        return  mIssueMap.get(id);
+    }
+    public void updateIssue(TicketEvent issueEvent){
+        IssueStatus issueStatus =  mIssueMap.get(issueEvent.getTicketId());
+        if(issueStatus != null) {
+            issueStatus.updateStatus(issueEvent);
+            issueStatus.setUpdated(true);
+            mIssueStatusDBWrapper.updateIssue(issueStatus.id, issueStatus);
+            notifyChange();
+        }
 
     }
 
@@ -84,6 +150,7 @@ public class IssueTracker {
         mIssueMap.remove(id);
         mIssueMap.put(OriginalId,issueStatus);
         mIssueStatusDBWrapper.updateIssue(id,issueStatus);
+        notifyChange();
 
     }
 
