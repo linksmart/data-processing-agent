@@ -1,7 +1,10 @@
 # Installation of the Virtualization Layer
+Requires Node.js >= 10.40, and recommends the 10.x branch.
+For MQTT, works with protocol 3.1.1+ (e.g. Mosquitto version 1.3+).
+
 
 1. See http://nodejs.org.
-	* On Ubuntu:
+	* On Ubuntu or Debian jessie:
 	```sh
 	apt-get install nodejs npm
 	```
@@ -37,7 +40,7 @@ Or if you want to perform continuous integration and other tests, leave out the 
 npm install
 ```
 
-> The main dependencies include `socket.io`, `mqtt`, `node-ssdp`, and `request`.
+> The main dependencies include `ws`, `mqtt`, `node-ssdp`, and `request`.
 
 
 # Setup of the Virtualization Layer
@@ -63,11 +66,21 @@ cd /opt/virtualization-layer/
 nodejs index.js
 ```
 
+## Or by using "pm2" https://github.com/Unitech/pm2
+TODO: Finish documentation
+
+```sh
+sudo npm install -g pm2
+pm2 start /usr/bin/nodejs /opt/virtualization-layer/index.js -- -v
+pm2 save
+pm2 startup
+```
+
 ## Or from a cron at restart:
 Edit the file `/etc/cron.d/almanac` and add:
 
 ```sh
-@reboot root cd /opt/virtualization-layer/ && nodejs /opt/virtualization-layer/index.js >> /var/log/virtualization-layer/virtualization-layer.log 2>&1 &
+@reboot root cd /opt/virtualization-layer/ && /usr/bin/nodejs /opt/virtualization-layer/index.js >> /var/log/virtualization-layer/virtualization-layer.log 2>&1 &
 ```
 
 ## Or from a Linux Upstart service
@@ -94,5 +107,3 @@ And then use it a a service, such as:
 ```sh
 service virtualization-layer restart
 ```
-
-## TODO: Document using "forever" https://github.com/nodejitsu/forever

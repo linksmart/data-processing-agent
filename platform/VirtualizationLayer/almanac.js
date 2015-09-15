@@ -47,19 +47,25 @@ It is now ' + now.toISOString() + '.\n\
  ');
 	},
 
-	serveInfo: function (req, res) {
-		almanac.basicHttp.serveJson(req, res, {
+	info: function () {
+		return {
 			version: almanac.version,
-			publicAddress: almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayerPublic.host + ':' + almanac.config.hosts.virtualizationLayerPublic.port + '/',
+			instanceName: almanac.config.hosts.instanceName,
+			publicAddressUrl: almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayerPublic.host + ':' + almanac.config.hosts.virtualizationLayerPublic.port + '/',
 			virtualAddress: almanac.virtualAddress,
-			networkManager: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/',
-			storageManager: 'http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path,
+			mqttVirtualAddress: almanac.mqttVirtualAddress,
+			networkManagerUrl: almanac.config.hosts.networkManagerUrl + '/',
+			storageManagerUrl: 'http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path,
 			mqttToHttpStorageManagerEnabled: almanac.config.mqttToHttpStorageManagerEnabled,
-			resourceCatalogue: almanac.recourceCatalogueUrl,
-			scral: 'http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path,
+			resourceCatalogueUrl: almanac.config.hosts.recourceCatalogueUrl,
+			scralUrl: 'http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path,
 			server: almanac.basicHttp.serverSignature,
 			nodejs: process.versions,
-		});
+		};
+	},
+
+	serveInfo: function (req, res) {
+		almanac.basicHttp.serveJson(req, res, almanac.info());
 	},
 
 	init: function() {
@@ -72,7 +78,7 @@ It is now ' + now.toISOString() + '.\n\
 		require('./almanac-santander.js')(almanac);
 
 		setTimeout(function() {
-				require('./almanac-websocket.js')(almanac);	//WebSocket (Socket.IO)
+				require('./almanac-websocket.js')(almanac);	//WebSocket
 				require('./almanac-mqtt.js')(almanac);	//MQTT
 				require('./almanac-upnp.js')(almanac);	//UPnP (SSDP)
 				require('./almanac-networkManager.js')(almanac);	//Register in the NetworkManager

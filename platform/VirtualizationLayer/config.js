@@ -9,6 +9,7 @@
 */
 
 var hosts = {
+		instanceName: '',	//Name of the instance in the federation
 		virtualizationLayerPublic: {	//Public IP of this Virtualization Layer, if any
 			scheme: 'http',
 			host: 'example.net',
@@ -19,15 +20,10 @@ var hosts = {
 			host: 'localhost',
 			port: 80,
 		},
-		mqttBroker: {
-			host: 'localhost',
-			port: 1883,
-		},
-		networkManager: {
-			host: 'localhost',
-			port: 8082,
-		},
-		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:applicationservicemanager:1',
+		mqttBrokerUrl: 'mqtt://localhost',
+		networkManagerUrl: 'http://localhost:8181',
+		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:OGCapplicationIoTresourcemanager:1',	//Set to blank to disable UPnP
+		recourceCatalogueUrl: '',	//Leave blank for UPnP discovery
 		scral: {
 			host: 'localhost',
 			port: 8080,

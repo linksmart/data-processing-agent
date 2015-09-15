@@ -66,7 +66,7 @@ var server = http.createServer(function (req, res) {
 });
 
 server.on('error', function (err) {
-	almanac.log.error('VL', 'Node.js: server error: %s. Check that you can use port %d.', err, config.hosts.virtualizationLayer.port);
+	almanac.log.error('VL', 'Node.js: server error: %s. Check that you can use port %d.', err.errno || err, config.hosts.virtualizationLayer.port);
 	process.exit(1);
 });
 
