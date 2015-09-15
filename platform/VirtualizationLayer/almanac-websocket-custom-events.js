@@ -11,27 +11,23 @@ module.exports = function (almanac) {
 	var WebSocketServer = require('ws').Server;
 	var util = require('util');
 
-	almanac.server.on('connection', function (socket) {
-			var remoteAddress = socket.remoteAddress;	//To populate ._peername https://github.com/joyent/node/blob/03e9f84933fe610b04b107cf1f83d17485e8906e/lib/net.js#L563
-		});
+	var nextClientId = 0,
+		wsClients = {};
 
 	almanac.webSocket = new WebSocketServer({
 			server: almanac.server,
 			path: '/ws/custom-events',
 		});
 
-	var nextClientId = 0,
-		wsClients = {};
-
 	almanac.webSocket.on('error', function (error) {
-			almanac.log.warn('VL', 'WebSocket: server error: ' + util.inspect(error));
+			almanac.log.warn('VL', 'WebSocket custom events: server error: ' + util.inspect(error));
 		});
 
 	almanac.webSocket.on('connection', function (ws) {
 			var clientId = nextClientId++;
 
 			ws.on('error', function (error) {
-					almanac.log.warn('VL', 'WebSocket: error with client #' + clientId + ': ' + util.inspect(error));
+					almanac.log.warn('VL', 'WebSocket custom events: error with client #' + clientId + ': ' + util.inspect(error));
 				});
 
 			var remoteAddress = ws.upgradeReq.connection.remoteAddress,	//Sometimes undefined during fast connections
@@ -51,7 +47,7 @@ module.exports = function (almanac) {
 				};
 
 			ws.on('message', function (data, flags) {
-					almanac.log.verbose('VL', 'WebSocket: message from client #' + clientId + ': ' + data);
+					almanac.log.verbose('VL', 'WebSocket custom events: message from client #' + clientId + ': ' + data);
 					try {
 						var payload = JSON.parse(data);
 						if (payload && payload.topic && payload.topic.charAt(0) == '/') {
@@ -61,16 +57,16 @@ module.exports = function (almanac) {
 								}));
 						}
 					} catch (ex) {
-						almanac.log.warn('VL', 'WebSocket: invalid message from client #: ' + clientId + ': ' + ex);
+						almanac.log.warn('VL', 'WebSocket custom events: invalid message from client #: ' + clientId + ': ' + ex);
 					}
 				});
 
 			ws.on('close', function (code, data) {
-					almanac.log.verbose('VL', 'WebSocket: close client #' + clientId + ': ' + code + ' / ' + data);
+					almanac.log.verbose('VL', 'WebSocket custom events: close client #' + clientId + ': ' + code + ' / ' + data);
 					delete wsClients[clientId];
 				});
 
-			almanac.log.verbose('VL', 'WebSocket: connected client #' + clientId + ' ' + remoteAddress + ':' + remotePort);
+			almanac.log.verbose('VL', 'WebSocket custom events: connected client #' + clientId + ' ' + remoteAddress + ':' + remotePort);
 
 		});
 
@@ -117,5 +113,5 @@ module.exports = function (almanac) {
 			});
 	};*/
 
-	almanac.log.info('VL', 'WebSocket: started');
+	almanac.log.info('VL', 'WebSocket custom events: started');
 };

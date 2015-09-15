@@ -32,15 +32,19 @@ module.exports = function (almanac) {
 		if (!topic || !message) {
 			return;
 		}
-		almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
+		almanac.log.silly('VL', 'MQTT: ' + topic + ': ' + message);
 		try {
 			var json = JSON.parse(message);
 			almanac.webSocket.forwardMqtt(topic, json);
 			if (topic === '/broadcast') {
+				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
 				if (json.type === 'HELLO') {
 					broadcastAlive();
+				} else if (json.type === 'CHAT') {
+					almanac.webSocketChat.broadcast(json);
 				}
 			} else if (topic.indexOf('/almanac/alert') === 0) {
+				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
 				//almanac.webSocket.in('alert').emit('alert', {	//TODO: Reimplement if needed
 				//		instance: almanac.config.hosts.virtualizationLayerPublic,
 				//		topic: topic,
@@ -58,12 +62,25 @@ module.exports = function (almanac) {
 				}
 				almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 			} else if (topic.indexOf('/almanac/0/info') === 0) {
+				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
 				//almanac.webSocket.in('info').emit('info', message);	//TODO: Re-implement if needeed
 			}
 		} catch (ex) {
 			almanac.log.warn('VL', 'MQTT message error: ' + ex);
 		}
 	});
+
+	almanac.mqttClient.broadcastChat = function (payload, clientInfo) {
+		almanac.mqttClient.publish('/broadcast', JSON.stringify({
+				date: Date.now(),
+				type: 'CHAT',
+				payload: payload,
+				clientInfo: clientInfo,
+				info: {
+					instanceName: almanac.config.hosts.instanceName,
+				},
+			}));
+	};
 
 	function broadcastAlive(type) {
 		almanac.mqttClient.publish('/broadcast', JSON.stringify({

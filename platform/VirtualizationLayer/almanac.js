@@ -78,7 +78,8 @@ It is now ' + now.toISOString() + '.\n\
 		require('./almanac-santander.js')(almanac);
 
 		setTimeout(function() {
-				require('./almanac-websocket.js')(almanac);	//WebSocket
+				require('./almanac-websocket-custom-events.js')(almanac);	//WebSocket for custom events (from MQTT)
+				require('./almanac-websocket-chat.js')(almanac);	//WebSocket for broadcast chat
 				require('./almanac-mqtt.js')(almanac);	//MQTT
 				require('./almanac-upnp.js')(almanac);	//UPnP (SSDP)
 				require('./almanac-networkManager.js')(almanac);	//Register in the NetworkManager
