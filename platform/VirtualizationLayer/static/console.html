@@ -2,48 +2,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">
 <head>
 <meta charset="UTF-8" />
-<title>Socket.IO console | ALMANAC</title>
+<title>WebSocket chat console | ALMANAC</title>
 <meta name="robots" content="noindex, nofollow" />
-<script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
-<h1>Socket.IO console</h1>
-<p>See JavaScript console</p>
+<h1>WebSocket chat console</h1>
+<p>Shows the broadcast chat messages in the JavaScript console.</p>
 
 <script>
 "use strict";
 
-var socket = io();
+var webSocket = new WebSocket('ws://' + location.host + '/ws/chat');
 
-function append(text) {
-	console.log(text);
-}
+webSocket.onerror = function (event) {
+		console.log('WebSocket error: ' + JSON.stringify(event));
+	};
 
-socket.on('info', function(msg) {
-		append(msg);
-	});
-socket.emit('subscribe', 'info');
+webSocket.onopen = function () {
+		console.log('WebSocket connected');
+	};
 
-socket.on('alert', function(json) {
-		append('alert: ' + JSON.stringify(json));
-	});
-socket.emit('subscribe', 'alert');
+webSocket.onclose = function () {
+		console.log('WebSocket closed');
+	};
 
-socket.on('DM', function(json) {
-		append('DM: ' + JSON.stringify(json));
-	});
-socket.emit('subscribe', 'DM');
-
-socket.on('peering', function(json) {
-		append('Peering: ' + JSON.stringify(json));
-	});
-socket.emit('subscribe', 'peering');
-
-socket.on('scral', function(json) {
-		append('SCRAL: ' + JSON.stringify(json));
-	});
-socket.emit('subscribe', 'scral');
+webSocket.onmessage = function (event) {
+		console.log('WebSocket message: ' + event.data);
+	};
 </script>
 </body>
 </html>

@@ -62,11 +62,11 @@ module.exports = function (almanac) {
 				});
 
 			ws.on('close', function (code, data) {
-					almanac.log.verbose('VL', 'WebSocket chat: close client #' + clientId + ': ' + code + ' / ' + data);
+					almanac.log.http('VL', 'WebSocket chat: close client #' + clientId + ': ' + code + ' / ' + data);
 					delete wsClients[clientId];
 				});
 
-			almanac.log.verbose('VL', 'WebSocket chat: connected client #' + clientId + ' ' + remoteAddress + ':' + remotePort);
+			almanac.log.http('VL', 'WebSocket chat: connected client #' + clientId + ' ' + remoteAddress + ':' + remotePort);
 
 		});
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">
 <head>
 <meta charset="UTF-8" />
-<title>Socket.IO viewer | ALMANAC</title>
+<title>WebSocket chat | ALMANAC</title>
 <meta name="robots" content="noindex, nofollow" />
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,7 +14,6 @@ button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px;
 li { padding: 5px 10px; }
 li:nth-child(odd) { background: #eee; }
 </style>
-<script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
@@ -27,9 +26,7 @@ li:nth-child(odd) { background: #eee; }
 <script>
 "use strict";
 
-var socket = io({
-			//transports: ['websocket'],	//Possibility to force the use of WebSocket solely
-		}),
+var webSocket = new WebSocket('ws://' + location.host + '/ws/chat'),
 	messages = document.getElementById('messages'),
 	messageBox = document.getElementById('m');
 
@@ -45,33 +42,26 @@ function append(text) {
 	messageBox.focus();
 }
 
-socket.on('info', function(msg) {
-		append(msg);
-	});
-socket.emit('subscribe', 'info');
+webSocket.onerror = function (event) {
+		append('Error: ' + JSON.stringify(event));
+	};
 
-socket.on('alert', function(json) {
-		append('alert: ' + JSON.stringify(json));
-	});
-socket.emit('subscribe', 'alert');
+webSocket.onopen = function () {
+		append('Connected');
+	};
 
-socket.on('DM', function(json) {
-		append('DM: ' + JSON.stringify(json));
-	});
-socket.emit('subscribe', 'DM');
+webSocket.onclose = function () {
+		append('Closed');
+	};
 
-socket.on('peering', function(json) {
-		append('Peering: ' + JSON.stringify(json));
-	});
-socket.emit('subscribe', 'peering');
-
-socket.on('scral', function(json) {
-		append('SCRAL: ' + JSON.stringify(json));
-	});
-socket.emit('subscribe', 'scral');
+webSocket.onmessage = function (event) {
+		append('Message: ' + event.data);
+	};
 
 function chat(form) {
-	socket.emit('info', form.m.value);
+	webSocket.send(JSON.stringify({
+			text: form.m.value,
+		}));
 	form.m.value = '';
 	return false;
 }

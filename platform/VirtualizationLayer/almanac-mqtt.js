@@ -40,7 +40,7 @@ module.exports = function (almanac) {
 				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
 				if (json.type === 'HELLO') {
 					broadcastAlive();
-				} else if (json.type === 'CHAT') {
+				} /*else if (json.type === 'CHAT')*/ {
 					almanac.webSocketChat.broadcast(json);
 				}
 			} else if (topic.indexOf('/almanac/alert') === 0) {

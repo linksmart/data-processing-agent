@@ -62,11 +62,11 @@ module.exports = function (almanac) {
 				});
 
 			ws.on('close', function (code, data) {
-					almanac.log.verbose('VL', 'WebSocket custom events: close client #' + clientId + ': ' + code + ' / ' + data);
+					almanac.log.http('VL', 'WebSocket custom events: close client #' + clientId + ': ' + code + ' / ' + data);
 					delete wsClients[clientId];
 				});
 
-			almanac.log.verbose('VL', 'WebSocket custom events: connected client #' + clientId + ' ' + remoteAddress + ':' + remotePort);
+			almanac.log.http('VL', 'WebSocket custom events: connected client #' + clientId + ' ' + remoteAddress + ':' + remotePort);
 
 		});
 
