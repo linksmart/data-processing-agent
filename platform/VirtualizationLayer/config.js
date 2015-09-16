@@ -63,4 +63,7 @@ exports.config = {
 
 	//Forward or not the local MQTT events by HTTP to the StorageManager (the one defined in hosts.masterStorageManager)
 	mqttToHttpStorageManagerEnabled: false,
+
+	//For compatibility with old MQTT brokers, e.g. Mosquitto < 1.3
+	mqttUseOldVersion3: true,
 };

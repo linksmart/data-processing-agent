@@ -25,4 +25,5 @@ var hosts = {
 exports.config = {
 	hosts: hosts,
 	logLevel: 'verbose',
+	mqttUseOldVersion3: false,	//Enable iff you use Mosquitto >= 1.3
 };

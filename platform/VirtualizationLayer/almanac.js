@@ -47,6 +47,8 @@ It is now ' + now.toISOString() + '.\n\
  ');
 	},
 
+	randomId: Math.random(),
+
 	info: function () {
 		return {
 			version: almanac.version,
@@ -60,8 +62,13 @@ It is now ' + now.toISOString() + '.\n\
 			resourceCatalogueUrl: almanac.config.hosts.recourceCatalogueUrl,
 			scralUrl: 'http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path,
 			server: almanac.basicHttp.serverSignature,
+			randomId: almanac.randomId,
 			nodejs: process.versions,
 		};
+	},
+
+	isMe: function (info) {
+		return info && info.randomId === almanac.randomId;
 	},
 
 	serveInfo: function (req, res) {

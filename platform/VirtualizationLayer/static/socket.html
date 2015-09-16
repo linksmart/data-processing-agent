@@ -26,9 +26,8 @@ li:nth-child(odd) { background: #eee; }
 <script>
 "use strict";
 
-var webSocket = new WebSocket('ws://' + location.host + '/ws/chat'),
-	messages = document.getElementById('messages'),
-	messageBox = document.getElementById('m');
+var messages = document.getElementById('messages'),
+		messageBox = document.getElementById('m');
 
 function append(text) {
 	while (messages.childNodes.length > 128) {
@@ -42,26 +41,37 @@ function append(text) {
 	messageBox.focus();
 }
 
-webSocket.onerror = function (event) {
-		append('Error: ' + JSON.stringify(event));
-	};
+try {
+	var webSocket = new WebSocket('ws://' + location.host + '/ws/chat');
 
-webSocket.onopen = function () {
-		append('Connected');
-	};
+	webSocket.onerror = function (event) {
+			append('Error: ' + JSON.stringify(event));
+		};
 
-webSocket.onclose = function () {
-		append('Closed');
-	};
+	webSocket.onopen = function () {
+			append('Connected');
+		};
 
-webSocket.onmessage = function (event) {
-		append('Message: ' + event.data);
-	};
+	webSocket.onclose = function () {
+			append('Closed');
+			webSocket = null;
+		};
+
+	webSocket.onmessage = function (event) {
+			append('Message: ' + event.data);
+		};
+} catch (ex) {
+	append('Exception: ' + ex.message);
+}
 
 function chat(form) {
-	webSocket.send(JSON.stringify({
+	if (webSocket) {
+		webSocket.send(JSON.stringify({
 			text: form.m.value,
 		}));
+	} else {
+		append('WebSocket not ready!');
+	}
 	form.m.value = '';
 	return false;
 }

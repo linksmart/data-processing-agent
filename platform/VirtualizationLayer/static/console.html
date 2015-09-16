@@ -13,23 +13,27 @@
 <script>
 "use strict";
 
-var webSocket = new WebSocket('ws://' + location.host + '/ws/chat');
+try {
+	var webSocket = new WebSocket('ws://' + location.host + '/ws/chat');
 
-webSocket.onerror = function (event) {
-		console.log('WebSocket error: ' + JSON.stringify(event));
-	};
+	webSocket.onerror = function (event) {
+			console.log('WebSocket error: ' + JSON.stringify(event));
+		};
 
-webSocket.onopen = function () {
-		console.log('WebSocket connected');
-	};
+	webSocket.onopen = function () {
+			console.log('WebSocket connected');
+		};
 
-webSocket.onclose = function () {
-		console.log('WebSocket closed');
-	};
+	webSocket.onclose = function () {
+			console.log('WebSocket closed');
+		};
 
-webSocket.onmessage = function (event) {
-		console.log('WebSocket message: ' + event.data);
-	};
+	webSocket.onmessage = function (event) {
+			console.log('WebSocket message: ' + event.data);
+		};
+} catch (ex) {
+	console.log('Exception: ' + ex.message);
+}
 </script>
 </body>
 </html>
