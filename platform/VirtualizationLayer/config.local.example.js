@@ -6,24 +6,25 @@
 */
 
 var hosts = {
-		instanceName: 'YourPlace',
-		virtualizationLayerPublic: {	//Public IP of this Virtualization Layer, if any
-			host: 'example.org',
-			port: 8088,
-		},
+		instanceName: 'YourPlace',	//Name of the instance in the federation
+		virtualizationLayerPublicUrl: 'http://example.net/',	//Public URL of this Virtualization Layer, if any
 		virtualizationLayer: {
-			port: 8088,
+			port: 80,
 		},
-		//recourceCatalogueUrl: 'http://localhost:44441/',
-		scral: {
-			host: 'example.com',
-			port: 8080,
-			path: '/connectors.rest-0.2.0/',
-		},
+		mqttBrokerUrl: 'mqtt://localhost/',
+		networkManagerUrl: 'http://localhost:8181/',
+		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:OGCapplicationIoTresourcemanager:1',	//Set to blank to disable UPnP
+		recourceCatalogueUrl: '',	//Leave blank for UPnP discovery
+		scralUrl: 'http://localhost:8080/connectors.rest/',
+		storageManagerUrl: 'http://cnet006.cloudapp.net/Dmf/SensorThings/',
 	};
 
 exports.config = {
 	hosts: hosts,
-	logLevel: 'verbose',
-	mqttUseOldVersion3: false,	//Enable iff you use Mosquitto >= 1.3
+
+	//{silent, error, warn, http, info, verbose, silly}
+	logLevel: 'info',
+
+	//Enable iff you use Mosquitto >= 1.3
+	mqttUseOldVersion3: false,
 };

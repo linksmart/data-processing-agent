@@ -11,7 +11,7 @@ module.exports = function (almanac) {
 	function proxySmartSantander(req, res) {
 		req.pipe(almanac.request({
 				method: req.method,
-				uri: 'http://' + almanac.config.hosts.santander.host + ':' + almanac.config.hosts.santander.port + almanac.config.hosts.santander.path + req.url,
+				uri: almanac.config.hosts.santanderUrl + req.url,
 				timeout: 15000,
 			}, function (error, response, body) {
 				if (error || response.statusCode != 200 || !body) {

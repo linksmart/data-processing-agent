@@ -43,14 +43,6 @@ module.exports = function (almanac) {
 					almanac.webSocketChat.broadcast(json);
 				}
 			} else if (topic.indexOf('/iotentity') > 0) {
-				//almanac.webSocket.in('scral').emit('scral', {	//TODO: Reimplement if needed
-				//		instance: almanac.config.hosts.virtualizationLayerPublic,
-				//		topic: topic,
-				//		body: json,
-				//	});
-				if (almanac.config.mqttToHttpStorageManagerEnabled) {
-					almanac.storageManager.postMqttEvent(topic, json);	//Forward to StorageManager
-				}
 				almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
 			}
 		} catch (ex) {
@@ -79,7 +71,4 @@ module.exports = function (almanac) {
 	}
 	setInterval(broadcastAlive, 60000);
 
-	/*setInterval(function () {	//TODO: Remove after testing
-			almanac.mqttClient.publish('/almanac/observations/iotentity/', '{"About":"dd2f87dd-4f80-455b-a939-e22f7f20a0c1","Properties":[{"IoTStateObservation":[{"Value":"3.36","PhenomenonTime":"2014-10-08T15:42:07.906Z","ResultTime":"2014-10-08T15:42:17.906Z"}],"About":"pipe1:PhMeter:getPh"}]}');
-		}, 20000);*/
 };

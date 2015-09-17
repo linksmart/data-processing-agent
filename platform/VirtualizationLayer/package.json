@@ -1,6 +1,6 @@
 {
 	"name": "almanac-virtualization-layer",
-	"version": "0.3.4",
+	"version": "0.4.0",
 	"license": "Apache-2.0",
 	"author": {
 		"name": "Alexandre Alapetite",
@@ -34,7 +34,7 @@
 		"node-ssdp": "~2.5.1",
 		"request": "~2.61.0",
 		"xml-writer": "~1.6.0",
-		"atom-writer": "~1.1.2",
+		"atom-writer": "Alkarex/node-atom-writer",
 		"npmlog": "~1.2.1",
 		"extend": "~3.0.0"
 	},

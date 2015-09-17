@@ -10,42 +10,19 @@
 
 var hosts = {
 		instanceName: '',	//Name of the instance in the federation
-		virtualizationLayerPublic: {	//Public IP of this Virtualization Layer, if any
-			scheme: 'http',
-			host: 'example.net',
-			port: 80,
-		},
 		virtualizationLayer: {
 			scheme: 'http',
 			host: 'localhost',
 			port: 80,
 		},
-		mqttBrokerUrl: 'mqtt://localhost',
-		networkManagerUrl: 'http://localhost:8181',
+		virtualizationLayerPublicUrl: '',	//Public URL of this Virtualization Layer, if any
+		mqttBrokerUrl: 'mqtt://localhost/',
+		networkManagerUrl: 'http://localhost:8181/',
 		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:OGCapplicationIoTresourcemanager:1',	//Set to blank to disable UPnP
-		recourceCatalogueUrl: '',	//Leave blank for UPnP discovery
-		scral: {
-			host: 'localhost',
-			port: 8080,
-			path: '/connectors.rest/',
-		},
-		storage: {	//Local Storage Manager
-			scheme: 'http',
-			host: 'localhost',
-			port: 8081,
-			path: '/StorageManagerLocal/REST/',
-		},
-		storageCloud: {	//Public Storage Manager cloud
-			scheme: 'http',
-			host: 'almanac_dmf1.cnet.se',
-			port: 80,
-			path: '/StorageManagerCloud/REST/',
-		},
-		santander: {	//Public SmartSantander instance cloud
-			host: 'data.smartsantander.eu',
-			port: 80,
-			path: '/ISMB/',
-		},
+		recourceCatalogueUrl: 'http://localhost:44441/',	//Set to blank to use only UPnP discovery
+		scralUrl: 'http://localhost:8080/connectors.rest/',
+		storageManagerUrl: 'http://cnet006.cloudapp.net/Dmf/SensorThings/',
+		santanderUrl: 'http://data.smartsantander.eu/ISMB/',
 		virtualizationLayerPeers: [	//Manual peering (sends the local MQTT events to other VirtualizationLayers
 			//'http://almanac.alexandra.dk/',	//Alexandra Institute (Ubuntu)
 			//'http://p2.alapetite.dk:8080/',	//Alexandra Institute (Raspberry Pi)
@@ -53,16 +30,11 @@ var hosts = {
 		],
 	};
 
-hosts.masterStorageManager = hosts.storageCloud;
-
 exports.config = {
 	hosts: hosts,
 
 	//{silent, error, warn, http, info, verbose, silly}
 	logLevel: 'info',
-
-	//Forward or not the local MQTT events by HTTP to the StorageManager (the one defined in hosts.masterStorageManager)
-	mqttToHttpStorageManagerEnabled: false,
 
 	//For compatibility with old MQTT brokers, e.g. Mosquitto < 1.3
 	mqttUseOldVersion3: true,

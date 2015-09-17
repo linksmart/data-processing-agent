@@ -92,26 +92,5 @@ module.exports = function (almanac) {
 			}
 		};
 
-	/*almanac.webSocket.forwardHttp = function (req, res, room) {
-		var body = '';
-		req.addListener('data', function (chunk) {
-				body += chunk;
-			});
-		req.addListener('end', function () {
-				try {
-					var json = JSON.parse(body);
-					almanac.webSocket.in(room).emit(room, {	//Forward to WebSocket clients
-							instance: almanac.config.hosts.virtualizationLayerPublic,
-							headers: req.headers,
-							url: req.url,
-							body: json,
-						});
-					almanac.log.verbose('VL', 'Peering POST forwarded to WebSocket on room ' + room);
-				} catch (ex) {
-					almanac.log.warn('VL', 'Error while forwarding POST to WebSocket: ' + ex);
-				}
-			});
-	};*/
-
 	almanac.log.info('VL', 'WebSocket custom events: started');
 };
