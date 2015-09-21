@@ -110,17 +110,18 @@ public class BeWaste {
                 String mesg = new String("ACCEPTED");
                 String json = gsonObj.toJson(mesg);
                 wasteMqttClient.publish("almanac/ticket", json);
-*/
+
                 try{
                     // pause for 10s
                     Thread.sleep(10000);
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
+*/
                 // 2. DF event: the toy bin got full
 /*                mesg = "DF";
                 json = gsonObj.toJson(mesg);
-                wasteMqttClient.publish("almanac/DF", json);*/
+                wasteMqttClient.publish("almanac/DF", json);
                 // end test purposes
 
                 try{
@@ -129,6 +130,7 @@ public class BeWaste {
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
+*/
             }
         }
 

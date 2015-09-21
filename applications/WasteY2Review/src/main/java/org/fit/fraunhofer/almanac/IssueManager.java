@@ -155,7 +155,7 @@ public class IssueManager implements Observer{
 //        subClient.subscribe(SIMULATE_TICKET_TOPIC);    // FIXME: simulation
 
         subClient.subscribe(DF_WASTEBINFULL_TOPIC);
-        subClient.subscribe(DF_WASTEBINEMPTY_TOPIC);
+//        subClient.subscribe(DF_WASTEBINEMPTY_TOPIC); // Not relevant for MeetIoT
         subClient.subscribe(TICKETING_EVENTS);
 
         subClient.addObserver(this);
@@ -268,59 +268,54 @@ public class IssueManager implements Observer{
     // of this observation.
     private void handleDFWastebinFull(MqttMessage message){
         try{
-            it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation obs =
-                    mapper.readValue(message.getPayload(), it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation.class);
+            if (message.getPayload().length != 0) {
+                it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation obs =
+                        mapper.readValue(message.getPayload(), it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation.class);
 
-            // get the waste bin id: event result value
-            String binId = obs.getResultValue().toString();
+                // get the waste bin id: event result value
+                String binId = obs.getResultValue().toString();
 
-            // Now the resource catalogue can be used to find the specific waste bin holding the id and then get
-            // its location (and bin type?), before a new issue can be created.
+                // Now the resource catalogue can be used to find the specific waste bin holding the id and then get
+                // its location (and bin type?), before a new issue can be created.
 
-            System.out.println("A Data Fusion message has arrived. The waste bin " + binId + " is full!");
+                System.out.println("A Data Fusion message has arrived. The waste bin " + binId + " is full!");
 
 //            Thing bin = wasteHttpClient.getBin(binId);
 //            org.geojson.LngLatAlt location = wasteHttpClient.getBinGeolocation(binId);
-            // For MeetIoT: hardcoding the DF related Thing:
-            Thing bin = new Thing();
-            bin.setId("6a2a241332749463701d4d9607c02bc903c8bea1");
-            bin.setDescription("Waste resource created by a Data Fusion event.");
-            bin.setMetadata("http://almanac-project.eu/ontologies/smartcity.owl#WasteBin");
-            Location location = new Location();
-            location.setTime(new Date());
-            GeoJsonObject geometry = new org.geojson.Point(7.665539,45.053309);
+                // For MeetIoT: hardcoding the DF related Thing:
+                Thing bin = new Thing();
+                bin.setId("6a2a241332749463701d4d9607c02bc903c8bea1");
+                bin.setDescription("Waste resource created by a Data Fusion event.");
+                bin.setMetadata("http://almanac-project.eu/ontologies/smartcity.owl#WasteBin");
+                Location location = new Location();
+                location.setTime(new Date());
+                GeoJsonObject geometry = new org.geojson.Point(7.665539, 45.053309);
 
-            location.setGeometry(geometry);
+                location.setGeometry(geometry);
 
-            HashSet<Location> ob = new HashSet<Location>();
-            ob.add(location);
-            bin.setLocations(ob);
+                HashSet<Location> ob = new HashSet<Location>();
+                ob.add(location);
+                bin.setLocations(ob);
 
-            fullBins.add(bin);
+                fullBins.add(bin);
 
-            System.out.println("DF event: fullBins size: " + fullBins.size() + "!");
-            generateRoute("/almanac/route");
+                System.out.println("DF event: fullBins size: " + fullBins.size() + "!");
+                generateRoute("/almanac/route");
 
-            fullBins.remove(7);
-            fullBins.remove(6);
+                fullBins.remove(7);
+                fullBins.remove(6);
 
 //            System.out.println("***Full Bin: " + binId + " Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
-            System.out.println("***Full Bin: " + binId +
-                            " Latitude: " + ((org.geojson.Point)(location.getGeometry())).getCoordinates().getLatitude() +
-                            " Longitude: " + ((org.geojson.Point)(location.getGeometry())).getCoordinates().getLongitude());
+                System.out.println("***Full Bin: " + binId +
+                        " Latitude: " + ((org.geojson.Point) (location.getGeometry())).getCoordinates().getLatitude() +
+                        " Longitude: " + ((org.geojson.Point) (location.getGeometry())).getCoordinates().getLongitude());
 
 //            createTicket("Ticket created from BeWaste: Data Fusion waste bin full.",
 //                         binId, location.getLatitude(), location.getLongitude());
-            createTicket("Ticket created from BeWaste: Data Fusion waste bin full.",
-                    binId, ((org.geojson.Point)(location.getGeometry())).getCoordinates().getLatitude(), ((org.geojson.Point)(location.getGeometry())).getCoordinates().getLongitude());
+                createTicket("Ticket created from BeWaste: Data Fusion waste bin full.",
+                        binId, ((org.geojson.Point) (location.getGeometry())).getCoordinates().getLatitude(), ((org.geojson.Point) (location.getGeometry())).getCoordinates().getLongitude());
 
-            fullBins.add(bin);
-
-            executor.execute(new Runnable() {
-                public void run() {
-                    generateRoute("/almanac/route");
-                }
-            });
+            }
         }catch(Exception e) {
             e.printStackTrace();
         }

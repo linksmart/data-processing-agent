@@ -50,8 +50,8 @@ public class WasteMqttClient extends Observable implements MqttCallback {
     private void openMqttConnection(String clientId){
         try {
 //            mqttClient = new MqttClient("tcp://localhost:1883","waste", new MemoryPersistence());
-//            mqttClient = new MqttClient("tcp://almanac.fit.fraunhofer.de:1883","wasteBackEndOtilia", new MemoryPersistence());
-            mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883", clientId, new MemoryPersistence());
+            mqttClient = new MqttClient("tcp://almanac.fit.fraunhofer.de:1883",clientId, new MemoryPersistence());
+//            mqttClient = new MqttClient("tcp://m2m.eclipse.org:1883", clientId, new MemoryPersistence());
             mqttClient.setCallback(this);
             mqttClient.connect();
         } catch (MqttException e) {
