@@ -11,7 +11,7 @@ module.exports = function (almanac) {
 	function proxyScral(req, res) {
 		req.pipe(almanac.request({
 				method: req.method,
-				uri: 'http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path + req.url,
+				uri: almanac.config.hosts.scralUrl + req.url,
 				timeout: 15000,
 			}, function (error, response, body) {
 				if (error || response.statusCode != 200 || !body) {

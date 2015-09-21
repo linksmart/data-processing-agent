@@ -11,7 +11,7 @@ module.exports = function (almanac) {
 
 	function registerInNetworkManager() {
 		almanac.request.post({
-				url: almanac.config.hosts.networkManagerUrl + '/NetworkManager',
+				url: almanac.config.hosts.networkManagerUrl + 'NetworkManager',
 				json: true,
 				body: JSON.stringify({
 						'Endpoint': almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/',	//The port number must always be mentionned for LinkSmart
@@ -34,8 +34,8 @@ module.exports = function (almanac) {
 
 	function refreshInNetworkManager() {
 		almanac.request.get({
-				//url: almanac.config.hosts.networkManagerUrl + '/NetworkManager?description="VirtualizationLayer"',
-				url: almanac.config.hosts.networkManagerUrl + '/GetNetworkManagerStatus?method=getLocalServices',
+				//url: almanac.config.hosts.networkManagerUrl + 'NetworkManager?description="VirtualizationLayer"',
+				url: almanac.config.hosts.networkManagerUrl + 'GetNetworkManagerStatus?method=getLocalServices',
 				json: true,
 				timeout: 2000,
 			}, function (error, response, body) {
@@ -67,7 +67,7 @@ module.exports = function (almanac) {
 
 	function updateMqttVirtualAddress() {
 		almanac.request.get({
-				url: almanac.config.hosts.networkManagerUrl + '/NetworkManager/?DESCRIPTION="Broker:tcp://' + os.hostname() + '"',
+				url: almanac.config.hosts.networkManagerUrl + 'NetworkManager/?DESCRIPTION="Broker:tcp://' + os.hostname() + '"',
 				json: true,
 				timeout: 5000,
 			}, function (error, response, body) {
@@ -90,7 +90,7 @@ module.exports = function (almanac) {
 
 		req.pipe(almanac.request({
 				method: req.method,
-				uri: almanac.config.hosts.networkManagerUrl + '/Tunneling/0/' + req.url,
+				uri: almanac.config.hosts.networkManagerUrl + 'Tunneling/0/' + req.url,
 				timeout: 20000,
 			}, function (error, response, body) {
 				if (error || response.statusCode != 200 || !body) {
