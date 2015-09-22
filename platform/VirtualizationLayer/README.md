@@ -1,6 +1,6 @@
 # Installation of the Virtualization Layer
 Requires Node.js >= 10.40, and recommends the 10.x branch.
-For MQTT, works with protocol 3.1.1+ (e.g. Mosquitto version 1.3+).
+For MQTT, recommend protocol 3.1.1+ (e.g. Mosquitto version 1.3+).
 
 
 1. See http://nodejs.org.
@@ -107,3 +107,38 @@ And then use it a a service, such as:
 ```sh
 service virtualization-layer restart
 ```
+
+
+# Virtualization Layer API
+
+## Pages
+
+* Technical information about the instance: /virtualizationLayerInfo
+* WebSocket HTML+JavaScript chat demo: /socket.html
+* WebSocket JavaScript chat demo: /console.html
+
+## HTTP Proxying + Format conversion
+
+* Proxy to Network Manager tunnelling: /tunnel/0.0.0.8917820598345047854 (change the virtual address)
+* Proxy to Resource Catalogue: /ResourceCatalogue/ogc/Things?filter= using Resource Catalogue API
+* Proxy to Storage Manager: /sm/ using Storage Manager API
+	* E.g. /sm/DataStreams%28ab1db42dea1bcdcb03f61b2a47ada8a77955715abe9bbed6611d82ba5ffa3570%29/Observations/$current
+	* Format conversion to ATOM (RSS): /sm-rss/ using Storage Manager API
+	* Format conversion to CSV: /sm-csv/ using Storage Manager API
+	* Format conversion to TSV: /sm-tsv/ using Storage Manager API
+* Proxy to SCRAL: /scral/devices using SCRAL API
+* Proxy to SmartSantander: /santander/GetNodes using SmartSantander API
+
+## WebSocket
+Good tools to test include [wscat](https://github.com/websockets/wscat) (command line) and [Dark WebSocket Terminal](https://chrome.google.com/webstore/detail/dark-websocket-terminal/dmogdjmcpfaibncngoolgljgocdabhke) (Google Chrome extension).
+(Replace localhost by the public URL of the instance)
+
+* Pan-federation chat: ws://localhost/ws/chat
+* Custom live events: ws://localhost/ws/custom-events﻿
+	* One can subscribe to internal MQTT topics by sending a JSON messages like:
+		* {"topic":"/federation1/test1"}
+		* {"topic":"/federation1/test2"}
+	* Each time, one then receives a confirmation with the list of topics subscribed to:
+		* {"subscriptions":{"/federation1/test1":true,"/federation1/test2":true}}
+	* And one then receives push messages for all matching events, e.g.
+		* {"topic":"/federation1/test1","payload":{"Hello":"World"}}
