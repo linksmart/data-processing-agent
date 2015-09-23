@@ -27,7 +27,8 @@ import java.util.concurrent.Executors;
 public class IssueManager implements Observer{
 
     /***************** CONSTANTS */
-    public static final int MIN_ISSUECOUNT = 7; // number of issues created until a route generation is triggered
+    public static final int MAX_ISSUECOUNT = 8; // max number of issues handled in the MeetIoT demo
+    public static final int MIN_ISSUECOUNT = 6;
 
      // To simulate a DF event with fill level above 70%
     public static final String SIMULATE_DF_TOPIC = "almanac/DF";
@@ -56,6 +57,8 @@ public class IssueManager implements Observer{
     private TicketManager otrsTicketManager;
 
     private ExecutorService executor;
+
+    private boolean firstBinFullEvent = true;
 
 
     public IssueManager(){
@@ -281,10 +284,13 @@ public class IssueManager implements Observer{
                 // its location (and bin type?), before a new issue can be created.
 
                 // This is the toy bin, the only one which matters for MeetIoT demo
-                if( (fullBins.size() == 7) &&
+                if( firstBinFullEvent &&
                     binId.compareTo("9ad30f72cae63d40d3f81ab6d6a501889455e1c07d6ba88390a443023ce1c2b5") == 0) {
 //            Thing bin = wasteHttpClient.getBin(binId);
 //            org.geojson.LngLatAlt location = wasteHttpClient.getBinGeolocation(binId);
+
+                    firstBinFullEvent = false; // in order to ignore all subsequent events for the same "full-bin" observation
+
                     // For MeetIoT: hardcoding the DF related Thing:
                     Thing bin = new Thing();
 //                bin.setId("6a2a241332749463701d4d9607c02bc903c8bea1");
@@ -306,8 +312,14 @@ public class IssueManager implements Observer{
                     System.out.println("DF event: fullBins size: " + fullBins.size() + "!");
                     generateRoute("/almanac/route");
 
-                    fullBins.remove(7);
-                    fullBins.remove(6);
+                    if(fullBins.size() == MAX_ISSUECOUNT) {
+                        fullBins.remove(7);
+                        fullBins.remove(6);
+
+                        generateRoute("/almanac/route/initial");
+
+                        firstBinFullEvent = true;
+                    }
 
 //            System.out.println("***Full Bin: " + binId + " Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
                     System.out.println("***Full Bin: " + binId +
@@ -443,11 +455,22 @@ public class IssueManager implements Observer{
 
                 fullBins.add(bin);
 
-                executor.execute(new Runnable() {
+ /*               executor.execute(new Runnable() {
                     public void run() {
                         generateRoute("/almanac/route");
                     }
-                });
+                });*/
+
+                generateRoute("/almanac/route");
+
+                if(fullBins.size() == MAX_ISSUECOUNT) {
+                    fullBins.remove(7);
+                    fullBins.remove(6);
+
+                    generateRoute("/almanac/route/initial");
+
+                    firstBinFullEvent = true;
+                }
 
                 break;
             case "REJECTED":
@@ -469,6 +492,15 @@ public class IssueManager implements Observer{
         if(!fullBins.isEmpty()){
 
             ArrayList<RouteEndpoint> routeEndpointList = new ArrayList<RouteEndpoint>();
+
+            if(routeType == "/almanac/route/initial" && fullBins.size() > MIN_ISSUECOUNT){
+                if(fullBins.size() == MAX_ISSUECOUNT){
+                    fullBins.remove(7);
+                }
+                fullBins.remove(6);
+
+                firstBinFullEvent = true;
+            }
 
             for (Thing entry : fullBins){
                 RouteEndpoint endpoint = new RouteEndpoint();
