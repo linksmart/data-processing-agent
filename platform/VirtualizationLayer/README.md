@@ -9,13 +9,7 @@ For MQTT, recommend protocol 3.1.1+ (e.g. Mosquitto version 1.3+).
 	apt-get install nodejs npm
 	```
 
-	* On Raspbian (Raspberry Pi):
-		* Either from a binary package from: http://nodejs.org/dist/
-			http://nodejs.org/dist/v0.10.27/node-v0.10.27-linux-arm-pi.tar.gz
-			How-to: http://alexandre.alapetite.fr/doc-alex/raspberrypi-nodejs-arduino/#nodejs
-			
-		* Or compile from source from: http://nodejs.org/dist/latest/
-			How-to: http://elinux.org/Node.js_on_RPi
+	* Otherwise, use https://github.com/nodesource/distributions
 
 2. Create and move to the directory where the VirtualizationLayer should be located, e.g.
 
@@ -135,7 +129,7 @@ Good tools to test include [wscat](https://github.com/websockets/wscat) (command
 
 * Pan-federation chat: ws://localhost/ws/chat
 * Custom live events: ws://localhost/ws/custom-events﻿
-	* One can subscribe to internal MQTT topics by sending a JSON messages like:
+	* One can subscribe to internal MQTT topics by sending JSON messages like:
 		* {"topic":"/federation1/test1"}
 		* {"topic":"/federation1/test2"}
 	* Each time, one then receives a confirmation with the list of topics subscribed to:
