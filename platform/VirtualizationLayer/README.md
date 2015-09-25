@@ -1,5 +1,5 @@
 # Installation of the Virtualization Layer
-Requires Node.js >= 10.40, and recommends the 10.x branch.
+Requires Node.js >= 0.10.40, and recommends the 0.10.x or 4.x branch.
 For MQTT, recommend protocol 3.1.1+ (e.g. Mosquitto version 1.3+).
 
 
