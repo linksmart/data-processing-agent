@@ -1,0 +1,638 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CCB3FFDA8936E92BC4A5BFCF /* Pods_Almanac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081B04D043684CEF9C55E988 /* Pods_Almanac.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		E93118E91BB3F02600C46A4B /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93118E81BB3F02600C46A4B /* Alert.swift */; settings = {ASSET_TAGS = (); }; };
+		E93118EB1BB3F02D00C46A4B /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93118EA1BB3F02D00C46A4B /* DataPoint.swift */; settings = {ASSET_TAGS = (); }; };
+		E93118ED1BB3F04200C46A4B /* WaterEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93118EC1BB3F04200C46A4B /* WaterEventCell.swift */; settings = {ASSET_TAGS = (); }; };
+		E93118EF1BB3F0DD00C46A4B /* ShowConsumptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93118EE1BB3F0DD00C46A4B /* ShowConsumptionVC.swift */; settings = {ASSET_TAGS = (); }; };
+		E93118F11BB4275B00C46A4B /* VLSocketReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93118F01BB4275B00C46A4B /* VLSocketReply.swift */; settings = {ASSET_TAGS = (); }; };
+		E9C6BACA1BB3D2FE00C72C00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C6BAC91BB3D2FE00C72C00 /* AppDelegate.swift */; };
+		E9C6BACF1BB3D2FE00C72C00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9C6BACD1BB3D2FE00C72C00 /* Main.storyboard */; };
+		E9C6BAD11BB3D2FE00C72C00 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9C6BAD01BB3D2FE00C72C00 /* Assets.xcassets */; };
+		E9C6BAD41BB3D2FE00C72C00 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9C6BAD21BB3D2FE00C72C00 /* LaunchScreen.storyboard */; };
+		E9C6BADF1BB3D2FE00C72C00 /* AlmanacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C6BADE1BB3D2FE00C72C00 /* AlmanacTests.swift */; };
+		E9C6BAEA1BB3D2FE00C72C00 /* AlmanacUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C6BAE91BB3D2FE00C72C00 /* AlmanacUITests.swift */; };
+		E9F5177E1BB3DDF6002ED7FD /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F5177D1BB3DDF6002ED7FD /* LoginVC.swift */; settings = {ASSET_TAGS = (); }; };
+		E9F517801BB3DE91002ED7FD /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F5177F1BB3DE91002ED7FD /* UserProfile.swift */; settings = {ASSET_TAGS = (); }; };
+		E9F517851BB3E518002ED7FD /* SmartmeterListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F517841BB3E518002ED7FD /* SmartmeterListTVC.swift */; settings = {ASSET_TAGS = (); }; };
+		E9F517871BB3ED97002ED7FD /* Thing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F517861BB3ED97002ED7FD /* Thing.swift */; settings = {ASSET_TAGS = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E9C6BADB1BB3D2FE00C72C00 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E9C6BABE1BB3D2FE00C72C00 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E9C6BAC51BB3D2FE00C72C00;
+			remoteInfo = Almanac;
+		};
+		E9C6BAE61BB3D2FE00C72C00 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E9C6BABE1BB3D2FE00C72C00 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E9C6BAC51BB3D2FE00C72C00;
+			remoteInfo = Almanac;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		081B04D043684CEF9C55E988 /* Pods_Almanac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Almanac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B205D626A02CA0DFE1E6516 /* Pods-Almanac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Almanac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Almanac/Pods-Almanac.debug.xcconfig"; sourceTree = "<group>"; };
+		924445F6ACBD9E9AA7C510F1 /* Pods-Almanac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Almanac.release.xcconfig"; path = "Pods/Target Support Files/Pods-Almanac/Pods-Almanac.release.xcconfig"; sourceTree = "<group>"; };
+		E93118E81BB3F02600C46A4B /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		E93118EA1BB3F02D00C46A4B /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
+		E93118EC1BB3F04200C46A4B /* WaterEventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaterEventCell.swift; sourceTree = "<group>"; };
+		E93118EE1BB3F0DD00C46A4B /* ShowConsumptionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowConsumptionVC.swift; sourceTree = "<group>"; };
+		E93118F01BB4275B00C46A4B /* VLSocketReply.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLSocketReply.swift; sourceTree = "<group>"; };
+		E9C6BAC61BB3D2FE00C72C00 /* Almanac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Almanac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9C6BAC91BB3D2FE00C72C00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E9C6BACE1BB3D2FE00C72C00 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E9C6BAD01BB3D2FE00C72C00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E9C6BAD31BB3D2FE00C72C00 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E9C6BAD51BB3D2FE00C72C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E9C6BADA1BB3D2FE00C72C00 /* AlmanacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlmanacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9C6BADE1BB3D2FE00C72C00 /* AlmanacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlmanacTests.swift; sourceTree = "<group>"; };
+		E9C6BAE01BB3D2FE00C72C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E9C6BAE51BB3D2FE00C72C00 /* AlmanacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlmanacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9C6BAE91BB3D2FE00C72C00 /* AlmanacUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlmanacUITests.swift; sourceTree = "<group>"; };
+		E9C6BAEB1BB3D2FE00C72C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E9F5177C1BB3DA57002ED7FD /* JBChartView-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JBChartView-Bridging-Header.h"; sourceTree = "<group>"; };
+		E9F5177D1BB3DDF6002ED7FD /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		E9F5177F1BB3DE91002ED7FD /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		E9F517841BB3E518002ED7FD /* SmartmeterListTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartmeterListTVC.swift; sourceTree = "<group>"; };
+		E9F517861BB3ED97002ED7FD /* Thing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thing.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E9C6BAC31BB3D2FE00C72C00 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CCB3FFDA8936E92BC4A5BFCF /* Pods_Almanac.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9C6BAD71BB3D2FE00C72C00 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9C6BAE21BB3D2FE00C72C00 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		951D08077DEA9E31FBE16A2B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				081B04D043684CEF9C55E988 /* Pods_Almanac.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D1458B14DE155EBFD553995A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2B205D626A02CA0DFE1E6516 /* Pods-Almanac.debug.xcconfig */,
+				924445F6ACBD9E9AA7C510F1 /* Pods-Almanac.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E9C6BABD1BB3D2FE00C72C00 = {
+			isa = PBXGroup;
+			children = (
+				E9C6BAC81BB3D2FE00C72C00 /* Almanac */,
+				E9C6BADD1BB3D2FE00C72C00 /* AlmanacTests */,
+				E9C6BAE81BB3D2FE00C72C00 /* AlmanacUITests */,
+				E9C6BAC71BB3D2FE00C72C00 /* Products */,
+				D1458B14DE155EBFD553995A /* Pods */,
+				951D08077DEA9E31FBE16A2B /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E9C6BAC71BB3D2FE00C72C00 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E9C6BAC61BB3D2FE00C72C00 /* Almanac.app */,
+				E9C6BADA1BB3D2FE00C72C00 /* AlmanacTests.xctest */,
+				E9C6BAE51BB3D2FE00C72C00 /* AlmanacUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E9C6BAC81BB3D2FE00C72C00 /* Almanac */ = {
+			isa = PBXGroup;
+			children = (
+				E9F5177D1BB3DDF6002ED7FD /* LoginVC.swift */,
+				E9F517841BB3E518002ED7FD /* SmartmeterListTVC.swift */,
+				E93118EC1BB3F04200C46A4B /* WaterEventCell.swift */,
+				E93118EE1BB3F0DD00C46A4B /* ShowConsumptionVC.swift */,
+				E9C6BACD1BB3D2FE00C72C00 /* Main.storyboard */,
+				E9F517811BB3E4A0002ED7FD /* Model */,
+				E9F517821BB3E4AB002ED7FD /* Assorted files */,
+			);
+			path = Almanac;
+			sourceTree = "<group>";
+		};
+		E9C6BADD1BB3D2FE00C72C00 /* AlmanacTests */ = {
+			isa = PBXGroup;
+			children = (
+				E9C6BADE1BB3D2FE00C72C00 /* AlmanacTests.swift */,
+				E9C6BAE01BB3D2FE00C72C00 /* Info.plist */,
+			);
+			path = AlmanacTests;
+			sourceTree = "<group>";
+		};
+		E9C6BAE81BB3D2FE00C72C00 /* AlmanacUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E9C6BAE91BB3D2FE00C72C00 /* AlmanacUITests.swift */,
+				E9C6BAEB1BB3D2FE00C72C00 /* Info.plist */,
+			);
+			path = AlmanacUITests;
+			sourceTree = "<group>";
+		};
+		E9F517811BB3E4A0002ED7FD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E9F5177F1BB3DE91002ED7FD /* UserProfile.swift */,
+				E93118E81BB3F02600C46A4B /* Alert.swift */,
+				E93118EA1BB3F02D00C46A4B /* DataPoint.swift */,
+				E9F517861BB3ED97002ED7FD /* Thing.swift */,
+				E93118F01BB4275B00C46A4B /* VLSocketReply.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		E9F517821BB3E4AB002ED7FD /* Assorted files */ = {
+			isa = PBXGroup;
+			children = (
+				E9C6BAD21BB3D2FE00C72C00 /* LaunchScreen.storyboard */,
+				E9C6BAD01BB3D2FE00C72C00 /* Assets.xcassets */,
+				E9C6BAD51BB3D2FE00C72C00 /* Info.plist */,
+				E9C6BAC91BB3D2FE00C72C00 /* AppDelegate.swift */,
+				E9F5177C1BB3DA57002ED7FD /* JBChartView-Bridging-Header.h */,
+			);
+			name = "Assorted files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E9C6BAC51BB3D2FE00C72C00 /* Almanac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9C6BAEE1BB3D2FE00C72C00 /* Build configuration list for PBXNativeTarget "Almanac" */;
+			buildPhases = (
+				5BF5835A6C8E341F4363B3CF /* Check Pods Manifest.lock */,
+				E9C6BAC21BB3D2FE00C72C00 /* Sources */,
+				E9C6BAC31BB3D2FE00C72C00 /* Frameworks */,
+				E9C6BAC41BB3D2FE00C72C00 /* Resources */,
+				F4B41F32333945939DDF1009 /* Embed Pods Frameworks */,
+				AF5A1CA8F9EA494FC836B59F /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Almanac;
+			productName = Almanac;
+			productReference = E9C6BAC61BB3D2FE00C72C00 /* Almanac.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E9C6BAD91BB3D2FE00C72C00 /* AlmanacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9C6BAF11BB3D2FE00C72C00 /* Build configuration list for PBXNativeTarget "AlmanacTests" */;
+			buildPhases = (
+				E9C6BAD61BB3D2FE00C72C00 /* Sources */,
+				E9C6BAD71BB3D2FE00C72C00 /* Frameworks */,
+				E9C6BAD81BB3D2FE00C72C00 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E9C6BADC1BB3D2FE00C72C00 /* PBXTargetDependency */,
+			);
+			name = AlmanacTests;
+			productName = AlmanacTests;
+			productReference = E9C6BADA1BB3D2FE00C72C00 /* AlmanacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E9C6BAE41BB3D2FE00C72C00 /* AlmanacUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9C6BAF41BB3D2FE00C72C00 /* Build configuration list for PBXNativeTarget "AlmanacUITests" */;
+			buildPhases = (
+				E9C6BAE11BB3D2FE00C72C00 /* Sources */,
+				E9C6BAE21BB3D2FE00C72C00 /* Frameworks */,
+				E9C6BAE31BB3D2FE00C72C00 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E9C6BAE71BB3D2FE00C72C00 /* PBXTargetDependency */,
+			);
+			name = AlmanacUITests;
+			productName = AlmanacUITests;
+			productReference = E9C6BAE51BB3D2FE00C72C00 /* AlmanacUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E9C6BABE1BB3D2FE00C72C00 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Alexandra Institute";
+				TargetAttributes = {
+					E9C6BAC51BB3D2FE00C72C00 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					E9C6BAD91BB3D2FE00C72C00 = {
+						CreatedOnToolsVersion = 7.0;
+						TestTargetID = E9C6BAC51BB3D2FE00C72C00;
+					};
+					E9C6BAE41BB3D2FE00C72C00 = {
+						CreatedOnToolsVersion = 7.0;
+						TestTargetID = E9C6BAC51BB3D2FE00C72C00;
+					};
+				};
+			};
+			buildConfigurationList = E9C6BAC11BB3D2FE00C72C00 /* Build configuration list for PBXProject "Almanac" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E9C6BABD1BB3D2FE00C72C00;
+			productRefGroup = E9C6BAC71BB3D2FE00C72C00 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E9C6BAC51BB3D2FE00C72C00 /* Almanac */,
+				E9C6BAD91BB3D2FE00C72C00 /* AlmanacTests */,
+				E9C6BAE41BB3D2FE00C72C00 /* AlmanacUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E9C6BAC41BB3D2FE00C72C00 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E9C6BAD41BB3D2FE00C72C00 /* LaunchScreen.storyboard in Resources */,
+				E9C6BAD11BB3D2FE00C72C00 /* Assets.xcassets in Resources */,
+				E9C6BACF1BB3D2FE00C72C00 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9C6BAD81BB3D2FE00C72C00 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9C6BAE31BB3D2FE00C72C00 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5BF5835A6C8E341F4363B3CF /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AF5A1CA8F9EA494FC836B59F /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Almanac/Pods-Almanac-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F4B41F32333945939DDF1009 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Almanac/Pods-Almanac-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E9C6BAC21BB3D2FE00C72C00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E93118E91BB3F02600C46A4B /* Alert.swift in Sources */,
+				E9F517801BB3DE91002ED7FD /* UserProfile.swift in Sources */,
+				E9C6BACA1BB3D2FE00C72C00 /* AppDelegate.swift in Sources */,
+				E9F5177E1BB3DDF6002ED7FD /* LoginVC.swift in Sources */,
+				E93118ED1BB3F04200C46A4B /* WaterEventCell.swift in Sources */,
+				E9F517851BB3E518002ED7FD /* SmartmeterListTVC.swift in Sources */,
+				E93118EB1BB3F02D00C46A4B /* DataPoint.swift in Sources */,
+				E93118F11BB4275B00C46A4B /* VLSocketReply.swift in Sources */,
+				E9F517871BB3ED97002ED7FD /* Thing.swift in Sources */,
+				E93118EF1BB3F0DD00C46A4B /* ShowConsumptionVC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9C6BAD61BB3D2FE00C72C00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E9C6BADF1BB3D2FE00C72C00 /* AlmanacTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9C6BAE11BB3D2FE00C72C00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E9C6BAEA1BB3D2FE00C72C00 /* AlmanacUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E9C6BADC1BB3D2FE00C72C00 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E9C6BAC51BB3D2FE00C72C00 /* Almanac */;
+			targetProxy = E9C6BADB1BB3D2FE00C72C00 /* PBXContainerItemProxy */;
+		};
+		E9C6BAE71BB3D2FE00C72C00 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E9C6BAC51BB3D2FE00C72C00 /* Almanac */;
+			targetProxy = E9C6BAE61BB3D2FE00C72C00 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E9C6BACD1BB3D2FE00C72C00 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E9C6BACE1BB3D2FE00C72C00 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E9C6BAD21BB3D2FE00C72C00 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E9C6BAD31BB3D2FE00C72C00 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E9C6BAEC1BB3D2FE00C72C00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Almanac/JBChartView-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E9C6BAED1BB3D2FE00C72C00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Almanac/JBChartView-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E9C6BAEF1BB3D2FE00C72C00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2B205D626A02CA0DFE1E6516 /* Pods-Almanac.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Almanac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = dk.alexandra.almanac.Almanac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		E9C6BAF01BB3D2FE00C72C00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 924445F6ACBD9E9AA7C510F1 /* Pods-Almanac.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Almanac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = dk.alexandra.almanac.Almanac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		E9C6BAF21BB3D2FE00C72C00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = AlmanacTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = dk.alexandra.almanac.AlmanacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Almanac.app/Almanac";
+			};
+			name = Debug;
+		};
+		E9C6BAF31BB3D2FE00C72C00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = AlmanacTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = dk.alexandra.almanac.AlmanacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Almanac.app/Almanac";
+			};
+			name = Release;
+		};
+		E9C6BAF51BB3D2FE00C72C00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = AlmanacUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = dk.alexandra.almanac.AlmanacUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Almanac;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		E9C6BAF61BB3D2FE00C72C00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = AlmanacUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = dk.alexandra.almanac.AlmanacUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Almanac;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E9C6BAC11BB3D2FE00C72C00 /* Build configuration list for PBXProject "Almanac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9C6BAEC1BB3D2FE00C72C00 /* Debug */,
+				E9C6BAED1BB3D2FE00C72C00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9C6BAEE1BB3D2FE00C72C00 /* Build configuration list for PBXNativeTarget "Almanac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9C6BAEF1BB3D2FE00C72C00 /* Debug */,
+				E9C6BAF01BB3D2FE00C72C00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9C6BAF11BB3D2FE00C72C00 /* Build configuration list for PBXNativeTarget "AlmanacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9C6BAF21BB3D2FE00C72C00 /* Debug */,
+				E9C6BAF31BB3D2FE00C72C00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9C6BAF41BB3D2FE00C72C00 /* Build configuration list for PBXNativeTarget "AlmanacUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9C6BAF51BB3D2FE00C72C00 /* Debug */,
+				E9C6BAF61BB3D2FE00C72C00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E9C6BABE1BB3D2FE00C72C00 /* Project object */;
+}

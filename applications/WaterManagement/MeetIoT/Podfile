@@ -1,0 +1,18 @@
+platform :ios, '9.0'
+use_frameworks!
+
+target 'Almanac' do
+   pod 'AlamofireObjectMapper'
+   pod 'Starscream'
+   pod 'JBChartView'
+   pod 'Colours/Swift'
+end
+
+target 'AlmanacTests' do
+
+end
+
+target 'AlmanacUITests' do
+
+end
+
