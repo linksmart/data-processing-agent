@@ -2,8 +2,8 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "Screen Shot 2015-06-12 at 00.01.52.png"
+      "filename" : "Screen Shot 2015-06-12 at 00.01.52.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",

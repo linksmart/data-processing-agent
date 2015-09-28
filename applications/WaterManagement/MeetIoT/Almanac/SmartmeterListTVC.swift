@@ -7,14 +7,50 @@
 //
 
 import UIKit
+import Starscream
+import ObjectMapper
+import AlamofireObjectMapper
 
-class SmartmeterListTVC: UITableViewController {
+
+class SmartmeterListTVC: UITableViewController, WebSocketDelegate {
     
-    var Smartmeters = [ObservationsResponse]()
+    var smartmeters = [VLSocketReply]() {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    
+    var websocketForMeters: WebSocket?
+    
+    var pathToObservation = "/federation1/smat/v2/observation"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+//        if websocketForMeters == nil {
+//            let url = NSURLComponents()
+//            url.scheme = "ws"
+//            url.host = "almanac.alexandra.dk"
+//            url.path = "/ws/custom-events"
+//            
+//            websocketForMeters = WebSocket(url: url.URL!)
+//            websocketForMeters?.delegate = self
+//            websocketForMeters?.connect()
+//        }
+        
+        // This is only until we can check RC...
+        let coffeeMachine = VLSocketReply()
+        coffeeMachine.topic = "/federation1/smat/v2/observation/watermeterai/watermeterai"
+        coffeeMachine.payload = Observation()
+        coffeeMachine.payload?.resultType = "AI Coffee Machine"
+        smartmeters.append(coffeeMachine)
+        
+        let watertower = VLSocketReply()
+        watertower.topic = "/federation1/smat/v2/observation/1bfccd37dd7f12dc24c84c0c3dcdf14a15bc15294adc9f3abe6c291031050f62/7aa01530613d11ffb435698791a39ef2aaa7e35e051b55b17f0be7eeb7f7dddb"
+        watertower.payload = Observation()
+        watertower.payload?.resultType = "Water Tower"
+        smartmeters.append(watertower)
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -22,37 +58,30 @@ class SmartmeterListTVC: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 10
+        return smartmeters.count
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SmartmeterCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("SmartmeterCell", forIndexPath: indexPath) as! SmartMeterCell
 
-        cell.textLabel?.text = "Thomas is great!"
+            cell.titleLabel?.text = smartmeters[indexPath.row].payload?.resultType
+            cell.subtitleLabel.text = "More HAAHA"
 
-        
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         print("Selected: ", indexPath)
         
-        performSegueWithIdentifier("showConsumption", sender: self)
+        performSegueWithIdentifier("showConsumption", sender: indexPath.row)
     }
 
 
@@ -91,14 +120,34 @@ class SmartmeterListTVC: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let sender = sender as? Int, destination = segue.destinationViewController as? ShowConsumptionVC {
+            destination.consumptionPathToObservation = smartmeters[sender].topic
+        }
     }
-    */
-
+    
+    func websocketDidConnect(socket: WebSocket) {
+        let subscribeString = "{\"topic\":\"\(pathToObservation)\"}"
+        print("Websocket connected\nConnecting to: ", subscribeString)
+        socket.writeString(subscribeString)
+    }
+    
+    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
+        print("Websocket disconnected")
+    }
+    
+    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+//        print(text)
+//        let reply = Mapper<VLSocketReply>().map(text)
+//        if let time = reply?.payload?.phenomenonTime, value = reply?.payload?.resultValue, type = reply?.payload?.resultType {
+//            let test = Observation(phenomenonTime: time, resultValue: value, resultType: type)
+//        }
+    }
+    
+    func websocketDidReceiveData(socket: WebSocket, data: NSData) {
+        print("Did receive data")
+    }
 }

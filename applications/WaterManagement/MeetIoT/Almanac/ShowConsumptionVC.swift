@@ -15,76 +15,111 @@ import Colours
 
 class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataSource, JBLineChartViewDataSource, JBLineChartViewDelegate, WebSocketDelegate {
     
-    @IBOutlet weak var consumptionGraph: JBLineChartView!
-    @IBOutlet weak var alertTable: UITableView!
+    
+    @IBOutlet weak var periodInGraphLabel: UILabel!
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var consumptionMonthGraph: JBLineChartView!
+    @IBOutlet weak var consumptionDailyGraph: JBLineChartView!
+    
+    @IBOutlet weak var alertTableView: UITableView!
     @IBOutlet weak var latestValueLabel: UILabel!
     
-    var socket: WebSocket?
+    var consumptonSocket: WebSocket?
+    var alertSocket: WebSocket?
     
-    var pathToObservation: String?
+    var isDayShowing = true
     
-    var alertList: [Alert] = [] {
+    var consumptionPathToObservation: String? {
         didSet {
-            alertTable.reloadData()
-        }
-    }
-    
-    var graphData = [Observation]() {
-        didSet {
-            if graphData.count > 60 {
-                graphData.removeFirst()
-            }
-            consumptionGraph.reloadData()
-        }
-    }
-    
-    var alertShown = false
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        consumptionGraph.delegate = self
-        consumptionGraph.dataSource = self
-        
-        consumptionGraph.backgroundColor = UIColor.clearColor()
-        consumptionGraph.autoresizingMask = UIViewAutoresizing.FlexibleWidth
-        
-        let alert = Alert()
-        alert.Subtitle = "Ass"
-        alert.TimeStamp = NSDate()
-        alert.Title = "Tiss"
-        alertList.append(alert)
-        //consumptionGraph.reloadData()
-        
-        if let image = UIImage(named: "aarhusvand_splash_03_rgb") {
-            consumptionGraph.backgroundColor = UIColor(patternImage: image)
-        } else {
-            print("There was no such image as background.jpg")
-        }
-        
-        pathToObservation = "/federation1/smat/v2/observation/1bfccd37dd7f12dc24c84c0c3dcdf14a15bc15294adc9f3abe6c291031050f62/7aa01530613d11ffb435698791a39ef2aaa7e35e051b55b17f0be7eeb7f7dddb"
-        
-        
-        if let pathToObservation = pathToObservation {
+            consumptonSocket?.disconnect()
+            consumptonSocket = nil
+            
             let url = NSURLComponents()
             url.scheme = "ws"
             url.host = "almanac.alexandra.dk"
             url.path = "/ws/custom-events"
             
-            socket = WebSocket(url: url.URL!)
-            socket?.delegate = self
-            socket?.connect()
+            consumptonSocket = WebSocket(url: url.URL!)
+            consumptonSocket?.delegate = self
+            consumptonSocket?.connect()
         }
     }
     
+    var alertPathToObservation: String? {
+        didSet {
+            alertSocket?.disconnect()
+            alertSocket = nil
+            
+            let url = NSURLComponents()
+            url.scheme = "ws"
+            url.host = "almanac.alexandra.dk"
+            url.path = "/ws/custom-events"
+            
+            alertSocket = WebSocket(url: url.URL!)
+            alertSocket?.delegate = self
+            alertSocket?.connect()
+        }
+    }
+
+    var alertList: [Alert] = [] {
+        didSet {
+            alertTableView.reloadData()
+        }
+    }
+    
+    var graphData = [Int: Observation]() {
+        didSet {
+            if graphData.count > 300 {
+                graphData.removeValueForKey(([Int](graphData.keys).minElement())!)
+            }
+            consumptionMonthGraph.reloadData()
+            consumptionDailyGraph.reloadData()
+        }
+    }
+    
+    var alertShown = false
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        consumptionMonthGraph.delegate = self
+        consumptionMonthGraph.dataSource = self
+        
+        consumptionMonthGraph.backgroundColor = UIColor.clearColor()
+        consumptionMonthGraph.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+        
+        consumptionDailyGraph.delegate = self
+        consumptionDailyGraph.dataSource = self
+        
+        consumptionDailyGraph.backgroundColor = UIColor.clearColor()
+        consumptionDailyGraph.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+        
+        containerView?.layer.borderColor = UIColor.lightGrayColor().CGColor
+        containerView?.layer.borderWidth = 2.0
+        containerView?.layer.cornerRadius = 10.0
+        containerView?.clipsToBounds = true
+        
+        if let image = UIImage(named: "aarhusvand_splash_03_rgb") {
+            consumptionMonthGraph.backgroundColor = UIColor(patternImage: image)
+        } else {
+            print("There was no such image as background.jpg")
+        }
+        
+        // pathToObservation = "/federation1/smat/v2/observation/1bfccd37dd7f12dc24c84c0c3dcdf14a15bc15294adc9f3abe6c291031050f62/7aa01530613d11ffb435698791a39ef2aaa7e35e051b55b17f0be7eeb7f7dddb"
+        // consumptionPathToObservation = "/federation1/smat/v2/observation/watermeterai/watermeterai"
+    }
+    
     override func viewDidDisappear(animated: Bool) {
-        socket?.disconnect()
-        socket = nil
+        consumptonSocket?.disconnect()
+        consumptonSocket = nil
+        
+        alertSocket?.disconnect()
+        alertSocket = nil
         print("View did disappear")
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        consumptionGraph.reloadData()
+        consumptionMonthGraph.reloadData()
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -96,10 +131,10 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("AlertCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("AlertCell", forIndexPath: indexPath) as! WaterEventCell
         
-        //cell.utilityTextLabel.text = alertList[indexPath.row].Title
-        //cell.alertTimeStamp?.text = NSDateFormatter.localizedStringFromDate(alertList[indexPath.row].TimeStamp!, dateStyle: .MediumStyle, timeStyle: .MediumStyle)
+        cell.utilityTextLabel.text = alertList[indexPath.row].Title
+        cell.alertTimeStamp?.text = NSDateFormatter.localizedStringFromDate(alertList[indexPath.row].TimeStamp!, dateStyle: .MediumStyle, timeStyle: .MediumStyle)
         
         return cell
     }
@@ -113,12 +148,21 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func lineChartView(lineChartView: JBLineChartView!, numberOfVerticalValuesAtLineIndex lineIndex: UInt) -> UInt {
-        print("There are: ", graphData.count)
-        return UInt(graphData.count)
+        if lineChartView == consumptionMonthGraph, let minValue = (graphData.keys).minElement(), let maxValue = (graphData.keys).maxElement() {
+            return UInt(maxValue - minValue)
+        } else if lineChartView == consumptionDailyGraph, let minValue = (graphData.keys).minElement(), let maxValue = (graphData.keys).maxElement() {
+            return UInt(maxValue - minValue)
+        } else {
+            return UInt(0)
+        }
     }
     
     func lineChartView(lineChartView: JBLineChartView!, verticalValueForHorizontalIndex horizontalIndex: UInt, atLineIndex lineIndex: UInt) -> CGFloat {
-        return CGFloat(graphData[Int(horizontalIndex)].resultValue)
+        if let minValue = (graphData.keys).minElement(), let resultValue = graphData[Int(horizontalIndex) + minValue ] {
+            return CGFloat(resultValue.resultValue)
+        } else {
+            return CGFloat.NaN
+        }
     }
     
     func lineChartView(lineChartView: JBLineChartView!, colorForLineAtLineIndex lineIndex: UInt) -> UIColor! {
@@ -126,7 +170,11 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func lineChartView(lineChartView: JBLineChartView!, fillColorForLineAtLineIndex lineIndex: UInt) -> UIColor! {
+        if lineChartView == consumptionMonthGraph {
         return UIColor.blueColor()
+        } else {
+            return UIColor.redColor()
+        }
     }
     
     func lineChartView(lineChartView: JBLineChartView!, widthForLineAtLineIndex lineIndex: UInt) -> CGFloat {
@@ -138,6 +186,9 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func lineChartView(lineChartView: JBLineChartView!, showsDotsForLineAtLineIndex lineIndex: UInt) -> Bool {
+        if lineChartView == consumptionMonthGraph {
+            return false
+        }
         return true
     }
     
@@ -150,9 +201,16 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func websocketDidConnect(socket: WebSocket) {
-        let subscribeString = "{\"topic\":\"\(pathToObservation!)\"}"
-        print("Websocket connected\nConnecting to: ", subscribeString)
-        socket.writeString(subscribeString)
+        
+        if socket == consumptonSocket {
+            let subscribeString = "{\"topic\":\"\(consumptionPathToObservation!)\"}"
+            print("Websocket connected\nConnecting to: ", subscribeString)
+            socket.writeString(subscribeString)
+        } else if socket == alertSocket {
+            let subscribeString = "{\"topic\":\"\(alertPathToObservation!)\"}"
+            print("Websocket connected\nConnecting to: ", subscribeString)
+            socket.writeString(subscribeString)
+        }
     }
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
@@ -164,13 +222,41 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         let reply = Mapper<VLSocketReply>().map(text)
         if let time = reply?.payload?.phenomenonTime, value = reply?.payload?.resultValue {
             let test = Observation(phenomenonTime: time, resultValue: value, resultType: "Ass")
-            latestValueLabel.text = "\(value)"
-            graphData.append(test)
+            //latestValueLabel.text = "\(value)"
+            graphData[Int(time.timeIntervalSince1970)] = test
         }
     }
     
     func websocketDidReceiveData(socket: WebSocket, data: NSData) {
         print("Did receive data")
+    }
+    
+    @IBAction func counterViewTap(gesture:UITapGestureRecognizer?) {
+        if (isDayShowing) {
+            UIView.transitionFromView(consumptionDailyGraph,
+                toView: consumptionMonthGraph,
+                duration: 1.0,
+                options: [ UIViewAnimationOptions.TransitionFlipFromLeft,
+                    UIViewAnimationOptions.ShowHideTransitionViews ],
+                completion:nil)
+            periodInGraphLabel.text = "Month View"
+        } else {
+            UIView.transitionFromView(consumptionMonthGraph,
+                toView: consumptionDailyGraph,
+                duration: 1.0,
+                options: [ UIViewAnimationOptions.TransitionFlipFromRight,
+                    UIViewAnimationOptions.ShowHideTransitionViews],
+                completion: nil)
+            periodInGraphLabel.text = "Day View"
+        }
+        
+        let tmpAlert: Alert = Alert()
+        tmpAlert.Title = "Leak Detected"
+        tmpAlert.Subtitle = "Oops I did it again"
+        tmpAlert.TimeStamp = NSDate()
+        self.alertList.insert(tmpAlert, atIndex: 0)
+        
+        isDayShowing = !isDayShowing
     }
 }
 

@@ -13,6 +13,7 @@
 		E93118ED1BB3F04200C46A4B /* WaterEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93118EC1BB3F04200C46A4B /* WaterEventCell.swift */; settings = {ASSET_TAGS = (); }; };
 		E93118EF1BB3F0DD00C46A4B /* ShowConsumptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93118EE1BB3F0DD00C46A4B /* ShowConsumptionVC.swift */; settings = {ASSET_TAGS = (); }; };
 		E93118F11BB4275B00C46A4B /* VLSocketReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93118F01BB4275B00C46A4B /* VLSocketReply.swift */; settings = {ASSET_TAGS = (); }; };
+		E9BE5B681BB9C4FD006E166C /* SmartMeterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BE5B671BB9C4FD006E166C /* SmartMeterCell.swift */; settings = {ASSET_TAGS = (); }; };
 		E9C6BACA1BB3D2FE00C72C00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C6BAC91BB3D2FE00C72C00 /* AppDelegate.swift */; };
 		E9C6BACF1BB3D2FE00C72C00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9C6BACD1BB3D2FE00C72C00 /* Main.storyboard */; };
 		E9C6BAD11BB3D2FE00C72C00 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9C6BAD01BB3D2FE00C72C00 /* Assets.xcassets */; };
@@ -51,6 +52,7 @@
 		E93118EC1BB3F04200C46A4B /* WaterEventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaterEventCell.swift; sourceTree = "<group>"; };
 		E93118EE1BB3F0DD00C46A4B /* ShowConsumptionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowConsumptionVC.swift; sourceTree = "<group>"; };
 		E93118F01BB4275B00C46A4B /* VLSocketReply.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLSocketReply.swift; sourceTree = "<group>"; };
+		E9BE5B671BB9C4FD006E166C /* SmartMeterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartMeterCell.swift; sourceTree = "<group>"; };
 		E9C6BAC61BB3D2FE00C72C00 /* Almanac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Almanac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9C6BAC91BB3D2FE00C72C00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E9C6BACE1BB3D2FE00C72C00 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -113,6 +115,24 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		E9BE5B651BB9BFBE006E166C /* ShowMeterDetails */ = {
+			isa = PBXGroup;
+			children = (
+				E93118EE1BB3F0DD00C46A4B /* ShowConsumptionVC.swift */,
+				E93118EC1BB3F04200C46A4B /* WaterEventCell.swift */,
+			);
+			name = ShowMeterDetails;
+			sourceTree = "<group>";
+		};
+		E9BE5B661BB9C4B4006E166C /* SmartMeterMaster */ = {
+			isa = PBXGroup;
+			children = (
+				E9F517841BB3E518002ED7FD /* SmartmeterListTVC.swift */,
+				E9BE5B671BB9C4FD006E166C /* SmartMeterCell.swift */,
+			);
+			name = SmartMeterMaster;
+			sourceTree = "<group>";
+		};
 		E9C6BABD1BB3D2FE00C72C00 = {
 			isa = PBXGroup;
 			children = (
@@ -138,11 +158,10 @@
 		E9C6BAC81BB3D2FE00C72C00 /* Almanac */ = {
 			isa = PBXGroup;
 			children = (
-				E9F5177D1BB3DDF6002ED7FD /* LoginVC.swift */,
-				E9F517841BB3E518002ED7FD /* SmartmeterListTVC.swift */,
-				E93118EC1BB3F04200C46A4B /* WaterEventCell.swift */,
-				E93118EE1BB3F0DD00C46A4B /* ShowConsumptionVC.swift */,
 				E9C6BACD1BB3D2FE00C72C00 /* Main.storyboard */,
+				E9F5177D1BB3DDF6002ED7FD /* LoginVC.swift */,
+				E9BE5B661BB9C4B4006E166C /* SmartMeterMaster */,
+				E9BE5B651BB9BFBE006E166C /* ShowMeterDetails */,
 				E9F517811BB3E4A0002ED7FD /* Model */,
 				E9F517821BB3E4AB002ED7FD /* Assorted files */,
 			);
@@ -376,6 +395,7 @@
 				E9F517801BB3DE91002ED7FD /* UserProfile.swift in Sources */,
 				E9C6BACA1BB3D2FE00C72C00 /* AppDelegate.swift in Sources */,
 				E9F5177E1BB3DDF6002ED7FD /* LoginVC.swift in Sources */,
+				E9BE5B681BB9C4FD006E166C /* SmartMeterCell.swift in Sources */,
 				E93118ED1BB3F04200C46A4B /* WaterEventCell.swift in Sources */,
 				E9F517851BB3E518002ED7FD /* SmartmeterListTVC.swift in Sources */,
 				E93118EB1BB3F02D00C46A4B /* DataPoint.swift in Sources */,
