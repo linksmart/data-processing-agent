@@ -203,15 +203,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2pD-mQ-8Rp" userLabel="Container">
-                                <rect key="frame" x="150" y="55" width="300" height="300"/>
+                                <rect key="frame" x="28" y="56" width="544" height="300"/>
                                 <subviews>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uze-dM-U9z" userLabel="Day View" customClass="JBLineChartView">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="544" height="300"/>
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zIS-cr-Abb" userLabel="Month View" customClass="JBLineChartView">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="544" height="300"/>
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
@@ -231,6 +231,12 @@
                                     <constraint firstAttribute="width" constant="300" id="fop-5J-uC9"/>
                                     <constraint firstItem="zIS-cr-Abb" firstAttribute="height" secondItem="2pD-mQ-8Rp" secondAttribute="height" id="s6W-tI-YKS"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Zsv-JV-n8w"/>
+                                        <exclude reference="fop-5J-uC9"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="Zh1-Ml-vhT" appends="YES" id="uV8-rZ-RzJ"/>
                                 </connections>
@@ -247,15 +253,18 @@
                                 </connections>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="69" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="85i-KR-FUT">
-                                <rect key="frame" x="20" y="363" width="560" height="229"/>
+                                <rect key="frame" x="20" y="364" width="560" height="228"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="228" id="UyM-KU-Zu3"/>
+                                </constraints>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AlertCell" rowHeight="69" id="lVt-h1-9Au" customClass="WaterEventCell" customModule="Almanac" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="22" width="560" height="69"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lVt-h1-9Au" id="1cH-qN-L3g">
-                                            <rect key="frame" x="0.0" y="0.0" width="560" height="69"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="560" height="68.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Leak" translatesAutoresizingMaskIntoConstraints="NO" id="rab-vy-5a2">
@@ -272,7 +281,7 @@
                                                     </variation>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text fra vandsystemet" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uEb-Mu-kPX">
-                                                    <rect key="frame" x="77" y="8" width="227" height="20"/>
+                                                    <rect key="frame" x="77" y="8" width="227" height="19.5"/>
                                                     <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="227" id="4EP-Og-chN"/>
@@ -282,7 +291,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tidspunkt for alarm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bF1-SA-Cys">
-                                                    <rect key="frame" x="77" y="35" width="227" height="20"/>
+                                                    <rect key="frame" x="77" y="35" width="227" height="19.5"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -317,13 +326,16 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="2pD-mQ-8Rp" secondAttribute="trailing" constant="8" id="6ox-Vf-id1"/>
                             <constraint firstAttribute="centerX" secondItem="2pD-mQ-8Rp" secondAttribute="centerX" id="D6R-A6-kWo"/>
                             <constraint firstItem="85i-KR-FUT" firstAttribute="leading" secondItem="XKN-t5-d4S" secondAttribute="leadingMargin" id="NKc-Uk-Jqw"/>
                             <constraint firstItem="y10-Jg-L22" firstAttribute="leading" secondItem="XKN-t5-d4S" secondAttribute="leadingMargin" id="S25-y9-j46"/>
+                            <constraint firstItem="2pD-mQ-8Rp" firstAttribute="top" secondItem="XKN-t5-d4S" secondAttribute="top" constant="56" id="STo-4x-U36"/>
                             <constraint firstItem="85i-KR-FUT" firstAttribute="top" secondItem="Uze-dM-U9z" secondAttribute="bottom" constant="8" id="TOs-4l-gmF"/>
                             <constraint firstItem="AFr-Da-lrG" firstAttribute="top" secondItem="85i-KR-FUT" secondAttribute="bottom" constant="8" id="UnN-ds-bRo"/>
-                            <constraint firstItem="2pD-mQ-8Rp" firstAttribute="top" secondItem="y10-Jg-L22" secondAttribute="bottom" constant="8" id="VQd-1d-cag"/>
+                            <constraint firstItem="2pD-mQ-8Rp" firstAttribute="top" secondItem="y10-Jg-L22" secondAttribute="bottom" constant="8" symbolic="YES" id="VQd-1d-cag"/>
                             <constraint firstItem="y10-Jg-L22" firstAttribute="trailing" secondItem="XKN-t5-d4S" secondAttribute="trailingMargin" id="cGH-3D-G01"/>
+                            <constraint firstItem="2pD-mQ-8Rp" firstAttribute="leading" secondItem="XKN-t5-d4S" secondAttribute="leadingMargin" constant="8" id="dnT-Hp-p3g"/>
                             <constraint firstAttribute="trailingMargin" secondItem="85i-KR-FUT" secondAttribute="trailing" id="e8z-Jp-xMV"/>
                             <constraint firstItem="85i-KR-FUT" firstAttribute="centerX" secondItem="Uze-dM-U9z" secondAttribute="centerX" id="emQ-aB-lV7"/>
                             <constraint firstItem="y10-Jg-L22" firstAttribute="top" secondItem="tL1-PG-gtP" secondAttribute="bottom" constant="8" id="ib6-63-fgx"/>
