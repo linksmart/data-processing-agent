@@ -129,10 +129,14 @@ Good tools to test include [wscat](https://github.com/websockets/wscat) (command
 
 * Pan-federation chat: ws://localhost/ws/chat
 * Custom live events: ws://localhost/ws/custom-events﻿
-	* One can subscribe to internal MQTT topics by sending JSON messages like:
+	* One can subscribe to internal MQTT topics by sending JSON messages like the following (they must start by a slash /):
 		* {"topic":"/federation1/test1"}
 		* {"topic":"/federation1/test2"}
+	* Or one can subscribe to multiple MQTT topics using a regular expression (the pattern is automatically anchored at beginning ^ and end $):
+		* {"topic":"/federation1/test[3-7]", "matching":"regex"}
+		* {"topic":"/federation1/test8/.*", "matching":"regex"}
 	* Each time, one then receives a confirmation with the list of topics subscribed to:
-		* {"subscriptions":{"/federation1/test1":true,"/federation1/test2":true}}
+		* {"subscriptions":{"/federation1/test1":true,"/federation1/test2":true},"subscriptionsRegex":{"/federation1/test[1-7]":{},"/federation1/test1/.*":{}}}
 	* And one then receives push messages for all matching events, e.g.
 		* {"topic":"/federation1/test1","payload":{"Hello":"World"}}
+		* {"topic":"/federation1/test8/abcd","payload":{"Hello":"World"}}
