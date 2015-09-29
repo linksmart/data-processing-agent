@@ -44,6 +44,7 @@ module.exports = function (almanac) {
 					remoteAddress: remoteAddress,
 					remotePort: remotePort,
 					mqttTopics: {},
+					mqttTopicsRegex: {},
 				};
 
 			ws.on('message', function (data, flags) {
@@ -51,9 +52,14 @@ module.exports = function (almanac) {
 					try {
 						var payload = JSON.parse(data);
 						if (payload && payload.topic && payload.topic.charAt(0) == '/') {
-							wsClients[clientId].mqttTopics[payload.topic] = true;
+							if (payload.matching === 'regex') {
+								wsClients[clientId].mqttTopicsRegex[payload.topic] = new RegExp('^' + payload.topic + '$');
+							} else {
+								wsClients[clientId].mqttTopics[payload.topic] = true;
+							}
 							ws.send(JSON.stringify({
 									subscriptions: wsClients[clientId].mqttTopics,
+									subscriptionsRegex: wsClients[clientId].mqttTopicsRegex,
 								}));
 						}
 					} catch (ex) {
@@ -80,13 +86,24 @@ module.exports = function (almanac) {
 			var clientIds = Object.keys(wsClients);
 			for (var i = clientIds.length - 1; i >= 0; i--) {
 				var client = wsClients[clientIds[i]] || {};
-				var subscriptions = Object.keys(client.mqttTopics);
-				for (var j = subscriptions.length - 1; j >= 0; j--) {
-					if (subscriptions[j] === topic) {
+
+				if (client.mqttTopics[topic]) {
+					client.ws.send(JSON.stringify({
+							topic: topic,
+							payload: data,
+						}));
+					continue;
+				}
+
+				var regexKeys = Object.keys(client.mqttTopicsRegex);
+				for (var j = regexKeys.length - 1; j >= 0; j--) {
+					var r = client.mqttTopicsRegex[regexKeys[j]];
+					if (r && r.test && r.test(topic)) {
 						client.ws.send(JSON.stringify({
 								topic: topic,
 								payload: data,
 							}));
+						break;
 					}
 				}
 			}
