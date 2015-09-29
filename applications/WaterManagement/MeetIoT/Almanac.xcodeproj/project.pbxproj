@@ -20,6 +20,7 @@
 		E9C6BAD41BB3D2FE00C72C00 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9C6BAD21BB3D2FE00C72C00 /* LaunchScreen.storyboard */; };
 		E9C6BADF1BB3D2FE00C72C00 /* AlmanacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C6BADE1BB3D2FE00C72C00 /* AlmanacTests.swift */; };
 		E9C6BAEA1BB3D2FE00C72C00 /* AlmanacUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C6BAE91BB3D2FE00C72C00 /* AlmanacUITests.swift */; };
+		E9F31ED01BBAE672001BA54B /* SmartMeterSplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F31ECF1BBAE672001BA54B /* SmartMeterSplitVC.swift */; settings = {ASSET_TAGS = (); }; };
 		E9F5177E1BB3DDF6002ED7FD /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F5177D1BB3DDF6002ED7FD /* LoginVC.swift */; settings = {ASSET_TAGS = (); }; };
 		E9F517801BB3DE91002ED7FD /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F5177F1BB3DE91002ED7FD /* UserProfile.swift */; settings = {ASSET_TAGS = (); }; };
 		E9F517851BB3E518002ED7FD /* SmartmeterListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F517841BB3E518002ED7FD /* SmartmeterListTVC.swift */; settings = {ASSET_TAGS = (); }; };
@@ -65,6 +66,7 @@
 		E9C6BAE51BB3D2FE00C72C00 /* AlmanacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlmanacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9C6BAE91BB3D2FE00C72C00 /* AlmanacUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlmanacUITests.swift; sourceTree = "<group>"; };
 		E9C6BAEB1BB3D2FE00C72C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E9F31ECF1BBAE672001BA54B /* SmartMeterSplitVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartMeterSplitVC.swift; sourceTree = "<group>"; };
 		E9F5177C1BB3DA57002ED7FD /* JBChartView-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JBChartView-Bridging-Header.h"; sourceTree = "<group>"; };
 		E9F5177D1BB3DDF6002ED7FD /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		E9F5177F1BB3DE91002ED7FD /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			children = (
 				E9F517841BB3E518002ED7FD /* SmartmeterListTVC.swift */,
 				E9BE5B671BB9C4FD006E166C /* SmartMeterCell.swift */,
+				E9F31ECF1BBAE672001BA54B /* SmartMeterSplitVC.swift */,
 			);
 			name = SmartMeterMaster;
 			sourceTree = "<group>";
@@ -394,6 +397,7 @@
 				E93118E91BB3F02600C46A4B /* Alert.swift in Sources */,
 				E9F517801BB3DE91002ED7FD /* UserProfile.swift in Sources */,
 				E9C6BACA1BB3D2FE00C72C00 /* AppDelegate.swift in Sources */,
+				E9F31ED01BBAE672001BA54B /* SmartMeterSplitVC.swift in Sources */,
 				E9F5177E1BB3DDF6002ED7FD /* LoginVC.swift in Sources */,
 				E9BE5B681BB9C4FD006E166C /* SmartMeterCell.swift in Sources */,
 				E93118ED1BB3F04200C46A4B /* WaterEventCell.swift in Sources */,

@@ -103,7 +103,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="69"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="762-rk-ixL" id="dD1-pO-dd1">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="69"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="68.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Leak" translatesAutoresizingMaskIntoConstraints="NO" id="qDi-mw-SyS">
@@ -177,10 +177,10 @@
             </objects>
             <point key="canvasLocation" x="-7274" y="-728"/>
         </scene>
-        <!--Split View Controller-->
+        <!--Smart Meter SplitVC-->
         <scene sceneID="ZmP-GK-psM">
             <objects>
-                <splitViewController id="fJl-Jo-YLF" sceneMemberID="viewController">
+                <splitViewController id="fJl-Jo-YLF" customClass="SmartMeterSplitVC" customModule="Almanac" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="X41-DJ-KDc" kind="relationship" relationship="masterViewController" id="g6d-14-zbx"/>
                         <segue destination="PlU-dL-H3b" kind="relationship" relationship="detailViewController" id="KxA-Hf-UKO"/>
@@ -203,15 +203,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2pD-mQ-8Rp" userLabel="Container">
-                                <rect key="frame" x="28" y="56" width="544" height="300"/>
+                                <rect key="frame" x="28" y="55.5" width="544" height="300.5"/>
                                 <subviews>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uze-dM-U9z" userLabel="Day View" customClass="JBLineChartView">
-                                        <rect key="frame" x="0.0" y="0.0" width="544" height="300"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="544" height="300.5"/>
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zIS-cr-Abb" userLabel="Month View" customClass="JBLineChartView">
-                                        <rect key="frame" x="0.0" y="0.0" width="544" height="300"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="544" height="300.5"/>
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
@@ -242,7 +242,7 @@
                                 </connections>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month view" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y10-Jg-L22">
-                                <rect key="frame" x="20" y="28" width="560" height="20"/>
+                                <rect key="frame" x="20" y="28" width="560" height="19.5"/>
                                 <animations/>
                                 <gestureRecognizers/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
@@ -329,8 +329,8 @@
                             <constraint firstAttribute="trailingMargin" secondItem="2pD-mQ-8Rp" secondAttribute="trailing" constant="8" id="6ox-Vf-id1"/>
                             <constraint firstAttribute="centerX" secondItem="2pD-mQ-8Rp" secondAttribute="centerX" id="D6R-A6-kWo"/>
                             <constraint firstItem="85i-KR-FUT" firstAttribute="leading" secondItem="XKN-t5-d4S" secondAttribute="leadingMargin" id="NKc-Uk-Jqw"/>
+                            <constraint firstItem="y10-Jg-L22" firstAttribute="top" secondItem="tL1-PG-gtP" secondAttribute="bottom" constant="8" id="RT9-XT-ugX"/>
                             <constraint firstItem="y10-Jg-L22" firstAttribute="leading" secondItem="XKN-t5-d4S" secondAttribute="leadingMargin" id="S25-y9-j46"/>
-                            <constraint firstItem="2pD-mQ-8Rp" firstAttribute="top" secondItem="XKN-t5-d4S" secondAttribute="top" constant="56" id="STo-4x-U36"/>
                             <constraint firstItem="85i-KR-FUT" firstAttribute="top" secondItem="Uze-dM-U9z" secondAttribute="bottom" constant="8" id="TOs-4l-gmF"/>
                             <constraint firstItem="AFr-Da-lrG" firstAttribute="top" secondItem="85i-KR-FUT" secondAttribute="bottom" constant="8" id="UnN-ds-bRo"/>
                             <constraint firstItem="2pD-mQ-8Rp" firstAttribute="top" secondItem="y10-Jg-L22" secondAttribute="bottom" constant="8" symbolic="YES" id="VQd-1d-cag"/>
@@ -338,7 +338,6 @@
                             <constraint firstItem="2pD-mQ-8Rp" firstAttribute="leading" secondItem="XKN-t5-d4S" secondAttribute="leadingMargin" constant="8" id="dnT-Hp-p3g"/>
                             <constraint firstAttribute="trailingMargin" secondItem="85i-KR-FUT" secondAttribute="trailing" id="e8z-Jp-xMV"/>
                             <constraint firstItem="85i-KR-FUT" firstAttribute="centerX" secondItem="Uze-dM-U9z" secondAttribute="centerX" id="emQ-aB-lV7"/>
-                            <constraint firstItem="y10-Jg-L22" firstAttribute="top" secondItem="tL1-PG-gtP" secondAttribute="bottom" constant="8" id="ib6-63-fgx"/>
                         </constraints>
                     </view>
                     <connections>
@@ -357,7 +356,7 @@
                 </tapGestureRecognizer>
                 <tapGestureRecognizer id="L5l-6v-sca"/>
             </objects>
-            <point key="canvasLocation" x="-6454" y="98"/>
+            <point key="canvasLocation" x="-6454" y="97.5"/>
         </scene>
     </scenes>
     <resources>
