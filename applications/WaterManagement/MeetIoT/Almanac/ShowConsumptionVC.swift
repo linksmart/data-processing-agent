@@ -13,6 +13,10 @@ import Starscream
 import ObjectMapper
 import Colours
 
+protocol SmartMeterHolder {
+    func updateValueForMeter(consumptionPathToObservation: String?, smartMeterValue: Double)
+}
+
 class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataSource, JBLineChartViewDataSource, JBLineChartViewDelegate, WebSocketDelegate {
     
     
@@ -24,10 +28,13 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var alertTableView: UITableView!
     @IBOutlet weak var latestValueLabel: UILabel!
     
+    var smartMeterHolder: SmartMeterHolder? = nil
+
     var consumptonSocket: WebSocket?
     var alertSocket: WebSocket?
     
     var isDayShowing = true
+    var inAlertMode = false
     
     var consumptionPathToObservation: String? {
         didSet {
@@ -60,7 +67,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
             alertSocket?.connect()
         }
     }
-
+    
     var alertList: [Alert] = [] {
         didSet {
             alertTableView.reloadData()
@@ -72,8 +79,12 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
             if graphData.count > 300 {
                 graphData.removeValueForKey(([Int](graphData.keys).minElement())!)
             }
-            consumptionMonthGraph.reloadData()
-            consumptionDailyGraph.reloadData()
+            if isDayShowing {
+                consumptionDailyGraph.reloadData()
+
+            } else {
+                consumptionMonthGraph.reloadData()
+            }
         }
     }
     
@@ -104,6 +115,11 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         } else {
             print("There was no such image as background.jpg")
         }
+        
+        counterViewTap(nil)
+        
+        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
+        navigationItem.leftItemsSupplementBackButton = true
         
         // pathToObservation = "/federation1/smat/v2/observation/1bfccd37dd7f12dc24c84c0c3dcdf14a15bc15294adc9f3abe6c291031050f62/7aa01530613d11ffb435698791a39ef2aaa7e35e051b55b17f0be7eeb7f7dddb"
         // consumptionPathToObservation = "/federation1/smat/v2/observation/watermeterai/watermeterai"
@@ -139,18 +155,17 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // graphData.append(UInt(arc4random()) + graphData.last!)
-    }
-    
     func numberOfLinesInLineChartView(lineChartView: JBLineChartView!) -> UInt {
         return 1
     }
     
     func lineChartView(lineChartView: JBLineChartView!, numberOfVerticalValuesAtLineIndex lineIndex: UInt) -> UInt {
         if lineChartView == consumptionMonthGraph, let minValue = (graphData.keys).minElement(), let maxValue = (graphData.keys).maxElement() {
+            print("Drawing \(maxValue - minValue) monthly points")
             return UInt(maxValue - minValue)
         } else if lineChartView == consumptionDailyGraph, let minValue = (graphData.keys).minElement(), let maxValue = (graphData.keys).maxElement() {
+            print("Drawing \(maxValue - minValue) daily points")
+
             return UInt(maxValue - minValue)
         } else {
             return UInt(0)
@@ -171,7 +186,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func lineChartView(lineChartView: JBLineChartView!, fillColorForLineAtLineIndex lineIndex: UInt) -> UIColor! {
         if lineChartView == consumptionMonthGraph {
-        return UIColor.blueColor()
+            return UIColor.blueColor()
         } else {
             return UIColor.redColor()
         }
@@ -189,7 +204,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         if lineChartView == consumptionMonthGraph {
             return false
         }
-        return true
+        return false
     }
     
     func lineChartView(lineChartView: JBLineChartView!, dotRadiusForDotAtHorizontalIndex horizontalIndex: UInt, atLineIndex lineIndex: UInt) -> CGFloat {
@@ -203,27 +218,56 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     func websocketDidConnect(socket: WebSocket) {
         
         if socket == consumptonSocket {
-            let subscribeString = "{\"topic\":\"\(consumptionPathToObservation!)\"}"
-            print("Websocket connected\nConnecting to: ", subscribeString)
-            socket.writeString(subscribeString)
+            if let path = consumptionPathToObservation {
+                let subscribeString = "{\"topic\":\"\(path)\"}"
+                print("Websocket connected\nConnecting to: ", subscribeString)
+                socket.writeString(subscribeString)
+            }
         } else if socket == alertSocket {
-            let subscribeString = "{\"topic\":\"\(alertPathToObservation!)\"}"
-            print("Websocket connected\nConnecting to: ", subscribeString)
-            socket.writeString(subscribeString)
+            if let path = alertPathToObservation {
+                let subscribeString = "{\"topic\":\"\(path)\"}"
+                print("Websocket connected\nConnecting to: ", subscribeString)
+                socket.writeString(subscribeString)
+            }
         }
     }
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
+        // Refreshing just to cause a reconnect. Funny, eh :)
+        delay(10) { () -> () in
+            self.consumptionPathToObservation = self.consumptionPathToObservation
+        }
+        delay(10) { () -> () in
+            self.alertPathToObservation = self.alertPathToObservation
+        }
+        
         print("Websocket disconnected")
     }
     
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-        // print(text)
-        let reply = Mapper<VLSocketReply>().map(text)
-        if let time = reply?.payload?.phenomenonTime, value = reply?.payload?.resultValue {
-            let test = Observation(phenomenonTime: time, resultValue: value, resultType: "Ass")
-            //latestValueLabel.text = "\(value)"
-            graphData[Int(time.timeIntervalSince1970)] = test
+        if socket == consumptonSocket {
+            let reply = Mapper<VLSocketReply>().map(text)
+            if let time = reply?.payload?.phenomenonTime, value = reply?.payload?.resultValue {
+                let test = Observation(phenomenonTime: time, resultValue: value, resultType: "Ass")
+                //latestValueLabel.text = "\(value)"
+                
+                smartMeterHolder?.updateValueForMeter(consumptionPathToObservation, smartMeterValue: value)
+                
+                if inAlertMode &&  graphData.count > 2 && test.resultValue == graphData[(graphData.keys).maxElement()!]?.resultValue {
+                    inAlertMode = false
+                }
+                graphData[Int(time.timeIntervalSince1970)] = test
+            }
+        } else if socket == alertSocket {
+            if !inAlertMode {
+                let tmpAlert: Alert = Alert()
+                tmpAlert.Title = "Leak Detected"
+                tmpAlert.Subtitle = "Oops I did it again"
+                tmpAlert.TimeStamp = NSDate()
+                self.alertList.insert(tmpAlert, atIndex: 0)
+                
+                inAlertMode = true
+            }
         }
     }
     
@@ -250,13 +294,16 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
             periodInGraphLabel.text = "Day View"
         }
         
-        let tmpAlert: Alert = Alert()
-        tmpAlert.Title = "Leak Detected"
-        tmpAlert.Subtitle = "Oops I did it again"
-        tmpAlert.TimeStamp = NSDate()
-        self.alertList.insert(tmpAlert, atIndex: 0)
-        
         isDayShowing = !isDayShowing
+    }
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
     }
 }
 

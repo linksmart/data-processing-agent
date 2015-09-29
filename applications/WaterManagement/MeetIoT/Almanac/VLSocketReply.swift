@@ -11,6 +11,7 @@ import ObjectMapper
 
 class VLSocketReply: Mappable {
     var topic: String?
+    var alertTopic: String?
     var payload: Observation?
     
     init() {}
