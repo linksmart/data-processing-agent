@@ -27,16 +27,16 @@ class SmartmeterListTVC: UITableViewController, WebSocketDelegate, SmartMeterHol
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //        if websocketForMeters == nil {
-        //            let url = NSURLComponents()
-        //            url.scheme = "ws"
-        //            url.host = "almanac.alexandra.dk"
-        //            url.path = "/ws/custom-events"
-        //
-        //            websocketForMeters = WebSocket(url: url.URL!)
-        //            websocketForMeters?.delegate = self
-        //            websocketForMeters?.connect()
-        //        }
+        if websocketForMeters == nil {
+            let url = NSURLComponents()
+            url.scheme = "ws"
+            url.host = "almanac.alexandra.dk"
+            url.path = "/ws/custom-events"
+            
+            websocketForMeters = WebSocket(url: url.URL!)
+            websocketForMeters?.delegate = self
+            websocketForMeters?.connect()
+        }
         
         // This is only until we can check RC...
         let coffeeMachine = VLSocketReply()
@@ -88,11 +88,14 @@ class SmartmeterListTVC: UITableViewController, WebSocketDelegate, SmartMeterHol
     }
     
     // MARK: - Navigation
-        override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let sender = sender as? Int, destination = segue.destinationViewController as? ShowConsumptionVC {
             destination.consumptionPathToObservation    = smartmeters[sender].topic
             destination.alertPathToObservation          = smartmeters[sender].alertTopic
-            destination.smartMeterHolder                = self
+            
+            // We dont need this now, since we have the regex query / socket connection
+            // that updates the values of everything in the list
+            // destination.smartMeterHolder                = self
         }
     }
     
@@ -114,24 +117,58 @@ class SmartmeterListTVC: UITableViewController, WebSocketDelegate, SmartMeterHol
     }
     
     func websocketDidConnect(socket: WebSocket) {
-        let subscribeString = "{\"topic\":\"\(pathToObservation)\"}"
+        let subscribeString = "{\"topic\":\"\(pathToObservation).*\", \"matching\":\"regex\"}" // {"topic":"/federation1/smat/v2/observation/.*", "matching":"regex"}
         print("Websocket connected\nConnecting to: ", subscribeString)
         socket.writeString(subscribeString)
     }
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
+        delay(10) { () -> () in
+                websocketForMeters?.connect()
+        }
         print("Websocket disconnected")
     }
     
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-        //        print(text)
-        //        let reply = Mapper<VLSocketReply>().map(text)
-        //        if let time = reply?.payload?.phenomenonTime, value = reply?.payload?.resultValue, type = reply?.payload?.resultType {
-        //            let test = Observation(phenomenonTime: time, resultValue: value, resultType: type)
-        //        }
+        // print(text)
+        let reply = Mapper<VLSocketReply>().map(text)
+        
+        let contents = smartmeters.filter { (T) -> Bool in
+            if T.topic == reply?.topic {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if contents.isEmpty && reply != nil && reply?.topic != nil {
+            smartmeters.append(reply!)
+        } else {
+            if let time = reply?.payload?.phenomenonTime, value = reply?.payload?.resultValue, _ = reply?.payload?.resultType {
+                contents.first?.payload?.resultValue = value
+                contents.first?.payload?.phenomenonTime = time
+                //self.tableView.reloadData()
+                var paths = [NSIndexPath]()
+                
+                for (index, _) in smartmeters.enumerate() {
+                    paths.append(NSIndexPath(forRow: index, inSection: 0))
+                }
+                
+                self.tableView.reloadRowsAtIndexPaths(paths, withRowAnimation: UITableViewRowAnimation.Automatic)
+            }
+        }
     }
     
     func websocketDidReceiveData(socket: WebSocket, data: NSData) {
         print("Did receive data")
+    }
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
     }
 }

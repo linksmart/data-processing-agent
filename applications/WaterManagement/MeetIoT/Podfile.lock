@@ -1,7 +1,7 @@
 PODS:
-  - Alamofire (2.0.0)
-  - AlamofireObjectMapper (0.9):
-    - Alamofire (= 2.0.0)
+  - Alamofire (2.0.2)
+  - AlamofireObjectMapper (1.0):
+    - Alamofire (~> 2.0.0)
     - ObjectMapper (= 0.17)
   - Colours/Swift (5.7.0)
   - JBChartView (2.8.16)
@@ -15,8 +15,8 @@ DEPENDENCIES:
   - Starscream
 
 SPEC CHECKSUMS:
-  Alamofire: 2f13548b29d25a58ecd91c9225fb51493e2b782b
-  AlamofireObjectMapper: 263915f1960f5a5bf00bdb921ceb5b8673e901d4
+  Alamofire: 8edbab00802a752bb5240cc2abe70e7e881488ad
+  AlamofireObjectMapper: 4f9d766a4742bb69258921723bafc260849f216c
   Colours: 180d1741c915b51b7d6c71867361c3128e15a477
   JBChartView: 8e65b7fbb4e7f1f2c0197575734fce4af1c19e17
   ObjectMapper: fa286b7cb5a398f1b0d8d64d0dd33fd1b307022c

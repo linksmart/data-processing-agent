@@ -29,7 +29,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var latestValueLabel: UILabel!
     
     var smartMeterHolder: SmartMeterHolder? = nil
-
+    
     var consumptonSocket: WebSocket?
     var alertSocket: WebSocket?
     
@@ -37,10 +37,11 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     var inAlertMode = false
     
     var consumptionPathToObservation: String? {
-        didSet {
+        willSet {
             consumptonSocket?.disconnect()
             consumptonSocket = nil
-            
+        }
+        didSet {
             let url = NSURLComponents()
             url.scheme = "ws"
             url.host = "almanac.alexandra.dk"
@@ -53,10 +54,11 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     var alertPathToObservation: String? {
-        didSet {
+        willSet {
             alertSocket?.disconnect()
             alertSocket = nil
-            
+        }
+        didSet {
             let url = NSURLComponents()
             url.scheme = "ws"
             url.host = "almanac.alexandra.dk"
@@ -81,7 +83,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
             }
             if isDayShowing {
                 consumptionDailyGraph.reloadData()
-
+                
             } else {
                 consumptionMonthGraph.reloadData()
             }
@@ -117,12 +119,6 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         
         counterViewTap(nil)
-        
-        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
-        navigationItem.leftItemsSupplementBackButton = true
-        
-        // pathToObservation = "/federation1/smat/v2/observation/1bfccd37dd7f12dc24c84c0c3dcdf14a15bc15294adc9f3abe6c291031050f62/7aa01530613d11ffb435698791a39ef2aaa7e35e051b55b17f0be7eeb7f7dddb"
-        // consumptionPathToObservation = "/federation1/smat/v2/observation/watermeterai/watermeterai"
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -165,7 +161,7 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
             return UInt(maxValue - minValue)
         } else if lineChartView == consumptionDailyGraph, let minValue = (graphData.keys).minElement(), let maxValue = (graphData.keys).maxElement() {
             print("Drawing \(maxValue - minValue) daily points")
-
+            
             return UInt(maxValue - minValue)
         } else {
             return UInt(0)
@@ -245,8 +241,9 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+        let reply = Mapper<VLSocketReply>().map(text)
+        
         if socket == consumptonSocket {
-            let reply = Mapper<VLSocketReply>().map(text)
             if let time = reply?.payload?.phenomenonTime, value = reply?.payload?.resultValue {
                 let test = Observation(phenomenonTime: time, resultValue: value, resultType: "Ass")
                 //latestValueLabel.text = "\(value)"
@@ -259,14 +256,17 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
                 graphData[Int(time.timeIntervalSince1970)] = test
             }
         } else if socket == alertSocket {
-            if !inAlertMode {
-                let tmpAlert: Alert = Alert()
-                tmpAlert.Title = "Leak Detected"
-                tmpAlert.Subtitle = "Oops I did it again"
-                tmpAlert.TimeStamp = NSDate()
-                self.alertList.insert(tmpAlert, atIndex: 0)
-                
-                inAlertMode = true
+            print("AlertText \(text)")
+            if let topic = reply?.topic where topic == alertPathToObservation {
+                if !inAlertMode {
+                    let tmpAlert: Alert = Alert()
+                    tmpAlert.Title = "Leak Detected"
+                    tmpAlert.Subtitle = "Oops I did it again"
+                    tmpAlert.TimeStamp = NSDate()
+                    self.alertList.insert(tmpAlert, atIndex: 0)
+                    
+                    inAlertMode = true
+                }
             }
         }
     }
@@ -279,19 +279,21 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         if (isDayShowing) {
             UIView.transitionFromView(consumptionDailyGraph,
                 toView: consumptionMonthGraph,
-                duration: 1.0,
+                duration: 0.5,
                 options: [ UIViewAnimationOptions.TransitionFlipFromLeft,
                     UIViewAnimationOptions.ShowHideTransitionViews ],
                 completion:nil)
             periodInGraphLabel.text = "Month View"
+            consumptionMonthGraph.reloadData()
         } else {
             UIView.transitionFromView(consumptionMonthGraph,
                 toView: consumptionDailyGraph,
-                duration: 1.0,
+                duration: 0.5,
                 options: [ UIViewAnimationOptions.TransitionFlipFromRight,
                     UIViewAnimationOptions.ShowHideTransitionViews],
                 completion: nil)
             periodInGraphLabel.text = "Day View"
+            consumptionDailyGraph.reloadData()
         }
         
         isDayShowing = !isDayShowing
