@@ -151,6 +151,10 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        alertList.removeAll()
+    }
+    
     func numberOfLinesInLineChartView(lineChartView: JBLineChartView!) -> UInt {
         return 1
     }
@@ -245,15 +249,15 @@ class ShowConsumptionVC: UIViewController, UITableViewDelegate, UITableViewDataS
         
         if socket == consumptonSocket {
             if let time = reply?.payload?.phenomenonTime, value = reply?.payload?.resultValue {
-                let test = Observation(phenomenonTime: time, resultValue: value, resultType: "Ass")
+                let newObservation = Observation(phenomenonTime: time, resultValue: value, resultType: "Ass")
                 //latestValueLabel.text = "\(value)"
                 
                 smartMeterHolder?.updateValueForMeter(consumptionPathToObservation, smartMeterValue: value)
                 
-                if inAlertMode &&  graphData.count > 2 && test.resultValue == graphData[(graphData.keys).maxElement()!]?.resultValue {
+                if inAlertMode &&  graphData.count > 2 && newObservation.resultValue == graphData[(graphData.keys).maxElement()!]?.resultValue {
                     inAlertMode = false
                 }
-                graphData[Int(time.timeIntervalSince1970)] = test
+                graphData[Int(time.timeIntervalSince1970)] = newObservation
             }
         } else if socket == alertSocket {
             print("AlertText \(text)")

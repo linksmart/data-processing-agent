@@ -150,11 +150,13 @@ class SmartmeterListTVC: UITableViewController, WebSocketDelegate, SmartMeterHol
                 //self.tableView.reloadData()
                 var paths = [NSIndexPath]()
                 
-                for (index, _) in smartmeters.enumerate() {
-                    paths.append(NSIndexPath(forRow: index, inSection: 0))
+                for (index, data) in smartmeters.enumerate() {
+                    if data.topic == reply?.topic {
+                        paths.append(NSIndexPath(forRow: index, inSection: 0))
+                    }
                 }
                 
-                self.tableView.reloadRowsAtIndexPaths(paths, withRowAnimation: UITableViewRowAnimation.Automatic)
+                self.tableView.reloadRowsAtIndexPaths(paths, withRowAnimation: UITableViewRowAnimation.Left)
             }
         }
     }
