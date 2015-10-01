@@ -149,7 +149,7 @@ class LoginVC: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     func logOn() {
         // Could show spinner here, and disable all the UI while we wait
 
-        if let password = self.txtPassword.text {
+        if let _ = self.txtPassword.text {
             activityIndicator.startAnimating()
             btnLogin.enabled = false
             txtPassword.enabled = false
