@@ -44,7 +44,7 @@ It is now ' + now.toISOString() + '.\n\
 </pre>\n\
 </body>\n\
 </html>\n\
- ');
+');
 	},
 
 	randomId: Math.random(),

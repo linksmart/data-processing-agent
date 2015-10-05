@@ -36,7 +36,7 @@ module.exports = function (almanac) {
 				almanac.webSocket.forwardMqtt(topic, json);
 			}
 			if (topic === '/broadcast') {
-				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
+				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + ((message && message.length < 1024 ) ? message : (('' + message).substring(0, 1024) + '… (' + message.length + 'B)')));
 				switch (json.type) {
 					case 'HELLO':
 					case 'ALIVE':
