@@ -82,11 +82,12 @@ It is now ' + now.toISOString() + '.\n\
 		require('./almanac-storageManager.js')(almanac);
 		require('./almanac-scral.js')(almanac);
 		require('./almanac-santander.js')(almanac);
+		require('./almanac-distributed.js')(almanac);	//Distributed requests
+		require('./almanac-websocket-custom-events.js')(almanac);	//WebSocket for custom events (from MQTT)
+		require('./almanac-websocket-chat.js')(almanac);	//WebSocket for broadcast chat
+		require('./almanac-mqtt.js')(almanac);	//MQTT
 
 		setTimeout(function() {
-				require('./almanac-websocket-custom-events.js')(almanac);	//WebSocket for custom events (from MQTT)
-				require('./almanac-websocket-chat.js')(almanac);	//WebSocket for broadcast chat
-				require('./almanac-mqtt.js')(almanac);	//MQTT
 				require('./almanac-upnp.js')(almanac);	//UPnP (SSDP)
 				require('./almanac-networkManager.js')(almanac);	//Register in the NetworkManager
 			}, 2000);

@@ -242,7 +242,8 @@ It is now ' + now.toISOString() + '.\n\
 			'Date': (new Date()).toUTCString(),
 			'Server': basicHttp.serverSignature,
 		});
-		res.end(JSON.stringify(json));
+		res.write(JSON.stringify(json));
+		res.end("\n");
 	},
 
 };

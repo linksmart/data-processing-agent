@@ -25,8 +25,6 @@ module.exports = function (almanac) {
 			broadcastAlive('HELLO');
 		});
 
-	almanac.federationInstances = {};	//TODO: Move to another file
-
 	almanac.mqttClient.on('message', function (topic, message) {
 		if (!topic || !message) {
 			return;
@@ -34,16 +32,43 @@ module.exports = function (almanac) {
 		almanac.log.silly('VL', 'MQTT: ' + topic + ': ' + message);
 		try {
 			var json = JSON.parse(message);
-			almanac.webSocket.forwardMqtt(topic, json);
+			if (almanac.webSocket) {
+				almanac.webSocket.forwardMqtt(topic, json);
+			}
 			if (topic === '/broadcast') {
 				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
-				if (json.type === 'HELLO' && !almanac.isMe(json.info)) {
-					broadcastAlive();
-				} /*else if (json.type === 'CHAT')*/ {
-					almanac.webSocketChat.broadcast(json);
+				switch (json.type) {
+					case 'HELLO':
+					case 'ALIVE':
+						if (json.info && !almanac.isMe(json.info)) {
+							if (almanac.updateInstance) {
+								almanac.updateInstance(json.info);
+							}
+							if (json.type === 'HELLO') {
+								broadcastAlive();
+							}
+						}
+						break;
+					case 'CHAT':
+						if (almanac.webSocketChat) {
+							almanac.webSocketChat.broadcast(json);
+						}
+						break;
+					case 'DISTREQ':
+						if (almanac.replyToDistributedRequest) {
+							almanac.replyToDistributedRequest(json);
+						}
+						break;
+					case 'DISTRESP':
+						if (almanac.processDistributedResponse) {
+							almanac.processDistributedResponse(json);
+						}
+						break;
 				}
 			} else if (topic.indexOf('/iotentity') > 0) {
-				almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
+				if (almanac.peering) {
+					almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
+				}
 			}
 		} catch (ex) {
 			almanac.log.warn('VL', 'MQTT message error: ' + ex);
@@ -58,6 +83,31 @@ module.exports = function (almanac) {
 				clientInfo: clientInfo,
 				info: {
 					instanceName: almanac.config.hosts.instanceName,
+					randomId: almanac.randomId,
+				},
+			}));
+	};
+
+	almanac.mqttClient.broadcastDistributedRequest = function (payload) {
+		almanac.mqttClient.publish('/broadcast', JSON.stringify({
+				date: Date.now(),
+				type: 'DISTREQ',
+				payload: payload,
+				info: {
+					instanceName: almanac.config.hosts.instanceName,
+					randomId: almanac.randomId,
+				},
+			}));
+	};
+
+	almanac.mqttClient.broadcastDistributedResponse = function (payload) {
+		almanac.mqttClient.publish('/broadcast', JSON.stringify({
+				date: Date.now(),
+				type: 'DISTRESP',
+				payload: payload,
+				info: {
+					instanceName: almanac.config.hosts.instanceName,
+					randomId: almanac.randomId,
 				},
 			}));
 	};
