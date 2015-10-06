@@ -25,6 +25,10 @@ module.exports = function (almanac) {
 			broadcastAlive('HELLO');
 		});
 
+	function shortenMessage(message) {
+		return (message && message.length < 1024 ) ? message : (('' + message).substring(0, 1024) + '… (' + message.length + 'B)');
+	}
+
 	almanac.mqttClient.on('message', function (topic, message) {
 		if (!topic || !message) {
 			return;
@@ -36,7 +40,7 @@ module.exports = function (almanac) {
 				almanac.webSocket.forwardMqtt(topic, json);
 			}
 			if (topic === '/broadcast') {
-				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + ((message && message.length < 1024 ) ? message : (('' + message).substring(0, 1024) + '… (' + message.length + 'B)')));
+				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + shortenMessage(message));
 				switch (json.type) {
 					case 'HELLO':
 					case 'ALIVE':
@@ -71,7 +75,7 @@ module.exports = function (almanac) {
 				}
 			}
 		} catch (ex) {
-			almanac.log.warn('VL', 'MQTT message error: ' + ex);
+			almanac.log.warn('VL', 'MQTT message error: ' + ex + ' for message: ' + shortenMessage(message));
 		}
 	});
 

@@ -108,13 +108,15 @@ service virtualization-layer restart
 ## Pages
 
 * Technical information about the instance: /virtualizationLayerInfo
+* List of known instances in the federation: /distributedInstances
 * WebSocket HTML+JavaScript chat demo: /socket.html
 * WebSocket JavaScript chat demo: /console.html
 
 ## HTTP Proxying + Format conversion
 
 * Proxy to Network Manager tunnelling: /tunnel/0.0.0.8917820598345047854 (change the virtual address)
-* Proxy to Resource Catalogue: /ResourceCatalogue/ogc/Things?filter= using Resource Catalogue API
+* Proxy to Resource Catalogue: /ResourceCatalogue/ using Resource Catalogue API
+	* E.g. /ResourceCatalogue/ogc/Things?%24filter=thingid%20eq%20c26958ce0b98584b3558fc9a3621c2b1541cee4a7685c2d68c741875740bfa1a
 * Proxy to Storage Manager: /sm/ using Storage Manager API
 	* E.g. /sm/DataStreams%28ab1db42dea1bcdcb03f61b2a47ada8a77955715abe9bbed6611d82ba5ffa3570%29/Observations/$current
 	* Format conversion to ATOM (RSS): /sm-rss/ using Storage Manager API
@@ -122,6 +124,11 @@ service virtualization-layer restart
 	* Format conversion to TSV: /sm-tsv/ using Storage Manager API
 * Proxy to SCRAL: /scral/devices using SCRAL API
 * Proxy to SmartSantander: /santander/GetNodes using SmartSantander API
+
+## Distributed HTTP requests
+
+* Distributed Resource Catalogue request: /distributed/ResourceCatalogue/
+	* E.g. /distributed/ResourceCatalogue/ogc/Things?%24filter=thingid%20eq%20c26958ce0b98584b3558fc9a3621c2b1541cee4a7685c2d68c741875740bfa1a
 
 ## WebSocket
 Good tools to test include [wscat](https://github.com/websockets/wscat) (command line) and [Dark WebSocket Terminal](https://chrome.google.com/webstore/detail/dark-websocket-terminal/dmogdjmcpfaibncngoolgljgocdabhke) (Google Chrome extension).

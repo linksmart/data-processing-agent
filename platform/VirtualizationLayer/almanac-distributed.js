@@ -10,45 +10,59 @@ module.exports = function (almanac) {
 
 	var peerTimeout = 10 * 60 * 1000;	//In milliseconds
 
-	almanac.distributedInstances = {};
+	var distributedInstances = {};
+
+	var extend = require('extend');
 
 	function servedistributedInstances(req, res) {
-		almanac.basicHttp.serveJson(req, res, almanac.distributedInstances);
+		var me = {};
+		me[almanac.config.hosts.instanceName] = {
+				self: true,
+				date: Date.now(),
+				info: almanac.info(),
+			};
+		almanac.basicHttp.serveJson(req, res, extend(true, {}, distributedInstances, me));
 	}
 
-	almanac.updateInstance = function (info) {
-		var instanceNames = Object.keys(almanac.distributedInstances);
-
-		//Delete expired peers
+	function deleteExpiredPeers() {
 		var expireDate = Date.now() - peerTimeout;
+		var instanceNames = Object.keys(distributedInstances);
 		for (var i = instanceNames.length - 1; i >= 0; i--) {
 			var instanceName = instanceNames[i];
-			var instance = almanac.distributedInstances[instanceName];
+			var instance = distributedInstances[instanceName];
 			if (instance.date < expireDate) {
-				almanac.log.info('VL', 'Distributed peer expired "' + instanceName + '": ' + JSON.stringify(almanac.distributedInstances[instanceName]));
-				delete almanac.distributedInstances[instanceName];
+				almanac.log.info('VL', 'Distributed peer expired "' + instanceName + '": ' + JSON.stringify(distributedInstances[instanceName]));
+				delete distributedInstances[instanceName];
 			}
 		}
+	}
+	setInterval(deleteExpiredPeers, 60000);
 
+	almanac.updateInstance = function (info) {
 		if (info && info.instanceName) {
-			var wasKnown = almanac.distributedInstances[info.instanceName];
-			almanac.distributedInstances[info.instanceName] = {
+			var wasKnown = distributedInstances[info.instanceName];
+			distributedInstances[info.instanceName] = {
 					date: Date.now(),
 					info: info,
 				};
 			if (!wasKnown) {
-				almanac.log.info('VL', 'Distributed peer discovered "' + info.instanceName + '": ' + JSON.stringify(almanac.distributedInstances[info.instanceName]));
+				almanac.log.info('VL', 'Distributed peer discovered "' + info.instanceName + '": ' + JSON.stringify(distributedInstances[info.instanceName]));
 			}
 		}
 	};
 
 	var currentResponses = {};
+	var lastReqIds = {};
 
 	function endDistributedResponse(reqId) {
 		var currentResponse = currentResponses[reqId];
 		delete currentResponses[reqId];
 		if (currentResponse && currentResponse.res && currentResponse.res.end) {
 			currentResponse.res.end("}}\n");
+			setTimeout(function() {
+					delete lastReqIds[reqId];
+					almanac.log.verbose('VL', 'lastReqIds size: ' + Object.keys(lastReqIds).length);
+				}, 60000);
 		}
 	}
 
@@ -72,7 +86,7 @@ module.exports = function (almanac) {
 						uri: req.url,
 					});
 				setTimeout(function() {
-						almanac.log.verbose('VL', 'processDistributedRequest: timeout without all responses');
+						almanac.log.verbose('VL', 'processDistributedRequest: timeout without all ' + (1 + Object.keys(distributedInstances).length) + ' responses');
 						endDistributedResponse(reqId);
 					}, 30000);
 			} catch (ex) {
@@ -88,9 +102,9 @@ module.exports = function (almanac) {
 		try {
 			var currentResponse = currentResponses[json.payload.reqId];
 			if (currentResponse && currentResponse.res && currentResponse.res.write) {
-				//Little check to avoid processing two times the same response (should be a proper mutex)
 				if (currentResponse.already[json.info.instanceName]) {
-					almanac.log.warn('VL', 'Distributed response already received for: ' + json.info.instanceName);
+					//Check to avoid processing two times the same response
+					almanac.log.verbose('VL', 'Distributed response already received for: ' + json.info.instanceName);
 					return;
 				}
 				currentResponse.already[json.info.instanceName] = true;
@@ -100,7 +114,7 @@ module.exports = function (almanac) {
 					(alreadyNb > 1 ? ',' : '' ) +
 					'"' + json.info.instanceName + '":' + JSON.stringify(json.payload));
 
-				if (alreadyNb >= 1 + Object.keys(almanac.distributedInstances).length) {
+				if (alreadyNb >= 1 + Object.keys(distributedInstances).length) {
 					almanac.log.verbose('VL', 'processDistributedResponse: received all responses');
 					endDistributedResponse(json.payload.reqId);
 				}
@@ -112,16 +126,16 @@ module.exports = function (almanac) {
 		}
 	};
 
-	var lastReqId = '';
-
 	almanac.replyToDistributedRequest = function (json) {
 		if (!(almanac.mqttClient && almanac.mqttClient.broadcastDistributedResponse && json.payload && json.payload.reqId)) {
 			return;
 		}
-		if (json.payload.reqId === lastReqId) {
-			//Do not respond 2 times in a row to the same request
+		if (lastReqIds[json.payload.reqId]) {
+			//Do not respond 2 times to the same request
+			almanac.log.verbose('VL', 'Distributed request already answered: ' + json.payload.reqId);
 			return;
 		}
+		lastReqIds[json.payload.reqId] = true;
 		almanac.request.get({
 				url: almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/' + json.payload.uri,
 				json: true,
@@ -130,7 +144,6 @@ module.exports = function (almanac) {
 				if (error || response.statusCode != 200 || !(body)) {
 					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 'undefined') + ' performing local request for distributed query! ' + json.payload.uri);
 				}
-				lastReqId = json.payload.reqId;
 				//TODO: Send the response only to the original requester instead of broadcast
 				almanac.mqttClient.broadcastDistributedResponse({
 						reqId: json.payload.reqId,
