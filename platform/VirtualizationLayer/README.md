@@ -127,8 +127,13 @@ service virtualization-layer restart
 
 ## Distributed HTTP requests
 
-* Distributed Resource Catalogue request: /distributed/ResourceCatalogue/
+* Distributed Resource Catalogue request (using default merging strategy): /distributed/ResourceCatalogue/
 	* E.g. /distributed/ResourceCatalogue/ogc/Things?%24filter=thingid%20eq%20c26958ce0b98584b3558fc9a3621c2b1541cee4a7685c2d68c741875740bfa1a
+* Distributed Resource Catalogue request (using split strategy = details grouped per instance): /distributed/ResourceCatalogue/
+	* E.g. /distributed-split/ResourceCatalogue/ogc/Things?%24filter=thingid%20eq%20c26958ce0b98584b3558fc9a3621c2b1541cee4a7685c2d68c741875740bfa1a
+* Distributed Resource Catalogue request (using merge strategy = results fusionned just like if they came from one single request): /distributed-merge/ResourceCatalogue/
+	* Assume JSON responses using `{"Thing":[ ]}` format
+	* E.g. /distributed-merge/ResourceCatalogue/ogc/Things?%24filter=thingid%20eq%20c26958ce0b98584b3558fc9a3621c2b1541cee4a7685c2d68c741875740bfa1a
 
 ## WebSocket
 Good tools to test include [wscat](https://github.com/websockets/wscat) (command line) and [Dark WebSocket Terminal](https://chrome.google.com/webstore/detail/dark-websocket-terminal/dmogdjmcpfaibncngoolgljgocdabhke) (Google Chrome extension).

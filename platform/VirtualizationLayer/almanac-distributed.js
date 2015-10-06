@@ -58,7 +58,11 @@ module.exports = function (almanac) {
 		var currentResponse = currentResponses[reqId];
 		delete currentResponses[reqId];
 		if (currentResponse && currentResponse.res && currentResponse.res.end) {
-			currentResponse.res.end("}}\n");
+			if (currentResponse.mergeType === 'M') {
+				currentResponse.res.end("]}\n");
+			} else {
+				currentResponse.res.end("}}\n");
+			}
 			setTimeout(function() {
 					delete lastReqIds[reqId];
 					almanac.log.verbose('VL', 'lastReqIds size: ' + Object.keys(lastReqIds).length);
@@ -66,7 +70,7 @@ module.exports = function (almanac) {
 		}
 	}
 
-	function processDistributedRequest(req, res) {
+	function processDistributedRequest(req, res, mergeType) {
 		//TODO: Check that it comes from an authorised peer
 		if (req.method !== 'GET') {
 			almanac.basicHttp.serve405(req, res, 'GET');
@@ -76,10 +80,20 @@ module.exports = function (almanac) {
 			var reqId = Date.now() + '_' + Math.random();
 			currentResponses[reqId] = {
 					already: {},
+					mergeType: mergeType || 'S',
 					res: res,
 				};
 			try {
-				res.write('{"instances":{');
+				res.writeHead(200, {
+					'Content-Type': 'application/json; charset=UTF-8',
+					'Date': (new Date()).toUTCString(),
+					'Server': almanac.basicHttp.serverSignature,
+				});
+				if (mergeType === 'M') {
+					res.write('{"Thing":[');
+				} else {
+					res.write('{"instances":{');
+				}
 				almanac.mqttClient.broadcastDistributedRequest({
 						reqId: reqId,
 						//method: req.method,	//Always GET
@@ -96,7 +110,7 @@ module.exports = function (almanac) {
 	}
 
 	almanac.processDistributedResponse = function (json) {
-		if (!(json && json.payload && json.payload.reqId && json.info && json.info.instanceName && json.payload)) {
+		if (!(json && json.payload && json.payload.reqId && json.payload.body && json.info && json.info.instanceName)) {
 			return;
 		}
 		try {
@@ -110,9 +124,15 @@ module.exports = function (almanac) {
 				currentResponse.already[json.info.instanceName] = true;
 
 				var alreadyNb = Object.keys(currentResponse.already).length;
-				currentResponse.res.write(
-					(alreadyNb > 1 ? ',' : '' ) +
-					'"' + json.info.instanceName + '":' + JSON.stringify(json.payload));
+				if (currentResponse.mergeType === 'M') {
+					currentResponse.res.write(
+						(alreadyNb > 1 ? ',' : '' ) +
+						JSON.stringify(json.payload.body.Thing).slice(1, -1));
+				} else {
+					currentResponse.res.write(
+						(alreadyNb > 1 ? ',' : '' ) +
+						'"' + json.info.instanceName + '":' + JSON.stringify(json.payload));
+				}
 
 				if (alreadyNb >= 1 + Object.keys(distributedInstances).length) {
 					almanac.log.verbose('VL', 'processDistributedResponse: received all responses');
@@ -154,6 +174,8 @@ module.exports = function (almanac) {
 			});
 	};
 
-	almanac.routes['distributed/'] = processDistributedRequest;
+	almanac.routes['distributed/'] = function (req, res) { processDistributedRequest(req, res, 'S'); };
+	almanac.routes['distributed-split/'] = function (req, res) { processDistributedRequest(req, res, 'S'); };
+	almanac.routes['distributed-merge/'] = function (req, res) { processDistributedRequest(req, res, 'M'); };
 	almanac.routes['distributedInstances'] = servedistributedInstances;
 };
