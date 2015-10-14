@@ -16,7 +16,7 @@ module.exports = function (almanac) {
 				url: almanac.config.hosts.networkManagerUrl + 'NetworkManager',
 				json: {
 						'Endpoint': almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/',	//The port number must always be mentionned for LinkSmart
-						'BackboneName': 'eu.linksmart.network.backbone.impl.soap.BackboneSOAPImpl',
+						'BackboneName': 'eu.linksmart.gc.network.backbone.protocol.http.HttpImpl',
 						'Attributes': {
 							'DESCRIPTION': 'VirtualizationLayer',
 							'SID': 'eu.linksmart.almanac.virtualizationlayer',
