@@ -92,7 +92,7 @@ module.exports = function (almanac) {
 
 		req.pipe(almanac.request({
 				method: req.method,
-				uri: almanac.config.hosts.networkManagerUrl + 'Tunneling/0/' + req.url,
+				uri: almanac.config.hosts.networkManagerUrl + 'HttpTunneling/0/' + req.url,
 				timeout: 20000,
 			}, function (error, response, body) {
 				if (error || response.statusCode != 200 || !body) {
