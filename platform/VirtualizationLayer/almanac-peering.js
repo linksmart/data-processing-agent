@@ -25,8 +25,7 @@ module.exports = function (almanac) {
 			function postToPeer(peer) {
 				almanac.request.post({
 						url: peer + 'mqttPeering/',
-						json: true,
-						body: json,
+						json: json,
 						timeout: 15000,
 					}, function (error, response, body) {
 						if (error || !response || response.statusCode != 200) {

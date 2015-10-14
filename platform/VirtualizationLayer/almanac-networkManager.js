@@ -9,25 +9,27 @@
 module.exports = function (almanac) {
 	almanac.virtualAddress = null;
 
+	//require('request').debug = true;
+
 	function registerInNetworkManager() {
 		almanac.request.post({
 				url: almanac.config.hosts.networkManagerUrl + 'NetworkManager',
-				json: true,
-				body: JSON.stringify({
+				json: {
 						'Endpoint': almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayer.host + ':' + almanac.config.hosts.virtualizationLayer.port + '/',	//The port number must always be mentionned for LinkSmart
 						'BackboneName': 'eu.linksmart.network.backbone.impl.soap.BackboneSOAPImpl',
 						'Attributes': {
-							'description': 'VirtualizationLayer',
-							'sid': 'eu.linksmart.almanac.virtualizationlayer',
+							'DESCRIPTION': 'VirtualizationLayer',
+							'SID': 'eu.linksmart.almanac.virtualizationlayer',
 						}
-					}),
+					},
 				timeout: 4000,
 			}, function (error, response, body) {
 				if (!error && response.statusCode == 200 && body && body.VirtualAddress) {
 					almanac.virtualAddress = body.VirtualAddress;
 					almanac.log.info('VL', 'Registered in the NetworkManager with VirtualAddress: ' + almanac.virtualAddress);
 				} else {
-					almanac.log.warn('VL', 'Cannot register in the NetworkManager! Will try again.');
+					almanac.log.warn('VL', 'Cannot register in the NetworkManager! Will try again. Status: ' + response.statusCode);
+					almanac.log.verbose('VL', 'NetworkManager error: ' + body);
 				}
 			});
 	}
@@ -43,7 +45,7 @@ module.exports = function (almanac) {
 					var virtualAddress = '';
 					for (var i = 0; i < body.VirtualAddresses.length; i++) {
 						var va = body.VirtualAddresses[i];
-						if (va.description && (va.description.indexOf(';SID = eu.linksmart.almanac.virtualizationlayer;') > 0)) {
+						if (va.description && (va.description.indexOf('SID = eu.linksmart.almanac.virtualizationlayer;') >= 0)) {
 							virtualAddress = va.virtualAddress;	//Found existing local VirtualizationLayer
 						}
 					}

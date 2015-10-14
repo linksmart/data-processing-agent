@@ -87,6 +87,7 @@ module.exports = function (almanac) {
 				clientInfo: clientInfo,
 				info: {
 					instanceName: almanac.config.hosts.instanceName,
+					virtualAddress: almanac.virtualAddress,
 					randomId: almanac.randomId,
 				},
 			}));
@@ -99,6 +100,7 @@ module.exports = function (almanac) {
 				payload: payload,
 				info: {
 					instanceName: almanac.config.hosts.instanceName,
+					virtualAddress: almanac.virtualAddress,
 					randomId: almanac.randomId,
 				},
 			}));
@@ -111,6 +113,7 @@ module.exports = function (almanac) {
 				payload: payload,
 				info: {
 					instanceName: almanac.config.hosts.instanceName,
+					virtualAddress: almanac.virtualAddress,
 					randomId: almanac.randomId,
 				},
 			}));
