@@ -8,56 +8,124 @@
 
 module.exports = function (almanac) {
 	var mqtt = require('mqtt');
-	almanac.mqttClient = mqtt.createClient(almanac.config.hosts.mqttBroker.port, almanac.config.hosts.mqttBroker.host);
+	almanac.log.info('VL', 'MQTT: connecting to: ' + almanac.config.hosts.mqttBrokerUrl);
+	almanac.mqttClient = mqtt.connect(almanac.config.hosts.mqttBrokerUrl,
+		almanac.config.mqttUseOldVersion3 ? {
+			protocolId: 'MQIsdp',
+			protocolVersion: 3,
+		} : {});
+
+	almanac.mqttClient.on('error', function (error) {
+			almanac.log.warn('VL', 'MQTT: error: ' + error);
+		});
+
+	almanac.mqttClient.on('connect', function () {
+			almanac.mqttClient.subscribe('/#');
+			almanac.log.info('VL', 'MQTT: connected to: ' + almanac.config.hosts.mqttBrokerUrl);
+			broadcastAlive('HELLO');
+		});
+
+	function shortenMessage(message) {
+		return (message && message.length < 1024 ) ? message : (('' + message).substring(0, 1024) + '… (' + message.length + 'B)');
+	}
 
 	almanac.mqttClient.on('message', function (topic, message) {
+		if (!topic || !message) {
+			return;
+		}
+		almanac.log.silly('VL', 'MQTT: ' + topic + ': ' + message);
 		try {
-			almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + message);
-			if (topic) {
-				var json = null;
-				if (topic.indexOf('/almanac/alert') === 0) {
-					json = JSON.parse(message);
-					almanac.webSocket.in('alert').emit('alert', {
-							instance: almanac.config.hosts.virtualizationLayerPublic,
-							topic: topic,
-							body: json,
-						});
+			var json = JSON.parse(message);
+			if (almanac.webSocket) {
+				almanac.webSocket.forwardMqtt(topic, json);
+			}
+			if (topic === '/broadcast') {
+				almanac.log.verbose('VL', 'MQTT: ' + topic + ': ' + shortenMessage(message));
+				switch (json.type) {
+					case 'HELLO':
+					case 'ALIVE':
+						if (json.info && !almanac.isMe(json.info)) {
+							if (almanac.updateInstance) {
+								almanac.updateInstance(json.info);
+							}
+							if (json.type === 'HELLO') {
+								broadcastAlive();
+							}
+						}
+						break;
+					case 'CHAT':
+						if (almanac.webSocketChat) {
+							almanac.webSocketChat.broadcast(json);
+						}
+						break;
+					case 'DISTREQ':
+						if (almanac.replyToDistributedRequest) {
+							almanac.replyToDistributedRequest(json);
+						}
+						break;
+					case 'DISTRESP':
+						if (almanac.processDistributedResponse) {
+							almanac.processDistributedResponse(json);
+						}
+						break;
+				}
+			} else if (topic.indexOf('/iotentity') > 0) {
+				if (almanac.peering) {
 					almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
-				} else if (topic.indexOf('/iotentity') > 0) {
-					json = JSON.parse(message);
-					almanac.webSocket.in('scral').emit('scral', {
-							instance: almanac.config.hosts.virtualizationLayerPublic,
-							topic: topic,
-							body: json,
-						});
-					if (almanac.config.mqttToHttpStorageManagerEnabled) {
-						almanac.storageManager.postMqttEvent(topic, json);	//Forward to StorageManager
-					}
-					almanac.peering.mqttPeering(topic, json);	//Peering with other VirtualizationLayers
-				} else if (topic.indexOf('/almanac/0/info') === 0) {
-					almanac.webSocket.in('info').emit('info', message);
 				}
 			}
 		} catch (ex) {
-			almanac.log.warn('VL', 'MQTT message error: ' + ex);
+			almanac.log.warn('VL', 'MQTT message error: ' + ex + ' for message: ' + shortenMessage(message));
 		}
 	});
 
-	almanac.mqttClient.subscribe('/almanac/#');
+	almanac.mqttClient.broadcastChat = function (payload, clientInfo) {
+		almanac.mqttClient.publish('/broadcast', JSON.stringify({
+				date: Date.now(),
+				type: 'CHAT',
+				payload: payload,
+				clientInfo: clientInfo,
+				info: {
+					instanceName: almanac.config.hosts.instanceName,
+					virtualAddress: almanac.virtualAddress,
+					randomId: almanac.randomId,
+				},
+			}));
+	};
 
-	setTimeout(function () {
-			almanac.mqttClient.publish('/almanac/0/info', JSON.stringify({
-					info: 'VirtualizationLayer MQTT started',
-				}));
-		}, 5000);
+	almanac.mqttClient.broadcastDistributedRequest = function (payload) {
+		almanac.mqttClient.publish('/broadcast', JSON.stringify({
+				date: Date.now(),
+				type: 'DISTREQ',
+				payload: payload,
+				info: {
+					instanceName: almanac.config.hosts.instanceName,
+					virtualAddress: almanac.virtualAddress,
+					randomId: almanac.randomId,
+				},
+			}));
+	};
 
-	setInterval(function () {
-			almanac.mqttClient.publish('/almanac/0/info', JSON.stringify({
-					info: 'VirtualizationLayer alive',
-				}));
-		}, 60000);
+	almanac.mqttClient.broadcastDistributedResponse = function (payload) {
+		almanac.mqttClient.publish('/broadcast', JSON.stringify({
+				date: Date.now(),
+				type: 'DISTRESP',
+				payload: payload,
+				info: {
+					instanceName: almanac.config.hosts.instanceName,
+					virtualAddress: almanac.virtualAddress,
+					randomId: almanac.randomId,
+				},
+			}));
+	};
 
-	/*setInterval(function () {	//TODO: Remove after testing
-			almanac.mqttClient.publish('/almanac/observations/iotentity/', '{"About":"dd2f87dd-4f80-455b-a939-e22f7f20a0c1","Properties":[{"IoTStateObservation":[{"Value":"3.36","PhenomenonTime":"2014-10-08T15:42:07.906Z","ResultTime":"2014-10-08T15:42:17.906Z"}],"About":"pipe1:PhMeter:getPh"}]}');
-		}, 20000);*/
+	function broadcastAlive(type) {
+		almanac.mqttClient.publish('/broadcast', JSON.stringify({
+				date: Date.now(),
+				type: type || 'ALIVE',
+				info: almanac.info(),
+			}));
+	}
+	setInterval(broadcastAlive, 60000);
+
 };

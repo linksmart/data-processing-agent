@@ -30,61 +30,90 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
+            <groupId>eu.linksmart</groupId>
+                    <artifactId>eu.linksmart.api.smartcity</artifactId>
+                    <version>0.0.3-SNAPSHOT</version>
+                </dependency>
 
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5</version>
-        </dependency>
 
-    </dependencies>
-    <repositories>
-        <repository>
-            <id>maven</id>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
+                <dependency>
+                    <groupId>eu.linksmart</groupId>
+                    <artifactId>eu.linksmart.smartcity.client</artifactId>
+                    <version>0.0.3-SNAPSHOT</version>
+                </dependency>
 
-        <repository>
-            <id>paho-mqtt-client</id>
-            <name>Paho MQTT Client</name>
-            <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
-        </repository>
-        <repository>
-            <id>opencast-public</id>
-            <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>
-        </repository>
-        <repository>
-            <id>central</id>
-            <url>https://linksmart.eu/repo/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.2</version>
-                <!-- nothing here -->
+                <dependency>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-mapper-asl</artifactId>
+                    <version>1.9.13</version>
+                </dependency>
+
+                <dependency>
+                     <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                     <version>2.6.1</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                    <version>4.5</version>
+                </dependency>
+
+            </dependencies>
+            <repositories>
+                <repository>
+                    <id>maven</id>
+                    <url>http://repo1.maven.org/maven2</url>
+                </repository>
+
+                <repository>
+                    <id>paho-mqtt-client</id>
+                    <name>Paho MQTT Client</name>
+                    <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+                </repository>
+                <repository>
+                    <id>opencast-public</id>
+                    <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>
+                </repository>
+                <repository>
+                    <id>almanac-snapshots</id>
+                    <name>Almanac Snapshots</name>
+                    <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots</url>
+                </repository>
+                <repository>
+                    <id>almanac-releases</id>
+                    <name>Almanac Snapshots</name>
+                    <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases</url>
+                </repository>
+                <repository>
+                    <id>central</id>
+                    <url>https://linksmart.eu/repo/content/groups/public/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>daily</updatePolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.1</version>
+                        <configuration>
+                            <source>1.7</source>
+                            <target>1.7</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.2</version>
+                        <!-- nothing here -->
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>

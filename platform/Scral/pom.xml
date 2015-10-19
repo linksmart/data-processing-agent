@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <properties>
+    <pwal.version>2.5.0</pwal.version>
+  </properties>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.ismb.pertlab</groupId>
 	<artifactId>it.ismb.pertlab.pwal</artifactId>
-	<version>2.5.0</version>
+	<version>${pwal.version}</version>
 	<packaging>pom</packaging>
 	<name>SCRAL</name>
 	<description>ParentPom for the ALMANAC SCRAL</description>
 	<modules>
 
-	<module>it.ismb.pert.pwal.rest</module>
-	<module>it.ismb.pert.pwal.managers.etsi.m2m</module>
+	<!-- Missing deps:  <module>it.ismb.pert.pwal.rest</module>-->
+	<!-- Test failures, skipped: --><module>it.ismb.pert.pwal.managers.etsi.m2m</module>
 	<module>java-file-utilities-for-option-management</module>
 	<module>java-mqtt-client</module>
 	<module>ogc.sensorthings.api.datamodel</module>
-	<module>java-open-weather-api</module>
+	<!-- Not PWAL: <module>java-open-weather-api</module> -->
 	<module>it.ismb.pert.pwal.communication.mqtt</module>
-	<module>it.ismb.pert.pwal.core/it.ismb.pert.pwal.core.impl</module>
+	<!--Missing deps: <module>it.ismb.pert.pwal.core/it.ismb.pert.pwal.core.impl</module>-->
 	<module>it.ismb.pert.pwal.core/it.ismb.pert.pwal.core.api</module>
 	<module>it.ismb.pert.pwal.communication.resourcecatalogue</module>
 	<module>it.ismb.pert.pwal.utilities.scpd</module>
@@ -26,7 +29,7 @@
 	<module>it.ismb.pert.pwal.managers.smartsantander</module>
 	<module>it.ismb.pert.pwal.managers.wastebin.simulator</module>
 	<module>it.ismb.pert.pwal.managers.watermeter.simulator</module>
-	<module>java-xively-client</module>
+	<!-- Not PWAL: <module>java-xively-client</module> -->
 	<module>it.ismb.pert.pwal.managers.xively</module>
 
 	</modules>

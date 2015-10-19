@@ -9,7 +9,7 @@
 module.exports = function (almanac) {
 
 	for (var i = almanac.config.hosts.virtualizationLayerPeers.length - 1; i >= 0; i--) {	//Remove the local instance from the list of peers
-		if (almanac.config.hosts.virtualizationLayerPeers[i].indexOf(almanac.config.hosts.virtualizationLayerPublic.host) >= 0) {
+		if (almanac.config.hosts.virtualizationLayerPeers[i].indexOf(almanac.config.hosts.virtualizationLayerPublicUrl) >= 0) {
 			almanac.config.hosts.virtualizationLayerPeers.splice(i, 1);
 		}
 	}
@@ -20,13 +20,12 @@ module.exports = function (almanac) {
 				json = {};
 			}
 			json.mqttTopic = topic;
-			json.vlInstance = almanac.config.hosts.virtualizationLayerPublic;
+			json.vlInstance = almanac.config.hosts.virtualizationLayerPublicUrl;
 
 			function postToPeer(peer) {
 				almanac.request.post({
 						url: peer + 'mqttPeering/',
-						json: true,
-						body: json,
+						json: json,
 						timeout: 15000,
 					}, function (error, response, body) {
 						if (error || !response || response.statusCode != 200) {
@@ -59,7 +58,7 @@ module.exports = function (almanac) {
 			req.addListener('end', function () {
 					try {
 						var json = JSON.parse(body);
-						almanac.webSocket.in('peering').emit('peering', json);	//Forward to Socket.IO clients (WebSocket)
+						//almanac.webSocket.in('peering').emit('peering', json);	//Forward to WebSocket clients	//TODO: Reimplement if needed
 						almanac.log.verbose('VL', 'Peering MQTT forwarded to WebSocket');
 						almanac.basicHttp.serveJson(req, res, {});
 					} catch (ex) {

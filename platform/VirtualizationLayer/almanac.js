@@ -38,28 +38,40 @@ var almanac = {
 Hello ' + req.connection.remoteAddress + '!\n\
 This is ' + req.connection.localAddress + ' running <a href="http://nodejs.org/" rel="external">Node.js</a>.\n\
 I am a Virtualization Layer for the <a href="http://www.almanac-project.eu/" rel="external">ALMANAC European project (Reliable Smart Secure Internet Of Things For Smart Cities)</a>.\n\
-I talk mainly to other machines, but there is a <a href="socket.html">WebSocket log</a> for humans, and a <a href="console.html">JavaScript console</a>.\n\
+I talk mainly to other machines, but there is a <a href="socket.html">WebSocket broadcast interface</a> for humans, and a <a href="console.html">JavaScript console</a>.\n\
 <a href="./virtualizationLayerInfo">More information about this instance</a>.\n\
 It is now ' + now.toISOString() + '.\n\
 </pre>\n\
 </body>\n\
 </html>\n\
- ');
+');
+	},
+
+	randomId: Math.random(),
+
+	info: function () {
+		return {
+			version: almanac.version,
+			instanceName: almanac.config.hosts.instanceName,
+			publicUrl: almanac.config.hosts.virtualizationLayerPublicUrl,
+			virtualAddress: almanac.virtualAddress,
+			mqttVirtualAddress: almanac.mqttVirtualAddress,
+			networkManagerUrl: almanac.config.hosts.networkManagerUrl,
+			storageManagerUrl: almanac.config.hosts.storageManagerUrl,
+			resourceCatalogueUrl: almanac.config.hosts.recourceCatalogueUrl,
+			scralUrl: almanac.config.hosts.scralUrl,
+			server: almanac.basicHttp.serverSignature,
+			randomId: almanac.randomId,
+			nodejs: process.versions,
+		};
+	},
+
+	isMe: function (info) {
+		return info && info.randomId === almanac.randomId;
 	},
 
 	serveInfo: function (req, res) {
-		almanac.basicHttp.serveJson(req, res, {
-			version: almanac.version,
-			publicAddress: almanac.config.hosts.virtualizationLayer.scheme + '://' + almanac.config.hosts.virtualizationLayerPublic.host + ':' + almanac.config.hosts.virtualizationLayerPublic.port + '/',
-			virtualAddress: almanac.virtualAddress,
-			networkManager: 'http://' + almanac.config.hosts.networkManager.host + ':' + almanac.config.hosts.networkManager.port + '/',
-			storageManager: 'http://' + almanac.config.hosts.masterStorageManager.host + ':' + almanac.config.hosts.masterStorageManager.port + almanac.config.hosts.masterStorageManager.path,
-			mqttToHttpStorageManagerEnabled: almanac.config.mqttToHttpStorageManagerEnabled,
-			resourceCatalogue: almanac.recourceCatalogueUrl,
-			scral: 'http://' + almanac.config.hosts.scral.host + ':' + almanac.config.hosts.scral.port + almanac.config.hosts.scral.path,
-			server: almanac.basicHttp.serverSignature,
-			nodejs: process.versions,
-		});
+		almanac.basicHttp.serveJson(req, res, almanac.info());
 	},
 
 	init: function() {
@@ -70,10 +82,12 @@ It is now ' + now.toISOString() + '.\n\
 		require('./almanac-storageManager.js')(almanac);
 		require('./almanac-scral.js')(almanac);
 		require('./almanac-santander.js')(almanac);
+		require('./almanac-distributed.js')(almanac);	//Distributed requests
+		require('./almanac-websocket-custom-events.js')(almanac);	//WebSocket for custom events (from MQTT)
+		require('./almanac-websocket-chat.js')(almanac);	//WebSocket for broadcast chat
+		require('./almanac-mqtt.js')(almanac);	//MQTT
 
 		setTimeout(function() {
-				require('./almanac-websocket.js')(almanac);	//WebSocket (Socket.IO)
-				require('./almanac-mqtt.js')(almanac);	//MQTT
 				require('./almanac-upnp.js')(almanac);	//UPnP (SSDP)
 				require('./almanac-networkManager.js')(almanac);	//Register in the NetworkManager
 			}, 2000);
