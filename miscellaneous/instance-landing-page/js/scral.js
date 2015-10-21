@@ -4,13 +4,15 @@ mqtt_port = 8000;
 mqtt_websocket_endpoint = "/mosquitto";
 mqtt_user = "landing.trn.federation1";
 scral_url = "http://scral.trn.federation1.almanac-project.eu:8000";
-vlc_ws_url = "ws://130.192.86.65:8088";
+vlc_ws_url = "ws://vlc.trn.federation1.almanac-project.eu:8000";
 dfm_url = "http://trn.federation1.almanac-project.eu:8000/dfm";
+network_manager_url="http://trn.federation1.almanac-project.eu:8000/linksmart/GetNetworkManagerStatus?method=getLocalServices";
 
 
 
 // the watchdog timer
 var watchdog;
+var vlcConnectionTimer;
 
 // the active services tracking
 var activeServicesCount = 0;
@@ -19,21 +21,21 @@ var allServicesCount = 6;
 // the mqtt message counter
 var mqttMsgCount = 0;
 var mqttCounterTimer; 
-
+var mqttConnectiontimer;
+var client;
 
 $(document).ready(function() {
 	handleServiceCountUIUpdate()
 	getDevicesCount();
-	getStatementCount()
-	/*setInterval(function() {
-		getDevicesCount();
-	}, 5000);*/
+	getStatementCount();
+	getNetworkManagerStatus();
 	websocketSetUp();
 	mqttConnectAndCheck();
 	
-	//---- set timers ------
 	setInterval(function() {
+		getDevicesCount();
 		getStatementCount();
+		getNetworkManagerStatus();
 	}, 5000);
 });
 
@@ -123,10 +125,14 @@ function websocketSetUp()
 
 	webSocket.onerror = function (event) {
 			console.log('WebSocket error: ' + JSON.stringify(event));
+			//schedule retry in 30s
+			vlcConnectionTimer = setTimeout(websocketSetUp,30000);
 		};
 
 	webSocket.onopen = function () {
 			console.log('WebSocket connected');
+			if(vlcConnectionTimer)
+				clear(vlcConnectionTimer);
 			webSocket.send("{\"topic\":\"/broadcast\"}");
 		};
 
@@ -189,7 +195,8 @@ function getStatementCount() {
 		crossDomain : true,
 		success : function(data) {
 			var jsonData = JSON.parse(data);
-			$("#dfmQueryCount").text(""+Object.keys(jsonData.EsperEngine).length);
+			if(jsonData)
+				$("#dfmQueryCount").text(""+Object.keys(jsonData.EsperEngine).length);
 			if($("#dfmStatus").text()=="Offline")
 			  incActiveServices();
 			$("#dfmStatus").text("Online");
@@ -232,6 +239,10 @@ function onConnect(data)
   //handle connection
   console.log("MQTT Connected");
   
+  //reset the re-connection timer
+  if(mqttConnectiontimer)
+	  clear(mqttConnectiontimer);
+  
   //update the service count
   incActiveServices();
   
@@ -250,6 +261,8 @@ function onConnect(data)
   mqttCounterTimer = setInterval(function() {
 	  updateMessagePerSecondCount();
 	}, 1000)
+  
+  
 }
 function onMessageArrived(data)
 {
@@ -274,6 +287,18 @@ function onConnectionLost(data)
   
   //clear the sampling timer
   clearInterval(mqttCounterTimer);
+  
+  // re - Connect
+  // connect the client
+  mqttConnectiontimer = setInterval(function() {
+	  
+	  console.log("Attempting re-connection after 5s...");
+	  
+	  console.log("client currently:"+client.isConnected());
+	  if (client.isConnected()== false) {
+		  client.connect({onSuccess : onConnect , mqttVersion : 3});
+	  }
+  }, 5000);
  
 }
 
@@ -286,3 +311,33 @@ function updateMessagePerSecondCount()
   //update the count
   $("#mqttMsgPerSec").text(nMsg);
 }
+
+//----------- End MQTT broker ----------
+//----------- Network Manager ----------
+function getNetworkManagerStatus() {
+	$.ajax({
+		url : network_manager_url,
+		type : "GET",
+		crossDomain : true,
+		success : function(data) {
+			console.log(data)
+			if($("#networkManagerStatus").text()=="Offline")
+				incActiveServices();
+			$("#networkManagerStatus").text("Online");
+			//set the class
+			$("#networkManagerStatus").removeClass("label-danger");
+			$("#networkManagerStatus").addClass("label-success");
+
+		},
+		error : function() {
+			if($("#networkManagerStatus").text()=="Online")
+				decActiveServices();
+			$("#networkManagerStatus").text("Offline");
+			//set the class
+			$("#networkManagerStatus").addClass("label-danger");
+			$("#networkManagerStatus").removeClass("label-success");
+			
+		}
+	});
+}
+//--------- END Network Manager ----------
