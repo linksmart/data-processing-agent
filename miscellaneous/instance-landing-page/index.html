@@ -32,6 +32,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/scral.js"></script>
 <script src="js/mqttws31.js"></script>
+<script src="js/uuid.js"></script>
 
 </head>
 <body>
@@ -96,7 +97,7 @@
 				<h4>Services detail</h4>
 				<div class="thumbnail">
 					<div class="row">
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<h5>Virtualization Layer</h5>
 
 							<p>
@@ -110,21 +111,33 @@
 							</p>
 
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<h5>Resource Catalogue</h5>
+								<p>
+								<ul class="list-group">
+									<li class="list-group-item">Status<span
+										class="pull-right label label-danger" id="resourceCatalogStatus">Offline</span></li>
+									<li class="list-group-item">Reachable at: <a   
+										class="pull-right" href="/catalog/">Direct link</a></li>
+								</ul>
+								</p>
+						</div>
+						
+						<div class="col-md-3">
+							<h5>Storage manager</h5>
 
 							<p>
 							<ul class="list-group">
 								<li class="list-group-item">Status<span
-									class="pull-right label label-danger">Offline</span></li>
-								<li class="list-group-item">Registered resources<span
-									class="pull-right label label-info" id="deviceCountCatalogue">28776</span></li>
+									class="pull-right label label-danger" id="storageManagerStatus">Offline</span></li>
+								<li class="list-group-item">Reachable at: <a
+									class="pull-right" href="/storage/help">Direct link</a></li>
 							</ul>
 							</p>
 
 						</div>
 						
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<h5>Data fusion manager</h5>
 
 							<p>
@@ -152,19 +165,6 @@
 									class="pull-right label label-info" id="deviceCountScral">28776</span></li>
 								<li class="list-group-item">Reachable at: <a
 									class="pull-right" href="/scral-gui/">Direct link</a></li>
-							</ul>
-							</p>
-						</div>
-						<div class="col-md-3">
-							<h5>Storage Manager</h5>
-							<p>
-							<ul class="list-group">
-								<li class="list-group-item">Status<span
-									class="pull-right label label-danger">Offline</span></li>
-								<li class="list-group-item">#Entries<span
-									class="pull-right label label-info">58776893</span></li>
-								<li class="list-group-item">Free memory<span
-									class="pull-right label label-success">4.7/6 GByte</span></li
 							</ul>
 							</p>
 						</div>

@@ -7,7 +7,8 @@ scral_url = "http://scral.trn.federation1.almanac-project.eu:8000";
 vlc_ws_url = "ws://vlc.trn.federation1.almanac-project.eu:8000";
 dfm_url = "http://trn.federation1.almanac-project.eu:8000/dfm";
 network_manager_url="http://trn.federation1.almanac-project.eu:8000/linksmart/GetNetworkManagerStatus?method=getLocalServices";
-
+storage_manager_url="http://trn.federation1.almanac-project.eu/storage/help";
+resource_catalog_url="http://trn.federation1.almanac-project.eu/catalog/";
 
 
 // the watchdog timer
@@ -29,6 +30,8 @@ $(document).ready(function() {
 	getDevicesCount();
 	getStatementCount();
 	getNetworkManagerStatus();
+	getStorageManagerStatus(); 
+	getResourceCatalogStatus();
 	websocketSetUp();
 	mqttConnectAndCheck();
 	
@@ -36,6 +39,8 @@ $(document).ready(function() {
 		getDevicesCount();
 		getStatementCount();
 		getNetworkManagerStatus();
+		getStorageManagerStatus();
+		getResourceCatalogStatus();
 	}, 5000);
 });
 
@@ -222,7 +227,8 @@ function getStatementCount() {
 //--------- MQTT Broker -------------------
 function mqttConnectAndCheck()
 {
-	client = new Paho.MQTT.Client(mqtt_broker, mqtt_port, mqtt_websocket_endpoint, mqtt_user);
+	var uuid = new UUIDGenerator();
+	client = new Paho.MQTT.Client(mqtt_broker, mqtt_port, mqtt_websocket_endpoint, mqtt_user+uuid.generateUUID());
 
 	// set callback handlers
 	client.onConnectionLost = onConnectionLost;
@@ -341,3 +347,61 @@ function getNetworkManagerStatus() {
 	});
 }
 //--------- END Network Manager ----------
+
+//----------- Storage Manager ----------
+function getStorageManagerStatus() {
+	$.ajax({
+		url : storage_manager_url,
+		type : "GET",
+		crossDomain : true,
+		success : function(data) {
+			console.log(data)
+			if($("#storageManagerStatus").text()=="Offline")
+				incActiveServices();
+			$("#storageManagerStatus").text("Online");
+			//set the class
+			$("#storageManagerStatus").removeClass("label-danger");
+			$("#storageManagerStatus").addClass("label-success");
+			
+		},
+		error : function() {
+			if($("#storageManagerStatus").text()=="Online")
+				decActiveServices();
+			$("#storageManagerStatus").text("Offline");
+			//set the class
+			$("#storageManagerStatus").addClass("label-danger");
+			$("#storageManagerStatus").removeClass("label-success");
+			
+		}
+	});
+}
+//--------- END Storage Manager  ----------
+
+//----------- Resource Catalog ----------
+function getResourceCatalogStatus() {
+	$.ajax({
+		url : resource_catalog_url,
+		type : "GET",
+		crossDomain : true,
+		success : function(data) {
+			console.log(data)
+			if($("#resourceCatalogStatus").text()=="Offline")
+				incActiveServices();
+			$("#resourceCatalogStatus").text("Online");
+			//set the class
+			$("#resourceCatalogStatus").removeClass("label-danger");
+			$("#resourceCatalogStatus").addClass("label-success");
+			
+		},
+		error : function() {
+			if($("#resourceCatalogStatus").text()=="Online")
+				decActiveServices();
+			$("#resourceCatalogStatus").text("Offline");
+			//set the class
+			$("#resourceCatalogStatus").addClass("label-danger");
+			$("#resourceCatalogStatus").removeClass("label-success");
+			
+		}
+	});
+}
+//--------- END Resource Catalog  ----------
