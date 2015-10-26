@@ -202,13 +202,24 @@ It is now ' + now.toISOString() + '.\n\
 	},
 
 	serveStaticFile: function (req, res) {
-		if ((/^\/[a-z0-9_-]+\.[a-z]{2,4}$/i).test(req.url) && (!(/\.\./).test(req.url))) {
+		if ((/^(\/[a-z0-9_-]{1,64})?\/[a-z0-9_-]{1,128}(\.[a-z0-9]{2,4})?\.[a-z]{2,4}$/i).test(req.url) && (!(/\.\./).test(req.url))) {
 			var myPath = './static' + req.url;
 			fs.stat(myPath, function (err, stats) {
 				if ((!err) && stats.isFile()) {
 					var ext = path.extname(myPath),
-						mimes = { '.css': 'text/css', '.html': 'text/html', '.ico': 'image/x-icon', '.jpg': 'image/jpeg',
-							'.js': 'application/javascript', '.json': 'application/json', '.png': 'image/png', '.txt': 'text/plain', '.xml': 'application/xml' },
+						mimes = {
+							'.css': 'text/css',
+							'.html': 'text/html',
+							'.ico': 'image/x-icon',
+							'.jpg': 'image/jpeg',
+							'.js': 'application/javascript',
+							'.json': 'application/json',
+							'.png': 'image/png',
+							'.svg': 'image/svg+xml',
+							'.txt': 'text/plain',
+							'.woff': 'application/font-woff',
+							'.xml': 'application/xml',
+						},
 						modifiedDate = new Date(stats.mtime).toUTCString();
 					if (modifiedDate === req.headers['if-modified-since']) {
 						res.writeHead(304, {

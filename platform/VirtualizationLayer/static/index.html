@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ALMANAC - Platform Instance</title>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+
+<!-- custom CSS -->
+<link rel="stylesheet" href="css/custom.css">
+
+<!-- fonts -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans"
+	rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Exo:300,400,600,800"
+	rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Days+One"
+	rel="stylesheet" type="text/css" />
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scral.js"></script>
+<script src="js/mqttws31.js"></script>
+<script src="js/uuid.js"></script>
+
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<img class="pull-left" src="img/torino_smart_city_small.png" />
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+				</div>
+				<div class="collapse navbar-collapse"
+					id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+						<li><a href="#">Issue Management</a></li>
+						<li><a href="#">Provisioning</a></li>
+					</ul>
+					<button type="button" class="btn btn-success navbar-btn pull-right">Sign in</button>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<h1>
+					<img class="pull-left" src="img/almanac_logo_small.png" /> ALMANAC
+					Platform Management
+				</h1>
+				<div>
+					<span class="label label-success">Smart City -
+						Instance</span>
+				</div>
+				<hr />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<h4>Status Overview</h4>
+				<div class="thumbnail">
+					<p>
+					<ul class="list-group">
+						<li class="list-group-item">Platform status<span
+							class="pull-right label label-success">Online</span></li>
+						<li class="list-group-item">Up-time<span
+							class="pull-right label label-info">8 months 7 days</span></li>
+						<li class="list-group-item">Active services<span
+							class="pull-right label label-success" id="activeServicesCount">0</span></li>
+						<li class="list-group-item">Monitoring status<span
+							class="pull-right label label-success">Active</span></li>
+					</ul>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<h4>Services detail</h4>
+				<div class="thumbnail">
+					<div class="row">
+						<div class="col-md-3">
+							<h5>Virtualization Layer WebSocket</h5>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item">Status<span
+									class="pull-right label label-danger" id="vlcStatus">Offline</span></li>
+								<li class="list-group-item">Reachable at: <a
+									class="pull-right" href="/">Direct
+										link</a></li>
+							</ul>
+							</p>
+
+						</div>
+						<div class="col-md-3">
+							<h5>Resource Catalogue</h5>
+								<p>
+								<ul class="list-group">
+									<li class="list-group-item">Status<span
+										class="pull-right label label-danger" id="resourceCatalogStatus">Offline</span></li>
+									<li class="list-group-item">Reachable at: <a   
+										class="pull-right" href="/ResourceCatalogue/">Direct link</a></li>
+								</ul>
+								</p>
+						</div>
+						
+						<div class="col-md-3">
+							<h5>Storage manager</h5>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item">Status<span
+									class="pull-right label label-danger" id="storageManagerStatus">Offline</span></li>
+								<li class="list-group-item">Reachable at: <a
+									class="pull-right" href="/sm/help">Direct link</a></li>
+							</ul>
+							</p>
+
+						</div>
+						
+						<div class="col-md-3">
+							<h5>Data fusion manager</h5>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item">Status<span
+									class="pull-right label label-danger" id="dfmStatus">Offline</span></li>
+								<li class="list-group-item">Active queries<span
+									class="pull-right label label-info" id="dfmQueryCount">-1</span></li>
+								<li class="list-group-item">Reachable at: <a
+									class="pull-right" href="/dfm/">Direct link</a></li>
+							</ul>
+							</p>
+
+						</div>
+					</div>
+					<div class="row">
+						
+						<div class="col-md-3">
+							<h5>Smart City Resource Adaptation Layer</h5>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item">Status<span
+									class="pull-right label label-danger" id="scralStatus">Offline</span></li>
+								<li class="list-group-item">Handled devices<span
+									class="pull-right label label-info" id="deviceCountScral">28776</span></li>
+								<li class="list-group-item">Reachable at: <a
+									class="pull-right" href="/scral/">Direct link</a></li>
+							</ul>
+							</p>
+						</div>
+						<div class="col-md-3">
+							<h5>MQTT Broker</h5>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item">Status<span
+									class="pull-right label label-danger" id="brokerStatus">Offline</span></li>
+								<li class="list-group-item">#Messages/s<span
+									class="pull-right label label-info" id="mqttMsgPerSec">0</span></li>
+							</ul>
+							</p>
+						</div>
+						<div class="col-md-3">
+							<h5>Network Manager</h5>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item">Status<span
+									class="pull-right label label-danger" id="networkManagerStatus">Offline</span></li>
+									<li class="list-group-item">Reachable at: <a
+									class="pull-right" href="/linksmart/NetworkManager">Direct
+										link</a></li>
+							</ul>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
