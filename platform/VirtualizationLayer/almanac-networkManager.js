@@ -65,11 +65,9 @@ module.exports = function (almanac) {
 	refreshInNetworkManager();
 	setInterval(refreshInNetworkManager, 120000);
 
-	var os = require('os');
-
 	function updateMqttVirtualAddress() {
 		almanac.request.get({
-				url: almanac.config.hosts.networkManagerUrl + 'NetworkManager/?DESCRIPTION="Broker:tcp://' + os.hostname() + '"',
+				url: almanac.config.hosts.networkManagerUrl + 'NetworkManager/?DESCRIPTION="Broker:tcp://' + almanac.os.hostname() + '"',
 				json: true,
 				timeout: 5000,
 			}, function (error, response, body) {

@@ -14,6 +14,7 @@ var almanac = {
 	server: null,
 	version: '0',
 	request: require('request'),
+	os: require('os'),
 
 	routes: {	//Routing of requests
 	},
@@ -54,15 +55,16 @@ It is now ' + now.toISOString() + '.\n\
 			version: almanac.version,
 			instanceName: almanac.config.hosts.instanceName,
 			publicUrl: almanac.config.hosts.virtualizationLayerPublicUrl,
-			virtualAddress: almanac.virtualAddress,
-			mqttVirtualAddress: almanac.mqttVirtualAddress,
-			networkManagerUrl: almanac.config.hosts.networkManagerUrl,
-			storageManagerUrl: almanac.config.hosts.storageManagerUrl,
-			resourceCatalogueUrl: almanac.config.hosts.recourceCatalogueUrl,
-			scralUrl: almanac.config.hosts.scralUrl,
-			server: almanac.basicHttp.serverSignature,
+			//hostname: os.hostname(),
+			virtualAddressOk: !!almanac.virtualAddress,
+			mqttVirtualAddressOk: !!almanac.mqttVirtualAddress,
+			networkManagerUrlOk: !!almanac.config.hosts.networkManagerUrl,
+			storageManagerUrlOk: !!almanac.config.hosts.storageManagerUrl,
+			resourceCatalogueUrlOk: !!almanac.config.hosts.recourceCatalogueUrl,
+			scralUrlOk: !!almanac.config.hosts.scralUrl,
+			//server: almanac.basicHttp.serverSignature,
 			randomId: almanac.randomId,
-			nodejs: process.versions,
+			//nodejs: process.versions,
 		};
 	},
 
