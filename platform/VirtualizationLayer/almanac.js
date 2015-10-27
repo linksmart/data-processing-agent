@@ -58,6 +58,7 @@ It is now ' + now.toISOString() + '.\n\
 			//hostname: os.hostname(),
 			virtualAddressOk: !!almanac.virtualAddress,
 			mqttVirtualAddressOk: !!almanac.mqttVirtualAddress,
+			mqttConnected: almanac.mqttClient && almanac.mqttClient.connected,
 			networkManagerUrlOk: !!almanac.config.hosts.networkManagerUrl,
 			storageManagerUrlOk: !!almanac.config.hosts.storageManagerUrl,
 			resourceCatalogueUrlOk: !!almanac.config.hosts.recourceCatalogueUrl,
