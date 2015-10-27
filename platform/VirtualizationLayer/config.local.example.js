@@ -16,7 +16,9 @@ var hosts = {
 		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:OGCapplicationIoTresourcemanager:1',	//Set to blank to disable UPnP
 		recourceCatalogueUrl: '',	//Leave blank for UPnP discovery
 		scralUrl: 'http://localhost:8080/connectors.rest/',
+		scralUiUrl: 'http://localhost:8080/gui/',
 		storageManagerUrl: 'http://cnet006.cloudapp.net/Dmf/SensorThings/',
+		dfmUrl: 'http://localhost:8319/',
 	};
 
 exports.config = {

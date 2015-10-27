@@ -21,7 +21,9 @@ var hosts = {
 		recourceCatalogueUrn: 'urn:schemas-upnp-org:IoTdevice:OGCapplicationIoTresourcemanager:1',	//Set to blank to disable UPnP
 		recourceCatalogueUrl: 'http://localhost:44441/',	//Set to blank to use only UPnP discovery
 		scralUrl: 'http://localhost:8080/connectors.rest/',
+		scralUiUrl: 'http://localhost:8080/gui/',
 		storageManagerUrl: 'http://cnet006.cloudapp.net/Dmf/SensorThings/',
+		dfmUrl: 'http://localhost:8319/',
 		santanderUrl: 'http://data.smartsantander.eu/ISMB/',
 		virtualizationLayerPeers: [	//Manual peering (sends the local MQTT events to other VirtualizationLayers
 			//'http://almanac.alexandra.dk/',	//Alexandra Institute (Ubuntu)
