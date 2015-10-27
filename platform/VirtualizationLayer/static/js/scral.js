@@ -1,7 +1,7 @@
 // the configuration parameters
 scral_url = "./scral";
 dfm_url = "./dfm";
-network_manager_url = "/tunnel/";
+network_manager_url = "./linksmart/GetNetworkManagerStatus?method=getLocalServices";
 storage_manager_url = "./sm/help";
 resource_catalog_url = "./ResourceCatalogue/";
 

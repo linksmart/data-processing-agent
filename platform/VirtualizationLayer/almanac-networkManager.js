@@ -7,7 +7,7 @@
 */
 
 module.exports = function (almanac) {
-	almanac.virtualAddress = null;
+	almanac.virtualAddress = '';
 
 	//require('request').debug = true;
 
@@ -102,5 +102,26 @@ module.exports = function (almanac) {
 			})).pipe(res);
 	}
 
+	function proxyLinksmart(req, res) {
+		if (!almanac.config.hosts.networkManagerUrl) {
+			almanac.basicHttp.serve503(req, res);
+			return;
+		}
+
+		req.pipe(almanac.request({
+				method: req.method,
+				uri: almanac.config.hosts.networkManagerUrl + req.url,
+				timeout: 20000,
+			}, function (error, response, body) {
+				if (error || response.statusCode != 200 || !body) {
+					almanac.log.warn('VL', 'Error ' + (response ? response.statusCode : 0) + ' proxying to LinkSmart!');
+					if (!body) {
+						almanac.basicHttp.serve503(req, res);
+					}
+				}
+			})).pipe(res);
+	}
+
 	almanac.routes['tunnel/'] = proxyNetworkManagerTunnel;	//Proxying to NetworkManager tunnel
+	almanac.routes['linksmart/'] = proxyLinksmart;	//Proxying to LinkSmart Network
 };
