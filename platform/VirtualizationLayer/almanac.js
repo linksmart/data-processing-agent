@@ -101,4 +101,6 @@ It is now ' + now.toISOString() + '.\n\
 
 };
 
+almanac.routes['vl'] = almanac.serveHome;	//Virtualization Layer home page
+
 exports.almanac = almanac;

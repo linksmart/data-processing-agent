@@ -131,6 +131,7 @@ function websocketSetUp()
 			if(vlcConnectionTimer)
 				clear(vlcConnectionTimer);
 			webSocket.send("{\"topic\":\"/broadcast\"}");
+			handleAliveMessage();
 		};
 
 	webSocket.onclose = function () {
@@ -227,6 +228,10 @@ function getMqttState() {
 			$("#brokerStatus").text("Offline");
 			$("#brokerStatus").addClass("label-danger");
 			$("#brokerStatus").removeClass("label-success");
+		}
+		if (data.instanceName) {
+			$("#instanceName").text(data.instanceName);
+			document.title = "ALMANAC - " + data.instanceName + " Platform Instance";
 		}
 	});
 }
