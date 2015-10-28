@@ -1,6 +1,7 @@
 package eu.almanac.event.datafusion.utils.epl;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.datafusion.Statement;
 
 
@@ -11,14 +12,21 @@ import java.util.UUID;
 
 public class EPLStatement implements Statement {
 
+
+    @JsonProperty("name")
     protected String name;
+    @JsonProperty("statement")
     protected String statement;
 
+    @JsonProperty("source")
     protected String source = null;
+    @JsonProperty("input")
     protected String[] input =null;
+    @JsonProperty("output")
     protected String[] output=null;
 
 
+    @JsonProperty("scope")
     protected String[] scope={"local"};
     protected String uuid =UUID.randomUUID().toString();
 

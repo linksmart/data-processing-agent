@@ -1,5 +1,6 @@
 package eu.almanac.event.datafusion.feeder.type;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.linksmart.api.event.datafusion.Statement;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
@@ -13,8 +14,10 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 public class PersistentBean {
+    @JsonProperty("statements")
     protected ArrayList<EPLStatement> statements;
-    protected Map<String,Observation> observations;
+    @JsonProperty("observations")
+    protected Map<String,Observation[]> observations;
     PersistentBean(){
         statements = null;
         observations = null;
@@ -30,11 +33,11 @@ public class PersistentBean {
         this.statements = statements;
     }
 
-    public Map<String,Observation> getObservations() {
+    public Map<String,Observation[]> getObservations() {
         return observations;
     }
 
-    public void setObservations(Map<String,Observation> observations) {
+    public void setObservations(Map<String,Observation[]> observations) {
         this.observations = observations;
     }
     @Nullable
@@ -55,14 +58,14 @@ public class PersistentBean {
 
     }
     @Nullable
-    public Observation getObservations(String topic) {
+    public Observation[] getObservations(String topic) {
         if(observations!=null)
             return observations.get(topic);
         else
             return null;
     }
 
-    public void setObservations(String key,Observation observation) {
+    public void setObservations(String key,Observation[] observation) {
         if(observations==null)
             observations = new Hashtable<>();
 

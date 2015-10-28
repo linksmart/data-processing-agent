@@ -1,5 +1,5 @@
 insert into 
-	meeter1Safe 
+	lekage_safe_00a467b9290129a71c6b496813cf52b437d878f25148773494967e2b85a2031b 
 select istream 
 	* 
 from 

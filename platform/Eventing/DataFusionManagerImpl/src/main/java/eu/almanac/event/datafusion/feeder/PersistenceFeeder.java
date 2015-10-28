@@ -1,5 +1,6 @@
 package eu.almanac.event.datafusion.feeder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import eu.almanac.event.datafusion.feeder.type.PersistentBean;
 import eu.almanac.event.datafusion.intern.Utils;
@@ -14,6 +15,7 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import org.apache.commons.io.IOUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class PersistenceFeeder implements Feeder, EventFeederLogic {
     static protected Configurator conf =  Configurator.getDefaultConfig();
     protected ArrayList<String> filePaths = new ArrayList<>();
     private static Gson gson = new Gson();
+    private static ObjectMapper mapper = new ObjectMapper();
     private PersistenceFeeder(){
 
     }
@@ -45,12 +48,19 @@ public class PersistenceFeeder implements Feeder, EventFeederLogic {
     static void loadFile(String filePath, DataFusionWrapper dfw){
         FileInputStream inputStream = null;
         try {
-            inputStream = new FileInputStream(filePath);
+            File f = new File(filePath);
+            if(f.exists() && !f.isDirectory()) {
+
+                inputStream = new FileInputStream(filePath);
 
 
-            String everything = IOUtils.toString(inputStream);
 
-            feed(everything, dfw);
+                String everything = IOUtils.toString(inputStream);
+
+                feed(everything, dfw);
+            }else {
+                loggerService.warn("There is no persistency file ");
+            }
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         } finally {
@@ -62,9 +72,18 @@ public class PersistenceFeeder implements Feeder, EventFeederLogic {
             }
         }
     }
+    private static String getThingID(String topic){
+        String [] aux = topic.split("/");
+        return aux[aux.length-2];
+    }
     static protected void feed(String rawData,DataFusionWrapper dfw){
-        PersistentBean persistentBean= gson.fromJson(rawData, PersistentBean.class);
-
+        //PersistentBean persistentBean= gson.fromJson(rawData, PersistentBean.class);
+        PersistentBean persistentBean= null;
+        try {
+            persistentBean = mapper.readValue(rawData, PersistentBean.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if(persistentBean!=null) {
             if (persistentBean.getStatements() != null && !persistentBean.getStatements().isEmpty()) {
                 for (Statement stm : persistentBean.getStatements()) {
@@ -73,7 +92,12 @@ public class PersistenceFeeder implements Feeder, EventFeederLogic {
             }
             if (persistentBean.getObservations() != null && !persistentBean.getObservations().isEmpty()) {
                 for (String topic : persistentBean.getObservations().keySet()) {
-                    dfw.addEvent(topic, persistentBean.getObservations(topic), persistentBean.getObservations(topic).getClass());
+
+                    String id= getThingID(topic);
+                    for(Observation observation: persistentBean.getObservations(topic)) {
+                        observation.setId(id);
+                        dfw.addEvent(topic, observation, observation.getClass());
+                    }
 
                 }
             }

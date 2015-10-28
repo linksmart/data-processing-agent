@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class BrokerService implements Observer {
+public class BrokerService implements Observer, Broker {
     protected static LoggerService loggerService;
     // this is the MQTT client to broker in the local broker
     private Configurator conf = Configurator.getDefaultConfig();
@@ -23,7 +23,6 @@ public class BrokerService implements Observer {
     protected ForwardingListener listener;
     private UUID ID;
     protected ArrayList<String> topics = new ArrayList<String>();
-    private static final Pattern ipPattern = Pattern.compile("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+"), urlPattern = Pattern.compile("\\b(tcp|ws)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|][:[0-9]+]");
 
 
 
@@ -35,7 +34,7 @@ public class BrokerService implements Observer {
 
 
 
-    public BrokerService(String brokerName, String brokerPort, UUID ID, String serviceDescription) throws MqttException {
+    public BrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
         listener = new ForwardingListener(this,ID);
 
          loggerService = new LoggerService(LoggerFactory.getLogger(BrokerService.class));
@@ -49,13 +48,13 @@ public class BrokerService implements Observer {
        createClient();
 
     }
-    public boolean isConnect() throws Exception {
+    public boolean isConnected()  {
 
         return mqttClient.isConnected();
     }
     protected void _connect() throws Exception {
 
-        if(!isConnect()) {
+        if(!isConnected()) {
 
             mqttClient.connect();
 
@@ -81,7 +80,7 @@ public class BrokerService implements Observer {
 
         try {
 
-            if(isConnect())
+            if(isConnected())
                 _disconnect();
 
             mqttClient.close();
@@ -135,7 +134,7 @@ public class BrokerService implements Observer {
                     try {
                         //noinspection SynchronizeOnNonFinalField
                         synchronized (watchdog) {
-                            if (!isConnect())
+                            if (!isConnected())
                                 _connect();
                         }
                     } catch (Exception e) {
@@ -194,7 +193,7 @@ public class BrokerService implements Observer {
     }
     public void publish(String topic, byte[] payload, int qos, boolean retained) throws Exception {
 
-        if(!isConnect())
+        if(!isConnected())
             _connect();
 
          mqttClient.publish(topic,payload,qos,retained);
@@ -219,7 +218,7 @@ public class BrokerService implements Observer {
     }
 
     public void setBrokerName(String brokerName) throws Exception {
-        boolean wasConnected =isConnect();
+        boolean wasConnected =isConnected();
         if(!this.brokerName.equals(brokerName)) {
 
             this.brokerName = brokerName;
@@ -235,7 +234,7 @@ public class BrokerService implements Observer {
     }
 
     public void setBrokerPort(String brokerPort) throws Exception {
-        boolean wasConnected =isConnect();
+        boolean wasConnected =isConnected();
 
         if(!this.brokerPort.equals(brokerPort)) {
             this.brokerPort = brokerPort;
@@ -244,7 +243,7 @@ public class BrokerService implements Observer {
         }
     }
     public void setBroker(String brokerName, String brokerPort) throws Exception {
-        boolean wasConnected =isConnect();
+        boolean wasConnected =isConnected();
         if(!this.brokerName.equals(brokerName) || !this.brokerPort.equals(brokerPort)) {
 
             if (!this.brokerPort.equals(brokerPort)) {
