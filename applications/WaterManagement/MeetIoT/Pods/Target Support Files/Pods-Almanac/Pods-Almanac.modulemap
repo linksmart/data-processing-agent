@@ -1,0 +1,6 @@
+framework module Pods_Almanac {
+  umbrella header "Pods-Almanac-umbrella.h"
+
+  export *
+  module * { export * }
+}

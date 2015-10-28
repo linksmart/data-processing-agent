@@ -1,0 +1,14 @@
+.navbar-inverse .navbar-nav
+{
+	font-size: 1.5em;
+}
+
+
+body
+{
+	 font-family: 'Exo';
+	 
+	 /* this handles the right navbar visualization*/
+	 padding-top: 70px;
+}
+

@@ -1,0 +1,184 @@
+@prefix s: <http://schema.org#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix geonames: <http://www.geonames.org/ontology#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix wbin: <http://www.ismb.it/ontologies/wastebin#> .
+@prefix places: <http://purl.org/ontology/places#> .
+@prefix gr: <http://purl.org/goodrelations/v1#> .
+@prefix muo: <http://purl.oclc.org/NET/muo/muo#> .
+
+
+<http://www.ismb.it/ontologies/wastebin> rdf:type owl:Ontology ;
+	owl:imports <http://schema.org/> ,
+	<http://www.opengis.net/ont/geosparql> ,
+	#<http://www.geonames.org/ontology> , # commented to support inferencing:  geonames uses some unsupported constructs
+	<http://www.w3.org/2006/vcard/ns> ,
+	<http://purl.org/ontology/places> ,
+	<http://purl.org/goodrelations/v1> ,
+	<http://purl.oclc.org/NET/muo/muo> .
+       
+
+
+
+# object properties
+wbin:yearlyWasteProduction rdf:type owl:ObjectProperty ;
+	owl:ObjectPropertyDomain [a owl:Class; owl:ObjectUnionOf (wbin:Quarter wbin:City wbin:District)] ;
+	rdfs:domain [a owl:Class; owl:unionOf (wbin:Quarter wbin:City)] ;
+	owl:ObjectPropertyRange wbin:YearlyWasteAmount ; 
+	rdfs:range wbin:MonthlyWasteAmount .
+	
+wbin:monthlyWasteProduction rdf:type owl:ObjectProperty ;
+	owl:ObjectPropertyDomain [a owl:Class; owl:ObjectUnionOf (wbin:Quarter wbin:City wbin:District)] ;
+	rdfs:domain [a owl:Class; owl:unionOf (wbin:Quarter wbin:City)] ;
+	owl:ObjectPropertyRange wbin:MonthlyWasteAmount ; 
+	rdfs:range wbin:MonthlyWasteAmount .
+	
+wbin:producedAmount rdf:type owl:ObjectProperty ;
+	owl:ObjectPropertyDomain [a owl:Class; owl:ObjectUnionOf (wbin:YearlyWasteAmount wbin:MonthlyWasteAmount)] ;
+	rdfs:domain [a owl:Class; owl:unionOf (wbin:YearlyWasteAmount wbin:MonthlyWasteAmount)] ;
+	owl:ObjectPropertyRange wbin:WasteAmount ; 
+	rdfs:range wbin:WasteAmount .
+
+wbin:type rdf:type owl:ObjectProperty ;
+	owl:ObjectPropertyDomain wbin:WasteAmount;
+	rdfs:domain wbin:WasteAmount;
+	owl:ObjectPropertyRange wbin:Garbage ;
+	rdfs:range  wbin:Garbage .
+	
+wbin:collects rdf:type owl:ObjectProperty ;
+	owl:ObjectPropertDomain wbin:WasteBin;
+	rdfs:domain wbin:WasteBin;
+	owl:ObjectPropertyRange wbin:Garbage ;
+	rdfs:range wbin:Garbage .
+
+wbin:contributesTo rdf:type owl:Objectproperty ;
+	owl:ObjectPropertDomain wbin:MonthlyWasteAmount;
+	rdfs:domain wbin:MonthlyWasteAmount;
+	owl:ObjectPropertyRange wbin:YearlyWasteAmount ;
+	rdfs:range wbin:YearlyWasteAmount .
+
+
+	
+# data properties
+wbin:year rdf:type owl:DataTypeProperty ;
+	owl:DataTypePropertyDomain wbin:WasteAmount;
+	owl:DataTypePropertyRange xsd:gYear .
+
+wbin:monthOfYear rdf:type owl:DataTypeProperty ;
+	owl:DataTypePropertyDomain wbin:MonthlyWasteAmount;
+	owl:DataTypePropertyRange xsd:gYearMonth .
+	
+wbin:amount rdf:type owl:DataTypeProperty ;
+	owl:DataTypePropertyDomain wbin:WasteAmount;
+	owl:DataTypePropertyRange xsd:gYearMonth .
+
+
+#  classes
+
+# city
+wbin:City rdf:type owl:Class ;
+	rdfs:subClassOf geo:Feature ;
+        owl:equivalentClass s:City , places:City .
+        
+# district
+wbin:District rdf:type owl:Class ;
+	rdfs:subClassOf geo:Feature ;
+	geo:sfWithin wbin:City .
+
+# quarter
+wbin:Quarter rdf:type owl:Class ;
+	rdfs:subClassOf s:Place , geo:Feature ;
+	geo:sfWithin wbin:District ;
+        geo:sfWithin wbin:City .
+        
+#-----------------------------------------
+#        WASTE BINS
+#-----------------------------------------
+
+# waste bin
+wbin:WasteBin rdf:type owl:Class ;
+	rdfs:subClassOf geo:Feature ;
+	geo:sfWithin wbin:District ;
+	geo:sfWithin wbin:Quarter .
+	
+# Dry waste bin storing undifferentiated rubbish
+wbin:DryWasteBin rdf:type owl:Class ;
+	rdfs:subClassOf wbin:WasteBin ;
+	rdfs:subClassOf [ a owl:Restriction; owl:onProperty wbin:collects; owl:ObjectAllValuesFrom wbin:DryRubbish].
+
+# Glass and Aluminum trash bin
+wbin:GlassBin rdf:type owl:Class ;
+	rdfs:subClassOf wbin:WasteBin ;
+	rdfs:subClassOf [ a owl:Restriction; owl:onProperty wbin:collects; owl:ObjectAllValuesFrom wbin:GlassOrAluminumRubbish].
+
+# Organic trash bin
+wbin:OrganicBin rdf:type owl:Class ;
+	rdfs:subClassOf wbin:WasteBin ;
+	rdfs:subClassOf [ a owl:Restriction; owl:onProperty wbin:collects; owl:ObjectAllValuesFrom wbin:GlassOrAluminumRubbish].
+
+# Paper trash bin
+wbin:PaperBin rdf:type owl:Class ;
+	rdfs:subClassOf wbin:WasteBin ;
+	rdfs:subClassOf [ a owl:Restriction; owl:onProperty wbin:collects; owl:ObjectAllValuesFrom wbin:OrganicRubbish].
+
+# Plastic trash bin
+wbin:PlasticBin rdf:type owl:Class ;
+	rdfs:subClassOf wbin:WasteBin ;
+	rdfs:subClassOf [ a owl:Restriction; owl:onProperty wbin:collects; owl:ObjectAllValuesFrom wbin:PlasticRubbish].
+
+# Used Clothes bin
+wbin:UsedClothesBin rdf:type owl:Class ;
+	rdfs:subClassOf wbin:WasteBin ;
+	rdfs:subClassOf [ a owl:Restriction; owl:onProperty wbin:collects; owl:ObjectAllValuesFrom wbin:UsedClothes].
+	
+#-----------------------------------------
+#        WASTE / GARBAGE
+#-----------------------------------------
+
+# general Waste root,
+wbin:Garbage rdf:type owl:Class .
+		
+# Plastic
+wbin:PlasticRubbish rdf:type owl:Class ;
+	rdfs:subClassOf wbin:Garbage .
+
+# Glass or Aluminum
+wbin:GlassOrAluminumRubbish rdf:type owl:Class ;
+	rdfs:subClassOf wbin:Garbage .
+
+# Paper
+wbin:PaperRubbish rdf:type owl:Class ;
+	rdfs:subClassOf wbin:Garbage .
+
+# Dry rubbish
+wbin:DryRubbish rdf:type owl:Class ;
+	rdfs:subClassOf wbin:Garbage .
+
+# Organic
+wbin:OrganicRubbish rdf:type owl:Class ;
+	rdfs:subClassOf wbin:Garbage .
+
+# Used Clothes
+wbin:UsedClothes rdf:type owl:Class ;
+	rdfs:subClassOf wbin:Garbage .
+
+#-----------------------------------------
+#	PRODUCTION RATES
+#-----------------------------------------
+
+# waste amount
+wbin:WasteAmount rdf:type owl:Class ;
+	rdfs:subClassOf gr:QuantitativeValue ;
+	rdfs:subClassOf muo:QualityValue .
+	
+#yearly waste amount
+wbin:YearlyWasteMount rdf:type owl:Class .
+
+#monthly waste amount
+wbin:MonthlyWasteMount rdf:type owl:Class .	
+	

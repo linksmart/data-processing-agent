@@ -1,0 +1,16 @@
+	{
+	"@id":"$prefix:$url",
+	"@type":"wbin:$class",
+  	"name":"$url",
+  	"description":"$description",
+    	"address":{
+    		"street-address":"$address",
+       		"locality":"$city"
+    	},
+    	"geometry":{
+       		"wkt":"$coordinates"
+    	},
+    	"latitude":$latitude,
+    	"longitude": $longitude,
+    	"within":["$prefix:$quarter","$prefix:$district"]
+	}

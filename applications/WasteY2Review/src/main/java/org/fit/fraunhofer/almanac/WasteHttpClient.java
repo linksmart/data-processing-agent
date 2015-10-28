@@ -135,6 +135,23 @@ public class WasteHttpClient{
         return null;
     }
 
+
+    public Thing getBin(String id){
+        try{
+            String wasteBinResponse = sendGET(RESOURCECAT_THINGID + id);
+
+            ObjectMapper mapper = new ObjectMapper();
+            Things bins = mapper.readValue(wasteBinResponse, Things.class);
+
+            Thing bin = bins.ThingsArray().get(0);
+            return bin;
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public org.geojson.LngLatAlt getBinGeolocation(String id){
         try{
             String wasteBinResponse = sendGET(RESOURCECAT_THINGID + id);

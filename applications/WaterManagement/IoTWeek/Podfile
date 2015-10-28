@@ -1,0 +1,9 @@
+platform :ios, '9.0'
+use_frameworks!
+
+target 'Water' do
+  pod 'AlamofireObjectMapper', '>= 0.2'
+  pod 'SIOSocket', '>= 0.2.0'
+  pod 'Charts', '>= 2.1'
+  pod 'JBChartView'
+end

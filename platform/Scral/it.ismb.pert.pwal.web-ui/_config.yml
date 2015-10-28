@@ -1,0 +1,46 @@
+##########################################################
+## Site settings, please un comment the settings        ##
+## relevant to teh project                              ##
+##########################################################
+
+##############################################################################
+# Site settings -- SCRAL
+# title: SCRAL
+# email: pwalscrum@ismb.it
+# description: Smart City Resources Adaptation Layer 
+# baseurl: "" # the subpath of your site, e.g. /blog/
+# url: "http://yourdomain.com" # the base hostname & protocol for your site
+#rest_endpoint: http://127.0.0.1:8080/connectors.rest 
+#rest_endpoint: http://almanac-showcase.ismb.it:8000/iot360/scral 
+# mqtt_broker: almanac-showcase.ismb.it
+# mqtt_broker: localhost
+# mqtt_port: 8000
+# mqtt_websocket_endpoint: /
+# mqtt_websocket_endpoint: /mosquitto
+# mqtt_root_topic: /almanac
+##############################################################################
+
+##############################################################################
+# Site settings -- IMPRESS
+# title: RAI
+# email: pwalscrum@ismb.it
+# description: Resources Adaptation Interfaces
+# baseurl: "" # the subpath of your site, e.g. /blog/
+# url: "http://yourdomain.com" # the base hostname & protocol for your site
+# rest_endpoint: http://192.168.1.103:8080/connectors.rest 
+# rest_endpoint: http://almanac-showcase.ismb.it:8000/iot360/scral 
+# mqtt_broker: 130.192.85.32
+# mqtt_broker: 192.168.1.101
+# mqtt_port: 8000
+# mqtt_websocket_endpoint: /
+# mqtt_websocket_endpoint: /mosquitto
+# mqtt_root_topic: /impress
+#############################################################################
+
+
+# Build settings
+markdown: redcarpet
+redcarpet:
+  extensions: ["hard_wrap", "no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data", "strikethrough", "superscript"]
+highlighter: pygments
+permalink: /:categories/:year/:title.html

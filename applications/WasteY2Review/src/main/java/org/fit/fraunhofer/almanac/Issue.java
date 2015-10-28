@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
  * Created by Werner-Kytölä on 26.06.2015.
  */
 //public class Issue extends Observable {
+
 public class Issue {
     protected String id;
     protected Date creationDate;
@@ -203,9 +204,10 @@ public class Issue {
     }
 
     private void publishUpdate(String message){
-        // will publish to topic "issue/<issueId>/update" to which the client has subscribed to get updates
+/*        // will publish to topic "issue/<issueId>/update" to which the client has subscribed to get updates
         String topic = IssueManager.ISSUE + id + IssueManager.UPDATE;
         WasteMqttClient.getInstancePub().publish(topic, message);
+*/
     }
 
     public void print(){

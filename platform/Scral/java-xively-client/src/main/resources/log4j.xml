@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender class="org.apache.log4j.ConsoleAppender" name="console">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5r %-5p [%F: %L] (%t:%x) %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="errorFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="log/error.log" />
+		<param name="MaxBackupIndex" value="5" />
+		<param name="MaxFileSize" value="5MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5r %-5p [%F: %L] (%t:%x) %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />
+		</filter>
+	</appender>
+
+	<appender name="file" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="log/application.log" />
+		<param name="MaxBackupIndex" value="10" />
+		<param name="MaxFileSize" value="10MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5r %-5p [%F: %L] (%t:%x) %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="INFO" />
+		</filter>
+	</appender>
+
+	<logger name="com.xively.client">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="org.apache.http">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="com.fasterxml.jackson">
+		<level value="ERROR" />
+	</logger>
+
+	<root>
+		<priority value="ERR" />
+<!-- 		<appender-ref ref="file" /> -->
+<!-- 		<appender-ref ref="errorFile" /> -->
+		<appender-ref ref="console" />
+	</root>
+
+</log4j:configuration>

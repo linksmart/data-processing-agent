@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+	  <groupId>it.ismb.pertlab</groupId>
+	  <artifactId>it.ismb.pertlab.pwal</artifactId>
+	  <relativePath>../pom.xml</relativePath>
+    <version>${pwal.version}</version>
+  </parent>
+	<groupId>it.ismb.pertlab.pwal</groupId>
+	<artifactId>scpdhelper</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>scpdhelper</name>
+	<description>A template-based SCPD device description helper</description>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include> **/templates/*.vm</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
+	<!-- Velocity for template/based generation of SCPDs -->
+
+
+	<dependencies>
+		<dependency>
+			<groupId>it.ismb.pertlab</groupId>
+			<artifactId>pwal-api</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>it.ismb.pertlab</groupId>
+			<artifactId>ogc.sensorthings.model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>it.ismb.pertlab.pwal</groupId>
+			<artifactId>pusher.mqtt</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>

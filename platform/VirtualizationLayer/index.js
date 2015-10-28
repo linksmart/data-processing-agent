@@ -46,7 +46,8 @@ var server = http.createServer(function (req, res) {
 				req.url = req.url.substring(s1.length + 1);
 				almanac.routes[s1](req, res);
 			} else if (s1 === '') {
-				almanac.serveHome(req, res);
+				req.url = '/index.html';
+				basicHttp.serveStaticFile(req, res);
 			} else {
 				basicHttp.serveStaticFile(req, res);
 			}
@@ -66,8 +67,12 @@ var server = http.createServer(function (req, res) {
 });
 
 server.on('error', function (err) {
-	almanac.log.error('VL', 'Node.js: server error: %s. Check that you can use port %d.', err, config.hosts.virtualizationLayer.port);
+	almanac.log.error('VL', 'Node.js: server error: %s. Check that you can use port %d.', err.errno || err, config.hosts.virtualizationLayer.port);
 	process.exit(1);
+});
+
+server.on('connection', function (socket) {
+	var remoteAddress = socket.remoteAddress;	//To populate ._peername https://github.com/joyent/node/blob/03e9f84933fe610b04b107cf1f83d17485e8906e/lib/net.js#L563 (e.g. for WebSocket)
 });
 
 almanac.server = server;

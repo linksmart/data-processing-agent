@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+	<specVersion>
+		<major>1</major>
+		<minor>0</minor>
+	</specVersion>
+	<device>
+		<!--UPnP Elements-->
+		<deviceType>urn:schemas-upnp-org:IoTdevice:$type:1</deviceType>
+		<presentationURL>$url</presentationURL>
+		<friendlyName>$name</friendlyName>
+		<manufacturer>$manufacturer</manufacturer>
+		<manufacturerURL>$manufacturerURL</manufacturerURL>
+		<modelDescription>$description</modelDescription>
+		<modelName>$modelName</modelName>
+		<modelNumber>$modelNumber</modelNumber>
+		<UDN>$uid</UDN>
+		
+		<!-- Resource Catalogue Fix for OGC SensorThings API -->
+		<metadata xmlns="IoT">
+			$thing
+		</metadata>
+
+		<!--CNet extension Elements-->
+		<IoTresourceid xmlns="IoT">$resourceId</IoTresourceid>
+		<gateway xmlns="IoT">$gateway</gateway>
+		<errormessage xmlns="IoT"></errormessage>
+		#foreach ($parameter in $parameters)
+		<$parameter.name xmlns="IoT">$parameter.value</$parameter.name>
+		#end
+
+		<lastMeasurement xmlns="IoT">$lastUpdate</lastMeasurement>
+
+		<!--UPnP Elements-->
+		<serviceList>
+			<service>
+				<serviceType>urn:schemas-upnp-org:$service::1</serviceType>
+				<serviceId>urn:schemas-upnp-org:$serviceId:1</serviceId>
+				<SCPDURL>_urn:schemas-upnp-org:t$serviceId:1_scpd.xml</SCPDURL>
+				<controlURL>_urn:schemas-upnp-org:$serviceId:1_control</controlURL>
+				<eventSubURL>_urn:schemas-upnp-org:$serviceId:1_event</eventSubURL>
+			</service>
+		</serviceList>
+	</device>
+</root>

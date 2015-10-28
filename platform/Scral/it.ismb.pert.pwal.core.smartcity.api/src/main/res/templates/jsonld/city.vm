@@ -1,0 +1,18 @@
+{
+	"@id" : "$prefix:$url",
+	"@type" : "wbin:City",
+	"name" : "$name",
+	"description" : "$description",
+	#if($latitude)
+	"latitude" : $latitude,
+	#end
+	#if($longitude)
+	"longitude" : $longitude,
+	#end
+	#if($geoNameId)
+	"geonames-id" : "geonames:$geoNameId",
+	#end
+	"geometry":{ 
+		"wkt":"$coordinates"
+	}
+}
