@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<<<<<<< HEAD
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="mp5-J7-XKw">
+=======
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B17c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="mp5-J7-XKw">
+>>>>>>> refs/remotes/origin/master
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -106,7 +110,11 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="68.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+<<<<<<< HEAD
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MeterImage" translatesAutoresizingMaskIntoConstraints="NO" id="qDi-mw-SyS">
+=======
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Leak" translatesAutoresizingMaskIntoConstraints="NO" id="qDi-mw-SyS">
+>>>>>>> refs/remotes/origin/master
                                             <rect key="frame" x="8" y="8" width="61" height="52"/>
                                             <animations/>
                                             <constraints>
@@ -361,6 +369,10 @@
     </scenes>
     <resources>
         <image name="Leak" width="207" height="165"/>
+<<<<<<< HEAD
+        <image name="MeterImage" width="266" height="223"/>
+=======
+>>>>>>> refs/remotes/origin/master
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="yoD-ih-PVD"/>
