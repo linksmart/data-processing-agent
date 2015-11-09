@@ -4,6 +4,7 @@ import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.constants.Const;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.logging.MqttLogger;
+import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
@@ -54,12 +55,13 @@ public class  Utils {
 
     }
     static public Logger createMqttLogger(Class lass) throws MalformedURLException, MqttException {
-        StaticBrokerService brokerService=  StaticBrokerService.getBrokerService(
-                lass.getCanonicalName(),
-                Configurator.getDefaultConfig().getString(Const.LOG_OUT_BROKER_CONF_PATH),
-                Configurator.getDefaultConfig().getString(Const.LOG_OUT_BROKER_PORT_CONF_PATH)
-        );
 
-        return MqttLogger.getLogger(lass, brokerService);
+        return MqttLogger.getLogger(
+                lass,
+                new StaticBroker(
+                        Configurator.getDefaultConfig().getString(Const.LOG_OUT_BROKER_CONF_PATH),
+                        Configurator.getDefaultConfig().getString(Const.LOG_OUT_BROKER_PORT_CONF_PATH)
+                )
+        );
     }
 }

@@ -54,7 +54,7 @@ public class BrokerService implements Observer, Broker {
     }
     protected void _connect() throws Exception {
 
-        if(!isConnected()) {
+        if(!mqttClient.isConnected()) {
 
             mqttClient.connect();
 
@@ -193,7 +193,7 @@ public class BrokerService implements Observer, Broker {
     }
     public void publish(String topic, byte[] payload, int qos, boolean retained) throws Exception {
 
-        if(!isConnected())
+        if(!mqttClient.isConnected())
             _connect();
 
          mqttClient.publish(topic,payload,qos,retained);

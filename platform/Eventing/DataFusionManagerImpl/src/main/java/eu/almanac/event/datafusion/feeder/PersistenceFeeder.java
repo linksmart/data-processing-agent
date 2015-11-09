@@ -18,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,21 +47,25 @@ public class PersistenceFeeder implements Feeder, EventFeederLogic {
 
     }
     static void loadFile(String filePath, DataFusionWrapper dfw){
-        FileInputStream inputStream = null;
+        InputStream inputStream = null;
         try {
+            boolean found =false;
             File f = new File(filePath);
             if(f.exists() && !f.isDirectory()) {
 
                 inputStream = new FileInputStream(filePath);
 
-
-
-                String everything = IOUtils.toString(inputStream);
-
-                feed(everything, dfw);
+                found =true;
             }else {
-                loggerService.warn("There is no persistency file ");
+                ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+                inputStream = classloader.getResourceAsStream(filePath);
+                if(inputStream.markSupported())
+                    found =true;
             }
+            if(!found)
+                loggerService.warn("There is no persistency file ");
+            else
+                feed(IOUtils.toString(inputStream), dfw);
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         } finally {

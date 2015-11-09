@@ -16,6 +16,7 @@ import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
+import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
@@ -33,7 +34,7 @@ import java.util.*;
  */
 public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
-    protected ArrayList<StaticBrokerService> brokerServices;
+    protected ArrayList<StaticBroker> brokerServices;
     protected final Statement query;
 
     private Configurator conf =  Configurator.getDefaultConfig();
@@ -92,8 +93,7 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
             for(String scope: scopes) {
                 if (!knownInstances.containsKey(scope.toLowerCase()))
                     throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), "The selected scope (" + query.getScope(0) + ") is unknown");
-                brokerServices.add(StaticBrokerService.getBrokerService(
-                        this.getClass().getCanonicalName(),
+                brokerServices.add(new StaticBroker(
                         knownInstances.get(scope.toLowerCase()).getKey(),
                         knownInstances.get(scope.toLowerCase()).getValue()
                 ));
@@ -334,7 +334,7 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
     private synchronized void  publish( Object ent) throws Exception {
 
 
-        for(StaticBrokerService brokerService: brokerServices)
+        for(StaticBroker brokerService: brokerServices)
 
             if (query.haveOutput())
                 for (String output : query.getOutput()) {
@@ -358,8 +358,8 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
     public void destroy(){
 
             try {
-                for(StaticBrokerService brokerService: brokerServices)
-                    brokerService.destroy(this.getClass().getCanonicalName());
+                for(StaticBroker brokerService: brokerServices)
+                    brokerService.destroy();
 
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);

@@ -32,7 +32,7 @@ public class Topic {
         this.topic = topic;
         isWild = (topic.contains("#")||topic.contains("+"));
         splitTopic = topic.split("/");
-        String ptr= topic.replace("+","[^/]+").replace("#",".+");
+        String ptr= topic.replace("/","/").replace("+","[^/]+").replace("#",".+");
         wildTopic = Pattern.compile(ptr);
 
     }
@@ -49,7 +49,7 @@ public class Topic {
             return false;
 
 
-        if(knownIgnoreTopics.contains(cmpTopic))
+        if(knownAcceptedTopics.contains(cmpTopic))
             return true;
         else if (knownIgnoreTopics.contains(cmpTopic))
             return false;

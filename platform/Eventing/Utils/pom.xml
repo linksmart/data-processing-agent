@@ -5,7 +5,7 @@
     <parent>
         <artifactId>eu.almanac.eventing</artifactId>
         <groupId>eu.almanac</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,7 +22,7 @@
         <dependency>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <groupId>org.eclipse.paho</groupId>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -46,7 +46,12 @@
         </dependency>
 
     </dependencies>
-
+    <repositories>
+        <repository>
+            <id>Eclipse Paho Repo</id>
+            <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+        </repository>
+    </repositories>
     <build>
     <plugins>
         <plugin>

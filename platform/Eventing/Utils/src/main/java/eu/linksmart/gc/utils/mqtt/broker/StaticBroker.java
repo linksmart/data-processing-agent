@@ -12,116 +12,129 @@ import java.util.UUID;
  */
 public class StaticBroker implements Broker{
 
-    protected BrokerService brokerService;
-    protected String clientID;
+    protected StaticBrokerService brokerService;
+    protected UUID clientID;
 
-    StaticBroker(String brokerName, String brokerPort) throws MalformedURLException, MqttException {
-        clientID = UUID.randomUUID().toString();
-        brokerService = StaticBrokerService.getBrokerService(clientID,brokerName,brokerPort);
+    public StaticBroker(String brokerName, String brokerPort) throws MalformedURLException, MqttException {
+        clientID = UUID.randomUUID();
+        brokerService = StaticBrokerService.getBrokerService(clientID, brokerName,brokerPort);
     }
 
     @Override
     public boolean isConnected() {
-        return false;
+        return brokerService.isConnected(clientID);
     }
 
     @Override
     public void connect() throws Exception {
 
+        brokerService.connect(clientID);
     }
 
     @Override
     public void disconnect() throws Exception {
-
+        brokerService.disconnect(clientID);
     }
 
     @Override
     public void destroy() throws Exception {
-
+        brokerService.destroy(clientID);
     }
 
     @Override
     public String getBrokerURL() {
-        return null;
+        return brokerService.getBrokerURL();
     }
 
     @Override
     public void createClient() throws MqttException {
+        brokerService.createClient();
 
     }
 
     @Override
     public boolean isWatchdog() {
-        return false;
+        return brokerService.isWatchdog();
     }
 
     @Override
     public void startWatchdog() {
 
+        brokerService.startWatchdog();
     }
 
     @Override
     public void stopWatchdog() {
+        brokerService.stopWatchdog();
 
     }
 
     @Override
     public void publish(String topic, byte[] payload, int qos, boolean retained) throws Exception {
 
+        brokerService.publish(topic,payload,qos,retained);
     }
 
     @Override
     public void publish(String topic, byte[] payload) throws Exception {
 
+        brokerService.publish(topic,payload);
     }
 
     @Override
     public void publish(String topic, String payload) throws Exception {
 
+        brokerService.publish(topic,payload);
     }
 
     @Override
     public String getBrokerName() {
-        return null;
+        return brokerService.getBrokerName();
     }
 
     @Override
     public void setBrokerName(String brokerName) throws Exception {
 
+        brokerService.setBrokerName(brokerName);
     }
 
     @Override
     public String getBrokerPort() {
-        return null;
+        return brokerService.getBrokerPort();
     }
 
     @Override
     public void setBrokerPort(String brokerPort) throws Exception {
+
+        brokerService.setBrokerPort(brokerPort);
 
     }
 
     @Override
     public void setBroker(String brokerName, String brokerPort) throws Exception {
 
+        brokerService.setBroker(brokerName,brokerPort);
     }
 
     @Override
     public boolean addListener(String topic, Observer stakeholder) {
-        return false;
+        return brokerService.addListener(topic,stakeholder);
     }
 
     @Override
     public boolean removeListener(String topic, Observer stakeholder) {
-        return false;
+        return brokerService.removeListener(topic,stakeholder);
     }
 
     @Override
     public void removeListener(Observer stakeholder) {
+         brokerService.removeListener(stakeholder);
 
     }
 
     @Override
     public void update(Observable o, Object arg) {
+        brokerService.update(o,arg);
 
     }
 }

@@ -3,6 +3,7 @@ package eu.linksmart.gc.utils.logging;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.constants.Const;
 import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
@@ -17,13 +18,13 @@ public class MqttLogger implements Logger {
 
     protected String name;
     protected String topic;
-    protected StaticBrokerService brokerService;
+    protected StaticBroker brokerService;
     protected static Map<String,Logger> loggers = new Hashtable<String, Logger>();
     protected Configurator conf = Configurator.getDefaultConfig();
-    protected MqttLogger(Class name, StaticBrokerService brokerService) {
+    protected MqttLogger(Class name, StaticBroker brokerService) {
         this(name.getCanonicalName(),brokerService);
     }
-    protected MqttLogger(String name, StaticBrokerService brokerService) {
+    protected MqttLogger(String name, StaticBroker brokerService) {
         this.name = name;
         topic = name.replace(".","/");
         this.brokerService = brokerService;
@@ -32,10 +33,10 @@ public class MqttLogger implements Logger {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        brokerService.destroy(name);
+        brokerService.destroy();
     }
 
-    static public Logger getLogger(Class name, StaticBrokerService brokerService) {
+    static public Logger getLogger(Class name, StaticBroker brokerService) {
 
 
         if (!loggers.containsKey(name.getCanonicalName())) {

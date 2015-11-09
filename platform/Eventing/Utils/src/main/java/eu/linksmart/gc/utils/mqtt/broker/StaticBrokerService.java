@@ -8,19 +8,16 @@ import java.util.*;
 /**
  * Created by José Ángel Carvajal on 07.08.2015 a researcher of Fraunhofer FIT.
  */
-public class StaticBrokerService extends BrokerService {
+public class StaticBrokerService extends BrokerService implements Broker{
     static Map<String,StaticBrokerService> brokerServices = new Hashtable<String, StaticBrokerService>();
-    static UUID ID = UUID.randomUUID();
-    protected  ArrayList<UUID> clients = new  ArrayList<UUID>();
+
+    protected static ArrayList<UUID> clients = new  ArrayList<UUID>();
 
     private StaticBrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
         super(brokerName, brokerPort, ID);
-        clients.add(ID);
+
     }
 
-    static void setUUID(UUID uuid){
-        ID = uuid;
-    }
 
     static public StaticBrokerService getBrokerService( UUID uuid, String name, String port) throws MalformedURLException, MqttException {
 
@@ -30,8 +27,11 @@ public class StaticBrokerService extends BrokerService {
 
         if(BrokerService.isBrokerURL(url))
             throw new MalformedURLException(url+" is not an broker URL");
-        if(brokerServices.containsKey(url))
+        if(brokerServices.containsKey(url)) {
+            if(!clients.contains(uuid))
+                clients.add(uuid);
             return brokerServices.get(url);
+        }
 
         brokerServices.put(url,new StaticBrokerService(name,port,uuid));
 
@@ -40,7 +40,7 @@ public class StaticBrokerService extends BrokerService {
 
     }
     static public StaticBrokerService getBrokerService( String brokerName, String port) throws MalformedURLException, MqttException {
-        return getBrokerService(ID, brokerName, port);
+        return getBrokerService(UUID.randomUUID(), brokerName, port);
 
     }
     static public StaticBrokerService getDefaultBrokerService(String clientID) throws MalformedURLException, MqttException {
@@ -63,7 +63,7 @@ public class StaticBrokerService extends BrokerService {
         throw new UnsupportedOperationException("The method is not possible for the class "+StaticBrokerService.class.getCanonicalName());
 
     }
-    public boolean connect(String clientID) throws Exception {
+    public boolean connect(UUID clientID) throws Exception {
 
         if(clients.contains(clientID)){
 
@@ -72,9 +72,9 @@ public class StaticBrokerService extends BrokerService {
         }else
             throw new Exception("This BrokerService do not contain any client with ID: "+clientID);
 
-        return isConnected();
+        return isConnected(clientID);
     }
-    public void disconnect(String clientID) throws Exception {
+    public void disconnect(UUID clientID) throws Exception {
         if(clients.contains(clientID)){
 
             if(clients.size() == 1){
@@ -82,11 +82,10 @@ public class StaticBrokerService extends BrokerService {
                 _disconnect();
             }
 
-
         }else
             throw new Exception("This BrokerService do not contain any client with ID: "+clientID);
     }
-    public void destroy(String clientID) throws Exception {
+    public void destroy(UUID clientID) throws Exception {
             if(clients.contains(clientID)){
 
                 if(clients.size() == 1){
@@ -108,6 +107,15 @@ public class StaticBrokerService extends BrokerService {
 
         brokerServices.remove(staticBrokerService.getBrokerURL());
     }
+    public boolean isConnected()  {
 
+        throw new UnsupportedOperationException("The method is not possible for the class "+StaticBrokerService.class.getCanonicalName());
+    }
+    public boolean isConnected(UUID clientID)  {
+
+        return clients.contains(clientID) && mqttClient.isConnected();
+
+
+    }
 
 }

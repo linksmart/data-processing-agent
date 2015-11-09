@@ -7,6 +7,7 @@ import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
+import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import eu.linksmart.gc.utils.mqtt.subscription.MqttMessage;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -23,7 +24,7 @@ public abstract class MqttFeederImpl implements Runnable, Feeder, EventFeederLog
     protected Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<>();
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
-    protected StaticBrokerService brokerService= null;
+    protected StaticBroker brokerService= null;
     @NotNull
     protected static Boolean toShutdown = false;
     protected long debugCount=0;
@@ -33,7 +34,7 @@ public abstract class MqttFeederImpl implements Runnable, Feeder, EventFeederLog
 
     public MqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException {
 
-        brokerService = initBrokerService(brokerName, brokerPort);
+        brokerService = new StaticBroker(brokerName,brokerPort);
         brokerService.addListener(topic,this);
         thisTread = new Thread(this);
         thisTread.start();
@@ -42,15 +43,6 @@ public abstract class MqttFeederImpl implements Runnable, Feeder, EventFeederLog
     }
 
 
-    private StaticBrokerService initBrokerService(String brokerName, String brokerPort) throws MalformedURLException, MqttException {
-        return  StaticBrokerService.getBrokerService(
-                this.getClass().getCanonicalName(),
-                brokerName,
-                brokerPort
-
-        );
-
-    }
 
 
     @Override
@@ -99,7 +91,7 @@ public abstract class MqttFeederImpl implements Runnable, Feeder, EventFeederLog
 
                     brokerService.removeListener(this);
                     try {
-                        brokerService.destroy(this.getClass().getCanonicalName());
+                        brokerService.destroy();
                     } catch (Exception e) {
                         loggerService.error(e.getMessage(),e);
                     }
