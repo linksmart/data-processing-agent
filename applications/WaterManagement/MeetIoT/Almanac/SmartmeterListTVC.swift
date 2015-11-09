@@ -124,7 +124,7 @@ class SmartmeterListTVC: UITableViewController, WebSocketDelegate, SmartMeterHol
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
         delay(10) { () -> () in
-                websocketForMeters?.connect()
+                self.websocketForMeters?.connect()
         }
         print("Websocket disconnected")
     }
