@@ -1,6 +1,7 @@
-package eu.linksmart.gc.utils.mqtt.subscription;
+package eu.linksmart.gc.utils.mqtt.types;
 
 import eu.linksmart.gc.utils.logging.LoggerService;
+import eu.linksmart.gc.utils.mqtt.subscription.ForwardingListener;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;

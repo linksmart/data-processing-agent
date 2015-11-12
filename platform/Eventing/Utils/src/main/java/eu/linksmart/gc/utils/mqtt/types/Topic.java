@@ -1,4 +1,4 @@
-package eu.linksmart.gc.utils.mqtt.subscription;
+package eu.linksmart.gc.utils.mqtt.types;
 
 
 
