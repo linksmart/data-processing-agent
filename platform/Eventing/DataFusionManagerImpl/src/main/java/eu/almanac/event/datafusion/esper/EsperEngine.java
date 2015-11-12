@@ -21,12 +21,15 @@ import java.util.*;
 
     private static EPServiceProvider epService;
     @Deprecated
-    Map<String, Map<String,String>> topicName = new HashMap<>();
+    private Map<String, Map<String,String>> topicName = new HashMap<>();
     @Deprecated
-    Map<String, Map<String,String>> nameTopic = new HashMap<>();
+    private Map<String, Map<String,String>> nameTopic = new HashMap<>();
     @Deprecated
-    Map<String, Boolean> queryReady = new HashMap<>();
-    Map<String,Statement> deployedStatements = new Hashtable<>();
+    private Map<String, Boolean> queryReady = new HashMap<>();
+
+    private Map<String, String> fullTypeNameToAlias = new HashMap<>();
+
+    private Map<String,Statement> deployedStatements = new Hashtable<>();
     private  LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
     static private EsperEngine ref= init();
@@ -46,18 +49,21 @@ import java.util.*;
         Configuration config = new Configuration();
 
         config.addImport("java.security.*");
-        config.addImport(Tools.class);
+        config.addImport("eu.almanac.event.datafusion.esper.utils.*");
         config.addImport(UUID.class);
         epService = EPServiceProviderManager.getDefaultProvider(config);
-        defineIoTTypes("observation", Observation.class);
+        //addEventType("observation", Observation.class);
         loggerService.info("Esper engine has started!");
 
     }
-    private static void defineIoTTypes(String esperTopic, Class type) {
+    @Override
+    public boolean addEventType(String nameType,  Object type) {
 
 
-        epService.getEPAdministrator().getConfiguration().addEventType(esperTopic, type);
+        fullTypeNameToAlias.put(type.getClass().getCanonicalName(),nameType);
+        epService.getEPAdministrator().getConfiguration().addEventType(nameType, type.getClass());
 
+        return true;
 
     }
     private void checkQueriesReadiness( String newEventWithTopic){
@@ -88,7 +94,8 @@ import java.util.*;
                   //  defineIoTTypes("observation", type);
 
 
-                epService.getEPRuntime().getEventSender("observation").sendEvent(event);
+
+                epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
             }
         }catch(Exception e){
 

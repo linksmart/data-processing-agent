@@ -34,6 +34,10 @@ public interface Const extends eu.linksmart.gc.utils.constants.Const, FeederCons
     public static final String DEFAULT_CONFIGURATION_FILE ="dfm.cfg";
     public static final UUID DFM_ID = UUID.randomUUID();
 
+    public static final String FeederPayloadTopic ="Feeder.Payload.Type.Topic";
+    public static final String FeederPayloadClass ="Feeder.Payload.Type.Class";
+    public static final String FeederPayloadAlias ="Feeder.Payload.Type.Alias";
+
 
 
 }

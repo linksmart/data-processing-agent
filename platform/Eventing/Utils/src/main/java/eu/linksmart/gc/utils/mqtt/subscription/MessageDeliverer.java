@@ -4,6 +4,7 @@ package eu.linksmart.gc.utils.mqtt.subscription;
 
 
 import eu.linksmart.gc.utils.logging.LoggerService;
+import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import org.slf4j.LoggerFactory;
 
 import java.util.Observable;

@@ -39,11 +39,6 @@
             <artifactId>antlr4-runtime</artifactId>
             <version>4.5</version>
         </dependency>
-        <dependency>
-            <groupId> eu.linksmart.gc </groupId>
-            <artifactId>network.backbone.protocol.mqtt.impl</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
 
 
     </dependencies>

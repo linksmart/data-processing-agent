@@ -49,6 +49,7 @@ public interface DataFusionWrapper {
 	 * */
 	@Deprecated
 	public boolean addEventType(String nameType, String[] eventSchema, Object[] eventTypes);
+	public boolean addEventType(String nameType,  Object type);
 	/**
 	 * Configure a particular type to a particular topic.<p>
 	 * More research must be done about this to discard this feature or not. 

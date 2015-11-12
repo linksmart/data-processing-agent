@@ -8,8 +8,7 @@ import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
-import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
-import eu.linksmart.gc.utils.mqtt.subscription.MqttMessage;
+import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.eclipse.paho.client.mqttv3.*;
 

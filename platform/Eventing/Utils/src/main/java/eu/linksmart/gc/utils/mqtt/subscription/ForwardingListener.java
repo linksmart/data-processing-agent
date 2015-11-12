@@ -3,6 +3,8 @@ package eu.linksmart.gc.utils.mqtt.subscription;
 
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.types.CurrentStatus;
+import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
+import eu.linksmart.gc.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 

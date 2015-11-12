@@ -20,7 +20,7 @@ public class StatementMqttFeederImpl extends EventMqttFeederImpl {
     private Gson parser = new Gson();
 
     @SuppressWarnings("UnusedDeclaration")
-    public StatementMqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException {
+    public StatementMqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException, InstantiationException {
         super(brokerName, brokerPort, topic);
     }
 
