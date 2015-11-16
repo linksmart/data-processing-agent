@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import eu.almanac.event.datafusion.esper.utils.Tools;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
@@ -17,7 +16,6 @@ import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
-import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
@@ -74,7 +72,7 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
     public ComplexEventHandlerImpl(Statement query) throws RemoteException, MalformedURLException, StatementException {
 
         this.query=query;
-        gson = new GsonBuilder().setDateFormat(Tools.getIsoTimeFormat()).create();
+        gson = new GsonBuilder().setDateFormat(conf.getString(Const.TIME_ISO_FORMAT)).create();
         parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         parser.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         brokerServices = new ArrayList<>();
@@ -108,7 +106,7 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
     @Override
     public void update(Map eventMap) {
 
-        loggerService.info( Tools.getDateNowString() + " Updating query: " + query.getName());
+        loggerService.info( Utils.getDateNowString() + " Updating query: " + query.getName());
 
         try {
 

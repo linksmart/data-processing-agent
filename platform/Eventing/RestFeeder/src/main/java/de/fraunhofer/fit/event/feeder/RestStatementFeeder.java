@@ -1,8 +1,4 @@
-package eu.almanac.event.datafusion.feeder;
-
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+package de.fraunhofer.fit.event.feeder;
 
 import com.google.gson.Gson;
 import eu.almanac.event.datafusion.intern.Utils;
@@ -16,6 +12,10 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.

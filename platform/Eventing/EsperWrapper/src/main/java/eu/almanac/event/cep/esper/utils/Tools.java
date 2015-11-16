@@ -1,4 +1,4 @@
-package eu.almanac.event.datafusion.esper.utils;
+package eu.almanac.event.cep.esper.utils;
 
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
@@ -6,13 +6,13 @@ import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
 
-import javax.xml.crypto.Data;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 public class Tools {
     static private Map<String, Object> variables= new HashMap<>();
     static public Random Random = new Random();

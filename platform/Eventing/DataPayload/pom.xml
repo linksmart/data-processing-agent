@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.fraunhofer.fit</groupId>
-    <artifactId>data-payload</artifactId>
+    <artifactId>DataPayload</artifactId>
 
     <description>Set of payloads implementation used by the feeders</description>
     <packaging>bundle</packaging>

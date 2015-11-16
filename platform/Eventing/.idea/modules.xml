@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ComplexEventMachineLearning/CEML.iml" filepath="$PROJECT_DIR$/ComplexEventMachineLearning/CEML.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataFusionManager/DataFusionManager.iml" filepath="$PROJECT_DIR$/DataFusionManager/DataFusionManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataFusionManagerImpl/DataFusionManagerImpl.iml" filepath="$PROJECT_DIR$/DataFusionManagerImpl/DataFusionManagerImpl.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataFusionRestManager/DataFusionRestManager.iml" filepath="$PROJECT_DIR$/DataFusionRestManager/DataFusionRestManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EsperWrapper/EsperWrapper.iml" filepath="$PROJECT_DIR$/EsperWrapper/EsperWrapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RestFeeder/RestFeeder.iml" filepath="$PROJECT_DIR$/RestFeeder/RestFeeder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RestFeeder/RestFeedr.iml" filepath="$PROJECT_DIR$/RestFeeder/RestFeedr.iml" group="RestFeedr and modules" />
       <module fileurl="file://$PROJECT_DIR$/Utils/Utils.iml" filepath="$PROJECT_DIR$/Utils/Utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataPayload/data-payload.iml" filepath="$PROJECT_DIR$/DataPayload/data-payload.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataFusionAPI/eu.almanac.api.event.datafusion.iml" filepath="$PROJECT_DIR$/DataFusionAPI/eu.almanac.api.event.datafusion.iml" />

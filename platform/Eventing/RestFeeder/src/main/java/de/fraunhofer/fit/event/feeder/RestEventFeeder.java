@@ -1,4 +1,4 @@
-package eu.almanac.event.datafusion.feeder;
+package de.fraunhofer.fit.event.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.event.datafusion.intern.Utils;

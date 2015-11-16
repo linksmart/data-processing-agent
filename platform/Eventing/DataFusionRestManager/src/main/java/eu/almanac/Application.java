@@ -1,17 +1,19 @@
 package eu.almanac;
 
+import de.fraunhofer.fit.event.ceml.CEMLRest;
 import eu.almanac.event.datafusion.core.DataFusionManagerCore;
+import de.fraunhofer.fit.event.feeder.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 @Configuration
-@ComponentScan("eu.almanac.event.datafusion.feeder")
+@Import(value = { CEMLRest.class, RestStatementFeeder.class,RestEventFeeder.class })
 @EnableAutoConfiguration
 @SpringBootApplication
 public class Application {

@@ -1,12 +1,10 @@
-package eu.almanac.event.datafusion.esper;
+package eu.almanac.event.cep.esper;
 
 import com.espertech.esper.client.*;
-import eu.almanac.event.datafusion.esper.utils.Tools;
-import eu.almanac.event.datafusion.handler.ComplexEventHandlerImpl;
-import eu.almanac.event.datafusion.intern.Const;
-import eu.almanac.event.datafusion.intern.Utils;
+import eu.almanac.event.cep.intern.Const;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
@@ -17,7 +15,7 @@ import java.util.*;
 /**
  * Created by Caravajal on 06.10.2014.
  */
- class EsperEngine implements DataFusionWrapper {
+ public class EsperEngine implements DataFusionWrapper {
 
     private static EPServiceProvider epService;
     @Deprecated
@@ -45,16 +43,31 @@ import java.util.*;
     public static EsperEngine getEngine(){
         return  ref;
     }
-    private EsperEngine(){
+    protected EsperEngine(){
+
+        // Add configuration file of the local package
+        Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
+        conf = Configurator.getDefaultConfig();
+
+        // add additional configuration
         Configuration config = new Configuration();
 
-        config.addImport("java.security.*");
-        config.addImport("eu.almanac.event.datafusion.esper.utils.*");
-        config.addImport(UUID.class);
+        // load additional libraries
+        loadAdditionalPackages(config);
+
+        // load configuration into Esper
         epService = EPServiceProviderManager.getDefaultProvider(config);
-        //addEventType("observation", Observation.class);
+
         loggerService.info("Esper engine has started!");
 
+    }
+    // load into the configuration file additional libraries
+    private void loadAdditionalPackages(Configuration config){
+        List<String> pkgList= conf.getList(Const.BUILDIN_PACKAGES);
+        for (String pkgName : pkgList    ) {
+
+            config.addImport(pkgName);
+        }
     }
     @Override
     public boolean addEventType(String nameType,  Object type) {
@@ -88,11 +101,6 @@ import java.util.*;
     private boolean addEsperEvent(String esperTopic, Object event, Class type){
         try {
             synchronized (this) {
-                // if the topic type is already defined, then the event is send
-                //if (!epService.getEPAdministrator().getConfiguration().isEventTypeExists("observation"))
-
-                  //  defineIoTTypes("observation", type);
-
 
 
                 epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
@@ -201,9 +209,13 @@ import java.util.*;
                 // if there is no exception set add statement as success
                 ret =true;
 
-            }catch (MalformedURLException | RemoteException | NullPointerException e ){
-                loggerService.error(e.getMessage(),e);
-                ret =false;
+            }catch (StatementException e){
+
+                throw e;
+
+            }catch (Exception e ) {
+                loggerService.error(e.getMessage(), e);
+                ret = false;
             }
 
         }
@@ -229,7 +241,7 @@ import java.util.*;
         return deployedStatements;
     }
 
-    public void addQuery(Statement query) throws StatementException, MalformedURLException, RemoteException {
+    public void addQuery(Statement query) throws Exception{
 
 
 
@@ -246,26 +258,20 @@ import java.util.*;
         addEsperStatement(query);
 
     }
-    private void addEsperStatement( Statement query) throws StatementException, MalformedURLException, RemoteException {
+    private void addEsperStatement( Statement query) throws Exception {
         ComplexEventHandler handler;
         // add the query and the listener for the query
-        try {
-            handler = new ComplexEventHandlerImpl(query);
+
+
+            handler =  (ComplexEventHandler) Class.forName(conf.getString(Const.DEFAULT_HANDLER)).newInstance();
+
             EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
 
             statement.setSubscriber(handler);
             statement.start();
 
             deployedStatements.put(query.getHash(),query);
-        } catch (Exception e) {
-            if(e instanceof StatementException)
-                throw (StatementException)e;
-           loggerService.error(e.getMessage(),e);
-            throw e;
 
-
-
-        }
     }
 
     public boolean pauseQuery(String name) {
@@ -292,7 +298,7 @@ import java.util.*;
         if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
 
-        ((ComplexEventHandlerImpl)epService.getEPAdministrator().getStatement(id).getSubscriber()).destroy();
+        ((ComplexEventHandler)epService.getEPAdministrator().getStatement(id).getSubscriber()).destroy();
 
         epService.getEPAdministrator().getStatement(id).destroy();
 

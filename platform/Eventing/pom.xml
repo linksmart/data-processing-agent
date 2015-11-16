@@ -15,10 +15,13 @@
         <module>../../miscellaneous/ogc.sensorthings.api.datamodel</module>
         <module>DataFusionCoreAPI</module>
         <module>Utils</module>
+		<module>EsperWrapper</module>
         <module>DataFusionManagerImpl</module>
         <module>DataFusionManager</module>
         <module>DataFusionRestManager</module>
 		<module>DataPayload</module>
+		<module>RestFeeder</module>
+		<module>ComplexEventMachineLearning</module>
 
 	</modules>
 	<repositories>
