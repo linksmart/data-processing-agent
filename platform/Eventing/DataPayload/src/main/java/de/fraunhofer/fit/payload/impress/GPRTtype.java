@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import eu.linksmart.api.event.datafusion.EventType;
+
 /**
  * Created by angel on 12/11/15.
  */
-public class GPRTtype implements Serializable {
+public class GPRTtype implements Serializable, EventType {
 
     @JsonPropertyDescription("The time point/period of when the observation happens. To be rendered as ISO8601 time point/period string.")
     @JsonProperty(value = "timestamp")
@@ -16,11 +18,11 @@ public class GPRTtype implements Serializable {
     @JsonProperty(value = "value")
     protected Double value;
     @JsonPropertyDescription("Id of the device which reported the measurement.")
-    @JsonProperty(value = "value")
-    protected String deviceID;
+    @JsonProperty(value = "deviceID")
+    protected int deviceID;
     @JsonPropertyDescription("Id of the variable or observedProperty of the reported value.")
     @JsonProperty(value = "variableID")
-    protected String variableID;
+    protected int variableID;
 
     public Date getTimestamp() {
         return timestamp;
@@ -38,19 +40,29 @@ public class GPRTtype implements Serializable {
         this.value = value;
     }
 
-    public String getDeviceID() {
+    public int getDeviceID() {
         return deviceID;
     }
 
-    public void setDeviceID(String deviceID) {
+    public void setDeviceID(int deviceID) {
         this.deviceID = deviceID;
     }
 
-    public String getVariableID() {
+    public int getVariableID() {
         return variableID;
     }
 
-    public void setVariableID(String variableID) {
+    public void setVariableID(int variableID) {
         this.variableID = variableID;
+    }
+
+    @Override
+    public void topicDataConstructor(String topic) {
+
+        String[] aux = topic.split("/");
+        if(aux.length>3)
+            setDeviceID(Integer.valueOf(aux[3]));
+        if(aux.length>5)
+            setVariableID(Integer.valueOf(aux[5]));
     }
 }

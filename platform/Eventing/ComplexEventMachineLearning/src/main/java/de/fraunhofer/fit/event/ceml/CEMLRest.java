@@ -1,36 +1,55 @@
 package de.fraunhofer.fit.event.ceml;
 
+import com.google.gson.reflect.TypeToken;
+import de.fraunhofer.fit.event.ceml.type.DataSetStructure;
+import de.fraunhofer.fit.event.ceml.type.DataStructure;
+import de.fraunhofer.fit.event.ceml.type.InstancesStructure;
+import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
+import com.google.gson.*;
 
 /**
  * Created by angel on 13/11/15.
  */
 @RestController
 public class CEMLRest {
-    @RequestMapping(value="/ceml/{objectType}/{objectName}", method= RequestMethod.POST)
+
+     private Configurator conf = Configurator.getDefaultConfig();
+     private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
+    @RequestMapping(value="/ceml/learningObject/{objectType}/{objectName}", method= RequestMethod.POST)
     public ResponseEntity<String> createLearningObject(
             @PathVariable("objectType") String objectType,
             @PathVariable("objectName") String objectName
     ) {
 
+
         try {
+
             if (!CEML.createLearningObject(objectName,objectType))
                 return new ResponseEntity<>("Error 409 Conflict: The given name already exist in the CEML Engine. Please select different name for the Learning Object", HttpStatus.CONFLICT);
         } catch (ClassNotFoundException e) {
             return new ResponseEntity<>("Error 404 Not Found: The give learning object type not found", HttpStatus.NOT_FOUND);
         }catch (InstantiationException |IllegalAccessException e){
             return new ResponseEntity<>("Error 500 Internal Error: Unexpected error crating the Learning Object see error below \n"+e.getMessage(), HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error 500 Internal Error: \n"+e.getMessage(), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>("Learning Object created with name "+objectName,HttpStatus.CREATED);
     }
-    @RequestMapping(value={"/ceml/{objectType}/{objectName} ","/ceml/{objectName} "}, method= RequestMethod.DELETE)
+    @RequestMapping(value={"/ceml/learningObject/{objectType}/{objectName} ","/ceml/learningObject/{objectName} "}, method= RequestMethod.DELETE)
     public ResponseEntity<String> deleteLearningObject(
             @PathVariable("objectName") String objectName
     ) {
@@ -40,7 +59,7 @@ public class CEMLRest {
 
         return new ResponseEntity<>("Learning Object deleted with name "+objectName,HttpStatus.CREATED);
     }
-    @RequestMapping(value={"/ceml/{objectType}/{objectName} ","/ceml/{objectName} "}, method= RequestMethod.GET)
+    @RequestMapping(value={"/ceml/learningObject/{objectType}/{objectName} ","/ceml/learningObject/{objectName} "}, method= RequestMethod.GET)
     public ResponseEntity<String> getLearningObject(
             @PathVariable("objectName") String objectName
     ) {
@@ -72,36 +91,56 @@ public class CEMLRest {
 
         return new ResponseEntity<>("CEML is running", HttpStatus.OK);
     }
-    @RequestMapping(value={"/ceml/{objectType}/{objectName}/{methodName} ","/ceml/{objectName}/{methodName}"}, method= RequestMethod.PUT)
+    @RequestMapping(value={"/ceml/learningObject/{objectType}/{objectName}/{methodName} ","/ceml/learningObject/{objectName}/{methodName}"}, method= RequestMethod.PUT)
     public ResponseEntity<String> putLearningObject(
             @PathVariable("objectName") String objectName,
             @PathVariable("methodName") String methodName
+            //TODO: ADD body parameters
     ) {
         Object response=null;
         try {
+            //TODO: ADD body parameters
              response = CEML.invoke(objectName,methodName, null);
             if (response==null)
                 return new ResponseEntity<>("Error 404 Not Found: The given learning object not found", HttpStatus.NOT_FOUND);
 
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            loggerService.error(e.getMessage(),e);
             return new ResponseEntity<>("Error 404 Not Found: The given learning object type not found", HttpStatus.NOT_FOUND);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            loggerService.error(e.getMessage(),e);
             return new ResponseEntity<>("Error 404 Not Found: The given method of the learning object not found", HttpStatus.NOT_FOUND);
 
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            loggerService.error(e.getMessage(),e);
             return new ResponseEntity<>("Error 500 Intern Error: Error while executing method ", HttpStatus.INTERNAL_SERVER_ERROR);
 
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method ", HttpStatus.INTERNAL_SERVER_ERROR);
+            loggerService.error(e.getMessage(),e);
+            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(
                 response.toString()
                 ,HttpStatus.OK);
+    }
+    @RequestMapping(value="/ceml/data/structuring/{objectName}", method= RequestMethod.POST)
+    public ResponseEntity<String> formatingStructuring(
+            @PathVariable("objectName") String objectName,
+            @RequestBody() String body
+    ){
+        DataStructure structure = (new Gson()).fromJson(body, DataStructure.class);
+        structure.setName(objectName);
+        try {
+           if(! CEML.createDataStructure(structure))
+               return new ResponseEntity<>("Error 500 Intern Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
+            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+        return new ResponseEntity<>("Structure of data with name "+objectName+"was created",HttpStatus.OK);
     }
 
 }

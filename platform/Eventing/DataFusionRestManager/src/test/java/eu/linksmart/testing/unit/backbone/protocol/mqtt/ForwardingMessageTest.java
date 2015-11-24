@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Thing;
+import eu.almanac.ogc.sensorthing.api.datamodel.*;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -38,7 +35,7 @@ public class ForwardingMessageTest implements Observer {
             e.printStackTrace();
         }
 
-       simulateEvents();
+       simulateEvents(100);
 
 
     }
@@ -108,7 +105,7 @@ public class ForwardingMessageTest implements Observer {
             for(int i=0; i<lines.length-1; i++)
                thingList.add( mapper.readValue(lines[i],Thing.class));
 
-            org.geojson.LngLatAlt point =((org.geojson.Point) ((it.ismb.pertlab.ogc.sensorthings.api.datamodel.Location) thingList.get(0).getLocations().toArray()[0]).getGeometry()).getCoordinates();
+            org.geojson.LngLatAlt point =((org.geojson.Point) ((eu.almanac.ogc.sensorthing.api.datamodel.Location) thingList.get(0).getLocations().toArray()[0]).getGeometry()).getCoordinates();
             System.out.println(point.getLatitude());
             System.out.println(point.getLongitude());
             System.out.println();
@@ -117,7 +114,7 @@ public class ForwardingMessageTest implements Observer {
 
         }
     }
-    public static void simulateEvents(){
+    public static void simulateEvents(int numEvents){
         try {
             // MqttClient c =new MqttClient("tcp://almanac-showcase.ismb.it:1883","test", new MemoryPersistence());
 
@@ -159,7 +156,7 @@ public class ForwardingMessageTest implements Observer {
 
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            int sleep = 100   ;
+            int sleep = numEvents   ;
             while (true){
                 if(!brokerService.isConnected())
                     try {

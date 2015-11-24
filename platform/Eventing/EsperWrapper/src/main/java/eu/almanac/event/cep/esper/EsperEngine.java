@@ -6,16 +6,14 @@ import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
-import java.net.MalformedURLException;
-import java.rmi.RemoteException;
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
  * Created by Caravajal on 06.10.2014.
  */
- public class EsperEngine implements DataFusionWrapper {
+ public class EsperEngine implements DataFusionWrapperAdvanced {
 
     private static EPServiceProvider epService;
     @Deprecated
@@ -30,6 +28,7 @@ import java.util.*;
     private Map<String,Statement> deployedStatements = new Hashtable<>();
     private  LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
+
     static private EsperEngine ref= init();
 
     static EsperEngine init(){
@@ -52,8 +51,6 @@ import java.util.*;
         // add additional configuration
         Configuration config = new Configuration();
 
-        // load additional libraries
-        loadAdditionalPackages(config);
 
         // load configuration into Esper
         epService = EPServiceProviderManager.getDefaultProvider(config);
@@ -61,19 +58,22 @@ import java.util.*;
         loggerService.info("Esper engine has started!");
 
     }
-    // load into the configuration file additional libraries
-    private void loadAdditionalPackages(Configuration config){
-        List<String> pkgList= conf.getList(Const.BUILDIN_PACKAGES);
-        for (String pkgName : pkgList    ) {
 
-            config.addImport(pkgName);
-        }
+    @Override
+    public void insertObject(String name,Object variable) throws UnsupportedOperationException{
+        epService.getEPAdministrator().getConfiguration().addVariable(name,variable.getClass(),variable);
+    }
+
+    @Override
+    public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws Exception{
+        epService.getEPAdministrator().getConfiguration().addImport(canonicalNameClassOrPkg);
+        return true;
     }
     @Override
     public boolean addEventType(String nameType,  Object type) {
 
 
-        fullTypeNameToAlias.put(type.getClass().getCanonicalName(),nameType);
+        fullTypeNameToAlias.put(type.getClass().getName(),nameType);
         epService.getEPAdministrator().getConfiguration().addEventType(nameType, type.getClass());
 
         return true;
@@ -98,7 +98,7 @@ import java.util.*;
 
 
 
-    private boolean addEsperEvent(String esperTopic, Object event, Class type){
+    private boolean addEsperEvent( Object event, Class type){
         try {
             synchronized (this) {
 
@@ -114,7 +114,7 @@ import java.util.*;
         return true;
     }
 
-    public String[] getParentTopic(String topic){
+    /*public String[] getParentTopic(String topic){
         String esperParentTopic;
         if(topic.charAt(0)== '/')
             topic = topic.substring(1);
@@ -128,15 +128,15 @@ import java.util.*;
         }
 
         return new String[]{esperParentTopic, esperTopicArray[esperTopicArray.length-2]};
-    }
+    }*/
     @Override
     public boolean addEvent(String topic, Object event,Class type) {
         try {
 
-            String[] parentTopicAndHead = getParentTopic(topic);
+           // String[] parentTopicAndHead = getParentTopic(topic);
 
-            addEsperEvent(parentTopicAndHead[0]+ ".hash",event, type );
-            insertStream(((Observation)event).getId(),parentTopicAndHead[0]);
+            addEsperEvent(event, type );
+            //insertStream(((Observation)event).getId(),parentTopicAndHead[0]);
             //createPersistent(((Observation)event).getId(),parentTopicAndHead[0]);
 
         }catch(Exception e){
@@ -180,45 +180,21 @@ import java.util.*;
     @Override
     public boolean addStatement(Statement statement) throws StatementException {
         Boolean ret = false;
-        if(statement.getStatement().toLowerCase().equals("pause")){
-            ret = pauseQuery(statement.getName());
 
-        }else if(statement.getStatement().toLowerCase().equals("start") ){
+        try {
+            addQuery(statement);
+            // if there is no exception set add statement as success
+            ret = true;
 
-            ret = startQuery(statement.getName());
+        } catch (StatementException e) {
 
-        }else if(statement.getStatement().toLowerCase().equals("remove") ){
+            throw e;
 
-            ret = removeQuery(statement.getName());
-
-        } else if (statement.getStatement().toLowerCase().contains("add instance ") ) {
-            String[] nameURL = statement.getStatement().toLowerCase().replace("add instance","").trim().split("=");
-            if(nameURL.length==2){
-                String namePort[] = nameURL[1].split(":");
-
-                ComplexEventMqttHandler.knownInstances.put(nameURL[0],new AbstractMap.SimpleImmutableEntry<>(namePort[0],namePort[1]));
-
-            }else {
-                throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + statement.getHash(), ("Statement " + statement.getName() + " try to add a instance but the format is incorrect, the correct format is 'add instance <instanceName>=<instanceURL>'"));
-
-            }
-
-        }else {
-            try {
-                addQuery(statement);
-                // if there is no exception set add statement as success
-                ret =true;
-
-            }catch (StatementException e){
-
-                throw e;
-
-            }catch (Exception e ) {
-                loggerService.error(e.getMessage(), e);
-                ret = false;
-            }
-
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
+            ret = false;
         }
+
 
         return ret;
     }
@@ -226,6 +202,19 @@ import java.util.*;
     @Override
     public boolean removeStatement(String id) throws StatementException {
         return removeQuery(id);
+    }
+
+    @Override
+    public boolean pauseStatement(String id) throws StatementException {
+       return pauseQuery(id);
+
+
+    }
+    @Override
+    public boolean startStatement(String id) throws StatementException {
+        return startQuery(id);
+
+
     }
 
     @Override
@@ -239,6 +228,11 @@ import java.util.*;
     @Override
     public Map<String,Statement>  getStatements() {
         return deployedStatements;
+    }
+
+    @Override
+    public DataFusionWrapperAdvanced getAdvancedFeatures() {
+        return this;
     }
 
     public void addQuery(Statement query) throws Exception{
@@ -259,37 +253,68 @@ import java.util.*;
 
     }
     private void addEsperStatement( Statement query) throws Exception {
-        ComplexEventHandler handler;
+        ComplexEventHandler handler=null;
         // add the query and the listener for the query
+        if (query.getCEHandler() != null || query.getCEHandler().equals("")) {
+            Class clazz = Class.forName(query.getCEHandler());
+            Constructor constructor = clazz.getConstructor(Statement.class);
+            handler = (ComplexEventHandler) constructor.newInstance(query);
+        }
 
-
-            handler =  (ComplexEventHandler) Class.forName(conf.getString(Const.DEFAULT_HANDLER)).newInstance();
-
+        if(query.getStateLifecycle()!= Statement.StatementLifecycle.RUN_ONCE) {
             EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
 
-            statement.setSubscriber(handler);
-            statement.start();
+            if (handler!=null) {
+
+                statement.setSubscriber(handler);
+            }
+            switch (query.getStateLifecycle()) {
+                case RUN:
+                    statement.start();
+                    break;
+                case PAUSE:
+                    statement.stop();
+                    break;
+
+            }
 
             deployedStatements.put(query.getHash(),query);
+        } else if (query.getStateLifecycle()== Statement.StatementLifecycle.RUN_ONCE) {
+            EPOnDemandQueryResult result = epService.getEPRuntime().executeQuery(query.getStatement());
+            if (handler !=null) {
+
+                for (EventBean event:result.getArray() ) {
+
+                    if(event.getUnderlying() instanceof Map)
+                        handler.update((Map<String,Object>) event.getUnderlying());
+                    else
+                        throw new Exception("Unsupported event in on-demand statement for the handler to generate an response ");
+                }
+            }
+        }
 
     }
 
-    public boolean pauseQuery(String name) {
+    public boolean pauseQuery(String id) {
 
-        if(epService.getEPAdministrator().getStatement(name)==null)
+        if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
 
-        epService.getEPAdministrator().getStatement(name).stop();
+        epService.getEPAdministrator().getStatement(id).stop();
+
+        // TODO: deployedStatements.get(id) mark as stopped
 
         return true;
     }
 
-    public boolean startQuery(String name) {
+    public boolean startQuery(String id) {
 
-        if(epService.getEPAdministrator().getStatement(name)==null)
+        if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
-        epService.getEPAdministrator().getStatement(name).start();
+        epService.getEPAdministrator().getStatement(id).start();
 
+
+        // TODO: deployedStatements.get(id) mark as stopped
         return true;
     }
 
@@ -306,4 +331,5 @@ import java.util.*;
 
         return true;
     }
+
 }

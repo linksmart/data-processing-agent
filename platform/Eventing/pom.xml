@@ -12,7 +12,6 @@
     </properties>
 	<modules>
         <module>DataFusionAPI</module>
-        <module>../../miscellaneous/ogc.sensorthings.api.datamodel</module>
         <module>DataFusionCoreAPI</module>
         <module>Utils</module>
 		<module>EsperWrapper</module>
@@ -46,7 +45,7 @@
       <id>opencast-public</id>
       <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>
     </repository>
-    <repository>
+   <!-- <repository>
         <id>central</id>
         <url>https://linksmart.eu/repo/content/groups/public/</url>
         <releases>
@@ -58,6 +57,7 @@
             <updatePolicy>daily</updatePolicy>
         </snapshots>
     </repository>
+    -->
 
   </repositories>
   <distributionManagement>
@@ -72,4 +72,27 @@
 			<url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>			
 		</repository>
 	</distributionManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.4.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -38,6 +38,28 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>eu.almanac</groupId>
+            <artifactId>Utils</artifactId>
+            <version>${almanac.version}</version>
+
+        </dependency>
+        <dependency>
+            <groupId>eu.almanac</groupId>
+            <artifactId>eu.almanac.api.event.datafusion</artifactId>
+            <version>${almanac.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.fraunhofer.fit</groupId>
+            <artifactId>DataPayload</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.4</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

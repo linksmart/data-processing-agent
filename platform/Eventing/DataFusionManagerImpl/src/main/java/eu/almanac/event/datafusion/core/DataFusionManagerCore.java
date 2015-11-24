@@ -7,12 +7,14 @@ import eu.almanac.event.datafusion.feeder.PersistenceFeeder;
 import eu.almanac.event.datafusion.feeder.StatementMqttFeederImpl;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.DataFusionWrapperAdvanced;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by J. Angel Caravajal on 06.10.2014.
@@ -96,6 +98,21 @@ public class DataFusionManagerCore {
             } catch (ClassNotFoundException e) {
                 loggerService.error(e.getMessage(),e);
             }
+        //initializing engines
+        for (DataFusionWrapper dfw: DataFusionWrapper.instancedEngines.values()  ) {
+            List<String> pkgList= conf.getList(Const.AdditionalImportPackage);
+            for (String pkgName : pkgList    ) {
+
+                try {
+                    DataFusionWrapperAdvanced dfwExtensions =dfw.getAdvancedFeatures();
+                    if(dfwExtensions != null)
+                        dfwExtensions.loadAdditionalPackages(pkgName);
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(),e);
+                }
+            }
+
+        }
 
         // TODO: change the loading of feeder the same way as the CEP engines are loaded
         // loading of feeders

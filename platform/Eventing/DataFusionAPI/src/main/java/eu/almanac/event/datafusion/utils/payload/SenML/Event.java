@@ -5,7 +5,6 @@ import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 
 import java.io.IOException;
 import java.text.DateFormat;

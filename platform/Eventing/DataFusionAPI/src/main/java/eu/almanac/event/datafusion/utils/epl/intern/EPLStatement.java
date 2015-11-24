@@ -27,5 +27,12 @@ public class EPLStatement extends eu.almanac.event.datafusion.utils.epl.EPLState
     public void setName(String name) {
         this.name = name;
     }
+    public void setCEHandler(String CEHandler) {
+         this.CEHandler =CEHandler;
+    }
+
+    public void setStateLifecycle(StatementLifecycle stateLifecycle) {
+         this.stateLifecycle=stateLifecycle;
+    }
 
 }

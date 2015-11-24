@@ -50,6 +50,7 @@ public interface DataFusionWrapper {
 	@Deprecated
 	public boolean addEventType(String nameType, String[] eventSchema, Object[] eventTypes);
 	public boolean addEventType(String nameType,  Object type);
+
 	/**
 	 * Configure a particular type to a particular topic.<p>
 	 * More research must be done about this to discard this feature or not. 
@@ -73,6 +74,10 @@ public interface DataFusionWrapper {
 	public boolean addStatement( Statement query) throws StatementException;
 
     public boolean removeStatement( String id) throws StatementException;
+
+	public boolean pauseStatement( String id) throws StatementException;
+
+	public boolean startStatement( String id) throws StatementException;
     /***
      *
      * Terminate the Wrapper, releasing any resource us by it.
@@ -80,7 +85,16 @@ public interface DataFusionWrapper {
      * */
     public void destroy();
 
+
+
     public Map<String,Statement> getStatements();
+
+	/**
+	 * Return the advanced features of the DataFusionManager if the implementation support it.
+	 * If the implementation do no support it, then the will return null
+	 * @return an instance of DataFusionWrapperAdvanced or null in case the Wrapper do not support those features
+     */
+	public DataFusionWrapperAdvanced getAdvancedFeatures();
 
 
 }

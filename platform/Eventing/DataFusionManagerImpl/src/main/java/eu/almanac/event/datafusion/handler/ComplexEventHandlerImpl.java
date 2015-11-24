@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
+import eu.almanac.event.datafusion.utils.handler.FixForJava7Handler;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
@@ -16,9 +17,7 @@ import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
+import eu.almanac.ogc.sensorthing.api.datamodel.*;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +29,7 @@ import java.util.*;
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
-public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
+public class ComplexEventHandlerImpl extends FixForJava7Handler implements ComplexEventMqttHandler {
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected ArrayList<StaticBroker> brokerServices;
     protected final Statement query;
@@ -363,6 +362,7 @@ public class ComplexEventHandlerImpl implements ComplexEventMqttHandler {
                 loggerService.error(e.getMessage(),e);
             }
     }
+
 
 
 }

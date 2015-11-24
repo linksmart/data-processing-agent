@@ -12,7 +12,7 @@ import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
+import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;

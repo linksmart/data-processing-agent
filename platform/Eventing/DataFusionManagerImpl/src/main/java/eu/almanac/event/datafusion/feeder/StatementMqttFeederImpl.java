@@ -4,12 +4,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.handler.FixForJava7Handler;
+import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Statement;
+import eu.linksmart.api.event.datafusion.Statement.StatementLifecycle;
 import eu.linksmart.api.event.datafusion.StatementException;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;
+import java.util.AbstractMap;
 
 /**
  * Created by José Ángel Carvajal on 22.05.2015 a researcher of Fraunhofer FIT.
@@ -25,7 +29,6 @@ public class StatementMqttFeederImpl extends EventMqttFeederImpl {
     }
 
 
-    @SuppressWarnings("SynchronizeOnNonFinalField")
     @Override
     protected void mangeEvent(String topic,byte[] rawEvent) {
         try {
@@ -34,23 +37,20 @@ public class StatementMqttFeederImpl extends EventMqttFeederImpl {
 
 
             if (statement != null) {
-                if (statement.getStatement().toLowerCase().equals("shutdown")) {
-                    synchronized (toShutdown) {
-                        toShutdown = true;
-                    }
-                } else {
 
-                    boolean success = true;
+
+                boolean success = true;
+                if (!processInternStatement(statement))
                     for (DataFusionWrapper i : dataFusionWrappers.values()) {
                         try {
+
                             i.addStatement(statement);
 
-                        }catch (StatementException e){
-                            brokerService.publish(e.getErrorTopic(),e.getMessage());
-                            loggerService.error(e.getMessage(),e);
-                        }
-                        catch (Exception e) {
-                            loggerService.error(e.getMessage(),e);
+                        } catch (StatementException e) {
+                            brokerService.publish(e.getErrorTopic(), e.getMessage());
+                            loggerService.error(e.getMessage(), e);
+                        } catch (Exception e) {
+                            loggerService.error(e.getMessage(), e);
 
                             success = false;
                         }
@@ -59,7 +59,6 @@ public class StatementMqttFeederImpl extends EventMqttFeederImpl {
 
                     }
 
-                }
 
             }
         }catch(JsonParseException e){
@@ -76,5 +75,41 @@ public class StatementMqttFeederImpl extends EventMqttFeederImpl {
             loggerService.error(e.getMessage(),e);
 
         }
+    }
+
+    // NOTE: consider move this code to an Feeder abstract class if not TODO: document the function
+    @SuppressWarnings("SynchronizeOnNonFinalField")
+    protected boolean processInternStatement(Statement statement) throws StatementException {
+        if (statement.getStatement().toLowerCase().equals("shutdown")) {
+            synchronized (toShutdown) {
+                toShutdown = true;
+            }
+            return true;
+        }
+        for (DataFusionWrapper i : dataFusionWrappers.values()) {
+            if (statement.getStatement() == null || statement.getStatement().toLowerCase().equals("")) {
+                switch (statement.getStateLifecycle()) {
+                    case RUN:
+                        i.startStatement(statement.getHash());
+                        break;
+                    case PAUSE:
+                        i.pauseStatement(statement.getHash());
+                        break;
+                    case REMOVE:
+                        i.removeStatement(statement.getHash());
+                        break;
+
+                }
+
+            } else if (statement.getStatement().toLowerCase().contains("add instance ")) {
+                FixForJava7Handler.addKnownLocations(statement.getStatement());
+
+            } else if (statement.getStatement().toLowerCase().contains("remove instance ")) {
+                FixForJava7Handler.removeKnownLocations(statement.getStatement());
+
+            } else
+                return false;
+        }
+        return true;
     }
 }

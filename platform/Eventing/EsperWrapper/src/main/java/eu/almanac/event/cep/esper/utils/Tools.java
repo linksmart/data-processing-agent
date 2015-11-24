@@ -2,9 +2,9 @@ package eu.almanac.event.cep.esper.utils;
 
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Datastream;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
+//import eu.almanac.ogc.sensorthing.api.datamodel.*;
+//import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
+//import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -181,7 +181,8 @@ public class Tools {
         return true;
     }
 */
-    static public boolean growing(Object[] objects){
+
+  /*  static public boolean growing(Object[] objects){
         if (objects.length<2)
             return true;
         Observation[] observations = (Observation[])objects;
@@ -235,7 +236,7 @@ public class Tools {
 
         return (Boolean)variables.get(current.getId());
 
-    }
+    }*/
 
     static public String getIsoTimeFormat(){
         return "yyyy-MM-dd'T'HH:mm:ss.S'Z'";
@@ -278,7 +279,7 @@ public class Tools {
         }
         return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
     }
-    static public Observation generateObservation(String id, Date date, Object observation, String resultType){
+ /*   static public Observation generateObservation(String id, Date date, Object observation, String resultType){
 
         Sensor sen = new Sensor();
         sen.setId(id);
@@ -305,5 +306,5 @@ public class Tools {
     static public Observation generateObservation(  Object observation){
 
         return  generateObservation(new Date(),observation);
-    }
+    }*/
 }

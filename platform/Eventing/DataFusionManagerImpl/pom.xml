@@ -33,11 +33,6 @@
             <version>${almanac.version}</version>
         </dependency>
         <dependency>
-            <groupId>it.ismb.pertlab</groupId>
-            <artifactId>ogc.sensorthings.model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.13</version>
@@ -78,6 +73,11 @@
             <version>${almanac.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>de.fraunhofer.fit</groupId>
+            <artifactId>DataPayload</artifactId>
+            <version>${almanac.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

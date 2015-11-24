@@ -3,16 +3,14 @@ package de.fraunhofer.fit.event.feeder;
 import com.google.gson.Gson;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
-import eu.linksmart.api.event.datafusion.Feeder;
-import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.api.event.datafusion.StatementException;
+import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -187,21 +185,63 @@ public class RestStatementFeeder implements Feeder {
         Statement statement = gson.fromJson(statementString,EPLStatement.class);
         int count =0;
         String engines="",error="";
-        for(DataFusionWrapper dfw:dataFusionWrappers.values())
-            try {
-                if(!dfw.addStatement(statement)) {
-                    error += "Ups we have a problem." + "\n";
-                }
-                count++;
-            }catch (StatementException se){
-                return new ResponseEntity<>(se.getMessage(),HttpStatus.BAD_REQUEST);
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(),e);
-                error+=e.getMessage()+"\n";
-            }
+        try {
+            if(!processInternStatement(statement))
+                for(DataFusionWrapper dfw:dataFusionWrappers.values())
+                    try {
+                        if(!dfw.addStatement(statement)) {
+                            error += "Ups we have a problem." + "\n";
+                        }
+                        count++;
+                    }catch (StatementException se){
+                        return new ResponseEntity<>(se.getMessage(),HttpStatus.BAD_REQUEST);
+                    } catch (Exception e) {
+                        loggerService.error(e.getMessage(),e);
+                        error+=e.getMessage()+"\n";
+                    }
+        } catch (StatementException e) {
+            loggerService.error(e.getMessage(),e);
+            error+=e.getMessage()+"\n";
+        }
         return getStandardResponse(engines,error, statement.getHash(),count,dataFusionWrappers.size());
     }
+    protected boolean processInternStatement(Statement statement) throws StatementException {
+        if (statement.getStatement().toLowerCase().equals("shutdown")) {
 
+            return true;
+        }
+        for (DataFusionWrapper i : dataFusionWrappers.values()) {
+            if (statement.getStatement() == null || statement.getStatement().toLowerCase().equals("")) {
+                switch (statement.getStateLifecycle()) {
+                    case RUN:
+                        i.startStatement(statement.getHash());
+                        break;
+                    case PAUSE:
+                        i.pauseStatement(statement.getHash());
+                        break;
+                    case REMOVE:
+                        i.removeStatement(statement.getHash());
+                        break;
+
+                }
+
+            } else if (statement.getStatement().toLowerCase().contains("add instance ")) {
+                String[] nameURL = statement.getStatement().toLowerCase().replace("add instance", "").trim().split("=");
+                if (nameURL.length == 2) {
+                    String namePort[] = nameURL[1].split(":");
+
+                    ComplexEventMqttHandler.knownInstances.put(nameURL[0], new AbstractMap.SimpleImmutableEntry<>(namePort[0], namePort[1]));
+
+                } else {
+                    throw new StatementException(conf.getString(eu.almanac.event.cep.intern.Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + statement.getHash(), ("Statement " + statement.getName() + " try to add a instance but the format is incorrect, the correct format is 'add instance <instanceName>=<instanceURL>'"));
+
+                }
+
+            } else
+                return false;
+        }
+        return true;
+    }
     @RequestMapping(value="/statement/{id}", method= RequestMethod.DELETE)
     public ResponseEntity<String> removeStatement(
             @PathVariable("id") String id

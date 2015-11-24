@@ -1,5 +1,6 @@
 package eu.linksmart.api.event.datafusion;
 
+
 /**
  * This is the part of the API offered by Data Fusion. The Statement is the Interface that any statement object must fulfill. This interface is a generalization of any statement of a CEP engine.<p>
  *
@@ -92,5 +93,43 @@ public interface Statement {
      * @return  The ID as string.
      * */
     public String getHash();
+    /***
+     * Return the handler selected to process the result of the complex event, @Default ComplexEventHandlerImpl.
+     * Note: The value "" or null is a valid response, this value represent silent events, events that just happen inside the CEP engine.
+     *
+     * @return  the handler cannonic name of ComplexEventHandler of the statement, @Default ComplexEventHandlerImpl..
+     * */
+    public String getCEHandler();
+    /***
+     * Return the state of the Statement, which determines how the statement will be at runtime.
+     *
+     * @return  Lifecycle Statement State @see StatementLifecycle .
+     * */
+    public StatementLifecycle getStateLifecycle();
+    /***
+     * Represent the possible States of a Statement can be in runtime.
+     * The states for a new Statements represent the state how they will be deployed in the engine.
+     * For an exiting Statement, the statements represent a change of state
+     *
+     * */
+    public enum StatementLifecycle {
+        /**
+         * RUN Execute the statement adding a Handler, which adds a actuate or reacts to the triggered statement.
+         */
+        RUN,
+        /**
+         * RUN_SILENT Execute the statement without a Handler.This means the events will just be generated in the engine.
+         */
+        RUN_ONCE,
+        /**
+         * RUN_ONCE_SILENT Similar to RUN_SILENT except the statement is run once and then destroy. In other words, the statement is not a continuous.
+         */
+        PAUSE,
+        /**
+         * REMOVE do just make sens in an existing Statement.
+         * This will remove the Statement form the CEP engine realising all other resources related to it
+         */
+        REMOVE
+    }
 
 }

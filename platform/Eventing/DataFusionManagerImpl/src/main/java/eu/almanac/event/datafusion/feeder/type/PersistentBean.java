@@ -3,7 +3,7 @@ package eu.almanac.event.datafusion.feeder.type;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.linksmart.api.event.datafusion.Statement;
-import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
+import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import org.antlr.v4.runtime.misc.Nullable;
 
 import java.util.ArrayList;

@@ -25,6 +25,11 @@ public class EPLStatement implements Statement {
     @JsonProperty("output")
     protected String[] output=null;
 
+    @JsonProperty("CEHandler")
+    protected String CEHandler= "eu.almanac.event.datafusion.handler.ComplexEventHandlerImpl";
+
+    @JsonProperty("stateLifecycle")
+    protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;
 
     @JsonProperty("scope")
     protected String[] scope={"local"};
@@ -45,6 +50,14 @@ public class EPLStatement implements Statement {
 
     public String getHash() {
         return hashIt(name + statement);
+    }
+
+    public String getCEHandler() {
+        return CEHandler;
+    }
+
+    public StatementLifecycle getStateLifecycle() {
+        return stateLifecycle;
     }
 
 

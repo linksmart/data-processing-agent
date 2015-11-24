@@ -39,5 +39,6 @@ public interface Const extends eu.linksmart.gc.utils.constants.Const, FeederCons
     public static final String FeederPayloadAlias ="Feeder.Payload.Type.Alias";
 
 
+    public static final String AdditionalImportPackage ="DataFusionWrapper.AdditionalImportPackage";
 
 }

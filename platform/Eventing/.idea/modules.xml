@@ -14,7 +14,6 @@
       <module fileurl="file://$PROJECT_DIR$/DataFusionAPI/eu.almanac.api.event.datafusion.iml" filepath="$PROJECT_DIR$/DataFusionAPI/eu.almanac.api.event.datafusion.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataFusionCoreAPI/eu.almanac.api.event.datafusion.core.iml" filepath="$PROJECT_DIR$/DataFusionCoreAPI/eu.almanac.api.event.datafusion.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/eu.almanac.eventing.iml" filepath="$PROJECT_DIR$/eu.almanac.eventing.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../miscellaneous/ogc.sensorthings.api.datamodel/ogc.sensorthings.model.iml" filepath="$PROJECT_DIR$/../../miscellaneous/ogc.sensorthings.api.datamodel/ogc.sensorthings.model.iml" />
     </modules>
   </component>
 </project>
