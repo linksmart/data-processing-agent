@@ -47,6 +47,7 @@
 		"sub": true
 	},
 	"scripts": {
+		"start": "node ./index.js",
 		"lint": "nodejs ./node_modules/.bin/jshint *.js",
 		"pretest": "npm run-script lint"
 	}
