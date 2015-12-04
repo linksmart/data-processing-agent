@@ -1,21 +1,16 @@
 package de.fraunhofer.fit.event.ceml;
 
-import com.google.gson.reflect.TypeToken;
-import de.fraunhofer.fit.event.ceml.type.DataSetStructure;
-import de.fraunhofer.fit.event.ceml.type.DataStructure;
-import de.fraunhofer.fit.event.ceml.type.InstancesStructure;
+import de.fraunhofer.fit.event.ceml.type.requests.builded.DataStructure;
+import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 import com.google.gson.*;
@@ -28,6 +23,7 @@ public class CEMLRest {
 
      private Configurator conf = Configurator.getDefaultConfig();
      private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
+    private Map<String, LearningRequest> requests = new Hashtable<>();
     @RequestMapping(value="/ceml/learningObject/{objectType}/{objectName}", method= RequestMethod.POST)
     public ResponseEntity<String> createLearningObject(
             @PathVariable("objectType") String objectType,
@@ -142,5 +138,40 @@ public class CEMLRest {
 
         return new ResponseEntity<>("Structure of data with name "+objectName+"was created",HttpStatus.OK);
     }
+    @RequestMapping(value="/ceml/{name}", method= RequestMethod.POST)
+    public ResponseEntity<String> learningRequest(
+            @PathVariable("name") String name,
+            @RequestBody() String body
+    ){
+        String retur ="";
+        try {
 
+            LearningRequest request = (new Gson()).fromJson(body, LearningRequest.class);
+            request.setName(name);
+            retur=CEMLFeeder.feedLearningRequest(request);
+
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+        return new ResponseEntity<>("Learning request+"+name+" was created and processed",HttpStatus.OK);
+    }
+    @RequestMapping(value="/ceml/{name}", method= RequestMethod.GET)
+    public ResponseEntity<String> learningRequest(
+            @PathVariable("name") String name
+    ){
+        String retur ="";
+        try {
+            if(requests.containsKey(name))
+                retur = (new Gson()).toJson(requests.get(name));
+            else
+                return new ResponseEntity<>("Error 404 Not Found: Request with name "+name, HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+        return new ResponseEntity<>(retur,HttpStatus.OK);
+    }
 }

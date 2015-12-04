@@ -1,0 +1,78 @@
+package de.fraunhofer.fit.event.ceml;
+
+import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
+import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningStatement;
+import eu.linksmart.api.event.datafusion.ComplexEventHandler;
+import eu.linksmart.api.event.datafusion.Statement;
+import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.gc.utils.logging.LoggerService;
+import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
+import weka.core.Instance;
+import weka.core.Instances;
+
+import java.util.Map;
+
+/**
+ * Created by angel on 26/11/15.
+ */
+public class LearningHandler implements ComplexEventHandler {
+
+    static private Configurator conf = Configurator.getDefaultConfig();
+    static private LoggerService loggerService = Utils.initDefaultLoggerService(LearningHandler.class);
+
+    private Statement statement;
+    private LearningRequest originalRequest;
+
+
+    public LearningHandler(Statement statement) {
+        this.statement = statement;
+        this.originalRequest =((LearningStatement)statement).getLearningRequest();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void update(Map eventMap) {
+
+        Instance instance = CEML.populateInstance(eventMap,originalRequest);
+
+        Object target =null;
+        if(eventMap.containsKey("target"))
+            target=eventMap.get("target");
+        else if (eventMap.containsKey(originalRequest.getData().getLearningTarget()))
+            target =eventMap.get(originalRequest.getData().getLearningTarget());
+        else {
+            loggerService.error("No target found in the learning rule");
+            return;
+        }
+        int prediction = CEML.predict(originalRequest.getModel().getLerner(),instance);
+        int itShould =  originalRequest.getData().getLearningTarget().indexOfValue(target.toString());
+/*
+        Instances instances =originalRequest.getData().getInstances();
+
+       // Weka dose the evaluation in a linear way, this means that the evaluation cost by weka is linear!
+     try {
+            instances.add(instance);
+            evaluation evaluation = new evaluation(instances);
+            evaluation.evaluateModel((Classifier) originalRequest.getModel().getLerner(),instances);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        if(originalRequest.getEvaluation().evaluate(prediction, itShould))
+             originalRequest.deploy();
+        else
+            originalRequest.undeploy();
+
+        CEML.learn(originalRequest.getModel().getLerner(),instance);
+
+
+    }
+
+
+
+    @Override
+    public void destroy() {
+
+    }
+}

@@ -66,7 +66,7 @@ import java.util.*;
 
     @Override
     public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws Exception{
-        epService.getEPAdministrator().getConfiguration().addImport(canonicalNameClassOrPkg);
+        epService.getEPAdministrator().getConfiguration().addImport(Class.forName(canonicalNameClassOrPkg));
         return true;
     }
     @Override

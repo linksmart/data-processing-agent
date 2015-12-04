@@ -14,7 +14,7 @@ public class EPLStatement implements Statement {
 
 
     @JsonProperty("name")
-    protected String name;
+    protected String name = UUID.randomUUID().toString();
     @JsonProperty("statement")
     protected String statement;
 
@@ -34,6 +34,15 @@ public class EPLStatement implements Statement {
     @JsonProperty("scope")
     protected String[] scope={"local"};
     protected String uuid =UUID.randomUUID().toString();
+
+    public EPLStatement() {
+    }
+
+    public EPLStatement(String name, String statement, String[] scope) {
+        this.name = name;
+        this.statement = statement;
+        this.scope = scope;
+    }
 
     public static String hashIt( String string){
         if(string == null)

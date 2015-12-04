@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.event.ceml.type;
+package de.fraunhofer.fit.event.ceml.type.requests;
 
 import weka.core.Attribute;
 import weka.core.Instances;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by angel on 19/11/15.
  */
-public class DataStructure {
+public class DataStructureRequest {
 
 
 
@@ -20,6 +20,7 @@ public class DataStructure {
     private String[] usedBy = null;
     private Instances instances = null;
     protected Map<String, Attribute> attributes = new Hashtable<>();
+    private String attributeTargetName = null;
     private Map<String, String> attributesById=null;
 
     private String name;
@@ -57,6 +58,9 @@ public class DataStructure {
         this.name = name;
     }
 
+    public Attribute getLearningTarget(){
+        return attributes.get(attributeTargetName);
+    }
 
 
     public Instances getInstances() {
@@ -74,6 +78,9 @@ public class DataStructure {
 
             structures.fixParentReference(this);
 
+            if(structures.cardinality==0){
+                structures.cardinality =1;
+            }
 
             for (int i = 0; i<structures.cardinality; i++) {
                 String postFix = (structures.cardinality ==1)?"":String.valueOf(i);
@@ -88,17 +95,23 @@ public class DataStructure {
 
         }
         attributesStructures = temp;
+        ArrayList<Attribute> orderAttributes= new ArrayList<>();
 
         for (AttributeStructure structures:attributesStructures ) {
 
             structures.buildAttributes();
+            orderAttributes.add(structures.getAttribute());
 
         }
-        instances =new Instances("test", new ArrayList<Attribute>(attributes.values()),attributes.size()*10);
+        attributeTargetName = orderAttributes.get(orderAttributes.size()-1).name();
+        instances =new Instances(name, orderAttributes,attributes.size()*10);
 
         instances.setClassIndex(instances.numAttributes()-1);
 
         return instances;
+    }
+    public Object getPositiveClassValue(){
+        return getLearningTarget().enumerateValues().nextElement();
     }
 
     public class AttributeStructure {
@@ -172,11 +185,11 @@ public class DataStructure {
             attributesById.put(id,attributeName);
 
         }
-        private void fixParentReference(DataStructure dataStructure){
+        private void fixParentReference(DataStructureRequest dataStructureRequest){
             try {
                 Field field  = AttributeStructure.class.getDeclaredField("this$0");
                 field.setAccessible(true);
-                field.set(this, dataStructure);
+                field.set(this, dataStructureRequest);
             } catch (Exception e) {
                 e.printStackTrace();
             }
