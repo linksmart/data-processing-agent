@@ -1,5 +1,6 @@
 package eu.almanac.event.datafusion.utils.handler;
 
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
 import eu.linksmart.api.event.datafusion.StatementException;
 
@@ -8,7 +9,7 @@ import java.util.AbstractMap;
 /**
  * Created by angel on 17/11/15.
  */
-public abstract class FixForJava7Handler implements ComplexEventMqttHandler {
+public abstract class FixForJava7Handler extends Component implements ComplexEventMqttHandler {
     public static boolean addKnownLocations(String statement) throws StatementException {
         String[] nameURL = statement.toLowerCase().replace("add instance", "").trim().split("=");
         if (nameURL.length == 2) {

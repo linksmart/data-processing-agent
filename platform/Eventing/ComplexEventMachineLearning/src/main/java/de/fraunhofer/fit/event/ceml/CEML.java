@@ -9,10 +9,7 @@ import de.fraunhofer.fit.event.ceml.type.Entry;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.DataStructure;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
 import de.fraunhofer.fit.payload.impress.GPRTtype;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
-import eu.linksmart.api.event.datafusion.DataFusionWrapperAdvanced;
-import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.api.event.datafusion.StatementException;
+import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.function.Utils;
@@ -23,7 +20,7 @@ import weka.core.*;
 /**
  * Created by angel on 13/11/15.
  */
-public class CEML {
+public class CEML implements AnalyzerComponent {
     static {
         for (DataFusionWrapper dfw: DataFusionWrapper.instancedEngines.values()      ) {
             DataFusionWrapperAdvanced extended = dfw.getAdvancedFeatures();
@@ -32,6 +29,10 @@ public class CEML {
             }
 
         }
+        if( !AnalyzerComponent.loadedComponents.containsKey("CEML"))
+            AnalyzerComponent.loadedComponents.put("CEML", new ArrayList<String>());
+
+        AnalyzerComponent.loadedComponents.get("CEML").add("Core");
     }
     static private Configurator conf = Configurator.getDefaultConfig();
     static private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
@@ -436,4 +437,13 @@ public class CEML {
         return new Entry(name,object);
     }
 
+    @Override
+    public String getImplementationName() {
+        return CEML.class.getSimpleName();
+    }
+
+    @Override
+    public String getImplementationOf() {
+        return "ComplexEventHandlerModule";
+    }
 }

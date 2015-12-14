@@ -5,6 +5,8 @@ package eu.linksmart.gc.utils.mqtt.broker;
  */
 public interface BrokerServiceConst {
     public static final String CONNECTION_MQTT_WATCHDOG_TIMEOUT = "CONNECTION_MQTT_WATCHDOG_TIMEOUT";
+    public static final String CONNECTION_MQTT_WATCHDOG_CONF_PATH = "CONNECTION_MQTT_WATCHDOG";
+
     public static final String RECONNECTION_TRY = "RECONNECTION_TRY";
     public static final String RECONNECTION_MQTT_RETRY_TIME = "RECONNECTION_MQTT_RETRY_TIME";
 

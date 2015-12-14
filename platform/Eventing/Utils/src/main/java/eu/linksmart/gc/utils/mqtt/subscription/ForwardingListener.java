@@ -117,7 +117,7 @@ public  class ForwardingListener implements MqttCallback {
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-        LOG.info("delivery complete  in listener");
+        LOG.debug("delivery complete  in listener");
 
     }
 

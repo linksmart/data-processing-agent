@@ -364,5 +364,8 @@ public class ComplexEventHandlerImpl extends FixForJava7Handler implements Compl
     }
 
 
-
+    @Override
+    public String getImplementationOf() {
+        return ComplexEventMqttHandler.class.getSimpleName();
+    }
 }

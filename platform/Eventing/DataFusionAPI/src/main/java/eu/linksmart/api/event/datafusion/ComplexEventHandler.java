@@ -21,7 +21,7 @@ import java.util.Map;
  * 
  * */
 
-public interface ComplexEventHandler {
+public interface ComplexEventHandler extends AnalyzerComponent{
 
 
 

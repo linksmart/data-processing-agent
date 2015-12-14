@@ -35,6 +35,8 @@ public class StaticBrokerService extends BrokerService implements Broker{
 
         brokerServices.put(url,new StaticBrokerService(name,port,uuid));
 
+        if(!clients.contains(uuid))
+            clients.add(uuid);
 
         return brokerServices.get(url);
 

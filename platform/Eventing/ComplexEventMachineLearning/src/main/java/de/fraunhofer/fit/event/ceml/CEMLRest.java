@@ -2,6 +2,8 @@ package de.fraunhofer.fit.event.ceml;
 
 import de.fraunhofer.fit.event.ceml.type.requests.builded.DataStructure;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
+import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.linksmart.api.event.datafusion.AnalyzerComponent;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 import com.google.gson.*;
@@ -19,10 +22,11 @@ import com.google.gson.*;
  * Created by angel on 13/11/15.
  */
 @RestController
-public class CEMLRest {
+public class CEMLRest extends Component{
 
      private Configurator conf = Configurator.getDefaultConfig();
      private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
+
     private Map<String, LearningRequest> requests = new Hashtable<>();
     @RequestMapping(value="/ceml/learningObject/{objectType}/{objectName}", method= RequestMethod.POST)
     public ResponseEntity<String> createLearningObject(
@@ -173,5 +177,10 @@ public class CEMLRest {
 
         }
         return new ResponseEntity<>(retur,HttpStatus.OK);
+    }
+
+    @Override
+    public String getImplementationOf() {
+        return CEML.class.getSimpleName();
     }
 }

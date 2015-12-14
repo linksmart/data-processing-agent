@@ -17,7 +17,7 @@ import java.util.Map;
  * */
 
 
-public interface DataFusionWrapper {
+public interface DataFusionWrapper extends AnalyzerComponent {
 
     static final public Map<String,DataFusionWrapper> instancedEngines= new Hashtable<String, DataFusionWrapper>();
 	/**

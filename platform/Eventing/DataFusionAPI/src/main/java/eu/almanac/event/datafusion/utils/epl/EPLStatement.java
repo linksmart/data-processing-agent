@@ -32,7 +32,7 @@ public class EPLStatement implements Statement {
     protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;
 
     @JsonProperty("scope")
-    protected String[] scope={"local"};
+    protected String[] scope={"default"};
     protected String uuid =UUID.randomUUID().toString();
 
     public EPLStatement() {

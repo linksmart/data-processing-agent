@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import eu.almanac.event.datafusion.feeder.type.PersistentBean;
 import eu.almanac.event.datafusion.intern.Utils;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.Statement;
@@ -26,7 +27,7 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
-public class PersistenceFeeder implements Feeder, EventFeederLogic {
+public class PersistenceFeeder extends Component implements Feeder, EventFeederLogic {
     static protected LoggerService loggerService = Utils.initDefaultLoggerService(PersistenceFeeder.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
     protected ArrayList<String> filePaths = new ArrayList<>();
@@ -150,5 +151,10 @@ public class PersistenceFeeder implements Feeder, EventFeederLogic {
     @Override
     public boolean subscribeToTopic(String topic) {
         return false;
+    }
+
+    @Override
+    public String getImplementationOf(){
+        return Feeder.class.getSimpleName();
     }
 }

@@ -19,6 +19,7 @@ package eu.almanac.ogc.sensorthing.api.datamodel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import eu.linksmart.api.event.datafusion.EventType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -174,4 +175,8 @@ public class Sensor extends OGCSensorThingsAPIDataModelEntry
 		// return the removal result
 		return removed;
 	}
+    @Override
+    public String getImplementationOf() {
+        return EventType.class.getSimpleName();
+    }
 }

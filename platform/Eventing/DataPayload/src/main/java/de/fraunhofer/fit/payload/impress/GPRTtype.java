@@ -4,12 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.EventType;
 
 /**
  * Created by angel on 12/11/15.
  */
-public class GPRTtype implements Serializable, EventType {
+public class GPRTtype extends Component implements Serializable, EventType {
 
     @JsonPropertyDescription("The time point/period of when the observation happens. To be rendered as ISO8601 time point/period string.")
     @JsonProperty(value = "timestamp")
@@ -64,5 +65,10 @@ public class GPRTtype implements Serializable, EventType {
             setDeviceID(Integer.valueOf(aux[3]));
         if(aux.length>5)
             setVariableID(Integer.valueOf(aux[5]));
+    }
+
+    @Override
+    public String getImplementationOf() {
+        return EventType.class.getSimpleName();
     }
 }

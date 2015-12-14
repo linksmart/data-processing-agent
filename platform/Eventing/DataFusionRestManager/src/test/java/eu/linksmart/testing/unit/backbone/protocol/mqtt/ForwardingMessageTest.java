@@ -28,9 +28,7 @@ public class ForwardingMessageTest implements Observer {
     public static void main(String [] args) {
 
         try {
-            brokerService = new StaticBroker("localhost","1883");
-
-            brokerService.connect();
+            gprt();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,6 +36,112 @@ public class ForwardingMessageTest implements Observer {
        simulateEvents(100);
 
 
+    }
+
+    public static void gprt(){
+
+
+        String payload = "{\"value\":1,\"timestamp\":\"2015-11-16T17:45:52.23Z\"}", payload2 = "{\"value\":30.0,\"timestamp\":\"2015-11-16T17:45:52.23Z\"}", topic = "/storage/devices/46/variables/5/measurements", topic2 = "/storage/devices/6/variables/0/measurements";
+        try {
+            StaticBroker broker = new StaticBroker("almanac","1883" );
+            broker.connect();
+            while (true) {
+                broker.publish(topic, payload.getBytes());
+                broker.publish("/storage/devices/6/variables/0/measurements", payload2.getBytes());
+                broker.publish("/storage/devices/11/variables/0/measurements", payload2.getBytes());
+                broker.publish("/storage/devices/12/variables/0/measurements", payload2.getBytes());
+                broker.publish("/storage/devices/15/variables/0/measurements", payload2.getBytes());
+                broker.publish("/storage/devices/13/variables/0/measurements", payload2.getBytes());
+                broker.publish("/storage/devices/53/variables/0/measurements", payload2.getBytes());
+                Thread.sleep(3000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+/*
+        IA ob= null;
+        try {
+            ob = (IA) Class.forName(CB.class.getCanonicalName()).newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        ob.method();*/
+/*
+        Gson gson = new Gson();
+
+        Foo dataStructure = new Foo();
+
+        String[] al= {"test"};
+        dataStructure.setUsedBy(al);
+
+        System.out.println(gson.toJson(dataStructure));
+
+        ArrayList<String> str=new ArrayList<String>();
+        Attribute attribute1=new Attribute("b"), attribute2=new Attribute("a");
+        Attribute test = new Attribute("att");
+
+        dataStructure = gson.fromJson("{    \"usedBy\":[\"lerning\"],\n" +
+                        "    \"attributesStructures\":[\n" +
+                        "            {\n" +
+                        "                \"attributeName\":\"temperature\",\n" +
+                        "                \"id\":\"11\"\n" +
+                        "                \n" +
+                        "            },\n" +
+                        "            {\n" +
+                        "                \"attributeName\":\"current\",\n" +
+                        "                \"id\":\"21\"\n" +
+                        "                \n" +
+                        "            }\n" +
+                        "            \n" +
+                        "        ]\n" +
+                        "        \n" +
+                        "        \n" +
+                        "    \n" +
+                        "}"
+                , Foo.class);
+        System.out.println((new Gson()).toJson(test));
+        ArrayList<Attribute> at= new ArrayList<Attribute>();
+        at.add(test);
+        Instances inst = new Instances("test",at,10);
+        inst.setClassIndex(0);
+
+        Instance in = new DenseInstance(1);
+        in.setDataset(inst);
+
+// Set instance's values for the attributes "length", "weight", and "position"
+        in.setValue(at.get(0), 5);
+
+
+// Set instance's dataset to be the dataset "race"
+
+        SGD sgd= new SGD();
+        sgd.setLossFunction(new SelectedTag(SGD.SQUAREDLOSS, SGD.TAGS_SELECTION));
+
+        try {
+   //         sgd.buildClassifier(inst);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            sgd.updateClassifier(in);
+
+        }catch (NullPointerException e) {
+            try {
+                sgd.buildClassifier(inst);
+                sgd.updateClassifier(in);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+// Print the instance
+        System.out.println("The instance: " + inst);*/
     }
 
     ObjectMapper mapper = new ObjectMapper();

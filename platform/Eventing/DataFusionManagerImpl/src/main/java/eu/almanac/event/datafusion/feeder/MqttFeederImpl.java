@@ -2,6 +2,7 @@ package eu.almanac.event.datafusion.feeder;
 
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.Utils;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -18,7 +19,7 @@ import java.util.*;
 /**
  * Created by Caravajal on 22.05.2015.
  */
-public abstract class MqttFeederImpl implements Runnable, Feeder, EventFeederLogic, Observer {
+public abstract class MqttFeederImpl extends Component implements Runnable, Feeder, EventFeederLogic, Observer {
 
     protected Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<>();
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
@@ -46,7 +47,6 @@ public abstract class MqttFeederImpl implements Runnable, Feeder, EventFeederLog
         }
 
     }
-
 
 
 
@@ -177,5 +177,9 @@ public abstract class MqttFeederImpl implements Runnable, Feeder, EventFeederLog
             }
 
         }
+    }
+    @Override
+    public String getImplementationOf(){
+        return Feeder.class.getSimpleName();
     }
 }

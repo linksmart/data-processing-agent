@@ -15,7 +15,7 @@ package eu.linksmart.api.event.datafusion;
  * 
  * */
 
-public interface Feeder {
+public interface Feeder extends AnalyzerComponent {
 
 
 	/**

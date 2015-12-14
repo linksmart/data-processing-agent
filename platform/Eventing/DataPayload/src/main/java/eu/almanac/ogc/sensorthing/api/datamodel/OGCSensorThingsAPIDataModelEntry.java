@@ -17,6 +17,8 @@
  */
 package eu.almanac.ogc.sensorthing.api.datamodel;
 
+import eu.almanac.event.datafusion.utils.generic.Component;
+
 /**
  * The superclass of all data models entries, defines common fields and provides
  * corresponding accessors (getter and setter).
@@ -24,7 +26,7 @@ package eu.almanac.ogc.sensorthing.api.datamodel;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-public abstract class OGCSensorThingsAPIDataModelEntry
+public abstract class OGCSensorThingsAPIDataModelEntry extends Component
 {
 	// the unique identifier associated to any data model entry
 	protected String id;

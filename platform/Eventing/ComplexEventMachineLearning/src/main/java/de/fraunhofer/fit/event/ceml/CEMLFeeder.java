@@ -1,6 +1,7 @@
 package de.fraunhofer.fit.event.ceml;
 
 import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.Statement;
@@ -14,7 +15,7 @@ import java.util.Collection;
 /**
  * Created by angel on 26/11/15.
  */
-public class CEMLFeeder implements Feeder {
+public class CEMLFeeder extends Component implements Feeder {
     protected static LoggerService loggerService = Utils.initDefaultLoggerService(CEMLFeeder.class);
     protected static Configurator conf =  Configurator.getDefaultConfig();
     @Override
@@ -119,5 +120,10 @@ public class CEMLFeeder implements Feeder {
             }
         }
         return retur;
+    }
+
+    @Override
+    public String getImplementationOf() {
+        return Feeder.class.getSimpleName();
     }
 }

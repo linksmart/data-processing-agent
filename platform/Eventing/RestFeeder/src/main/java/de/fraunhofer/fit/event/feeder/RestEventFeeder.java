@@ -2,6 +2,7 @@ package de.fraunhofer.fit.event.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.event.datafusion.intern.Utils;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.datafusion.DataFusionWrapper;
 import eu.linksmart.api.event.datafusion.Feeder;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 24.08.2015 a researcher of Fraunhofer FIT.
  */
 @RestController
-public class RestEventFeeder implements Feeder {
+public class RestEventFeeder extends Component implements Feeder {
     protected Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<>();
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
@@ -105,5 +106,10 @@ public class RestEventFeeder implements Feeder {
             return new ResponseEntity<>("Multi-status 207: some of the engines did not succeed  ("+engines+") with your request. Errors below:\n"+error,HttpStatus.MULTI_STATUS);
 
         return new ResponseEntity<>("Error 500"+error,HttpStatus.MULTI_STATUS);
+    }
+
+    @Override
+    public String getImplementationOf() {
+        return Feeder.class.getSimpleName();
     }
 }

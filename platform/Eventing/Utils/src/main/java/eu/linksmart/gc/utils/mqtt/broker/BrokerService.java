@@ -38,6 +38,7 @@ public class BrokerService implements Observer, Broker {
         listener = new ForwardingListener(this,ID);
 
          loggerService = new LoggerService(LoggerFactory.getLogger(BrokerService.class));
+        watchdog = conf.getBool(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_CONF_PATH);
         if (brokerName.equals("*"))
             this.brokerName = getHostName();
         else
@@ -54,16 +55,18 @@ public class BrokerService implements Observer, Broker {
     }
     protected void _connect() throws Exception {
 
+
+        loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is connecting...");
         if(!mqttClient.isConnected()) {
 
             mqttClient.connect();
 
         }
-       // startWatchdog();
-        loggerService.info("MQTT broker is connected");
+        startWatchdog();
+        loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is connected");
     }
     protected void _disconnect() throws Exception {
-
+        loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is disconnecting...");
         stopWatchdog();
         try {
 
@@ -72,7 +75,7 @@ public class BrokerService implements Observer, Broker {
             loggerService.error(e.getMessage(),e);
             throw e;
         }
-        loggerService.info("MQTT broker is disconnected");
+        loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is disconnected");
 
     }
     protected void _destroy() throws Exception {
@@ -120,37 +123,38 @@ public class BrokerService implements Observer, Broker {
 
     public void createClient() throws MqttException {
         mqttClient = new MqttClient(getBrokerURL(),ID.toString()+":"+UUID.randomUUID().toString(), new MemoryPersistence());
-
+        connectionWatchdog();
         mqttClient.setCallback(listener);
     }
 
     private void connectionWatchdog(){
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (watchdog){
+        if(watchdog) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (watchdog) {
 
-                    try {
-                        //noinspection SynchronizeOnNonFinalField
-                        synchronized (watchdog) {
-                            if (!isConnected())
-                                _connect();
+                        try {
+                            //noinspection SynchronizeOnNonFinalField
+                            synchronized (watchdog) {
+                                if (!mqttClient.isConnected())
+                                    _connect();
+                            }
+                        } catch (Exception e) {
+                            loggerService.error("Error in the watch dog of broker service:" + e.getMessage(), e);
                         }
-                    } catch (Exception e) {
-                        loggerService.error("Error in the watch dog of broker service:"+e.getMessage(),e);
-                    }
-                    try {
+                        try {
 
-                        Thread.sleep(conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT));
-                    }catch (Exception e){
-                        loggerService.error(e.getMessage(),e);
+                            Thread.sleep(conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT));
+                        } catch (Exception e) {
+                            loggerService.error(e.getMessage(), e);
+                        }
                     }
                 }
             }
+            ).start();
         }
-        ).start();
-
     }
     public boolean isWatchdog() {
         return watchdog;

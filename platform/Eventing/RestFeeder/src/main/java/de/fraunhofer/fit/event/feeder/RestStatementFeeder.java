@@ -3,6 +3,7 @@ package de.fraunhofer.fit.event.feeder;
 import com.google.gson.Gson;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 
 @RestController
-public class RestStatementFeeder implements Feeder {
+public class RestStatementFeeder extends Component implements Feeder {
     protected Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<>();
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
@@ -81,16 +82,7 @@ public class RestStatementFeeder implements Feeder {
     public boolean isDown() {
         return false;
     }
-    @RequestMapping("/")
-    public ResponseEntity<String> status() {
 
-        return new ResponseEntity<>("{" +
-                "\"status\":{" +
-                        "\"text\":\"Data-Fusion REST Manager is running!\"," +
-                        "\"value\":true" +
-                    "}" +
-                "}",HttpStatus.OK);
-    }
     @RequestMapping(value = "/statement/", method= RequestMethod.GET)
     public ResponseEntity<String> getStatements() {
 
@@ -263,5 +255,10 @@ public class RestStatementFeeder implements Feeder {
                error+=e.getMessage()+"\n";
             }
        return getStandardResponse(engines,error, id,count,dataFusionWrappers.size());
+    }
+
+    @Override
+    public String getImplementationOf() {
+        return Feeder.class.getSimpleName();
     }
 }

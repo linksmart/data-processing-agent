@@ -265,4 +265,8 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 		setId( aux[aux.length-2]);
 
 	}
+    @Override
+    public String getImplementationOf() {
+        return EventType.class.getSimpleName();
+    }
 }

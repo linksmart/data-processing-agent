@@ -2,7 +2,9 @@ package de.fraunhofer.fit.event.ceml;
 
 import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningStatement;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
+import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
@@ -17,7 +19,7 @@ import java.util.Map;
 /**
  * Created by angel on 26/11/15.
  */
-public class LearningHandler implements ComplexEventHandler {
+public class LearningHandler extends Component implements ComplexEventHandler {
 
     static private Configurator conf = Configurator.getDefaultConfig();
     static private LoggerService loggerService = Utils.initDefaultLoggerService(LearningHandler.class);
@@ -74,5 +76,10 @@ public class LearningHandler implements ComplexEventHandler {
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public String getImplementationOf() {
+        return ComplexEventHandler.class.getSimpleName();
     }
 }

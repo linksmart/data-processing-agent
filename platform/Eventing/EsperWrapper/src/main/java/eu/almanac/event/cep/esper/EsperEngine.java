@@ -2,6 +2,7 @@ package eu.almanac.event.cep.esper;
 
 import com.espertech.esper.client.*;
 import eu.almanac.event.cep.intern.Const;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
@@ -13,7 +14,7 @@ import java.util.*;
 /**
  * Created by Caravajal on 06.10.2014.
  */
- public class EsperEngine implements DataFusionWrapperAdvanced {
+ public class EsperEngine extends Component implements DataFusionWrapperAdvanced {
 
     private static EPServiceProvider epService;
     @Deprecated
@@ -332,4 +333,8 @@ import java.util.*;
         return true;
     }
 
+    @Override
+    public String getImplementationOf() {
+        return DataFusionWrapper.class.getSimpleName();
+    }
 }
