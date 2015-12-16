@@ -2,6 +2,7 @@ package eu.almanac.event.cep.esper;
 
 import com.espertech.esper.client.*;
 import eu.almanac.event.cep.intern.Const;
+import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -257,43 +258,55 @@ import java.util.*;
     private void addEsperStatement( Statement query) throws Exception {
         ComplexEventHandler handler=null;
         // add the query and the listener for the query
-        if (query.getCEHandler() != null || query.getCEHandler().equals("")) {
+        if(query.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS) {
+            ((EPLStatement)query).setCEHandler("eu.almanac.event.datafusion.handler.ComplexEventSynchHandler");
+            Class clazz = Class.forName(query.getCEHandler());
+            Constructor constructor = clazz.getConstructor(Statement.class);
+            handler = (ComplexEventHandler) constructor.newInstance(query);
+        }else if (query.getCEHandler() != null || query.getCEHandler().equals("")) {
             Class clazz = Class.forName(query.getCEHandler());
             Constructor constructor = clazz.getConstructor(Statement.class);
             handler = (ComplexEventHandler) constructor.newInstance(query);
         }
 
-        if(query.getStateLifecycle()!= Statement.StatementLifecycle.RUN_ONCE) {
-            EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
+        switch (query.getStateLifecycle()) {
+            case RUN:
+            case PAUSE:
 
-            if (handler!=null) {
+                EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
 
-                statement.setSubscriber(handler);
-            }
-            switch (query.getStateLifecycle()) {
-                case RUN:
-                    statement.start();
-                    break;
-                case PAUSE:
-                    statement.stop();
-                    break;
+                if (handler != null) {
 
-            }
-
-            deployedStatements.put(query.getHash(),query);
-        } else if (query.getStateLifecycle()== Statement.StatementLifecycle.RUN_ONCE) {
-            EPOnDemandQueryResult result = epService.getEPRuntime().executeQuery(query.getStatement());
-            if (handler !=null) {
-
-                for (EventBean event:result.getArray() ) {
-
-                    if(event.getUnderlying() instanceof Map)
-                        handler.update((Map<String,Object>) event.getUnderlying());
-                    else
-                        throw new Exception("Unsupported event in on-demand statement for the handler to generate an response ");
+                    statement.setSubscriber(handler);
                 }
-            }
+                switch (query.getStateLifecycle()) {
+                    case RUN:
+                        statement.start();
+                        break;
+                    case PAUSE:
+                        statement.stop();
+                        break;
+
+                }
+
+                deployedStatements.put(query.getHash(), query);
+                break;
+            case ONCE:
+            case SYNCHRONOUS:
+                EPOnDemandQueryResult result = epService.getEPRuntime().executeQuery(query.getStatement());
+                if (handler != null) {
+
+                    for (EventBean event : result.getArray()) {
+
+                        if (event.getUnderlying() instanceof Map)
+                            handler.update((Map<String, Object>) event.getUnderlying());
+                        else
+                            throw new Exception("Unsupported event in on-demand statement for the handler to generate an response ");
+                    }
+                }
+                break;
         }
+
 
     }
 

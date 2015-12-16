@@ -31,7 +31,7 @@ public interface ComplexEventHandler extends AnalyzerComponent{
      * @param eventMap the result of a statement
      *
      * */
-    public void update(Map eventMap);
+    public  void update(Map eventMap);
 
     /***
      *

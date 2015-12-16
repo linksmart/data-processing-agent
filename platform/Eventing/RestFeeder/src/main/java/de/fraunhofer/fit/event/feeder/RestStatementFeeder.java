@@ -1,6 +1,7 @@
 package de.fraunhofer.fit.event.feeder;
 
 import com.google.gson.Gson;
+import eu.almanac.event.datafusion.handler.ComplexEventSynchHandler;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
@@ -199,7 +200,14 @@ public class RestStatementFeeder extends Component implements Feeder {
             loggerService.error(e.getMessage(), e);
             error += e.getMessage() + "\n";
         }
-        return getStandardResponse(engines, error, statement.getHash(), count, dataFusionWrappers.size());
+        if(statement.getStateLifecycle()!= Statement.StatementLifecycle.SYNCHRONOUS || error != "")
+            return getStandardResponse(engines, error, statement.getHash(), count, dataFusionWrappers.size());
+        else
+        try {
+            return new ResponseEntity<String>((new Gson()).toJson(statement.getSynchronouseResponse()),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     protected boolean processInternStatement(Statement statement) throws StatementException {
@@ -219,6 +227,7 @@ public class RestStatementFeeder extends Component implements Feeder {
                     case REMOVE:
                         i.removeStatement(statement.getHash());
                         break;
+
 
                 }
 

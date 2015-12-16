@@ -1,6 +1,8 @@
 package eu.linksmart.api.event.datafusion;
 
 
+import java.util.Map;
+
 /**
  * This is the part of the API offered by Data Fusion. The Statement is the Interface that any statement object must fulfill. This interface is a generalization of any statement of a CEP engine.<p>
  *
@@ -106,6 +108,7 @@ public interface Statement {
      * @return  Lifecycle Statement State @see StatementLifecycle .
      * */
     public StatementLifecycle getStateLifecycle();
+    public Map getSynchronouseResponse();
     /***
      * Represent the possible States of a Statement can be in runtime.
      * The states for a new Statements represent the state how they will be deployed in the engine.
@@ -118,15 +121,19 @@ public interface Statement {
          */
         RUN,
         /**
-         * RUN_SILENT Execute the statement without a Handler.This means the events will just be generated in the engine.
+         * ONCE Execute once, generating a default the response at the moment
          */
-        RUN_ONCE,
+        ONCE,
         /**
-         * RUN_ONCE_SILENT Similar to RUN_SILENT except the statement is run once and then destroy. In other words, the statement is not a continuous.
+         * SYNCHRONOUS similar to ONCE, but returns the generated request.
+         */
+        SYNCHRONOUS,
+        /**
+         * PAUSE deploy the query in but do not start it
          */
         PAUSE,
         /**
-         * REMOVE do just make sens in an existing Statement.
+         * REMOVE makes sens in an existing Statement.
          * This will remove the Statement form the CEP engine realising all other resources related to it
          */
         REMOVE

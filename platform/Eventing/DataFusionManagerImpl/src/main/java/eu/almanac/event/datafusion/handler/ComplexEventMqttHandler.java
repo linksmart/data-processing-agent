@@ -12,7 +12,6 @@ import eu.almanac.event.datafusion.utils.handler.FixForJava7Handler;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
-import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -30,7 +29,7 @@ import java.util.*;
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
-public class ComplexEventHandlerImpl extends FixForJava7Handler implements ComplexEventMqttHandler {
+public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler {
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected ArrayList<StaticBroker> brokerServices;
     protected final Statement query;
@@ -69,8 +68,8 @@ public class ComplexEventHandlerImpl extends FixForJava7Handler implements Compl
             }
         }
     }
-    public ComplexEventHandlerImpl(Statement query) throws RemoteException, MalformedURLException, StatementException {
-        super(ComplexEventHandlerImpl.class.getSimpleName(),"Default handler for complex events", ComplexEventHandler.class.getSimpleName(),ComplexEventMqttHandler.class.getSimpleName());
+    public ComplexEventMqttHandler(Statement query) throws RemoteException, MalformedURLException, StatementException {
+        super(ComplexEventMqttHandler.class.getSimpleName(),"Default handler for complex events", ComplexEventHandler.class.getSimpleName(), eu.linksmart.api.event.datafusion.ComplexEventMqttHandler.class.getSimpleName());
         this.query=query;
         gson = new GsonBuilder().setDateFormat(conf.getString(Const.TIME_ISO_FORMAT)).create();
         parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -104,7 +103,7 @@ public class ComplexEventHandlerImpl extends FixForJava7Handler implements Compl
 
 
     @Override
-    public void update(Map eventMap) {
+    public synchronized void update(Map eventMap) {
 
         loggerService.info( Utils.getDateNowString() + " Updating query: " + query.getName());
 
@@ -141,7 +140,7 @@ public class ComplexEventHandlerImpl extends FixForJava7Handler implements Compl
     }
 
     @Deprecated
-    public void update(Event event) {
+    public synchronized void update(Event event) {
 
         loggerService.info("Updating query: " + query.getName());
 
@@ -159,21 +158,21 @@ public class ComplexEventHandlerImpl extends FixForJava7Handler implements Compl
 
 
     @Deprecated
-    public void update(Event[] events) {
+    public synchronized void update(Event[] events) {
 
         if (events[0].isGenerated())
             return;
         update2( events);
 
     }
-    public void update(IoTEntityEvent[] events) {
+    public synchronized void update(IoTEntityEvent[] events) {
         if (events[0].isGenerated())
             return;
 
         update2( events);
 
     }
-    public void update2(Object[] events) {
+    public synchronized void update2(Object[] events) {
 
         loggerService.info("Updating query: " + query.getName());
 
@@ -353,7 +352,7 @@ public class ComplexEventHandlerImpl extends FixForJava7Handler implements Compl
 
 
     @Override
-    public void destroy(){
+    public  synchronized void destroy(){
 
             try {
                 for(StaticBroker brokerService: brokerServices)

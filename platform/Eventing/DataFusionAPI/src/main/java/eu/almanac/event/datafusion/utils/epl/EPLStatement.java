@@ -8,6 +8,7 @@ import eu.linksmart.api.event.datafusion.Statement;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.UUID;
 
 public class EPLStatement implements Statement {
@@ -26,14 +27,15 @@ public class EPLStatement implements Statement {
     protected String[] output=null;
 
     @JsonProperty("CEHandler")
-    protected String CEHandler= "eu.almanac.event.datafusion.handler.ComplexEventHandlerImpl";
+    protected String CEHandler= "eu.almanac.event.datafusion.handler.ComplexEventMqttHandler";
 
     @JsonProperty("stateLifecycle")
     protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;
 
     @JsonProperty("scope")
     protected String[] scope={"default"};
-    protected String uuid =UUID.randomUUID().toString();
+    protected static final String uuid =UUID.randomUUID().toString();
+    protected Map synchRespones = null;
 
     public EPLStatement() {
     }
@@ -67,6 +69,18 @@ public class EPLStatement implements Statement {
 
     public StatementLifecycle getStateLifecycle() {
         return stateLifecycle;
+    }
+
+    @Override
+    public Map getSynchronouseResponse() {
+        if(stateLifecycle ==stateLifecycle.SYNCHRONOUS)
+            try {
+                uuid.wait(60000);
+            } catch (InterruptedException e) {
+
+            }
+
+        return synchRespones;
     }
 
 

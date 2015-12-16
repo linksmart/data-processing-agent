@@ -1,5 +1,7 @@
 package eu.almanac.event.datafusion.utils.epl.intern;
 
+import java.util.Map;
+
 /**
  * Created by Jose Angel Carvajal on 31.08.2015 a researcher of Fraunhofer FIT.
  */
@@ -33,6 +35,13 @@ public class EPLStatement extends eu.almanac.event.datafusion.utils.epl.EPLState
 
     public void setStateLifecycle(StatementLifecycle stateLifecycle) {
          this.stateLifecycle=stateLifecycle;
+    }
+
+    public void setSynchronouseResponse( Map  response) {
+
+        this.synchRespones = response;
+        uuid.notifyAll();
+
     }
 
 }
