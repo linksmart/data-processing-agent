@@ -147,8 +147,8 @@ public class CEMLRest extends Component{
 
         return new ResponseEntity<>("Structure of data with name "+objectName+"was created",HttpStatus.OK);
     }
-    @RequestMapping(value="/ceml/{name}", method= RequestMethod.POST)
-    public ResponseEntity<String> learningRequest(
+    @RequestMapping(value="/ceml/learn/{name}", method=  RequestMethod.POST)
+    public ResponseEntity<String> createRequest(
             @PathVariable("name") String name,
             @RequestBody() String body
     ){
@@ -164,10 +164,10 @@ public class CEMLRest extends Component{
             return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
-        return new ResponseEntity<>("Learning request+"+name+" was created and processed",HttpStatus.OK);
+        return new ResponseEntity<>("Learning request+"+name+" was created and processed",HttpStatus.CREATED);
     }
-    @RequestMapping(value="/ceml/{name}", method= RequestMethod.GET)
-    public ResponseEntity<String> learningRequest(
+    @RequestMapping(value="/ceml/learn/{name}", method= RequestMethod.GET)
+    public ResponseEntity<String> getRequest(
             @PathVariable("name") String name
     ){
         String retur ="";
@@ -182,6 +182,47 @@ public class CEMLRest extends Component{
 
         }
         return new ResponseEntity<>(retur,HttpStatus.OK);
+    }
+    @RequestMapping(value="/ceml/learn/{name}/data", method= RequestMethod.GET)
+    public ResponseEntity<String> getRequestData(
+            @PathVariable("name") String name
+    ){
+        String retur ="";
+        try {
+            if(requests.containsKey(name))
+                retur = (new Gson()).toJson(requests.get(name).getData());
+            else
+                return new ResponseEntity<>("Error 404 Not Found: Request with name "+name, HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+        return new ResponseEntity<>(retur,HttpStatus.OK);
+    }
+    @RequestMapping(value="/ceml/learn/{name}", method=  RequestMethod.PUT)
+    public ResponseEntity<String> updateRequest(
+            @PathVariable("name") String name,
+            @RequestBody() String body
+    ){
+        String retur ="";
+        try {
+
+           if(requests.containsKey(name)){
+               LearningRequest request = (new Gson()).fromJson(body, LearningRequest.class);
+               requests.get(name).reBuild(request);
+
+           }else {
+               loggerService.warn("There is no learning request with name " + name);
+               return new ResponseEntity<>("Error 404 Not found: There is no request with given name"+ name, HttpStatus.NOT_FOUND);
+           }
+
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+        return new ResponseEntity<>("Learning request+"+name+" was created and processed",HttpStatus.CREATED);
     }
 
 

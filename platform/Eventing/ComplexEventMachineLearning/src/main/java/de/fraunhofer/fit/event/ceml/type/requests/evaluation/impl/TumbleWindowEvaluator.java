@@ -2,6 +2,7 @@ package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
 import de.fraunhofer.fit.event.ceml.type.requests.builded.EvaluationAlgorithmBase;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.InitialSamples;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.TumbleEvaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
 
@@ -97,6 +98,15 @@ public class TumbleWindowEvaluator  implements TumbleEvaluator  {
 
     }
 
+    @Override
+    public void reBuild(Evaluator evaluator) {
+        if(evaluator instanceof  TumbleWindowEvaluator){
+
+            windowEvaluators[0].reBuild(evaluator);
+            windowEvaluators[1].reBuild(evaluator);
+        }
+
+    }
 
 
 }

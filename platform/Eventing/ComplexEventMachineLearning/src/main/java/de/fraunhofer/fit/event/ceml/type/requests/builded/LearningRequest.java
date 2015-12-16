@@ -2,7 +2,6 @@ package de.fraunhofer.fit.event.ceml.type.requests.builded;
 
 import de.fraunhofer.fit.event.ceml.CEMLFeeder;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.TumbleEvaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TumbleWindowEvaluator;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 import eu.linksmart.api.event.datafusion.Statement;
@@ -60,7 +59,26 @@ public class LearningRequest {
     }
 
 
+    private void loadLearningStatements(){
+        Integer i=0;
+        for (String strStatement : learningProcess) {
+            Statement statement = new LearningStatement("LearningStatement:"+name+i.toString(),this, strStatement);
+            leaningStatements.put(statement.getHash(),statement);
+            i++;
+        }
+    }
+    private void loadDeploymentStatements(){
+        Integer i =0;
+        for (String strStatement : deploy) {
+            Statement statement = new EPLStatement();
+            ((EPLStatement) statement).setName("DeployStatement:" + name + i.toString());
+            ((EPLStatement) statement).setStatement(strStatement);
+            ((EPLStatement) statement).setStateLifecycle(Statement.StatementLifecycle.PAUSE);
 
+            deployStatements.put(statement.getHash(),statement);
+            i ++;
+        }
+    }
     public void build() throws Exception {
 
         model.setName(name);
@@ -68,35 +86,48 @@ public class LearningRequest {
         data.buildInstances();
         model.build(this);
 
-        Integer i =0;
         leaningStatements = new Hashtable<>();
         if(learningProcess==null)
             throw new Exception("The Learning Process was not defined");
-        for (String strStatement : learningProcess) {
-            Statement statement = new LearningStatement("LearningStatement:"+name+i.toString(),this, strStatement);
-            leaningStatements.put(statement.getHash(),statement);
-            i++;
-        }
+
+        loadLearningStatements();
 
         deployStatements = new Hashtable<>();
         if(deploy != null) {
 
-            i=0;
-            for (String strStatement : deploy) {
-                Statement statement = new EPLStatement();
-                ((EPLStatement) statement).setName("DeployStatement:" + name + i.toString());
-                ((EPLStatement) statement).setStatement(strStatement);
-                ((EPLStatement) statement).setStateLifecycle(Statement.StatementLifecycle.PAUSE);
-
-                deployStatements.put(statement.getHash(),statement);
-                i = 0;
-            }
+            loadDeploymentStatements();
         }
         if(evaluation == null)
             evaluation = new TumbleWindowEvaluator();
         evaluation.build(data.getAttributes().keySet());
 
 
+    }
+    public void reBuild(LearningRequest request){
+        if(request.model != null){
+            model.reBuild(request.model);
+        }
+        if(request.learningProcess != null){
+            if(leaningStatements!=null && !leaningStatements.isEmpty()){
+                CEMLFeeder.removeStatement(leaningStatements.values());
+            }
+
+            learningProcess = request.learningProcess;
+            loadLearningStatements();
+        }
+        if(request.deploy != null){
+            if(deployStatements!=null && !deployStatements.isEmpty()){
+                CEMLFeeder.removeStatement(deployStatements.values());
+            }
+
+            deploy = request.deploy;
+
+            loadDeploymentStatements();
+        }
+        if(request.evaluation != null){
+            evaluation.reBuild(request.evaluation);
+
+        }
     }
     public void deploy(){
       if (!deployed){

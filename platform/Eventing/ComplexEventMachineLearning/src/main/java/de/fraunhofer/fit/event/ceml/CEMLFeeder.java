@@ -101,6 +101,31 @@ public class CEMLFeeder extends Component implements Feeder {
         }
         return retur;
     }
+    static public String removeStatement(Collection<Statement> statements){
+        boolean success =true;
+        String retur="";
+        for(CEPEngine dfw: CEPEngine.instancedEngines.values()) {
+            for (Statement statement : statements) {
+                try {
+                    dfw.removeStatement(statement.getHash());
+
+                } catch (StatementException e) {
+                    loggerService.error(e.getMessage(), e);
+                    retur += e.getMessage() + "\n";
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(), e);
+                    retur += e.getMessage() + "\n";
+
+                    success = false;
+                }
+                if (success) {
+                    loggerService.info("Statement " + statement.getHash() + " was successful");
+                    retur += "Statement " + statement.getName() + " was successful";
+                }
+            }
+        }
+        return retur;
+    }
    static public String startStatements(Collection<Statement> statements){
         boolean success =true;
         String retur="";

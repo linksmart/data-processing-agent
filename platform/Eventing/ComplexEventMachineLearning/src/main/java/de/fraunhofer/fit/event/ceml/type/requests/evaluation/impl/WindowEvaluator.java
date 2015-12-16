@@ -142,7 +142,20 @@ public class WindowEvaluator implements Evaluator {
 
         }
     }
-     public EvaluationAlgorithm instanceEvaluationAlgorithm(String canonicalName, String method, double target)  {
+
+    @Override
+    public void reBuild(Evaluator evaluator) {
+        if(evaluator instanceof  TumbleWindowEvaluator){
+            TumbleWindowEvaluator aux = (TumbleWindowEvaluator)evaluator;
+            for(TargetRequest algorithm: aux.targets){
+                evaluationAlgorithms.get(algorithm.getName()).reBuild(algorithm);
+            }
+
+        }
+
+    }
+
+    public EvaluationAlgorithm instanceEvaluationAlgorithm(String canonicalName, String method, double target)  {
 
         try {
             Class clazz = Class.forName(canonicalName);
@@ -235,7 +248,10 @@ public class WindowEvaluator implements Evaluator {
             WindowEvaluator.this.sequentialConfusionMatrix = sequentialConfusionMatrix;
         }
 
-
+        @Override
+        public void reBuild(TargetRequest evaluationAlgorithm) {
+           target  = evaluationAlgorithm.getThreshold();
+        }
     }
 
     public class Accuracy extends EvaluationAlgorithmSubBase {
@@ -447,6 +463,11 @@ public class WindowEvaluator implements Evaluator {
 
         public Samples(ComparisonMethod method, double target) {
             super(method, target);
+        }
+
+        @Override
+        public void reBuild(TargetRequest evaluationAlgorithm) {
+            target = evaluationAlgorithm.getThreshold();
         }
     }
 

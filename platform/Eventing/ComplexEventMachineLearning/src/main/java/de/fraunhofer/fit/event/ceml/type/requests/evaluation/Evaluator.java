@@ -12,6 +12,8 @@ public interface Evaluator {
 
     void build(Collection<String> classesNames);
 
+    void reBuild(Evaluator evaluator);
+
     enum EvaluationMetrics{
         truePositives,trueNegatives,falsePositives,falseNegatives
     }

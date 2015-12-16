@@ -164,5 +164,9 @@ public class Model extends ModelStructure {
     public double test(double v){
         return v;
     }
+    public void reBuild(Model request){
+        /*TODO: chnaging configuration of the model */
+
+    }
 
 }
