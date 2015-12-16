@@ -3,7 +3,7 @@ package eu.linksmart.api.event.datafusion;
 /**
  * Created by angel on 18/11/15.
  */
-public interface DataFusionWrapperAdvanced extends DataFusionWrapper {
+public interface CEPEngineAdvanced extends CEPEngine {
 
     public void insertObject(String name,Object variable) throws UnsupportedOperationException;
     /**

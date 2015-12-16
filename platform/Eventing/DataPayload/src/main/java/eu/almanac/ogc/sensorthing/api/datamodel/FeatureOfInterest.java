@@ -230,8 +230,5 @@ public class FeatureOfInterest extends OGCSensorThingsAPIDataModelEntry
 		// return the removal result
 		return removed;
 	}
-    @Override
-    public String getImplementationOf() {
-        return EventType.class.getSimpleName();
-    }
+
 }

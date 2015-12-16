@@ -12,12 +12,12 @@ import java.util.Map;
  *  the complex event.<p>
  *  
  * The CEH have two duties. One is the action taken after the event was triggered (the handling of the event).<p>
- * The second is the interaction of {@link DataFusionWrapper} and the event handler. This interface is the API of this second responsibility.   
+ * The second is the interaction of {@link CEPEngine} and the event handler. This interface is the API of this second responsibility.
  * 
  * @author Jose Angel Carvajal Soto
  * @version     0.03
  * @since       0.03
- * @see DataFusionWrapper
+ * @see CEPEngine
  * 
  * */
 

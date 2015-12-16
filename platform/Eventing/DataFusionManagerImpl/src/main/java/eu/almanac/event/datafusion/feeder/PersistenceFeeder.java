@@ -5,10 +5,9 @@ import com.google.gson.Gson;
 import eu.almanac.event.datafusion.feeder.type.PersistentBean;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -21,8 +20,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
@@ -33,21 +30,20 @@ public class PersistenceFeeder extends Component implements Feeder, EventFeederL
     protected ArrayList<String> filePaths = new ArrayList<>();
     private static Gson gson = new Gson();
     private static ObjectMapper mapper = new ObjectMapper();
-    private PersistenceFeeder(){
 
-    }
     public PersistenceFeeder(String... filePaths){
+        super(PersistenceFeeder.class.getSimpleName(),"Feeder that inserts statements and Events at loading time", Feeder.class.getSimpleName());
 
         for(String f: filePaths)
             this.filePaths.add(f);
 
     }
-    private void loadFiles(DataFusionWrapper dfw){
+    private void loadFiles(CEPEngine dfw){
         for (String f: filePaths)
                 loadFile(f,dfw);
 
     }
-    static void loadFile(String filePath, DataFusionWrapper dfw){
+    static void loadFile(String filePath, CEPEngine dfw){
         InputStream inputStream = null;
         try {
             boolean found =false;
@@ -82,7 +78,7 @@ public class PersistenceFeeder extends Component implements Feeder, EventFeederL
         String [] aux = topic.split("/");
         return aux[aux.length-2];
     }
-    static protected void feed(String rawData,DataFusionWrapper dfw){
+    static protected void feed(String rawData,CEPEngine dfw){
         //PersistentBean persistentBean= gson.fromJson(rawData, PersistentBean.class);
         PersistentBean persistentBean= null;
         try {
@@ -112,7 +108,7 @@ public class PersistenceFeeder extends Component implements Feeder, EventFeederL
 
     }
 
-    static protected void feedStatement( Statement statement, DataFusionWrapper dfw) {
+    static protected void feedStatement( Statement statement, CEPEngine dfw) {
 
         if (statement != null) {
 
@@ -129,14 +125,14 @@ public class PersistenceFeeder extends Component implements Feeder, EventFeederL
     }
 
     @Override
-    public boolean dataFusionWrapperSignIn(DataFusionWrapper dfw) {
+    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
         loadFiles(dfw);
         //TODO: add code for the OSGi future
         return true;
     }
 
     @Override
-    public boolean dataFusionWrapperSignOut(DataFusionWrapper dfw) {
+    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
 
         //TODO: add code for the OSGi future
         return true;
@@ -153,8 +149,4 @@ public class PersistenceFeeder extends Component implements Feeder, EventFeederL
         return false;
     }
 
-    @Override
-    public String getImplementationOf(){
-        return Feeder.class.getSimpleName();
-    }
 }

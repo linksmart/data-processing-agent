@@ -2,7 +2,7 @@ package de.fraunhofer.fit.event.ceml;
 
 import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
@@ -18,13 +18,18 @@ import java.util.Collection;
 public class CEMLFeeder extends Component implements Feeder {
     protected static LoggerService loggerService = Utils.initDefaultLoggerService(CEMLFeeder.class);
     protected static Configurator conf =  Configurator.getDefaultConfig();
+
+    public CEMLFeeder() {
+        super(CEMLFeeder.class.getSimpleName(), "Provide intern infrastructure to feed the CEP with learning DF statements ", Feeder.class.getSimpleName(),"CEML");
+    }
+
     @Override
-    public boolean dataFusionWrapperSignIn(DataFusionWrapper dfw) {
+    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
         return false;
     }
 
     @Override
-    public boolean dataFusionWrapperSignOut(DataFusionWrapper dfw) {
+    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
         return false;
     }
 
@@ -35,7 +40,7 @@ public class CEMLFeeder extends Component implements Feeder {
     public static String feedStatements(Collection<Statement> statements){
         boolean success =true;
         String retur="";
-        for(DataFusionWrapper dfw:DataFusionWrapper.instancedEngines.values()) {
+        for(CEPEngine dfw: CEPEngine.instancedEngines.values()) {
             for (Statement statement : statements) {
                 try {
                     dfw.addStatement(statement);
@@ -74,7 +79,7 @@ public class CEMLFeeder extends Component implements Feeder {
     static public String pauseStatements(Collection<Statement> statements){
         boolean success =true;
         String retur="";
-        for(DataFusionWrapper dfw:DataFusionWrapper.instancedEngines.values()) {
+        for(CEPEngine dfw: CEPEngine.instancedEngines.values()) {
             for (Statement statement : statements) {
                 try {
                     dfw.pauseStatement(statement.getHash());
@@ -99,7 +104,7 @@ public class CEMLFeeder extends Component implements Feeder {
    static public String startStatements(Collection<Statement> statements){
         boolean success =true;
         String retur="";
-        for(DataFusionWrapper dfw:DataFusionWrapper.instancedEngines.values()) {
+        for(CEPEngine dfw: CEPEngine.instancedEngines.values()) {
             for (Statement statement : statements) {
                 try {
                     dfw.startStatement(statement.getHash());
@@ -122,8 +127,4 @@ public class CEMLFeeder extends Component implements Feeder {
         return retur;
     }
 
-    @Override
-    public String getImplementationOf() {
-        return Feeder.class.getSimpleName();
-    }
 }

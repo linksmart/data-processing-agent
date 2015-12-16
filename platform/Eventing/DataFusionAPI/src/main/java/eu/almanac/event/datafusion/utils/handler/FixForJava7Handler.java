@@ -10,6 +10,12 @@ import java.util.AbstractMap;
  * Created by angel on 17/11/15.
  */
 public abstract class FixForJava7Handler extends Component implements ComplexEventMqttHandler {
+
+
+    public FixForJava7Handler(String implName, String desc, String... implOf) {
+        super(implName, desc, implOf);
+    }
+
     public static boolean addKnownLocations(String statement) throws StatementException {
         String[] nameURL = statement.toLowerCase().replace("add instance", "").trim().split("=");
         if (nameURL.length == 2) {

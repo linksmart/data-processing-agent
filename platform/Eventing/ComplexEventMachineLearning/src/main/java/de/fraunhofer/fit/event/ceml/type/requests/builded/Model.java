@@ -1,16 +1,14 @@
 package de.fraunhofer.fit.event.ceml.type.requests.builded;
 
 import de.fraunhofer.fit.event.ceml.CEML;
-import de.fraunhofer.fit.event.ceml.type.Entry;
 import de.fraunhofer.fit.event.ceml.type.requests.ModelStructure;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
-import eu.linksmart.api.event.datafusion.DataFusionWrapperAdvanced;
+import eu.linksmart.api.event.datafusion.CEPEngine;
+import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by angel on 26/11/15.
@@ -83,8 +81,8 @@ public class Model extends ModelStructure {
     }
     public int insertInCEPEngines(){
         int n=0;
-        for (DataFusionWrapper dfw: DataFusionWrapper.instancedEngines.values()      ) {
-            DataFusionWrapperAdvanced extended = dfw.getAdvancedFeatures();
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()      ) {
+            CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
             if(extended!=null) {
                 extended.insertObject(name, this);
                 n++;

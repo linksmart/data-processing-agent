@@ -21,7 +21,7 @@ import java.util.*;
  */
 public abstract class MqttFeederImpl extends Component implements Runnable, Feeder, EventFeederLogic, Observer {
 
-    protected Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<>();
+    protected Map<String,CEPEngine> dataFusionWrappers = new HashMap<>();
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
     protected StaticBroker brokerService= null;
@@ -34,7 +34,8 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
     protected Thread thisTread;
     static protected @NotNull Boolean down =false;
 
-    public MqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException {
+    public MqttFeederImpl(String brokerName, String brokerPort, String topic,String implName, String desc, String... implOf) throws MalformedURLException, MqttException {
+        super(implName,desc,implOf);
 
         brokerService = new StaticBroker(brokerName,brokerPort);
         brokerService.addListener(topic,this);
@@ -51,7 +52,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
 
     @Override
-    public boolean dataFusionWrapperSignIn(DataFusionWrapper dfw) {
+    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
         dataFusionWrappers.put(dfw.getName(), dfw);
 
         //TODO: add code for the OSGi future
@@ -59,7 +60,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
     }
 
     @Override
-    public boolean dataFusionWrapperSignOut(DataFusionWrapper dfw) {
+    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
         dataFusionWrappers.remove(dfw.getName());
 
         //TODO: add code for the OSGi future
@@ -89,7 +90,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
 
 
-                    for (DataFusionWrapper i : dataFusionWrappers.values())
+                    for (CEPEngine i : dataFusionWrappers.values())
                         i.destroy();
 
 
@@ -104,7 +105,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 	 * For the feeder is enable to interact with a Data Fusion Engine,
 	 * the wrapper of the engine has to explicitly subscribe to the feeder as a Data Fusion engine.<p>
 	 * Doing so through this function
-	 * @param dfw is the {@link DataFusionWrapper} which what to be subscribed.
+	 * @param dfw is the {@link eu.linksmart.api.event.datafusion.CEPEngine} which what to be subscribed.
 	 *
 	 * @return <code>true</code> in a successful subscription, <code>false</code> otherwise.
 	 * */
@@ -164,7 +165,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
                             +Const.FeederPayloadClass+" "
                             +Const.FeederPayloadTopic+" do not match"
             );
-        for (DataFusionWrapper dfw:DataFusionWrapper.instancedEngines.values()) {
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()) {
             for(int i=0; i<classes.size();i++) {
                 try {
                     Object aClassObject = Class.forName(classes.get(i).toString()).newInstance();
@@ -177,9 +178,5 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
             }
 
         }
-    }
-    @Override
-    public String getImplementationOf(){
-        return Feeder.class.getSimpleName();
     }
 }

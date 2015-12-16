@@ -25,6 +25,10 @@ public class GPRTtype extends Component implements Serializable, EventType {
     @JsonProperty(value = "variableID")
     protected int variableID;
 
+    public GPRTtype() {
+        super(GPRTtype.class.getSimpleName(), "Payload type used in GPRT institute of the UFPE", EventType.class.getSimpleName());
+    }
+
     public Date getTimestamp() {
         return timestamp;
     }
@@ -67,8 +71,5 @@ public class GPRTtype extends Component implements Serializable, EventType {
             setVariableID(Integer.valueOf(aux[5]));
     }
 
-    @Override
-    public String getImplementationOf() {
-        return EventType.class.getSimpleName();
-    }
+
 }

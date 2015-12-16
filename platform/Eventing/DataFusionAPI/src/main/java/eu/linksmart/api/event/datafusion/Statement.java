@@ -9,7 +9,7 @@ package eu.linksmart.api.event.datafusion;
  * @author Jose Angel Carvajal Soto
  * @version     0.03
  * @since       0.03
- * @see  DataFusionWrapper
+ * @see  CEPEngine
  *
  * */
 public interface Statement {

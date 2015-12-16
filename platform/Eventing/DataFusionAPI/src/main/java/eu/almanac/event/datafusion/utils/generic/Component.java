@@ -3,22 +3,42 @@ package eu.almanac.event.datafusion.utils.generic;
 import eu.linksmart.api.event.datafusion.AnalyzerComponent;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * Created by José Ángel Carvajal on 14.12.2015 a researcher of Fraunhofer FIT.
  */
-public abstract class Component implements AnalyzerComponent {
+public abstract class Component {
 
+    ComponentInfo info =  new ComponentInfo();
+    public Component(String implName, String desc, String implOf) {
+        info.setImplementationName(implName);
+        info.setImplementationOf(new String[]{implOf});
+        info.setDescription(desc);
 
-    public Component() {
-        if(!AnalyzerComponent.loadedComponents.containsKey(getImplementationOf()))
-            AnalyzerComponent.loadedComponents.put(getImplementationOf(),new ArrayList<String>());
-        AnalyzerComponent.loadedComponents.get(getImplementationOf()).add(getImplementationName());
+        if(!AnalyzerComponent.loadedComponents.containsKey(info.getImplementationName()))
+            AnalyzerComponent.loadedComponents.put(info.getImplementationName(), new Hashtable<Component, ComponentInfo>());
+
+       AnalyzerComponent.loadedComponents.get(info.getImplementationName()).put(this,info);
 
     }
 
-    @Override
-    public String getImplementationName(){
-        return this.getClass().getSimpleName();
+    public Component(String implName, String desc, String... implOf) {
+        info.setImplementationName(implName);
+        info.setImplementationOf(implOf);
+        info.setDescription(desc);
+
+        if(!AnalyzerComponent.loadedComponents.containsKey(info.getImplementationName()))
+            AnalyzerComponent.loadedComponents.put(info.getImplementationName(), new Hashtable<Component, ComponentInfo>());
+
+        AnalyzerComponent.loadedComponents.get(info.getImplementationName()).put(this, info);
+
     }
+    protected void finalize(){
+
+        AnalyzerComponent.loadedComponents.get(info.getImplementationName()).remove(this);
+
+
+    }
+
 }

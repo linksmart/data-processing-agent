@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created by Caravajal on 06.10.2014.
  */
- public class EsperEngine extends Component implements DataFusionWrapperAdvanced {
+ public class EsperEngine extends Component implements CEPEngineAdvanced {
 
     private static EPServiceProvider epService;
     @Deprecated
@@ -44,6 +44,7 @@ import java.util.*;
         return  ref;
     }
     protected EsperEngine(){
+        super(EsperEngine.class.getSimpleName(),"Default handler for complex events", CEPEngine.class.getSimpleName(),CEPEngineAdvanced.class.getSimpleName());
 
         // Add configuration file of the local package
         Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
@@ -232,7 +233,7 @@ import java.util.*;
     }
 
     @Override
-    public DataFusionWrapperAdvanced getAdvancedFeatures() {
+    public CEPEngineAdvanced getAdvancedFeatures() {
         return this;
     }
 
@@ -333,8 +334,4 @@ import java.util.*;
         return true;
     }
 
-    @Override
-    public String getImplementationOf() {
-        return DataFusionWrapper.class.getSimpleName();
-    }
 }

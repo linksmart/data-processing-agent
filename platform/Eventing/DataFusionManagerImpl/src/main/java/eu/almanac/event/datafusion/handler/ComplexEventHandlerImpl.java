@@ -11,6 +11,7 @@ import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.handler.FixForJava7Handler;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
+import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
@@ -69,7 +70,7 @@ public class ComplexEventHandlerImpl extends FixForJava7Handler implements Compl
         }
     }
     public ComplexEventHandlerImpl(Statement query) throws RemoteException, MalformedURLException, StatementException {
-
+        super(ComplexEventHandlerImpl.class.getSimpleName(),"Default handler for complex events", ComplexEventHandler.class.getSimpleName(),ComplexEventMqttHandler.class.getSimpleName());
         this.query=query;
         gson = new GsonBuilder().setDateFormat(conf.getString(Const.TIME_ISO_FORMAT)).create();
         parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -364,8 +365,7 @@ public class ComplexEventHandlerImpl extends FixForJava7Handler implements Compl
     }
 
 
-    @Override
-    public String getImplementationOf() {
-        return ComplexEventMqttHandler.class.getSimpleName();
-    }
+
+
+
 }

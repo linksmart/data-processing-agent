@@ -9,6 +9,8 @@ import de.fraunhofer.fit.event.ceml.type.Entry;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.DataStructure;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
 import de.fraunhofer.fit.payload.impress.GPRTtype;
+import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -21,19 +23,8 @@ import weka.core.*;
  * Created by angel on 13/11/15.
  */
 public class CEML implements AnalyzerComponent {
-    static {
-        for (DataFusionWrapper dfw: DataFusionWrapper.instancedEngines.values()      ) {
-            DataFusionWrapperAdvanced extended = dfw.getAdvancedFeatures();
-            if(extended!=null) {
-                extended.insertObject("creator", new Entry(null,null) );
-            }
 
-        }
-        if( !AnalyzerComponent.loadedComponents.containsKey("CEML"))
-            AnalyzerComponent.loadedComponents.put("CEML", new ArrayList<String>());
-
-        AnalyzerComponent.loadedComponents.get("CEML").add("Core");
-    }
+    static AnalyzerComponent info;
     static private Configurator conf = Configurator.getDefaultConfig();
     static private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
 
@@ -63,8 +54,8 @@ public class CEML implements AnalyzerComponent {
        /* if(objectType.equals( "weka.classifiers.functions.SGD"))
             ((SGD)learningObjects.get(objectName)).setLossFunction(new SelectedTag(SGD.SQUAREDLOSS, SGD.TAGS_SELECTION));
         */
-        for (DataFusionWrapper dfw: DataFusionWrapper.instancedEngines.values()      ) {
-            DataFusionWrapperAdvanced extended = dfw.getAdvancedFeatures();
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()      ) {
+            CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
             if(extended!=null)
                 extended.insertObject(objectName,learningObjects.get(objectName));
 
@@ -337,6 +328,7 @@ public class CEML implements AnalyzerComponent {
 
         return null;
 
+
     }
     static public boolean createDataStructure(DataStructure structure) throws Exception {
 
@@ -437,13 +429,5 @@ public class CEML implements AnalyzerComponent {
         return new Entry(name,object);
     }
 
-    @Override
-    public String getImplementationName() {
-        return CEML.class.getSimpleName();
-    }
 
-    @Override
-    public String getImplementationOf() {
-        return "ComplexEventHandlerModule";
-    }
 }

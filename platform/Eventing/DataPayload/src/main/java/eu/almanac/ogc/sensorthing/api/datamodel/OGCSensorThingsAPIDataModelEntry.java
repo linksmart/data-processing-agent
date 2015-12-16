@@ -18,6 +18,7 @@
 package eu.almanac.ogc.sensorthing.api.datamodel;
 
 import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.linksmart.api.event.datafusion.EventType;
 
 /**
  * The superclass of all data models entries, defines common fields and provides
@@ -36,6 +37,7 @@ public abstract class OGCSensorThingsAPIDataModelEntry extends Component
 	 */
 	public OGCSensorThingsAPIDataModelEntry()
 	{
+        super(OGCSensorThingsAPIDataModelEntry.class.getSimpleName(), "Payload types used in OGC SensorThings", EventType.class.getSimpleName());
 		// TODO Auto-generated constructor stub
 	}
 	

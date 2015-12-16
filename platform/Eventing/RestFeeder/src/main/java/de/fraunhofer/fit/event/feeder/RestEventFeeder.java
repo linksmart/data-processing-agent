@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -20,19 +20,20 @@ import java.util.Map;
  */
 @RestController
 public class RestEventFeeder extends Component implements Feeder {
-    protected Map<String,DataFusionWrapper> dataFusionWrappers = new HashMap<>();
+    protected Map<String,CEPEngine> dataFusionWrappers = new HashMap<>();
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
 
     private ObjectMapper mapper = new ObjectMapper();
 
     public RestEventFeeder() {
-        for(DataFusionWrapper wrapper: DataFusionWrapper.instancedEngines.values())
+        super(RestEventFeeder.class.getSimpleName(),"REST API for insert HTTP Events into the CEP Engines", Feeder.class.getSimpleName());
+        for(CEPEngine wrapper: CEPEngine.instancedEngines.values())
         dataFusionWrapperSignIn(wrapper);
     }
 
     @Override
-    public boolean dataFusionWrapperSignIn(DataFusionWrapper dfw) {
+    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
 
         dataFusionWrappers.put(dfw.getName(), dfw);
 
@@ -41,7 +42,7 @@ public class RestEventFeeder extends Component implements Feeder {
     }
 
     @Override
-    public boolean dataFusionWrapperSignOut(DataFusionWrapper dfw) {
+    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
         dataFusionWrappers.remove(dfw.getName());
 
         //TODO: add code for the OSGi future
@@ -78,7 +79,7 @@ public class RestEventFeeder extends Component implements Feeder {
             loggerService.error(e.getMessage(),e);
             return new ResponseEntity<>("The Observation sent is not OGC SensorThing compliant",HttpStatus.BAD_REQUEST);
         }
-        for (DataFusionWrapper i : dataFusionWrappers.values())
+        for (CEPEngine i : dataFusionWrappers.values())
             try {
 
                 if(i.addEvent(federation+"/"+pi+"/"+version+"/observation/"+thingId+"/"+streamId, event, event.getClass()))
@@ -108,8 +109,4 @@ public class RestEventFeeder extends Component implements Feeder {
         return new ResponseEntity<>("Error 500"+error,HttpStatus.MULTI_STATUS);
     }
 
-    @Override
-    public String getImplementationOf() {
-        return Feeder.class.getSimpleName();
-    }
 }

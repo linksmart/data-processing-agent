@@ -28,6 +28,11 @@ public class CEMLRest extends Component{
      private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
 
     private Map<String, LearningRequest> requests = new Hashtable<>();
+
+    public CEMLRest() {
+        super(CEMLRest.class.getSimpleName(), "Provides a REST API for managing the Learning request", "CEML");
+    }
+
     @RequestMapping(value="/ceml/learningObject/{objectType}/{objectName}", method= RequestMethod.POST)
     public ResponseEntity<String> createLearningObject(
             @PathVariable("objectType") String objectType,
@@ -179,8 +184,5 @@ public class CEMLRest extends Component{
         return new ResponseEntity<>(retur,HttpStatus.OK);
     }
 
-    @Override
-    public String getImplementationOf() {
-        return CEML.class.getSimpleName();
-    }
+
 }

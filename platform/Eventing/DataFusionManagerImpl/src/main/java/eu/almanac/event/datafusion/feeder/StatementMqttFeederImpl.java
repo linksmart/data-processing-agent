@@ -4,28 +4,28 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.handler.FixForJava7Handler;
-import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.CEPEngine;
+import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.api.event.datafusion.Statement.StatementLifecycle;
 import eu.linksmart.api.event.datafusion.StatementException;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;
-import java.util.AbstractMap;
 
 /**
  * Created by José Ángel Carvajal on 22.05.2015 a researcher of Fraunhofer FIT.
  */
 
-public class StatementMqttFeederImpl extends EventMqttFeederImpl {
+public class StatementMqttFeederImpl extends MqttFeederImpl {
 
     private Gson parser = new Gson();
 
     @SuppressWarnings("UnusedDeclaration")
     public StatementMqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException, InstantiationException {
-        super(brokerName, brokerPort, topic);
+        super(brokerName, brokerPort, topic,StatementMqttFeederImpl.class.getSimpleName(),"Provides a statement MQTT API",MqttFeederImpl.class.getSimpleName(), Feeder.class.getSimpleName());
+
     }
 
 
@@ -41,7 +41,7 @@ public class StatementMqttFeederImpl extends EventMqttFeederImpl {
 
                 boolean success = true;
                 if (!processInternStatement(statement))
-                    for (DataFusionWrapper i : dataFusionWrappers.values()) {
+                    for (CEPEngine i : dataFusionWrappers.values()) {
                         try {
 
                             i.addStatement(statement);
@@ -86,7 +86,7 @@ public class StatementMqttFeederImpl extends EventMqttFeederImpl {
             }
             return true;
         }
-        for (DataFusionWrapper i : dataFusionWrappers.values()) {
+        for (CEPEngine i : dataFusionWrappers.values()) {
             if (statement.getStatement() == null || statement.getStatement().toLowerCase().equals("")) {
                 switch (statement.getStateLifecycle()) {
                     case RUN:

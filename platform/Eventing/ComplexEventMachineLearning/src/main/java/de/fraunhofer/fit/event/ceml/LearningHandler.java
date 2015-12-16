@@ -29,6 +29,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
 
 
     public LearningHandler(Statement statement) {
+        super(LearningHandler.class.getSimpleName(),"Learning Handler processes the data and input it to the learning objects");
         this.statement = statement;
         this.originalRequest =((LearningStatement)statement).getLearningRequest();
     }
@@ -78,8 +79,4 @@ public class LearningHandler extends Component implements ComplexEventHandler {
 
     }
 
-    @Override
-    public String getImplementationOf() {
-        return ComplexEventHandler.class.getSimpleName();
-    }
 }

@@ -1,8 +1,9 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
+import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.EventType;
+import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import sun.security.pkcs.ParsingException;
@@ -15,7 +16,7 @@ import java.net.MalformedURLException;
 public class EventMqttFeederImpl extends MqttFeederImpl {
     private ObjectMapper mapper = new ObjectMapper();
     public EventMqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException, InstantiationException {
-        super(brokerName, brokerPort, topic);
+        super(brokerName, brokerPort, topic,EventMqttFeederImpl.class.getSimpleName(),"Provides a MQTT API to insert events into the CEP engine",MqttFeederImpl.class.getSimpleName(), Feeder.class.getSimpleName());
 
 
     }
@@ -46,7 +47,7 @@ public class EventMqttFeederImpl extends MqttFeederImpl {
                     ((EventType)event).topicDataConstructor(topic);
                 }
 
-                for (DataFusionWrapper i : dataFusionWrappers.values())
+                for (CEPEngine i : dataFusionWrappers.values())
                     i.addEvent(topic, event, event.getClass());
             }else
                 throw new ParsingException("No suitable class for the received event");

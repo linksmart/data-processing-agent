@@ -12,14 +12,14 @@ import java.util.Map;
  * @author Jose Angel Carvajal Soto
  * @version     0.03
  * @since       0.03
- * @see  DataFusionWrapper
+ * @see  CEPEngine
  * 
  * */
 
 
-public interface DataFusionWrapper extends AnalyzerComponent {
+public interface CEPEngine extends AnalyzerComponent {
 
-    static final public Map<String,DataFusionWrapper> instancedEngines= new Hashtable<String, DataFusionWrapper>();
+    static final public Map<String,CEPEngine> instancedEngines= new Hashtable<String, CEPEngine>();
 	/**
 	 * Return the name of the CEP which implement the interface
 	 * 
@@ -94,7 +94,7 @@ public interface DataFusionWrapper extends AnalyzerComponent {
 	 * If the implementation do no support it, then the will return null
 	 * @return an instance of DataFusionWrapperAdvanced or null in case the Wrapper do not support those features
      */
-	public DataFusionWrapperAdvanced getAdvancedFeatures();
+	public CEPEngineAdvanced getAdvancedFeatures();
 
 
 }

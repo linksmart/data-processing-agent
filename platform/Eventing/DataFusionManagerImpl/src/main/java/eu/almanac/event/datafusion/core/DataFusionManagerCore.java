@@ -6,12 +6,13 @@ import eu.almanac.event.datafusion.feeder.EventMqttFeederImpl;
 import eu.almanac.event.datafusion.feeder.PersistenceFeeder;
 import eu.almanac.event.datafusion.feeder.StatementMqttFeederImpl;
 import eu.almanac.event.datafusion.intern.Utils;
-import eu.linksmart.api.event.datafusion.DataFusionWrapper;
-import eu.linksmart.api.event.datafusion.DataFusionWrapperAdvanced;
+import eu.linksmart.api.event.datafusion.CEPEngine;
+import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.linksmart.gc.utils.logging.LoggerService;
+import eu.almanac.event.cep.esper.EsperEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,12 +100,12 @@ public class DataFusionManagerCore {
                 loggerService.error(e.getMessage(),e);
             }
         //initializing engines
-        for (DataFusionWrapper dfw: DataFusionWrapper.instancedEngines.values()  ) {
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()  ) {
             List<String> pkgList= conf.getList(Const.AdditionalImportPackage);
             for (String pkgName : pkgList    ) {
 
                 try {
-                    DataFusionWrapperAdvanced dfwExtensions =dfw.getAdvancedFeatures();
+                    CEPEngineAdvanced dfwExtensions =dfw.getAdvancedFeatures();
                     if(dfwExtensions != null)
                         dfwExtensions.loadAdditionalPackages(pkgName);
                 } catch (Exception e) {
@@ -126,7 +127,7 @@ public class DataFusionManagerCore {
 
             persistentFeeder = new PersistenceFeeder(conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
-            for (DataFusionWrapper wrapper: DataFusionWrapper.instancedEngines.values()) {
+            for (CEPEngine wrapper: CEPEngine.instancedEngines.values()) {
                 feederImplEvents.dataFusionWrapperSignIn(wrapper);
                 feederImplQuery.dataFusionWrapperSignIn(wrapper);
                 persistentFeeder.dataFusionWrapperSignIn(wrapper);

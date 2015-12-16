@@ -234,8 +234,5 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 		this.observedProperty = observedProperty;
 	}
 
-    @Override
-    public String getImplementationOf() {
-        return EventType.class.getSimpleName();
-    }
+
 }
