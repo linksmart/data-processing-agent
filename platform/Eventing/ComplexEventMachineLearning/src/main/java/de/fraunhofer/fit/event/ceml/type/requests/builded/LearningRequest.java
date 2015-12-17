@@ -107,26 +107,39 @@ public class LearningRequest {
         if(request.model != null){
             model.reBuild(request.model);
         }
-        if(request.learningProcess != null){
+        rebuildLearningStatements(request.learningProcess);
+        rebuildDeploymentStatements(request.deploy);
+
+        if(request.evaluation != null){
+            evaluation.reBuild(request.evaluation);
+
+        }
+    }
+
+    public void rebuildLearningStatements(ArrayList<String> statements){
+
+
+        if(statements!= null){
+
             if(leaningStatements!=null && !leaningStatements.isEmpty()){
                 CEMLFeeder.removeStatement(leaningStatements.values());
             }
 
-            learningProcess = request.learningProcess;
+            learningProcess = statements;
             loadLearningStatements();
         }
-        if(request.deploy != null){
+
+    }
+
+    public void rebuildDeploymentStatements(ArrayList<String> statements){
+        if(statements != null){
             if(deployStatements!=null && !deployStatements.isEmpty()){
                 CEMLFeeder.removeStatement(deployStatements.values());
             }
 
-            deploy = request.deploy;
+            deploy = statements;
 
             loadDeploymentStatements();
-        }
-        if(request.evaluation != null){
-            evaluation.reBuild(request.evaluation);
-
         }
     }
     public void deploy(){

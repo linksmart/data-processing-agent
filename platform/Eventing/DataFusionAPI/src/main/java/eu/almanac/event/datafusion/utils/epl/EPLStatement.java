@@ -72,7 +72,7 @@ public class EPLStatement implements Statement {
     }
 
     @Override
-    public Map getSynchronouseResponse() {
+    public Map getSynchronousResponse() {
         if(stateLifecycle ==stateLifecycle.SYNCHRONOUS)
             try {
                 uuid.wait(60000);

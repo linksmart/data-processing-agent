@@ -108,7 +108,7 @@ public interface Statement {
      * @return  Lifecycle Statement State @see StatementLifecycle .
      * */
     public StatementLifecycle getStateLifecycle();
-    public Map getSynchronouseResponse();
+    public Map getSynchronousResponse();
     /***
      * Represent the possible States of a Statement can be in runtime.
      * The states for a new Statements represent the state how they will be deployed in the engine.

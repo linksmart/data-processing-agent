@@ -71,6 +71,49 @@ public class LearningHandler extends Component implements ComplexEventHandler {
 
 
     }
+    public static void update(Map eventMap, LearningRequest originalRequest) {
+
+        Instance instance = CEML.populateInstance(eventMap,originalRequest);
+
+        Object target =null;
+        if(eventMap.containsKey("target"))
+            target=eventMap.get("target");
+        else if (eventMap.containsKey(originalRequest.getData().getLearningTarget()))
+            target =eventMap.get(originalRequest.getData().getLearningTarget());
+        else {
+            loggerService.error("No target found in the learning rule");
+            return;
+        }
+        int prediction = CEML.predict(originalRequest.getModel().getLerner(),instance);
+        int itShould =  originalRequest.getData().getLearningTarget().indexOfValue(target.toString());
+/*
+        Instances instances =originalRequest.getData().getInstances();
+
+       // Weka dose the evaluation in a linear way, this means that the evaluation cost by weka is linear!
+     try {
+            instances.add(instance);
+            evaluation evaluation = new evaluation(instances);
+            evaluation.evaluateModel((Classifier) originalRequest.getModel().getLerner(),instances);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        if(originalRequest.getEvaluation().evaluate(prediction, itShould))
+            originalRequest.deploy();
+        else
+            originalRequest.undeploy();
+
+        CEML.learn(originalRequest.getModel().getLerner(),instance);
+
+
+    }
+    public static int classify(Map eventMap, LearningRequest originalRequest) {
+
+        Instance instance = CEML.populateInstance(eventMap,originalRequest);
+
+        return CEML.predict(originalRequest.getModel().getLerner(),instance);
+
+
+    }
 
 
 
