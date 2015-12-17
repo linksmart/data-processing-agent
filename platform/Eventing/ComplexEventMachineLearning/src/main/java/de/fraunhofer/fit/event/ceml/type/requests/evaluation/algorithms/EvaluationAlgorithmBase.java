@@ -1,7 +1,6 @@
-package de.fraunhofer.fit.event.ceml.type.requests.builded;
+package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithmExtended;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
@@ -109,4 +108,9 @@ public abstract class EvaluationAlgorithmBase implements EvaluationAlgorithm {
 
     }
 
+    @Override
+    public void reBuild(TargetRequest evaluationAlgorithm) {
+
+        target = evaluationAlgorithm.getThreshold();
+    }
 }

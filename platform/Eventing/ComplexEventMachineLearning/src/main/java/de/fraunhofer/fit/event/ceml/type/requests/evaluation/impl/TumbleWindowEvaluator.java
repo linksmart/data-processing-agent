@@ -1,7 +1,6 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
-import de.fraunhofer.fit.event.ceml.type.requests.builded.EvaluationAlgorithmBase;
-import de.fraunhofer.fit.event.ceml.type.requests.builded.InitialSamples;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithmBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.TumbleEvaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;

@@ -1,4 +1,7 @@
-package de.fraunhofer.fit.event.ceml.type.requests.builded;
+package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
+
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithmBase;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
 
 public class Samples extends EvaluationAlgorithmBase {
 
@@ -10,4 +13,6 @@ public class Samples extends EvaluationAlgorithmBase {
         public double calculate() {
             return currentValue++;
         }
-    }
+
+
+}

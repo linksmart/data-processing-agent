@@ -1,7 +1,6 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
-import de.fraunhofer.fit.event.ceml.type.requests.builded.EvaluationAlgorithmBase;
-import de.fraunhofer.fit.event.ceml.type.requests.builded.Samples;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithmBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithmExtended;
@@ -248,10 +247,6 @@ public class WindowEvaluator implements Evaluator {
             WindowEvaluator.this.sequentialConfusionMatrix = sequentialConfusionMatrix;
         }
 
-        @Override
-        public void reBuild(TargetRequest evaluationAlgorithm) {
-           target  = evaluationAlgorithm.getThreshold();
-        }
     }
 
     public class Accuracy extends EvaluationAlgorithmSubBase {
@@ -459,16 +454,12 @@ public class WindowEvaluator implements Evaluator {
     }
 
 
-    public class Samples extends de.fraunhofer.fit.event.ceml.type.requests.builded.Samples{
+    public class Samples extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.Samples {
 
         public Samples(ComparisonMethod method, double target) {
             super(method, target);
         }
 
-        @Override
-        public void reBuild(TargetRequest evaluationAlgorithm) {
-            target = evaluationAlgorithm.getThreshold();
-        }
     }
 
 }
