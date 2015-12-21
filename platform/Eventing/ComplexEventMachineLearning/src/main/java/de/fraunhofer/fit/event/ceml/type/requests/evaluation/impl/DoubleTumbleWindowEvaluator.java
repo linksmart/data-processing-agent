@@ -1,27 +1,34 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
+import com.google.gson.*;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithmBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.TumbleEvaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.InitialSamples;
 
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * Created by angel on 1/12/15.
  */
-public class TumbleWindowEvaluator  implements TumbleEvaluator  {
+public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements TumbleEvaluator  {
 
-    protected ArrayList<TargetRequest> targets;
 
 
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
     private int learning = 0, learnt =0;
     private EvaluationAlgorithm  initialSamples;
 
-    public TumbleWindowEvaluator() {
+    public DoubleTumbleWindowEvaluator() {
     }
+
+
 
     @Override
     public synchronized boolean  evaluate(int predicted, int actual){
@@ -81,7 +88,7 @@ public class TumbleWindowEvaluator  implements TumbleEvaluator  {
             if(targets.get(i)!=null)
                 if(targets.get(i).getName().equals(InitialSamples.class.getSimpleName())) {
                     initialSamples = EvaluationAlgorithmBase.instanceEvaluationAlgorithm(
-                            InitialSamples.class.getSimpleName(),
+                            InitialSamples.class.getCanonicalName(),
                             targets.get(i).getMethod(),
                             targets.get(i).getThreshold()
                     );
@@ -99,13 +106,14 @@ public class TumbleWindowEvaluator  implements TumbleEvaluator  {
 
     @Override
     public void reBuild(Evaluator evaluator) {
-        if(evaluator instanceof  TumbleWindowEvaluator){
+        if(evaluator instanceof DoubleTumbleWindowEvaluator){
 
             windowEvaluators[0].reBuild(evaluator);
             windowEvaluators[1].reBuild(evaluator);
         }
 
     }
+
 
 
 }

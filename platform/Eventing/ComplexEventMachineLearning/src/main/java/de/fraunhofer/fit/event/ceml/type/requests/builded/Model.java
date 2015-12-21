@@ -1,24 +1,47 @@
 package de.fraunhofer.fit.event.ceml.type.requests.builded;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import de.fraunhofer.fit.event.ceml.CEML;
 import de.fraunhofer.fit.event.ceml.type.requests.ModelStructure;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
+import eu.linksmart.gc.utils.gson.GsonSerializable;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 
 /**
  * Created by angel on 26/11/15.
  */
-public class Model extends ModelStructure {
+public class Model implements Serializable {
     private LearningRequest origin =null;
     private String name;
     private Class nativeType;
     private Object lerner;
+    @JsonPropertyDescription("Algorithm use to build the model")
+    @JsonProperty(value = "Type")
+    protected String type;
+    public Model() {
+        super();
+    }
 
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
     public String getName() {
         return name;
     }
@@ -91,11 +114,6 @@ public class Model extends ModelStructure {
         }
         return n;
     }
-    public String classify2(){
-
-        return "test";
-
-    }
     public String classify(Object... args){
         if(args.length==origin.getData().getAttributesStructures().size()-1) {
             Instance instance=null;
@@ -151,19 +169,7 @@ public class Model extends ModelStructure {
 
 
     }*/
-    public String test(){
-        return  "hola";
-    }
 
-    public String test(String te){
-        return  te.toString();
-    }
-    public String test(Object v,String te){
-        return  te;
-    }
-    public double test(double v){
-        return v;
-    }
     public void reBuild(Model request){
         /*TODO: chnaging configuration of the model */
 

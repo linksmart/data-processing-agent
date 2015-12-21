@@ -9,8 +9,6 @@ import de.fraunhofer.fit.event.ceml.type.Entry;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.DataStructure;
 import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
 import de.fraunhofer.fit.payload.impress.GPRTtype;
-import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -35,7 +33,7 @@ public class CEML implements AnalyzerComponent {
     // defined which algorithms use which data structure
     static protected Map<String, String> learningObjectDataStructure = new HashMap<>();
 
-    static protected Map<String, Boolean> buildedLearningObject = new HashMap<>();
+    static protected Map<String, Boolean> builtLearningObject = new HashMap<>();
 
     static public boolean createLearningObject(String objectName, String objectType) throws Exception {
 
@@ -129,7 +127,7 @@ public class CEML implements AnalyzerComponent {
        return loadedStructures.get(learningObjectDataStructure.get(learningObjectName));
 
    }
-    static private Object getBuildedLerningObject( String learningObjectName){
+    static private Object getBuiltLearningObject(String learningObjectName){
         // do the learning object exist?
         if(!learningObjects.containsKey(learningObjectName))
             return null;
@@ -140,10 +138,10 @@ public class CEML implements AnalyzerComponent {
         if(( dataStructure = getStructureLearningObject(learningObjectName))==null)
             return null;
 
-        if(!buildedLearningObject.containsKey(learningObjectName))
-            buildedLearningObject.put(learningObjectName, false);
+        if(!builtLearningObject.containsKey(learningObjectName))
+            builtLearningObject.put(learningObjectName, false);
 
-        if(!buildedLearningObject.get(learningObjectName)) {
+        if(!builtLearningObject.get(learningObjectName)) {
           /*           TODO: do this with reflection
           Method mth = getMethod(
                     lerner.getClass(),
@@ -165,12 +163,12 @@ public class CEML implements AnalyzerComponent {
                 return null;
 
             }
-            buildedLearningObject.put(learningObjectName,true);
+            builtLearningObject.put(learningObjectName,true);
         }
 
         return lerner;
     }
-    static public Instance createInstece(int n, Instances instances){
+    static public Instance createInstance(int n, Instances instances){
         Instance inst = new DenseInstance(n);
 
         inst.setDataset(instances);
@@ -218,7 +216,7 @@ public class CEML implements AnalyzerComponent {
 
 
 
-    static public boolean classify(String learningObjectName, GPRTtype gprt, Object toClassify){
+   /* static public boolean classify(String learningObjectName, GPRTtype gprt, Object toClassify){
 
         DataStructure dataStructure = null;
         if(( dataStructure = getStructureLearningObject(learningObjectName))==null)
@@ -226,12 +224,12 @@ public class CEML implements AnalyzerComponent {
         // do the learning object exist?
         if(!learningObjects.containsKey(learningObjectName))
             return false;
-        Object lerner =getBuildedLerningObject(learningObjectName);
+        Object lerner = getBuiltLearningObject(learningObjectName);
 
 
         String id = String.valueOf(gprt.getDeviceID())+String.valueOf(gprt.getVariableID());
 
-        Instance inst = createInstece(dataStructure.getAttributes().size(), dataStructure.getInstances());
+        Instance inst = createInstance(dataStructure.getAttributes().size(), dataStructure.getInstances());
 
         inst.setValue(dataStructure.getAttributeByID(id) ,String.valueOf(gprt.getValue()));
         Attribute attribute = dataStructure.getAttributes().get(dataStructure.getAttributesStructures().get(dataStructure.getAttributesStructures().size()-1));
@@ -241,20 +239,20 @@ public class CEML implements AnalyzerComponent {
             inst.setValue(attribute,toClassify.toString());
         return learn(lerner, inst);
 
-    }
+    }*/
     static public boolean classify(String learningObjectName, Map<String,Object> values, Object toClassify){
 
         //TODO: construct the classification vector from 1 to 5 with the target at end !
         Integer i =0;
 
-        Object lerner = getBuildedLerningObject(learningObjectName);
-        if(( lerner = getBuildedLerningObject(learningObjectName))==null)
+        Object lerner = getBuiltLearningObject(learningObjectName);
+        if(( lerner = getBuiltLearningObject(learningObjectName))==null)
             return false;
 
         DataStructure dataStructure = null;
         if(( dataStructure = getStructureLearningObject(learningObjectName))==null)
             return false;
-        Instance instance = createInstece(values.size(),dataStructure.getInstances());
+        Instance instance = createInstance(values.size(), dataStructure.getInstances());
 
         for (String key: values.keySet()) {
             if(!dataStructure.getAttributes().containsKey(key))
@@ -282,20 +280,20 @@ public class CEML implements AnalyzerComponent {
             instance.setValue(attribute,toClassify.toString());
 
         return learn(lerner,instance);
-    }
+    }/*
     static public boolean classify(String learningObjectName, GPRTtype[] values, Object toClassify){
 
         //TODO: construct the classification vector from 1 to 5 with the target at end !
 
 
-        Object lerner = getBuildedLerningObject(learningObjectName);
-        if(( lerner = getBuildedLerningObject(learningObjectName))==null)
+        Object lerner = getBuiltLearningObject(learningObjectName);
+        if(( lerner = getBuiltLearningObject(learningObjectName))==null)
             return false;
 
         DataStructure dataStructure = null;
         if(( dataStructure = getStructureLearningObject(learningObjectName))==null)
             return false;
-        Instance instance = createInstece(dataStructure.getAttributes().size(),dataStructure.getInstances());
+        Instance instance = createInstance(dataStructure.getAttributes().size(), dataStructure.getInstances());
         Integer i =0;
 
         for (GPRTtype event : values) {
@@ -313,7 +311,7 @@ public class CEML implements AnalyzerComponent {
             instance.setValue(attribute,toClassify.toString());
 
         return learn(lerner,instance);
-    }
+    }*/
     static public Double getNumeric(Object numeric){
         if(numeric instanceof Double)
             return (Double) numeric;
@@ -336,17 +334,17 @@ public class CEML implements AnalyzerComponent {
         loadedStructures.put(structure.getName(),structure);
         for (String learningObjectName:structure.getUsedBy() ) {
             if(learningObjectDataStructure.containsKey(learningObjectName)){
-                if(buildedLearningObject.containsKey(learningObjectName))
-                    if(buildedLearningObject.get(learningObjectName)) {
+                if(builtLearningObject.containsKey(learningObjectName))
+                    if(builtLearningObject.get(learningObjectName)) {
                         throw new Exception("The selected learning object has already build being build around a data structure. " +
                                 "Current version do no allowed changes after the learning object has being build. Remove the object to change it");
                     }
                 learningObjectDataStructure.remove(learningObjectName);
-                buildedLearningObject.remove(learningObjectName);
+                builtLearningObject.remove(learningObjectName);
 
             }
             learningObjectDataStructure.put(learningObjectName,structure.getName());
-            buildedLearningObject.put(learningObjectName,false);
+            builtLearningObject.put(learningObjectName, false);
 
         }
         return true;
@@ -354,7 +352,7 @@ public class CEML implements AnalyzerComponent {
     }
     static public Instance populateInstance(Map<String, Object> events, LearningRequest originalRequest){
         // TODO: check what makes more sense originalRequest.getData().getAttributes().size() or eventMap.size()
-        Instance instance = CEML.createInstece(originalRequest.getData().getAttributes().size(),originalRequest.getData().getInstances());
+        Instance instance = CEML.createInstance(originalRequest.getData().getAttributes().size(), originalRequest.getData().getInstances());
 
         for(String key: events.keySet()){
             Object aux;

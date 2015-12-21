@@ -1,10 +1,15 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms;
 
+import com.google.gson.*;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
 import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.gc.utils.gson.GsonSerializable;
 import eu.linksmart.gc.utils.logging.LoggerService;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Type;
 
 /**
  * Created by angel on 4/12/15.
@@ -113,4 +118,5 @@ public abstract class EvaluationAlgorithmBase implements EvaluationAlgorithm {
 
         target = evaluationAlgorithm.getThreshold();
     }
+
 }

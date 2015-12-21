@@ -1,12 +1,21 @@
 package de.fraunhofer.fit.event.ceml.type.requests.builded;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import de.fraunhofer.fit.event.ceml.CEMLFeeder;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TumbleWindowEvaluator;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.DoubleTumbleWindowEvaluator;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.gc.utils.gson.GsonSerializable;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
@@ -14,32 +23,40 @@ import java.util.Map;
 /**
  * Created by angel on 26/11/15.
  */
-public class LearningRequest {
+public class LearningRequest  {
     protected String name;
     private Configurator conf = Configurator.getDefaultConfig();
-    protected DataStructure data;
-    private  boolean deployed =false;
 
+    @JsonPropertyDescription("Data definition")
+    @JsonProperty(value = "Data")
+    protected DataStructure data;
+    @JsonPropertyDescription("Current Model and model definition")
+    @JsonProperty(value = "Model")
+    protected Model model;
+    @JsonPropertyDescription("Evaluator definition and current evaluation status")
+    @JsonProperty(value = "Evaluation")
+    private Evaluator evaluation;
+    @JsonPropertyDescription("The raw statements that defines the learning process")
+    @JsonProperty(value = "LearningProcess")
+    private ArrayList<String> learningProcess;
+    @JsonPropertyDescription("The raw statements which will be deployed during the time the learnt object reached the evaluation criteria")
+    @JsonProperty(value = "Deployment")
+    private ArrayList<String> deploy;
+
+    @JsonIgnore
+    private  boolean deployed =false;
+    @JsonIgnore
+    protected Map<String,Statement> deployStatements;
+    @JsonIgnore
     protected Map<String,Statement> leaningStatements;
+
 
     public Map<String, Statement> getDeployStatements() {
         return deployStatements;
     }
-
-    protected Map<String,Statement> deployStatements;
-
-    protected Model model;
-
-    private TumbleWindowEvaluator evaluation;
-    private ArrayList<String> learningProcess;
-    private ArrayList<String> deploy;
-
-
     public Map<String,Statement> getLeaningStatements() {
         return leaningStatements;
     }
-
-
 
     public DataStructure getData() {
         return data;
@@ -98,7 +115,7 @@ public class LearningRequest {
             loadDeploymentStatements();
         }
         if(evaluation == null)
-            evaluation = new TumbleWindowEvaluator();
+            evaluation = new DoubleTumbleWindowEvaluator();
         evaluation.build(data.getAttributes().keySet());
 
 
@@ -168,6 +185,7 @@ public class LearningRequest {
     public Evaluator getEvaluation() {
         return evaluation;
     }
+
 
 
 }

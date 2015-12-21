@@ -1,5 +1,13 @@
 package de.fraunhofer.fit.event.ceml.type.requests.builded;
 
+import com.fasterxml.jackson.annotation.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.gc.utils.gson.GsonSerializable;
+import eu.linksmart.gc.utils.gson.GsonSerializableParent;
+import eu.linksmart.gc.utils.logging.LoggerService;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import weka.core.Attribute;
 import weka.core.Instances;
 
@@ -11,20 +19,29 @@ import java.util.Map;
 /**
  * Created by angel on 19/11/15.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DataStructure {
 
 
-
+    @JsonPropertyDescription("Define the raw structure of the attributes.")
+    @JsonProperty(value = "AttributesStructures")
     private ArrayList<AttributeStructure> attributesStructures = null;
-
+    @JsonIgnore
+    private LoggerService loggerService = Utils.initDefaultLoggerService(DataStructure.class);
+    @JsonIgnore
     private String[] usedBy = null;
+    @JsonIgnore
     private Instances instances = null;
+    @JsonIgnore
     protected Map<String, Attribute> attributes = new Hashtable<>();
+    @JsonIgnore
     private String attributeTargetName = null;
-    private Map<String, String> attributesById=null;
-
+    @JsonIgnore
     private String name;
+    @JsonCreator
+    public DataStructure(){
 
+    }
     public String[] getUsedBy() {
         return usedBy;
     }
@@ -69,14 +86,11 @@ public class DataStructure {
         return instances;
     }
 
-    public Attribute getAttributeByID(String attributeID){
-        return attributes.get(attributesById.get(attributeID));
-    }
     public Instances buildInstances(){
         ArrayList<AttributeStructure> temp= new ArrayList<>();
+        boolean isTarget = false;
         for (AttributeStructure structures:attributesStructures ) {
 
-            structures.fixParentReference(this);
 
             if(structures.cardinality==0){
                 structures.cardinality =1;
@@ -87,19 +101,29 @@ public class DataStructure {
 
                 AttributeStructure  aux = new AttributeStructure();
                 aux.attributeName = structures.attributeName+postFix;
-                aux.id= structures.id+postFix;
                 aux.attributesClasses = structures.attributesClasses;
                 aux.cardinality =1;
+
+                if(structures.isTarget && !isTarget) {
+                    isTarget = true;
+                    aux.isTarget=true;
+                }else if(structures.isTarget )
+                    loggerService.error("Unexpected second target!");
+
                 temp.add(aux);
             }
 
+
+
         }
         attributesStructures = temp;
+        if(!isTarget)
+            attributesStructures.get(attributesStructures.size()-1).isTarget =true;
         ArrayList<Attribute> orderAttributes= new ArrayList<>();
 
         for (AttributeStructure structures:attributesStructures ) {
 
-            structures.buildAttributes();
+            structures.buildAttributes(attributes);
             orderAttributes.add(structures.getAttribute());
 
         }
@@ -114,27 +138,55 @@ public class DataStructure {
         return getLearningTarget().enumerateValues().nextElement();
     }
 
-    public class AttributeStructure {
-        private ArrayList<String> attributesClasses=null;
-        private Attribute attribute=null;
+   /*  @Override
+    public Gson getGsonSerializer() {
+        return GsonSerializableParent.GsonSerializer();
+    }
+    public static Gson GsonSerializer() throws NotImplementedException {
+        return GsonSerializable.GsonSerializer();
+    }
+    public static GsonBuilder GsonBuilder() throws NotImplementedException{
+        return GsonSerializable.GsonBuilder();
+    }
 
+    public static GsonBuilder GsonBuilder(GsonBuilder gsonBuilder) throws NotImplementedException{
+        return GsonSerializable.GsonBuilder(gsonBuilder);
+    }
+    public static String Serializer(Object object) throws NotImplementedException{
+        return GsonSerializable.GsonSerializer().toJson(object);
+    }
+    public static Object Dserializer(String object) throws NotImplementedException{
+        return GsonSerializable.GsonSerializer().fromJson(object,object.getClass());
+    }
+   public class AttributeStructure extends GsonSerializableChild<AttributeStructure> {
+        @JsonPropertyDescription("Define the name of the attribute or of the attribute vector name (base name of all members of the vector")
+        @JsonProperty(value = "AttributesClasses")
+        private ArrayList<String> attributesClasses=null;
+
+        @JsonPropertyDescription("Define the amount of repetitions of the same attribute (if is a vector)")
+        @JsonProperty(value = "Cardinality")
+        private int cardinality = 0;
+
+
+        @JsonPropertyDescription("Define the possible values of the attribute, in case is a nominal attribute")
+        @JsonProperty(value = "Name")
+        private String attributeName=null;
+
+
+        @JsonPropertyDescription("Define if this attribute is the learning target")
+        @JsonProperty(value = "IsTarget")
+        private boolean isTarget = false;
+        @JsonCreator
+        public AttributeStructure() {
+        }
+
+        public boolean isTarget() {
+            return isTarget;
+        }
+        private Attribute attribute=null;
         public int getCardinality() {
             return cardinality;
         }
-
-        private int cardinality = 0;
-
-        private String id=null;
-        private String attributeName=null;
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-
         public ArrayList<String> getAttributesClasses() {
             return attributesClasses;
         }
@@ -179,13 +231,11 @@ public class DataStructure {
 
             if( attributes ==null)
                 attributes = new Hashtable<String, Attribute>();
-            if( attributesById ==null)
-                attributesById= new Hashtable<>();
+
             attributes.put(attribute.name(),attribute);
-            attributesById.put(id,attributeName);
 
         }
-        private void fixParentReference(DataStructure dataStructure){
+       /* private void fixParentReference(DataStructure dataStructure){
             try {
                 Field field  = AttributeStructure.class.getDeclaredField("this$0");
                 field.setAccessible(true);
@@ -193,6 +243,12 @@ public class DataStructure {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }*/
+/*
+        @Override
+        public Gson getGsonSerializer() {
+            return GsonSerializableChild.GsonSerializer();
         }
-    }
+
+    }*/
 }

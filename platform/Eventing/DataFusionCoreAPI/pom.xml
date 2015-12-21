@@ -24,6 +24,14 @@
     <name>OSGi Component - DataFusion Core APIs</name>
     <description>OSGi Component description - Describe the APIs of needed in the internal logic</description>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.4</version>
+        </dependency>
+    </dependencies>
 
 
     <build>

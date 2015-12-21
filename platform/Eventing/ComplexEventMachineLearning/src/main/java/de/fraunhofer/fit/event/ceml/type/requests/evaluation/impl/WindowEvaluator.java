@@ -1,5 +1,6 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithmBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
@@ -16,7 +17,7 @@ import java.util.Map;
 /**
  * Created by angel on 1/12/15.
  */
-public class WindowEvaluator implements Evaluator {
+public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     protected static LoggerService loggerService = Utils.initDefaultLoggerService(WindowEvaluator.class);
     private long totalFalsePositives = 0;
     private long totalFalseNegatives = 0;
@@ -144,9 +145,9 @@ public class WindowEvaluator implements Evaluator {
 
     @Override
     public void reBuild(Evaluator evaluator) {
-        if(evaluator instanceof  TumbleWindowEvaluator){
-            TumbleWindowEvaluator aux = (TumbleWindowEvaluator)evaluator;
-            for(TargetRequest algorithm: aux.targets){
+        if(evaluator instanceof DoubleTumbleWindowEvaluator){
+            DoubleTumbleWindowEvaluator aux = (DoubleTumbleWindowEvaluator)evaluator;
+            for(TargetRequest algorithm: aux.getTargets()) {
                 evaluationAlgorithms.get(algorithm.getName()).reBuild(algorithm);
             }
 
@@ -454,12 +455,13 @@ public class WindowEvaluator implements Evaluator {
     }
 
 
-    public class Samples extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.Samples {
+    public class Samples extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.Samples {
 
         public Samples(ComparisonMethod method, double target) {
             super(method, target);
         }
 
     }
+
 
 }

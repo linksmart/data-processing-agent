@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.datafusion.Statement;
 
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.UUID;
 
-public class EPLStatement implements Statement {
+public class EPLStatement implements Statement, Serializable {
 
 
     @JsonProperty("name")
