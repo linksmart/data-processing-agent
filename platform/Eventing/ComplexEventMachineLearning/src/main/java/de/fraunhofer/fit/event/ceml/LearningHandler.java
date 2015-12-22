@@ -1,18 +1,14 @@
 package de.fraunhofer.fit.event.ceml;
 
-import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
-import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningStatement;
+import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
+import de.fraunhofer.fit.event.ceml.type.requests.LearningStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
-import eu.linksmart.api.event.datafusion.ComplexEventMqttHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
 import weka.core.Instance;
-import weka.core.Instances;
 
 import java.util.Map;
 

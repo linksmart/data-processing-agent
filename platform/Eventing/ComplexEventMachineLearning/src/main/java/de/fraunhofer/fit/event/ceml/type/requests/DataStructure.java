@@ -1,17 +1,11 @@
-package de.fraunhofer.fit.event.ceml.type.requests.builded;
+package de.fraunhofer.fit.event.ceml.type.requests;
 
 import com.fasterxml.jackson.annotation.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.gson.GsonSerializable;
-import eu.linksmart.gc.utils.gson.GsonSerializableParent;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import weka.core.Attribute;
 import weka.core.Instances;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;

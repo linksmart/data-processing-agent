@@ -1,6 +1,5 @@
-package de.fraunhofer.fit.event.ceml.type.requests.builded;
+package de.fraunhofer.fit.event.ceml.type.requests;
 
-import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 
 /**

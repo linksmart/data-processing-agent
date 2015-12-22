@@ -5,9 +5,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 
-import de.fraunhofer.fit.event.ceml.type.Entry;
-import de.fraunhofer.fit.event.ceml.type.requests.builded.DataStructure;
-import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
+import de.fraunhofer.fit.event.ceml.type.requests.DataStructure;
+import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
 import de.fraunhofer.fit.payload.impress.GPRTtype;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -422,9 +421,6 @@ public class CEML implements AnalyzerComponent {
 
         return value;
 
-    }
-    public static Entry newEntry(String name, Object[] object){
-        return new Entry(name,object);
     }
 
 

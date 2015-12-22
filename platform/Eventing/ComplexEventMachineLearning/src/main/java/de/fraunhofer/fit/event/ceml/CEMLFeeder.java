@@ -1,6 +1,6 @@
 package de.fraunhofer.fit.event.ceml;
 
-import de.fraunhofer.fit.event.ceml.type.requests.builded.LearningRequest;
+import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.Feeder;
