@@ -9,6 +9,8 @@ import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.DoubleTumbleWi
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.gc.utils.logging.LoggerService;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class LearningRequest  {
     protected String name;
     private Configurator conf = Configurator.getDefaultConfig();
+    private LoggerService loggerService = Utils.initDefaultLoggerService(LearningRequest.class);
 
     @JsonPropertyDescription("Data definition")
     @JsonProperty(value = "Data")
@@ -155,7 +158,10 @@ public class LearningRequest  {
     }
     public void deploy(){
       if (!deployed){
-            deployed =CEMLFeeder.startStatements(deployStatements.values()).contains("was successful");
+          loggerService.info("Request "+name+" is being deployed");
+           if( deployed =CEMLFeeder.startStatements(deployStatements.values()).contains("was successful"))
+               loggerService.info("Request "+name+" has been deployed");
+
         }
 
 
@@ -164,6 +170,7 @@ public class LearningRequest  {
         if(deployed) {
             CEMLFeeder.pauseStatements(deployStatements.values());
             deployed =false;
+            loggerService.info("Request "+name+" had been removed from active deployment");
         }
 
     }
