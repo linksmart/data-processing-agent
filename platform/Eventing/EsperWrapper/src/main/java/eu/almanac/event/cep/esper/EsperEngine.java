@@ -5,6 +5,7 @@ import eu.almanac.event.cep.intern.Const;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
+import eu.linksmart.api.event.datafusion.EventType;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -58,6 +59,10 @@ import java.util.*;
         // load configuration into Esper
         epService = EPServiceProviderManager.getDefaultProvider(config);
 
+        // default event type
+        addEventType( EventType.class.getCanonicalName(), "Event");
+        fullTypeNameToAlias.put("Event", EventType.class.getCanonicalName());
+
         loggerService.info("Esper engine has started!");
 
     }
@@ -107,6 +112,10 @@ import java.util.*;
 
 
                 epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
+                if(event instanceof EventType){
+                    epService.getEPRuntime().getEventSender(type.getCanonicalName()).sendEvent(event);
+                }
+
             }
         }catch(Exception e){
 

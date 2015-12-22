@@ -265,4 +265,19 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 		setId( aux[aux.length-2]);
 
 	}
+
+    @Override
+    public Date getDate() {
+        return phenomenonTime;
+    }
+
+    @Override
+    public String getAttributeId() {
+        return datastream.id;
+    }
+
+    @Override
+    public Object getValue() {
+        return resultValue;
+    }
 }

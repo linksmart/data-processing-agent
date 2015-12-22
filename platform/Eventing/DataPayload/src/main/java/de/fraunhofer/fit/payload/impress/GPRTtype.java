@@ -71,5 +71,20 @@ public class GPRTtype extends Component implements Serializable, EventType {
             setVariableID(Integer.valueOf(aux[5]));
     }
 
+    @Override
+    public Date getDate() {
+        return timestamp;
+    }
+
+    @Override
+    public String getId() {
+        return String.valueOf(deviceID);
+    }
+
+    @Override
+    public String getAttributeId() {
+        return String.valueOf(variableID);
+    }
+
 
 }
