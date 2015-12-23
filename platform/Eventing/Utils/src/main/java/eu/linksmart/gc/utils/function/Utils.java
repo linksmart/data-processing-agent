@@ -20,6 +20,9 @@ import java.util.TimeZone;
  * Created by José Ángel Carvajal on 07.08.2015 a researcher of Fraunhofer FIT.
  */
 public class  Utils {
+    static private DateFormat dateFormat = getDateFormat();
+
+    static private DateFormat isoDateFormat = new SimpleDateFormat(Const.TIME_ISO_FORMAT);
     static public DateFormat getDateFormat(){
         DateFormat dateFormat;
         String tzs = Configurator.getDefaultConfig().getString(Const.TIME_TIMEZONE_CONF_PATH);
@@ -37,6 +40,12 @@ public class  Utils {
 
         return dateFormat;
 
+    }
+    static public String getTimestamp(Date date){
+        return dateFormat.format(date);
+    }
+    static public String getIsoTimestamp(Date date){
+        return isoDateFormat.format(date);
     }
     static public String getDateNowString(){
         return getDateFormat().format(new Date());
