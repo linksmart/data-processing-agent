@@ -19,7 +19,10 @@ public class StaticBroker implements Broker{
         clientID = UUID.randomUUID();
         brokerService = StaticBrokerService.getBrokerService(clientID, brokerName,brokerPort);
     }
-
+    public StaticBroker() throws MalformedURLException, MqttException {
+        clientID = UUID.randomUUID();
+        brokerService = StaticBrokerService.getBrokerService(clientID, "localhost","1883");
+    }
     @Override
     public boolean isConnected() {
         return brokerService.isConnected(clientID);
