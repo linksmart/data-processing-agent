@@ -5,4 +5,5 @@ package de.fraunhofer.fit.event.ceml.intern;
  */
 public interface Const extends eu.linksmart.gc.utils.constants.Const {
     static final public String DefaultEvaluatorConfPath = "CEML.Evaluation.Default";
+    public static final String COMPLEX_LEARNING_HANDLER ="COMPLEX_LEARNING_HANDLER";
 }

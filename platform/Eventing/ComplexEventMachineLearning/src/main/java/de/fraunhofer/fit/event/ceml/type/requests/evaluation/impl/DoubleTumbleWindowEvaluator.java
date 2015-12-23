@@ -1,17 +1,14 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
-import com.google.gson.*;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithmBase;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.EvaluationAlgorithmBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.TumbleEvaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.ModelEvaluationAlgorithm;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.InitialSamples;
 
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -23,7 +20,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
 
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
     private int learning = 0, learnt =0;
-    private EvaluationAlgorithm  initialSamples;
+    private ModelEvaluationAlgorithm initialSamples;
 
     public DoubleTumbleWindowEvaluator() {
     }
@@ -87,7 +84,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
         for(int i=0; i <targets.size();i++)
             if(targets.get(i)!=null)
                 if(targets.get(i).getName().equals(InitialSamples.class.getSimpleName())) {
-                    initialSamples = EvaluationAlgorithmBase.instanceEvaluationAlgorithm(
+                    initialSamples = (ModelEvaluationAlgorithm) EvaluationAlgorithmBase.instanceEvaluationAlgorithm(
                             InitialSamples.class.getCanonicalName(),
                             targets.get(i).getMethod(),
                             targets.get(i).getThreshold()

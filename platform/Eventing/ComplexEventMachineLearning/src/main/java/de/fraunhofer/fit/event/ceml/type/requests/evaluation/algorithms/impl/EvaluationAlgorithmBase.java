@@ -1,29 +1,24 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms;
+package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl;
 
-import com.google.gson.*;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.ModelEvaluationAlgorithmExtended;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.gson.GsonSerializable;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Type;
 
 /**
  * Created by angel on 4/12/15.
  */
 public abstract class EvaluationAlgorithmBase implements EvaluationAlgorithm {
-    protected double target =-1;
-    protected double currentValue= 0;
+
     protected ComparisonMethod method= ComparisonMethod.More;
     protected static LoggerService loggerService = Utils.initDefaultLoggerService(EvaluationAlgorithmBase.class);
 
     protected String name;
 
 
-    static public EvaluationAlgorithm instanceEvaluationAlgorithm(String canonicalName, String method, double target)  {
+    static public EvaluationAlgorithm instanceEvaluationAlgorithm(String canonicalName, String method, Object target)  {
 
         try {
             Class clazz = Class.forName(canonicalName);
@@ -46,8 +41,10 @@ public abstract class EvaluationAlgorithmBase implements EvaluationAlgorithm {
                 }
             }
 
-            constructor = clazz.getConstructor(ComparisonMethod.class, double.class);
-
+            if(target instanceof Double)
+                constructor = clazz.getConstructor(ComparisonMethod.class, double.class);
+            else if(target instanceof Double[])
+                constructor = clazz.getConstructor(ComparisonMethod.class, Double[].class);
 
             return  (EvaluationAlgorithm) constructor.newInstance(methodParameter,target);
         } catch (Exception e) {
@@ -58,28 +55,9 @@ public abstract class EvaluationAlgorithmBase implements EvaluationAlgorithm {
     public EvaluationAlgorithmBase(){
         name = this.getClass().getSimpleName();
     }
-    public EvaluationAlgorithmBase(ComparisonMethod method, double target){
+    public EvaluationAlgorithmBase(ComparisonMethod method){
         name = this.getClass().getSimpleName();
-        this.target=target;
 
-    }
-    @Override
-    public double getTarget() {
-        return target;
-    }
-
-    @Override
-    public void setTarget(double target) {
-
-        this.target =target;
-    }
-
-    @Override
-    public abstract double calculate() ;
-
-    @Override
-    public double getResult() {
-        return currentValue;
     }
 
     @Override
@@ -87,36 +65,15 @@ public abstract class EvaluationAlgorithmBase implements EvaluationAlgorithm {
         this.method =method;
     }
 
-    @Override
-    public boolean isReady() {
-        switch (method){
-
-            case Equal:
-                return currentValue== target;
-            case More:
-                return currentValue >target;
-            case MoreEqual:
-                return currentValue >=target;
-            case Less:
-                return currentValue < target;
-            case LessEqual:
-                return currentValue <=target;
-        }
-        return false;
-    }
 
 
-    public EvaluationAlgorithmExtended getExtended(){
-        if(this instanceof EvaluationAlgorithmExtended)
-            return  (EvaluationAlgorithmExtended)this;
+
+    public ModelEvaluationAlgorithmExtended getExtended(){
+        if(this instanceof ModelEvaluationAlgorithmExtended)
+            return  (ModelEvaluationAlgorithmExtended)this;
         return null;
 
     }
 
-    @Override
-    public void reBuild(TargetRequest evaluationAlgorithm) {
-
-        target = evaluationAlgorithm.getThreshold();
-    }
 
 }
