@@ -7,7 +7,7 @@ public class InitialSamples extends ModelEvaluationAlgorithmBase {
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             if(currentValue>target)
                 currentValue--;
             return currentValue;

@@ -7,7 +7,7 @@ import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
 /**
  * Created by José Ángel Carvajal on 23.12.2015 a researcher of Fraunhofer FIT.
  */
-public abstract class ClassEvaluationAlgorithmBase extends EvaluationAlgorithmBase implements ClassEvaluationAlgorithm {
+public abstract class ClassEvaluationAlgorithmBase extends EvaluationAlgorithmBase<Double[]> implements ClassEvaluationAlgorithm {
     protected Double[] targets ;
     protected Double[] currentValues;
 
@@ -21,7 +21,7 @@ public abstract class ClassEvaluationAlgorithmBase extends EvaluationAlgorithmBa
 
     }
     @Override
-    public abstract double calculate(int classIndex) ;
+    public abstract Double calculate(int classIndex) ;
 
     @Override
     public Double[] getTarget() {
@@ -43,15 +43,15 @@ public abstract class ClassEvaluationAlgorithmBase extends EvaluationAlgorithmBa
         switch (method){
 
             case Equal:
-                return currentValues[i]== targets[i];
+                return currentValues[i].compareTo( targets[i])==0;
             case More:
-                return currentValues[i] >targets[i];
+                return currentValues[i].compareTo( targets[i])<0;
             case MoreEqual:
-                return currentValues[i] >=targets[i];
+                return currentValues[i].compareTo( targets[i])<=0;
             case Less:
-                return currentValues[i] < targets[i];
+                return currentValues[i].compareTo( targets[i])>0;
             case LessEqual:
-                return currentValues[i] <=targets[i];
+                return currentValues[i].compareTo( targets[i])>=0;
         }
         return false;
     }
@@ -69,19 +69,19 @@ public abstract class ClassEvaluationAlgorithmBase extends EvaluationAlgorithmBa
             switch (method){
 
                 case Equal:
-                    ready = currentValues[i]== targets[i];
+                    ready = currentValues[i].compareTo(targets[i])==0;
                     break;
                 case More:
-                    ready =  currentValues[i] >targets[i];
+                    ready = currentValues[i].compareTo(targets[i])<0;
                     break;
                 case MoreEqual:
-                    ready = currentValues[i] >=targets[i];
+                    ready = currentValues[i].compareTo(targets[i])<=0;
                     break;
                 case Less:
-                    ready = currentValues[i] < targets[i];
+                    ready = currentValues[i].compareTo(targets[i])>0;
                     break;
                 case LessEqual:
-                    ready = currentValues[i] <=targets[i];
+                    ready = currentValues[i].compareTo(targets[i])>=0;
             }
         return ready;
     }

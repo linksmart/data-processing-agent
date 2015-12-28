@@ -358,11 +358,26 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             double denominator = (totalTrueNegatives + totalTruePositives + totalFalseNegatives + totalFalsePositives);
             if (denominator > 0)
                 return (currentValue = ((double) (totalTrueNegatives + totalTruePositives)) / denominator);
-            return 0;
+            return 0.0;
+
+        }
+    }
+    public class ClassPrecision extends ClassEvaluationAlgorithmSubBase {
+
+        public ClassPrecision(ComparisonMethod method, Double[] target) {
+            super(method, target);
+        }
+
+        @Override
+        public Double calculate(int classIndex) {
+            long denominator = (long) (sequentialConfusionMatrix[classIndex][EvaluationMetrics.truePositives.ordinal()] + sequentialConfusionMatrix[classIndex][EvaluationMetrics.falsePositives.ordinal()]);
+            if (denominator > 0)
+                return (currentValues[classIndex]= ((double) sequentialConfusionMatrix[classIndex][EvaluationMetrics.truePositives.ordinal()]) / denominator);
+            return 0.0;
 
         }
     }
@@ -373,11 +388,11 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             long denominator = (totalTruePositives + totalFalsePositives);
             if (denominator > 0)
                 return (currentValue = ((double) totalTruePositives) / denominator);
-            return 0;
+            return 0.0;
 
         }
     }
@@ -388,33 +403,40 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             long denominator = (totalTruePositives + totalFalseNegatives);
             if (denominator > 0)
                 return ( currentValue = ((double) totalTruePositives) / denominator);
-            return 0;
+            return 0.0;
 
         }
     }
-/*
-    public class SensitivityPerClass extends EvaluationAlgorithmSubBase {
 
-        public SensitivityPerClass(ComparisonMethod method, double target) {
+    public class ClassSensitivity extends ClassEvaluationAlgorithmSubBase {
+
+        public ClassSensitivity(ComparisonMethod method, Double[] target) {
             super(method, target);
         }
 
         @Override
-        public double calculate(int indexClass) {
+        public Double calculate(int indexClass) {
             long denominator = (((long)sequentialConfusionMatrix[indexClass][EvaluationMetrics.truePositives.ordinal()]) + (long)sequentialConfusionMatrix[indexClass][EvaluationMetrics.falseNegatives.ordinal()]);
             if (denominator > 0)
-                return ( currentValue = ((double)sequentialConfusionMatrix[indexClass][EvaluationMetrics.truePositives.ordinal()]) / denominator);
-            return 0;
+                return ( currentValues[indexClass] = ((double)sequentialConfusionMatrix[indexClass][EvaluationMetrics.truePositives.ordinal()]) / denominator);
+            return 0.0;
 
         }
-    }*/
+    }
     public class Recall extends Sensitivity {
 
         public Recall(ComparisonMethod method, double target) {
+            super(method, target);
+        }
+
+    }
+    public class ClassRecall extends ClassSensitivity {
+
+        public ClassRecall(ComparisonMethod method, Double[] target) {
             super(method, target);
         }
 
@@ -426,12 +448,12 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
 
             long denominator = (totalFalsePositives + totalTrueNegatives);
             if (denominator > 0)
                 return (currentValue = ((double) totalTrueNegatives) / denominator);
-            return 0;
+            return 0.0;
 
         }
     }
@@ -443,13 +465,13 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
 
 
             long denominator = (totalTrueNegatives + totalFalseNegatives);
             if (denominator > 0)
                 return ( currentValue= ((double) totalTrueNegatives));
-            return 0;
+            return 0.0;
 
         }
     }
@@ -460,11 +482,11 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
-            long denominator = (totalFalsePositives + totalTrueNegatives);
+        public Double calculate() {
+            Double denominator = (double)(totalFalsePositives + totalTrueNegatives);
             if (denominator > 0)
                 return (currentValue = totalFalsePositives/denominator);
-            return 0;
+            return 0.0;
         }
     }
     public class FalseDiscoveryRate extends ModelEvaluationAlgorithmSubBase {
@@ -474,11 +496,11 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
-            long denominator = (totalFalsePositives + totalTruePositives);
+        public Double calculate() {
+            Double denominator = (double)(totalFalsePositives + totalTruePositives);
             if (denominator > 0)
-                return ( currentValue= 1- totalFalsePositives);
-            return 0;
+                return ( currentValue= 1.0 - totalFalsePositives);
+            return 0.0;
         }
     }
     public class MissRate extends ModelEvaluationAlgorithmSubBase {
@@ -488,11 +510,11 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             long denominator = (totalFalseNegatives + totalTruePositives);
             if (denominator > 0)
                 return ( currentValue= ((double) totalFalseNegatives) / denominator);
-            return 0;
+            return 0.0;
         }
     }
     public class F1Score extends ModelEvaluationAlgorithmSubBase {
@@ -502,28 +524,41 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             double denominator = (( totalTruePositives *2.0) + totalFalsePositives + totalFalseNegatives);
             if (denominator > 0)
                 return ( currentValue= ( totalTruePositives *2.0) / denominator);
-            return 0;
+            return 0.0;
         }
-    }/*
-    public class WeightedF1Score extends F1Score {
+    }
 
-        public WeightedF1Score(ComparisonMethod method, double target) {
+    public class ClassWeightedF1Score extends ClassEvaluationAlgorithmSubBase  {
+
+        protected ClassPrecision precision;
+        protected ClassRecall recall;
+        protected Integer[] weight;
+        protected int samples=0;
+        public ClassWeightedF1Score(ComparisonMethod method, Double[] target) {
             super(method, target);
+            precision = new ClassPrecision(method,target);
+            recall = new ClassRecall(method,target);
+            weight = new Integer[target.length];
         }
 
 
         @Override
-        public double calculate(int classIndex) {
-            double denominator = ((sequentialConfusionMatrix[classIndex][EvaluationMetrics.truePositives.ordinal()] *2.0) +(sequentialConfusionMatrix[classIndex][EvaluationMetrics.falsePositives.ordinal()]  + (sequentialConfusionMatrix[classIndex][EvaluationMetrics.falseNegatives.ordinal()]);
-            if (denominator > 0)
-                return ( currentValue= ( totalTruePositives *2.0) / denominator);
-            return 0;
+        public Double calculate(int classIndex) {
+            double pre = precision.calculate(classIndex), re=recall.calculate(classIndex);
+
+            weight[classIndex]++;
+            samples++;
+
+            return currentValues[classIndex]=(weight[classIndex]/samples)*2.0*((pre*re)/(pre+re));
+
         }
-    }*/
+
+
+    }
     public class MatthewsCorrelationCoefficient extends ModelEvaluationAlgorithmSubBase {
 
         public MatthewsCorrelationCoefficient(ComparisonMethod method, double target) {
@@ -531,12 +566,12 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             double denominator = Math.sqrt((totalTruePositives + totalFalsePositives)*(totalTruePositives + totalFalseNegatives)*(totalTrueNegatives + totalFalsePositives)*(totalTrueNegatives + totalFalseNegatives));
             if (denominator > 0)
                 return ( currentValue= ((double) (totalTrueNegatives * totalTruePositives)-(totalFalsePositives * totalFalseNegatives)) / denominator);
 
-            return 0;
+            return 0.0;
         }
     }
     public class Informedness extends ModelEvaluationAlgorithmSubBase {
@@ -546,7 +581,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             return (currentValue = sensitivity() + specificity() - 1);
 
         }
@@ -573,7 +608,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             return (currentValue = precision() + negativePredictiveValue() - 1);
         }
         private double precision() {

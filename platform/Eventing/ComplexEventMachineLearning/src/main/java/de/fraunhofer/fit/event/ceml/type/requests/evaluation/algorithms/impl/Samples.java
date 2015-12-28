@@ -7,7 +7,7 @@ public class Samples extends ModelEvaluationAlgorithmBase {
         }
 
         @Override
-        public double calculate() {
+        public Double calculate() {
             return currentValue++;
         }
 

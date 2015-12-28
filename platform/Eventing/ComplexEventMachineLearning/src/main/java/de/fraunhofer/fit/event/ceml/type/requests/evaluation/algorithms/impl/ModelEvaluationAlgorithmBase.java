@@ -6,9 +6,9 @@ import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
 /**
  * Created by José Ángel Carvajal on 23.12.2015 a researcher of Fraunhofer FIT.
  */
-public abstract class ModelEvaluationAlgorithmBase extends EvaluationAlgorithmBase implements ModelEvaluationAlgorithm {
-    protected double target =-1;
-    protected double currentValue= 0;
+public abstract class ModelEvaluationAlgorithmBase extends EvaluationAlgorithmBase<Double> implements ModelEvaluationAlgorithm {
+    protected Double target =-1.0;
+    protected Double currentValue= 0.0;
 
 
     public ModelEvaluationAlgorithmBase(ComparisonMethod method, double target){
@@ -17,23 +17,23 @@ public abstract class ModelEvaluationAlgorithmBase extends EvaluationAlgorithmBa
 
     }
     @Override
-    public double getTarget() {
+    public Double getTarget() {
         return target;
     }
 
     @Override
-    public void setTarget(double target) {
+    public void setTarget(Double target) {
 
         this.target =target;
     }
 
     @Override
-    public abstract double calculate() ;
+    public abstract Double calculate() ;
 
 
 
     @Override
-    public double getResult() {
+    public Double getResult() {
         return currentValue;
     }
 
@@ -47,15 +47,15 @@ public abstract class ModelEvaluationAlgorithmBase extends EvaluationAlgorithmBa
         switch (method){
 
             case Equal:
-                return currentValue== target;
+                return currentValue.compareTo(target) == 0;
             case More:
-                return currentValue >target;
+                return currentValue.compareTo(target) < 0;
             case MoreEqual:
-                return currentValue >=target;
+                return currentValue.compareTo(target) <= 0;
             case Less:
-                return currentValue < target;
+                return currentValue.compareTo(target) > 0;
             case LessEqual:
-                return currentValue <=target;
+                return currentValue.compareTo(target) >= 0;
         }
         return false;
     }

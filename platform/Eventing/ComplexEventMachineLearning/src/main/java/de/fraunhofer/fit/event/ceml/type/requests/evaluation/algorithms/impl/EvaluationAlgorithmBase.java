@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 /**
  * Created by angel on 4/12/15.
  */
-public abstract class EvaluationAlgorithmBase implements EvaluationAlgorithm {
+public abstract class EvaluationAlgorithmBase<T> implements EvaluationAlgorithm<T> {
 
     protected ComparisonMethod method= ComparisonMethod.More;
     protected static LoggerService loggerService = Utils.initDefaultLoggerService(EvaluationAlgorithmBase.class);
