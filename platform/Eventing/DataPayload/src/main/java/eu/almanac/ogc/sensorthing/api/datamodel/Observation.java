@@ -20,6 +20,7 @@ package eu.almanac.ogc.sensorthing.api.datamodel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.datafusion.EventType;
+import eu.linksmart.gc.utils.function.Utils;
 
 import java.util.Date;
 
@@ -32,7 +33,7 @@ import java.util.Date;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventType
+public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventType<Observation,String,String,Object>
 {
 	/**
 	 * The time point/period of when the observation happens. To be rendered as
@@ -272,6 +273,11 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
     }
 
     @Override
+    public String getIsoTimestamp() {
+        return Utils.getIsoTimestamp(phenomenonTime);
+    }
+
+    @Override
     public String getAttributeId() {
         return datastream.id;
     }
@@ -279,5 +285,31 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
     @Override
     public Object getValue() {
         return resultValue;
+    }
+
+    @Override
+    public void setDate(Date value) {
+        phenomenonTime =value;
+
+    }
+
+    @Override
+    public void setAttributeId(String value) {
+
+        if (datastream==null)
+            datastream = new Datastream();
+        datastream.setId(value);
+
+    }
+
+    @Override
+    public void setValue(Object value) {
+        resultValue =value;
+
+    }
+
+    @Override
+    public Observation getNative() {
+        return this;
     }
 }
