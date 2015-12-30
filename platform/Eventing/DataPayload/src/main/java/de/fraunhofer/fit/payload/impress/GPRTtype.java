@@ -6,11 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.EventType;
+import eu.linksmart.gc.utils.function.Utils;
 
 /**
  * Created by angel on 12/11/15.
  */
-public class GPRTtype extends Component implements Serializable, EventType {
+public class GPRTtype extends Component implements Serializable, EventType<Integer,Integer,Double> {
 
     @JsonPropertyDescription("The time point/period of when the observation happens. To be rendered as ISO8601 time point/period string.")
     @JsonProperty(value = "timestamp")
@@ -40,6 +41,8 @@ public class GPRTtype extends Component implements Serializable, EventType {
     public Double getValue() {
         return value;
     }
+
+
 
     public void setValue(Double value) {
         this.value = value;
@@ -77,14 +80,34 @@ public class GPRTtype extends Component implements Serializable, EventType {
     }
 
     @Override
-    public String getId() {
-        return String.valueOf(deviceID);
+    public String getIsoTimestamp() {
+        return Utils.getIsoTimestamp(timestamp);
     }
 
     @Override
-    public String getAttributeId() {
-        return String.valueOf(variableID);
+    public void setDate(Date value) {
+        timestamp =value;
+    }
+    @Override
+    public  void setId(Integer value) {
+
+        deviceID = value;
+
     }
 
+    @Override
+    public void setAttributeId(Integer value) {
+        variableID = value;
+    }
+
+    @Override
+    public Integer getId() {
+        return deviceID;
+    }
+
+    @Override
+    public Integer getAttributeId() {
+        return variableID;
+    }
 
 }

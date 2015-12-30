@@ -83,7 +83,7 @@ public class BrokerService implements Observer, Broker {
 
         try {
 
-            if(isConnected())
+            if( mqttClient.isConnected())
                 _disconnect();
 
             mqttClient.close();

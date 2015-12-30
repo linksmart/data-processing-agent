@@ -17,6 +17,7 @@
  */
 package eu.almanac.ogc.sensorthing.api.datamodel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.datafusion.EventType;
@@ -33,7 +34,7 @@ import java.util.Date;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventType<Observation,String,String,Object>
+public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventType<String,String,Object>
 {
 	/**
 	 * The time point/period of when the observation happens. To be rendered as
@@ -308,8 +309,6 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 
     }
 
-    @Override
-    public Observation getNative() {
-        return this;
-    }
+
+
 }
