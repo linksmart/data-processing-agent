@@ -1,0 +1,10 @@
+{
+  "statements":[
+   {
+      "name":"persistent",
+      "statement":"select * from observation.std:lastevent()",
+      "scope":["local"],
+      "output":["/out/"]
+    }
+  ]
+}
