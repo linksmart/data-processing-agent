@@ -83,6 +83,7 @@ public class DataStructure {
     public Instances buildInstances(){
         ArrayList<AttributeStructure> temp= new ArrayList<>();
         boolean isTarget = false;
+        attributesStructures.get(attributesStructures.size()-1).attributeName = name;
         for (AttributeStructure structures:attributesStructures ) {
 
 

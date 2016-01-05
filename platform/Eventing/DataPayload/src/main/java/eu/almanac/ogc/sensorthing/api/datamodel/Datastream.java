@@ -99,7 +99,6 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 	private void initCommon()
 	{
 		// initialize inner sets
-		this.observations = new HashSet<Observation>();
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package eu.almanac.event.cep.esper;
 
 import com.espertech.esper.client.*;
+import com.espertech.esper.client.time.CurrentTimeEvent;
+import com.espertech.esper.client.time.CurrentTimeSpanEvent;
 import eu.almanac.event.cep.intern.Const;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
@@ -55,9 +57,18 @@ import java.util.*;
         // add additional configuration
         Configuration config = new Configuration();
 
+        // extern clock
+        if(conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK))
+            config.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
 
         // load configuration into Esper
         epService = EPServiceProviderManager.getDefaultProvider(config);
+
+
+        // extern clock
+        if(conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK))
+            epService.getEPRuntime().sendEvent(new CurrentTimeEvent(conf.getDate(Const.SIMULATION_EXTERNAL_CLOCK_STARTING_TIME).getTime()));
+
 
         // default event type
         addEventType( EventType.class.getCanonicalName(), "Event");
@@ -112,9 +123,17 @@ import java.util.*;
 
 
                 epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
+                if(conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK))
+                    epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(((EventType)event).getDate().getTime()));
+                /*
+                This lines produces the following error:
+                    ERROR e.a.event.cep.esper.EsperEngine - Event object of type eu.almanac.ogc.sensorthing.api.datamodel.Observation does not equal, extend or implement the type java.lang.String of event type 'eu.linksmart.api.event.datafusion.EventType'
+                I don't understand yet why, for now I will just remove the lines
                 if(event instanceof EventType){
-                    epService.getEPRuntime().getEventSender(type.getCanonicalName()).sendEvent(event);
+                    EventType event1 = (EventType)event;
+                    epService.getEPRuntime().getEventSender(EventType.class.getCanonicalName()).sendEvent(event1);
                 }
+                */
 
             }
         }catch(Exception e){
@@ -198,7 +217,7 @@ import java.util.*;
             // if there is no exception set add statement as success
             ret = true;
 
-        } catch (StatementException e) {
+        } catch (StatementException  e) {
 
             throw e;
 
@@ -281,8 +300,13 @@ import java.util.*;
         switch (query.getStateLifecycle()) {
             case RUN:
             case PAUSE:
+                EPStatement statement;
+                try {
 
-                EPStatement statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
+                    statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
+                }catch (EPStatementException e){
+                    throw new StatementException(e.getMessage(),query.getHash(),e.getCause());
+                }
 
                 if (handler != null) {
 
@@ -302,7 +326,12 @@ import java.util.*;
                 break;
             case ONCE:
             case SYNCHRONOUS:
-                EPOnDemandQueryResult result = epService.getEPRuntime().executeQuery(query.getStatement());
+                EPOnDemandQueryResult result;
+                try {
+                     result = epService.getEPRuntime().executeQuery(query.getStatement());
+                }catch (EPStatementException e){
+                    throw new StatementException(e.getMessage(),query.getHash(),e.getCause());
+                }
                 if (handler != null) {
 
                     for (EventBean event : result.getArray()) {
@@ -310,7 +339,8 @@ import java.util.*;
                         if (event.getUnderlying() instanceof Map)
                             handler.update((Map<String, Object>) event.getUnderlying());
                         else
-                            throw new Exception("Unsupported event in on-demand statement for the handler to generate an response ");
+                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",query.getHash());
+
                     }
                 }
                 break;

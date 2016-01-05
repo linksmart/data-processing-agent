@@ -1,5 +1,6 @@
 package de.fraunhofer.fit.event.ceml;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
@@ -35,6 +36,7 @@ public class CEMLRest extends Component{
     public CEMLRest() {
 
         super(CEMLRest.class.getSimpleName(), "Provides a REST API for managing the Learning request", "CEML");
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
 

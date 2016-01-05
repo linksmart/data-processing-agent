@@ -1,6 +1,7 @@
 package eu.linksmart.gc.utils.configuration;
 
 
+import eu.linksmart.gc.utils.function.Utils;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -11,6 +12,8 @@ import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.File;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -153,6 +156,16 @@ public class Configurator extends ConfigurationConst {
 
     }
 
+    public Date getDate(String key){
+
+        try {
+            return Utils.getDateFormat().parse( config.getString(key));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
     public List<String> getList(String key){
 
         return  config.getList(String.class, key);

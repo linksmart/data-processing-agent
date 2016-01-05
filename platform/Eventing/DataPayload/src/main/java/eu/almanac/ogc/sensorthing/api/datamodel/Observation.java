@@ -269,32 +269,38 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 	}
 
     @Override
+    @JsonIgnore
     public Date getDate() {
         return phenomenonTime;
     }
 
     @Override
+    @JsonIgnore
     public String getIsoTimestamp() {
         return Utils.getIsoTimestamp(phenomenonTime);
     }
 
     @Override
+    @JsonIgnore
     public String getAttributeId() {
         return datastream.id;
     }
 
     @Override
+    @JsonIgnore
     public Object getValue() {
         return resultValue;
     }
 
     @Override
+    @JsonIgnore
     public void setDate(Date value) {
         phenomenonTime =value;
 
     }
 
     @Override
+    @JsonIgnore
     public void setAttributeId(String value) {
 
         if (datastream==null)

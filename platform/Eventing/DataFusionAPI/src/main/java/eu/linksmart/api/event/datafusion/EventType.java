@@ -1,5 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 /**
@@ -16,6 +18,7 @@ public interface EventType< IDType, IDAttribute, ValueType> {
 
 
     public void setDate(Date value);
+    @JsonIgnore
     public void  setId(IDType value);
     public void setAttributeId(IDAttribute value);
     public void setValue(ValueType value);

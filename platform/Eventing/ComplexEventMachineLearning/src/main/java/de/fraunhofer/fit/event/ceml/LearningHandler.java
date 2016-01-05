@@ -39,8 +39,8 @@ public class LearningHandler extends Component implements ComplexEventHandler {
         Object target =null;
         if(eventMap.containsKey("target"))
             target=eventMap.get("target");
-        else if (eventMap.containsKey(originalRequest.getData().getLearningTarget()))
-            target =eventMap.get(originalRequest.getData().getLearningTarget());
+        else if (eventMap.containsKey(originalRequest.getData().getLearningTarget().name()))
+            target =eventMap.get(originalRequest.getData().getLearningTarget().name());
         else {
             loggerService.error("No target found in the learning rule");
             return;

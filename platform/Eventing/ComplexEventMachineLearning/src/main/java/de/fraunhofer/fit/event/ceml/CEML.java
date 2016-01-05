@@ -8,6 +8,7 @@ import java.util.*;
 import de.fraunhofer.fit.event.ceml.type.requests.DataStructure;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
 import de.fraunhofer.fit.payload.impress.GPRTtype;
+import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -356,7 +357,7 @@ public class CEML implements AnalyzerComponent {
         for(String key: events.keySet()){
             Object aux;
             String toCompare =  key;
-            if(key.toLowerCase().equals("target"))
+            if(key.toLowerCase().equals("target")| key.equals(originalRequest.getData().getLearningTarget().name()))
                 toCompare = originalRequest.getData().getLearningTarget().name();
 
             if((aux=getObject(toCompare,originalRequest.getData().getAttributes()))!=null ){
@@ -385,25 +386,49 @@ public class CEML implements AnalyzerComponent {
 
     private static Instance popularVectorInstance(Object vector, LearningRequest originalRequest, String key, Instance instance){
         String toCompare;
-        Object aux;
-        Object[] auxs = (Object[])vector;
-        for(int i =0; i<auxs.length;i++){
-            toCompare = key+String.valueOf(i);
-            if((aux=getObject(toCompare,originalRequest.getData().getAttributes()))!=null ){
-                Attribute attribute = (Attribute)aux;
-                if(attribute.isNumeric()){
-                    Double input = CEML.getNumeric(auxs[i]);
-                    instance.setValue(attribute,input);
+        if(!(vector instanceof Observation[]) ) {
+            Object aux;
+            Object[] auxs = (Object[]) vector;
+            for (int i = 0; i < auxs.length; i++) {
+                toCompare = key + String.valueOf(i);
+                if ((aux = getObject(toCompare, originalRequest.getData().getAttributes())) != null) {
+                    Attribute attribute = (Attribute) aux;
+                    if (attribute.isNumeric()) {
+                        Double input = CEML.getNumeric(auxs[i]);
+                        instance.setValue(attribute, input);
 
-                }else if(attribute.isDate()&& auxs[i]instanceof Date){
-                    String input = Utils.getDateFormat().format(auxs[i]);
-                    instance.setValue(attribute,input);
+                    } else if (attribute.isDate() && auxs[i] instanceof Date) {
+                        String input = Utils.getDateFormat().format(auxs[i]);
+                        instance.setValue(attribute, input);
 
-                }else {
-                    String input = auxs[i].toString();
-                    instance.setValue(attribute,input);
+                    } else {
+                        String input = auxs[i].toString();
+                        instance.setValue(attribute, input);
+                    }
                 }
             }
+        }else {
+            Object aux;
+            Observation[] auxs = (Observation[]) vector;
+            for (int i = 0; i < auxs.length; i++) {
+                toCompare = key + String.valueOf(i);
+                if ((aux = getObject(auxs[i].getId(), originalRequest.getData().getAttributes())) != null) {
+                    Attribute attribute = (Attribute) aux;
+                    if (attribute.isNumeric()) {
+                        Double input = CEML.getNumeric(auxs[i]);
+                        instance.setValue(attribute, input);
+
+                   /* } else if (attribute.isDate() && auxs[i] instanceof Date) {
+                        String input = Utils.getDateFormat().format(auxs[i]);
+                        instance.setValue(attribute, input);
+*/
+                    } else {
+                        String input = auxs[i].getResultValue().toString();
+                        instance.setValue(attribute, input);
+                    }
+                }
+            }
+
         }
         return instance;
     }
