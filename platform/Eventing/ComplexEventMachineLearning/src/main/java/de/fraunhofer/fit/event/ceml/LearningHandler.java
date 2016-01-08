@@ -1,5 +1,6 @@
 package de.fraunhofer.fit.event.ceml;
 
+import de.fraunhofer.fit.event.ceml.intern.Const;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
@@ -62,6 +63,9 @@ public class LearningHandler extends Component implements ComplexEventHandler {
              originalRequest.deploy();
         else
             originalRequest.undeploy();
+
+        if(conf.getBool(Const.GenerateReports))
+            loggerService.info(originalRequest.getEvaluation().report());
 
         CEML.learn(originalRequest.getModel().getLerner(),instance);
 

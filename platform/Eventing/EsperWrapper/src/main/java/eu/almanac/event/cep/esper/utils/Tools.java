@@ -73,7 +73,7 @@ public class Tools {
         return  CreateIoTEntity(generateRandomAbout(),property,observation.toString());
     }
 
-    static public Map CreateIoTEntities(Map entities, String property, String observation ){
+    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, String observation){
 
 
         Map<String,IoTEntityEvent> arg =entities;
@@ -85,21 +85,21 @@ public class Tools {
 
         return ret;
     }
-    static public Map CreateIoTEntities(Map entities, String property, Float observation ){
+    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, Float observation){
 
         return CreateIoTEntities(entities,property,observation.toString());
     }
 
-    static public Map CreateIoTEntities(Map entities, String property, Double observation ){
+    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, Double observation){
 
         return CreateIoTEntities(entities,property,observation.toString());
     }
 
-    static public Map CreateIoTEntities(Map entities, String property, Integer observation ){
+    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, Integer observation){
 
         return CreateIoTEntities(entities,property,observation.toString());
     }
-    static public Map CreateIoTEntities(Map entities, String property, Boolean observation ){
+    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, Boolean observation){
 
         return CreateIoTEntities(entities,property,observation.toString());
     }
@@ -307,4 +307,24 @@ public class Tools {
 
         return  generateObservation(new Date(),observation);
     }*/
+    static private Map<String, Map> used = new Hashtable<String,Map>();
+    static public boolean hadBeanUsed(String queryName, Object[] objects){
+        boolean hadBeanUsed ;
+        if(!used.containsKey(queryName))
+            used.put(queryName,null);
+        if(used.get(queryName)==null) {
+            used.put(queryName,new Hashtable());
+            for (Object object: objects)
+                used.get(queryName).put(object,object);
+
+            hadBeanUsed = false;
+        }else {
+            hadBeanUsed = false;
+            for (int i = objects.length-1; i >0 && !hadBeanUsed; i--)
+                hadBeanUsed = used.get(queryName).containsKey(objects[i]);
+
+        }
+
+        return hadBeanUsed;
+    }
 }

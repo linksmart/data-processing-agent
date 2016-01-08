@@ -16,11 +16,13 @@ public interface Evaluator {
 
      boolean isDeployable();
 
-    void build(Collection<String> classesNames);
+    void build(Collection<String> classesNames) throws Exception;
 
     void reBuild(Evaluator evaluator);
 
+    String report();
     enum EvaluationMetrics{
         truePositives,trueNegatives,falsePositives,falseNegatives
     }
+
 }

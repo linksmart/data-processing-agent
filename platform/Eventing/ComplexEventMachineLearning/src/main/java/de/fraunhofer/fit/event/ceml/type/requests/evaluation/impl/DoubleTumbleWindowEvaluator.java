@@ -80,18 +80,26 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
 
     @SuppressWarnings("unchecked")
     @Override
-    public void build(Collection<String> namesClasses){
-        for(int i=0; i <targets.size();i++)
-            if(targets.get(i)!=null)
-                if(targets.get(i).getName().equals(InitialSamples.class.getSimpleName())) {
+    public void build(Collection<String> namesClasses) throws Exception {
+        boolean isSamples = false;
+        for(int i=0; i <targets.size();i++) {
+            if (targets.get(i) != null)
+                if (targets.get(i).getName().equals(InitialSamples.class.getSimpleName())) {
                     initialSamples = (ModelEvaluationAlgorithm) EvaluationAlgorithmBase.instanceEvaluationAlgorithm(
                             InitialSamples.class.getCanonicalName(),
                             targets.get(i).getMethod(),
                             targets.get(i).getThreshold()
                     );
                     targets.remove(i);
-                }
 
+                }
+            if (targets.get(i).getName().equals(WindowEvaluator.Samples.class.getSimpleName()))
+                isSamples = true;
+        }
+
+
+        if (!isSamples)
+            throw  new Exception("For creating sliding evaluator the samples must be defined");
 
         if(initialSamples== null)
             initialSamples = new InitialSamples(EvaluationAlgorithm.ComparisonMethod.More,-1);
@@ -111,6 +119,14 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
 
     }
 
+    @Override
+    public String report() {
+        if(learning == learnt)
+            return  "Learning window report: "+windowEvaluators[learning].report();
+
+        return  "Learning window report: "+windowEvaluators[learning].report()+" || "+
+                "Learnt window report: "+windowEvaluators[learnt].report();
+    }
 
 
 }

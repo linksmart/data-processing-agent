@@ -8,8 +8,8 @@ public class InitialSamples extends ModelEvaluationAlgorithmBase {
 
         @Override
         public Double calculate() {
-            if(currentValue>target)
-                currentValue--;
+            if(currentValue<target)
+                currentValue++;
             return currentValue;
         }
 

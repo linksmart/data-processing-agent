@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
  * Created by angel on 4/12/15.
  */
 public class TargetRequest {
-    public double getThreshold() {
+    public Double getThreshold() {
         return threshold;
     }
 
