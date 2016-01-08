@@ -1,6 +1,5 @@
 package eu.almanac.client.event.datafusion;
 
-import datafusion.sdk.client.epl.StatementSender;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 
