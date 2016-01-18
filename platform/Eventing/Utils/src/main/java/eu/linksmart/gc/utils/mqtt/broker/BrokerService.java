@@ -7,6 +7,7 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.subscription.ForwardingListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.LoggerFactory;
 
@@ -223,7 +224,10 @@ public class BrokerService implements Observer, Broker {
         if(!mqttClient.isConnected())
             _connect();
 
-         mqttClient.publish(topic,payload,qos,retained);
+        // create the topic and the publish suppose to solve the:
+        // 106ed26f-74f8-4048-9035-cb9146e35c7c:67c62857-af3c-4aa0-9f28-3f4db6baf811: Timed out as no activity, keepAlive=60,000 lastOutboundActivity=1,446,124,817,035 lastInboundActivity=1,446,124,826,676 time=1,446,124,936,865 lastPing=1,446,124,784,576
+        mqttClient.getTopic(topic).publish(payload,qos,retained);
+
     }
     public void publish(String topic, byte[] payload) throws Exception {
 
