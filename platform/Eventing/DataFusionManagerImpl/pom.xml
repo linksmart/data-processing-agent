@@ -16,12 +16,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>1.7.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>eu.almanac</groupId>
             <artifactId>eu.almanac.api.event.datafusion</artifactId>
             <version>${almanac.version}</version>
@@ -123,28 +117,7 @@
                 <version>2.2</version>
                 <!-- nothing here -->
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>src/main/resources/dfm.cfg</file>
-                                    <type>cfg</type>
-                                    <classifier>configuration</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
 
         </plugins>
     </build>
