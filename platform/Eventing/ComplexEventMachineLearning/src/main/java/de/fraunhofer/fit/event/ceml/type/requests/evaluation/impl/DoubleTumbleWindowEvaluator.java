@@ -122,10 +122,10 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
     @Override
     public String report() {
         if(learning == learnt)
-            return  "Learning window report: "+windowEvaluators[learning].report();
+            return  "Learning window report > "+windowEvaluators[learning].report();
 
-        return  "Learning window report: "+windowEvaluators[learning].report()+" || "+
-                "Learnt window report: "+windowEvaluators[learnt].report();
+        return  "Learning window report > "+windowEvaluators[learning].report()+" | "+
+                "Learnt window report > "+windowEvaluators[learnt].report();
     }
 
 

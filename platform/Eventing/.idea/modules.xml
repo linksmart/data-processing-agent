@@ -2,18 +2,21 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ComplexEventMachineLearning/CEML.iml" filepath="$PROJECT_DIR$/ComplexEventMachineLearning/CEML.iml" />
-      <module fileurl="file://$PROJECT_DIR$/DataFusionManager/DataFusionManager.iml" filepath="$PROJECT_DIR$/DataFusionManager/DataFusionManager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/DataFusionManagerImpl/DataFusionManagerImpl.iml" filepath="$PROJECT_DIR$/DataFusionManagerImpl/DataFusionManagerImpl.iml" />
-      <module fileurl="file://$PROJECT_DIR$/DataFusionRestManager/DataFusionRestManager.iml" filepath="$PROJECT_DIR$/DataFusionRestManager/DataFusionRestManager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/EsperWrapper/EsperWrapper.iml" filepath="$PROJECT_DIR$/EsperWrapper/EsperWrapper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RestFeeder/RestFeeder.iml" filepath="$PROJECT_DIR$/RestFeeder/RestFeeder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ComplexEventMachineLearning/CEML.iml" filepath="$PROJECT_DIR$/ComplexEventMachineLearning/CEML.iml" group="eu.almanac.eventing and modules" />
+      <module fileurl="file://$PROJECT_DIR$/Client/DataFusionClient.iml" filepath="$PROJECT_DIR$/Client/DataFusionClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DataFusionManager/DataFusionManager.iml" filepath="$PROJECT_DIR$/DataFusionManager/DataFusionManager.iml" group="eu.almanac.eventing and modules" />
+      <module fileurl="file://$PROJECT_DIR$/DataFusionManagerImpl/DataFusionManagerImpl.iml" filepath="$PROJECT_DIR$/DataFusionManagerImpl/DataFusionManagerImpl.iml" group="eu.almanac.eventing and modules" />
+      <module fileurl="file://$PROJECT_DIR$/DataFusionRestManager/DataFusionRestManager.iml" filepath="$PROJECT_DIR$/DataFusionRestManager/DataFusionRestManager.iml" group="eu.almanac.eventing and modules" />
+      <module fileurl="file://$PROJECT_DIR$/DataPayload/DataPayload.iml" filepath="$PROJECT_DIR$/DataPayload/DataPayload.iml" group="eu.almanac.eventing and modules" />
+      <module fileurl="file://$PROJECT_DIR$/EsperWrapper/EsperWrapper.iml" filepath="$PROJECT_DIR$/EsperWrapper/EsperWrapper.iml" group="eu.almanac.eventing and modules" />
+      <module fileurl="file://$PROJECT_DIR$/RestFeeder/RestFeeder.iml" filepath="$PROJECT_DIR$/RestFeeder/RestFeeder.iml" group="eu.almanac.eventing and modules" />
       <module fileurl="file://$PROJECT_DIR$/RestFeeder/RestFeedr.iml" filepath="$PROJECT_DIR$/RestFeeder/RestFeedr.iml" group="RestFeedr and modules" />
-      <module fileurl="file://$PROJECT_DIR$/Utils/Utils.iml" filepath="$PROJECT_DIR$/Utils/Utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Utils/Utils.iml" filepath="$PROJECT_DIR$/Utils/Utils.iml" group="eu.almanac.eventing and modules" />
       <module fileurl="file://$PROJECT_DIR$/DataPayload/data-payload.iml" filepath="$PROJECT_DIR$/DataPayload/data-payload.iml" />
-      <module fileurl="file://$PROJECT_DIR$/DataFusionAPI/eu.almanac.api.event.datafusion.iml" filepath="$PROJECT_DIR$/DataFusionAPI/eu.almanac.api.event.datafusion.iml" />
-      <module fileurl="file://$PROJECT_DIR$/DataFusionCoreAPI/eu.almanac.api.event.datafusion.core.iml" filepath="$PROJECT_DIR$/DataFusionCoreAPI/eu.almanac.api.event.datafusion.core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/eu.almanac.eventing.iml" filepath="$PROJECT_DIR$/eu.almanac.eventing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SDKLibrary/datafusion.sdk.client.iml" filepath="$PROJECT_DIR$/SDKLibrary/datafusion.sdk.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DataFusionAPI/eu.almanac.api.event.datafusion.iml" filepath="$PROJECT_DIR$/DataFusionAPI/eu.almanac.api.event.datafusion.iml" group="eu.almanac.eventing and modules" />
+      <module fileurl="file://$PROJECT_DIR$/DataFusionCoreAPI/eu.almanac.api.event.datafusion.core.iml" filepath="$PROJECT_DIR$/DataFusionCoreAPI/eu.almanac.api.event.datafusion.core.iml" group="eu.almanac.eventing and modules" />
+      <module fileurl="file://$PROJECT_DIR$/eu.almanac.eventing.iml" filepath="$PROJECT_DIR$/eu.almanac.eventing.iml" group="eu.almanac.eventing and modules" />
     </modules>
   </component>
 </project>

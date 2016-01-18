@@ -9,5 +9,6 @@ public interface Const extends eu.linksmart.gc.utils.constants.Const {
 
     public static final String GenerateReports =   "CEML.Evaluation.GenerateReports";
 
+    public static final String EngineTimeProveded =   "CEML.Evaluation.TimeProvedBy";
     public static final String DEFAULT_CONFIGURATION_FILE ="ceml.cfg";
 }

@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class BrokerService implements Observer, Broker {
     protected static LoggerService loggerService;
@@ -23,6 +22,10 @@ public class BrokerService implements Observer, Broker {
     protected ForwardingListener listener;
     private UUID ID;
     protected ArrayList<String> topics = new ArrayList<String>();
+
+    protected int preloadedQoS = 0,preloadedTriesReconnect = 10, preloadedRetryTime =3000;
+    protected boolean preloadedPolicy = false;
+
 
 
 
@@ -39,6 +42,7 @@ public class BrokerService implements Observer, Broker {
 
          loggerService = new LoggerService(LoggerFactory.getLogger(BrokerService.class));
         watchdog = conf.getBool(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_CONF_PATH);
+        preloadConfiguration();
         if (brokerName.equals("*"))
             this.brokerName = getHostName();
         else
@@ -127,6 +131,13 @@ public class BrokerService implements Observer, Broker {
         mqttClient.setCallback(listener);
     }
 
+    protected void preloadConfiguration(){
+
+        preloadedQoS =conf.getInt(Const.DEFAULT_QOS);
+        preloadedPolicy = conf.getBool(Const.DEFAULT_RETAIN_POLICY);
+        preloadedTriesReconnect =conf.getInt(Const.RECONNECTION_TRY);
+        preloadedRetryTime = conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME);
+    }
     private void connectionWatchdog(){
 
         if(watchdog) {
@@ -136,6 +147,13 @@ public class BrokerService implements Observer, Broker {
                     while (watchdog) {
 
                         try {
+                            try {
+
+                                preloadConfiguration();
+
+                            }catch (Exception e){
+                                loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
+                            }
                             //noinspection SynchronizeOnNonFinalField
                             synchronized (watchdog) {
                                 if (!mqttClient.isConnected())
@@ -148,7 +166,12 @@ public class BrokerService implements Observer, Broker {
 
                             Thread.sleep(conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT));
                         } catch (Exception e) {
-                            loggerService.error(e.getMessage(), e);
+                            loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
+                            try {
+                                Thread.sleep(3000);
+                            } catch (InterruptedException e1) {
+                                loggerService.error(e.getMessage(), e);
+                            }
                         }
                     }
                 }
@@ -204,11 +227,12 @@ public class BrokerService implements Observer, Broker {
     }
     public void publish(String topic, byte[] payload) throws Exception {
 
+
         publish(
                 topic,
                 payload,
-                conf.getInt(Const.DEFAULT_QOS),
-                conf.getBool(Const.DEFAULT_RETAIN_POLICY));
+                preloadedQoS,
+                preloadedPolicy);
     }
     public void publish(String topic, String payload) throws Exception {
 
@@ -313,7 +337,7 @@ public class BrokerService implements Observer, Broker {
         ForwardingListener source = (ForwardingListener)arg;
         switch (source.getStatus()){
             case Disconnected:
-                for(int i=0; i<conf.getInt(Const.RECONNECTION_TRY) && !mqttClient.isConnected();i++){
+                for(int i=0; i<preloadedTriesReconnect && !mqttClient.isConnected();i++){
                     try {
                         mqttClient.connect();
 
@@ -321,7 +345,7 @@ public class BrokerService implements Observer, Broker {
                         loggerService.error(e.getMessage(), e);
                     }
                     try {
-                        Thread.sleep(conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME));
+                        Thread.sleep(preloadedRetryTime);
                     } catch (InterruptedException e) {
                         loggerService.error(e.getMessage(), e);
                     }
