@@ -33,6 +33,10 @@ public class LearningRequest  {
     @JsonPropertyDescription("Evaluator definition and current evaluation status")
     @JsonProperty(value = "Evaluation")
     private Evaluator evaluation;
+
+    @JsonPropertyDescription("The raw statements that defines the initial pre-processing steps ")
+    @JsonProperty(value = "SupportStatements")
+    private ArrayList<String> support;
     @JsonPropertyDescription("The raw statements that defines the learning process")
     @JsonProperty(value = "LearningProcess")
     private ArrayList<String> learningProcess;
@@ -46,6 +50,8 @@ public class LearningRequest  {
     protected Map<String,Statement> deployStatements;
     @JsonIgnore
     protected Map<String,Statement> leaningStatements;
+    @JsonIgnore
+    protected Map<String,Statement> supportStatements;
 
 
     public Map<String, Statement> getDeployStatements() {
@@ -81,15 +87,33 @@ public class LearningRequest  {
             i++;
         }
     }
-    private void loadDeploymentStatements(){
+    private void loadStatements(boolean isDeployment){
         Integer i =0;
-        for (String strStatement : deploy) {
-            Statement statement = new EPLStatement();
-            ((EPLStatement) statement).setName("DeployStatement:" + name + i.toString());
-            ((EPLStatement) statement).setStatement(strStatement);
-            ((EPLStatement) statement).setStateLifecycle(Statement.StatementLifecycle.PAUSE);
+        ArrayList<String>  map;
+        if(isDeployment)
+            map = deploy;
+        else
+            map =support;
 
-            deployStatements.put(statement.getHash(),statement);
+        for (String strStatement : map) {
+            Statement statement = new EPLStatement();
+            if(isDeployment) {
+                ((EPLStatement) statement).setName("DeployStatement:" + name + i.toString());
+                ((EPLStatement) statement).setStateLifecycle(Statement.StatementLifecycle.PAUSE);
+            }else {
+                ((EPLStatement) statement).setName("SupportStatement:" + name + i.toString());
+                ((EPLStatement) statement).setCEHandler(null);
+
+            }
+            ((EPLStatement) statement).setStatement(strStatement);
+
+
+
+            if( isDeployment)
+                deployStatements.put(statement.getHash(),statement);
+            else
+                supportStatements.put(statement.getHash(),statement);
+
             i ++;
         }
     }
@@ -99,6 +123,11 @@ public class LearningRequest  {
         data.setName(name);
         data.buildInstances();
         model.build(this);
+        deployStatements = new Hashtable<>();
+        if(deploy != null) {
+
+            loadStatements(true);
+        }
 
         leaningStatements = new Hashtable<>();
         if(learningProcess==null)
@@ -109,7 +138,7 @@ public class LearningRequest  {
         deployStatements = new Hashtable<>();
         if(deploy != null) {
 
-            loadDeploymentStatements();
+            loadStatements(true);
         }
         if(evaluation == null)
             evaluation = new DoubleTumbleWindowEvaluator();
@@ -153,7 +182,8 @@ public class LearningRequest  {
 
             deploy = statements;
 
-            loadDeploymentStatements();
+
+            loadStatements(true);
         }
     }
     public void deploy(){
