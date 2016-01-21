@@ -123,10 +123,10 @@ public class LearningRequest  {
         data.setName(name);
         data.buildInstances();
         model.build(this);
-        deployStatements = new Hashtable<>();
-        if(deploy != null) {
+        supportStatements = new Hashtable<>();
+        if(support != null) {
 
-            loadStatements(true);
+            loadStatements(false);
         }
 
         leaningStatements = new Hashtable<>();
