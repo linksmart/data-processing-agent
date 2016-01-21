@@ -291,7 +291,7 @@ import java.util.*;
             Class clazz = Class.forName(query.getCEHandler());
             Constructor constructor = clazz.getConstructor(Statement.class);
             handler = (ComplexEventHandler) constructor.newInstance(query);
-        }else if (query.getCEHandler() != null || query.getCEHandler().equals("")) {
+        }else if (query.getCEHandler() != null && query.getCEHandler().equals("")) {
             Class clazz = Class.forName(query.getCEHandler());
             Constructor constructor = clazz.getConstructor(Statement.class);
             handler = (ComplexEventHandler) constructor.newInstance(query);
