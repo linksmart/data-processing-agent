@@ -46,6 +46,11 @@ public class LearningRequest  {
 
     @JsonIgnore
     private  boolean deployed =false;
+
+    public Map<String, Statement> getSupportStatements() {
+        return supportStatements;
+    }
+
     @JsonIgnore
     protected Map<String,Statement> deployStatements;
     @JsonIgnore

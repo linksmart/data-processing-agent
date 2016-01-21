@@ -72,7 +72,7 @@ public class CEMLFeeder extends Component implements Feeder {
 
         String retur ="";
 
-         return feedStatements(request.getLeaningStatements().values()) + "\n"+ feedStatements(request.getDeployStatements().values()) ;
+         return feedStatements(request.getSupportStatements().values()) + "\n"+ feedStatements(request.getLeaningStatements().values()) + "\n"+ feedStatements(request.getDeployStatements().values()) ;
 
 
     }
