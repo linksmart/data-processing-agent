@@ -42,12 +42,7 @@
             <groupId>eu.almanac</groupId>
             <artifactId>Utils</artifactId>
             <version>${almanac.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                </exclusion>
-            </exclusions>
+
         </dependency>
         <dependency>
             <groupId>eu.almanac</groupId>
