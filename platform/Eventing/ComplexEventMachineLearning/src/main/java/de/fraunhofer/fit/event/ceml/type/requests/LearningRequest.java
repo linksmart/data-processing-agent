@@ -35,13 +35,13 @@ public class LearningRequest  {
     private Evaluator evaluation;
 
     @JsonPropertyDescription("The raw statements that defines the initial pre-processing steps ")
-    @JsonProperty(value = "SupportStatements")
+    @JsonProperty(value = "LearningStreams")
     private ArrayList<String> support;
     @JsonPropertyDescription("The raw statements that defines the learning process")
-    @JsonProperty(value = "LearningProcess")
+    @JsonProperty(value = "LearningRules")
     private ArrayList<String> learningProcess;
     @JsonPropertyDescription("The raw statements which will be deployed during the time the learnt object reached the evaluation criteria")
-    @JsonProperty(value = "Deployment")
+    @JsonProperty(value = "DeploymentRules")
     private ArrayList<String> deploy;
 
     @JsonIgnore
