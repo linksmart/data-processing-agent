@@ -3,6 +3,7 @@ package de.fraunhofer.fit.event.ceml.type.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import de.fraunhofer.fit.event.ceml.CEML;
+import de.fraunhofer.fit.event.ceml.LearningHandler;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import weka.classifiers.Classifier;
@@ -121,6 +122,13 @@ public class Model implements Serializable {
 
         }
         return null;
+    }
+    public String classify(Map args){
+
+
+        return origin.data.getLearningTarget().value(LearningHandler.classify(args,origin));
+
+
     }
    /* public String classify(Entry... args) {
 
