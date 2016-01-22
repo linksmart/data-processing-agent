@@ -107,7 +107,7 @@ public class LearningRequest  {
                 ((EPLStatement) statement).setStateLifecycle(Statement.StatementLifecycle.PAUSE);
             }else {
                 ((EPLStatement) statement).setName("SupportStatement:" + name + i.toString());
-
+                ((EPLStatement) statement).setCEHandler(null);
 
             }
             ((EPLStatement) statement).setStatement(strStatement);
