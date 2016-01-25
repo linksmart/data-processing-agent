@@ -33,7 +33,9 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
 
         if(initialSamples.isReady()) {
             windowEvaluators[learning].evaluate(predicted, actual);
-            windowEvaluators[learnt].evaluate(predicted, actual);
+            if(learnt!=learning)
+                windowEvaluators[learnt].evaluate(predicted, actual);
+
             trySliding();
 
             return windowEvaluators[learnt].isDeployable();
