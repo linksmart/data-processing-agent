@@ -40,6 +40,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
     @Override
     public void update(Map eventMap) {
 
+
         Instance instance = CEML.populateInstance(eventMap,originalRequest);
 
         Object target =null;
@@ -51,6 +52,8 @@ public class LearningHandler extends Component implements ComplexEventHandler {
             loggerService.error("No target found in the learning rule");
             return;
         }
+        loggerService.info("Learning with rule: "+ statement.getName() +" with id: "+statement.getHash()+" learning target: "+target.toString());
+
         int prediction = CEML.predict(originalRequest.getModel().getLerner(),instance);
         int itShould =  originalRequest.getData().getLearningTarget().indexOfValue(target.toString());
 /*
