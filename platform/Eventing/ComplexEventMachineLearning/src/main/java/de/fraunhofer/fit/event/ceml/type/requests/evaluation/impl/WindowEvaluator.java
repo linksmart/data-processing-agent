@@ -96,7 +96,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
     }
     public boolean readyToSlide(){
-        return  evaluationAlgorithms.get(Samples.class.getSimpleName()).isReady();
+        return  evaluationAlgorithms.get(SlideAfter.class.getSimpleName()).isReady();
     }
 
 
@@ -638,6 +638,13 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     public class Samples extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.Samples {
 
         public Samples(ComparisonMethod method, double target) {
+            super(method, target);
+        }
+
+    }
+    public class SlideAfter extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.Samples {
+
+        public SlideAfter(ComparisonMethod method, double target) {
             super(method, target);
         }
 

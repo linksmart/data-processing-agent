@@ -83,7 +83,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
     @SuppressWarnings("unchecked")
     @Override
     public void build(Collection<String> namesClasses) throws Exception {
-        boolean isSamples = false;
+        boolean isSlideAfter = false;
         for(int i=0; i <targets.size();i++) {
             if (targets.get(i) != null)
                 if (targets.get(i).getName().equals(InitialSamples.class.getSimpleName())) {
@@ -95,13 +95,13 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
                     targets.remove(i);
 
                 }
-            if (targets.get(i).getName().equals(WindowEvaluator.Samples.class.getSimpleName()))
-                isSamples = true;
+            if (targets.get(i).getName().equals(WindowEvaluator.SlideAfter.class.getSimpleName()))
+                isSlideAfter = true;
         }
 
 
-        if (!isSamples)
-            throw  new Exception("For creating sliding evaluator the samples must be defined");
+        if (!isSlideAfter)
+            throw  new Exception("For creating sliding evaluator the SlideAfter must be defined");
 
         if(initialSamples== null)
             initialSamples = new InitialSamples(EvaluationAlgorithm.ComparisonMethod.More,-1);
