@@ -24,8 +24,9 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     private long totalFalseNegatives = 0;
     private long totalTruePositives = 0;
     private long totalTrueNegatives = 0;
-    private long samples = 0;
+   // private long samples = 0;
 
+    EvaluationAlgorithm samples;
     private double[][] confusionMatrix ;
     private ArrayList<String> classes;
 
@@ -47,7 +48,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     @Override
     public boolean evaluate(int predicted, int actual){
         confusionMatrix[actual][predicted]++;
-        sample();
+
             for (int i = 0; i < classes.size(); i++) {
                 if (i == actual && actual == predicted) {
                     sequentialConfusionMatrix[i][EvaluationMetrics.truePositives.ordinal()]++;
@@ -111,18 +112,12 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
        totalFalseNegatives = 0;
        totalTruePositives = 0;
        totalTrueNegatives = 0;
-       samples =0;
+
 
     }
 
 
-    public long getSamples() {
-        return samples;
-    }
 
-    public long sample() {
-        return samples += 1;
-    }
     @SuppressWarnings("unchecked")
     @Override
     public void build(Collection<String> namesClasses){
@@ -147,6 +142,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
 
         }
+        samples = evaluationAlgorithms.get(Samples.class.getSimpleName());
     }
 
     @Override

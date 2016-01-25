@@ -3,6 +3,7 @@ package de.fraunhofer.fit.event.ceml;
 import de.fraunhofer.fit.event.ceml.intern.Const;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningStatement;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.WindowEvaluator;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
@@ -52,10 +53,10 @@ public class LearningHandler extends Component implements ComplexEventHandler {
             loggerService.error("No target found in the learning rule");
             return;
         }
-        loggerService.info("Learning with rule: "+ statement.getName() +" with id: "+statement.getHash()+" learning target: "+target.toString());
 
         int prediction = CEML.predict(originalRequest.getModel().getLerner(),instance);
         int itShould =  originalRequest.getData().getLearningTarget().indexOfValue(target.toString());
+        loggerService.info("REPORT: Learning with rule: "+ statement.getName() +" with id: "+statement.getHash()+" learning target: "+target.toString()+ " predicted index: "+ String.valueOf(prediction)+" sample index: "+ String.valueOf(itShould));
 /*
         Instances instances =originalRequest.getData().getInstances();
 
@@ -85,7 +86,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
         }
 
         if(conf.getBool(Const.GenerateReports))
-            loggerService.info(simulatedTime+originalRequest.getEvaluation().report());
+            loggerService.info("REPORT: "+simulatedTime+originalRequest.getEvaluation().report());
 
         CEML.learn(originalRequest.getModel().getLerner(),instance);
 
