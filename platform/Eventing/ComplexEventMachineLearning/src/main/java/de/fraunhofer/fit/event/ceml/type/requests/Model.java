@@ -180,7 +180,7 @@ public class Model implements Serializable {
 
     }
     public String report(){
-        return "< Model Type: "+nativeType.getCanonicalName()+" >"+evaluation.report();
+        return "< Model Type: "+nativeType.getCanonicalName()+ " learner object: "+String.valueOf(lerner.hashCode()) + " >" + evaluation.report();
     }
 
 }
