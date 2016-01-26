@@ -4,12 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import de.fraunhofer.fit.event.ceml.CEML;
 import de.fraunhofer.fit.event.ceml.LearningHandler;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.DoubleTumbleWindowEvaluator;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -24,6 +29,9 @@ public class Model implements Serializable {
     @JsonPropertyDescription("Algorithm use to build the model")
     @JsonProperty(value = "Type")
     protected String type;
+    @JsonPropertyDescription("Evaluator definition and current evaluation status")
+    @JsonProperty(value = "Evaluation")
+    private Evaluator evaluation;
     public Model() {
         super();
     }
@@ -77,6 +85,11 @@ public class Model implements Serializable {
     }
     public void build(LearningRequest origin) throws Exception {
         this.origin =origin;
+        if(evaluation==null)
+            evaluation= new DoubleTumbleWindowEvaluator();
+
+        evaluation.build(origin.getData().getAttributes().keySet());
+
         initialize();
          /*           TODO: do this with reflection
           Method mth = getMethod(
@@ -94,42 +107,9 @@ public class Model implements Serializable {
             }*/
 
             ((Classifier)lerner).buildClassifier(origin.getData().getInstances());
-        insertInCEPEngines();
-    }
-    public int insertInCEPEngines(){
-        int n=0;
-        for (CEPEngine dfw: CEPEngine.instancedEngines.values()      ) {
-            CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
-            if(extended!=null) {
-                extended.insertObject(name, this);
-                n++;
-            }
-
-        }
-        return n;
-    }
-    public String classify(Object... args){
-        if(args.length==origin.getData().getAttributesStructures().size()-1) {
-            Instance instance=null;
-            Map<String, Object> aux = new Hashtable<>();
-            for(int i=0;i<args.length;i++) {
-                aux.put(origin.getData().getAttributesStructures().get(i).getAttributeName(), args[i]);
-                instance = CEML.populateInstance(aux, origin);
-
-            }
-            int i = (int) CEML.predict(lerner, instance);
-            return origin.getData().getLearningTarget().value(i);
-
-        }
-        return null;
-    }
-    public String classify(Map args){
-
-
-        return origin.data.getLearningTarget().value(LearningHandler.classify(args,origin));
-
 
     }
+
    /* public String classify(Entry... args) {
 
         Instance instance = null;
@@ -173,7 +153,28 @@ public class Model implements Serializable {
 
     public void reBuild(Model request){
         /*TODO: chnaging configuration of the model */
+        evaluation.reBuild(request.evaluation);
 
+    }
+    public Prediction evaluate(Instance instance) {
+        int i =CEML.predict(lerner,instance);
+
+        return  new Prediction(i,origin.getData().getLearningTarget().value(i),type,new ArrayList<EvaluationAlgorithm>(evaluation.getEvaluationAlgorithms().values()),evaluation.evaluate(i,(int)instance.classValue()));
+
+
+
+    }
+
+    public Prediction prediction(Instance instance) {
+        int i =CEML.predict(lerner,instance);
+
+        return  new Prediction(i,origin.getData().getLearningTarget().value(i),type,new ArrayList<EvaluationAlgorithm>(evaluation.getEvaluationAlgorithms().values()));
+
+
+
+    }
+    public String report(){
+        return "< Model Type: "+type+" >"+evaluation.report();
     }
 
 }

@@ -2,10 +2,11 @@ package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
+
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.*;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ClassEvaluationAlgorithmBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.EvaluationAlgorithmBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ModelEvaluationAlgorithmBase;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
@@ -46,7 +47,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     }
 
     @Override
-    public boolean evaluate(int predicted, int actual){
+    public double evaluate(int predicted,int actual){
         confusionMatrix[actual][predicted]++;
 
             for (int i = 0; i < classes.size(); i++) {
@@ -65,24 +66,28 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
                 }
 
 
-            calculateEvaluationMetrics(actual);
+            calculateEvaluationMetrics(  actual);
 
-            return isDeployable();
+            return calculateEvaluationMetrics(actual);
         }
-        return false;
+        return 0.0;
 
 
 
     }
-    protected void calculateEvaluationMetrics(int classIndex){
-        for(EvaluationAlgorithm algorithm: evaluationAlgorithms.values())
-            if(algorithm instanceof ModelEvaluationAlgorithm)
-                ((ModelEvaluationAlgorithm)algorithm).calculate();
-            else if(algorithm instanceof ClassEvaluationAlgorithm)
-                ((ClassEvaluationAlgorithm)algorithm).calculate(classIndex);
+    protected double calculateEvaluationMetrics(int evaluatedClass){
+        double accumulateMetric =0;
+        for(EvaluationAlgorithm algorithm: evaluationAlgorithms.values()) {
+            if (algorithm instanceof ModelEvaluationAlgorithm)
+                ((ModelEvaluationAlgorithm) algorithm).calculate();
+            else if (algorithm instanceof ClassEvaluationAlgorithm)
+                ((ClassEvaluationAlgorithm) algorithm).calculate(evaluatedClass);
             else
-                loggerService.error("Evaluation algorithm "+algorithm.getClass().getName()+" is an instance of an unknown algorithm class");
+                loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
+            accumulateMetric = algorithm.getNormalizedResult();
 
+        }
+        return accumulateMetric/evaluationAlgorithms.size();
 
     }
 
@@ -94,6 +99,10 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         return true;
 
 
+    }
+    @Override
+    public Map<String,EvaluationAlgorithm> getEvaluationAlgorithms(){
+        return evaluationAlgorithms;
     }
     public boolean readyToSlide(){
         return  evaluationAlgorithms.get(SlideAfter.class.getSimpleName()).isReady();
@@ -648,6 +657,12 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
             super(method, target);
         }
 
+        @Override
+        public double getNormalizedResult(){
+
+            return 1.0;
+
+        }
     }
 /* TODO: transform all basic metrics into algorithms
     public class TotalTruePositives   extends EvaluationAlgorithmBase<Long> {

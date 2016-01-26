@@ -1,6 +1,7 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
+
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.EvaluationAlgorithmBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.TumbleEvaluator;
@@ -10,6 +11,7 @@ import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.Ini
 
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by angel on 1/12/15.
@@ -28,22 +30,22 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
 
 
     @Override
-    public synchronized boolean  evaluate(int predicted, int actual){
+    public synchronized double  evaluate(int predicted,int actual){
 
 
         if(initialSamples.isReady()) {
-            windowEvaluators[learning].evaluate(predicted, actual);
+           double re= windowEvaluators[learning].evaluate( predicted, actual);
             if(learnt!=learning)
-                windowEvaluators[learnt].evaluate(predicted, actual);
+                windowEvaluators[learnt].evaluate( predicted, actual);
 
             trySliding();
 
-            return windowEvaluators[learnt].isDeployable();
+            return re;
 
 
         }
         initialSamples.calculate();
-        return false;
+        return 0.0;
 
 
     }
@@ -119,6 +121,11 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
             windowEvaluators[1].reBuild(evaluator);
         }
 
+    }
+
+    @Override
+    public Map<String, EvaluationAlgorithm> getEvaluationAlgorithms() {
+        return windowEvaluators[learnt].getEvaluationAlgorithms();
     }
 
     @Override

@@ -3,14 +3,22 @@ package de.fraunhofer.fit.event.ceml.type.requests;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.sun.org.apache.xpath.internal.operations.Mod;
+import de.fraunhofer.fit.event.ceml.CEML;
 import de.fraunhofer.fit.event.ceml.CEMLFeeder;
+import de.fraunhofer.fit.event.ceml.LearningHandler;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.DoubleTumbleWindowEvaluator;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
+import eu.linksmart.api.event.datafusion.CEPEngine;
+import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
+import weka.classifiers.Evaluation;
+import weka.core.Instance;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -23,16 +31,15 @@ public class LearningRequest  {
     protected String name;
     private Configurator conf = Configurator.getDefaultConfig();
     private LoggerService loggerService = Utils.initDefaultLoggerService(LearningRequest.class);
+    private int leadingModel =-1;
 
     @JsonPropertyDescription("Data definition")
     @JsonProperty(value = "Data")
     protected DataStructure data;
     @JsonPropertyDescription("Current Model and model definition")
     @JsonProperty(value = "Model")
-    protected Model model;
-    @JsonPropertyDescription("Evaluator definition and current evaluation status")
-    @JsonProperty(value = "Evaluation")
-    private Evaluator evaluation;
+    protected ArrayList<Model> model;
+
 
     @JsonPropertyDescription("The raw statements that defines the initial pre-processing steps ")
     @JsonProperty(value = "LearningStreams")
@@ -75,11 +82,11 @@ public class LearningRequest  {
     }
 
 
-    public Model getModel() {
+    public ArrayList<Model> getModel() {
         return model;
     }
 
-    public void setModel(Model model) {
+    public void setModel(ArrayList<Model> model) {
         this.model = model;
     }
 
@@ -124,10 +131,13 @@ public class LearningRequest  {
     }
     public void build() throws Exception {
 
-        model.setName(name);
+        for(Model m: model)
+            m.setName(name);
         data.setName(name);
         data.buildInstances();
-        model.build(this);
+        for(Model m: model)
+            m.build(this);
+
         supportStatements = new Hashtable<>();
         if(support != null) {
 
@@ -145,23 +155,25 @@ public class LearningRequest  {
 
             loadStatements(true);
         }
-        if(evaluation == null)
-            evaluation = new DoubleTumbleWindowEvaluator();
-        evaluation.build(data.getAttributes().keySet());
+        insertInCEPEngines();
 
 
     }
     public void reBuild(LearningRequest request){
         if(request.model != null){
-            model.reBuild(request.model);
+            if(model.size()!=request.model.size()){
+                loggerService.error("Models do not match in size while rebuilding");
+                return;
+            }
+
+            for(int i=0; i<model.size();i++)
+                model.get(i).reBuild(request.model.get(i));
         }
         rebuildLearningStatements(request.learningProcess);
         rebuildDeploymentStatements(request.deploy);
 
-        if(request.evaluation != null){
-            evaluation.reBuild(request.evaluation);
 
-        }
+
     }
 
     public void rebuildLearningStatements(ArrayList<String> statements){
@@ -210,6 +222,18 @@ public class LearningRequest  {
 
     }
 
+    public Prediction evaluate(Instance instance){
+        Prediction max = new Prediction();
+
+        for (int i=0; i<model.size();i++) {
+            Prediction aux =model.get(i).evaluate(instance);
+            if (aux.getEvaluationMetricResult()> max.getEvaluationMetricResult()) {
+                max = aux;
+                leadingModel =i;
+            }
+        }
+        return max;
+    }
     public String getName() {
         return name;
     }
@@ -218,8 +242,39 @@ public class LearningRequest  {
         this.name = name;
     }
 
-    public Evaluator getEvaluation() {
-        return evaluation;
+    public int insertInCEPEngines(){
+        int n=0;
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()      ) {
+            CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
+            if(extended!=null) {
+                extended.insertObject(name, this);
+                n++;
+            }
+
+        }
+        return n;
+    }
+    public String classify(Object... args){
+        if(args.length==getData().getAttributesStructures().size()-1) {
+            Instance instance=null;
+            Map<String, Object> aux = new Hashtable<>();
+            for(int i=0;i<args.length;i++) {
+                aux.put(getData().getAttributesStructures().get(i).getAttributeName(), args[i]);
+                instance = CEML.populateInstance(aux, this);
+
+            }
+            int i = (int) CEML.predict(model.get(leadingModel), instance);
+            return getData().getLearningTarget().value(i);
+
+        }
+        return null;
+    }
+    public Prediction classify(Map args){
+        Instance instance = CEML.populateInstance(args,this);
+
+        return model.get(leadingModel).prediction(instance);
+
+
     }
 
 

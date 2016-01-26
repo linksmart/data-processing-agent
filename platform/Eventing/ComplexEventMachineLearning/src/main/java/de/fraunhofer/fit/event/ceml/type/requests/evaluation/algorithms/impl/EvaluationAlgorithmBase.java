@@ -116,6 +116,12 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
         }
         return this.getClass().getSimpleName() + ": " + currentValue.toString() + " Target: " + target.toString();
     }
+    @Override
+    public double getNormalizedResult(){
+        if(((Double)getResult()/((Double)getTarget()))>1.0)
+            return 1.0;
+        return ((Double)getResult()/((Double)getTarget()));
+    }
 
 
 }

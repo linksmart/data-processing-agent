@@ -65,7 +65,8 @@ public class CEMLRest extends Component{
                         retur =mapper.writeValueAsString(requests.get(name).getData());
                         break;
                     case "evaluation":
-                        retur =mapper.writeValueAsString(requests.get(name).getEvaluation());
+                       // retur =mapper.writeValueAsString(requests.get(name).getEvaluation());
+                        retur="";
                         break;
                     case "learning":
                         retur = mapper.writeValueAsString((requests.get(name).getLeaningStatements()));
@@ -99,8 +100,8 @@ public class CEMLRest extends Component{
                         retur = requests.get(name);
                         break;
                     case "evaluation":
-                        requests.get(name).getEvaluation().reBuild(mapper.readValue(body,EvaluatorBase.class));
-                        retur = requests.get(name).getEvaluation();
+                       // requests.get(name).getEvaluation().reBuild(mapper.readValue(body,EvaluatorBase.class));
+                        //retur = requests.get(name).getEvaluation();
                         break;
                     case "learning":
                         ArrayList<String> learning = (new Gson()).fromJson(body, new TypeToken<ArrayList<String>>(){}.getType());
@@ -108,7 +109,7 @@ public class CEMLRest extends Component{
                         retur = requests.get(name).getLeaningStatements();
                         break;
                     case "model":
-                        requests.get(name).getModel().reBuild(mapper.readValue(body, Model.class));
+                      //  requests.get(name).getModel().reBuild(mapper.readValue(body, Model.class));
                         retur = requests.get(name).getModel();
                         break;
 
@@ -117,9 +118,9 @@ public class CEMLRest extends Component{
                         break;
 
                     case "classify":
-                        Model mdl =  requests.get(name).getModel();
+                      //  Model mdl =  requests.get(name).getModel();
                         Map input = mapper.readValue(body, new TypeReference<Map<String, Object>>() {});
-                        retur = requests.get(name).getData().getInstances().attribute(LearningHandler.classify(input, requests.get(name)));
+                    //    retur = requests.get(name).getData().getInstances().attribute(LearningHandler.classify(input, requests.get(name)));
                         break;
                     case "deployment":
                         ArrayList<String> deployed = mapper.readValue(body, new TypeReference<ArrayList<String>>(){});
