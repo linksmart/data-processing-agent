@@ -65,9 +65,6 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
                     totalTrueNegatives++;
                 }
 
-
-            calculateEvaluationMetrics(  actual);
-
             return calculateEvaluationMetrics(actual);
         }
         return 0.0;
