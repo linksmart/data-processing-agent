@@ -10,6 +10,9 @@ import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.DoubleTumbleWi
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
+import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.gc.utils.logging.LoggerService;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 
@@ -32,6 +35,8 @@ public class Model implements Serializable {
     @JsonPropertyDescription("Evaluator definition and current evaluation status")
     @JsonProperty(value = "Evaluation")
     private Evaluator evaluation;
+    private Configurator conf = Configurator.getDefaultConfig();
+    private LoggerService loggerService = Utils.initDefaultLoggerService(LearningRequest.class);
     public Model() {
         super();
     }
@@ -157,6 +162,7 @@ public class Model implements Serializable {
 
     }
     public Prediction evaluate(Instance instance) {
+        loggerService.info("Evaluating "+nativeType.getCanonicalName()+ " learner object "+String.valueOf(lerner.hashCode()));
         int i =CEML.predict(lerner,instance);
 
         return  new Prediction(i,origin.getData().getLearningTarget().value(i),type,new ArrayList<EvaluationAlgorithm>(evaluation.getEvaluationAlgorithms().values()),evaluation.evaluate(i,(int)instance.classValue()));
@@ -174,7 +180,7 @@ public class Model implements Serializable {
 
     }
     public String report(){
-        return "< Model Type: "+type+" >"+evaluation.report();
+        return "< Model Type: "+nativeType.getCanonicalName()+" >"+evaluation.report();
     }
 
 }
