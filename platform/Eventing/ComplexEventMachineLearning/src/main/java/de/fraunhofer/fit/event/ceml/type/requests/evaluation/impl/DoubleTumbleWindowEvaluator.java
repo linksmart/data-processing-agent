@@ -8,6 +8,8 @@ import de.fraunhofer.fit.event.ceml.type.requests.evaluation.TumbleEvaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.ModelEvaluationAlgorithm;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.InitialSamples;
+import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.gc.utils.logging.LoggerService;
 
 
 import java.util.Collection;
@@ -19,6 +21,7 @@ import java.util.Map;
 public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements TumbleEvaluator  {
 
 
+    protected static LoggerService loggerService = Utils.initDefaultLoggerService(DoubleTumbleWindowEvaluator.class);
 
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
     private int learning = 0, learnt =0;
@@ -60,6 +63,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
     }
     public synchronized boolean trySliding() {
 
+        loggerService.info("Tumble Window evaluator is trying to sliding...");
         if(readyToSlide()) {
 
             if(learning==learnt){
@@ -69,8 +73,12 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
                 windowEvaluators[learnt].reset();
                 learnt=(learnt+1)%2;
             }
+            loggerService.info("Sliding finished.");
             return true;
+
         }
+
+        loggerService.info("Sliding not done.");
         return false;
 
     }

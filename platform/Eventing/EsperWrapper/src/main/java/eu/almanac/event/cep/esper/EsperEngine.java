@@ -79,7 +79,9 @@ import java.util.*;
     }
 
     @Override
-    public void insertObject(String name,Object variable) throws UnsupportedOperationException{
+    public <T extends Object> void insertObject(String name,T variable) throws UnsupportedOperationException{
+
+        epService.getEPAdministrator().getConfiguration().addImport(variable.getClass());
         epService.getEPAdministrator().getConfiguration().addVariable(name,variable.getClass(),variable);
     }
 

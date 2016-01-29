@@ -63,6 +63,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
     public void update(Map eventMap) {
 
 
+
         Instance instance = CEML.populateInstance(eventMap,originalRequest);
 
         Object target =null;
@@ -71,14 +72,22 @@ public class LearningHandler extends Component implements ComplexEventHandler {
         else if (eventMap.containsKey(originalRequest.getData().getLearningTarget().name()))
             target =eventMap.get(originalRequest.getData().getLearningTarget().name());
         else {
-            loggerService.error("No target found in the learning rule");
+            String elements="";
+            for(Object s: eventMap.keySet())
+                elements+= s.toString()+", ";
+            loggerService.error("No target found in the learning rule, search "+originalRequest.getData().getLearningTarget().name()+" found: "+elements);
             return;
         }
 
+        if(target== null) {
+            loggerService.error("target cannot be unknown for learning.");
+            return;
+        }
         //int prediction = CEML.predict(originalRequest.getModel().getLerner(),instance);
         Prediction prediction = originalRequest.evaluate(instance);
+
         int itShould =  originalRequest.getData().getLearningTarget().indexOfValue(target.toString());
-        loggerService.info("REPORT: Learning with rule: "+ statement.getName() +" with id: "+statement.getHash()+" learning target: "+target.toString()+ " predicted index: "+ prediction.getPredictedClass()+" sample index: "+ String.valueOf(itShould));
+        loggerService.info("\n(R) Learning with rule: "+ statement.getName() +" with id: "+statement.getHash()+" learning target: "+target.toString()+ " predicted index: "+ prediction.getPredictedClass()+" sample index: "+ String.valueOf(itShould));
 /*
         Instances instances =originalRequest.getData().getInstances();
 
@@ -110,7 +119,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
                 else
                     loggerService.warn("Selected column as simulated time has unknown time format");
             }
-           report("REPORT: " + simulatedTime);
+           report("\n(R) SimulatedTime: " + simulatedTime);
 
         }
         learn(originalRequest,instance);

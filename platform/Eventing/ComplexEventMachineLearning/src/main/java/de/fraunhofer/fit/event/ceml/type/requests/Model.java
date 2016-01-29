@@ -34,9 +34,9 @@ public class Model implements Serializable {
     protected String type;
     @JsonPropertyDescription("Evaluator definition and current evaluation status")
     @JsonProperty(value = "Evaluation")
-    private Evaluator evaluation;
+    public Evaluator evaluation;
     private Configurator conf = Configurator.getDefaultConfig();
-    private LoggerService loggerService = Utils.initDefaultLoggerService(LearningRequest.class);
+    private LoggerService loggerService = Utils.initDefaultLoggerService(Model.class);
     public Model() {
         super();
     }
@@ -162,7 +162,7 @@ public class Model implements Serializable {
 
     }
     public Prediction evaluate(Instance instance) {
-        loggerService.info("Evaluating "+nativeType.getCanonicalName()+ " learner object "+String.valueOf(lerner.hashCode()));
+        loggerService.info("Evaluating "+nativeType.getCanonicalName()+ " learner object "+System.identityHashCode(lerner));
         int i =CEML.predict(lerner,instance);
 
         return  new Prediction(i,origin.getData().getLearningTarget().value(i),type,new ArrayList<EvaluationAlgorithm>(evaluation.getEvaluationAlgorithms().values()),evaluation.evaluate(i,(int)instance.classValue()));
@@ -180,7 +180,7 @@ public class Model implements Serializable {
 
     }
     public String report(){
-        return "< Model Type: "+nativeType.getCanonicalName()+ " learner object: "+String.valueOf(lerner.hashCode()) + " >" + evaluation.report();
+        return "\n (R) Model> name:"+name+" Type: "+nativeType.getCanonicalName()+ " learner id: "+System.identityHashCode(lerner) + evaluation.report();
     }
 
 }

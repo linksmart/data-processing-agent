@@ -81,7 +81,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
                 ((ClassEvaluationAlgorithm) algorithm).calculate(evaluatedClass);
             else
                 loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
-            accumulateMetric = algorithm.getNormalizedResult();
+            accumulateMetric += algorithm.getNormalizedResult();
 
         }
         return accumulateMetric/evaluationAlgorithms.size();
@@ -119,6 +119,9 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
        totalTruePositives = 0;
        totalTrueNegatives = 0;
 
+
+
+        evaluationAlgorithms.get(SlideAfter.class.getName()).reset();
 
     }
 
@@ -186,10 +189,11 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
                 }
             }
 
+
             constructor = clazz.getConstructor(WindowEvaluator.class,EvaluationAlgorithm.ComparisonMethod.class, double.class);
+            Double aux =new Double(target);
 
-
-            return  (EvaluationAlgorithm) constructor.newInstance(this,methodParameter,target);
+            return  (EvaluationAlgorithm) constructor.newInstance(this,methodParameter,aux);
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
         }
@@ -372,7 +376,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         public Double calculate() {
             double denominator = (totalTrueNegatives + totalTruePositives + totalFalseNegatives + totalFalsePositives);
             if (denominator > 0)
-                return (currentValue = ((double) (totalTrueNegatives + totalTruePositives)) / denominator);
+                return (currentValue = new Double((double) (totalTrueNegatives + totalTruePositives) / denominator));
             return 0.0;
 
         }
@@ -417,7 +421,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         public Double calculate() {
             long denominator = (totalTruePositives + totalFalseNegatives);
             if (denominator > 0)
-                return ( currentValue = ((double) totalTruePositives) / denominator);
+                return ( currentValue = new Double(((double) totalTruePositives) / denominator));
             return 0.0;
 
         }

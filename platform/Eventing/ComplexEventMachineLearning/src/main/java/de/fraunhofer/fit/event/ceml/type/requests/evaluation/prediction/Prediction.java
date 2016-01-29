@@ -82,4 +82,9 @@ public class Prediction {
     public void setAcceptedPrediction(boolean acceptedPrediction) {
         this.acceptedPrediction = acceptedPrediction;
     }
+
+    @Override
+    public String toString(){
+        return "\n(R) Prediction> prediction (index, name):("+predictedClass+", "+predictedClassName+") accepted: "+acceptedPrediction+" evaluationRate: "+evaluationMetricResult;
+    }
 }

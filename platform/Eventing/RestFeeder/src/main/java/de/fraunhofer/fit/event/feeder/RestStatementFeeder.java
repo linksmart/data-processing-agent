@@ -188,6 +188,7 @@ public class RestStatementFeeder extends Component implements Feeder {
                         if (!dfw.addStatement(statement)) {
                             error += "Ups we have a problem." + "\n";
                         }
+                        loggerService.info("Statement " + statement.getHash() + " was successful");
                         count++;
                     } catch (StatementException se) {
                         return new ResponseEntity<>(se.getMessage(), HttpStatus.BAD_REQUEST);

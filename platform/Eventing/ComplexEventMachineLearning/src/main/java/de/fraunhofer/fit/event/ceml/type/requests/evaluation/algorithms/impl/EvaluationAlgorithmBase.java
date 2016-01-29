@@ -8,6 +8,8 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 
 import java.lang.reflect.Constructor;
 
+import com.rits.cloning.Cloner;
+
 /**
  * Created by angel on 4/12/15.
  */
@@ -18,7 +20,8 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
 
     protected String name;
     protected T target ;
-    protected T currentValue;
+    public T currentValue;
+    protected Cloner cloner = new Cloner();
 
     static public EvaluationAlgorithm instanceEvaluationAlgorithm(String canonicalName, String method, Object target)  {
 
@@ -58,9 +61,13 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
         name = this.getClass().getSimpleName();
     }
     public EvaluationAlgorithmBase(ComparisonMethod method, T target){
+
+        // TODO: broke, the target copy the reference of the object insted of making a new reference,
+        // I solved this by creating the reference outside the constructor
         name = this.getClass().getSimpleName();
 
-        this.target=target;
+
+        this.target=cloner.deepClone(target);
 
     }
 
@@ -78,7 +85,7 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
     @Override
     public void setTarget(T target) {
 
-        this.target =target;
+        this.target =cloner.deepClone(target);
     }
 
     @Override
@@ -89,9 +96,9 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
     public void reBuild(TargetRequest evaluationAlgorithm) {
 
         if (target instanceof Object[])
-            target = (T) evaluationAlgorithm.getThresholds();
+            target = cloner.deepClone((T) evaluationAlgorithm.getThresholds());
         else
-            target = (T) evaluationAlgorithm.getThreshold();
+            target = cloner.deepClone((T) evaluationAlgorithm.getThreshold());
     }
 
     public ModelEvaluationAlgorithmExtended getExtended(){
@@ -114,7 +121,7 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
             s+="]";
             return s;
         }
-        return this.getClass().getSimpleName() + ": " + currentValue.toString() + " Target: " + target.toString();
+        return "\n (R)"+this.getClass().getSimpleName() + "> current: " + currentValue.toString() + " Target : " + target.toString()+"\n (D) Algorithm ID "+String.valueOf(System.identityHashCode(this))+" CurrentValue ID "+String.valueOf(System.identityHashCode(currentValue)) +" Target ID " + String.valueOf(System.identityHashCode(target)) ;
     }
     @Override
     public double getNormalizedResult(){
@@ -122,6 +129,7 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
             return 1.0;
         return ((Double)getResult()/((Double)getTarget()));
     }
+
 
 
 }

@@ -3,6 +3,7 @@ package de.fraunhofer.fit.event.ceml;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.SynchronousQueue;
 
 
 import de.fraunhofer.fit.event.ceml.type.requests.DataStructure;
@@ -13,6 +14,7 @@ import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.function.Utils;
+import org.apache.commons.lang3.math.NumberUtils;
 import weka.classifiers.Classifier;
 import weka.classifiers.UpdateableClassifier;
 import weka.core.*;
@@ -182,6 +184,7 @@ public class CEML implements AnalyzerComponent {
                    inst
             );
             mth.invoke(lerner,inst);*/
+            loggerService.info("\n(D) learning with "+lerner.getClass().getCanonicalName()+" id "+ System.identityHashCode(lerner));
             ((UpdateableClassifier)lerner).updateClassifier(inst);
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
@@ -200,12 +203,14 @@ public class CEML implements AnalyzerComponent {
             mth.invoke(lerner,inst);*/
             int index =-1;
 
-            double possibilities[] = ((Classifier)lerner).distributionForInstance(inst), max =-1.0;
+          /*  double possibilities[] = ((Classifier)lerner).distributionForInstance(inst), max =-1.0;
             for(int i=0;i<possibilities.length;i++)
                 if(max<possibilities[i]) {
                     max = possibilities[i];
                     index = i;
-                }
+                }*/
+            loggerService.info("\n(D) classifying with " + lerner.getClass().getCanonicalName() + " id " + System.identityHashCode(lerner));
+            index = (int)((Classifier)lerner).classifyInstance(inst);
 
             return index;
         } catch (Exception e) {
@@ -313,16 +318,23 @@ public class CEML implements AnalyzerComponent {
         return learn(lerner,instance);
     }*/
     static public Double getNumeric(Object numeric){
+        if(numeric== null)
+            loggerService.error("the given learning attribute is null");
         if(numeric instanceof Double)
             return (Double) numeric;
-        if(numeric instanceof Integer)
+        else if(numeric instanceof Integer)
             return Double.valueOf((Integer)numeric);
-        if(numeric instanceof Float)
+        else if(numeric instanceof Float)
             return Double.valueOf((Float)numeric);
-        if(numeric instanceof Long)
+        else if(numeric instanceof Long)
             return Double.valueOf((Long)numeric);
-        if(numeric instanceof Short)
+        else if(numeric instanceof Short)
             return Double.valueOf((Short)numeric);
+        else if(numeric instanceof String &&NumberUtils.isNumber((String)numeric))
+            return NumberUtils.createDouble((String) numeric);
+
+        loggerService.error("the object "+numeric.toString()+" is not a number");
+
 
         return null;
 
@@ -357,7 +369,7 @@ public class CEML implements AnalyzerComponent {
         for(String key: events.keySet()){
             Object aux;
             String toCompare =  key;
-            if(key.toLowerCase().equals("target")| key.equals(originalRequest.getData().getLearningTarget().name()))
+            if(key.toLowerCase().equals("target")|| key.equals(originalRequest.getData().getLearningTarget().name()))
                 toCompare = originalRequest.getData().getLearningTarget().name();
 
             if((aux=getObject(toCompare,originalRequest.getData().getAttributes()))!=null ){
@@ -371,8 +383,14 @@ public class CEML implements AnalyzerComponent {
                     instance.setValue(attribute,input);
 
                 }else {
-                    String input = events.get(key).toString();
-                    instance.setValue(attribute,input);
+                    try {
+
+                        String input = events.get(key).toString();
+                        instance.setValue(attribute,input);
+                    }catch (Exception e){
+                        loggerService.error(key);
+                        loggerService.error( events.keySet().toString());
+                    }
                 }
 
             }else if(events.get(key) instanceof Object[]){

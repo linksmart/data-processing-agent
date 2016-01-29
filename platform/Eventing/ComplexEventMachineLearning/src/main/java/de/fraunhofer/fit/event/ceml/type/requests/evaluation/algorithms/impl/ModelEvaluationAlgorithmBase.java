@@ -13,7 +13,7 @@ public abstract class ModelEvaluationAlgorithmBase extends EvaluationAlgorithmBa
 
     public ModelEvaluationAlgorithmBase(ComparisonMethod method, double target){
         super(method, target);
-        currentValue = 0.0;
+        currentValue = new Double(0.0);
 
     }
 
@@ -42,6 +42,10 @@ public abstract class ModelEvaluationAlgorithmBase extends EvaluationAlgorithmBa
         return false;
     }
 
+    @Override
+    public void reset() {
+        currentValue = 0.0;
+    }
 
 
 

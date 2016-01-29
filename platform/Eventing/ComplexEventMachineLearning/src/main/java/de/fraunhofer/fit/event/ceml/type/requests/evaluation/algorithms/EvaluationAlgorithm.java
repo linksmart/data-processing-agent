@@ -18,6 +18,7 @@ public interface EvaluationAlgorithm<T>  extends Serializable {
     ModelEvaluationAlgorithmExtended getExtended();
     String report();
     double getNormalizedResult();
+    void reset();
 
     enum ComparisonMethod{
         Equal, More, MoreEqual, Less, LessEqual

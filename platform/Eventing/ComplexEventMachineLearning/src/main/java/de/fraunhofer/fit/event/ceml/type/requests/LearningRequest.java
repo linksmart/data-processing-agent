@@ -31,7 +31,7 @@ public class LearningRequest  {
     protected String name;
     private Configurator conf = Configurator.getDefaultConfig();
     private LoggerService loggerService = Utils.initDefaultLoggerService(LearningRequest.class);
-    private int leadingModel =-1;
+    private int leadingModel =0;
 
     @JsonPropertyDescription("Data definition")
     @JsonProperty(value = "Data")
@@ -227,10 +227,12 @@ public class LearningRequest  {
 
         for (int i=0; i<model.size();i++) {
             Prediction aux =model.get(i).evaluate(instance);
+
             if (aux.getEvaluationMetricResult()> max.getEvaluationMetricResult()) {
                 max = aux;
                 leadingModel =i;
             }
+            loggerService.info(aux.toString());
         }
         return max;
     }
@@ -254,21 +256,7 @@ public class LearningRequest  {
         }
         return n;
     }
-    public String classify(Object... args){
-        if(args.length==getData().getAttributesStructures().size()-1) {
-            Instance instance=null;
-            Map<String, Object> aux = new Hashtable<>();
-            for(int i=0;i<args.length;i++) {
-                aux.put(getData().getAttributesStructures().get(i).getAttributeName(), args[i]);
-                instance = CEML.populateInstance(aux, this);
 
-            }
-            int i = (int) CEML.predict(model.get(leadingModel), instance);
-            return getData().getLearningTarget().value(i);
-
-        }
-        return null;
-    }
     public Prediction classify(Map args){
         Instance instance = CEML.populateInstance(args,this);
 

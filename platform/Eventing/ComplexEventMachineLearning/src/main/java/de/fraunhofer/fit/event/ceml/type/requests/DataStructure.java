@@ -83,7 +83,7 @@ public class DataStructure {
     public Instances buildInstances(){
         ArrayList<AttributeStructure> temp= new ArrayList<>();
         boolean isTarget = false;
-        attributesStructures.get(attributesStructures.size()-1).attributeName = name;
+        //attributesStructures.get(attributesStructures.size()-1).attributeName = name;
         for (AttributeStructure structures:attributesStructures ) {
 
 
@@ -123,6 +123,7 @@ public class DataStructure {
 
         }
         attributeTargetName = orderAttributes.get(orderAttributes.size()-1).name();
+        loggerService.info("attribute target name: "+attributeTargetName);
         instances =new Instances(name, orderAttributes,attributes.size()*10);
 
         instances.setClassIndex(instances.numAttributes()-1);

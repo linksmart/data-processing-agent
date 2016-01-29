@@ -73,4 +73,12 @@ public abstract class ClassEvaluationAlgorithmBase<T extends  Comparable<T>> ext
             }
         return ready;
     }
+
+    @Override
+    public void reset() {
+        @SuppressWarnings("unchecked")
+
+        final T[] a = (T[]) Array.newInstance(target.getClass(), target.length);
+        target = a;
+    }
 }

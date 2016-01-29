@@ -5,7 +5,7 @@ package eu.linksmart.api.event.datafusion;
  */
 public interface CEPEngineAdvanced extends CEPEngine {
 
-    public void insertObject(String name,Object variable) throws UnsupportedOperationException;
+    public <T extends Object>void insertObject(String name,T variable) throws UnsupportedOperationException;
     /**
      * Add additional package used in the engine
      * @param canonicalNameClassOrPkg String representing a class or a package path containing classes (e.g. my.package.*).
