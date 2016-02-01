@@ -2,17 +2,17 @@ package eu.almanac.event.datafusion.feeder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import eu.linksmart.api.event.datafusion.StatementResponse;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
-import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.handler.FixForJava7Handler;
-import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 /**
  * Created by José Ángel Carvajal on 22.05.2015 a researcher of Fraunhofer FIT.
@@ -31,50 +31,79 @@ public class StatementMqttFeederImpl extends MqttFeederImpl {
 
     @Override
     protected void mangeEvent(String topic,byte[] rawEvent) {
+        Statement statement = null;
         try {
 
-                Statement statement = parser.fromJson(new String(rawEvent), EPLStatement.class);
+            statement = parser.fromJson(new String(rawEvent), EPLStatement.class);
 
 
-            if (statement != null) {
-
-
-                boolean success = true;
-                if (!processInternStatement(statement))
-                    for (CEPEngine i : dataFusionWrappers.values()) {
-                        try {
-
-                            i.addStatement(statement);
-
-                        } catch (StatementException e) {
-                            brokerService.publish(e.getErrorTopic(), e.getMessage());
-                            loggerService.error(e.getMessage(), e);
-                        } catch (Exception e) {
-                            loggerService.error(e.getMessage(), e);
-
-                            success = false;
-                        }
-                        if (success)
-                            brokerService.publish(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + statement.getHash(), "Statement " + statement.getHash() + " was successful");
-
-                    }
-
-
-            }
-        }catch(JsonParseException e){
+        } catch (JsonParseException e) {
             try {
-                brokerService.publish(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"errors",e.getMessage());
+                brokerService.publish(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + "errors/", e.getMessage());
             } catch (Exception e1) {
-                loggerService.error(e1.getMessage(),e1);
+                loggerService.error(e1.getMessage(), e1);
             }
-            loggerService.error(e.getMessage(),e);
+            loggerService.error(e.getMessage(), e);
 
 
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
 
-        }catch(Exception e){
-            loggerService.error(e.getMessage(),e);
 
         }
+        try {
+
+            statement = parser.fromJson(new String(rawEvent), EPLStatement.class);
+
+
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
+
+
+        }
+        if (statement != null) {
+
+            boolean  isProcessed;
+            try {
+                isProcessed = processInternStatement(statement);
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
+                return;
+
+            }
+            if (!isProcessed) {
+                ArrayList<StatementResponse> responses = StatementFeeder.feedStatement(statement);
+                for (StatementResponse response : responses)
+                    if (response.getTopic() != null && !response.getTopic().equals("")) {
+                        try {
+                            brokerService.publish(response.getTopic(), response.getMessage());
+                        } catch (Exception e) {
+                            loggerService.error(e.getMessage(), e);
+                        } finally {
+                            if (response.isSuccess())
+                                loggerService.info(response.getMessage());
+                            else
+                                loggerService.error(response.getMessage());
+                        }
+                    } else {
+                        try {
+                            if (response.isSuccess())
+                                brokerService.publish(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + statement.getHash(), response.getMessage());
+                            else
+                                brokerService.publish(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + "error/" + statement.getHash(), response.getMessage());
+                        } catch (Exception e) {
+                            loggerService.error(e.getMessage(), e);
+                        } finally {
+                            if (response.isSuccess())
+                                loggerService.info(response.getMessage());
+                            else
+                                loggerService.error(response.getMessage());
+                        }
+                    }
+            }
+        }
+
+
     }
 
     // NOTE: consider move this code to an Feeder abstract class if not TODO: document the function
@@ -86,30 +115,20 @@ public class StatementMqttFeederImpl extends MqttFeederImpl {
             }
             return true;
         }
-        for (CEPEngine i : dataFusionWrappers.values()) {
-            if (statement.getStatement() == null || statement.getStatement().toLowerCase().equals("")) {
-                switch (statement.getStateLifecycle()) {
-                    case RUN:
-                        i.startStatement(statement.getHash());
-                        break;
-                    case PAUSE:
-                        i.pauseStatement(statement.getHash());
-                        break;
-                    case REMOVE:
-                        i.removeStatement(statement.getHash());
-                        break;
 
-                }
+        if (statement.getStatement() == null || statement.getStatement().toLowerCase().equals("")) {
+            StatementFeeder.changeStatement(statement.getHash(),statement.getStateLifecycle());
 
-            } else if (statement.getStatement().toLowerCase().contains("add instance ")) {
-                FixForJava7Handler.addKnownLocations(statement.getStatement());
+        } else if (statement.getStatement().toLowerCase().contains("add instance ")) {
+            FixForJava7Handler.addKnownLocations(statement.getStatement());
 
-            } else if (statement.getStatement().toLowerCase().contains("remove instance ")) {
-                FixForJava7Handler.removeKnownLocations(statement.getStatement());
+        } else if (statement.getStatement().toLowerCase().contains("remove instance ")) {
+            FixForJava7Handler.removeKnownLocations(statement.getStatement());
 
-            } else
-                return false;
-        }
+        } else
+            return false;
+
         return true;
     }
+
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>eu.almanac</groupId>
-	<artifactId>eu.almanac.eventing</artifactId>
+	<groupId>eu.linksmart.services</groupId>
+	<artifactId>eventing</artifactId>
 	<version>1.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Eventing</name>
@@ -13,7 +13,6 @@
 	<modules>
         <module>DataFusionAPI</module>
         <module>DataFusionCoreAPI</module>
-        <module>Utils</module>
 		<module>EsperWrapper</module>
         <module>DataFusionManagerImpl</module>
         <module>DataFusionManager</module>
@@ -21,6 +20,7 @@
 		<module>DataPayload</module>
 		<module>RestFeeder</module>
 		<module>ComplexEventMachineLearning</module>
+        <module>CemlRestApi</module>
 
 	</modules>
 	<repositories>
@@ -33,6 +33,10 @@
 			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
 
+        <repository>
+            <id>Eclipse Paho Repo</id>
+            <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+        </repository>
     <repository>
 			<id>almanac-snapshots</id>
 			<url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>
@@ -41,11 +45,9 @@
 		  <id>almanac-releases</id>
 		  <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>
 	  </repository>
-   <repository>
-      <id>opencast-public</id>
-      <url>http://repository.opencastproject.org/nexus/content/repositories/public/</url>
-    </repository>
-   <!-- <repository>
+
+
+    <repository>
         <id>central</id>
         <url>https://linksmart.eu/repo/content/groups/public/</url>
         <releases>
@@ -57,7 +59,6 @@
             <updatePolicy>daily</updatePolicy>
         </snapshots>
     </repository>
-    -->
 
   </repositories>
   <distributionManagement>

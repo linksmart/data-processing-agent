@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
+import de.fraunhofer.fit.event.ceml.api.CEML_Rest;
+import de.fraunhofer.fit.event.ceml.core.CEML;
 import de.fraunhofer.fit.event.ceml.intern.Const;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
-import de.fraunhofer.fit.event.ceml.type.requests.Model;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
+import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.linksmart.api.event.datafusion.StatementResponse;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -156,19 +158,19 @@ public class CEMLRest extends Component{
 
     }
     private ResponseEntity<String> create(String name, String body, String requestType){
-        String retur ="";
+        ArrayList<StatementResponse> retur ;
         try {
 
             switch (requestType){
                 case "":
                     LearningRequest request = mapper.readValue(body, LearningRequest.class);
                     request.setName(name);
-                    retur=CEMLFeeder.feedLearningRequest(request);
+                    retur= CEML_Rest.feedLearningRequest(request);
                     break;
                 default:
                     LearningRequest request1 = mapper.readValue(body,LearningRequest.class);
                     request1.setName(name);
-                    retur=CEMLFeeder.feedLearningRequest(request1);
+                    retur=CEML_Rest.feedLearningRequest(request1);
             }
 
         }catch (Exception e){

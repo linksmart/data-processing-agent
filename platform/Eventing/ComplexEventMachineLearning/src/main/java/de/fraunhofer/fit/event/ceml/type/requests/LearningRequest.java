@@ -3,21 +3,17 @@ package de.fraunhofer.fit.event.ceml.type.requests;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import de.fraunhofer.fit.event.ceml.CEML;
-import de.fraunhofer.fit.event.ceml.CEMLFeeder;
-import de.fraunhofer.fit.event.ceml.LearningHandler;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.DoubleTumbleWindowEvaluator;
+import de.fraunhofer.fit.event.ceml.core.CEML;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
+import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import eu.linksmart.api.event.datafusion.Statement;
+import eu.linksmart.api.event.datafusion.StatementResponse;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import weka.classifiers.Evaluation;
 import weka.core.Instance;
 
 import java.util.ArrayList;
@@ -182,7 +178,7 @@ public class LearningRequest  {
         if(statements!= null){
 
             if(leaningStatements!=null && !leaningStatements.isEmpty()){
-                CEMLFeeder.removeStatement(leaningStatements.values());
+                StatementFeeder.removeStatements(leaningStatements.values());
             }
 
             learningProcess = statements;
@@ -194,7 +190,7 @@ public class LearningRequest  {
     public void rebuildDeploymentStatements(ArrayList<String> statements){
         if(statements != null){
             if(deployStatements!=null && !deployStatements.isEmpty()){
-                CEMLFeeder.removeStatement(deployStatements.values());
+                StatementFeeder.removeStatements(deployStatements.values());
             }
 
             deploy = statements;
@@ -206,7 +202,8 @@ public class LearningRequest  {
     public void deploy(){
       if (!deployed){
           loggerService.info("Request "+name+" is being deployed");
-           if( deployed =CEMLFeeder.startStatements(deployStatements.values()).contains("was successful"))
+           ArrayList<StatementResponse> responses =StatementFeeder.startStatements(deployStatements.values());
+          if((deployed=(responses.size()>0 && responses.get(0).isSuccess())))
                loggerService.info("Request "+name+" has been deployed");
 
         }
@@ -215,7 +212,7 @@ public class LearningRequest  {
     }
     public void undeploy(){
         if(deployed) {
-            CEMLFeeder.pauseStatements(deployStatements.values());
+            StatementFeeder.pauseStatements(deployStatements.values());
             deployed =false;
             loggerService.info("Request "+name+" had been removed from active deployment");
         }

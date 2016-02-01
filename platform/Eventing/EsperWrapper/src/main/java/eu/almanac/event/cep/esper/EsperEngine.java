@@ -85,6 +85,13 @@ import java.util.*;
         epService.getEPAdministrator().getConfiguration().addVariable(name,variable.getClass(),variable);
     }
 
+  /*  @Override
+    public void insertObject(String name,Object variable) throws UnsupportedOperationException{
+
+        epService.getEPAdministrator().getConfiguration().addImport(variable.getClass());
+        epService.getEPAdministrator().getConfiguration().addVariable(name,variable.getClass(),variable);
+    }*/
+
     @Override
     public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws Exception{
         epService.getEPAdministrator().getConfiguration().addImport(Class.forName(canonicalNameClassOrPkg));

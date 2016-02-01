@@ -6,15 +6,15 @@
 
 
     <parent>
-        <artifactId>eu.almanac.eventing</artifactId>
-        <groupId>eu.almanac</groupId>
+        <groupId>eu.linksmart.services</groupId>
+        <artifactId>eventing</artifactId>
         <version>1.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>RestFeeder</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>eu.almanac</groupId>
+            <groupId>eu.linksmart.services</groupId>
             <artifactId>DataFusionManagerImpl</artifactId>
             <version>${almanac.version}</version>
             <exclusions>

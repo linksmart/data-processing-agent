@@ -1,9 +1,8 @@
-package de.fraunhofer.fit.event.ceml;
+package de.fraunhofer.fit.event.ceml.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.SynchronousQueue;
 
 
 import de.fraunhofer.fit.event.ceml.type.requests.DataStructure;

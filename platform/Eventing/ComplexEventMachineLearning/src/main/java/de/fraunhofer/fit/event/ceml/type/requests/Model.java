@@ -2,14 +2,11 @@ package de.fraunhofer.fit.event.ceml.type.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import de.fraunhofer.fit.event.ceml.CEML;
-import de.fraunhofer.fit.event.ceml.LearningHandler;
+import de.fraunhofer.fit.event.ceml.core.CEML;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.DoubleTumbleWindowEvaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
-import eu.linksmart.api.event.datafusion.CEPEngine;
-import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -18,8 +15,6 @@ import weka.core.Instance;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * Created by angel on 26/11/15.
