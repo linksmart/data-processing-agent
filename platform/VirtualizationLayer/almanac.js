@@ -65,6 +65,7 @@ It is now ' + now.toISOString() + '.\n\
 			scralUrlOk: !!almanac.config.hosts.scralUrl,
 			scralUiUrlOk: !!almanac.config.hosts.scralUiUrl,
 			dfmUrlOk: !!almanac.config.hosts.dfmUrl,
+			dflUrlOk: !!almanac.config.hosts.dflUrl,
 			//server: almanac.basicHttp.serverSignature,
 			randomId: almanac.randomId,
 			//nodejs: process.versions,
@@ -87,6 +88,7 @@ It is now ' + now.toISOString() + '.\n\
 		require('./almanac-storageManager.js')(almanac);
 		require('./almanac-scral.js')(almanac);
 		require('./almanac-dataFusionManager.js')(almanac);
+		require('./almanac-dataFusionLanguage.js')(almanac); // DFL- API
 		require('./almanac-santander.js')(almanac);
 		require('./almanac-distributed.js')(almanac);	//Distributed requests
 		require('./almanac-websocket-custom-events.js')(almanac);	//WebSocket for custom events (from MQTT)
