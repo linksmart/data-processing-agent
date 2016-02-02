@@ -10,6 +10,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.LoggerFactory;
+import sun.awt.Mutex;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -32,6 +33,7 @@ public class BrokerService implements Observer, Broker {
 
     private Boolean watchdog = false;
 
+    private final static Mutex lock  = new Mutex();
     private String brokerName;
     private String brokerPort;
 
@@ -155,8 +157,8 @@ public class BrokerService implements Observer, Broker {
                             }catch (Exception e){
                                 loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
                             }
-                            //noinspection SynchronizeOnNonFinalField
-                            synchronized (watchdog) {
+
+                            synchronized (lock) {
                                 if (!mqttClient.isConnected())
                                     _connect();
                             }

@@ -1,11 +1,10 @@
 package eu.linksmart.gc.utils.mqtt.broker;
 
+import eu.linksmart.gc.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by José Ángel Carvajal on 23.10.2015 a researcher of Fraunhofer FIT.
@@ -14,10 +13,15 @@ public class StaticBroker implements Broker{
 
     protected StaticBrokerService brokerService;
     protected UUID clientID;
+    protected Map<Topic,ArrayList<Observer>> observersByTopic = new Hashtable<>();
+    protected Map<Observer,Topic> observers = new Hashtable<>();
+    protected boolean needsReconnect = false;
+
 
     public StaticBroker(String brokerName, String brokerPort) throws MalformedURLException, MqttException {
         clientID = UUID.randomUUID();
         brokerService = StaticBrokerService.getBrokerService(clientID, brokerName,brokerPort);
+
     }
     public StaticBroker() throws MalformedURLException, MqttException {
         clientID = UUID.randomUUID();
@@ -31,16 +35,36 @@ public class StaticBroker implements Broker{
     @Override
     public void connect() throws Exception {
 
+
+       reconnectClients();
+
         brokerService.connect(clientID);
+    }
+    private void disconnectClients(){
+        for(ArrayList<Observer> array: observersByTopic.values())
+            for(Observer observer: array)
+                brokerService.removeListener(observer);
+        needsReconnect = true;
+
+    }
+    private void reconnectClients(){
+        if(needsReconnect)
+            for(Topic key: observersByTopic.keySet())
+                for(Observer observer: observersByTopic.get(key))
+                    brokerService.addListener(key.getTopic(),observer);
+        needsReconnect= false;
+
     }
 
     @Override
     public void disconnect() throws Exception {
+        disconnectClients();
         brokerService.disconnect(clientID);
     }
 
     @Override
     public void destroy() throws Exception {
+        disconnectClients();
         brokerService.destroy(clientID);
     }
 
@@ -121,16 +145,33 @@ public class StaticBroker implements Broker{
 
     @Override
     public boolean addListener(String topic, Observer stakeholder) {
+        Topic t = new Topic(topic);
+        if(!observersByTopic.containsKey(t))
+            observersByTopic.put(t,new ArrayList<Observer>());
+        if(!observersByTopic.get(t).contains(stakeholder)) {
+            observers.put(stakeholder,t);
+            observersByTopic.get(t).add(stakeholder);
+        }
+
         return brokerService.addListener(topic,stakeholder);
     }
 
     @Override
     public boolean removeListener(String topic, Observer stakeholder) {
+        observersByTopic.get(new Topic(topic)).remove(stakeholder);
+        observers.remove(stakeholder);
+
         return brokerService.removeListener(topic,stakeholder);
     }
 
     @Override
     public void removeListener(Observer stakeholder) {
+        Topic t = observers.get(stakeholder);
+        observers.remove(stakeholder);
+        observersByTopic.get(t).remove(stakeholder);
+        if(observersByTopic.get(t).isEmpty())
+            observersByTopic.remove(t);
+
          brokerService.removeListener(stakeholder);
 
     }
