@@ -1,0 +1,3 @@
+legofusion:
+  environment:
+    - STORAGE_MANAGER_URL=http://storagemanager.smat.federation2.almanac-project.eu/SensorThings/

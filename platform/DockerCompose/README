@@ -1,0 +1,8 @@
+Docker-Compose Examples:
+
+// Start a docker session with VL and Mosquitto.
+// Special configuration can be done in the develop.yml file
+docker-compose -f docker-compose.yml -f docker-compose.develop.yml up
+
+// Tidy up images
+docker-compose rm

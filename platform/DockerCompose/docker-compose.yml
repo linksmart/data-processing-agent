@@ -1,0 +1,12 @@
+mosquitto:
+  image: ansi/mosquitto
+  ports:
+    - "1883:1883"
+legofusion:
+  image: glagnar/virtualizationlayer:latest
+  links:
+    - mosquitto
+  ports:
+    - "80:80"
+  environment:
+    - MQTT_BROKER_URL=mqtt://mosquitto
