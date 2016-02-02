@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
-import de.fraunhofer.fit.event.ceml.api.CEML_Rest;
+import de.fraunhofer.fit.event.ceml.api.CemlJavaAPI;
 import de.fraunhofer.fit.event.ceml.core.CEML;
-import de.fraunhofer.fit.event.ceml.intern.Const;
+
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
-import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.StatementResponse;
-import eu.linksmart.gc.utils.configuration.Configurator;
+
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ import com.google.gson.*;
 @RestController
 public class CEMLRest extends Component{
 
-     private Configurator conf = Configurator.getDefaultConfig();
+    // private Configurator conf = Configurator.getDefaultConfig();
      private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
 
     private Map<String, LearningRequest> requests = new Hashtable<>();
@@ -40,8 +39,7 @@ public class CEMLRest extends Component{
 
         super(CEMLRest.class.getSimpleName(), "Provides a REST API for managing the Learning request", "CEML");
         // Add configuration file of the local package
-        Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
-        conf = Configurator.getDefaultConfig();
+
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
@@ -165,12 +163,12 @@ public class CEMLRest extends Component{
                 case "":
                     LearningRequest request = mapper.readValue(body, LearningRequest.class);
                     request.setName(name);
-                    retur= CEML_Rest.feedLearningRequest(request);
+                    retur= CemlJavaAPI.feedLearningRequest(request);
                     break;
                 default:
                     LearningRequest request1 = mapper.readValue(body,LearningRequest.class);
                     request1.setName(name);
-                    retur=CEML_Rest.feedLearningRequest(request1);
+                    retur= CemlJavaAPI.feedLearningRequest(request1);
             }
 
         }catch (Exception e){

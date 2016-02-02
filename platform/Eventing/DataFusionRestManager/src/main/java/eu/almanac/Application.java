@@ -2,7 +2,6 @@ package eu.almanac;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import de.fraunhofer.fit.event.ceml.CEMLRest;
 import eu.almanac.event.datafusion.core.DataFusionManagerCore;
 import de.fraunhofer.fit.event.feeder.*;
 import eu.almanac.event.datafusion.utils.generic.Component;
@@ -27,7 +26,7 @@ import java.util.Objects;
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 @Configuration
-@Import(value = { CEMLRest.class, RestStatementFeeder.class,RestEventFeeder.class })
+@Import(value = {  RestStatementFeeder.class,RestEventFeeder.class })
 @EnableAutoConfiguration
 @SpringBootApplication
 @RestController

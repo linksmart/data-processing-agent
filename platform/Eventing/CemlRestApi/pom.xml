@@ -16,7 +16,7 @@
         <dependency>
             <groupId>eu.linksmart.services</groupId>
             <artifactId>CEML</artifactId>
-            <version>1.1.1-SNAPSHOT</version>
+            <version>${almanac.version}</version>
         </dependency>
 
         <dependency>

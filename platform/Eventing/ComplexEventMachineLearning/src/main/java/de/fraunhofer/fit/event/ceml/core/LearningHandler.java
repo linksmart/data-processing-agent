@@ -36,8 +36,8 @@ public class LearningHandler extends Component implements ComplexEventHandler {
         super(LearningHandler.class.getSimpleName(),"Learning Handler processes the data and input it to the learning objects");
         this.statement = statement;
         this.originalRequest =((LearningStatement)statement).getLearningRequest();
-        if(conf.getString(Const.EngineTimeProveded)!= null ||conf.getString(Const.EngineTimeProveded)!="" )
-            columnNameTime = conf.getString(Const.EngineTimeProveded);
+        if(conf.getString(Const.CEML_EngineTimeProveded)!= null ||conf.getString(Const.CEML_EngineTimeProveded)!="" )
+            columnNameTime = conf.getString(Const.CEML_EngineTimeProveded);
         for(int i =0; i<originalRequest.getModel().size();i++)
             modelByName.put(originalRequest.getModel().get(i).getType(),i);
 
@@ -103,7 +103,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
             originalRequest.undeploy();
 
 
-        if(conf.getBool(Const.GenerateReports)) {
+        if(conf.getBool(Const.CEML_GenerateReports)) {
             String simulatedTime = "";
             if(eventMap.containsKey(columnNameTime)) {
                 Object aux = eventMap.get(columnNameTime);
@@ -149,7 +149,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
                 originalRequest.undeploy();
 
 
-            if(conf.getBool(Const.GenerateReports)) {
+            if(conf.getBool(Const.CEML_GenerateReports)) {
                 String simulatedTime = "";
                 if(eventMap.containsKey(columnNameTime)) {
                     Object aux = eventMap.get(columnNameTime);
