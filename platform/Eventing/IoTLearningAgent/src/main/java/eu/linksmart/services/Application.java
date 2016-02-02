@@ -11,20 +11,20 @@ import java.net.MalformedURLException;
 
 public class Application {
     public static void main(String[] args) {
-
+        MqttCemlAPI api;
         try {
             DataFusionManagerCore.start(args);
-            MqttCemlAPI api = new MqttCemlAPI();
+             api = new MqttCemlAPI();
 
+            while (DataFusionManagerCore.isActive()){
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        while (DataFusionManagerCore.isActive()){
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
 

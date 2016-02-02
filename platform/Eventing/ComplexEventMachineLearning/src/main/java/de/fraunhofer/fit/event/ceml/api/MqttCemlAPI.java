@@ -31,9 +31,12 @@ public class MqttCemlAPI extends Component {
 
     public MqttCemlAPI() throws MalformedURLException, MqttException, ClassNotFoundException {
         super(MqttCemlAPI.class.getSimpleName(),"Provides a MQTT light API to the CEML logic", "MqttCemlAPI");
+        Class.forName(CemlJavaAPI.class.getCanonicalName());
         brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST),conf.getString(Const.CEML_MQTT_BROKER_PORT));
         observers = new ArrayList<>();
-        Class.forName(CemlJavaAPI.class.getCanonicalName());
+        initAddRequest();
+        initGetRequest();
+        initRemoveRequest();
         loggerService.info("MQTT CEML API started!");
     }
 
@@ -55,7 +58,7 @@ public class MqttCemlAPI extends Component {
 
             }
         };
-        brokerService.addListener(conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "add",aux);
+        brokerService.addListener(conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "add/#",aux);
         observers.add(aux);
     }
     protected void reportError(String message){
