@@ -17,7 +17,7 @@ var hosts = {
 		recourceCatalogueUrl: '',	//Leave blank for UPnP discovery
 		scralUrl: 'http://localhost:8080/connectors.rest/',
 		scralUiUrl: 'http://localhost:8080/gui/',
-		storageManagerUrl: 'http://cnet006.cloudapp.net/Dmf/SensorThings/',
+		storageManagerUrl: 'http://cnet006.cloudapp.net/SensorThings/',
 		dfmUrl: 'http://localhost:8319/',
 	};
 

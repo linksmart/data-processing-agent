@@ -4,6 +4,7 @@ dfm_url = "./dfm";
 network_manager_url = "./linksmart/GetNetworkManagerStatus?method=getLocalServices";
 storage_manager_url = "./sm/help";
 resource_catalog_url = "./ResourceCatalogue/";
+dfl_url = "./dfl/api/data-fusion/v0.5.0/chains/"
 
 
 // the watchdog timer
@@ -24,6 +25,7 @@ $(document).ready(function() {
 	getStorageManagerStatus(); 
 	getResourceCatalogStatus();
 	getMqttState();
+	getDFLStatus();
 	websocketSetUp();
 
 	setInterval(function() {
@@ -33,6 +35,7 @@ $(document).ready(function() {
 		getStorageManagerStatus();
 		getResourceCatalogStatus();
 		getMqttState();
+		getDFLStatus();
 	}, 5000);
 });
 
@@ -335,3 +338,44 @@ function getResourceCatalogStatus() {
 	});
 }
 //--------- END Resource Catalog  ----------
+
+//----------- Network Manager ----------
+function dflOnline() {
+	if ($("#dflStatus").text() === "Offline") {
+		incActiveServices();
+	}
+	$("#dflStatus").text("Online");
+	//set the class
+	$("#dflStatus").removeClass("label-danger");
+	$("#dflStatus").addClass("label-success");
+}
+
+function dflOffline() {
+	if ($("#dflStatus").text() === "Online") {
+		decActiveServices();
+	}
+	$("#dflStatus").text("Offline");
+	//set the class
+	$("#dflStatus").addClass("label-danger");
+	$("#dflStatus").removeClass("label-success");
+}
+
+function getDFLStatus() {
+	$.ajax({
+		url : dfl_url,
+		type : "GET",
+		crossDomain : true,
+		success : function(data) {
+			console.log(data);
+			dflOnline();
+		},
+		error : function(xhr) {
+			if (xhr.status == 400) {
+				dflOnline();	//A request without parameter currently returns a 400
+			} else {
+				dflOffline();
+			}
+		}
+	});
+}
+//--------- END Network Manager ----------
