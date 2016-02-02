@@ -21,7 +21,7 @@ import com.google.gson.*;
 /**
  * Created by José Ángel Carvajal on 01.02.2016 a researcher of Fraunhofer FIT.
  */
-public class CEML_Rest {
+public class CemlJavaAPI {
 
 
     /**
@@ -38,7 +38,7 @@ public class CEML_Rest {
     static {
 
         // Add configuration file of the local package
-        Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
+        Configurator.addConfFile(Const.CEML_DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -63,7 +63,7 @@ public class CEML_Rest {
 
 
     }
-    public static Response get(String name, String typeRequest) {
+    public static StatementResponse get(String name, String typeRequest) {
         String retur;
         try {
             if (name == null)
@@ -93,17 +93,17 @@ public class CEML_Rest {
                         retur = mapper.writeValueAsString(requests.get(name));
                 }
             else
-                return new Response("Error 404 Not Found: Request with name " + name,HttpStatus.NOT_FOUND );
+                return new StatementResponse("Error 404 Not Found: Request with name " + name,HttpStatus.NOT_FOUND,false );
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return  new Response("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return  new StatementResponse("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false);
 
         }
-        return new  Response(retur, HttpStatus.OK);
+        return new  StatementResponse(retur, HttpStatus.OK, true);
     }
 
-    public static Response update(String name, String body, String typeRequest) {
+    public static StatementResponse update(String name, String body, String typeRequest) {
         Object retur = null;
         try {
 
@@ -151,28 +151,28 @@ public class CEML_Rest {
 
             } else {
                 loggerService.warn("There is no learning request with name " + name);
-                return new Response("Error 404 Not found: There is no request with given name" + name, HttpStatus.NOT_FOUND);
+                return new StatementResponse("Error 404 Not found: There is no request with given name" + name, HttpStatus.NOT_FOUND,false);
             }
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return new Response("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new StatementResponse("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false);
 
         }
         if (retur != null)
             try {
 
-                return new Response(mapper.writeValueAsString(retur), HttpStatus.OK);
+                return new StatementResponse(mapper.writeValueAsString(retur), HttpStatus.OK,true);
 
             } catch (Exception e) {
-                return new Response("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}", HttpStatus.MULTI_STATUS);
+                return new StatementResponse("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}", HttpStatus.MULTI_STATUS,true);
             }
         else
-            return new Response("{\"message\":\"There was an unknown error!\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new StatementResponse("{\"message\":\"There was an unknown error!\"}", HttpStatus.INTERNAL_SERVER_ERROR, false);
 
     }
 
-    public static Response create(String name, String body, String requestType) {
+    public static StatementResponse create(String name, String body, String requestType) {
         ArrayList<StatementResponse> responses=null;
         try {
 
@@ -190,19 +190,40 @@ public class CEML_Rest {
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return new Response("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new StatementResponse("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false);
 
         }
         if (responses != null)
             try {
 
-                return new Response(mapper.writeValueAsString(responses), HttpStatus.MULTI_STATUS);
+                return new StatementResponse(mapper.writeValueAsString(responses), HttpStatus.MULTI_STATUS, true);
 
             } catch (Exception e) {
-                return new Response("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}", HttpStatus.MULTI_STATUS);
+                return new StatementResponse("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}", HttpStatus.MULTI_STATUS, true);
             }
         else
-            return new Response("{\"message\":\"There was an unknown error!\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new StatementResponse("{\"message\":\"There was an unknown error!\"}", HttpStatus.INTERNAL_SERVER_ERROR, false);
+    }
+    public static StatementResponse create( LearningRequest request) {
+        ArrayList<StatementResponse> responses=null;
+        try {
+            responses=feedLearningRequest(request);
+
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
+            return new StatementResponse("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false);
+
+        }
+        if (responses != null)
+            try {
+
+                return new StatementResponse(mapper.writeValueAsString(responses), HttpStatus.MULTI_STATUS, true);
+
+            } catch (Exception e) {
+                return new StatementResponse("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}", HttpStatus.MULTI_STATUS, true);
+            }
+        else
+            return new StatementResponse("{\"message\":\"There was an unknown error!\"}", HttpStatus.INTERNAL_SERVER_ERROR, false);
     }
 
 

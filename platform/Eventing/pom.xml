@@ -9,20 +9,23 @@
 	<description>ALMANAC Eventing and Data Fusion</description>
     <properties>
         <almanac.version>1.1.1-SNAPSHOT</almanac.version>
+        <build.plugins.plugin.version>3.5</build.plugins.plugin.version>
     </properties>
 	<modules>
         <module>DataFusionAPI</module>
         <module>DataFusionCoreAPI</module>
+        <module>DataPayload</module>
 		<module>EsperWrapper</module>
         <module>DataFusionManagerImpl</module>
         <module>DataFusionManager</module>
+        <module>RestFeeder</module>
         <module>DataFusionRestManager</module>
-		<module>DataPayload</module>
-		<module>RestFeeder</module>
 		<module>ComplexEventMachineLearning</module>
         <module>CemlRestApi</module>
+        <module>IoTLearningAgent</module>
+        <module>IoTRestLearningAgent</module>
 
-	</modules>
+    </modules>
 	<repositories>
 		<repository>
 			<id>maven</id>
@@ -75,6 +78,15 @@
 	</distributionManagement>
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -84,14 +96,6 @@
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 					</instructions>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
 				</configuration>
 			</plugin>
 		</plugins>

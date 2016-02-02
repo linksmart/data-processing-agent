@@ -1,9 +1,10 @@
-package eu.almanac;
+package eu.linksmart.services;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import de.fraunhofer.fit.event.ceml.CEMLRest;
+import de.fraunhofer.fit.event.feeder.RestEventFeeder;
+import de.fraunhofer.fit.event.feeder.RestStatementFeeder;
 import eu.almanac.event.datafusion.core.DataFusionManagerCore;
-import de.fraunhofer.fit.event.feeder.*;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.datafusion.AnalyzerComponent;
@@ -20,13 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 @Configuration
-@Import(value = {  RestStatementFeeder.class,RestEventFeeder.class })
+@Import(value = { CEMLRest.class, RestStatementFeeder.class,RestEventFeeder.class })
 @EnableAutoConfiguration
 @SpringBootApplication
 @RestController

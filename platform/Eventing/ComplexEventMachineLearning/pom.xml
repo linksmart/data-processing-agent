@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>eu.linksmart.services</groupId>
         <artifactId>eventing</artifactId>
@@ -12,6 +13,12 @@
     <description>CEML - ML module for CEP in the DataFusion Manager</description>
     <dependencies>
 
+
+        <dependency>
+            <groupId>eu.linksmart.services</groupId>
+            <artifactId>DataFusionManagerImpl</artifactId>
+            <version>${almanac.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -32,42 +39,9 @@
         </dependency>
 
         <dependency>
-            <groupId>eu.linksmart.gc</groupId>
-            <artifactId>utils</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
-
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>eu.almanac.api.event.datafusion</artifactId>
-            <version>${almanac.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>uk.com.robust-it</groupId>
             <artifactId>cloning</artifactId>
             <version>1.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>DataPayload</artifactId>
-            <version>${almanac.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>DataFusionManagerImpl</artifactId>
-            <version>${almanac.version}</version>
         </dependency>
 
 
