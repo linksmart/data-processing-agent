@@ -1,6 +1,0 @@
-C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\bin\Debug\XMLSerializationExample.dll
-C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\bin\Debug\XMLSerializationExample.pdb
-C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\obj\x86\Debug\XMLSerializationExample.dll
-C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\obj\x86\Debug\XMLSerializationExample.pdb
-C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\obj\x86\Debug\XacmlProcessor.csprojResolveAssemblyReference.cache
-C:\Users\Vinkovits\documents\visual studio 2010\Projects\XMLSerializationExample\XMLSerializationExample\bin\Debug\XMLSerializationExample.dll.config
