@@ -121,7 +121,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
 
 
-        evaluationAlgorithms.get(SlideAfter.class.getName()).reset();
+        evaluationAlgorithms.get(SlideAfter.class.getSimpleName()).reset();
 
     }
 
