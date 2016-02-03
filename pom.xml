@@ -10,7 +10,10 @@
     <properties>
         <almanac.version>1.1.1-SNAPSHOT</almanac.version>
         <build.plugins.plugin.version>3.5</build.plugins.plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
 	<modules>
         <module>DataFusionAPI</module>
         <module>DataFusionCoreAPI</module>
@@ -65,7 +68,7 @@
 
   </repositories>
   <distributionManagement>
-		<snapshotRepository>
+		<!--<snapshotRepository>
 			<uniqueVersion>true</uniqueVersion>
 			<id>almanac-snapshots</id>
 			<url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>			
@@ -74,7 +77,18 @@
 		  <uniqueVersion>false</uniqueVersion>
 			<id>almanac-releases</id>
 			<url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>			
-		</repository>
+		</repository>-->
+      <repository>
+          <id>releases</id>
+          <name>Releases</name>
+          <url>https://linksmart.eu/repo/content/repositories/releases/</url>
+      </repository>
+      <snapshotRepository>
+          <id>snapshots</id>
+          <name>Snapshots</name>
+          <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+          <uniqueVersion>false</uniqueVersion>
+      </snapshotRepository>
 	</distributionManagement>
 	<build>
 		<plugins>
