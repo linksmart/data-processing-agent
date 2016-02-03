@@ -84,7 +84,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
         Prediction prediction = originalRequest.evaluate(instance);
 
         int itShould =  originalRequest.getData().getLearningTarget().indexOfValue(target.toString());
-        loggerService.info("\n(R) Learning with rule: "+ statement.getName() +" with id: "+statement.getHash()+" learning target: "+target.toString()+ " predicted index: "+ prediction.getPredictedClass()+" sample index: "+ String.valueOf(itShould));
+        loggerService.info("\n(R) Learning with rule: "+ statement.getName() +" with id: "+statement.getHash()+" learning target: "+target.getClass().getSimpleName()+ " predicted index: "+ prediction.getPredictedClass()+" sample index: "+ String.valueOf(itShould));
 /*
         Instances instances =originalRequest.getData().getInstances();
 

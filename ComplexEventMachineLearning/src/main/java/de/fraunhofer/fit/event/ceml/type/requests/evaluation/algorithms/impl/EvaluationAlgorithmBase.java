@@ -121,7 +121,8 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
             s+="]";
             return s;
         }
-        return "\n (R)"+this.getClass().getSimpleName() + "> current: " + currentValue.toString() + " Target : " + target.toString()+"\n (D) Algorithm ID "+String.valueOf(System.identityHashCode(this))+" CurrentValue ID "+String.valueOf(System.identityHashCode(currentValue)) +" Target ID " + String.valueOf(System.identityHashCode(target)) ;
+        loggerService.debug("(D) Algorithm ID "+String.valueOf(System.identityHashCode(this))+" CurrentValue ID "+String.valueOf(System.identityHashCode(currentValue)) +" Target ID " + String.valueOf(System.identityHashCode(target)));
+        return "\n (R)"+this.getClass().getSimpleName() + "> current: " + currentValue.toString() + " Target : " + target.toString() ;
     }
     @Override
     public double getNormalizedResult(){
