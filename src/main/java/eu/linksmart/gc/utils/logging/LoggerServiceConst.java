@@ -15,4 +15,5 @@ public interface LoggerServiceConst {
     public static final String LOG_ONLINE_ENABLED_CONF_PATH = "LOGGER_LOG_ONLINE_ENABLED";
     public static final String LOG_OUT_BROKER_CONF_PATH ="LOGGER_LOG_OUT_BROKER";
     public static final String LOG_OUT_BROKER_PORT_CONF_PATH ="LOGGER_LOG_OUT_BROKER_PORT";
+    public static final String LoggingDefaultLoggingFile  ="Logging.Default.Logging.File";
 }

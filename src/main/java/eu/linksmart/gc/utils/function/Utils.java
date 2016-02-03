@@ -51,6 +51,7 @@ public class  Utils {
         return getDateFormat().format(new Date());
     }
     static public LoggerService initDefaultLoggerService(Class lass){
+        System.setProperty("log4j.configuration", Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
         LoggerService loggerService = new LoggerService(LoggerFactory.getLogger(lass));
         if (Configurator.getDefaultConfig().getBool(Const.LOG_ONLINE_ENABLED_CONF_PATH)) {
             try {
