@@ -65,7 +65,7 @@ public class StatementFeeder implements Feeder {
 
                     loggerService.error(e.getMessage(), e);
                     response.add(new StatementResponse(e.getMessage(), HttpStatus.BAD_REQUEST,e.getErrorTopic(),false));
-
+                    success = false;
 
                 } catch (Exception e) {
                     loggerService.error(e.getMessage(), e);
