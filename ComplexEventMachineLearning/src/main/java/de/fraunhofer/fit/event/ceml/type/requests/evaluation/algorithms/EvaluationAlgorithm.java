@@ -19,7 +19,7 @@ public interface EvaluationAlgorithm<T>  extends Serializable {
     String report();
     double getNormalizedResult();
     void reset();
-
+    boolean isControlMetric();
     enum ComparisonMethod{
         Equal, More, MoreEqual, Less, LessEqual
     }

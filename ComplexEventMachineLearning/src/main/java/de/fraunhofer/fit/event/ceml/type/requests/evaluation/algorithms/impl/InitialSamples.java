@@ -14,4 +14,8 @@ public class InitialSamples extends ModelEvaluationAlgorithmBase {
         }
 
 
+    @Override
+    public boolean isControlMetric() {
+        return true;
+    }
 }

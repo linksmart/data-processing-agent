@@ -16,6 +16,8 @@ import weka.core.Instance;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by angel on 26/11/15.
@@ -24,7 +26,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
 
     static private Configurator conf = Configurator.getDefaultConfig();
     static private LoggerService loggerService = Utils.initDefaultLoggerService(LearningHandler.class);
-
+    protected ExecutorService executor = Executors.newCachedThreadPool();
     private Statement statement;
     private LearningRequest originalRequest;
     private String columnNameTime = "";
@@ -55,12 +57,18 @@ public class LearningHandler extends Component implements ComplexEventHandler {
             CEML.learn(m.getLerner(),instance);
 
     }
-    @SuppressWarnings("unchecked")
-    @Override
-    public void update(Map eventMap) {
+    private class EventExecutor implements Runnable{
+        private Map eventMap;
+        EventExecutor(Map eventMap){
+            this.eventMap=eventMap;
+        }
 
-
-
+        @Override
+        public void run() {
+            processMessage(eventMap);
+        }
+    }
+    private void processMessage(Map eventMap){
         Instance instance = CEML.populateInstance(eventMap,originalRequest);
 
         Object target =null;
@@ -96,9 +104,9 @@ public class LearningHandler extends Component implements ComplexEventHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
-       // if(originalRequest.getEvaluation().evaluate(prediction, itShould))
+        // if(originalRequest.getEvaluation().evaluate(prediction, itShould))
         if(prediction.isAcceptedPrediction())
-             originalRequest.deploy();
+            originalRequest.deploy();
         else
             originalRequest.undeploy();
 
@@ -116,10 +124,18 @@ public class LearningHandler extends Component implements ComplexEventHandler {
                 else
                     loggerService.warn("Selected column as simulated time has unknown time format");
             }
-           report("\n(R) SimulatedTime: " + simulatedTime);
+            report("\n(R) SimulatedTime: " + simulatedTime);
 
         }
         learn(originalRequest,instance);
+
+    }
+    @SuppressWarnings("unchecked")
+    @Override
+    public void update(Map eventMap) {
+
+        executor.execute(new EventExecutor(eventMap));
+
 
 
     }

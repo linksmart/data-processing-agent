@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
@@ -38,6 +40,7 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
     protected ObjectMapper parser = new ObjectMapper();
     @Deprecated
     protected boolean sendPerProperty;
+    protected ExecutorService executor = Executors.newCachedThreadPool();
     Gson gson;
 
 
@@ -102,10 +105,38 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
     }
 
 
-    @Override
-    public synchronized void update(Map eventMap) {
 
-        loggerService.info( Utils.getDateNowString() + " Updating query: " + query.getName());
+    @Override
+    public  void update(Map eventMap) {
+        loggerService.info( Utils.getDateNowString() + " Simple update query: " + query.getName());
+        executor.execute(new EventExecutor(eventMap));
+
+
+
+    }
+    private class EventExecutor implements Runnable{
+        private Map eventMap;
+        EventExecutor(Map eventMap){
+            this.eventMap=eventMap;
+        }
+
+        @Override
+        public void run() {
+            processMessage(eventMap);
+        }
+    }
+    public void update(Map[] insertStream, Map[] removeStream){
+        loggerService.info( Utils.getDateNowString() + " Multi-update query: " + query.getName());
+        for (Map m: insertStream)
+            executor.execute(new EventExecutor(m));
+
+        for (Map m: removeStream)
+            executor.execute(new EventExecutor(m));
+    }
+
+    protected void processMessage(Map eventMap){
+
+
 
         try {
 
@@ -135,12 +166,10 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
         } catch (MqttException e) {
             loggerService.error(e.getMessage(), e);
         }
-
-
     }
 
     @Deprecated
-    public synchronized void update(Event event) {
+    public  void update(Event event) {
 
         loggerService.info("Updating query: " + query.getName());
 

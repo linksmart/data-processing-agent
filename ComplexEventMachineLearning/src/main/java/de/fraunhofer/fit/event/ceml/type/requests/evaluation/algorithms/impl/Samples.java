@@ -11,5 +11,8 @@ public class Samples extends ModelEvaluationAlgorithmBase {
             return currentValue++;
         }
 
-
+    @Override
+    public boolean isControlMetric() {
+        return true;
+    }
 }

@@ -131,6 +131,10 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
         return ((Double)getResult()/((Double)getTarget()));
     }
 
+    @Override
+    public boolean isControlMetric() {
+        return false;
+    }
 
 
 }

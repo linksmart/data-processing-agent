@@ -74,17 +74,23 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     }
     protected double calculateEvaluationMetrics(int evaluatedClass){
         double accumulateMetric =0;
+        int i=0;
         for(EvaluationAlgorithm algorithm: evaluationAlgorithms.values()) {
-            if (algorithm instanceof ModelEvaluationAlgorithm)
-                ((ModelEvaluationAlgorithm) algorithm).calculate();
-            else if (algorithm instanceof ClassEvaluationAlgorithm)
-                ((ClassEvaluationAlgorithm) algorithm).calculate(evaluatedClass);
-            else
-                loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
-            accumulateMetric += algorithm.getNormalizedResult();
+
+                if (algorithm instanceof ModelEvaluationAlgorithm)
+                    ((ModelEvaluationAlgorithm) algorithm).calculate();
+                else if (algorithm instanceof ClassEvaluationAlgorithm)
+                    ((ClassEvaluationAlgorithm) algorithm).calculate(evaluatedClass);
+                else
+                    loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
+
+                if(!algorithm.isControlMetric()) {
+                    accumulateMetric += algorithm.getNormalizedResult();
+                    i++;
+                }
 
         }
-        return accumulateMetric/evaluationAlgorithms.size();
+        return accumulateMetric/(evaluationAlgorithms.size()-i);
 
     }
 
@@ -658,11 +664,10 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
             super(method, target);
         }
 
+
         @Override
-        public double getNormalizedResult(){
-
-            return 1.0;
-
+        public boolean isControlMetric() {
+            return true;
         }
     }
 /* TODO: transform all basic metrics into algorithms
