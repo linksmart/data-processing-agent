@@ -12,9 +12,11 @@ import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import eu.linksmart.gc.utils.mqtt.types.Topic;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.eclipse.paho.client.mqttv3.*;
+import sun.awt.Mutex;
 
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
 
 /**
  * Created by Caravajal on 22.05.2015.
@@ -28,11 +30,16 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
     protected Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();
     protected Map<String,String> classToAlias= new Hashtable<String, String>();
     @NotNull
-    protected static Boolean toShutdown = false;
+    protected  Boolean toShutdown = false;
+    protected static final Object lockToShutdown = new Object();
     protected long debugCount=0;
 
     protected Thread thisTread;
-    static protected @NotNull Boolean down =false;
+
+    protected  Boolean down =false;
+    protected static final Object lockDown = new Object();
+    private final int LOG_DEBUG_NUM_IN_EVENTS_REPORTED;
+
 
     public MqttFeederImpl(String brokerName, String brokerPort, String topic,String implName, String desc, String... implOf) throws MalformedURLException, MqttException {
         super(implName,desc,implOf);
@@ -46,7 +53,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
         } catch (InstantiationException e) {
             loggerService.error(e.getMessage(),e);
         }
-
+        LOG_DEBUG_NUM_IN_EVENTS_REPORTED=conf.getInt(FeederConst.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH);
     }
 
 
@@ -73,7 +80,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
         @NotNull
         boolean tmp ;
 
-        synchronized (down) {
+        synchronized (lockDown) {
 
             tmp = down;
         }
@@ -112,7 +119,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
                     loggerService.info(this.getClass().getSimpleName() + " logged off");
 
-                    synchronized (down) {
+                    synchronized (lockDown) {
                         down = true;
                     }
 
@@ -143,7 +150,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
         debugCount=(debugCount+1)%Long.MAX_VALUE;
         try {
-            if(debugCount%conf.getInt(FeederConst.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH) == 0)
+            if(debugCount%LOG_DEBUG_NUM_IN_EVENTS_REPORTED == 0)
                 loggerService.info(Utils.getDateNowString() + " message arrived with topic: " + ((MqttMessage) mqttMessage).getTopic());
 
         }catch (Exception e){

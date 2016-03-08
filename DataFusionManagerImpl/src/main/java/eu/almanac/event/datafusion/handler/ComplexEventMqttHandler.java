@@ -32,6 +32,7 @@ import java.util.concurrent.Executors;
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
 public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler {
+
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected ArrayList<StaticBroker> brokerServices;
     protected final Statement query;
@@ -43,6 +44,9 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
     protected ExecutorService executor = Executors.newCachedThreadPool();
     Gson gson;
 
+    // configuration
+    private  String STATEMENT_INOUT_BASE_TOPIC= "queries/";
+    private  String TIME_ISO_FORMAT =  "yyyy-MM-dd'T'HH:mm:ss.S'Z'";
 
     static {
         List<String> hosts = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_CONF_PATH),
@@ -74,11 +78,17 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
     public ComplexEventMqttHandler(Statement query) throws RemoteException, MalformedURLException, StatementException {
         super(ComplexEventMqttHandler.class.getSimpleName(),"Default handler for complex events", ComplexEventHandler.class.getSimpleName(), eu.linksmart.api.event.datafusion.ComplexEventMqttHandler.class.getSimpleName());
         this.query=query;
-        gson = new GsonBuilder().setDateFormat(conf.getString(Const.TIME_ISO_FORMAT)).create();
+        try {
+            TIME_ISO_FORMAT = conf.getString(Const.TIME_ISO_FORMAT);
+            STATEMENT_INOUT_BASE_TOPIC =conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
+
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+        }
+        gson = new GsonBuilder().setDateFormat(TIME_ISO_FORMAT).create();
         parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         parser.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         brokerServices = new ArrayList<>();
-
 
 
         try {
@@ -92,7 +102,7 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
 
             for(String scope: scopes) {
                 if (!knownInstances.containsKey(scope.toLowerCase()))
-                    throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), "The selected scope (" + query.getScope(0) + ") is unknown");
+                    throw new StatementException(STATEMENT_INOUT_BASE_TOPIC + query.getHash(), "The selected scope (" + query.getScope(0) + ") is unknown");
                 brokerServices.add(new StaticBroker(
                         knownInstances.get(scope.toLowerCase()).getKey(),
                         knownInstances.get(scope.toLowerCase()).getValue()

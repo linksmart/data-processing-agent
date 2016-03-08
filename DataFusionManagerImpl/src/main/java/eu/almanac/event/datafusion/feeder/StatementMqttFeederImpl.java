@@ -21,11 +21,13 @@ import java.util.ArrayList;
 public class StatementMqttFeederImpl extends MqttFeederImpl {
 
     private Gson parser = new Gson();
-
+    // configuration
+    private String STATEMENT_INOUT_BASE_TOPIC ="queries/";
     @SuppressWarnings("UnusedDeclaration")
     public StatementMqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException, InstantiationException {
         super(brokerName, brokerPort, topic,StatementMqttFeederImpl.class.getSimpleName(),"Provides a statement MQTT API",MqttFeederImpl.class.getSimpleName(), Feeder.class.getSimpleName());
 
+        STATEMENT_INOUT_BASE_TOPIC = conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
     }
 
 
@@ -39,7 +41,7 @@ public class StatementMqttFeederImpl extends MqttFeederImpl {
 
         } catch (JsonParseException e) {
             try {
-                brokerService.publish(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + "errors/", e.getMessage());
+                brokerService.publish(STATEMENT_INOUT_BASE_TOPIC + "errors/", e.getMessage());
             } catch (Exception e1) {
                 loggerService.error(e1.getMessage(), e1);
             }
@@ -107,10 +109,10 @@ public class StatementMqttFeederImpl extends MqttFeederImpl {
     }
 
     // NOTE: consider move this code to an Feeder abstract class if not TODO: document the function
-    @SuppressWarnings("SynchronizeOnNonFinalField")
+
     protected boolean processInternStatement(Statement statement) throws StatementException {
         if (statement.getStatement().toLowerCase().equals("shutdown")) {
-            synchronized (toShutdown) {
+            synchronized (lockToShutdown) {
                 toShutdown = true;
             }
             return true;

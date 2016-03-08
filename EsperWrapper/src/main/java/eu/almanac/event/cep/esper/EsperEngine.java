@@ -35,6 +35,9 @@ import java.util.*;
     private Configurator conf =  Configurator.getDefaultConfig();
 
     static private EsperEngine ref= init();
+    // configuration
+    private String STATEMENT_INOUT_BASE_TOPIC = "queries/";
+    private boolean SIMULATION_EXTERNAL_CLOCK = false;
 
     static EsperEngine init(){
         EsperEngine EE= new EsperEngine();
@@ -43,6 +46,7 @@ import java.util.*;
 
         return EE;
     }
+
 
     public static EsperEngine getEngine(){
         return  ref;
@@ -57,16 +61,20 @@ import java.util.*;
         // add additional configuration
         Configuration config = new Configuration();
 
-        // extern clock
-        if(conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK))
-            config.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
+        //load values
+        STATEMENT_INOUT_BASE_TOPIC = conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
+        SIMULATION_EXTERNAL_CLOCK = conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK);
 
+        // extern clock
+        if(SIMULATION_EXTERNAL_CLOCK) {
+            config.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
+        }
         // load configuration into Esper
         epService = EPServiceProviderManager.getDefaultProvider(config);
 
 
         // extern clock
-        if(conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK))
+        if(SIMULATION_EXTERNAL_CLOCK)
             epService.getEPRuntime().sendEvent(new CurrentTimeEvent(conf.getDate(Const.SIMULATION_EXTERNAL_CLOCK_STARTING_TIME).getTime()));
 
 
@@ -132,7 +140,7 @@ import java.util.*;
 
 
                 epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
-                if(conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK))
+                if(SIMULATION_EXTERNAL_CLOCK)
                     epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(((EventType)event).getDate().getTime()));
                 /*
                 This lines produces the following error:
@@ -282,7 +290,7 @@ import java.util.*;
 
         if(epService.getEPAdministrator().getStatement(query.getHash())!=null) {
 
-            throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + query.getHash(), ("Query with id " + query.getHash() + " already added"));
+            throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+ query.getHash(), ("Query with id " + query.getHash() + " already added"));
 
         }
 
