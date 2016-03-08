@@ -20,9 +20,9 @@
         <module>DataPayload</module>
 		<module>EsperWrapper</module>
         <module>DataFusionManagerImpl</module>
-        <module>DataFusionManager</module>
+        <module>IoTRESTDataProcessingAgent</module>
         <module>RestFeeder</module>
-        <module>DataFusionRestManager</module>
+        <module>IoTDataProcessingAgent</module>
 		<module>ComplexEventMachineLearning</module>
         <module>CemlRestApi</module>
         <module>IoTLearningAgent</module>

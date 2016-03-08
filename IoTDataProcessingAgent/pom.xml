@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>DataFusionManager</artifactId>
+    <artifactId>IoTDataProcessingAgent</artifactId>
     <dependencies>
         <dependency>
             <groupId>eu.linksmart.services</groupId>
@@ -45,7 +45,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>eu.almanac.Application</mainClass>
+                            <mainClass>eu.linksmart.services.Application</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
