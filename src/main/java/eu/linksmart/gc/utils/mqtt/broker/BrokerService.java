@@ -187,8 +187,7 @@ public class BrokerService implements Observer, Broker {
     }
 
     public void startWatchdog() {
-        //noinspection SynchronizeOnNonFinalField
-        synchronized (watchdog) {
+        synchronized (lock) {
             if (!this.watchdog) {
                 this.watchdog = true;
                 connectionWatchdog();
@@ -197,8 +196,7 @@ public class BrokerService implements Observer, Broker {
 
     }
     public void stopWatchdog() {
-        //noinspection SynchronizeOnNonFinalField
-        synchronized (watchdog) {
+        synchronized (lock) {
             this.watchdog = false;
         }
 
