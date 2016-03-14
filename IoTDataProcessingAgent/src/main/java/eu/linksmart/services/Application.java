@@ -1,4 +1,4 @@
-package eu.almanac;
+package eu.linksmart.services;
 
 import eu.almanac.event.datafusion.core.DataFusionManagerCore;
 

@@ -43,14 +43,14 @@
             <id>Eclipse Paho Repo</id>
             <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
         </repository>
-    <repository>
+   <!-- <repository>
 			<id>almanac-snapshots</id>
 			<url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-snapshots/</url>
 		</repository>
 	   <repository>
 		  <id>almanac-releases</id>
 		  <url>http://almanac.fit.fraunhofer.de:8081/nexus/content/repositories/almanac-releases/</url>
-	  </repository>
+	  </repository>-->
 
 
     <repository>

@@ -5,6 +5,7 @@ import eu.almanac.event.datafusion.feeder.EventMqttFeederImpl;
 
 import eu.almanac.event.datafusion.feeder.PersistenceFeeder;
 import eu.almanac.event.datafusion.feeder.StatementMqttFeederImpl;
+import eu.almanac.event.datafusion.feeder.TestFeeder;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
@@ -13,9 +14,15 @@ import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.almanac.event.cep.esper.EsperEngine;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.xml.DOMConfigurator;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by J. Angel Caravajal on 06.10.2014.
@@ -62,17 +69,24 @@ public class DataFusionManagerCore {
 
             if(active) {
                 loggerService.info("Data Fusion Manager is alive");
-
-
+                int hb = 5000;
                 try {
-                    Thread.sleep(conf.getInt(Const.LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH));
-                } catch (InterruptedException e) {
+                     hb=conf.getInt(Const.LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH);
+
+                } catch (Exception ignored) {
+
+                }
+                try {
+
+                    Thread.sleep(hb);
+                } catch (Exception e) {
                     loggerService.error(e.getMessage(), e);
                 }
             }
         }
     }
     protected static boolean init(String args[]){
+
 
         if(args.length>0) {
             for (String arg: args)
@@ -81,6 +95,15 @@ public class DataFusionManagerCore {
         }else
             Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
+        try {
+            //System.setProperty("log4j.configuration",(new File(".", "resources"+File.separatorChar+ Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
+            //System.setProperty("log4j.configuration",(new File(".", "resources"+File.separatorChar+ Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
+            System.setProperty("log4j.configuration",(new File(  Configurator.getDefaultConfig().getString(eu.linksmart.gc.utils.constants.Const.LoggingDefaultLoggingFile))).toURL().toString());
+            System.setProperty("log4j.configurationFile",(new File(  Configurator.getDefaultConfig().getString(eu.linksmart.gc.utils.constants.Const.LoggingDefaultLoggingFile))).toURL().toString());
+            //DOMConfigurator.configure(Configurator.getDefaultConfig().getString(eu.linksmart.gc.utils.constants.Const.LoggingDefaultLoggingFile));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         loggerService = Utils.initDefaultLoggerService(DataFusionManagerCore.class);
 
 
@@ -117,7 +140,7 @@ public class DataFusionManagerCore {
 
         // TODO: change the loading of feeder the same way as the CEP engines are loaded
         // loading of feeders
-        Feeder feederImplEvents = null,  feederImplQuery = null, persistentFeeder=null;
+        Feeder feederImplEvents = null,  feederImplQuery = null, persistentFeeder=null,testFeeder = null;
         try {
 
             feederImplEvents = new EventMqttFeederImpl(conf.get(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.get(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
@@ -127,10 +150,15 @@ public class DataFusionManagerCore {
 
             persistentFeeder = new PersistenceFeeder(conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
+
             for (CEPEngine wrapper: CEPEngine.instancedEngines.values()) {
                 feederImplEvents.dataFusionWrapperSignIn(wrapper);
                 feederImplQuery.dataFusionWrapperSignIn(wrapper);
                 persistentFeeder.dataFusionWrapperSignIn(wrapper);
+                if(conf.getBool(Const.TEST_FEEDER)) {
+                    testFeeder = new TestFeeder();
+                    testFeeder.dataFusionWrapperSignIn(wrapper);
+                }
             }
 
         } catch (Exception e) {
