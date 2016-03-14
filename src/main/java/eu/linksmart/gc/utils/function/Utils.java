@@ -6,15 +6,20 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.logging.MqttLogger;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.spi.LoggerRepository;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 import java.util.TimeZone;
 
 /**
@@ -56,13 +61,23 @@ public class  Utils {
         try {
             //System.setProperty("log4j.configuration",(new File(".", "resources"+File.separatorChar+ Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
             //System.setProperty("log4j.configuration",(new File(".", "resources"+File.separatorChar+ Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
-            System.setProperty("log4j.configuration",(new File(".",  Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
-            System.setProperty("log4j.configurationFile",(new File(".",  Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
+            System.setProperty("log4j.configuration",(new File(  Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
+            System.setProperty("log4j.configurationFile",(new File(  Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
+
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
         LoggerService loggerService = new LoggerService(LoggerFactory.getLogger(lass));
+        try {
+            Properties p = new Properties();
+            p.load(new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)));
+            PropertyConfigurator.configure(p);
+            loggerService.debug("configuration file loaded");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (Configurator.getDefaultConfig().getBool(Const.LOG_ONLINE_ENABLED_CONF_PATH)) {
             try {
 
