@@ -95,7 +95,7 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>src/main/resources/dfm.cfg</file>
+                                    <file>src/main/resources/conf.cfg</file>
                                     <type>cfg</type>
                                     <classifier>configuration</classifier>
                                 </artifact>

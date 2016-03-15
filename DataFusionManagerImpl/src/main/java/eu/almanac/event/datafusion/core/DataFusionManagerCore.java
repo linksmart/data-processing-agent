@@ -40,13 +40,13 @@ public class DataFusionManagerCore {
     protected static Configurator conf;
     protected static  LoggerService loggerService;
 
-    public static void run(String[] args){
+    public static void run(String args){
 
          init(args);
         statusLoop();
     }
 
-    public static boolean start(String[] args){
+    public static boolean start(String args){
         Boolean ret =init(args);
         new Thread(new Runnable(){
 
@@ -85,25 +85,16 @@ public class DataFusionManagerCore {
             }
         }
     }
-    protected static boolean init(String args[]){
+    protected static boolean init(String args){
 
 
-        if(args.length>0) {
-            for (String arg: args)
-                Configurator.addConfFile(arg);
+        if(args != null) {
+             Configurator.addConfFile(args);
 
         }else
             Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
-        try {
-            //System.setProperty("log4j.configuration",(new File(".", "resources"+File.separatorChar+ Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
-            //System.setProperty("log4j.configuration",(new File(".", "resources"+File.separatorChar+ Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
-            System.setProperty("log4j.configuration",(new File(  Configurator.getDefaultConfig().getString(eu.linksmart.gc.utils.constants.Const.LoggingDefaultLoggingFile))).toURL().toString());
-            System.setProperty("log4j.configurationFile",(new File(  Configurator.getDefaultConfig().getString(eu.linksmart.gc.utils.constants.Const.LoggingDefaultLoggingFile))).toURL().toString());
-            //DOMConfigurator.configure(Configurator.getDefaultConfig().getString(eu.linksmart.gc.utils.constants.Const.LoggingDefaultLoggingFile));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+
         loggerService = Utils.initDefaultLoggerService(DataFusionManagerCore.class);
 
 

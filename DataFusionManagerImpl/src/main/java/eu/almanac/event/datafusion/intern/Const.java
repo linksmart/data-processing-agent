@@ -31,7 +31,7 @@ public interface Const extends eu.linksmart.gc.utils.constants.Const, FeederCons
 
     public static final String CEP_ENGINES_PATH = "CEP_ENGINES";
 
-    public static final String DEFAULT_CONFIGURATION_FILE ="dfm.cfg";
+    public static final String DEFAULT_CONFIGURATION_FILE = "conf.cfg";
     public static final UUID DFM_ID = UUID.randomUUID();
 
     public static final String FeederPayloadTopic ="Feeder.Payload.Type.Topic";

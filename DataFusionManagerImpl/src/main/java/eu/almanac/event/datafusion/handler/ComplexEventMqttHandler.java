@@ -75,6 +75,9 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
             }
         }
     }
+
+    private String OUTPUT_TOPIC;
+
     public ComplexEventMqttHandler(Statement query) throws RemoteException, MalformedURLException, StatementException {
         super(ComplexEventMqttHandler.class.getSimpleName(),"Default handler for complex events", ComplexEventHandler.class.getSimpleName(), eu.linksmart.api.event.datafusion.ComplexEventMqttHandler.class.getSimpleName());
         this.query=query;
@@ -82,6 +85,10 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
             TIME_ISO_FORMAT = conf.getString(Const.TIME_ISO_FORMAT);
             STATEMENT_INOUT_BASE_TOPIC =conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
 
+
+            OUTPUT_TOPIC = Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH) + query.getHash();
+            if(OUTPUT_TOPIC == null)
+                OUTPUT_TOPIC = "/federation1/amiat/v2/cep/";
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
@@ -379,7 +386,7 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
                     brokerService.publish(output + query.getHash(),   parser.writeValueAsString(ent).getBytes());
                 }
             else
-                brokerService.publish(Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH) + query.getHash(), parser.writeValueAsString(ent).getBytes());
+                brokerService.publish(OUTPUT_TOPIC, parser.writeValueAsString(ent).getBytes());
 
 
 

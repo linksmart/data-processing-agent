@@ -8,8 +8,11 @@ import eu.almanac.event.datafusion.core.DataFusionManagerCore;
 
 public class Application {
     public static void main(String[] args) {
+        String confFile = Const.DEFAULT_CONFIGURATION_FILE;
+        if(args.length>0)
+            confFile= args[0];
 
-        DataFusionManagerCore.run(args);
+        DataFusionManagerCore.run(confFile);
 
 
     }

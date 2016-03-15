@@ -151,12 +151,12 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
         debugCount=(debugCount+1)%Long.MAX_VALUE;
         try {
             if(debugCount%LOG_DEBUG_NUM_IN_EVENTS_REPORTED == 0)
-                loggerService.info(Utils.getDateNowString() + " message arrived with topic: " + ((MqttMessage) mqttMessage).getTopic());
+                loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " + ((MqttMessage) mqttMessage).getTopic());
 
         }catch (Exception e){
             loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
             if(debugCount%20== 0)
-                loggerService.info(Utils.getDateNowString() + " message arrived with topic: " + ((MqttMessage) mqttMessage).getTopic());
+                loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " + ((MqttMessage) mqttMessage).getTopic());
 
         }
 

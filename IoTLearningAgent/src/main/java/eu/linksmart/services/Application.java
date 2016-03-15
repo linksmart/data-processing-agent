@@ -11,9 +11,13 @@ import java.net.MalformedURLException;
 
 public class Application {
     public static void main(String[] args) {
+        String confFile = Const.DEFAULT_CONFIGURATION_FILE;
+        if(args.length>0)
+            confFile= args[0];
+
         MqttCemlAPI api;
         try {
-            DataFusionManagerCore.start(args);
+            DataFusionManagerCore.start(confFile);
              api = new MqttCemlAPI();
 
             while (DataFusionManagerCore.isActive()){

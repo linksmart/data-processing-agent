@@ -35,7 +35,8 @@ public class PersistenceFeeder extends Component implements Feeder, EventFeederL
         super(PersistenceFeeder.class.getSimpleName(),"Feeder that inserts statements and Events at loading time", Feeder.class.getSimpleName());
 
         for(String f: filePaths)
-            this.filePaths.add(f);
+            if(f!=null&&!f.equals(""))
+                this.filePaths.add(f);
 
     }
     private void loadFiles(CEPEngine dfw){

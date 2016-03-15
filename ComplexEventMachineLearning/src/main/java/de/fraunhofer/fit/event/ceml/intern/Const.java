@@ -15,5 +15,5 @@ public interface Const extends eu.linksmart.gc.utils.constants.Const {
     public static final String CEML_MQTT_ERROR_TOPIC =   "CEML.API.MQTT.Topic.Error";
     public static final String CEML_MQTT_BROKER_HOST =   "CEML.API.MQTT.Broker.Host";
     public static final String CEML_MQTT_BROKER_PORT =   "CEML.API.MQTT.Broker.Port";
-    public static final String CEML_DEFAULT_CONFIGURATION_FILE ="ceml.cfg";
+    public static final String CEML_DEFAULT_CONFIGURATION_FILE = "conf.cfg";
 }

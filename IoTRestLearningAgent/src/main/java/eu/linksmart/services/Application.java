@@ -32,9 +32,11 @@ import java.util.Map;
 @RestController
 public class Application {
     public static void main(String[] args) {
+        String confFile = Const.DEFAULT_CONFIGURATION_FILE;
+        if(args.length>0)
+            confFile= args[0];
 
-
-        Boolean hasStarted = DataFusionManagerCore.start(args);
+        Boolean hasStarted = DataFusionManagerCore.start(confFile);
         if(hasStarted)
             SpringApplication.run(Application.class, args);
 
