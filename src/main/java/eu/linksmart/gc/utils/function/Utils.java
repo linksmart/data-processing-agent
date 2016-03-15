@@ -5,17 +5,13 @@ import eu.linksmart.gc.utils.constants.Const;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.logging.MqttLogger;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
-import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.spi.LoggerRepository;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.nio.file.NoSuchFileException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -64,15 +60,29 @@ public class  Utils {
             Properties p = new Properties();
             try {
                 p.load(new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)));
-            }catch(FileNotFoundException ex){
-                InputStream in = lass.getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
-                p.load(in);
                 loggerService.info("Loading from configuration from jar default file");
+            }catch(FileNotFoundException ex){
+                try {
+
+                    InputStream in = lass.getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                    p.load(in);
+                    loggerService.info("Loading from configuration from jar default file");
+                }catch (Exception exx){
+                    try {
+                        InputStream in = Utils.class.getClassLoader().getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                        p.load(in);
+                        loggerService.info("Loading from configuration from jar default file");
+                    }catch (Exception exxx){
+
+                        exxx.printStackTrace();
+                    }
+                }
             }
             PropertyConfigurator.configure(p);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         if (Configurator.getDefaultConfig().getBool(Const.LOG_ONLINE_ENABLED_CONF_PATH)) {
             try {
 
