@@ -28,6 +28,7 @@ public class BrokerService implements Observer, Broker {
     protected int preloadedQoS = 0,preloadedTriesReconnect = 10, preloadedRetryTime =3000;
     protected boolean preloadedPolicy = false;
 
+    private int CONNECTION_MQTT_WATCHDOG_TIMEOUT = 30000;
 
 
 
@@ -36,8 +37,6 @@ public class BrokerService implements Observer, Broker {
     private final static Mutex lock  = new Mutex();
     private String brokerName;
     private String brokerPort;
-
-
 
 
     public BrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
@@ -140,6 +139,7 @@ public class BrokerService implements Observer, Broker {
         preloadedPolicy = conf.getBool(Const.DEFAULT_RETAIN_POLICY);
         preloadedTriesReconnect =conf.getInt(Const.RECONNECTION_TRY);
         preloadedRetryTime = conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME);
+        CONNECTION_MQTT_WATCHDOG_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT);
     }
     private void connectionWatchdog(){
 
@@ -165,17 +165,13 @@ public class BrokerService implements Observer, Broker {
                         } catch (Exception e) {
                             loggerService.error("Error in the watch dog of broker service:" + e.getMessage(), e);
                         }
-                        try {
 
-                            Thread.sleep(conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT));
-                        } catch (Exception e) {
-                            loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
-                            try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException e1) {
-                                loggerService.error(e.getMessage(), e);
-                            }
+                        try {
+                            Thread.sleep(CONNECTION_MQTT_WATCHDOG_TIMEOUT);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+
                     }
                 }
             }

@@ -13,9 +13,9 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.net.MalformedURLException;
+import java.nio.file.NoSuchFileException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,24 +57,19 @@ public class  Utils {
         return getDateFormat().format(new Date());
     }
     static public LoggerService initDefaultLoggerService(Class lass){
-       // System.setProperty("log4j.configurationFile", Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
-        try {
-            //System.setProperty("log4j.configuration",(new File(".", "resources"+File.separatorChar+ Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
-            //System.setProperty("log4j.configuration",(new File(".", "resources"+File.separatorChar+ Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
-            System.setProperty("log4j.configuration",(new File(  Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
-            System.setProperty("log4j.configurationFile",(new File(  Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))).toURL().toString());
 
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
 
         LoggerService loggerService = new LoggerService(LoggerFactory.getLogger(lass));
         try {
             Properties p = new Properties();
-            p.load(new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)));
+            try {
+                p.load(new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)));
+            }catch(FileNotFoundException ex){
+                InputStream in = lass.getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                p.load(in);
+                loggerService.info("Loading from configuration from jar default file");
+            }
             PropertyConfigurator.configure(p);
-            loggerService.debug("configuration file loaded");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,6 +81,8 @@ public class  Utils {
                 loggerService.error(e.getMessage(), e);
             }
         }
+
+        loggerService.info("Configuration file loaded");
         return loggerService;
 
     }

@@ -13,6 +13,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.File;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -168,7 +169,15 @@ public class Configurator extends ConfigurationConst {
     }
     public List<String> getList(String key){
 
-        return  config.getList(String.class, key);
+        // BugFIX: the getList is not returning a split list. I needed to do it by myself
+        //return  config.getList(String.class, key);
+        String[] strings = config.getString(key).split(",");
+        List<String> ret = new ArrayList<>();
+        for(String i: strings)
+            ret.add(i.trim());
+
+        return ret;
+
 
     }
 }
