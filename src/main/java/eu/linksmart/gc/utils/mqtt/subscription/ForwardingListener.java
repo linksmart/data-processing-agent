@@ -5,11 +5,11 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.types.CurrentStatus;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import eu.linksmart.gc.utils.mqtt.types.Topic;
+import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 public  class ForwardingListener implements MqttCallback {
     protected final UUID originProtocol;
     protected  Observer  connectionListener = null;
-    protected static final LoggerService LOG= new LoggerService(LoggerFactory.getLogger(ForwardingListener.class));
+    protected static Logger LOG = Logger.getLogger(ForwardingListener.class.getName());
 
     protected long sequence ;
     protected ExecutorService executor = Executors.newCachedThreadPool();

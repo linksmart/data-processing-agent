@@ -2,7 +2,7 @@ package eu.linksmart.gc.utils.mqtt.types;
 
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.subscription.ForwardingListener;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.util.UUID;
  * Created by Caravajal on 25.03.2015.
  */
 public class MqttMessage implements Serializable {
-    protected final static LoggerService LOG= new LoggerService(LoggerFactory.getLogger(ForwardingListener.class));
+    protected static Logger LOG = Logger.getLogger(MqttMessage.class.getName());
     private static final long serialVersionUID = -1353455745007862618L;
     private String topic = null;
     private byte[] payload = null;

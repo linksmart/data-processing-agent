@@ -2,15 +2,11 @@ package eu.linksmart.gc.utils.configuration;
 
 
 import eu.linksmart.gc.utils.function.Utils;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.ReloadingFileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
-import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
-import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration.CompositeConfiguration;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.SystemConfiguration;
 
+import javax.naming.ConfigurationException;
 import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -54,9 +50,9 @@ public class Configurator extends ConfigurationConst {
         for(String key = null ;stringIterator.hasNext(); key = stringIterator.next() ) {
             if(key!=null )
                 if (!conf.config.containsKey(key)){
-                    conf.config.addProperty(key, configurator.config.get(Object.class, key));
+                    conf.config.addProperty(key, configurator.config.getProperty(key));
                 }else
-                    conf.config.setProperty(key, configurator.config.get(Object.class, key));
+                    conf.config.setProperty(key, configurator.config.getProperty(key));
 
         }
 
@@ -83,53 +79,38 @@ public class Configurator extends ConfigurationConst {
 
     }
     protected Configurator() {
-        Configurations  configs = new Configurations();
-        File propertiesFile = new File(DEFAULT_INTERN_CONFIGURATION_FILE);
+        this(DEFAULT_INTERN_CONFIGURATION_FILE);
 
-
-        FileBasedConfigurationBuilder<PropertiesConfiguration> builder = configs.propertiesBuilder(propertiesFile);
-
-
-        try
-        {
-            PropertiesConfiguration aux = builder.getConfiguration();
-            aux.setListDelimiterHandler(new DefaultListDelimiterHandler(','));
-
-            config = aux;
-
-
-        }
-        catch(ConfigurationException cex)
-        {
-            //NOTE: The loading configuration has not loaded yet. Therefore, I print directly on the standard error output
-            cex.printStackTrace();
-        }
     }
     protected Configurator(String configurationFile) {
-        Parameters params = new Parameters();
 
-
-        builder = new ReloadingFileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
-                .configure(params.properties()
-                        .setFileName(configurationFile));
 
         try
         {
-            //NOTE: The loading configuration has not loaded yet. Therefore, I print directly on the standard error output
-            PropertiesConfiguration aux = builder.getConfiguration();
-            aux.setListDelimiterHandler(new DefaultListDelimiterHandler(','));
 
-            config = aux;
+             config = new CompositeConfiguration();
+            config.addConfiguration(new PropertiesConfiguration(configurationFile));
 
 
         }
-        catch(ConfigurationException cex)
+        catch(Exception cex)
         {
-            cex.printStackTrace();
+            try
+            {
+
+                config = new CompositeConfiguration();
+                config.addConfiguration(new PropertiesConfiguration("etc/"+configurationFile));
+
+
+            }
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+            }
         }
     }
-    private  Configuration config = null;
-    private  FileBasedConfigurationBuilder<PropertiesConfiguration> builder =null;
+    private CompositeConfiguration config = null;
+
 
     public  Object get(String key){
 

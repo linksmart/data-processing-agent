@@ -9,7 +9,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.net.MalformedURLException;
 import java.text.DateFormat;
@@ -60,17 +59,20 @@ public class  Utils {
             Properties p = new Properties();
             try {
                 p.load(new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)));
-                loggerService.info("Loading from configuration from jar default file");
+                PropertyConfigurator.configure(p);
+                loggerService.info("Loading from configuration from given file");
             }catch(FileNotFoundException ex){
                 try {
 
                     InputStream in = lass.getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
                     p.load(in);
+                    PropertyConfigurator.configure(p);
                     loggerService.info("Loading from configuration from jar default file");
                 }catch (Exception exx){
                     try {
                         InputStream in = Utils.class.getClassLoader().getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
                         p.load(in);
+                        PropertyConfigurator.configure(p);
                         loggerService.info("Loading from configuration from jar default file");
                     }catch (Exception exxx){
 
@@ -78,7 +80,6 @@ public class  Utils {
                     }
                 }
             }
-            PropertyConfigurator.configure(p);
         } catch (Exception e) {
             e.printStackTrace();
         }

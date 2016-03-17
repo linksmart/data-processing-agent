@@ -7,17 +7,16 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.subscription.ForwardingListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.slf4j.LoggerFactory;
-import sun.awt.Mutex;
+
+import org.apache.log4j.Logger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
 
 public class BrokerService implements Observer, Broker {
-    protected static LoggerService loggerService;
+    protected static Logger loggerService = Logger.getLogger(BrokerService.class.getName());
     // this is the MQTT client to broker in the local broker
     private Configurator conf = Configurator.getDefaultConfig();
     protected MqttClient mqttClient;
@@ -34,7 +33,7 @@ public class BrokerService implements Observer, Broker {
 
     private Boolean watchdog = false;
 
-    private final static Mutex lock  = new Mutex();
+    private final static Object lock  = new Object();
     private String brokerName;
     private String brokerPort;
 
@@ -42,7 +41,7 @@ public class BrokerService implements Observer, Broker {
     public BrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
         listener = new ForwardingListener(this,ID);
 
-         loggerService = new LoggerService(LoggerFactory.getLogger(BrokerService.class));
+        // loggerService = new LoggerService(LoggerFactory.getLogger(BrokerService.class));
         watchdog = conf.getBool(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_CONF_PATH);
         preloadConfiguration();
         if (brokerName.equals("*"))
