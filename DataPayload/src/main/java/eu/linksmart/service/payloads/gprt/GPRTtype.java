@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.payload.impress;
+package eu.linksmart.service.payloads.gprt;
 
 import java.io.Serializable;
 import java.util.Date;

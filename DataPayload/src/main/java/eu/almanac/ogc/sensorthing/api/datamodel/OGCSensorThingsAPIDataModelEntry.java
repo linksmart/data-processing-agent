@@ -27,7 +27,7 @@ import eu.linksmart.api.event.datafusion.EventType;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-public abstract class OGCSensorThingsAPIDataModelEntry extends Component
+public abstract class OGCSensorThingsAPIDataModelEntry
 {
 	// the unique identifier associated to any data model entry
 	protected String id;
@@ -37,7 +37,6 @@ public abstract class OGCSensorThingsAPIDataModelEntry extends Component
 	 */
 	public OGCSensorThingsAPIDataModelEntry()
 	{
-        super(OGCSensorThingsAPIDataModelEntry.class.getSimpleName(), "Payload types used in OGC SensorThings", EventType.class.getSimpleName());
 		// TODO Auto-generated constructor stub
 	}
 	
