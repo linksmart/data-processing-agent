@@ -14,6 +14,7 @@ import eu.linksmart.api.event.datafusion.StatementResponse;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,7 @@ public class CEMLRest extends Component{
     }
 
 
-    @RequestMapping(value="/ceml", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getAll(     ) {
 
         return get(null,null);
@@ -187,58 +188,58 @@ public class CEMLRest extends Component{
         else
             return new ResponseEntity<>("{\"message\":\"There was an unknown error!\"}",HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    @RequestMapping(value="/ceml/{name}", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml/{name}", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getRequest(
             @PathVariable("name") String name
     ){
 
         return get(name,"complete");
     }
-    @RequestMapping(value="/ceml/{name}/data", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml/{name}/data", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getRequestData(
             @PathVariable("name") String name
     ){
         return get(name, "data");
     }
-    @RequestMapping(value="/ceml/{name}/evaluation", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml/{name}/evaluation", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getEvaluation(
             @PathVariable("name") String name
     ){
         return get(name, "evaluation");
     }
-    @RequestMapping(value="/ceml/{name}/learning", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml/{name}/learning", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getLearning(
             @PathVariable("name") String name
     ){
         return get(name,"learning");
     }
 
-    @RequestMapping(value="/ceml/{name}/deployment", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml/{name}/deployment", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getDeployment(
             @PathVariable("name") String name
     ){
         return get(name,"deployment");
     }
 
-    @RequestMapping(value="/ceml/{name}/model", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml/{name}/model", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getModel(
             @PathVariable("name") String name
     ){
         return get(name,"model");
     }
-    @RequestMapping(value="/ceml/{name}/model/classify", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml/{name}/model/classify", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> classifyWithModel(
             @PathVariable("name") String name
     ){
         return get(name,"classify");
     }
-    @RequestMapping(value="/ceml/{name}/regression", method= RequestMethod.GET)
+    @RequestMapping(value="/ceml/{name}/regression", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> predictWithModel(
             @PathVariable("name") String name
     ){
         return get(name,"regression");
     }
-    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.POST)
+    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRequest(
             @PathVariable("name") String name,
             @RequestBody() String body
@@ -248,7 +249,7 @@ public class CEMLRest extends Component{
 
         return create(name,body,"");
     }
-    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT)
+    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateRequest(
             @PathVariable("name") String name,
             @RequestBody() String body
@@ -256,7 +257,7 @@ public class CEMLRest extends Component{
       return update(name, body, "");
     }
 
-    @RequestMapping(value="/ceml/{name}/model", method= RequestMethod.PUT)
+    @RequestMapping(value="/ceml/{name}/model", method= RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateModel(
             @PathVariable("name") String name,
             @RequestBody() String body
@@ -264,7 +265,7 @@ public class CEMLRest extends Component{
         return update(name, body, "model");
     }
 
-    @RequestMapping(value="/ceml/{name}/evaluation", method=  RequestMethod.PUT)
+    @RequestMapping(value="/ceml/{name}/evaluation", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateEvaluation(
             @PathVariable("name") String name,
             @RequestBody() String body
@@ -272,14 +273,14 @@ public class CEMLRest extends Component{
         return update(name, body, "evaluation");
     }
 
-    @RequestMapping(value="/ceml/{name}/learning", method= RequestMethod.PUT)
+    @RequestMapping(value="/ceml/{name}/learning", method= RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateLearning(
             @PathVariable("name") String name,
             @RequestBody() String body
     ){
         return update(name,body,"learning");
     }
-    @RequestMapping(value="/ceml/{name}/deployment", method= RequestMethod.PUT)
+    @RequestMapping(value="/ceml/{name}/deployment", method= RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateDeployment(
             @PathVariable("name") String name,
             @RequestBody() String body

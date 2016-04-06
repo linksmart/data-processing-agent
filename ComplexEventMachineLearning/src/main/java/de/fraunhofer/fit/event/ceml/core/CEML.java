@@ -7,7 +7,7 @@ import java.util.*;
 
 import de.fraunhofer.fit.event.ceml.type.requests.DataStructure;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
-import de.fraunhofer.fit.payload.impress.GPRTtype;
+import eu.linksmart.service.payloads.gprt.GPRTtype;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;

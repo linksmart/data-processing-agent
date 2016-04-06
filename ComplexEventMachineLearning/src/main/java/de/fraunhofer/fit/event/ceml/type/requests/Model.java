@@ -12,6 +12,7 @@ import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
+import weka.core.OptionHandler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public class Model implements Serializable {
     @JsonPropertyDescription("Algorithm use to build the model")
     @JsonProperty(value = "Type")
     protected String type;
+    @JsonPropertyDescription("Attributes for the model")
+    @JsonProperty(value = "Parameters")
+    protected String parameters;
     @JsonPropertyDescription("Evaluator definition and current evaluation status")
     @JsonProperty(value = "Evaluation")
     public Evaluator evaluation;
@@ -107,7 +111,7 @@ public class Model implements Serializable {
             }*/
 
             ((Classifier)lerner).buildClassifier(origin.getData().getInstances());
-
+            //((OptionHandler)lerner).setOptions();
     }
 
    /* public String classify(Entry... args) {
