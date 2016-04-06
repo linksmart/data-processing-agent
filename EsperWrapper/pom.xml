@@ -36,8 +36,8 @@
             <groupId>eu.linksmart.gc</groupId>
             <artifactId>utils</artifactId>
             <version>0.3.0-SNAPSHOT</version>
-
         </dependency>
+
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -63,14 +63,7 @@
                     </instructions>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 </project>

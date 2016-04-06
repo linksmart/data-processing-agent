@@ -28,6 +28,9 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
@@ -119,36 +122,70 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
         }
+        executor.execute(eventExecutor);
     }
 
 
 
+    private  EventExecutor eventExecutor = new EventExecutor();
     @Override
     public  void update(Map eventMap) {
         loggerService.info( Utils.getDateNowString() + " Simple update query: " + query.getName());
-        executor.execute(new EventExecutor(eventMap));
+        eventExecutor.stack(eventMap);
 
 
 
     }
     private class EventExecutor implements Runnable{
         private Map eventMap;
-        EventExecutor(Map eventMap){
-            this.eventMap=eventMap;
+        private LinkedBlockingQueue <Map> queue = new LinkedBlockingQueue();
+        private boolean active = true;
+
+        synchronized void stack(Map eventMap){
+            queue.add(eventMap);
+            synchronized (queue) {
+                queue.notifyAll();
+            }
         }
+
+        public synchronized void setActive(boolean value){
+            active = value;
+        }
+
 
         @Override
         public void run() {
-            processMessage(eventMap);
+            boolean active = true;
+            synchronized (this) {
+                active = this.active;
+            }
+            while (active) {
+
+                try {
+                    processMessage(queue.take());
+
+
+                    synchronized (this) {
+                        active = this.active;
+                    }
+                    if (queue.size() == 0)
+                        synchronized (queue) {
+                            queue.wait(500);
+                        }
+
+                } catch (InterruptedException e) {
+                    loggerService.error(e.getMessage(), e);
+                }
+            }
         }
     }
     public void update(Map[] insertStream, Map[] removeStream){
         loggerService.info( Utils.getDateNowString() + " Multi-update query: " + query.getName());
         for (Map m: insertStream)
-            executor.execute(new EventExecutor(m));
+            eventExecutor.stack(m);
 
         for (Map m: removeStream)
-            executor.execute(new EventExecutor(m));
+            eventExecutor.stack(m);
     }
 
     protected void processMessage(Map eventMap){

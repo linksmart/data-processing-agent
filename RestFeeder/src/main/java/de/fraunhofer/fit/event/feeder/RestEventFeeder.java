@@ -9,6 +9,7 @@ import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +54,7 @@ public class RestEventFeeder extends Component implements Feeder {
         return false;
     }
 
-    @RequestMapping(value="event/{federation}/{pi}/{ver}/observation/{thingId}/{streamId}", method= RequestMethod.POST, consumes="application/json")
+    @RequestMapping(value="event/{federation}/{pi}/{ver}/observation/{thingId}/{streamId}", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addObservation(
             @RequestBody String rawEvent,
             @PathVariable("federation") String federation,

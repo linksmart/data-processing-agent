@@ -135,33 +135,8 @@ import java.util.*;
 
 
 
-    private boolean addEsperEvent( Object event, Class type){
-        try {
-            synchronized (this) {
 
 
-                epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
-                if(SIMULATION_EXTERNAL_CLOCK)
-                    epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(((EventType)event).getDate().getTime()));
-                /*
-                This lines produces the following error:
-                    ERROR e.a.event.cep.esper.EsperEngine - Event object of type eu.almanac.ogc.sensorthing.api.datamodel.Observation does not equal, extend or implement the type java.lang.String of event type 'eu.linksmart.api.event.datafusion.EventType'
-                I don't understand yet why, for now I will just remove the lines
-                if(event instanceof EventType){
-                    EventType event1 = (EventType)event;
-                    epService.getEPRuntime().getEventSender(EventType.class.getCanonicalName()).sendEvent(event1);
-                }
-                */
-
-            }
-        }catch(Exception e){
-
-           loggerService.error(e.getMessage(),e);
-
-            return false;
-        }
-        return true;
-    }
 
     /*public String[] getParentTopic(String topic){
         String esperParentTopic;
@@ -180,20 +155,25 @@ import java.util.*;
     }*/
     @Override
     public boolean addEvent(String topic, Object event,Class type) {
-        try {
+
 
            // String[] parentTopicAndHead = getParentTopic(topic);
+            try {
+                epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
+                if(SIMULATION_EXTERNAL_CLOCK)
+                    synchronized (this) {
+                        epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(((EventType)event).getDate().getTime()));
+                    }
+            }catch(Exception e){
 
-            addEsperEvent(event, type );
+                loggerService.error(e.getMessage(),e);
+
+                return false;
+            }
             //insertStream(((Observation)event).getId(),parentTopicAndHead[0]);
             //createPersistent(((Observation)event).getId(),parentTopicAndHead[0]);
 
-        }catch(Exception e){
 
-            loggerService.error(e.getMessage(),e);
-
-            return false;
-        }
         return true;
     }
 

@@ -1,6 +1,7 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.EventType;
 import eu.linksmart.api.event.datafusion.Feeder;
@@ -9,12 +10,16 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import sun.security.pkcs.ParsingException;
 
 import java.net.MalformedURLException;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Created by Caravajal on 22.05.2015.
  */
 public class EventMqttFeederImpl extends MqttFeederImpl {
+
     private ObjectMapper mapper = new ObjectMapper();
+    private Map<String, Class> compiledTopicClass = new Hashtable<>();
     public EventMqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException, InstantiationException {
         super(brokerName, brokerPort, topic,EventMqttFeederImpl.class.getSimpleName(),"Provides a MQTT API to insert events into the CEP engine",MqttFeederImpl.class.getSimpleName(), Feeder.class.getSimpleName());
 
@@ -22,24 +27,27 @@ public class EventMqttFeederImpl extends MqttFeederImpl {
     }
 
 
-    // extract the ID of the topic for ALMANAC project
-    private static String getThingID(String topic){
-        String [] aux = topic.split("/");
-        return aux[aux.length-2];
-    }
+
     @Override
     protected void mangeEvent(String topic,byte[] rawEvent) {
-        try {
-            if(mapper==null)
+          try {
+          if(mapper==null)
                 mapper = new ObjectMapper();
             Object event=null;
-            for(Topic t: topicToClass.keySet()) {
-                if(t.equals(topic)) {
-                   event =mapper.readValue(rawEvent,topicToClass.get(t));
-                    break;
-                }
+            if(!compiledTopicClass.containsKey(topic)) {
+                if(topicToClass.isEmpty())
+                    event = mapper.readValue(rawEvent, Observation.class);
+                else
+                    for (Topic t : topicToClass.keySet()) {
+                        if (t.equals(topic)) {
+                            event = mapper.readValue(rawEvent, topicToClass.get(t));
+                            compiledTopicClass.put(topic, topicToClass.get(t));
+                            break;
+                        }
+                    }
+            }else{
+                event = mapper.readValue(rawEvent, compiledTopicClass.get(topic));
             }
-
 
             if(event!=null) {
                 // if the event needs data from the topic

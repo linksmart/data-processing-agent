@@ -8,9 +8,11 @@ import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -86,7 +88,7 @@ public class RestStatementFeeder extends Component implements Feeder {
         return false;
     }
 
-    @RequestMapping(value = "/statement/", method = RequestMethod.GET)
+    @RequestMapping(value = "/statement/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getStatements() {
 
         Map<String, Map<String, Statement>> statements = new Hashtable<>();
@@ -107,7 +109,7 @@ public class RestStatementFeeder extends Component implements Feeder {
             }
 
         if (statements.size() == 0 && error.equals(""))
-            return new ResponseEntity<>("The provided ID no not exist", HttpStatus.OK);
+            return new ResponseEntity<>(gson.toJson(statements), HttpStatus.OK);
         else if (statements.size() == dataFusionWrappers.size())
             return new ResponseEntity<>(gson.toJson(statements), HttpStatus.OK);
         else if (error.equals(""))
@@ -119,7 +121,7 @@ public class RestStatementFeeder extends Component implements Feeder {
     }
 
 
-    @RequestMapping(value = "/statement/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/statement/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getStatement(@PathVariable("id") String id) {
         if (id == null || id.equals(""))
             return getStatements();
@@ -172,7 +174,7 @@ public class RestStatementFeeder extends Component implements Feeder {
         return new ResponseEntity<>("Error 500: " + error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @RequestMapping(value = "/statement/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/statement/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addStatement(
             @RequestBody String statementString
     ) {
@@ -249,7 +251,7 @@ public class RestStatementFeeder extends Component implements Feeder {
         return true;
     }
 
-    @RequestMapping(value = "/statement/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/statement/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> removeStatement(
             @PathVariable("id") String id
     ) {
