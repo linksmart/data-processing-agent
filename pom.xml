@@ -45,21 +45,7 @@
 
 
     </dependencies>
-    <repositories>
-        <repository>
-            <id>Eclipse Paho Repo</id>
-            <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
-        </repository>
 
-        <repository>
-            <id>jboss-maven2-release-repository</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>apache</id>
-            <url>https://linksmart.eu/repo/content/repositories/apache-snapshots/</url>
-        </repository>
-    </repositories>
     <build>
     <plugins>
         <plugin>

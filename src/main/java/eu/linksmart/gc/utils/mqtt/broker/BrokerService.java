@@ -28,6 +28,7 @@ public class BrokerService implements Observer, Broker {
     protected boolean preloadedPolicy = false;
 
     private int CONNECTION_MQTT_WATCHDOG_TIMEOUT = 30000;
+    private int SUBSCRIPTION_QoS =0;
 
 
 
@@ -36,7 +37,6 @@ public class BrokerService implements Observer, Broker {
     private final static Object lock  = new Object();
     private String brokerName;
     private String brokerPort;
-
 
     public BrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
         listener = new ForwardingListener(this,ID);
@@ -139,6 +139,7 @@ public class BrokerService implements Observer, Broker {
         preloadedTriesReconnect =conf.getInt(Const.RECONNECTION_TRY);
         preloadedRetryTime = conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME);
         CONNECTION_MQTT_WATCHDOG_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT);
+        SUBSCRIPTION_QoS = conf.getInt(BrokerServiceConst.SUBSCRIPTION_QoS);
     }
     private void connectionWatchdog(){
 
@@ -308,7 +309,9 @@ public class BrokerService implements Observer, Broker {
 
             topics.add(topic);
             String[] aux = topics.toArray(new String[topics.size()] ) ;
-            mqttClient.subscribe(aux);
+            int[] qoss= new int[aux.length];
+            Arrays.fill(qoss,SUBSCRIPTION_QoS);
+            mqttClient.subscribe(aux,qoss);
 
             listener.addObserver(topic, stakeholder);
         } catch (Exception e) {

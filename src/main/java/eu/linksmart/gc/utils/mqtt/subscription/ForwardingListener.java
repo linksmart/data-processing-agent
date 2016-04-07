@@ -1,7 +1,6 @@
 package eu.linksmart.gc.utils.mqtt.subscription;
 
 
-import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.types.CurrentStatus;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import eu.linksmart.gc.utils.mqtt.types.Topic;
@@ -24,14 +23,17 @@ public  class ForwardingListener implements MqttCallback {
     protected static Logger LOG = Logger.getLogger(ForwardingListener.class.getName());
 
     protected long sequence ;
-    protected ExecutorService executor = Executors.newCachedThreadPool();
-    protected Map<Topic, MessageDeliverer> observables;
+   protected Map<Topic, TopicMessageDeliverable> observables;
+    protected Map<String,TopicMessageDeliverable> compiledTopic = new Hashtable<>();
+    protected final  Object muxMessageDelivererSet = new Object();
+    protected  Set<Topic> messageDelivererSet = new HashSet<>();
 
     protected CurrentStatus status;
 
     public ForwardingListener(String listening, Observer mqttEventsListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
         initObserver(listening, mqttEventsListener);
+
     }
 
     public ForwardingListener(String listening, Observer connectionListener, Observer mqttEventsListener, UUID originProtocol) {
@@ -42,20 +44,23 @@ public  class ForwardingListener implements MqttCallback {
     public ForwardingListener( Observer connectionListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
         this.connectionListener = connectionListener;
-        observables = new Hashtable<Topic, MessageDeliverer>();
+        observables = new Hashtable<Topic, TopicMessageDeliverable>();
     }
 
 
     protected void initObserver(String listening, Observer mqttEventsListener){
-        observables = new Hashtable<Topic, MessageDeliverer>();
-        observables.put(new Topic(listening), new MessageDeliverer());
+        observables = new Hashtable<Topic, TopicMessageDeliverable>();
+        observables.put(new Topic(listening), new TopicMessageDeliverable());
     }
     public void addObserver(String topic, Observer listener){
         Topic t = new Topic(topic);
         if(!observables.containsKey(t))
-            observables.put(t, new MessageDeliverer());
+            observables.put(t, new TopicMessageDeliverable());
 
         observables.get(t).addObserver(listener);
+        synchronized (muxMessageDelivererSet) {
+            messageDelivererSet = observables.keySet();
+        }
 
     }
     @SuppressWarnings("SuspiciousMethodCalls")
@@ -70,6 +75,9 @@ public  class ForwardingListener implements MqttCallback {
         if(observables.isEmpty())
             status = CurrentStatus.NotListening;
 
+        synchronized (muxMessageDelivererSet) {
+            messageDelivererSet = observables.keySet();
+        }
         return true;
     }
     public Set<Topic> getListeningTopics(){
@@ -101,15 +109,23 @@ public  class ForwardingListener implements MqttCallback {
         LOG.debug("Message arrived in listener:" + topic);
 
         boolean processed= false;
-     //if (observables.containsKey(topic))
-        for(Topic t: observables.keySet()) {
-            if(t.equals(topic)) {
-               // observables.get(t).notifyObservers(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol));
-                observables.get(t).setMqttMessage(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol));
-                executor.execute(observables.get(t));
-                processed= true;
-            }
+        if(!compiledTopic.containsKey(topic)){
+
+            for(Topic t: messageDelivererSet)
+                if(t.equals(topic)) {
+                    compiledTopic.put(topic, observables.get(t));
+                    compiledTopic.get(topic).addMessage(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol));
+
+                    processed = true;
+                    break;
+                }
+        } else if(compiledTopic.containsKey(topic)) {
+            // observables.get(t).notifyObservers(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol));
+            compiledTopic.get(topic).addMessage(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol));
+
+            processed = true;
         }
+
 
         if(!processed)
             LOG.warn("A message arrived and no one listening to it");
