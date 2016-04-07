@@ -3,32 +3,31 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>eventing</artifactId>
-        <groupId>eu.linksmart.services</groupId>
-        <version>1.1.1-SNAPSHOT</version>
+        <artifactId>parent</artifactId>
+        <groupId>eu.linksmart.services.events</groupId>
+        <version>1.2.0</version>
 
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>iot.learning.agent</artifactId>
+    <name>IoT Learning agent</name>
+    <packaging>jar</packaging>
 
     <dependencies>
 
         <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>CEML</artifactId>
-            <version>${almanac.version}</version>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>ceml</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.14</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.14</version>
         </dependency>
     </dependencies>
 
@@ -38,54 +37,24 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.2</version>
+
                 <!-- nothing here -->
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>eu.linksmart.services.Application</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
 
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>src/main/resources/conf.cfg</file>
-                                    <type>cfg</type>
-                                    <classifier>configuration</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
+
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <skipe>true</skipe>
+                </configuration>
             </plugin>
         </plugins>
     </build>

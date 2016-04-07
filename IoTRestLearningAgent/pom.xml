@@ -3,19 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>eventing</artifactId>
-        <groupId>eu.linksmart.services</groupId>
-        <version>1.1.1-SNAPSHOT</version>
+        <artifactId>parent</artifactId>
+        <groupId>eu.linksmart.services.events</groupId>
+        <version>1.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>1.1.2</version>
-    <artifactId>iot.rest.learning.agent</artifactId>
-
+   <!-- <version>1.1.2</version>-->
+    <artifactId>iot.learning.rest.agent</artifactId>
+    <name>IoT Learning REST agent </name>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>DataFusionManagerImpl</artifactId>
-            <version>${almanac.version}</version>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>data.procesing.core</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -27,71 +27,54 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-            <version>1.3.1.RELEASE</version>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
-            <version>1.3.1.RELEASE</version>
+
         </dependency>
 
         <dependency>
             <!-- Import dependency management from Spring Boot -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-dependencies</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-            <version>1.3.1.RELEASE</version>
             <type>pom</type>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>RestFeeder</artifactId>
-            <version>${almanac.version}</version>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>feeder.rest</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>eu.linksmart.services</groupId>
+            <groupId>eu.linksmart.services.events</groupId>
             <artifactId>ceml.rest.api</artifactId>
-            <version>${almanac.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.4</version>
-        </dependency>
+
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <skipe>true</skipe>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.2</version>
                 <!-- nothing here -->
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-
-                <version>1.10</version>
                 <executions>
                     <execution>
                         <id>attach-artifacts</id>
@@ -99,7 +82,7 @@
                         <goals>
                             <goal>attach-artifact</goal>
                         </goals>
-                        <configuration>
+                        <configuration combine.self="override">
                             <artifacts>
                                 <artifact>
                                     <file>src/main/resources/application.properties</file>
@@ -119,44 +102,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.3.1.RELEASE</version>
-                <configuration>
-                    <mainClass>eu.linksmart.services.Application</mainClass>
-                    <layout>ZIP</layout>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
+
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/myTESTapplication/WEB-INF/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
 
         </plugins>
     </build>
-    <properties>
-        <start-class>eu.linksmart.services.Application</start-class>
-    </properties>
 
 </project>

@@ -6,17 +6,19 @@
 
 
     <parent>
-        <groupId>eu.linksmart.services</groupId>
-        <artifactId>eventing</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <groupId>eu.linksmart.services.events</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.2.0</version>
     </parent>
-    <artifactId>RestFeeder</artifactId>
+
+    <artifactId>feeder.rest</artifactId>
+    <name>RestFeeder</name>
+    <packaging>bundle</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>DataFusionManagerImpl</artifactId>
-            <version>${almanac.version}</version>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>data.procesing.core</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -28,38 +30,35 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>1.2.5.RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.4</version>
         </dependency>
     </dependencies>
-        <build>
-            <plugins>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
 
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>2.4.0</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <instructions>
-                            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        </instructions>
-                    </configuration>
-                </plugin>
-
-            </plugins>
-        </build>
+                <extensions>true</extensions>
+                <configuration combine.self="override">
+                    <instructions>
+                        <Embed-Dependency>spring-boot-starter-web</Embed-Dependency>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Export-Package>!*</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

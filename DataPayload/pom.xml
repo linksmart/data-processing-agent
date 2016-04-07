@@ -3,111 +3,87 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>eu.linksmart.services</groupId>
-        <artifactId>eventing</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <groupId>eu.linksmart.services.events</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>DataPayload</artifactId>
+    <artifactId>payload</artifactId>
+    <name>DataPayload</name>
 
     <description>Set of payloads implementation used by the feeders</description>
     <packaging>bundle</packaging>
 
     <dependencies>
-        <!--<dependency>
-            <groupId>de.grundid.opendatalab</groupId>
-            <artifactId>geojson-jackson</artifactId>
-            <version>1.0</version>
-        </dependency>-->
-
         <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>eu.almanac.api.event.datafusion</artifactId>
-            <version>${almanac.version}</version>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>api.agents</artifactId>
         </dependency>
         <dependency>
-
             <groupId>eu.linksmart.gc</groupId>
             <artifactId>utils</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
         </dependency>
-     <!--   <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>17.0</version>
-        </dependency>-->
-        <dependency>
-            <groupId>org.apache.sis.core</groupId>
-            <artifactId>sis-metadata</artifactId>
-            <version>0.6</version>
-        </dependency>
+
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.7.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.7.3</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.7.3</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
         </dependency>
         <dependency>
             <groupId>de.grundid.opendatalab</groupId>
             <artifactId>geojson-jackson</artifactId>
-            <version>1.6</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.7.3</version>
         </dependency>
-        <!--       <dependency>
-                   <groupId>com.fasterxml.jackson.datatype</groupId>
-                   <artifactId>jackson-datatype-joda</artifactId>
-                   <version>2.7.3</version>
-               </dependency>-->
-    </dependencies>
 
+
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.sis.core</groupId>
+            <artifactId>sis-metadata</artifactId>
+            <version>0.6</version>
+        </dependency>
+    </dependencies>
     <build>
-    <plugins>
-    <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.4.0</version>
-        <extensions>true</extensions>
-        <configuration>
-            <instructions>
-                <Bundle-SymbolicName>eu.linksmart.api.event.datafusion</Bundle-SymbolicName>
-            </instructions>
-        </configuration>
-    </plugin>
-    </plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+
+                <extensions>true</extensions>
+                <configuration combine.self="override">
+                    <instructions>
+                        <Embed-Dependency>hibernate-jpa-2.0-api</Embed-Dependency>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Export-Package>!*</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
+
 </project>

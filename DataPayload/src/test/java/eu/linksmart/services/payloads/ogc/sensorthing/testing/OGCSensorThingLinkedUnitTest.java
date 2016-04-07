@@ -176,7 +176,7 @@ public class OGCSensorThingLinkedUnitTest {
                         "}"+*/
                     "}";
 
-    @Test
+   // @Test
     public void TestParsingObservation() {
 
       //  UtilsLinked.testParsing(observationJSON, Observation.class, UtilsLinked.constructObservation(false));

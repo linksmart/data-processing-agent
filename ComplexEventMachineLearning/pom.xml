@@ -5,50 +5,42 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>eu.linksmart.services</groupId>
-        <artifactId>eventing</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <groupId>eu.linksmart.services.events</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.2.0</version>
     </parent>
-    <artifactId>CEML</artifactId>
-    <description>CEML - ML module for CEP in the DataFusion Manager</description>
+    <artifactId>ceml</artifactId>
+
+    <name>CEML</name>
+    <description>Complex-Event Machine Learning - ML module for CEP in the DataFusion Manager</description>
+    <packaging>bundle</packaging>
     <dependencies>
 
-
         <dependency>
-            <groupId>eu.linksmart.services</groupId>
-            <artifactId>DataFusionManagerImpl</artifactId>
-            <version>${almanac.version}</version>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>data.procesing.core</artifactId>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>nz.ac.waikato.cms.weka</groupId>
             <artifactId>weka-dev</artifactId>
-            <version>3.7.13</version>
-            <exclusions>
-                <exclusion>
-
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-
-
-
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
         </dependency>
 
-
+        <!-- Maybe is not needed and the code it using it can be refactored -->
         <dependency>
             <groupId>uk.com.robust-it</groupId>
             <artifactId>cloning</artifactId>
             <version>1.9.2</version>
         </dependency>
-
 
     </dependencies>
     <build>
@@ -64,7 +56,7 @@
                         <goals>
                             <goal>attach-artifact</goal>
                         </goals>
-                        <configuration>
+                        <configuration combine.self="override">
                             <artifacts>
                                 <artifact>
                                     <file>src/main/resources/ceml.cfg</file>
@@ -79,20 +71,14 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.4.0</version>
+
                 <extensions>true</extensions>
-                <configuration>
+                <configuration combine.self="override">
                     <instructions>
+                        <Embed-Dependency>weka-dev</Embed-Dependency>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Export-Package>!*</Export-Package>
                     </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
