@@ -42,7 +42,7 @@
     </licenses>
     <properties>
         <!-- main version -->
-        <ls.se.agents.version>1.1.1-SNAPSHOT</ls.se.agents.version>
+        <ls.se.agents.version>1.2.0</ls.se.agents.version>
         <!-- LS GC version -->
         <linksmart.gc.version>0.3.0-SNAPSHOT</linksmart.gc.version>
 
