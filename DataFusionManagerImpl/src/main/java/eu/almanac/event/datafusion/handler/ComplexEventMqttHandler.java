@@ -181,11 +181,12 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
     }
     public void update(Map[] insertStream, Map[] removeStream){
         loggerService.info( Utils.getDateNowString() + " Multi-update query: " + query.getName());
-        for (Map m: insertStream)
-            eventExecutor.stack(m);
-
-        for (Map m: removeStream)
-            eventExecutor.stack(m);
+        if(insertStream!=null)
+            for (Map m: insertStream)
+                eventExecutor.stack(m);
+        if(removeStream!=null)
+            for (Map m: removeStream)
+                eventExecutor.stack(m);
     }
 
     protected void processMessage(Map eventMap){
