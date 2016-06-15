@@ -45,6 +45,17 @@
             <artifactId>feeder.rest</artifactId>
         </dependency>
 
+     <!--   <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>wrapper.esper</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>SiddhiWrapper</artifactId>
+        </dependency>
+
+
     </dependencies>
     <build>
         <plugins>

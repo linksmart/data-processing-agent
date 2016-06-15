@@ -1,6 +1,7 @@
 package de.fraunhofer.fit.event.feeder;
 
 import com.google.gson.Gson;
+import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
@@ -241,7 +242,7 @@ public class RestStatementFeeder extends Component implements Feeder {
                     ComplexEventMqttHandler.knownInstances.put(nameURL[0], new AbstractMap.SimpleImmutableEntry<>(namePort[0], namePort[1]));
 
                 } else {
-                    throw new StatementException(conf.getString(eu.almanac.event.cep.intern.Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + statement.getHash(), ("Statement " + statement.getName() + " try to add a instance but the format is incorrect, the correct format is 'add instance <instanceName>=<instanceURL>'"));
+                    throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + statement.getHash(), ("Statement " + statement.getName() + " try to add a instance but the format is incorrect, the correct format is 'add instance <instanceName>=<instanceURL>'"));
 
                 }
 

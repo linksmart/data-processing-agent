@@ -13,16 +13,9 @@ import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import eu.almanac.event.cep.esper.EsperEngine;
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.xml.DOMConfigurator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by J. Angel Caravajal on 06.10.2014.

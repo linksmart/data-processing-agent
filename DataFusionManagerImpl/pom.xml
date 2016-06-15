@@ -37,10 +37,6 @@
             <artifactId>utils</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>wrapper.esper</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>

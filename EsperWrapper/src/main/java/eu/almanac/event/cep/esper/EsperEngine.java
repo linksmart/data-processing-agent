@@ -154,7 +154,7 @@ import java.util.*;
         return new String[]{esperParentTopic, esperTopicArray[esperTopicArray.length-2]};
     }*/
     @Override
-    public boolean addEvent(String topic, Object event,Class type) {
+    public boolean addEvent(String topic, EventType event,Class type) {
 
 
            // String[] parentTopicAndHead = getParentTopic(topic);
@@ -162,7 +162,7 @@ import java.util.*;
                 epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
                 if(SIMULATION_EXTERNAL_CLOCK)
                     synchronized (this) {
-                        epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(((EventType)event).getDate().getTime()));
+                        epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(event.getDate().getTime()));
                     }
             }catch(Exception e){
 
@@ -197,7 +197,7 @@ import java.util.*;
     }
 
     @Override
-    public boolean addEventType(String nameType, String[] eventSchema, Object[] eventTypes) {
+    public boolean addEventType(String nameType, String[] eventSchema, Class[] eventTypes)throws StatementException {
         return false;
     }
 

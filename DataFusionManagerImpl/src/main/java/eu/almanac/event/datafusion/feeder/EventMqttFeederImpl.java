@@ -56,7 +56,7 @@ public class EventMqttFeederImpl extends MqttFeederImpl {
                 }
 
                 for (CEPEngine i : dataFusionWrappers.values())
-                    i.addEvent(topic, event, event.getClass());
+                    i.addEvent(topic, (EventType)event, event.getClass());
             }else
                 throw new ParsingException("No suitable class for the received event");
         }catch(Exception e){

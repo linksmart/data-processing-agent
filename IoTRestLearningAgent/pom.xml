@@ -56,6 +56,11 @@
             <artifactId>ceml.rest.api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>wrapper.esper</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

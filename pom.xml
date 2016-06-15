@@ -97,6 +97,7 @@
         <module>DataFusionCoreAPI</module>
         <module>DataPayload</module>
 		<module>EsperWrapper</module>
+        <module>SiddhiWrapper</module>
         <module>DataFusionManagerImpl</module>
         <module>IoTDataProcessingAgent</module>
         <module>RestFeeder</module>
@@ -134,11 +135,6 @@
             </dependency>
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
-                <artifactId>wrapper.esper</artifactId>
-                <version>${ls.se.agents.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>eu.linksmart.services.events</groupId>
                 <artifactId>data.procesing.core</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
@@ -151,6 +147,11 @@
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
                 <artifactId>ceml.rest.api</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>SiddhiWrapper</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
             <!--  LS GC  Dependencies -->

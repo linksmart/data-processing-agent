@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import org.antlr.v4.runtime.misc.Nullable;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -40,7 +39,7 @@ public class PersistentBean {
     public void setObservations(Map<String,Observation[]> observations) {
         this.observations = observations;
     }
-    @Nullable
+
     public Statement getStatement(int index) {
 
         if(statements!=null)
@@ -57,7 +56,6 @@ public class PersistentBean {
         statements.set(index, (EPLStatement) statement);
 
     }
-    @Nullable
     public Observation[] getObservations(String topic) {
         if(observations!=null)
             return observations.get(topic);

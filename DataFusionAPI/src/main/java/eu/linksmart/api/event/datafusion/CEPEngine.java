@@ -34,7 +34,7 @@ public interface CEPEngine extends AnalyzerComponent {
 	 * 
 	 * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addEvent(String topic, Object event, Class type);
+	public boolean addEvent(String topic, EventType event, Class type);
 	/**
 	 * Configure a particular type in the engine.
 	 * 
@@ -48,7 +48,7 @@ public interface CEPEngine extends AnalyzerComponent {
 	 * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
 	 * */
 	@Deprecated
-	public boolean addEventType(String nameType, String[] eventSchema, Object[] eventTypes);
+	public boolean addEventType(String nameType, String[] eventSchema, Class[] eventTypes)throws StatementException;
 	public boolean addEventType(String nameType,  Object type);
 
 	/**

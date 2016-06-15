@@ -10,7 +10,6 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import eu.linksmart.gc.utils.mqtt.types.Topic;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.eclipse.paho.client.mqttv3.*;
 import sun.awt.Mutex;
 
@@ -29,7 +28,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
     protected StaticBroker brokerService= null;
     protected Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();
     protected Map<String,String> classToAlias= new Hashtable<String, String>();
-    @NotNull
+
     protected  Boolean toShutdown = false;
     protected static final Object lockToShutdown = new Object();
     protected long debugCount=0;
@@ -76,8 +75,8 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
     
     @SuppressWarnings("SynchronizeOnNonFinalField")
-    public @NotNull boolean isDown(){
-        @NotNull
+    public boolean isDown(){
+
         boolean tmp ;
 
         synchronized (lockDown) {

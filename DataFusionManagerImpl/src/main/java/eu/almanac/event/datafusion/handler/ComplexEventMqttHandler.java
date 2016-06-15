@@ -1,6 +1,5 @@
 package eu.almanac.event.datafusion.handler;
 
-import com.espertech.esper.client.EventBean;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
@@ -34,7 +33,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
-public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler {
+    public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler {
 
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected ArrayList<StaticBroker> brokerServices;
@@ -332,9 +331,9 @@ public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.li
         if (event instanceof Observation) {
            return (Observation)event;
 
-
-        }else if (event instanceof EventBean){
-            return handleObject(((EventBean)event).getUnderlying(),description,streamID);
+        // TODO: Esper Specific code must be moved to esper artifact
+       // }else if (event instanceof EventBean){
+        //    return handleObject(((EventBean)event).getUnderlying(),description,streamID);
         }else {
 
 
