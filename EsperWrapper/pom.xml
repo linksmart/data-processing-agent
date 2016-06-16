@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>eu.linksmart.services.events</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>eu.linksmart.services.events.gpl</groupId>
+        <artifactId>reactor</artifactId>
         <version>1.2.1-SNAPSHOT</version>
     </parent>
     <artifactId>wrapper.esper</artifactId>

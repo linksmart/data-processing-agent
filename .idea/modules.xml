@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/distributions/mqtt/IoTDataProcessingAgent/iot.data.processing.agent.iml" filepath="$PROJECT_DIR$/distributions/mqtt/IoTDataProcessingAgent/iot.data.processing.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/rest/IoTDataProcessingAgent/iot.data.processing.rest.agent.iml" filepath="$PROJECT_DIR$/distributions/rest/IoTDataProcessingAgent/iot.data.processing.rest.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/mqtt/IoTLearningAgent/iot.learning.agent.iml" filepath="$PROJECT_DIR$/distributions/mqtt/IoTLearningAgent/iot.learning.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/rest/IoTLearningAgent/iot.learning.rest.agent.iml" filepath="$PROJECT_DIR$/distributions/rest/IoTLearningAgent/iot.learning.rest.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/mqtt/mqtt.reactor.iml" filepath="$PROJECT_DIR$/distributions/mqtt/mqtt.reactor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/parent.reactor (1) (eu.linksmart.services.events.gpl.distributions).iml" filepath="$PROJECT_DIR$/distributions/parent.reactor (1) (eu.linksmart.services.events.gpl.distributions).iml" />
+      <module fileurl="file://$PROJECT_DIR$/parent.reactor (2) (eu.linksmart.services.events.gpl).iml" filepath="$PROJECT_DIR$/parent.reactor (2) (eu.linksmart.services.events.gpl).iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/rest/rest.reactor.iml" filepath="$PROJECT_DIR$/distributions/rest/rest.reactor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EsperWrapper/wrapper.esper.iml" filepath="$PROJECT_DIR$/EsperWrapper/wrapper.esper.iml" />
+    </modules>
+  </component>
+</project>
