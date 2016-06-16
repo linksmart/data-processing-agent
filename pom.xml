@@ -35,8 +35,8 @@
     <licenses>
         <license>
             <name>Apache 2.0 license</name>
-            <url>https://linksmart.eu/repo/content/sites/doc/license.txt</url>
-            <distribution>linksmart-repo</distribution>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>https://linksmart.eu/repo/content/repositories/snapshots/eu/linksmart/services/events/</distribution>
             <comments>LinkSmart Services: IoT Data-Processing and Learning agents are released under the Apache 2.0 license.</comments>
         </license>
     </licenses>
@@ -470,6 +470,7 @@
           <url>dav:https://linksmart.eu/repo/content/sites/doc/</url>
       </site>
 	</distributionManagement>
+
     <ciManagement>
         <system>Jenkins</system>
         <url>http://greatfool.fit.fraunhofer.de:8080</url>
@@ -488,6 +489,7 @@
         <connection>scm:git:https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git</connection>
         <developerConnection>scm:git:https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git</developerConnection>
         <url>scm:git:https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git</url>
+
     </scm>
 
     <!-- maven Site related configuration -->
