@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>eu.linksmart.services.events.distributions.mqtt</groupId>
+        <artifactId>mqtt.reactor</artifactId>
+        <version>1.2.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>iot.learning.agent</artifactId>
+    <name>IoT Learning agent</name>
+    <packaging>jar</packaging>
+
+    <dependencies>
+		<dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>iot.learning.impl</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>SiddhiWrapper</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
+</project>
