@@ -10,9 +10,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>iot.learning.agent</artifactId>
-    <name>IoT Learning agent</name>
-    <packaging>jar</packaging>
+    <artifactId>iot.learning.impl</artifactId>
+    <name>IoT Learning implementation</name>
+
 
     <dependencies>
 
@@ -21,11 +21,6 @@
             <artifactId>ceml</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>wrapper.esper</artifactId>
-            <version>${ls.se.agents.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -36,33 +31,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
+    <packaging>jar</packaging>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-
-                <!-- nothing here -->
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

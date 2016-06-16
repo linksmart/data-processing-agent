@@ -8,8 +8,8 @@
         <version>1.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>iot.data.processing.rest.agent</artifactId>
-    <name>IoT Data-Processing REST agent</name>
+    <artifactId>iot.data.processing.rest.impl</artifactId>
+    <name>IoT Data-Processing REST implementation</name>
 
     <packaging>jar</packaging>
     <dependencies>
@@ -45,67 +45,11 @@
             <artifactId>feeder.rest</artifactId>
         </dependency>
 
-     <!--   <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>wrapper.esper</artifactId>
-            <version>${ls.se.agents.version}</version>
-        </dependency>-->
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>SiddhiWrapper</artifactId>
-        </dependency>
+
 
 
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration combine.self="override">
-                            <artifacts>
-                                <artifact>
-                                    <file>src/main/resources/application.properties</file>
-                                    <type>properties</type>
-                                    <classifier>configuration</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
 
-            </plugin>
-
-        </plugins>
-    </build>
 
 
 </project>
