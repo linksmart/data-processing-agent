@@ -6,16 +6,15 @@
         <groupId>eu.linksmart.gc</groupId>
         <artifactId>eu.linksmart.gc.osgi.component</artifactId>
         <version>0.3.0-SNAPSHOT</version>
+        <relativePath>../linksmart-gc-osgi-component/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-        <artifactId>utils</artifactId>
+    <artifactId>utils</artifactId>
     <version>${linksmart.gc.version}</version>
     <name>Several Utils</name>
     <packaging>bundle</packaging>
     <dependencies>
-
-
         <dependency>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <groupId>org.eclipse.paho</groupId>
@@ -26,13 +25,11 @@
             <artifactId>commons-configuration</artifactId>
             <version>1.10</version>
         </dependency>
-
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -42,10 +39,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-
-
     </dependencies>
-
     <build>
     <plugins>
         <plugin>
@@ -86,12 +80,11 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <configuration>
-                <source>1.7</source>
-                <target>1.7</target>
+                <source>${java.compiler.version}</source>
+                <target>${java.compiler.version}</target>
             </configuration>
         </plugin>
 
     </plugins>
     </build>
-
 </project>
