@@ -6,6 +6,7 @@ import eu.almanac.event.datafusion.feeder.EventMqttFeederImpl;
 import eu.almanac.event.datafusion.feeder.PersistenceFeeder;
 import eu.almanac.event.datafusion.feeder.StatementMqttFeederImpl;
 import eu.almanac.event.datafusion.feeder.TestFeeder;
+import eu.almanac.event.datafusion.intern.DynamicCoasts;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
@@ -14,6 +15,7 @@ import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
+import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,9 +92,14 @@ public class DataFusionManagerCore {
 
         loggerService = Utils.initDefaultLoggerService(DataFusionManagerCore.class);
 
+        String idPath= conf.getString(Const.ID_CONF_PATH);
+        if(idPath.equals("*"))
+            DynamicCoasts.setIsSet(true);
+        else
+            DynamicCoasts.setId(conf.getString(Const.ID_CONF_PATH));
 
         loggerService.info(
-                "The Data-Fusion Manager is starting with ID: " + Const.DFM_ID.toString() + ";\n" +
+                "The Data-Fusion Manager is starting with ID: " + DynamicCoasts.getId().toString() + ";\n" +
                         " with incoming events in broker tcp://" + conf.get(Const.EVENTS_IN_BROKER_CONF_PATH) + ":" + conf.get(Const.EVENTS_IN_BROKER_PORT_CONF_PATH) +
                         " waiting for events from the topic: " + conf.get(Const.EVENT_IN_TOPIC_CONF_PATH) + ";\n" +
                         " waiting for queries from topic: " + conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH) +

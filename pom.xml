@@ -96,7 +96,6 @@
         <module>DataFusionAPI</module>
         <module>DataFusionCoreAPI</module>
         <module>DataPayload</module>
-		<!--<module>EsperWrapper</module>-->
         <module>SiddhiWrapper</module>
         <module>DataFusionManagerImpl</module>
         <module>IoTDataProcessingAgent</module>
@@ -417,6 +416,19 @@
                     </instructions>
                 </configuration>
             </plugin>
+            <!-- build sources  -->
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>attach-sources</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
         </plugins>
     </build>
 

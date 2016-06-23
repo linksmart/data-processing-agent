@@ -1,5 +1,7 @@
 package eu.almanac.event.datafusion.feeder;
 
+import eu.almanac.event.datafusion.intern.Const;
+import eu.almanac.event.datafusion.intern.DynamicCoasts;
 import eu.linksmart.api.event.datafusion.StatementResponse;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.Feeder;
@@ -53,32 +55,46 @@ public class StatementFeeder implements Feeder {
     public static ArrayList<StatementResponse> feedStatement(Statement statement){
         boolean success =true;
 
-
         ArrayList<StatementResponse> response = new ArrayList<>();
-        for(CEPEngine dfw: CEPEngine.instancedEngines.values()) {
+
+        if(!statement.getTargetAgents().isEmpty()) {
+            success = false;
+            for (int i = 1; i < statement.getTargetAgents().size(); i++)
+                if (statement.getTargetAgents().get(i).equals(DynamicCoasts.getId()))
+                    success = true;
+        }
+
+
+        if(!success) {
+            loggerService.info("Discarding statement " + statement.getHash() +" is not addressed to me (ID ="+DynamicCoasts.getId()+")");
+            response.add(new StatementResponse("Discarding statement " + statement.getHash() +" is not addressed to me (ID ="+DynamicCoasts.getId()+")", HttpStatus.NOT_ACCEPTABLE, true));
+
+        }else {
+            for (CEPEngine dfw : CEPEngine.instancedEngines.values()) {
 
                 try {
-                   if( !dfw.addStatement(statement))
-                       response.add(new StatementResponse("Unexpected error in statement " + statement.getName() +" with hash "+ statement.getHash()+ " in engine "+dfw.getName(), HttpStatus.INTERNAL_SERVER_ERROR,false));
+                    if (!dfw.addStatement(statement))
+                        response.add(new StatementResponse("Unexpected error in statement " + statement.getName() + " with hash " + statement.getHash() + " in engine " + dfw.getName(), HttpStatus.INTERNAL_SERVER_ERROR, false));
 
                 } catch (StatementException e) {
 
                     loggerService.error(e.getMessage(), e);
-                    response.add(new StatementResponse(e.getMessage(), HttpStatus.BAD_REQUEST,e.getErrorTopic(),false));
+                    response.add(new StatementResponse(e.getMessage(), HttpStatus.BAD_REQUEST, e.getErrorTopic(), false));
                     success = false;
 
                 } catch (Exception e) {
                     loggerService.error(e.getMessage(), e);
-                    response.add(new StatementResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false));
+                    response.add(new StatementResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, false));
 
                     success = false;
                 }
                 if (success) {
                     loggerService.info("Statement " + statement.getHash() + " was successful");
-                    response.add(new StatementResponse("Statement " + statement.getName() +" with hash "+ statement.getHash()+ " in engine "+dfw.getName()+" was processed successfully", HttpStatus.OK,true));
+                    response.add(new StatementResponse("Statement " + statement.getName() + " with hash " + statement.getHash() + " in engine " + dfw.getName() + " was processed successfully", HttpStatus.OK, true));
 
                 }
 
+            }
         }
         return response;
     }

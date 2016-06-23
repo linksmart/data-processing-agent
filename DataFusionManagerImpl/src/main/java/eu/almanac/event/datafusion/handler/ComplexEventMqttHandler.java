@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.almanac.event.datafusion.intern.Const;
+import eu.almanac.event.datafusion.intern.DynamicCoasts;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.handler.FixForJava7Handler;
@@ -44,6 +45,7 @@ import java.util.concurrent.LinkedBlockingQueue;
     @Deprecated
     protected boolean sendPerProperty;
     protected ExecutorService executor = Executors.newCachedThreadPool();
+    protected String PUBLISHER_ID ;
     Gson gson;
 
     // configuration
@@ -87,10 +89,14 @@ import java.util.concurrent.LinkedBlockingQueue;
             TIME_ISO_FORMAT = conf.getString(Const.TIME_ISO_FORMAT);
             STATEMENT_INOUT_BASE_TOPIC =conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
 
+            String aux= Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
+            if(aux == null)
+                aux = "/federation1/amiat/v2/cep/";
 
-            OUTPUT_TOPIC = Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH) + query.getHash();
-            if(OUTPUT_TOPIC == null)
-                OUTPUT_TOPIC = "/federation1/amiat/v2/cep/";
+            OUTPUT_TOPIC = aux + query.getHash();
+
+            PUBLISHER_ID =DynamicCoasts.getId();
+
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
@@ -418,12 +424,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
             if (query.haveOutput())
                 for (String output : query.getOutput()) {
-                    if(output.lastIndexOf(0)!='/')
-                        output+='/';
-                    brokerService.publish(output + query.getHash(),   parser.writeValueAsString(ent).getBytes());
+                    //if(output.lastIndexOf(0)!='/')
+                    //    output+='/';
+                    brokerService.publish(output,parser.writeValueAsString(ent).getBytes());
                 }
             else
-                brokerService.publish(OUTPUT_TOPIC, parser.writeValueAsString(ent).getBytes());
+                brokerService.publish(OUTPUT_TOPIC+"/"+PUBLISHER_ID, parser.writeValueAsString(ent).getBytes());
 
 
 

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
@@ -37,6 +38,8 @@ public class EPLStatement implements Statement, Serializable {
     protected String[] scope={"default"};
     protected static final String uuid =UUID.randomUUID().toString();
     protected Map synchRespones = null;
+    @JsonProperty("TargetAgents")
+    protected ArrayList<String> targetAgents= new  ArrayList<String>();
 
     public EPLStatement() {
     }
@@ -66,6 +69,11 @@ public class EPLStatement implements Statement, Serializable {
 
     public String getCEHandler() {
         return CEHandler;
+    }
+
+    @Override
+    public ArrayList<String> getTargetAgents() {
+        return targetAgents;
     }
 
     public StatementLifecycle getStateLifecycle() {

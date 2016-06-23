@@ -11,12 +11,13 @@
 
     <artifactId>iot.data.processing.agent</artifactId>
     <name>IoT Data-Processing agent</name>
-
     <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>iot.data.processing.impl</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
 
         <dependency>

@@ -1,6 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -102,6 +103,12 @@ public interface Statement {
      * @return  the handler cannonic name of ComplexEventHandler of the statement, @Default ComplexEventHandlerImpl..
      * */
     public String getCEHandler();
+    /***
+     * Return the IDs selected to agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
+     *
+     * @return  List of targeted Agents address to process the statement, otherwise empty (all available agents):
+     * */
+    public ArrayList<String> getTargetAgents();
     /***
      * Return the state of the Statement, which determines how the statement will be at runtime.
      *
