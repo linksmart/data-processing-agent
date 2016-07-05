@@ -12,5 +12,8 @@ public interface BrokerServiceConst {
 
     public static final String DEFAULT_QOS = "DEFAULT_QOS";
     public static final String DEFAULT_RETAIN_POLICY= "DEFAULT_RETAIN_POLICY";
+
+    public static final String CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT = "mqtt.keepAlive";
+    public static final String CONNECTION_MQTT_CONNECTION_TIMEOUT = "mqtt.connectionTimeout";
     public static final String SUBSCRIPTION_QoS ="Default.Subscription.QoS";
 }

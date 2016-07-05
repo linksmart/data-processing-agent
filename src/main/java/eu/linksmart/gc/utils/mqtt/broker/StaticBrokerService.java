@@ -25,7 +25,7 @@ public class StaticBrokerService extends BrokerService implements Broker{
 
 
 
-        if(BrokerService.isBrokerURL(url))
+        if(!BrokerService.isBrokerURL(url))
             throw new MalformedURLException(url+" is not an broker URL");
         if(brokerServices.containsKey(url)) {
             if(!clients.contains(uuid))

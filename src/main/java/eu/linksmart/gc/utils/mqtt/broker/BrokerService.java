@@ -3,14 +3,17 @@ package eu.linksmart.gc.utils.mqtt.broker;
 
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.constants.Const;
+import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.subscription.ForwardingListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import org.apache.log4j.Logger;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -30,13 +33,20 @@ public class BrokerService implements Observer, Broker {
     private int CONNECTION_MQTT_WATCHDOG_TIMEOUT = 30000;
     private int SUBSCRIPTION_QoS =0;
 
-
+    private boolean CERTIFICATE_BASE_SECURITY = false;
+    private String CA_CERTIFICATE_PATH ="";
+    private String CLIENT_CERTIFICATE_PATH="";
+    private String KEY_PATH="";
+    private String CERTIFICATE_KEY_PASSWORD="";
 
     private Boolean watchdog = false;
 
     private final static Object lock  = new Object();
     private String brokerName;
     private String brokerPort;
+    private int CONNECTION_MQTT_CONNECTION_TIMEOUT=60000;
+    private int CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT=60000;
+    private MqttConnectOptions mqttOptions;
 
     public BrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
         listener = new ForwardingListener(this,ID);
@@ -64,7 +74,7 @@ public class BrokerService implements Observer, Broker {
         loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is connecting...");
         if(!mqttClient.isConnected()) {
 
-            mqttClient.connect();
+            mqttClient.connect(mqttOptions);
 
         }
         startWatchdog();
@@ -119,20 +129,38 @@ public class BrokerService implements Observer, Broker {
         else
             return "tcp://"+brokerName;
     }
+    public static String getSecureBrokerURL(String brokerName, String brokerPort){
+
+        if (ipPattern.matcher(brokerName).find())
+            return "ssl://"+brokerName+":"+brokerPort;
+        else
+            return "ssl://"+brokerName;
+    }
+    public static String getBrokerURL(String brokerName, String brokerPort, boolean isSSL_URL){
+
+        if (isSSL_URL)
+            return getSecureBrokerURL(brokerName,brokerPort);
+        else
+            return getBrokerURL(brokerName, brokerPort);
+    }
     public static boolean isBrokerURL(String string){
-        return urlPattern.matcher(string).find();
+
+      return  urlPattern.matcher(string).find();
+
     }
     public String getBrokerURL(){
-        return getBrokerURL(brokerName, brokerPort);
+        return getBrokerURL(brokerName, brokerPort, CERTIFICATE_BASE_SECURITY);
     }
 
     public void createClient() throws MqttException {
+
         mqttClient = new MqttClient(getBrokerURL(),ID.toString()+":"+UUID.randomUUID().toString(), new MemoryPersistence());
         connectionWatchdog();
+
         mqttClient.setCallback(listener);
     }
 
-    protected void preloadConfiguration(){
+    protected void preloadConfiguration() throws MqttException {
 
         preloadedQoS =conf.getInt(Const.DEFAULT_QOS);
         preloadedPolicy = conf.getBool(Const.DEFAULT_RETAIN_POLICY);
@@ -140,6 +168,33 @@ public class BrokerService implements Observer, Broker {
         preloadedRetryTime = conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME);
         CONNECTION_MQTT_WATCHDOG_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT);
         SUBSCRIPTION_QoS = conf.getInt(BrokerServiceConst.SUBSCRIPTION_QoS);
+        CONNECTION_MQTT_CONNECTION_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_CONNECTION_TIMEOUT);
+        CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT= conf.getInt(BrokerServiceConst.CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT);
+        CERTIFICATE_BASE_SECURITY = conf.getBool(Const.CERTIFICATE_BASE_SECURITY);
+        if(CERTIFICATE_BASE_SECURITY) {
+            CA_CERTIFICATE_PATH = conf.getString(Const.CA_CERTIFICATE_PATH);
+            CLIENT_CERTIFICATE_PATH = conf.getString(Const.CERTIFICATE_FILE_PATH);
+            KEY_PATH = conf.getString(Const.KEY_FILE_PATH);
+            CERTIFICATE_KEY_PASSWORD = conf.getString(Const.CERTIFICATE_KEY_PASSWORD);
+        }
+
+        mqttOptions = new MqttConnectOptions();
+
+        mqttOptions.setConnectionTimeout(CONNECTION_MQTT_CONNECTION_TIMEOUT/1000);
+        mqttOptions.setKeepAliveInterval(CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT/1000);
+        mqttOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
+
+
+        if(CERTIFICATE_BASE_SECURITY) {
+            SSLSocketFactory socketFactory = null;
+            try {
+                socketFactory = Utils.getSocketFactory(CA_CERTIFICATE_PATH, CLIENT_CERTIFICATE_PATH, KEY_PATH, CERTIFICATE_KEY_PASSWORD);
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
+                throw new MqttException(e);
+            }
+            mqttOptions.setSocketFactory(socketFactory);
+        }
     }
     private void connectionWatchdog(){
 
@@ -342,7 +397,7 @@ public class BrokerService implements Observer, Broker {
             case Disconnected:
                 for(int i=0; i<preloadedTriesReconnect && !mqttClient.isConnected();i++){
                     try {
-                        mqttClient.connect();
+                        mqttClient.connect(mqttOptions);
 
                     } catch (MqttException e) {
                         loggerService.error(e.getMessage(), e);
