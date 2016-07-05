@@ -42,7 +42,7 @@ public class BrokerService implements Observer, Broker {
     private Boolean watchdog = false;
 
     private final static Object lock  = new Object();
-    private String brokerName;
+    private String brokerName ;
     private String brokerPort;
     private int CONNECTION_MQTT_CONNECTION_TIMEOUT=60000;
     private int CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT=60000;
@@ -168,15 +168,34 @@ public class BrokerService implements Observer, Broker {
         preloadedRetryTime = conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME);
         CONNECTION_MQTT_WATCHDOG_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT);
         SUBSCRIPTION_QoS = conf.getInt(BrokerServiceConst.SUBSCRIPTION_QoS);
-        CONNECTION_MQTT_CONNECTION_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_CONNECTION_TIMEOUT);
-        CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT= conf.getInt(BrokerServiceConst.CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT);
-        CERTIFICATE_BASE_SECURITY = conf.getBool(Const.CERTIFICATE_BASE_SECURITY);
-        if(CERTIFICATE_BASE_SECURITY) {
-            CA_CERTIFICATE_PATH = conf.getString(Const.CA_CERTIFICATE_PATH);
-            CLIENT_CERTIFICATE_PATH = conf.getString(Const.CERTIFICATE_FILE_PATH);
-            KEY_PATH = conf.getString(Const.KEY_FILE_PATH);
-            CERTIFICATE_KEY_PASSWORD = conf.getString(Const.CERTIFICATE_KEY_PASSWORD);
+        try {
+            CONNECTION_MQTT_CONNECTION_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_CONNECTION_TIMEOUT);
+        }catch (NoSuchElementException ex){
+            loggerService.error("property CONNECTION_MQTT_CONNECTION_TIMEOUT not found loading hardcoded property",ex);
         }
+        try {
+
+            CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT= conf.getInt(BrokerServiceConst.CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT);
+        }catch (NoSuchElementException ex){
+            loggerService.error("property CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT not found loading hardcoded property",ex);
+        }
+        try {
+            CERTIFICATE_BASE_SECURITY = conf.getBool(Const.CERTIFICATE_BASE_SECURITY);
+        }catch (NoSuchElementException ex){
+            loggerService.error("property CERTIFICATE_BASE_SECURITY not found loading hardcoded property",ex);
+        }
+
+        try {
+            if(CERTIFICATE_BASE_SECURITY) {
+                CA_CERTIFICATE_PATH = conf.getString(Const.CA_CERTIFICATE_PATH);
+                CLIENT_CERTIFICATE_PATH = conf.getString(Const.CERTIFICATE_FILE_PATH);
+                KEY_PATH = conf.getString(Const.KEY_FILE_PATH);
+                CERTIFICATE_KEY_PASSWORD = conf.getString(Const.CERTIFICATE_KEY_PASSWORD);
+            }
+        }catch (NoSuchElementException ex){
+            loggerService.error("security properties not found loading hardcoded property",ex);
+        }
+
 
         mqttOptions = new MqttConnectOptions();
 
