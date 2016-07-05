@@ -100,7 +100,7 @@ public class RestStatementFeeder extends Component implements Feeder {
         for (CEPEngine dfw : dataFusionWrappers.values())
             try {
                 Map<String, Statement> aux = dfw.getStatements();
-                if (!aux.isEmpty()) {
+                if (aux != null && !aux.isEmpty()) {
                     statements.put(dfw.getName(), aux);
                 }
 
