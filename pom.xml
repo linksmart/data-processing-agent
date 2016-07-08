@@ -39,7 +39,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-<<<<<<< HEAD
+
 
     <dependency>
         <groupId>org.bouncycastle</groupId>
@@ -47,8 +47,7 @@
         <version>1.46</version>
     </dependency>
 
-=======
->>>>>>> ec792be86022f9917aa07cf6cb381030a3fa59ea
+
     </dependencies>
     <build>
     <plugins>
