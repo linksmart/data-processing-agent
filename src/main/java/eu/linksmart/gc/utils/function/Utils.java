@@ -6,9 +6,6 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.logging.MqttLogger;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import org.apache.log4j.PropertyConfigurator;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.openssl.PEMReader;
-import org.bouncycastle.openssl.PasswordFinder;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +17,7 @@ import javax.net.ssl.TrustManagerFactory;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.*;
-import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,29 +60,30 @@ public class  Utils {
     }
     static public LoggerService initDefaultLoggerService(Class lass){
 
-
         LoggerService loggerService = new LoggerService(LoggerFactory.getLogger(lass));
         try {
             Properties p = new Properties();
             try {
-                p.load(new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)));
+                final FileInputStream configStream = new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                p.load(configStream);
                 PropertyConfigurator.configure(p);
                 loggerService.info("Loading from configuration from given file");
+                configStream.close();
             }catch(FileNotFoundException ex){
                 try {
-
                     InputStream in = lass.getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
                     p.load(in);
                     PropertyConfigurator.configure(p);
                     loggerService.info("Loading from configuration from jar default file");
+                    in.close();
                 }catch (Exception exx){
                     try {
                         InputStream in = Utils.class.getClassLoader().getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
                         p.load(in);
                         PropertyConfigurator.configure(p);
                         loggerService.info("Loading from configuration from jar default file");
+                        in.close();
                     }catch (Exception exxx){
-
                         exxx.printStackTrace();
                     }
                 }
@@ -99,7 +94,6 @@ public class  Utils {
 
         if (Configurator.getDefaultConfig().getBool(Const.LOG_ONLINE_ENABLED_CONF_PATH)) {
             try {
-
                 loggerService.addLoggers(Utils.createMqttLogger(lass));
             } catch (Exception e) {
                 loggerService.error(e.getMessage(), e);
@@ -134,47 +128,26 @@ public class  Utils {
     }
     static public SSLSocketFactory getSocketFactory (final String caCrtFile, final String crtFile, final String keyFile, final String password) throws Exception
     {
-        Security.addProvider(new BouncyCastleProvider());
-
-        // load CA certificate
-        PEMReader reader = new PEMReader(new InputStreamReader(new ByteArrayInputStream(Files.readAllBytes(Paths.get(caCrtFile)))));
-        X509Certificate caCert = (X509Certificate)reader.readObject();
-        reader.close();
-
-        // load client certificate
-        reader = new PEMReader(new InputStreamReader(new ByteArrayInputStream(Files.readAllBytes(Paths.get(crtFile)))));
-        X509Certificate cert = (X509Certificate)reader.readObject();
-        reader.close();
-
-        // load client private key
-        reader = new PEMReader(
-                new InputStreamReader(new ByteArrayInputStream(Files.readAllBytes(Paths.get(keyFile)))),
-                new PasswordFinder() {
-                    public char[] getPassword() {
-                        return password.toCharArray();
-                    }
-                }
-        );
-        KeyPair key = (KeyPair)reader.readObject();
-        reader.close();
-
+        final FileInputStream crtStream = new FileInputStream(crtFile);
+        final FileInputStream keyStream = new FileInputStream(keyFile);
         // CA certificate is used to authenticate server
-        KeyStore caKs = KeyStore.getInstance("JKS");
-        caKs.load(null, null);
-        caKs.setCertificateEntry("ca-certificate", caCert);
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
+        final KeyStore caKs = KeyStore.getInstance("JKS");
+        caKs.load(crtStream, password.toCharArray());
+        final TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
         tmf.init(caKs);
 
+        crtStream.close();
+
         // client key and certificates are sent to server so it can authenticate us
-        KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(null, null);
-        ks.setCertificateEntry("certificate", cert);
-        ks.setKeyEntry("private-key", key.getPrivate(), password.toCharArray(), new java.security.cert.Certificate[]{cert});
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance("PKIX");
+        final KeyStore ks = KeyStore.getInstance("JKS");
+        ks.load(keyStream, password.toCharArray());
+        final KeyManagerFactory kmf = KeyManagerFactory.getInstance("PKIX");
         kmf.init(ks, password.toCharArray());
 
+        keyStream.close();
+
         // finally, create SSL socket factory
-        SSLContext context = SSLContext.getInstance("TLSv1.2");
+        final SSLContext context = SSLContext.getInstance("TLSv1.2");
         context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 
         return context.getSocketFactory();
