@@ -73,7 +73,7 @@ public class TopicMessageDeliverable implements Runnable{
     }
 
     public synchronized void deleteObserver(Observer listener) {
-        observers.remove(observers);
+        observers.remove(listener);
     }
 
     public synchronized int countObservers() {
