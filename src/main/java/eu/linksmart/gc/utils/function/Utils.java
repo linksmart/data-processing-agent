@@ -42,7 +42,7 @@ public class  Utils {
             dateFormat= new SimpleDateFormat(Const.TIME_ISO_FORMAT);
 
         else
-             dateFormat =new SimpleDateFormat(Const.TIME_ISO_FORMAT);
+             dateFormat =new SimpleDateFormat(Configurator.getDefaultConfig().getString(Const.TIME_FORMAT_CONF_PATH) );
 
         dateFormat.setTimeZone(tz);
 
