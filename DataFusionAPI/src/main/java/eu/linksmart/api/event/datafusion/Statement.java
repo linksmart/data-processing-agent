@@ -3,6 +3,7 @@ package eu.linksmart.api.event.datafusion;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This is the part of the API offered by Data Fusion. The Statement is the Interface that any statement object must fulfill. This interface is a generalization of any statement of a CEP engine.<p>
@@ -95,7 +96,7 @@ public interface Statement {
      *
      * @return  The ID as string.
      * */
-    public String getHash();
+    public String getID();
     /***
      * Return the handler selected to process the result of the complex event, @Default ComplexEventHandlerImpl.
      * Note: The value "" or null is a valid response, this value represent silent events, events that just happen inside the CEP engine.
@@ -116,13 +117,15 @@ public interface Statement {
      * */
     public StatementLifecycle getStateLifecycle();
     public Map getSynchronousResponse();
+    public boolean equals(Statement org);
+
     /***
      * Represent the possible States of a Statement can be in runtime.
      * The states for a new Statements represent the state how they will be deployed in the engine.
      * For an exiting Statement, the statements represent a change of state
      *
      * */
-    public enum StatementLifecycle {
+     public enum StatementLifecycle {
         /**
          * RUN Execute the statement adding a Handler, which adds a actuate or reacts to the triggered statement.
          */

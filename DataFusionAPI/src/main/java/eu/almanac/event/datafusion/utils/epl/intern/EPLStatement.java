@@ -1,5 +1,6 @@
 package eu.almanac.event.datafusion.utils.epl.intern;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -39,11 +40,17 @@ public class EPLStatement extends eu.almanac.event.datafusion.utils.epl.EPLState
          this.stateLifecycle=stateLifecycle;
     }
 
-    public void setSynchronouseResponse( Map  response) {
+    public void setSynchronousResponse(Map response) {
 
         this.synchRespones = response;
         uuid.notifyAll();
 
     }
+    public void setId(String id){
+        this.id =id;
+    }
 
+    public void setTargetAgents(ArrayList<String> targetAgents) {
+        this.targetAgents = targetAgents;
+    }
 }

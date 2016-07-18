@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation;
+package eu.linksmart.api.event.ceml.evaluation;
 
 /**
  * Created by angel on 2/12/15.

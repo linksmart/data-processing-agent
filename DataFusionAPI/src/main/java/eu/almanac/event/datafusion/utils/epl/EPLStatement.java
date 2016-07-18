@@ -9,9 +9,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class EPLStatement implements Statement, Serializable {
 
@@ -19,14 +17,14 @@ public class EPLStatement implements Statement, Serializable {
     @JsonProperty("name")
     protected String name = UUID.randomUUID().toString();
     @JsonProperty("statement")
-    protected String statement;
+    protected String statement="";
 
     @JsonProperty("source")
-    protected String source = null;
+    protected String source = "";
     @JsonProperty("input")
-    protected String[] input =null;
+    protected String[] input ={""};
     @JsonProperty("output")
-    protected String[] output=null;
+    protected String[] output={""};
 
     @JsonProperty("CEHandler")
     protected String CEHandler= "eu.almanac.event.datafusion.handler.ComplexEventMqttHandler";
@@ -37,9 +35,15 @@ public class EPLStatement implements Statement, Serializable {
     @JsonProperty("scope")
     protected String[] scope={"default"};
     protected static final String uuid =UUID.randomUUID().toString();
-    protected Map synchRespones = null;
+    @JsonProperty("SynchronousResponse")
+    protected Map synchRespones = new Hashtable<>();
     @JsonProperty("TargetAgents")
     protected ArrayList<String> targetAgents= new  ArrayList<String>();
+
+    @JsonProperty("ID")
+    protected String id = "";
+
+
 
     public EPLStatement() {
     }
@@ -63,8 +67,10 @@ public class EPLStatement implements Statement, Serializable {
         return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
     }
 
-    public String getHash() {
-        return hashIt(name + statement);
+    public String getID() {
+        if(id==null||id.equals(""))
+            id = hashIt(name + statement);
+        return id;
     }
 
     public String getCEHandler() {
@@ -82,7 +88,7 @@ public class EPLStatement implements Statement, Serializable {
 
     @Override
     public Map getSynchronousResponse() {
-        if(stateLifecycle ==stateLifecycle.SYNCHRONOUS)
+        if(stateLifecycle == StatementLifecycle.SYNCHRONOUS)
             try {
                 uuid.wait(60000);
             } catch (InterruptedException e) {
@@ -91,11 +97,6 @@ public class EPLStatement implements Statement, Serializable {
 
         return synchRespones;
     }
-
-
-    protected String hash;
-
-
 
 
     @Override
@@ -152,26 +153,69 @@ public class EPLStatement implements Statement, Serializable {
         scope =new String[1];
         scope[0] ="local";
     }
-   /* public void setName(String name) {
-        this.name = name;
+    @Override
+    public boolean equals(Statement obj) {
+
+        return  (this == obj) ||
+                (
+                        this.name.equals(obj.getName()) &&
+                        this.statement.equals(obj.getStatement()) &&
+                        this.source.equals(obj.getSource()) &&
+                        Arrays.deepEquals(this.input, obj.getInput()) &&
+                        Arrays.deepEquals(this.output, obj.getOutput()) &&
+                        this.CEHandler.equals(obj.getCEHandler()) &&
+                        this.stateLifecycle.equals(obj.getStateLifecycle()) &&
+                        Arrays.deepEquals(this.scope, obj.getScope()) &&
+                        this.targetAgents.equals(obj.getTargetAgents()) &&
+                        id.equals(obj.getID())
+                );
+
     }
 
-    public void setStatement(String statement) {
-        this.statement = statement;
+
+    public void setScope(String[] scope) {
+        this.scope = scope;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setOutput(String[] output) {
+        this.output = output;
     }
 
     public void setInput(String[] input) {
         this.input = input;
     }
 
-    public void setOutput(String[] output) {
-        this.output = output;
+    public void setSource(String source) {
+        this.source = source;
     }
-    public void setScope(String[] scope) {
-        this.scope = scope;
-    }*/
+
+    public void setStatement(String statement) {
+        this.statement = statement;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setCEHandler(String CEHandler) {
+        this.CEHandler =CEHandler;
+    }
+
+    public void setStateLifecycle(StatementLifecycle stateLifecycle) {
+        this.stateLifecycle=stateLifecycle;
+    }
+
+    public void setSynchronousResponse(Map response) {
+
+        this.synchRespones = response;
+        uuid.notifyAll();
+
+    }
+    public void setId(String id){
+        this.id =id;
+    }
+
+    public void setTargetAgents(ArrayList<String> targetAgents) {
+        this.targetAgents = targetAgents;
+    }
+
 }

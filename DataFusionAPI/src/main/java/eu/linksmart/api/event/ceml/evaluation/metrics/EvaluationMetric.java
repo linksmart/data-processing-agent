@@ -1,16 +1,16 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms;
+package eu.linksmart.api.event.ceml.evaluation.metrics;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
+
 
 import java.io.Serializable;
 
 /**
  * Created by angel on 4/12/15.
  */
-public interface EvaluationAlgorithm<T>  extends Serializable {
+public interface EvaluationMetric<T>  extends Serializable {
 
     void setComparisonMethod(ComparisonMethod method);
-    void reBuild(TargetRequest evaluationAlgorithm);
+    void reBuild(MetricDefinition<T> evaluationAlgorithm);
     boolean isReady();
     T getTarget();
     void setTarget(T target);

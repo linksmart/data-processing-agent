@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms;
+package eu.linksmart.api.event.ceml.evaluation.metrics;
 
 public interface ClassEvaluationAlgorithmExtended {
     long getFalsePositives(int classIndex) ;
