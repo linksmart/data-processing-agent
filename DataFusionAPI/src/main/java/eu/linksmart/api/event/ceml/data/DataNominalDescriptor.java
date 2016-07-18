@@ -7,9 +7,9 @@ import java.util.function.Function;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
- interface DataNominalDescriptor {
+public interface DataNominalDescriptor {
 
-    public static DataNominalDescriptor factory(DescriptorTypes type, String name) throws Exception {
+    public static  DataNominalDescriptor factory(DescriptorTypes type, String name) throws Exception {
         DataNominalDescriptor result;
         switch (type){
             case NOMINAL_CLASSES:

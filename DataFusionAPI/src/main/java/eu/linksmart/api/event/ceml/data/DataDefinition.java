@@ -11,14 +11,14 @@ import java.util.List;
  class DataDefinition implements DataDescriptors{
 
     private final int size;
-    private final List<DataDefinition> nominalDescriptors;
+    private final List<DataNominalDescriptor> nominalDescriptors;
 
     public DataDefinition(int n){
         this.size=n;
         nominalDescriptors = null;
     }
 
-    public DataDefinition(DataDefinition... definitions){
+    public DataDefinition(DataNominalDescriptor... definitions){
         this.size=definitions.length;
 
         nominalDescriptors =Arrays.asList(definitions);
@@ -28,10 +28,10 @@ import java.util.List;
         return size;
     }
 
-    public List<DataDefinition> getNominalDescriptors() {
+    public List<DataNominalDescriptor> getNominalDescriptors() {
         return nominalDescriptors;
     }
-    public DataDefinition getNominalDescriptor(int i) {
+    public DataNominalDescriptor getNominalDescriptor(int i) {
         return nominalDescriptors.get(i);
     }
 

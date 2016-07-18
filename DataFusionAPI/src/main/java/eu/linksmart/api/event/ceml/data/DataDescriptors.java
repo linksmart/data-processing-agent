@@ -11,11 +11,11 @@ public interface DataDescriptors {
     public static DataDescriptors factory(int n){
         return new DataDefinition(n);
     }
-    public static DataDescriptors factory(DataDefinition... definitions){
+    public static DataDescriptors factory(DataNominalDescriptor... definitions){
         return new DataDefinition(definitions);
     }
     public int getSize() ;
 
-    public List<DataDefinition> getNominalDescriptors() ;
-    public DataDefinition getNominalDescriptor(int i) ;
+    public List<DataNominalDescriptor> getNominalDescriptors() ;
+    public DataNominalDescriptor getNominalDescriptor(int i) ;
 }
