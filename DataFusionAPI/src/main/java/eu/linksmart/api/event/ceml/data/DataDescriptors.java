@@ -1,6 +1,6 @@
 package eu.linksmart.api.event.ceml.data;
 
-import eu.linksmart.api.event.ceml.JsonSerializable;
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 
 import java.util.List;
 
@@ -28,4 +28,5 @@ public interface DataDescriptors extends JsonSerializable{
     public int getTotalInputSize();
     public int getInputSize();
     public int getTargetSize();
+    public boolean isLambdaTypeDefinition();
 }

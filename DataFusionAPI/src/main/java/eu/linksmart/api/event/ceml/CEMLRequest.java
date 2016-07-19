@@ -3,6 +3,7 @@ package eu.linksmart.api.event.ceml;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.model.Model;
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.datafusion.Statement;
 
 import java.util.Map;

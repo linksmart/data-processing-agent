@@ -1,7 +1,7 @@
 package eu.linksmart.api.event.ceml.evaluation;
 
 
-import eu.linksmart.api.event.ceml.JsonSerializable;
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 

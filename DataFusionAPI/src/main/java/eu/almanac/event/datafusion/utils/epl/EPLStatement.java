@@ -2,6 +2,7 @@ package eu.almanac.event.datafusion.utils.epl;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.datafusion.Statement;
 
 
@@ -11,7 +12,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class EPLStatement implements Statement, Serializable {
+public class EPLStatement implements Statement {
 
 
     @JsonProperty("name")
@@ -217,5 +218,11 @@ public class EPLStatement implements Statement, Serializable {
     public void setTargetAgents(ArrayList<String> targetAgents) {
         this.targetAgents = targetAgents;
     }
+
+    @Override
+    public JsonSerializable build() throws Exception {
+        return this;
+    }
+
 
 }

@@ -1,11 +1,7 @@
 package eu.linksmart.api.event.ceml.model;
 
-import eu.linksmart.api.event.ceml.JsonSerializable;
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.

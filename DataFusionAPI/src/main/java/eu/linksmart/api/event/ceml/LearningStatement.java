@@ -1,5 +1,6 @@
 package eu.linksmart.api.event.ceml;
 
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.datafusion.Statement;
 
 /**
@@ -7,4 +8,5 @@ import eu.linksmart.api.event.datafusion.Statement;
  */
 public interface LearningStatement<ValueType, ReturnValueType> extends Statement,JsonSerializable {
     CEMLRequest<ValueType, ReturnValueType> getRequest();
+    void setRequest(CEMLRequest<ValueType, ReturnValueType> request);
 }

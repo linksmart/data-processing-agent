@@ -1,6 +1,6 @@
 package eu.linksmart.api.event.ceml.data;
 
-import eu.linksmart.api.event.ceml.JsonSerializable;
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
 public class DataDefinition  implements DataDescriptors{
 
     protected   int inputSize=-1,targetSize=-1, totalInputSize=-1;
-    protected  List<DataDescriptor> totalInput= null;
-    protected  List<DataDescriptor> input= null;
-    protected  List<DataDescriptor> targets= null;
+    protected  List<DataDescriptor> totalInput= null, input= null, targets= null;
+    protected  boolean lambdaTypes = false;
+
 
     protected DataDefinition(int inputSize, int targetSize){
 
@@ -23,6 +23,7 @@ public class DataDefinition  implements DataDescriptors{
         totalInput = null;
         input = null;
         targets = null;
+        lambdaTypes = true;
     }
 
     protected DataDefinition(DataDescriptor... definitions){
@@ -43,6 +44,8 @@ public class DataDefinition  implements DataDescriptors{
         this.targetSize=targets.size();
 
         totalInputSize = inputSize + targetSize;
+
+        lambdaTypes = false;
 
     }
 
@@ -107,11 +110,24 @@ public class DataDefinition  implements DataDescriptors{
     }
 
     @Override
+    public boolean isLambdaTypeDefinition() {
+        return lambdaTypes;
+    }
+
+    @Override
     public JsonSerializable build() throws Exception {
-        if((inputSize==-1)&&(totalInputSize==-1)&&(targetSize==-1))
-            return this;
-        for (DataDescriptor descriptor: totalInput)
-            descriptor.build();
+        if((inputSize==-1)&&(totalInputSize==-1)&&(targetSize==-1)) {
+
+            for (DataDescriptor descriptor : totalInput)
+                descriptor.build();
+
+            this.inputSize=targets.size();
+            this.targetSize=targets.size();
+
+            totalInputSize = inputSize + targetSize;
+        } else
+            lambdaTypes=true;
+
 
         return this;
     }

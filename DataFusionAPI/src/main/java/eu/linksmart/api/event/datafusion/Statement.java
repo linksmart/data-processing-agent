@@ -16,7 +16,7 @@ import java.util.Set;
  * @see  CEPEngine
  *
  * */
-public interface Statement {
+public interface Statement extends JsonSerializable {
     /***
      * Name of the statement
      *
@@ -118,6 +118,27 @@ public interface Statement {
     public StatementLifecycle getStateLifecycle();
     public Map getSynchronousResponse();
     public boolean equals(Statement org);
+
+
+    public void setScope(String[] scope);
+
+    public void setOutput(String[] output);
+
+    public void setInput(String[] input);
+
+    public void setSource(String source);
+
+    public void setStatement(String statement);
+
+    public void setName(String name);
+    public void setCEHandler(String CEHandler);
+
+    public void setStateLifecycle(StatementLifecycle stateLifecycle);
+
+    public void setSynchronousResponse(Map response) ;
+    public void setId(String id);
+
+    public void setTargetAgents(ArrayList<String> targetAgents);
 
     /***
      * Represent the possible States of a Statement can be in runtime.
