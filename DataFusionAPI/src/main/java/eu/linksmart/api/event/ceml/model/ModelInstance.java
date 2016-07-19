@@ -16,19 +16,18 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import java.util.*;
 
 /**
- * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
+ * Created by José �?ngel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  * Class implementing Autoregressive neural networks.
  */
 
 // TODO TBD
-public class ModelInstance<Input,Return> implements Model<Input,Return>{
+public class ModelInstance implements Model<List<Double>,List<Double>>{
 
     @JsonIgnore
     private DataDescriptors descriptors;
 
     private int numInputs;
     private int numOutputs = 24;
-    private int numNnets = 7;
 
     private int ArP;
     private int ArSeasonalP;
@@ -81,7 +80,7 @@ public class ModelInstance<Input,Return> implements Model<Input,Return>{
         numInputs = p + (P * numOutputs);
         this.seasonalityPeriod = seasonalityPeriod;
 
-        numNnets = seasonalityPeriod / numOutputs;
+        int numNnets = seasonalityPeriod / numOutputs;
 
 
         netArr = new ArrayList<>(numNnets);
@@ -147,20 +146,18 @@ public class ModelInstance<Input,Return> implements Model<Input,Return>{
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public boolean learn(Input input) throws Exception {
-        List<Double> inputList = (List<Double>)input;
+    public boolean learn(List<Double> input) throws Exception {
         List<Double> trainOutputCache ;
         // first fill the future buffer
-        if (inputList.size() < (seasonalityPeriod * (ArSeasonalP+1))) {
+        if (input.size() < (seasonalityPeriod * (ArSeasonalP+1))) {
             //input size is less than expected
             return false;
         } else {
-            trainOutputCache = inputList.subList(seasonalityPeriod * ArSeasonalP,seasonalityPeriod * (ArSeasonalP+1));
+            trainOutputCache = input.subList(seasonalityPeriod * ArSeasonalP,seasonalityPeriod * (ArSeasonalP+1));
         }
 
-        List<Double> seasonalCache = inputList.subList(0,seasonalityPeriod * ArSeasonalP);
-        List<Double> recentPointsCache = inputList.subList(0, ArP);
+        List<Double> seasonalCache = input.subList(0,seasonalityPeriod * ArSeasonalP);
+        List<Double> recentPointsCache = input.subList(0, ArP);
 
 
 
@@ -193,11 +190,9 @@ public class ModelInstance<Input,Return> implements Model<Input,Return>{
     //This method is just to localize the supperesswarning annotation.
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Return predict(Input input) throws Exception {
-        List<Double> inputList = (List<Double>)input;
-        List<Double> tempSeasonalCache =  inputList.subList(0,seasonalityPeriod * ArSeasonalP);
-        List<Double> tempRecentPointersCache = inputList.subList(0, ArP);
+    public List<Double> predict(List<Double> input) throws Exception {
+        List<Double> tempSeasonalCache =  input.subList(0,seasonalityPeriod * ArSeasonalP);
+        List<Double> tempRecentPointersCache = input.subList(0, ArP);
 
 
         List<Double> returnList = new LinkedList<>();
@@ -217,7 +212,7 @@ public class ModelInstance<Input,Return> implements Model<Input,Return>{
 
         }
 
-        return (Return) returnList;
+        return  returnList;
     }
 
     @Override
