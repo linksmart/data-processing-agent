@@ -2,12 +2,14 @@ package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.EvaluationAlgorithmBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.TumbleEvaluator;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.ModelEvaluationAlgorithm;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.EvaluationMetricBase;
+import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
+import eu.linksmart.api.event.ceml.evaluation.TumbleEvaluator;
+import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
+import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.InitialSamples;
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
@@ -18,14 +20,14 @@ import java.util.Map;
 /**
  * Created by angel on 1/12/15.
  */
-public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements TumbleEvaluator  {
+public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implements TumbleEvaluator<Integer>  {
 
 
     protected static LoggerService loggerService = Utils.initDefaultLoggerService(DoubleTumbleWindowEvaluator.class);
 
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
     private int learning = 0, learnt =0;
-    private ModelEvaluationAlgorithm initialSamples;
+    private ModelEvaluationMetric initialSamples;
 
     public DoubleTumbleWindowEvaluator() {
     }
@@ -33,7 +35,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
 
 
     @Override
-    public synchronized double  evaluate(int predicted,int actual){
+    public synchronized double  evaluate(Integer predicted,Integer actual){
 
 
         if(initialSamples.isReady()) {
@@ -61,6 +63,13 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
 
 
     }
+
+    @Override
+    public void build(DataDescriptors classesNames) throws Exception {
+        //TODO auto-generated
+
+    }
+
     public synchronized boolean trySliding() {
 
         loggerService.info("Tumble Window evaluator is trying to sliding...");
@@ -91,13 +100,13 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
 
 
     @SuppressWarnings("unchecked")
-    @Override
+    //@Override
     public void build(Collection<String> namesClasses) throws Exception {
         boolean isSlideAfter = false;
         for(int i=0; i <targets.size();i++) {
             if (targets.get(i) != null)
                 if (targets.get(i).getName().equals(InitialSamples.class.getSimpleName())) {
-                    initialSamples = (ModelEvaluationAlgorithm) EvaluationAlgorithmBase.instanceEvaluationAlgorithm(
+                    initialSamples = (ModelEvaluationMetric) EvaluationMetricBase.instanceEvaluationAlgorithm(
                             InitialSamples.class.getCanonicalName(),
                             targets.get(i).getMethod(),
                             targets.get(i).getThreshold()
@@ -114,7 +123,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
             throw  new Exception("For creating sliding evaluator the SlideAfter must be defined");
 
         if(initialSamples== null)
-            initialSamples = new InitialSamples(EvaluationAlgorithm.ComparisonMethod.More,-1);
+            initialSamples = new InitialSamples(EvaluationMetric.ComparisonMethod.More,-1);
 
         windowEvaluators[0] = new WindowEvaluator(namesClasses,targets);
         windowEvaluators[1] = new WindowEvaluator(namesClasses,targets);
@@ -132,7 +141,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
     }
 
     @Override
-    public Map<String, EvaluationAlgorithm> getEvaluationAlgorithms() {
+    public Map<String, EvaluationMetric> getEvaluationAlgorithms() {
         return windowEvaluators[learnt].getEvaluationAlgorithms();
     }
 
@@ -146,4 +155,9 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase implements Tumble
     }
 
 
+    @Override
+    public JsonSerializable build() throws Exception {
+        //TODO auto-generated
+        return null;
+    }
 }

@@ -12,27 +12,24 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 16.12.2015 a researcher of Fraunhofer FIT.
  */
-public class ComplexEventSynchHandler extends Component implements ComplexEventHandler {
+public class ComplexEventSynchHandler extends BaseEventHandler<Map> implements ComplexEventHandler<Map> {
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected EPLStatement statement;
     public ComplexEventSynchHandler(Statement statement) {
-        super(ComplexEventSynchHandler.class.getSimpleName(),"Handles the response of the CEP engines to generate sync response", ComplexEventHandler.class.getSimpleName());
+        super(statement);
         this.statement =(EPLStatement)statement;
 
     }
 
-
-    protected Object waiter = new Object();
     @Override
-    public synchronized void update(Map eventMap) {
-
-        statement.setSynchronouseResponse(eventMap);
-
+    protected void processMessage(Map events) {
+        statement.setSynchronousResponse(events);
     }
+
+
 
     @Override
     public synchronized void destroy() {
-        waiter.notify();
-        waiter =null;
+
     }
 }

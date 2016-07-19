@@ -57,8 +57,9 @@
         </dependency>
 
         <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>SiddhiWrapper</artifactId>
+            <groupId>eu.linksmart.services.events.gpl</groupId>
+            <artifactId>wrapper.esper</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
     </dependencies>
 

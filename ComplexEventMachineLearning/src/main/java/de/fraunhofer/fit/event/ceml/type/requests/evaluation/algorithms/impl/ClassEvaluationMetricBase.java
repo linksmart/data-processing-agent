@@ -1,7 +1,6 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.ClassEvaluationAlgorithm;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
+import eu.linksmart.api.event.ceml.evaluation.metrics.ClassEvaluationMetric;
 
 import java.lang.reflect.Array;
 
@@ -9,13 +8,13 @@ import java.lang.reflect.Array;
 /**
  * Created by José Ángel Carvajal on 23.12.2015 a researcher of Fraunhofer FIT.
  */
-public abstract class ClassEvaluationAlgorithmBase<T extends  Comparable<T>> extends EvaluationAlgorithmBase<T[]> implements ClassEvaluationAlgorithm<T> {
+public abstract class ClassEvaluationMetricBase<T extends  Comparable<T>> extends EvaluationMetricBase<T[]> implements ClassEvaluationMetric<T> {
 
 
-    public ClassEvaluationAlgorithmBase(){
+    public ClassEvaluationMetricBase(){
         super();
     }
-    public ClassEvaluationAlgorithmBase(ComparisonMethod method, T[] targets){
+    public ClassEvaluationMetricBase(ComparisonMethod method, T[] targets){
         super(method,targets);
         @SuppressWarnings("unchecked")
         final T[] a = (T[]) Array.newInstance(target.getClass(), targets.length);
@@ -80,5 +79,10 @@ public abstract class ClassEvaluationAlgorithmBase<T extends  Comparable<T>> ext
 
         final T[] a = (T[]) Array.newInstance(target.getClass(), target.length);
         target = a;
+    }
+    @Override
+    public ClassEvaluationMetricBase build(){
+        // TODO aot-generated
+        return this;
     }
 }

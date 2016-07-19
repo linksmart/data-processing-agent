@@ -22,6 +22,7 @@ import java.util.concurrent.locks.Lock;
  */
 public abstract class MqttFeederImpl extends Component implements Runnable, Feeder, EventFeederLogic, Observer {
 
+    private String STATEMENT_INOUT_BASE_TOPIC;
     protected Map<String,CEPEngine> dataFusionWrappers = new HashMap<>();
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
@@ -37,7 +38,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
     protected  Boolean down =false;
     protected static final Object lockDown = new Object();
-    private final int LOG_DEBUG_NUM_IN_EVENTS_REPORTED;
+    private int LOG_DEBUG_NUM_IN_EVENTS_REPORTED;
 
 
     public MqttFeederImpl(String brokerName, String brokerPort, String topic,String implName, String desc, String... implOf) throws MalformedURLException, MqttException {
@@ -52,9 +53,14 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
         } catch (InstantiationException e) {
             loggerService.error(e.getMessage(),e);
         }
-        LOG_DEBUG_NUM_IN_EVENTS_REPORTED=conf.getInt(FeederConst.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH);
+        loadConfParameters();
+
     }
 
+    protected  void loadConfParameters(){
+        LOG_DEBUG_NUM_IN_EVENTS_REPORTED=conf.getInt(FeederConst.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH);
+        STATEMENT_INOUT_BASE_TOPIC = conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
+    }
 
 
     @Override
@@ -124,6 +130,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
                 }
             }
+            loadConfParameters();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -159,8 +166,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
         }
 
-
-        mangeEvent(((MqttMessage)mqttMessage).getTopic(), ((MqttMessage)mqttMessage).getPayload() );
+        mangeEvent(((MqttMessage) mqttMessage).getTopic(), ((MqttMessage) mqttMessage).getPayload());
 
     }
 

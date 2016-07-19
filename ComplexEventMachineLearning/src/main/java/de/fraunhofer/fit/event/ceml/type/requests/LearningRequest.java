@@ -7,10 +7,7 @@ import de.fraunhofer.fit.event.ceml.core.CEML;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
 import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
-import eu.linksmart.api.event.datafusion.CEPEngine;
-import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
-import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.api.event.datafusion.StatementResponse;
+import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -91,7 +88,7 @@ public class LearningRequest  {
         Integer i=0;
         for (String strStatement : learningProcess) {
             Statement statement = new LearningStatement("LearningStatement:"+name+i.toString(),this, strStatement);
-            leaningStatements.put(statement.getHash(),statement);
+            leaningStatements.put(statement.getID(),statement);
             i++;
         }
     }
@@ -118,9 +115,9 @@ public class LearningRequest  {
 
 
             if( isDeployment)
-                deployStatements.put(statement.getHash(),statement);
+                deployStatements.put(statement.getID(),statement);
             else
-                supportStatements.put(statement.getHash(),statement);
+                supportStatements.put(statement.getID(),statement);
 
             i ++;
         }
@@ -202,8 +199,8 @@ public class LearningRequest  {
     public void deploy(){
       if (!deployed){
           loggerService.info("Request "+name+" is being deployed");
-           ArrayList<StatementResponse> responses =StatementFeeder.startStatements(deployStatements.values());
-          if((deployed=(responses.size()>0 && responses.get(0).isSuccess())))
+          MultiResourceResponses<Statement> responses =StatementFeeder.startStatements(deployStatements.values());
+          if((deployed=(responses.containsSuccess())))
                loggerService.info("Request "+name+" has been deployed");
 
         }

@@ -1,10 +1,8 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
+import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 25.01.2016 a researcher of Fraunhofer FIT.
@@ -14,10 +12,10 @@ public class Prediction {
     protected String predictedClassName;
     protected double evaluationMetricResult;
     protected boolean acceptedPrediction;
-    protected ArrayList<EvaluationAlgorithm> evaluations = null;
+    protected ArrayList<EvaluationMetric> evaluations = null;
 
 
-    public Prediction(int predictedClass, String predictedClassName, String predictedBy, ArrayList<EvaluationAlgorithm> evaluations,double evaluationMetricResult ) {
+    public Prediction(int predictedClass, String predictedClassName, String predictedBy, ArrayList<EvaluationMetric> evaluations,double evaluationMetricResult ) {
         this.predictedClass = predictedClass;
         this.predictedClassName = predictedClassName;
 
@@ -26,7 +24,7 @@ public class Prediction {
 
         acceptedPrediction= evaluationMetricResult>.99;
     }
-    public Prediction(int predictedClass, String predictedClassName, String predictedBy, ArrayList<EvaluationAlgorithm> evaluations ) {
+    public Prediction(int predictedClass, String predictedClassName, String predictedBy, ArrayList<EvaluationMetric> evaluations ) {
         this.predictedClass = predictedClass;
         this.predictedClassName = predictedClassName;
 
@@ -37,8 +35,8 @@ public class Prediction {
     }
     private void process(){
 
-        for (EvaluationAlgorithm evaluationAlgorithm: evaluations)
-            evaluationMetricResult+=evaluationAlgorithm.getNormalizedResult();
+        for (EvaluationMetric evaluationMetric : evaluations)
+            evaluationMetricResult+= evaluationMetric.getNormalizedResult();
         evaluationMetricResult= evaluationMetricResult/evaluations.size();
         acceptedPrediction=evaluationMetricResult>.99;
     }

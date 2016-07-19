@@ -1,6 +1,6 @@
 package de.fraunhofer.fit.event.ceml.type.requests;
 
-import de.fraunhofer.fit.event.ceml.core.LearningHandler;
+import de.fraunhofer.fit.event.ceml.core.LearningHandlerOld;
 import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
 
 /**
@@ -21,7 +21,7 @@ public class LearningStatement extends EPLStatement {
     public LearningStatement(String name, LearningRequest learningRequest, String statement){
         this.statement =statement;
         this.learningRequest =learningRequest;
-        CEHandler= LearningHandler.class.getCanonicalName();
+        CEHandler= LearningHandlerOld.class.getCanonicalName();
         this.name =name;
     }
 }

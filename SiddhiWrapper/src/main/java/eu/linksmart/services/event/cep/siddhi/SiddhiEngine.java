@@ -12,7 +12,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.wso2.siddhi.core.ExecutionPlanRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
@@ -170,16 +169,16 @@ public class SiddhiEngine extends Component implements CEPEngine {
     public synchronized boolean  addStatement(Statement query) throws StatementException {
 
         if(query.getInput() != null && query.getInput().length!=0) {
-            throw new StatementException(STATEMENT_INOUT_BASE_TOPIC + query.getHash(), "Input non default type not yet available");
-        }else if(!hashStatement.containsKey(query.getHash())){
-            hashStatement.put(query.getHash(), query);
-            hashExecutionPlanRuntime.put(query.getHash(),siddhiManager.createExecutionPlanRuntime(typeNameSiddhiDeffinition.get(DEFAULT_TYPE)+query.getStatement()));
-            ExecutionPlanRuntime executionPlanRuntime = hashExecutionPlanRuntime.get(query.getHash());
+            throw new StatementException(STATEMENT_INOUT_BASE_TOPIC + query.getID(), "Input non default type not yet available");
+        }else if(!hashStatement.containsKey(query.getID())){
+            hashStatement.put(query.getID(), query);
+            hashExecutionPlanRuntime.put(query.getID(),siddhiManager.createExecutionPlanRuntime(typeNameSiddhiDeffinition.get(DEFAULT_TYPE)+query.getStatement()));
+            ExecutionPlanRuntime executionPlanRuntime = hashExecutionPlanRuntime.get(query.getID());
 
             try {
                 executionPlanRuntime.addCallback(query.getName(), new SiddhiCEPHandler(query));
             } catch (RemoteException|MalformedURLException e) {
-                throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+query.getHash(),e.getMessage(),e);
+                throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+query.getID(),e.getMessage(),e);
             }
 
             hashInputHandler.put(query.getName(), executionPlanRuntime.getInputHandler("Observation"));

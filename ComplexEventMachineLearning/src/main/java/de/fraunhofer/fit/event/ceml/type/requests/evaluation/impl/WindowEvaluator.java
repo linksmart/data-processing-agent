@@ -1,12 +1,14 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
+import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.*;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ClassEvaluationAlgorithmBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ModelEvaluationAlgorithmBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ClassEvaluationMetricBase;
+import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ModelEvaluationMetricBase;
+import eu.linksmart.api.event.ceml.evaluation.metrics.*;
+import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
@@ -19,7 +21,7 @@ import java.util.Map;
 /**
  * Created by angel on 1/12/15.
  */
-public class WindowEvaluator extends EvaluatorBase implements Evaluator{
+public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator<Integer>{
     protected static LoggerService loggerService = Utils.initDefaultLoggerService(WindowEvaluator.class);
     private long totalFalsePositives = 0;
     private long totalFalseNegatives = 0;
@@ -27,13 +29,13 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     private long totalTrueNegatives = 0;
    // private long samples = 0;
 
-    EvaluationAlgorithm samples;
+    EvaluationMetric samples;
     private double[][] confusionMatrix ;
     private ArrayList<String> classes;
 
     private  long[][] sequentialConfusionMatrix;
 
-    protected Map<String,EvaluationAlgorithm> evaluationAlgorithms = new HashMap<>();
+    protected Map<String,EvaluationMetric> evaluationAlgorithms = new HashMap<>();
 
 
     protected ArrayList<TargetRequest> targets;
@@ -47,21 +49,21 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     }
 
     @Override
-    public double evaluate(int predicted,int actual){
+    public double evaluate(Integer predicted,Integer actual){
         confusionMatrix[actual][predicted]++;
 
             for (int i = 0; i < classes.size(); i++) {
                 if (i == actual && actual == predicted) {
-                    sequentialConfusionMatrix[i][EvaluationMetrics.truePositives.ordinal()]++;
+                    sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]++;
                     totalTruePositives++;
                 } else if (i != actual && i == predicted) {
-                    sequentialConfusionMatrix[i][EvaluationMetrics.falsePositives.ordinal()]++;
+                    sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()]++;
                     totalFalsePositives++;
                 } else if (i == actual && i != predicted) {
-                    sequentialConfusionMatrix[i][EvaluationMetrics.falseNegatives.ordinal()]++;
+                    sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()]++;
                     totalFalseNegatives++;
                 } else if (i != actual && i != predicted) {
-                    sequentialConfusionMatrix[i][EvaluationMetrics.trueNegatives.ordinal()]++;
+                    sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()]++;
                     totalTrueNegatives++;
                 }
 
@@ -75,12 +77,12 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     protected double calculateEvaluationMetrics(int evaluatedClass){
         double accumulateMetric =0;
         int i=0;
-        for(EvaluationAlgorithm algorithm: evaluationAlgorithms.values()) {
+        for(EvaluationMetric algorithm: evaluationAlgorithms.values()) {
 
-                if (algorithm instanceof ModelEvaluationAlgorithm)
-                    ((ModelEvaluationAlgorithm) algorithm).calculate();
-                else if (algorithm instanceof ClassEvaluationAlgorithm)
-                    ((ClassEvaluationAlgorithm) algorithm).calculate(evaluatedClass);
+                if (algorithm instanceof ModelEvaluationMetric)
+                    ((ModelEvaluationMetric) algorithm).calculate();
+                else if (algorithm instanceof ClassEvaluationMetric)
+                    ((ClassEvaluationMetric) algorithm).calculate(evaluatedClass);
                 else
                     loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
 
@@ -96,15 +98,21 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
     public boolean isDeployable(){
 
-        for(EvaluationAlgorithm algorithm: evaluationAlgorithms.values())
+        for(EvaluationMetric algorithm: evaluationAlgorithms.values())
             if(!algorithm.isReady())
                 return false;
         return true;
 
 
     }
+
     @Override
-    public Map<String,EvaluationAlgorithm> getEvaluationAlgorithms(){
+    public void build(DataDescriptors classesNames) throws Exception {
+        //TODO auto-generated
+    }
+
+    @Override
+    public Map<String,EvaluationMetric> getEvaluationAlgorithms(){
         return evaluationAlgorithms;
     }
     public boolean readyToSlide(){
@@ -115,10 +123,10 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     protected void reset(){
         for(int i=0; i<classes.size();i++) {
 
-            sequentialConfusionMatrix[i][EvaluationMetrics.truePositives.ordinal()]  = 0;
-            sequentialConfusionMatrix[i][EvaluationMetrics.trueNegatives.ordinal()]  = 0;
-            sequentialConfusionMatrix[i][EvaluationMetrics.falsePositives.ordinal()] = 0;
-            sequentialConfusionMatrix[i][EvaluationMetrics.falseNegatives.ordinal()] = 0;
+            sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]  = 0;
+            sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()]  = 0;
+            sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
+            sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
         }
        totalFalsePositives = 0;
        totalFalseNegatives = 0;
@@ -127,7 +135,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
 
 
-        for(EvaluationAlgorithm algorithm: evaluationAlgorithms.values())
+        for(EvaluationMetric algorithm: evaluationAlgorithms.values())
             algorithm.reset();
 
         //evaluationAlgorithms.get(SlideAfter.class.getSimpleName()).reset();
@@ -137,7 +145,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
 
     @SuppressWarnings("unchecked")
-    @Override
+    //@Override
     public void build(Collection<String> namesClasses){
         classes = new ArrayList<>(namesClasses);
 
@@ -145,10 +153,10 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         sequentialConfusionMatrix = new long[classes.size()][4];
         for(int i=0; i<classes.size();i++) {
 
-            sequentialConfusionMatrix[i][EvaluationMetrics.truePositives.ordinal()]  = 0;
-            sequentialConfusionMatrix[i][EvaluationMetrics.trueNegatives.ordinal()]  = 0;
-            sequentialConfusionMatrix[i][EvaluationMetrics.falsePositives.ordinal()] = 0;
-            sequentialConfusionMatrix[i][EvaluationMetrics.falseNegatives.ordinal()] = 0;
+            sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]  = 0;
+            sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()]  = 0;
+            sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
+            sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
         }
         for(TargetRequest target:targets){
             String algorithm = WindowEvaluator.class.getCanonicalName()+"$"+target.getName();
@@ -175,7 +183,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
     }
 
-    public EvaluationAlgorithm instanceEvaluationAlgorithm(String canonicalName, String method, double target)  {
+    public EvaluationMetric instanceEvaluationAlgorithm(String canonicalName, String method, double target)  {
 
         try {
             Class clazz = Class.forName(canonicalName);
@@ -183,26 +191,26 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
             Constructor constructor = null;
 
 
-            EvaluationAlgorithm.ComparisonMethod methodParameter = EvaluationAlgorithm.ComparisonMethod.More;
+            EvaluationMetric.ComparisonMethod methodParameter = EvaluationMetric.ComparisonMethod.More;
             if(method.trim().toLowerCase().equals("equal")){
-                methodParameter = EvaluationAlgorithm.ComparisonMethod.Equal;
+                methodParameter = EvaluationMetric.ComparisonMethod.Equal;
 
             } else if(method.trim().toLowerCase().contains("smaller")|| method.trim().toLowerCase().contains("less")){
                 if(method.trim().toLowerCase().contains("equal")){
-                    methodParameter = EvaluationAlgorithm.ComparisonMethod.LessEqual;
+                    methodParameter = EvaluationMetric.ComparisonMethod.LessEqual;
                 }else
-                    methodParameter = EvaluationAlgorithm.ComparisonMethod.Less;
+                    methodParameter = EvaluationMetric.ComparisonMethod.Less;
             } else if(method.trim().toLowerCase().contains("bigger")|| method.trim().toLowerCase().contains("more")){
                 if(method.trim().toLowerCase().contains("equal")){
-                    methodParameter = EvaluationAlgorithm.ComparisonMethod.MoreEqual;
+                    methodParameter = EvaluationMetric.ComparisonMethod.MoreEqual;
                 }
             }
 
 
-            constructor = clazz.getConstructor(WindowEvaluator.class,EvaluationAlgorithm.ComparisonMethod.class, double.class);
+            constructor = clazz.getConstructor(WindowEvaluator.class,EvaluationMetric.ComparisonMethod.class, double.class);
             Double aux =new Double(target);
 
-            return  (EvaluationAlgorithm) constructor.newInstance(this,methodParameter,aux);
+            return  (EvaluationMetric) constructor.newInstance(this,methodParameter,aux);
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
         }
@@ -215,14 +223,21 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
     @Override
     public String report(){
         String report = "";
-        for(EvaluationAlgorithm algorithm: evaluationAlgorithms.values()){
+        for(EvaluationMetric algorithm: evaluationAlgorithms.values()){
             report += algorithm.report()+" || ";
         }
         return report;
     }
-    public abstract class ModelEvaluationAlgorithmSubBase extends ModelEvaluationAlgorithmBase implements ModelEvaluationAlgorithmExtended {
 
-        public ModelEvaluationAlgorithmSubBase(EvaluationAlgorithm.ComparisonMethod method, double target){
+    @Override
+    public JsonSerializable build() throws Exception {
+        //TODO auto-generated
+        return null;
+    }
+
+    public abstract class ModelEvaluationMetricSubBase extends ModelEvaluationMetricBase implements ModelEvaluationAlgorithmExtended {
+
+        public ModelEvaluationMetricSubBase(EvaluationMetric.ComparisonMethod method, double target){
             super(method,target);
 
         }
@@ -278,9 +293,9 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
     }
-    public abstract class ClassEvaluationAlgorithmSubBase extends ClassEvaluationAlgorithmBase<Double>  implements ModelEvaluationAlgorithmExtended, ClassEvaluationAlgorithmExtended {
+    public abstract class ClassEvaluationMetricSubBase extends ClassEvaluationMetricBase<Double> implements ModelEvaluationAlgorithmExtended, ClassEvaluationAlgorithmExtended {
 
-        public ClassEvaluationAlgorithmSubBase(EvaluationAlgorithm.ComparisonMethod method, Double[] targets){
+        public ClassEvaluationMetricSubBase(EvaluationMetric.ComparisonMethod method, Double[] targets){
             super(method,targets);
 
         }
@@ -337,46 +352,46 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
         @Override
         public long getFalsePositives(int classIndex) {
-            return (long) sequentialConfusionMatrix[classIndex][EvaluationMetrics.falsePositives.ordinal()];
+            return (long) sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.falsePositives.ordinal()];
         }
 
         @Override
         public void setFalsePositives(int classIndex, long FalsePositives) {
-             sequentialConfusionMatrix[classIndex][EvaluationMetrics.falsePositives.ordinal()]= FalsePositives;
+             sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.falsePositives.ordinal()]= FalsePositives;
         }
 
         @Override
         public long getFalseNegatives(int classIndex) {
-            return  (long) sequentialConfusionMatrix[classIndex][EvaluationMetrics.falseNegatives.ordinal()];
+            return  (long) sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.falseNegatives.ordinal()];
         }
 
         @Override
         public void setFalseNegatives(int classIndex, long FalseNegatives) {
-           sequentialConfusionMatrix[classIndex][EvaluationMetrics.falseNegatives.ordinal()] = FalseNegatives;
+           sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.falseNegatives.ordinal()] = FalseNegatives;
         }
 
         @Override
         public long getTruePositives(int classIndex) {
-            return  (long) sequentialConfusionMatrix[classIndex][EvaluationMetrics.truePositives.ordinal()];
+            return  (long) sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.truePositives.ordinal()];
         }
 
         @Override
         public void setTruePositives(int classIndex, long TruePositives) {
-            sequentialConfusionMatrix[classIndex][EvaluationMetrics.truePositives.ordinal()] = TruePositives;
+            sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.truePositives.ordinal()] = TruePositives;
         }
 
         @Override
         public long getTrueNegatives(int classIndex) {
-            return  (long) sequentialConfusionMatrix[classIndex][EvaluationMetrics.trueNegatives.ordinal()];
+            return  (long) sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.trueNegatives.ordinal()];
         }
 
         @Override
         public void setTrueNegatives(int classIndex, long TrueNegatives) {
-            sequentialConfusionMatrix[classIndex][EvaluationMetrics.trueNegatives.ordinal()]= TrueNegatives;
+            sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.trueNegatives.ordinal()]= TrueNegatives;
         }
     }
 
-    public class Accuracy extends ModelEvaluationAlgorithmSubBase {
+    public class Accuracy extends ModelEvaluationMetricSubBase {
         public Accuracy(ComparisonMethod method, double target) {
             super(method, target);
         }
@@ -390,7 +405,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
         }
     }
-    public class ClassPrecision extends ClassEvaluationAlgorithmSubBase{
+    public class ClassPrecision extends ClassEvaluationMetricSubBase {
 
         public ClassPrecision(ComparisonMethod method, Double[] target) {
             super(method, target);
@@ -398,14 +413,14 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
         @Override
         public Double calculate(int classIndex) {
-            long denominator = (long) (sequentialConfusionMatrix[classIndex][EvaluationMetrics.truePositives.ordinal()] + sequentialConfusionMatrix[classIndex][EvaluationMetrics.falsePositives.ordinal()]);
+            long denominator = (long) (sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.truePositives.ordinal()] + sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.falsePositives.ordinal()]);
             if (denominator > 0)
-                return (currentValue[classIndex]= ((double) sequentialConfusionMatrix[classIndex][EvaluationMetrics.truePositives.ordinal()]) / denominator);
+                return (currentValue[classIndex]= ((double) sequentialConfusionMatrix[classIndex][ClassificationEvaluationValue.truePositives.ordinal()]) / denominator);
             return 0.0;
 
         }
     }
-    public class Precision extends ModelEvaluationAlgorithmSubBase {
+    public class Precision extends ModelEvaluationMetricSubBase {
 
         public Precision(ComparisonMethod method, double target) {
             super(method, target);
@@ -420,7 +435,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
         }
     }
-    public class Sensitivity extends ModelEvaluationAlgorithmSubBase {
+    public class Sensitivity extends ModelEvaluationMetricSubBase {
 
         public Sensitivity(ComparisonMethod method, double target) {
             super(method, target);
@@ -436,7 +451,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
     }
 
-    public class ClassSensitivity extends ClassEvaluationAlgorithmSubBase {
+    public class ClassSensitivity extends ClassEvaluationMetricSubBase {
 
         public ClassSensitivity(ComparisonMethod method, Double[] target) {
             super(method, target);
@@ -444,9 +459,9 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
         @Override
         public Double calculate(int indexClass) {
-            long denominator = (((long)sequentialConfusionMatrix[indexClass][EvaluationMetrics.truePositives.ordinal()]) + (long)sequentialConfusionMatrix[indexClass][EvaluationMetrics.falseNegatives.ordinal()]);
+            long denominator = (((long)sequentialConfusionMatrix[indexClass][ClassificationEvaluationValue.truePositives.ordinal()]) + (long)sequentialConfusionMatrix[indexClass][ClassificationEvaluationValue.falseNegatives.ordinal()]);
             if (denominator > 0)
-                return ( currentValue[indexClass] = ((double)sequentialConfusionMatrix[indexClass][EvaluationMetrics.truePositives.ordinal()]) / denominator);
+                return ( currentValue[indexClass] = ((double)sequentialConfusionMatrix[indexClass][ClassificationEvaluationValue.truePositives.ordinal()]) / denominator);
             return 0.0;
 
         }
@@ -465,7 +480,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
 
     }
-    public class Specificity extends ModelEvaluationAlgorithmSubBase {
+    public class Specificity extends ModelEvaluationMetricSubBase {
 
         public Specificity(ComparisonMethod method, double target) {
             super(method, target);
@@ -482,7 +497,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
     }
 
-    public class NegativePredictiveValue extends ModelEvaluationAlgorithmSubBase {
+    public class NegativePredictiveValue extends ModelEvaluationMetricSubBase {
 
         public NegativePredictiveValue(ComparisonMethod method, double target) {
             super(method, target);
@@ -499,7 +514,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
         }
     }
-    public class FallOut extends ModelEvaluationAlgorithmSubBase {
+    public class FallOut extends ModelEvaluationMetricSubBase {
 
         public FallOut(ComparisonMethod method, double target) {
             super(method, target);
@@ -513,7 +528,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
             return 0.0;
         }
     }
-    public class FalseDiscoveryRate extends ModelEvaluationAlgorithmSubBase {
+    public class FalseDiscoveryRate extends ModelEvaluationMetricSubBase {
 
         public FalseDiscoveryRate(ComparisonMethod method, double target) {
             super(method, target);
@@ -527,7 +542,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
             return 0.0;
         }
     }
-    public class MissRate extends ModelEvaluationAlgorithmSubBase {
+    public class MissRate extends ModelEvaluationMetricSubBase {
 
         public MissRate(ComparisonMethod method, double target) {
             super(method, target);
@@ -541,7 +556,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
             return 0.0;
         }
     }
-    public class F1Score extends ModelEvaluationAlgorithmSubBase {
+    public class F1Score extends ModelEvaluationMetricSubBase {
 
         public F1Score(ComparisonMethod method, double target) {
             super(method, target);
@@ -556,7 +571,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
         }
     }
 
-    public class ClassWeightedF1Score extends ClassEvaluationAlgorithmSubBase  {
+    public class ClassWeightedF1Score extends ClassEvaluationMetricSubBase {
 
         protected ClassPrecision precision;
         protected ClassRecall recall;
@@ -583,7 +598,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
 
     }
-    public class MatthewsCorrelationCoefficient extends ModelEvaluationAlgorithmSubBase {
+    public class MatthewsCorrelationCoefficient extends ModelEvaluationMetricSubBase {
 
         public MatthewsCorrelationCoefficient(ComparisonMethod method, double target) {
             super(method, target);
@@ -598,7 +613,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
             return 0.0;
         }
     }
-    public class Informedness extends ModelEvaluationAlgorithmSubBase {
+    public class Informedness extends ModelEvaluationMetricSubBase {
 
         public Informedness(ComparisonMethod method, double target) {
             super(method, target);
@@ -625,7 +640,7 @@ public class WindowEvaluator extends EvaluatorBase implements Evaluator{
 
         }
     }
-    public class Markedness extends ModelEvaluationAlgorithmSubBase {
+    public class Markedness extends ModelEvaluationMetricSubBase {
 
         public Markedness(ComparisonMethod method, double target) {
             super(method, target);

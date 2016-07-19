@@ -1,9 +1,12 @@
 package de.fraunhofer.fit.event.ceml.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.fraunhofer.fit.event.ceml.core.CEMLManager;
 import de.fraunhofer.fit.event.ceml.intern.Const;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
 import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.linksmart.api.event.ceml.CEMLRequest;
+import eu.linksmart.api.event.datafusion.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.StatementResponse;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
@@ -46,9 +49,9 @@ public class MqttCemlAPI extends Component {
             public void update(Observable o, Object arg) {
                 MqttMessage mqttMessage =(MqttMessage)arg;
                 try {
-                    LearningRequest request = mapper.readValue(mqttMessage.getPayload(),LearningRequest.class);
+                    CEMLRequest request = mapper.readValue(mqttMessage.getPayload(),CEMLManager.class);
 
-                    StatementResponse response =CemlJavaAPI.create(request);
+                    MultiResourceResponses<CEMLRequest> response = CemlJavaAPI.create(request);
                     reportFeedback(mapper.writeValueAsString(response));
 
                 } catch (Exception e) {
@@ -82,21 +85,18 @@ public class MqttCemlAPI extends Component {
     }
 
     protected void initRemoveRequest(){
-        Observer aux= new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-                MqttMessage mqttMessage =(MqttMessage)arg;
-                try {
+        Observer aux= (o, arg) -> {
+            try {
 
-                    throw new NoSuchMethodException("not yet implemented");
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(),e);
-                    reportError(e.getMessage());
-                }
-
-
+                throw new NoSuchMethodException("not yet implemented");
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+                reportError(e.getMessage());
             }
+
+
         };
+
         brokerService.addListener(conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "remove",aux);
         observers.add(aux);
     }

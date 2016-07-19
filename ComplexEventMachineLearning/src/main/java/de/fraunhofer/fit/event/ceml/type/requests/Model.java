@@ -3,8 +3,8 @@ package de.fraunhofer.fit.event.ceml.type.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import de.fraunhofer.fit.event.ceml.core.CEML;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.Evaluator;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
+import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.DoubleTumbleWindowEvaluator;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction.Prediction;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -12,7 +12,6 @@ import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
-import weka.core.OptionHandler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -91,8 +90,8 @@ public class Model implements Serializable {
         this.origin =origin;
         if(evaluation==null)
             evaluation= new DoubleTumbleWindowEvaluator();
-
-        evaluation.build(origin.getData().getAttributes().keySet());
+        // TODO: do this with new API
+        //evaluation.build(origin.getData().getAttributes().keySet());
 
         initialize();
          /*           TODO: do this with reflection
@@ -164,7 +163,7 @@ public class Model implements Serializable {
         loggerService.info("Evaluating "+nativeType.getCanonicalName()+ " learner object "+System.identityHashCode(lerner));
         int i =CEML.predict(lerner,instance);
 
-        return  new Prediction(i,origin.getData().getLearningTarget().value(i),type,new ArrayList<EvaluationAlgorithm>(evaluation.getEvaluationAlgorithms().values()),evaluation.evaluate(i,(int)instance.classValue()));
+        return  new Prediction(i,origin.getData().getLearningTarget().value(i),type,new ArrayList<EvaluationMetric>(evaluation.getEvaluationAlgorithms().values()),evaluation.evaluate(i,(int)instance.classValue()));
 
 
 
@@ -173,7 +172,7 @@ public class Model implements Serializable {
     public Prediction prediction(Instance instance) {
         int i =CEML.predict(lerner,instance);
 
-        return  new Prediction(i,origin.getData().getLearningTarget().value(i),type,new ArrayList<EvaluationAlgorithm>(evaluation.getEvaluationAlgorithms().values()));
+        return  new Prediction(i,origin.getData().getLearningTarget().value(i),type,new ArrayList<EvaluationMetric>(evaluation.getEvaluationAlgorithms().values()));
 
 
 

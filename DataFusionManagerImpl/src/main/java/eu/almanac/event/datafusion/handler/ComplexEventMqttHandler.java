@@ -5,10 +5,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import eu.almanac.event.datafusion.intern.Const;
-import eu.almanac.event.datafusion.intern.DynamicCoasts;
+import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
-import eu.almanac.event.datafusion.utils.handler.FixForJava7Handler;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
@@ -16,8 +15,10 @@ import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
+import eu.linksmart.gc.utils.mqtt.broker.BrokerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.almanac.ogc.sensorthing.api.datamodel.*;
+import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,17 +29,15 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
-    public class ComplexEventMqttHandler extends FixForJava7Handler implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler {
+    public class ComplexEventMqttHandler extends BaseEventHandler<Map> implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler<Map> {
 
-    protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+
     protected ArrayList<StaticBroker> brokerServices;
-    protected final Statement query;
+
 
     private Configurator conf =  Configurator.getDefaultConfig();
     protected ObjectMapper parser = new ObjectMapper();
@@ -51,7 +50,7 @@ import java.util.concurrent.LinkedBlockingQueue;
     // configuration
     private  String STATEMENT_INOUT_BASE_TOPIC= "queries/";
     private  String TIME_ISO_FORMAT =  "yyyy-MM-dd'T'HH:mm:ss.S'Z'";
-
+    private String[] handlerScopes;
     static {
         List<String> hosts = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_CONF_PATH),
                 ports = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_PORT_CONF_PATH),
@@ -83,7 +82,8 @@ import java.util.concurrent.LinkedBlockingQueue;
     private String OUTPUT_TOPIC;
 
     public ComplexEventMqttHandler(Statement query) throws RemoteException, MalformedURLException, StatementException {
-        super(ComplexEventMqttHandler.class.getSimpleName(),"Default handler for complex events", ComplexEventHandler.class.getSimpleName(), eu.linksmart.api.event.datafusion.ComplexEventMqttHandler.class.getSimpleName());
+        super(query);
+        //super(ComplexEventMqttHandler.class.getSimpleName(),"Default handler for complex events", ComplexEventHandler.class.getSimpleName(), eu.linksmart.api.event.datafusion.ComplexEventMqttHandler.class.getSimpleName());
         this.query=query;
         try {
             TIME_ISO_FORMAT = conf.getString(Const.TIME_ISO_FORMAT);
@@ -93,9 +93,9 @@ import java.util.concurrent.LinkedBlockingQueue;
             if(aux == null)
                 aux = "/federation1/amiat/v2/cep/";
 
-            OUTPUT_TOPIC = aux + query.getHash();
+            OUTPUT_TOPIC = aux + query.getID();
 
-            PUBLISHER_ID =DynamicCoasts.getId();
+            PUBLISHER_ID = DynamicConst.getId();
 
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
@@ -106,18 +106,35 @@ import java.util.concurrent.LinkedBlockingQueue;
         brokerServices = new ArrayList<>();
 
 
+        loadScopes();
+
+        executor.execute(eventExecutor);
+    }
+
+    private void loadScopes() throws StatementException, MalformedURLException, RemoteException {
         try {
 
-            String[] scopes;
+
 
             if(query.getScope().length==0){
-                scopes = new String[]{"local"};
+                handlerScopes= new String[]{"local"};
             }else
-                scopes = query.getScope();
+                handlerScopes = query.getScope();
 
-            for(String scope: scopes) {
+            if(!brokerServices.isEmpty()){
+                for(StaticBroker brokerService :brokerServices)
+                    try {
+                        brokerService.destroy();
+                    } catch (Exception e) {
+                        loggerService.error(e.getMessage(),e);
+                    }
+                brokerServices.clear();
+            }
+
+            for(String scope: handlerScopes) {
                 if (!knownInstances.containsKey(scope.toLowerCase()))
-                    throw new StatementException(STATEMENT_INOUT_BASE_TOPIC + query.getHash(), "The selected scope (" + query.getScope(0) + ") is unknown");
+                    throw new StatementException(STATEMENT_INOUT_BASE_TOPIC + query.getID(), "The selected scope (" + query.getScope(0) + ") is unknown");
+
                 brokerServices.add(new StaticBroker(
                         knownInstances.get(scope.toLowerCase()).getKey(),
                         knownInstances.get(scope.toLowerCase()).getValue()
@@ -127,72 +144,10 @@ import java.util.concurrent.LinkedBlockingQueue;
         } catch (MqttException e) {
             throw new RemoteException(e.getMessage());
         }
-        executor.execute(eventExecutor);
     }
 
 
 
-    private  EventExecutor eventExecutor = new EventExecutor();
-    @Override
-    public  void update(Map eventMap) {
-        loggerService.info( Utils.getDateNowString() + " Simple update query: " + query.getName());
-        eventExecutor.stack(eventMap);
-
-
-
-    }
-    private class EventExecutor implements Runnable{
-        private Map eventMap;
-        private LinkedBlockingQueue <Map> queue = new LinkedBlockingQueue();
-        private boolean active = true;
-
-        synchronized void stack(Map eventMap){
-            queue.add(eventMap);
-            synchronized (queue) {
-                queue.notifyAll();
-            }
-        }
-
-        public synchronized void setActive(boolean value){
-            active = value;
-        }
-
-
-        @Override
-        public void run() {
-            boolean active = true;
-            synchronized (this) {
-                active = this.active;
-            }
-            while (active) {
-
-                try {
-                    processMessage(queue.take());
-
-
-                    synchronized (this) {
-                        active = this.active;
-                    }
-                    if (queue.size() == 0)
-                        synchronized (queue) {
-                            queue.wait(500);
-                        }
-
-                } catch (InterruptedException e) {
-                    loggerService.error(e.getMessage(), e);
-                }
-            }
-        }
-    }
-    public void update(Map[] insertStream, Map[] removeStream){
-        loggerService.info( Utils.getDateNowString() + " Multi-update query: " + query.getName());
-        if(insertStream!=null)
-            for (Map m: insertStream)
-                eventExecutor.stack(m);
-        if(removeStream!=null)
-            for (Map m: removeStream)
-                eventExecutor.stack(m);
-    }
 
     protected void processMessage(Map eventMap){
 
@@ -282,7 +237,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
     public Observation packObservation(Object event, String resultType, String StreamID) {
         Sensor sen = new Sensor();
-        sen.setId(query.getHash());
+        sen.setId(query.getID());
         sen.setObservations(null);
         Datastream ds = new Datastream();
         ds.setObservations(null);
@@ -419,6 +374,9 @@ import java.util.concurrent.LinkedBlockingQueue;
     }
     private synchronized void  publish( Object ent) throws Exception {
 
+        if(handlerScopes!=query.getScope()){
+            loadScopes();
+        }
 
         for(StaticBroker brokerService: brokerServices)
 

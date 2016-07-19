@@ -1,17 +1,16 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.ModelEvaluationAlgorithm;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
+import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 
 /**
  * Created by José Ángel Carvajal on 23.12.2015 a researcher of Fraunhofer FIT.
  */
-public abstract class ModelEvaluationAlgorithmBase extends EvaluationAlgorithmBase<Double> implements ModelEvaluationAlgorithm {
+public abstract class ModelEvaluationMetricBase extends EvaluationMetricBase<Double> implements ModelEvaluationMetric<Double> {
 
 
 
 
-    public ModelEvaluationAlgorithmBase(ComparisonMethod method, double target){
+    public ModelEvaluationMetricBase(ComparisonMethod method, double target){
         super(method, target);
         currentValue = new Double(0.0);
 
@@ -47,6 +46,10 @@ public abstract class ModelEvaluationAlgorithmBase extends EvaluationAlgorithmBa
         currentValue = 0.0;
     }
 
-
+    @Override
+    public ModelEvaluationMetricBase build(){
+        // TODO aot-generated
+        return this;
+    }
 
 }

@@ -3,13 +3,14 @@ package de.fraunhofer.fit.event.ceml.type.requests.evaluation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
 import java.util.ArrayList;
 
 /**
  * Created by José Ángel Carvajal on 18.12.2015 a researcher of Fraunhofer FIT.
  */
-public abstract class EvaluatorBase  implements Evaluator{
+public abstract class EvaluatorBase<T>  implements Evaluator<T> {
 
     public EvaluatorBase(){
         targets =null;

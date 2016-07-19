@@ -1,7 +1,8 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.EvaluationAlgorithm;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.ModelEvaluationAlgorithmExtended;
+import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
+import eu.linksmart.api.event.ceml.evaluation.metrics.MetricDefinition;
+import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationAlgorithmExtended;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -13,17 +14,17 @@ import com.rits.cloning.Cloner;
 /**
  * Created by angel on 4/12/15.
  */
-public abstract class EvaluationAlgorithmBase<T extends Object> implements EvaluationAlgorithm<T> {
+public abstract class EvaluationMetricBase<T extends Object> implements EvaluationMetric<T> {
 
     protected ComparisonMethod method= ComparisonMethod.More;
-    protected static LoggerService loggerService = Utils.initDefaultLoggerService(EvaluationAlgorithmBase.class);
+    protected static LoggerService loggerService = Utils.initDefaultLoggerService(EvaluationMetricBase.class);
 
     protected String name;
     protected T target ;
     public T currentValue;
     protected Cloner cloner = new Cloner();
 
-    static public EvaluationAlgorithm instanceEvaluationAlgorithm(String canonicalName, String method, Object target)  {
+    static public EvaluationMetric instanceEvaluationAlgorithm(String canonicalName, String method, Object target)  {
 
         try {
             Class clazz = Class.forName(canonicalName);
@@ -51,16 +52,16 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
             else if(target instanceof Double[])
                 constructor = clazz.getConstructor(ComparisonMethod.class, Double[].class);
 
-            return  (EvaluationAlgorithm) constructor.newInstance(methodParameter,target);
+            return  (EvaluationMetric) constructor.newInstance(methodParameter,target);
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
         }
         return null;
     }
-    public EvaluationAlgorithmBase(){
+    public EvaluationMetricBase(){
         name = this.getClass().getSimpleName();
     }
-    public EvaluationAlgorithmBase(ComparisonMethod method, T target){
+    public EvaluationMetricBase(ComparisonMethod method, T target){
 
         // TODO: broke, the target copy the reference of the object insted of making a new reference,
         // I solved this by creating the reference outside the constructor
@@ -93,12 +94,12 @@ public abstract class EvaluationAlgorithmBase<T extends Object> implements Evalu
         return currentValue;
     }
     @Override
-    public void reBuild(TargetRequest evaluationAlgorithm) {
+    public void reBuild(MetricDefinition<T> evaluationAlgorithm) {
 
-        if (target instanceof Object[])
-            target = cloner.deepClone((T) evaluationAlgorithm.getThresholds());
-        else
-            target = cloner.deepClone((T) evaluationAlgorithm.getThreshold());
+      //  if (target instanceof Object[])
+       //     target = cloner.deepClone((T) evaluationAlgorithm.getThresholds());
+       // else
+            target = cloner.deepClone( evaluationAlgorithm.getThreshold());
     }
 
     public ModelEvaluationAlgorithmExtended getExtended(){

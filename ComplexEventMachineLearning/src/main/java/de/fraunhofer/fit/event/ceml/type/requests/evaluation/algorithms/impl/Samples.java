@@ -1,6 +1,6 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl;
 
-public class Samples extends ModelEvaluationAlgorithmBase {
+public class Samples extends ModelEvaluationMetricBase {
 
         public Samples(ComparisonMethod method, double target) {
             super(method, target);

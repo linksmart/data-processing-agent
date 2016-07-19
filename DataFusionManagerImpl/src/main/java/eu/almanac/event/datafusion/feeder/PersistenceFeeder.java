@@ -115,7 +115,7 @@ public class PersistenceFeeder extends Component implements Feeder, EventFeederL
 
             try {
                 dfw.addStatement(statement);
-                loggerService.info("Statement " + statement.getHash() + " was successful");
+                loggerService.info("Statement " + statement.getID() + " was successful");
             } catch (Exception e) {
                 loggerService.error(e.getMessage(), e);
 

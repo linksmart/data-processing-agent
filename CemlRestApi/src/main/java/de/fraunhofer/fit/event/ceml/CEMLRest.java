@@ -7,8 +7,11 @@ import com.google.gson.reflect.TypeToken;
 import de.fraunhofer.fit.event.ceml.api.CemlJavaAPI;
 import de.fraunhofer.fit.event.ceml.core.CEML;
 
+import de.fraunhofer.fit.event.ceml.core.CEMLManager;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
 import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.linksmart.api.event.ceml.CEMLRequest;
+import eu.linksmart.api.event.datafusion.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.StatementResponse;
 
 import eu.linksmart.gc.utils.function.Utils;
@@ -157,17 +160,17 @@ public class CEMLRest extends Component{
 
     }
     private ResponseEntity<String> create(String name, String body, String requestType){
-        ArrayList<StatementResponse> retur ;
+        MultiResourceResponses<CEMLRequest> retur ;
         try {
 
             switch (requestType){
                 case "":
-                    LearningRequest request = mapper.readValue(body, LearningRequest.class);
+                    CEMLRequest request = mapper.readValue(body, CEMLManager.class);
                     request.setName(name);
                     retur= CemlJavaAPI.feedLearningRequest(request);
                     break;
                 default:
-                    LearningRequest request1 = mapper.readValue(body,LearningRequest.class);
+                    CEMLRequest request1 = mapper.readValue(body,CEMLManager.class);
                     request1.setName(name);
                     retur= CemlJavaAPI.feedLearningRequest(request1);
             }

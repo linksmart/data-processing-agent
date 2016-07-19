@@ -4,10 +4,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
 import de.fraunhofer.fit.event.ceml.core.CEML;
+import de.fraunhofer.fit.event.ceml.core.CEMLManager;
 import de.fraunhofer.fit.event.ceml.intern.Const;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
 import eu.almanac.event.datafusion.feeder.StatementFeeder;
+import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.linksmart.api.event.ceml.CEMLRequest;
+import eu.linksmart.api.event.datafusion.MultiResourceResponses;
+import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementResponse;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
@@ -44,22 +49,19 @@ public class CemlJavaAPI {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    public static ArrayList<StatementResponse> feedLearningRequest(LearningRequest request){
-        ArrayList<StatementResponse> responses;
+    public static MultiResourceResponses<CEMLRequest> feedLearningRequest(CEMLRequest request){
+        MultiResourceResponses<CEMLRequest> responses = new MultiResourceResponses<>();
         try {
             request.build();
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
-            responses = new ArrayList<StatementResponse>();
-            responses.add(new StatementResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false));
+            responses = new MultiResourceResponses<CEMLRequest>();
+            responses.addResponse(new StatementResponse("Internal Server Error", DynamicConst.getId(),null,"Agent", e.getMessage(), 500));
             return responses;
         }
 
-        responses = StatementFeeder.feedStatements(request.getSupportStatements().values());
-        responses.addAll( StatementFeeder.feedStatements(request.getLeaningStatements().values()));
-        responses.addAll( StatementFeeder.feedStatements(request.getDeployStatements().values()));
-
-        return  responses;
+        responses.addResponse(new StatementResponse("OK",DynamicConst.getId(),request.getName(), "Learning Request", "OK",200 ));
+        return responses;
 
 
     }
@@ -93,14 +95,16 @@ public class CemlJavaAPI {
                         retur = mapper.writeValueAsString(requests.get(name));
                 }
             else
-                return new StatementResponse("Error 404 Not Found: Request with name " + name,HttpStatus.NOT_FOUND,false );
+                return new StatementResponse("Not Found",DynamicConst.getId(),name, "Learning Request","Error 404 Not Found: Request with name " + name,404 );
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return  new StatementResponse("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false);
+            return new StatementResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 );
+
 
         }
-        return new  StatementResponse(retur, HttpStatus.OK, true);
+        return new StatementResponse("OK",DynamicConst.getId(),name, "Learning Request", "OK",200 );
+
     }
 
     public static StatementResponse update(String name, String body, String typeRequest) {
@@ -151,79 +155,69 @@ public class CemlJavaAPI {
 
             } else {
                 loggerService.warn("There is no learning request with name " + name);
-                return new StatementResponse("Error 404 Not found: There is no request with given name" + name, HttpStatus.NOT_FOUND,false);
+                return new StatementResponse("Not Found",DynamicConst.getId(),name, "Learning Request","Error 404 Not found: There is no request with given name" + name,404 );
+
             }
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return new StatementResponse("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false);
+            return new StatementResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 );
 
         }
         if (retur != null)
-            try {
 
-                return new StatementResponse(mapper.writeValueAsString(retur), HttpStatus.OK,true);
 
-            } catch (Exception e) {
-                return new StatementResponse("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}", HttpStatus.MULTI_STATUS,true);
-            }
+                return new StatementResponse("OK",DynamicConst.getId(),name, "Learning Request", "OK",200 );
+
+
         else
-            return new StatementResponse("{\"message\":\"There was an unknown error!\"}", HttpStatus.INTERNAL_SERVER_ERROR, false);
+            return new StatementResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","There was an unknown error!" ,500 );
+
 
     }
 
-    public static StatementResponse create(String name, String body, String requestType) {
-        ArrayList<StatementResponse> responses=null;
+    public static  MultiResourceResponses<CEMLRequest> create(String name, String body, String requestType) {
+        MultiResourceResponses<CEMLRequest> responses=new MultiResourceResponses<>();
         try {
 
+            MultiResourceResponses<CEMLRequest> aux;
             switch (requestType) {
                 case "":
-                    LearningRequest request = mapper.readValue(body, LearningRequest.class);
+                    CEMLRequest request = mapper.readValue(body, CEMLManager.class);
                     request.setName(name);
-                    responses = feedLearningRequest(request);
+                    aux = feedLearningRequest(request);
                     break;
                 default:
-                    LearningRequest request1 = mapper.readValue(body, LearningRequest.class);
+                    CEMLRequest request1 = mapper.readValue(body, CEMLManager.class);
                     request1.setName(name);
-                    responses = feedLearningRequest(request1);
+                    aux = feedLearningRequest(request1);
             }
+            //responses.addAllResponses(aux.getResponses());
+            //responses.getResources().putAll(aux.getResources());
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return new StatementResponse("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false);
-
+            responses.addResponse(new StatementResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
         }
-        if (responses != null)
-            try {
-
-                return new StatementResponse(mapper.writeValueAsString(responses), HttpStatus.MULTI_STATUS, true);
-
-            } catch (Exception e) {
-                return new StatementResponse("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}", HttpStatus.MULTI_STATUS, true);
-            }
-        else
-            return new StatementResponse("{\"message\":\"There was an unknown error!\"}", HttpStatus.INTERNAL_SERVER_ERROR, false);
+        return responses;
     }
-    public static StatementResponse create( LearningRequest request) {
-        ArrayList<StatementResponse> responses=null;
+    public static MultiResourceResponses<CEMLRequest> create( CEMLRequest request) {
+        MultiResourceResponses<CEMLRequest> responses= new MultiResourceResponses<>();
         try {
-            responses=feedLearningRequest(request);
+            MultiResourceResponses<CEMLRequest> aux=feedLearningRequest(request);
+
+
+
+            responses.addAllResponses(aux.getResponses());
+            responses.getResources().putAll(aux.getResources());
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return new StatementResponse("Error 500 Intern Error: Error while executing method " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,false);
+            responses.addResponse(new StatementResponse("Internal Server Error",DynamicConst.getId(),request.getName(), "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
 
         }
-        if (responses != null)
-            try {
 
-                return new StatementResponse(mapper.writeValueAsString(responses), HttpStatus.MULTI_STATUS, true);
-
-            } catch (Exception e) {
-                return new StatementResponse("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}", HttpStatus.MULTI_STATUS, true);
-            }
-        else
-            return new StatementResponse("{\"message\":\"There was an unknown error!\"}", HttpStatus.INTERNAL_SERVER_ERROR, false);
+        return responses;
     }
 
 

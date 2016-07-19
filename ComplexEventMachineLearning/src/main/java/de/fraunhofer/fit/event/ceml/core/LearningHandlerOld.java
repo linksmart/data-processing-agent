@@ -22,10 +22,10 @@ import java.util.concurrent.Executors;
 /**
  * Created by angel on 26/11/15.
  */
-public class LearningHandler extends Component implements ComplexEventHandler {
+public class LearningHandlerOld extends Component implements ComplexEventHandler<Map> {
 
     static private Configurator conf = Configurator.getDefaultConfig();
-    static private LoggerService loggerService = Utils.initDefaultLoggerService(LearningHandler.class);
+    static private LoggerService loggerService = Utils.initDefaultLoggerService(LearningHandlerOld.class);
     protected ExecutorService executor = Executors.newCachedThreadPool();
     private Statement statement;
     private LearningRequest originalRequest;
@@ -34,8 +34,8 @@ public class LearningHandler extends Component implements ComplexEventHandler {
     private Map<String, Integer> modelByName = new Hashtable<>();
 
 
-    public LearningHandler(Statement statement) {
-        super(LearningHandler.class.getSimpleName(),"Learning Handler processes the data and input it to the learning objects");
+    public LearningHandlerOld(Statement statement) {
+        super(LearningHandlerOld.class.getSimpleName(),"Learning Handler processes the data and input it to the learning objects");
         this.statement = statement;
         this.originalRequest =((LearningStatement)statement).getLearningRequest();
         if(conf.getString(Const.CEML_EngineTimeProveded)!= null ||conf.getString(Const.CEML_EngineTimeProveded)!="" )
@@ -92,7 +92,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
         Prediction prediction = originalRequest.evaluate(instance);
 
         int itShould =  originalRequest.getData().getLearningTarget().indexOfValue(target.toString());
-        loggerService.info("\n(R) Learning with rule: "+ statement.getName() +" with id: "+statement.getHash()+" learning target: "+target.getClass().getSimpleName()+ " predicted index: "+ prediction.getPredictedClass()+" sample index: "+ String.valueOf(itShould));
+        loggerService.info("\n(R) Learning with rule: "+ statement.getName() +" with id: "+statement.getID()+" learning target: "+target.getClass().getSimpleName()+ " predicted index: "+ prediction.getPredictedClass()+" sample index: "+ String.valueOf(itShould));
 /*
         Instances instances =originalRequest.getData().getInstances();
 
@@ -131,7 +131,7 @@ public class LearningHandler extends Component implements ComplexEventHandler {
 
     }
     @SuppressWarnings("unchecked")
-    @Override
+   // @Override
     public void update(Map eventMap) {
 
         executor.execute(new EventExecutor(eventMap));
@@ -191,6 +191,15 @@ public class LearningHandler extends Component implements ComplexEventHandler {
     }
 
 
+    @Override
+    public void update(Map[] insertStream, Map[] removeStream) {
+        if(insertStream!=null)
+            for (Map map : insertStream)
+                update(map);
+        if(removeStream!=null)
+            for (Map map : removeStream)
+                update(map);
+    }
 
     @Override
     public void destroy() {
