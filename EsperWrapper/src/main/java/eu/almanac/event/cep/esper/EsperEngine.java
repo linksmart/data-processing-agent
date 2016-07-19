@@ -43,7 +43,6 @@ import java.util.*;
         EsperEngine EE= new EsperEngine();
 
         instancedEngines.put(EE.getName(),EE);
-
         return EE;
     }
 
@@ -269,9 +268,9 @@ import java.util.*;
 
 
 
-        if(epService.getEPAdministrator().getStatement(query.getHash())!=null) {
+        if(epService.getEPAdministrator().getStatement(query.getID())!=null) {
 
-            throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+ query.getHash(), ("Query with id " + query.getHash() + " already added"));
+            throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+ query.getID(), ("Query with id " + query.getID() + " already added"));
 
         }
 
@@ -301,9 +300,9 @@ import java.util.*;
                 EPStatement statement;
                 try {
 
-                    statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getHash());
+                    statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getID());
                 }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),query.getHash(),e.getCause());
+                    throw new StatementException(e.getMessage(),query.getID(),e.getCause());
                 }
 
                 if (handler != null) {
@@ -320,7 +319,7 @@ import java.util.*;
 
                 }
 
-                deployedStatements.put(query.getHash(), query);
+                deployedStatements.put(query.getID(), query);
                 break;
             case ONCE:
             case SYNCHRONOUS:
@@ -328,16 +327,17 @@ import java.util.*;
                 try {
                      result = epService.getEPRuntime().executeQuery(query.getStatement());
                 }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),query.getHash(),e.getCause());
+                    throw new StatementException(e.getMessage(),query.getID(),e.getCause());
                 }
                 if (handler != null) {
 
                     for (EventBean event : result.getArray()) {
 
                         if (event.getUnderlying() instanceof Map)
-                            handler.update((Map<String, Object>) event.getUnderlying());
+                            throw new Exception("The sync response in under construction");
+                           // handler.update((Map<String, Object>) event.getUnderlying());
                         else
-                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",query.getHash());
+                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",query.getID());
 
                     }
                 }

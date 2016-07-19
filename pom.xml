@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.linksmart.services.events.gpl</groupId>
     <artifactId>reactor</artifactId>
+    <name>LGPL reactor</name>
 
     <packaging>pom</packaging>
 
@@ -35,5 +36,12 @@
         <module>EsperWrapper</module>
         <module>distributions</module>
     </modules>
-
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
+            <url>https://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>https://linksmart.eu/repo/content/repositories/snapshots/eu/linksmart/services/events/gpl/</distribution>
+            <comments>LinkSmart Services: IoT Data-Processing and Learning GPL Agents is project based on the IoT Data-Processing and Learning. Differentiating from it in the Licence </comments>
+        </license>
+    </licenses>
 </project>
