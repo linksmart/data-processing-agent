@@ -1,29 +1,28 @@
 package eu.linksmart.api.event.ceml.evaluation;
 
 
+import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 
-import java.util.Collection;
-import java.util.Map;
+
+import java.util.Set;
 
 /**
  * Created by angel on 2/12/15.
  */
 //@JsonDeserialize(as = DoubleTumbleWindowEvaluator.class)
-public interface Evaluator {
-     double evaluate(int predicted, int actual);
+public interface Evaluator<T> {
+     double evaluate(T predicted, T actual);
 
      boolean isDeployable();
 
-    void build(Collection<String> classesNames) throws Exception;
+    void build(DataDescriptors classesNames) throws Exception;
 
     void reBuild(Evaluator evaluator);
 
-    Map<String,EvaluationMetric> getEvaluationAlgorithms();
+    Set<EvaluationMetric> getEvaluationAlgorithms();
 
     String report();
-    enum EvaluationClassificationValues {
-        truePositives,trueNegatives,falsePositives,falseNegatives
-    }
+
 
 }

@@ -1,6 +1,5 @@
 package eu.linksmart.api.event.ceml.data;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,14 +7,17 @@ import java.util.List;
  */
 public interface DataDescriptors {
 
-    public static DataDescriptors factory(int n){
-        return new DataDefinition(n);
+    public static DataDescriptors factory(int inputTotalSize,int targetSize){
+        return new DataDefinition(inputTotalSize,targetSize);
     }
-    public static DataDescriptors factory(DataNominalDescriptor... definitions){
+    public static DataDescriptors factory(DataDescriptor... definitions){
         return new DataDefinition(definitions);
     }
-    public int getSize() ;
 
-    public List<DataNominalDescriptor> getNominalDescriptors() ;
-    public DataNominalDescriptor getNominalDescriptor(int i) ;
+    public List<DataDescriptor> getDescriptors() ;
+    public DataDescriptor getDescriptor(int i) throws Exception;
+    public List<DataDescriptor> getTargets();
+    public int getTotalInputSize();
+    public int getInputSize();
+    public int getTargetSize();
 }

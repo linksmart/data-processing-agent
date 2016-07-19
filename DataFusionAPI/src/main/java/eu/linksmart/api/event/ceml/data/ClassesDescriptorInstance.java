@@ -1,35 +1,47 @@
 package eu.linksmart.api.event.ceml.data;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.util.ArrayList;
+
+import java.util.List;
 import java.util.function.Function;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
- class ClassesDescriptorInstance<T> extends DataDescriptorInstance implements ClassesDataDescriptor<T> {
+public class ClassesDescriptorInstance<F> extends DataDescriptorInstance implements ClassesDescriptor<F> {
+
+    @JsonProperty("Classes")
+    @JsonDeserialize(as = ArrayList.class)
+    private List<String> classes = new ArrayList<>();
+
+    @JsonIgnore
+    private Function<F,Integer> selectionFunction=null;
 
 
-    private Map<T,String> classes = new HashMap<>();
-    private Function<T,T> selectionFunction=null;
-
-
-    ClassesDescriptorInstance(String name, Map<T, String> classes) throws Exception {
-        super(name,ClassesDescriptorInstance.class.getComponentType());
+    protected ClassesDescriptorInstance(String name, List<String> classes, boolean isTarget) throws Exception {
+        super(name,ClassesDescriptorInstance.class.getComponentType(),isTarget);
         this.classes =classes;
 
     }
-    ClassesDescriptorInstance(String name, Map<T, String> classes, Function<T, T> selectionFunction) throws Exception {
-        super(name,ClassesDescriptorInstance.class.getComponentType());
+    protected ClassesDescriptorInstance(String name, List<String> classes, Function<F, Integer> selectionFunction, boolean isTarget) throws Exception {
+        super(name,ClassesDescriptorInstance.class.getComponentType(), isTarget);
         this.classes =classes;
         this.selectionFunction = selectionFunction;
 
     }
-    public String getClass(T selectionParameter){
+    public String getClass(F selectionParameter) throws Exception {
         if(selectionFunction!=null){
             return classes.get(selectionFunction.apply(selectionParameter));
         }
-        return classes.get(selectionParameter);
+
+        if(selectionParameter.getClass().isAssignableFrom(Integer.class))
+            return classes.get((Integer)selectionParameter);
+
+        throw new Exception("Selection not possible the selection function wasn't set and the selection parameter cannot be casted to Integer");
 
     }
     @Override
@@ -40,5 +52,10 @@ import java.util.function.Function;
     @Override
     public ClassesDescriptorInstance getClassesDescription() {
         return this;
+    }
+
+    @Override
+    public void build() {
+
     }
 }

@@ -1,38 +1,79 @@
 package eu.linksmart.api.event.ceml.data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
- class DataDefinition implements DataDescriptors{
+public class DataDefinition  implements DataDescriptors{
 
-    private final int size;
-    private final List<DataNominalDescriptor> nominalDescriptors;
+    private  int inputSize=-1,targetSize=-1, totalInputSize=-1;
+    private  List<DataDescriptor> totalInput= new ArrayList<>();
+    private  List<DataDescriptor> input= new ArrayList<>();
+    private  List<DataDescriptor> targets= new ArrayList<>();
 
-    public DataDefinition(int n){
-        this.size=n;
-        nominalDescriptors = null;
+    protected DataDefinition(int inputSize, int targetSize){
+
+        this.inputSize=inputSize;
+        this.targetSize=targetSize;
+        totalInputSize = inputSize + targetSize;
+        totalInput = null;
+        input = null;
+        targets = null;
     }
 
-    public DataDefinition(DataNominalDescriptor... definitions){
-        this.size=definitions.length;
+    protected DataDefinition(DataDescriptor... definitions){
 
-        nominalDescriptors =Arrays.asList(definitions);
+
+        for(DataDescriptor descriptor : definitions){
+            totalInput.add(descriptor);
+            if (descriptor.isTarget())
+                targets.add(descriptor);
+            else
+                targets.add(descriptor);
+
+
+        }
+        this.inputSize=targets.size();
+        this.targetSize=targets.size();
+
+        totalInputSize = inputSize + targetSize;
+
     }
 
-    public int getSize() {
-        return size;
+
+    @Override
+    public List<DataDescriptor> getDescriptors() {
+        return totalInput;
     }
 
-    public List<DataNominalDescriptor> getNominalDescriptors() {
-        return nominalDescriptors;
+    @Override
+    public DataDescriptor getDescriptor(int i) throws Exception {
+        if(totalInput!=null)
+            return totalInput.get(i);
+
+        return DataDescriptor.factory(DataDescriptor.DescriptorTypes.NUMBER,String.valueOf(i),i<inputSize);
     }
-    public DataNominalDescriptor getNominalDescriptor(int i) {
-        return nominalDescriptors.get(i);
+
+    @Override
+    public List<DataDescriptor> getTargets() {
+        return targets;
+    }
+
+    @Override
+    public int getTotalInputSize() {
+        return totalInputSize;
+    }
+
+    @Override
+    public int getInputSize() {
+        return inputSize;
+    }
+
+    @Override
+    public int getTargetSize() {
+        return targetSize;
     }
 
 }

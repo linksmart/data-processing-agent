@@ -5,16 +5,20 @@ import java.util.Date;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
- class DataDescriptorInstance implements DataNominalDescriptor {
-    private String name;
-    private Class type;
-    DataDescriptorInstance(String name, Class clazz) throws Exception {
+public class DataDescriptorInstance implements DataDescriptor {
+     private String name;
+     private Class type;
+
+
+     private boolean target ;
+    protected DataDescriptorInstance(String name, Class clazz,boolean isTarget) throws Exception {
 
         if (!(Number.class.isAssignableFrom(clazz) && Date.class.isAssignableFrom(clazz) && ClassesDescriptorInstance.class.isAssignableFrom(clazz)))
             throw new Exception("The Data description accepts only three kinds of types: Number, Date or ClassesDescription");
 
         this.name = name;
         this.type = clazz;
+        target =isTarget;
 
     }
 
@@ -29,6 +33,11 @@ import java.util.Date;
     }
 
     @Override
+    public boolean isTarget() {
+        return target;
+    }
+
+    @Override
     public boolean isClassesDescription() {
         return false;
     }
@@ -38,4 +47,13 @@ import java.util.Date;
         return null;
     }
 
+    @Override
+    public Class getType() {
+        return type;
+    }
+
+    @Override
+    public void build() {
+
+    }
 }

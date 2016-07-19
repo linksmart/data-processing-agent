@@ -21,7 +21,7 @@ import java.util.Map;
  * 
  * */
 
-public interface ComplexEventHandler extends AnalyzerComponent{
+public interface ComplexEventHandler<T> extends AnalyzerComponent{
 
 
 
@@ -31,7 +31,7 @@ public interface ComplexEventHandler extends AnalyzerComponent{
      * @param eventMap the result of a statement
      *
      * */
-    public  void update(Map eventMap);
+    public void update(T[] insertStream, T[] removeStream);
 
     /***
      *
