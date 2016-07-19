@@ -1,5 +1,7 @@
 package eu.linksmart.api.event.ceml.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.linksmart.api.event.ceml.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 
 import java.util.List;
@@ -11,7 +13,8 @@ import java.util.Map;
 
 // TODO TBD
 public class ModelInstance<Input,Return> implements Model<Input,Return>{
-    private final DataDescriptors descriptors;
+    @JsonIgnore
+    private DataDescriptors descriptors;
 
     protected ModelInstance(DataDescriptors descriptors){
         // Todo
@@ -38,4 +41,21 @@ public class ModelInstance<Input,Return> implements Model<Input,Return>{
         return null;
     }
 
+    @Override
+    public void setDescriptors(DataDescriptors descriptors) {
+        this.descriptors =descriptors;
+    }
+
+    @Override
+    public DataDescriptors getDescriptors() {
+        return descriptors;
+    }
+
+    @Override
+    public JsonSerializable build() throws Exception {
+        if(descriptors== null || descriptors.getDescriptors().isEmpty())
+            throw new Exception("The descriptors are a mandatory field!");
+
+        return this;
+    }
 }

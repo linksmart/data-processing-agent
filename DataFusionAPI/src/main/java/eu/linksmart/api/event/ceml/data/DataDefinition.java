@@ -1,5 +1,7 @@
 package eu.linksmart.api.event.ceml.data;
 
+import eu.linksmart.api.event.ceml.JsonSerializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,10 +10,10 @@ import java.util.List;
  */
 public class DataDefinition  implements DataDescriptors{
 
-    private  int inputSize=-1,targetSize=-1, totalInputSize=-1;
-    private  List<DataDescriptor> totalInput= new ArrayList<>();
-    private  List<DataDescriptor> input= new ArrayList<>();
-    private  List<DataDescriptor> targets= new ArrayList<>();
+    protected   int inputSize=-1,targetSize=-1, totalInputSize=-1;
+    protected  List<DataDescriptor> totalInput= null;
+    protected  List<DataDescriptor> input= null;
+    protected  List<DataDescriptor> targets= null;
 
     protected DataDefinition(int inputSize, int targetSize){
 
@@ -25,7 +27,9 @@ public class DataDefinition  implements DataDescriptors{
 
     protected DataDefinition(DataDescriptor... definitions){
 
-
+       totalInput= new ArrayList<>();
+       input= new ArrayList<>();
+       targets= new ArrayList<>();
         for(DataDescriptor descriptor : definitions){
             totalInput.add(descriptor);
             if (descriptor.isTarget())
@@ -49,9 +53,35 @@ public class DataDefinition  implements DataDescriptors{
     }
 
     @Override
+    public List<DataDescriptor> getTargetDescriptors() {
+        return targets;
+    }
+
+    @Override
+    public List<DataDescriptor> getInputDescriptors() {
+        return input;
+    }
+
+    @Override
     public DataDescriptor getDescriptor(int i) throws Exception {
         if(totalInput!=null)
             return totalInput.get(i);
+
+        return DataDescriptor.factory(DataDescriptor.DescriptorTypes.NUMBER,String.valueOf(i),i<inputSize);
+    }
+
+    @Override
+    public DataDescriptor getTargetDescriptor(int i) throws Exception {
+        if(targets!=null)
+            return targets.get(i);
+
+        return DataDescriptor.factory(DataDescriptor.DescriptorTypes.NUMBER,String.valueOf(i),i<inputSize);
+    }
+
+    @Override
+    public DataDescriptor getInputDescriptor(int i) throws Exception {
+        if(input!=null)
+            return input.get(i);
 
         return DataDescriptor.factory(DataDescriptor.DescriptorTypes.NUMBER,String.valueOf(i),i<inputSize);
     }
@@ -76,4 +106,13 @@ public class DataDefinition  implements DataDescriptors{
         return targetSize;
     }
 
+    @Override
+    public JsonSerializable build() throws Exception {
+        if((inputSize==-1)&&(totalInputSize==-1)&&(targetSize==-1))
+            return this;
+        for (DataDescriptor descriptor: totalInput)
+            descriptor.build();
+
+        return this;
+    }
 }

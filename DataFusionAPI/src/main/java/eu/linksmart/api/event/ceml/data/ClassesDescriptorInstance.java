@@ -16,10 +16,11 @@ public class ClassesDescriptorInstance<F> extends DataDescriptorInstance impleme
 
     @JsonProperty("Classes")
     @JsonDeserialize(as = ArrayList.class)
-    private List<String> classes = new ArrayList<>();
+    protected List<String> classes = new ArrayList<>();
+
 
     @JsonIgnore
-    private Function<F,Integer> selectionFunction=null;
+    protected Function<F,Integer> selectionFunction=null;
 
 
     protected ClassesDescriptorInstance(String name, List<String> classes, boolean isTarget) throws Exception {
@@ -55,7 +56,14 @@ public class ClassesDescriptorInstance<F> extends DataDescriptorInstance impleme
     }
 
     @Override
-    public void build() {
+    public ClassesDescriptor build() throws Exception {
+        if(classes==null|| classes.isEmpty())
+            throw new Exception("The classes is a mandatory field!");
+        super.build();
+
+        return this;
+
+
 
     }
 }

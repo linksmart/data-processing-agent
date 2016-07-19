@@ -2,12 +2,14 @@ package eu.linksmart.api.event.ceml.evaluation.metrics;
 
 
 
+import eu.linksmart.api.event.ceml.JsonSerializable;
+
 import java.io.Serializable;
 
 /**
  * Created by angel on 4/12/15.
  */
-public interface EvaluationMetric<T>  extends Serializable {
+public interface EvaluationMetric<T>  extends JsonSerializable {
 
     void setComparisonMethod(ComparisonMethod method);
     void reBuild(MetricDefinition<T> evaluationAlgorithm);

@@ -13,11 +13,13 @@ import java.util.function.Function;
 public interface DataDescriptor extends JsonSerializable {
 
     public static DataDescriptor factory(DescriptorTypes type, String name, boolean isTarget) throws Exception {
+      return factory(type,name,null,null,isTarget);
+    }
+    public static <T> DataDescriptor factory(DescriptorTypes type, String name, List<String> classes, Function<T, Integer> selectionFunction, boolean isTarget) throws Exception {
         DataDescriptor result;
         switch (type){
             case NOMINAL_CLASSES:
-                throw new Exception("The definition of classes needs the classes as parameter");
-
+                return ClassesDescriptor.factory(name, classes,selectionFunction,isTarget);
             case DATE:
                 result = new DataDescriptorInstance(name,Date.class.getComponentType(),isTarget);
                 break;
@@ -33,24 +35,33 @@ public interface DataDescriptor extends JsonSerializable {
 
         return result;
     }
-    public static <T> DataDescriptor factory(DescriptorTypes type, String name, List<String> classes, Function<T, Integer> selectionFunction, boolean isTarget) throws Exception {
-        if(type == DescriptorTypes.NOMINAL_CLASSES)
-            return ClassesDescriptor.factory(name, classes, selectionFunction,isTarget);
-        return factory(type,name,isTarget);
-    }
     public static <T> DataDescriptor factory(DescriptorTypes type, String name,List<String> classes, boolean isTarget) throws Exception {
-        if(type == DescriptorTypes.NOMINAL_CLASSES)
-            return ClassesDescriptor.factory(name, classes,isTarget);
-        return factory(type,name,isTarget);
+        return factory(type,name,classes,null,isTarget);
     }
-    Class getNativeType();
-    String getName();
+    public Class getNativeType();
+    public String getName();
     boolean isTarget();
     boolean isClassesDescription();
-    ClassesDescriptorInstance getClassesDescription();
-    public Class getType();
+    DataDescriptor getClassesDescription();
+    public DescriptorTypes getType();
     public enum DescriptorTypes{
-        NOMINAL_CLASSES,INTEGER,DOUBLE,NUMBER, DATE
+        NOMINAL_CLASSES,INTEGER,DOUBLE,NUMBER, DATE;
+
+        static public Class getNativeType(DescriptorTypes type){
+            switch (type){
+                case NOMINAL_CLASSES:
+                    return ClassesDescriptor.class;
+                case DATE:
+                    return Date.class;
+                case INTEGER:
+                    return Integer.class;
+                case NUMBER:
+                case DOUBLE:
+                default:
+                    return Double.class;
+
+            }
+        }
 
     }
 }
