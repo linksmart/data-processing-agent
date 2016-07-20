@@ -14,7 +14,7 @@ public class DataDescriptorInstance implements DataDescriptor {
     @JsonProperty("NativeType")
     protected Class javaType=null;
 
-    @JsonProperty("Target")
+    @JsonProperty("isTarget")
     protected boolean target =false ;
 
     @JsonProperty("Type")

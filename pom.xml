@@ -87,6 +87,15 @@
         <java.version>1.8</java.version>
         <start-class>eu.linksmart.services.Application</start-class>
         <maven.version>3.0.4</maven.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- CEML dependencies -->
+        <nd4j.backend>nd4j-native</nd4j.backend>
+        <shadedClassifier>bin</shadedClassifier>
+        <nd4j.version>0.4-rc3.10</nd4j.version>
+        <dl4j.version>0.4-rc3.10</dl4j.version>
+        <canova.version>0.0.0.16</canova.version>
     </properties>
 
     <prerequisites>

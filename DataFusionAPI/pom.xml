@@ -21,14 +21,6 @@
     <name>Event Agents API</name>
     <description>Set of interfaces to access the Event agents</description>
     <packaging>bundle</packaging>
-    <properties>
-        <nd4j.backend>nd4j-native</nd4j.backend>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <shadedClassifier>bin</shadedClassifier>
-        <nd4j.version>0.4-rc3.10</nd4j.version>
-        <dl4j.version>0.4-rc3.10</dl4j.version>
-        <canova.version>0.0.0.16</canova.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -47,26 +39,7 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.deeplearning4j</groupId>
-            <artifactId>deeplearning4j-core</artifactId>
-            <version>${dl4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native</artifactId>
-            <version>${nd4j.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>canova-nd4j-image</artifactId>
-            <groupId>org.nd4j</groupId>
-            <version>${canova.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>canova-nd4j-codec</artifactId>
-            <groupId>org.nd4j</groupId>
-            <version>${canova.version}</version>
-        </dependency>
+
     </dependencies>
 
 </project>

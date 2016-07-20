@@ -8,10 +8,10 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
  */
 public interface Model<Input,Return> extends JsonSerializable{
 
-    public static <Input,Return> Model<Input,Return> factory(DataDescriptors descriptor){
-       return new ModelInstance<>(descriptor);
-    }
-    public DataDescriptors getDataDescriptors();
+   // public static <Input,Return> Model<Input,Return> factory(DataDescriptors descriptor){
+      // return new ModelInstance(descriptor);
+    //}
+
     public boolean learn(Input input) throws Exception;
     public Return predict(Input input) throws Exception;
     public void setDescriptors(DataDescriptors descriptors);

@@ -12,13 +12,13 @@ import java.util.function.Function;
 public interface DataDescriptor extends JsonSerializable {
 
     public static DataDescriptor factory(DescriptorTypes type, String name, boolean isTarget) throws Exception {
-      return factory(type,name,null,null,isTarget);
+      return factory(type,name,null,null,null,isTarget);
     }
-    public static <T> DataDescriptor factory(DescriptorTypes type, String name, List<String> classes, Function<T, Integer> selectionFunction, boolean isTarget) throws Exception {
+    public static <T> DataDescriptor factory(DescriptorTypes type, String name, List<String> classes, Class<T> inputClassType, Function<T, Integer> selectionFunction, boolean isTarget) throws Exception {
         DataDescriptor result;
         switch (type){
             case NOMINAL_CLASSES:
-                return ClassesDescriptor.factory(name, classes,selectionFunction,isTarget);
+                return ClassesDescriptor.factory(name, classes,inputClassType,selectionFunction,isTarget);
             case DATE:
                 result = new DataDescriptorInstance(name,Date.class.getComponentType(),isTarget);
                 break;
@@ -32,10 +32,11 @@ public interface DataDescriptor extends JsonSerializable {
 
         }
 
+
         return result;
     }
-    public static <T> DataDescriptor factory(DescriptorTypes type, String name,List<String> classes, boolean isTarget) throws Exception {
-        return factory(type,name,classes,null,isTarget);
+    public static DataDescriptor factory(DescriptorTypes type, String name,List<String> classes, boolean isTarget) throws Exception {
+        return factory(type,name,classes,null,null,isTarget);
     }
     public Class getNativeType();
     public String getName();

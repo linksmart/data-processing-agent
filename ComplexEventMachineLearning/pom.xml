@@ -41,7 +41,26 @@
             <artifactId>cloning</artifactId>
             <version>1.9.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native</artifactId>
+            <version>${nd4j.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>canova-nd4j-image</artifactId>
+            <groupId>org.nd4j</groupId>
+            <version>${canova.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>canova-nd4j-codec</artifactId>
+            <groupId>org.nd4j</groupId>
+            <version>${canova.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
