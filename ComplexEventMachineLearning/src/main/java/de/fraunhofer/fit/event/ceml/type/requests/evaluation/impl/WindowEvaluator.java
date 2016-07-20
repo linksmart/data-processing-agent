@@ -13,10 +13,7 @@ import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by angel on 1/12/15.
@@ -405,6 +402,66 @@ public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator
 
         }
     }
+
+    public class RMSEEvaluator extends ModelEvaluationMetricBase implements Evaluator<Double>{
+        private     final int MAX_QUEUE_SIZE = 200;
+        private static final int MAX_NUMBER_FOR_AVG = 10000;
+        Queue<Map.Entry<Double,Double>> fixedSizeQueue = new LinkedList<>();
+
+        private double N = 0; //fading increment
+
+
+        public RMSEEvaluator(ComparisonMethod method, double target) {
+            super(method, target);
+        }
+
+        private void addTofixedsizeQueue(Queue queue,Map.Entry<Double,Double>entry){
+            if(queue.size()== MAX_QUEUE_SIZE){
+                queue.remove();
+            }
+            queue.add(entry);
+        }
+
+        @Override
+        public Double calculate() {
+            return currentValue;
+        }
+
+
+        @Override
+        public double evaluate(Double predicted, Double actual) {
+            addTofixedsizeQueue(fixedSizeQueue,new AbstractMap.SimpleEntry<Double,Double>(predicted,actual));
+
+            double diff = actual-predicted;
+            double sqrdError = diff * diff;
+            if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
+                N++;
+            }
+            currentValue = Math.sqrt(((N-1)/N) * currentValue*currentValue + sqrdError/N);
+            return currentValue;
+        }
+
+        @Override
+        public boolean isDeployable() {
+            return isReady();
+        }
+
+        @Override
+        public void build(DataDescriptors classesNames) throws Exception {
+
+        }
+
+        @Override
+        public void reBuild(Evaluator evaluator) {
+
+        }
+
+        @Override
+        public Map<String, EvaluationMetric> getEvaluationAlgorithms() {
+            return null;
+        }
+    }
+
     public class ClassPrecision extends ClassEvaluationMetricSubBase {
 
         public ClassPrecision(ComparisonMethod method, Double[] target) {
