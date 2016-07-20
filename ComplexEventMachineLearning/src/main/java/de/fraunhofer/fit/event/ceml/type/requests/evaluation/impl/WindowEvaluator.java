@@ -50,7 +50,7 @@ public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator
         confusionMatrix[actual][predicted]++;
 
             for (int i = 0; i < classes.size(); i++) {
-                if (i == actual && actual == predicted) {
+                if (i == actual && actual.equals( predicted)) {
                     sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]++;
                     totalTruePositives++;
                 } else if (i != actual && i == predicted) {
