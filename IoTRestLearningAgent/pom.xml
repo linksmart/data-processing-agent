@@ -55,7 +55,11 @@
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>ceml.rest.api</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>	1.1.7</version>
+        </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>
             <artifactId>wrapper.esper</artifactId>

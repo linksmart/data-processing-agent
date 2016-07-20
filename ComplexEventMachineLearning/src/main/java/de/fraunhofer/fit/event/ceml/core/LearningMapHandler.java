@@ -25,7 +25,7 @@ public class LearningMapHandler extends LearningHandlerBase<Map<String,Object>,M
 
                 Map<String,Object>  withoutTarget= new HashMap<>();
                 List<Object> measuredTargets = new ArrayList<>();
-                for(DataDescriptor descriptor:descriptors.getDescriptors())
+                for(DataDescriptor descriptor:descriptors)
                     if(descriptor.isTarget())
                         measuredTargets.add(eventMap.get(descriptor.getName()));
                     else

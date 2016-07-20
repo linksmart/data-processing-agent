@@ -26,7 +26,7 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
 
 
     protected ClassesDescriptorInstance(String name, List<String> classes, boolean isTarget) throws Exception {
-        super(name,ClassesDescriptorInstance.class.getComponentType(),isTarget);
+        super(name,ClassesDescriptorInstance.class,isTarget);
         this.classes =classes;
 
     }
@@ -53,7 +53,7 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
     public <F > void setSelectionFunction(Function<F, Integer> function, Class<F> type) {
         functionInputType = type;
 
-       if(type.isAssignableFrom(Object.class))
+       if(type!=null&&type.isAssignableFrom(Object.class))
             this.selectionFunction = (Function<Object, Integer>)function;
 
     }

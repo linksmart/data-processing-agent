@@ -22,7 +22,7 @@ public class DataDescriptorInstance implements DataDescriptor {
 
     protected DataDescriptorInstance(String name, Class clazz,boolean isTarget) throws Exception {
 
-        if (!(Number.class.isAssignableFrom(clazz) && Date.class.isAssignableFrom(clazz) && ClassesDescriptorInstance.class.isAssignableFrom(clazz)))
+        if (!(Number.class.isAssignableFrom(clazz) || Date.class.isAssignableFrom(clazz) || ClassesDescriptorInstance.class.isAssignableFrom(clazz)))
             throw new Exception("The Data description accepts only three kinds of types: Number, Date or ClassesDescription");
 
         this.name = name;

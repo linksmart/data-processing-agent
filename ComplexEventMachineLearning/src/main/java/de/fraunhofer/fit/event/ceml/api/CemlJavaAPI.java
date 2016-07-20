@@ -9,25 +9,26 @@ import de.fraunhofer.fit.event.ceml.core.CEML;
 import de.fraunhofer.fit.event.ceml.core.CEMLManager;
 import de.fraunhofer.fit.event.ceml.intern.Const;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
-import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.almanac.event.datafusion.intern.DynamicConst;
-import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.linksmart.api.event.ceml.CEMLRequest;
+import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptorDeserializer;
+import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.datafusion.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementResponse;
+import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import org.codehaus.jackson.map.type.TypeFactory;
-import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 import com.google.gson.*;
+
 /**
  * Created by José Ángel Carvajal on 01.02.2016 a researcher of Fraunhofer FIT.
  */
@@ -52,9 +53,13 @@ public class CemlJavaAPI {
         conf = Configurator.getDefaultConfig();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        SimpleModule testModule = new SimpleModule("DataDescriptor", new Version(1, 0, 0, null,null,null))
-                  .addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer());
-        mapper.registerModule(testModule);
+
+       // SimpleModule module = new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(aClass, ModelAutoregressiveNewralNetwork.class);
+
+        mapper  .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, EPLStatement.class))
+                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, de.fraunhofer.fit.event.ceml.core.LearningStatement.class))
+                .registerModule(new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(Model.class, AutoregressiveNeuralNetworkModel.class))
+                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
     }
     public static MultiResourceResponses<CEMLRequest> feedLearningRequest(CEMLRequest request){
         MultiResourceResponses<CEMLRequest> responses = new MultiResourceResponses<>();

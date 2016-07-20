@@ -23,8 +23,11 @@ import java.util.*;
  */
 
 // TODO TBD
-public class ModelAutoregressiveNewralNetwork extends ModelInstance<List<Double>,List<Double>> {
+public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>,List<Double>> {
 
+    static {
+        Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
+    }
     @JsonIgnore
     private DataDescriptors descriptors;
 
@@ -69,35 +72,10 @@ public class ModelAutoregressiveNewralNetwork extends ModelInstance<List<Double>
                 .backprop(true).build();
     }
 
-    public ModelAutoregressiveNewralNetwork(DataDescriptors descriptors) {
-        super(descriptors);
-
-        int p = 48;
-        int P =2;
-        int numNodes=24;
-        int seasonalityPeriod= 168;
-
-        ArP = p;
-        ArSeasonalP = P;
-        numInputs = p + (P * numOutputs);
-        this.seasonalityPeriod = seasonalityPeriod;
-
-        int numNnets = seasonalityPeriod / numOutputs;
+    public AutoregressiveNeuralNetworkModel() {
+      //  super(descriptors,AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
 
 
-        netArr = new ArrayList<>(numNnets);
-        for (int i = 0; i < numNnets; i++) {
-            // Switch these two options to do different functions with different
-            // networks
-
-            final MultiLayerConfiguration conf = getSimpleDenseLayerNetworkConfiguration(numNodes);
-
-            // Create the network
-            MultiLayerNetwork nnet = new MultiLayerNetwork(conf);
-            nnet.init();
-
-            netArr.add(nnet);
-        }
 
     }
 
@@ -225,9 +203,33 @@ public class ModelAutoregressiveNewralNetwork extends ModelInstance<List<Double>
 
     @Override
     public JsonSerializable build() throws Exception {
-        if(descriptors== null || descriptors.getDescriptors().isEmpty())
-            throw new Exception("The descriptors are a mandatory field!");
+        super.build();
+        int p = 48;
+        int P =2;
+        int numNodes=24;
+        int seasonalityPeriod= 168;
 
+        ArP = p;
+        ArSeasonalP = P;
+        numInputs = p + (P * numOutputs);
+        this.seasonalityPeriod = seasonalityPeriod;
+
+        int numNnets = seasonalityPeriod / numOutputs;
+
+
+        netArr = new ArrayList<>(numNnets);
+        for (int i = 0; i < numNnets; i++) {
+            // Switch these two options to do different functions with different
+            // networks
+
+            final MultiLayerConfiguration conf = getSimpleDenseLayerNetworkConfiguration(numNodes);
+
+            // Create the network
+            MultiLayerNetwork nnet = new MultiLayerNetwork(conf);
+            nnet.init();
+
+            netArr.add(nnet);
+        }
         return this;
     }
 }

@@ -1,19 +1,30 @@
 package de.fraunhofer.fit.event.ceml;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.reflect.TypeToken;
 import de.fraunhofer.fit.event.ceml.api.CemlJavaAPI;
 import de.fraunhofer.fit.event.ceml.core.CEML;
 
 import de.fraunhofer.fit.event.ceml.core.CEMLManager;
 import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
+import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
+import eu.linksmart.api.event.ceml.LearningStatement;
+import eu.linksmart.api.event.ceml.data.DataDefinition;
+import eu.linksmart.api.event.ceml.data.DataDescriptor;
+import eu.linksmart.api.event.ceml.data.DataDescriptorDeserializer;
+import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.ceml.model.Model;
+import eu.linksmart.api.event.ceml.model.ModelDeserializer;
 import eu.linksmart.api.event.datafusion.MultiResourceResponses;
-import eu.linksmart.api.event.datafusion.StatementResponse;
+import eu.linksmart.api.event.datafusion.Statement;
 
+import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
@@ -46,6 +57,14 @@ public class CEMLRest extends Component{
 
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        // SimpleModule module = new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(aClass, ModelAutoregressiveNewralNetwork.class);
+
+        mapper  .registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addAbstractTypeMapping(DataDescriptors.class, DataDefinition.class))
+                .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, EPLStatement.class))
+                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, de.fraunhofer.fit.event.ceml.core.LearningStatement.class))
+                .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
+                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
     }
 
 

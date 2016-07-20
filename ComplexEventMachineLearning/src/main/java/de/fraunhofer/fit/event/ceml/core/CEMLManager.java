@@ -2,13 +2,14 @@ package de.fraunhofer.fit.event.ceml.core;
 
 import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.linksmart.api.event.ceml.CEMLRequest;
-import eu.linksmart.api.event.ceml.data.DataDescriptor;
+import eu.linksmart.api.event.ceml.data.DataDefinition;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.datafusion.Statement;
+import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -16,7 +17,6 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
@@ -27,8 +27,9 @@ public class CEMLManager implements CEMLRequest {
     private Configurator conf = Configurator.getDefaultConfig();
     private LoggerService loggerService = Utils.initDefaultLoggerService(CEMLManager.class);
     private int leadingModel =0;
-    @JsonDeserialize(as = DataDescriptor.class)
+    @JsonDeserialize(as = DataDefinition.class)
     protected DataDescriptors descriptors;
+    @JsonDeserialize(as = AutoregressiveNeuralNetworkModel.class)
     protected Model model;
     protected Evaluator evaluator;
     protected ArrayList<Statement> auxiliaryStatements;

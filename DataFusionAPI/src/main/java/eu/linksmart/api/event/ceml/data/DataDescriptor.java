@@ -20,15 +20,15 @@ public interface DataDescriptor extends JsonSerializable {
             case NOMINAL_CLASSES:
                 return ClassesDescriptor.factory(name, classes,inputClassType,selectionFunction,isTarget);
             case DATE:
-                result = new DataDescriptorInstance(name,Date.class.getComponentType(),isTarget);
+                result = new DataDescriptorInstance(name,Date.class,isTarget);
                 break;
             case INTEGER:
-                result= new DataDescriptorInstance(name,Integer.class.getComponentType(),isTarget);
+                result= new DataDescriptorInstance(name,Integer.class,isTarget);
                 break;
             case NUMBER:
             case DOUBLE:
             default:
-                result= new DataDescriptorInstance(name,Double.class.getComponentType(),isTarget);
+                result= new DataDescriptorInstance(name,Double.class,isTarget);
 
         }
 

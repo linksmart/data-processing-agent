@@ -29,15 +29,18 @@ public class DataDescriptorDeserializer extends JsonDeserializer<DataDescriptor>
     public DataDescriptor deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String name =  node.get("Name").textValue();
-        DataDescriptor.DescriptorTypes type = DataDescriptor.DescriptorTypes.valueOf(node.get("Type").textValue());
+        DataDescriptor.DescriptorTypes type = DataDescriptor.DescriptorTypes.NUMBER;
+        if(node.hasNonNull("Type"))
+            type= DataDescriptor.DescriptorTypes.valueOf(node.get("Type").textValue());
 
-        boolean isTarget =  !node.get("isTarget").isNull();
+        boolean isTarget =  node.hasNonNull("isTarget");
         if(isTarget)
-            isTarget =  !node.get("isTarget").asBoolean();
+            isTarget =  node.get("isTarget").asBoolean();
         ArrayList<String> classes= null;
-        if(!node.get("Classes").isNull()&&node.get("Classes").isArray())
+        if(node.hasNonNull("Classes")) {
             classes = mapper.reader(collectionType).readValue(node.get("Classes"));
-
+            type = DataDescriptor.DescriptorTypes.NOMINAL_CLASSES;
+        }
 
         try {
             return DataDescriptor.factory(type,name,classes,isTarget);

@@ -8,19 +8,22 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public class DataDefinition  implements DataDescriptors{
+public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDescriptors{
 
     protected   int inputSize=-1,targetSize=-1, totalInputSize=-1;
-    protected  List<DataDescriptor> totalInput= null, input= null, targets= null;
+    protected  List<DataDescriptor> input= new ArrayList<>(), targets= new ArrayList<>();
     protected  boolean lambdaTypes = false;
 
+    public DataDefinition(){
 
+
+    }
     protected DataDefinition(int inputSize, int targetSize){
 
         this.inputSize=inputSize;
         this.targetSize=targetSize;
         totalInputSize = inputSize + targetSize;
-        totalInput = null;
+      //  totalInput = null;
         input = null;
         targets = null;
         lambdaTypes = true;
@@ -28,11 +31,11 @@ public class DataDefinition  implements DataDescriptors{
 
     protected DataDefinition(DataDescriptor... definitions){
 
-       totalInput= new ArrayList<>();
+      // totalInput= new ArrayList<>();
        input= new ArrayList<>();
        targets= new ArrayList<>();
         for(DataDescriptor descriptor : definitions){
-            totalInput.add(descriptor);
+            add(descriptor);
             if (descriptor.isTarget())
                 targets.add(descriptor);
             else
@@ -50,10 +53,10 @@ public class DataDefinition  implements DataDescriptors{
     }
 
 
-    @Override
+   /* @Override
     public List<DataDescriptor> getDescriptors() {
         return totalInput;
-    }
+    }*/
 
     @Override
     public List<DataDescriptor> getTargetDescriptors() {
@@ -65,13 +68,13 @@ public class DataDefinition  implements DataDescriptors{
         return input;
     }
 
-    @Override
+   /* @Override
     public DataDescriptor getDescriptor(int i) throws Exception {
         if(totalInput!=null)
             return totalInput.get(i);
 
         return DataDescriptor.factory(DataDescriptor.DescriptorTypes.NUMBER,String.valueOf(i),i<inputSize);
-    }
+    }*/
 
     @Override
     public DataDescriptor getTargetDescriptor(int i) throws Exception {
@@ -118,7 +121,7 @@ public class DataDefinition  implements DataDescriptors{
     public JsonSerializable build() throws Exception {
         if((inputSize==-1)&&(totalInputSize==-1)&&(targetSize==-1)) {
 
-            for (DataDescriptor descriptor : totalInput)
+            for (DataDescriptor descriptor : this)
                 descriptor.build();
 
             this.inputSize=targets.size();

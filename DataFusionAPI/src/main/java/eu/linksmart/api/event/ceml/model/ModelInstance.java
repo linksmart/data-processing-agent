@@ -17,11 +17,15 @@ public abstract class ModelInstance<Input,Return> implements Model<Input,Return>
 
     @JsonIgnore
     private DataDescriptors descriptors;
+   // @JsonIgnore
+   // protected Class<? extends Model>type;
 
-    public ModelInstance(DataDescriptors descriptors){
-        this.descriptors = descriptors;
+    //final protected String modelName;
+
+    public ModelInstance(){
+
+
     }
-
 
 
     @Override
@@ -38,7 +42,7 @@ public abstract class ModelInstance<Input,Return> implements Model<Input,Return>
 
     @Override
     public JsonSerializable build() throws Exception {
-        if(descriptors== null || descriptors.getDescriptors().isEmpty())
+        if(descriptors== null || descriptors.isEmpty())
             throw new Exception("The descriptors are a mandatory field!");
 
         return this;
