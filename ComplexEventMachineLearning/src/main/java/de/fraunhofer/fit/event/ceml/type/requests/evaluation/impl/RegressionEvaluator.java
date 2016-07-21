@@ -1,13 +1,8 @@
 package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.EvaluationMetricBase;
 import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ModelEvaluationMetricBase;
-import eu.linksmart.api.event.ceml.data.DataDescriptors;
-import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
 
 import java.util.*;
 
@@ -15,11 +10,11 @@ import java.util.*;
  * Created by devasya on 7/20/2016.
  * For evaluating regression
  */
-public class RegressionEvaluator extends GenericEvaluator<Double> implements Evaluator<Double> {
+public class RegressionEvaluator<T> extends GenericEvaluator<T>  {
 
     private static final int MAX_NUMBER_FOR_AVG = 10000;
-    LinkedList<Map.Entry<Double,Double>> fixedSizeList = new LinkedList<>();
-    Map.Entry<Double,Double> latestEntry ;
+    LinkedList<Map.Entry<Object,Object>> fixedSizeList = new LinkedList<>();
+    List<Map.Entry<Object,Object>> latestEntries = new LinkedList<>();
     private double N = 0; //fading increment
     private int maxQueueSize = 200;
 
@@ -28,7 +23,7 @@ public class RegressionEvaluator extends GenericEvaluator<Double> implements Eva
     }
 
 
-    private void addTofixedsizeList(LinkedList<Map.Entry<Double, Double>> list, Map.Entry<Double, Double> entry){
+    private void addTofixedsizeList(LinkedList<Map.Entry<Object, Object>> list, Map.Entry<Object, Object> entry){
         if(list.size()== maxQueueSize){
             list.remove();//removes the first most element
         }
@@ -37,9 +32,22 @@ public class RegressionEvaluator extends GenericEvaluator<Double> implements Eva
 
 
     @Override
-    public double evaluate(Double predicted, Double actual) {
-        latestEntry = new AbstractMap.SimpleEntry<>(predicted, actual);
-        addTofixedsizeList(fixedSizeList,latestEntry );
+    public double evaluate(T predicted, T actual) {
+        latestEntries.clear();
+        if(predicted instanceof Collection ) {//Add one by one on getting collection
+            Iterator iteratorPred = ((Collection)predicted).iterator();
+            for (Object actualEntry :(Collection) actual) {
+                Object predEntry = iteratorPred.next();
+                Map.Entry entry = new AbstractMap.SimpleEntry<>(predEntry, actualEntry);
+                latestEntries.add(entry);
+                addTofixedsizeList(fixedSizeList, entry);
+
+            }
+        }else {//add the single element
+            Map.Entry entry = new AbstractMap.SimpleEntry<>(predicted, actual);
+            latestEntries.add(entry);
+            addTofixedsizeList(fixedSizeList, entry);
+        }
         double accumulateMetric =0;
         int i=0;
         for(EvaluationMetric algorithm: evaluationAlgorithms.values()) {
@@ -65,15 +73,20 @@ public class RegressionEvaluator extends GenericEvaluator<Double> implements Eva
 
         @Override
         public Double calculate() {
-            double predicted = latestEntry.getKey();
-            double actual = latestEntry.getValue();
-            double diff = actual-predicted;
-            double squaredError = diff * diff;
-            if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
-                N++;
-            }
             double squaredRMSE = currentValue*currentValue;
-            return (currentValue = Math.sqrt(((N-1)/N) * squaredRMSE  + squaredError/N));
+            for(Map.Entry entry:latestEntries){
+                Double predicted = (Double) entry.getKey();
+                Double actual = (Double) entry.getValue();
+                double diff =  actual-predicted;
+                double squaredError = diff * diff;
+                if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
+                    N++;
+                }
+
+                squaredRMSE = ((N-1)/N) * squaredRMSE  + squaredError/N;
+            }
+            currentValue = Math.sqrt(squaredRMSE);
+            return  currentValue;
         }
 
 
