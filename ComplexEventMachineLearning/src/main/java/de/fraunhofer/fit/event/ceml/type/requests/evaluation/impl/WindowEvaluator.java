@@ -18,8 +18,8 @@ import java.util.*;
 /**
  * Created by angel on 1/12/15.
  */
-public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator<Integer>{
-    protected static LoggerService loggerService = Utils.initDefaultLoggerService(WindowEvaluator.class);
+public class WindowEvaluator extends GenericEvaluator<Integer> implements Evaluator<Integer>{
+
     private long totalFalsePositives = 0;
     private long totalFalseNegatives = 0;
     private long totalTruePositives = 0;
@@ -32,17 +32,9 @@ public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator
 
     private  long[][] sequentialConfusionMatrix;
 
-    protected Map<String,EvaluationMetric> evaluationAlgorithms = new HashMap<>();
-
-
-    protected ArrayList<TargetRequest> targets;
-
 
     public WindowEvaluator(Collection<String> namesClasses, ArrayList<TargetRequest> targets){
-        this.targets=targets;
-        build(namesClasses);
-
-
+        super(namesClasses, targets);
     }
 
     @Override
@@ -71,47 +63,38 @@ public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator
 
 
     }
+
+
     protected double calculateEvaluationMetrics(int evaluatedClass){
         double accumulateMetric =0;
         int i=0;
         for(EvaluationMetric algorithm: evaluationAlgorithms.values()) {
 
-                if (algorithm instanceof ModelEvaluationMetric)
-                    ((ModelEvaluationMetric) algorithm).calculate();
-                else if (algorithm instanceof ClassEvaluationMetric)
-                    ((ClassEvaluationMetric) algorithm).calculate(evaluatedClass);
-                else
-                    loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
+            if (algorithm instanceof ModelEvaluationMetric)
+                ((ModelEvaluationMetric) algorithm).calculate();
+            else if (algorithm instanceof ClassEvaluationMetric)
+                ((ClassEvaluationMetric) algorithm).calculate(evaluatedClass);
+            else
+                loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
 
-                if(!algorithm.isControlMetric()) {
-                    accumulateMetric += algorithm.getNormalizedResult();
-                    i++;
-                }
+            if(!algorithm.isControlMetric()) {
+                accumulateMetric += algorithm.getNormalizedResult();
+                i++;
+            }
 
         }
         return accumulateMetric/(evaluationAlgorithms.size()-i);
 
     }
 
-    public boolean isDeployable(){
 
-        for(EvaluationMetric algorithm: evaluationAlgorithms.values())
-            if(!algorithm.isReady())
-                return false;
-        return true;
-
-
-    }
 
     @Override
     public void build(DataDescriptors classesNames) throws Exception {
         //TODO auto-generated
     }
 
-    @Override
-    public Map<String,EvaluationMetric> getEvaluationAlgorithms(){
-        return evaluationAlgorithms;
-    }
+
     public boolean readyToSlide(){
         return  evaluationAlgorithms.get(SlideAfter.class.getSimpleName()).isReady();
     }
@@ -142,7 +125,7 @@ public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator
 
 
     @SuppressWarnings("unchecked")
-    //@Override
+    @Override
     public void build(Collection<String> namesClasses){
         classes = new ArrayList<>(namesClasses);
 
@@ -155,81 +138,11 @@ public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator
             sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
             sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
         }
-        for(TargetRequest target:targets){
-            String algorithm = WindowEvaluator.class.getCanonicalName()+"$"+target.getName();
 
-            evaluationAlgorithms.put(
-                    target.getName(),
-                    instanceEvaluationAlgorithm(algorithm,target.getMethod(),target.getThreshold())
-            );
-
-
-        }
+        super.build(namesClasses);
+        
         samples = evaluationAlgorithms.get(Samples.class.getSimpleName());
-    }
 
-    @Override
-    public void reBuild(Evaluator evaluator) {
-        if(evaluator instanceof DoubleTumbleWindowEvaluator){
-            DoubleTumbleWindowEvaluator aux = (DoubleTumbleWindowEvaluator)evaluator;
-            for(TargetRequest algorithm: aux.getTargets()) {
-                evaluationAlgorithms.get(algorithm.getName()).reBuild(algorithm);
-            }
-
-        }
-
-    }
-
-    public EvaluationMetric instanceEvaluationAlgorithm(String canonicalName, String method, double target)  {
-
-        try {
-            Class clazz = Class.forName(canonicalName);
-
-            Constructor constructor = null;
-
-
-            EvaluationMetric.ComparisonMethod methodParameter = EvaluationMetric.ComparisonMethod.More;
-            if(method.trim().toLowerCase().equals("equal")){
-                methodParameter = EvaluationMetric.ComparisonMethod.Equal;
-
-            } else if(method.trim().toLowerCase().contains("smaller")|| method.trim().toLowerCase().contains("less")){
-                if(method.trim().toLowerCase().contains("equal")){
-                    methodParameter = EvaluationMetric.ComparisonMethod.LessEqual;
-                }else
-                    methodParameter = EvaluationMetric.ComparisonMethod.Less;
-            } else if(method.trim().toLowerCase().contains("bigger")|| method.trim().toLowerCase().contains("more")){
-                if(method.trim().toLowerCase().contains("equal")){
-                    methodParameter = EvaluationMetric.ComparisonMethod.MoreEqual;
-                }
-            }
-
-
-            constructor = clazz.getConstructor(WindowEvaluator.class,EvaluationMetric.ComparisonMethod.class, double.class);
-            Double aux =new Double(target);
-
-            return  (EvaluationMetric) constructor.newInstance(this,methodParameter,aux);
-        } catch (Exception e) {
-            loggerService.error(e.getMessage(), e);
-        }
-        return null;
-    }
-    public void setTargets(ArrayList<TargetRequest> targets) {
-        this.targets = targets;
-    }
-
-    @Override
-    public String report(){
-        String report = "";
-        for(EvaluationMetric algorithm: evaluationAlgorithms.values()){
-            report += algorithm.report()+" || ";
-        }
-        return report;
-    }
-
-    @Override
-    public JsonSerializable build() throws Exception {
-        //TODO auto-generated
-        return null;
     }
 
     public abstract class ModelEvaluationMetricSubBase extends ModelEvaluationMetricBase implements ModelEvaluationAlgorithmExtended {
@@ -403,66 +316,7 @@ public class WindowEvaluator extends EvaluatorBase<Integer> implements Evaluator
         }
     }
 
-    public class RMSEEvaluator extends ModelEvaluationMetricBase implements Evaluator<Double>{
-        private     final int MAX_QUEUE_SIZE = 200;
-        private static final int MAX_NUMBER_FOR_AVG = 10000;
-        Queue<Map.Entry<Double,Double>> fixedSizeQueue = new LinkedList<>();
-
-        private double N = 0; //fading increment
-
-
-        public RMSEEvaluator(ComparisonMethod method, double target) {
-            super(method, target);
-        }
-
-        private void addTofixedsizeQueue(Queue queue,Map.Entry<Double,Double>entry){
-            if(queue.size()== MAX_QUEUE_SIZE){
-                queue.remove();
-            }
-            queue.add(entry);
-        }
-
-        @Override
-        public Double calculate() {
-            return currentValue;
-        }
-
-
-        @Override
-        public double evaluate(Double predicted, Double actual) {
-            addTofixedsizeQueue(fixedSizeQueue,new AbstractMap.SimpleEntry<Double,Double>(predicted,actual));
-
-            double diff = actual-predicted;
-            double sqrdError = diff * diff;
-            if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
-                N++;
-            }
-            currentValue = Math.sqrt(((N-1)/N) * currentValue*currentValue + sqrdError/N);
-            return currentValue;
-        }
-
-        @Override
-        public boolean isDeployable() {
-            return isReady();
-        }
-
-        @Override
-        public void build(DataDescriptors classesNames) throws Exception {
-
-        }
-
-        @Override
-        public void reBuild(Evaluator evaluator) {
-
-        }
-
-        @Override
-        public Map<String, EvaluationMetric> getEvaluationAlgorithms() {
-            return null;
-        }
-    }
-
-    public class ClassPrecision extends ClassEvaluationMetricSubBase {
+     public class ClassPrecision extends ClassEvaluationMetricSubBase {
 
         public ClassPrecision(ComparisonMethod method, Double[] target) {
             super(method, target);
