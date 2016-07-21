@@ -6,11 +6,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.reflect.TypeToken;
-import de.fraunhofer.fit.event.ceml.api.CemlJavaAPI;
-import de.fraunhofer.fit.event.ceml.core.CEML;
+import eu.linksmart.ceml.api.CemlJavaAPI;
+import eu.linksmart.ceml.core.CEML;
 
-import de.fraunhofer.fit.event.ceml.core.CEMLManager;
-import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
+import eu.linksmart.ceml.core.CEMLManager;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -24,7 +23,6 @@ import eu.linksmart.api.event.ceml.model.ModelDeserializer;
 import eu.linksmart.api.event.datafusion.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.Statement;
 
-import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import org.springframework.http.HttpStatus;
@@ -32,7 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.Hashtable;
 import java.util.Map;
 import com.google.gson.*;
@@ -46,7 +44,7 @@ public class CEMLRest extends Component{
     // private Configurator conf = Configurator.getDefaultConfig();
      private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
 
-    private Map<String, LearningRequest> requests = new Hashtable<>();
+    private Map<String, CEMLRequest> requests = new Hashtable<>();
     private ObjectMapper mapper = new ObjectMapper();
 
 
@@ -62,7 +60,7 @@ public class CEMLRest extends Component{
 
         mapper  .registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addAbstractTypeMapping(DataDescriptors.class, DataDefinition.class))
                 .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, EPLStatement.class))
-                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, de.fraunhofer.fit.event.ceml.core.LearningStatement.class))
+                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.ceml.Statements.LearningStatement.class))
                 .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
                 .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
     }
@@ -85,20 +83,20 @@ public class CEMLRest extends Component{
                         retur =mapper.writeValueAsString( requests.get(name));
                         break;
                     case "data":
-                        retur =mapper.writeValueAsString(requests.get(name).getData());
+                        retur =mapper.writeValueAsString(requests.get(name).getDescriptors());
                         break;
                     case "evaluation":
                        // retur =mapper.writeValueAsString(requests.get(name).getEvaluation());
                         retur="";
                         break;
                     case "learning":
-                        retur = mapper.writeValueAsString((requests.get(name).getLeaningStatements()));
+                        retur = mapper.writeValueAsString((requests.get(name).getLearningStreamStatements()));
                         break;
                     case "model":
                         retur = mapper.writeValueAsString(requests.get(name).getModel());
                         break;
                     case "deployment":
-                        retur = mapper.writeValueAsString((requests.get(name).getDeployStatements()));
+                        retur = mapper.writeValueAsString((requests.get(name).getDeploymentStreamStatements()));
                         break;
                     default:
                         retur = mapper.writeValueAsString(requests.get(name));
@@ -111,7 +109,7 @@ public class CEMLRest extends Component{
 
         }
         return new ResponseEntity<>(retur,HttpStatus.OK);
-    }
+    }/*
     private ResponseEntity<String> update(String name, String body, String typeRequest){
         Object retur =null;
         try {
@@ -137,7 +135,7 @@ public class CEMLRest extends Component{
                         break;
 
                     case "regression":
-                      /*TODO: missing features of regression*/
+                      //TODO: missing features of regression
                         break;
 
                     case "classify":
@@ -177,7 +175,7 @@ public class CEMLRest extends Component{
         else
             return new ResponseEntity<>("{\"message\":\"There was an unknown error!\"}",HttpStatus.INTERNAL_SERVER_ERROR);
 
-    }
+    }*/
     private ResponseEntity<String> create(String name, String body, String requestType){
         MultiResourceResponses<CEMLRequest> retur ;
         try {
@@ -271,7 +269,7 @@ public class CEMLRest extends Component{
 
         return create(name,body,"");
     }
-    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    /*@RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateRequest(
             @PathVariable("name") String name,
             @RequestBody() String body
@@ -308,7 +306,7 @@ public class CEMLRest extends Component{
             @RequestBody() String body
     ){
         return update(name,body,"deployment");
-    }
+    }*/
 
 
 
