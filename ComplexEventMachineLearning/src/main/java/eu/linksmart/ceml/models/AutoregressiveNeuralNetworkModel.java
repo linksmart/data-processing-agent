@@ -29,10 +29,10 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
     }
     @JsonIgnore
-    private DataDescriptors descriptors;
+    protected DataDescriptors descriptors;
 
-    private int numInputs;
-    private int numOutputs = 24;
+    private int numInputsPerNet;
+    private int numOutputsPerNet = 24;
 
     private int ArP;
     private int ArSeasonalP;
@@ -61,13 +61,13 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
                 .momentum(0.9)
                 .list()
                 .layer(0,
-                        new DenseLayer.Builder().nIn(numInputs)
+                        new DenseLayer.Builder().nIn(numInputsPerNet)
                                 .nOut(numHiddenNodes).activation("tanh")
                                 .build())
                 .layer(1,
                         new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                                 .activation("identity").nIn(numHiddenNodes)
-                                .nOut(numOutputs).build()).pretrain(false)
+                                .nOut(numOutputsPerNet).build()).pretrain(false)
                 .backprop(true).build();
     }
 
@@ -89,9 +89,9 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
                 .hasNext() && ArSeasonalP*seasonalityPeriod > counter ; ) {
 
 
-            if (counter % seasonalityPeriod == ((netIndex)*numOutputs)) {
+            if (counter % seasonalityPeriod == ((netIndex)* numOutputsPerNet)) {
                 // add numOutPut number of points
-                for (int i = 0; i < numOutputs; i++) {
+                for (int i = 0; i < numOutputsPerNet; i++) {
                     Double dataPoint =  iterator.next();
                     prevSeasonalPoints.add(dataPoint);
 
@@ -145,7 +145,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
             inpuList.addAll(getPrevSeasonalPoints(seasonalCache,netIndex++));
 
             LinkedList<Double> outpuList = new LinkedList<>();
-            for (int i = 0; i < numOutputs; i++) {
+            for (int i = 0; i < numOutputsPerNet; i++) {
                 outpuList.add(outputIterator.next());
             }
 
@@ -180,7 +180,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
             final INDArray inputArr = getINDArray(inpuList);
             INDArray out = nnet.output(inputArr, false);
 
-            for (int i = 0; i < numOutputs ; i++) {
+            for (int i = 0; i < numOutputsPerNet; i++) {
                 returnList.add(out.getDouble(i));
             }
 
@@ -191,30 +191,28 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
     @Override
     public void setDescriptors(DataDescriptors descriptors) {
-
+        this.descriptors = descriptors;
     }
 
     @Override
     public DataDescriptors getDescriptors() {
-        return null;
+        return this.descriptors;
     }
 
 
     @Override
     public JsonSerializable build() throws Exception {
         super.build();
-        // TODO: do this with the descriptors or by configuration
         int p = 48;
-        int P =2;
         int numNodes=24;
-        int seasonalityPeriod= 168;
+
 
         ArP = p;
         ArSeasonalP = P;
-        numInputs = p + (P * numOutputs);
+        numInputsPerNet = p + (P * numOutputsPerNet);
         this.seasonalityPeriod = seasonalityPeriod;
 
-        int numNnets = seasonalityPeriod / numOutputs;
+        int numNnets = descriptors.getTargetSize() / numOutputsPerNet;
 
 
         lerner = new ArrayList<>(numNnets);
