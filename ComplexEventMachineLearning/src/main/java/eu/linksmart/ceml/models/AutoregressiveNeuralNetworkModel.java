@@ -29,7 +29,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
     }
     @JsonIgnore
-    private DataDescriptors descriptors;
+    protected DataDescriptors descriptors;
 
     private int numInputs;
     private int numOutputs = 24;
@@ -192,29 +192,30 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
     @Override
     public void setDescriptors(DataDescriptors descriptors) {
-
+        this.descriptors = descriptors;
     }
 
     @Override
     public DataDescriptors getDescriptors() {
-        return null;
+        return this.descriptors;
     }
 
 
     @Override
     public JsonSerializable build() throws Exception {
         super.build();
-        int p = 48;
-        int P =2;
-        int numNodes=24;
         int seasonalityPeriod= 168;
+        int P = descriptors.getInputSize()/seasonalityPeriod;
+        int p = 48;
+        int numNodes=24;
+
 
         ArP = p;
         ArSeasonalP = P;
         numInputs = p + (P * numOutputs);
         this.seasonalityPeriod = seasonalityPeriod;
 
-        int numNnets = seasonalityPeriod / numOutputs;
+        int numNnets = descriptors.getTargetSize() / numOutputs;
 
 
         netArr = new ArrayList<>(numNnets);
