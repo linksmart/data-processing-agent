@@ -203,6 +203,8 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
     @Override
     public JsonSerializable build() throws Exception {
         super.build();
+        int seasonalityPeriod= 168;
+        int P = descriptors.getInputSize()/seasonalityPeriod;
         int p = 48;
         int numNodes=24;
 
