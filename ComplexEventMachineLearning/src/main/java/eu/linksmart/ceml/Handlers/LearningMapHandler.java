@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.event.ceml.core;
+package eu.linksmart.ceml.Handlers;
 
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public class LearningMapHandler extends LearningHandlerBase<Map<String,Object>,Map<String,Object>,List<Object>>{
+public class LearningMapHandler extends LearningHandlerBase<Map<String,Object>,Map<String,Object>,List<Object>,Object>{
 
 
     public LearningMapHandler(LearningStatement<Map<String, Object>, List<Object>> statement) {

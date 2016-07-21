@@ -1,18 +1,13 @@
-package de.fraunhofer.fit.event.ceml.core;
+package eu.linksmart.ceml.Handlers;
 
-import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
-import eu.linksmart.api.event.ceml.data.DataDescriptor;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public class LearningListHandler extends LearningHandlerBase<List<Object>,List<Object>,List<Object>> {
+public class LearningListHandler extends LearningHandlerBase<List<Object>,List<Object>,List<Object>,Object> {
 
 
     public LearningListHandler(LearningStatement<List<Object>, List<Object>> statement) {

@@ -1,13 +1,11 @@
-package de.fraunhofer.fit.event.ceml.api;
+package eu.linksmart.ceml.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.fraunhofer.fit.event.ceml.core.CEMLManager;
-import de.fraunhofer.fit.event.ceml.intern.Const;
-import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
+import eu.linksmart.ceml.core.CEMLManager;
+import eu.linksmart.ceml.intern.Const;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.datafusion.MultiResourceResponses;
-import eu.linksmart.api.event.datafusion.StatementResponse;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -15,7 +13,6 @@ import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Observable;

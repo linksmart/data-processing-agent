@@ -1,22 +1,16 @@
-package de.fraunhofer.fit.event.ceml.core;
+package eu.linksmart.ceml.Handlers;
 
-import de.fraunhofer.fit.event.ceml.intern.Const;
-import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
-import de.fraunhofer.fit.event.ceml.type.requests.LearningStatement;
+import eu.linksmart.ceml.intern.Const;
 import eu.almanac.event.datafusion.handler.BaseEventHandler;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
-import eu.linksmart.api.event.datafusion.ComplexEventHandler;
-import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
-import weka.core.Instance;
 
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -25,14 +19,14 @@ import java.util.concurrent.Executors;
 /**
  * Created by angel on 26/11/15.
  */
-public abstract class LearningHandlerBase<Coll,Val,RetVal>  extends BaseEventHandler<Coll> {
+public abstract class LearningHandlerBase<Coll,Val,RetVal,LearningObject>  extends BaseEventHandler<Coll> {
 
     static protected Configurator conf = Configurator.getDefaultConfig();
     static protected LoggerService loggerService = Utils.initDefaultLoggerService(LearningHandlerBase.class);
     protected ExecutorService executor = Executors.newCachedThreadPool();
     final protected eu.linksmart.api.event.ceml.LearningStatement statement;
     final protected CEMLRequest<Val,RetVal> originalRequest;
-    final protected Model<Val,RetVal> model;
+    final protected Model<Val,RetVal,LearningObject> model;
     final protected Evaluator<RetVal> evaluator;
     final protected DataDescriptors descriptors;
     protected String columnNameTime = "";

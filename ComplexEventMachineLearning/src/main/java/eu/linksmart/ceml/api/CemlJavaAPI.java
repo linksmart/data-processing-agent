@@ -1,14 +1,11 @@
-package de.fraunhofer.fit.event.ceml.api;
+package eu.linksmart.ceml.api;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.google.gson.reflect.TypeToken;
-import de.fraunhofer.fit.event.ceml.core.CEML;
-import de.fraunhofer.fit.event.ceml.core.CEMLManager;
-import de.fraunhofer.fit.event.ceml.intern.Const;
-import de.fraunhofer.fit.event.ceml.type.requests.LearningRequest;
+import eu.linksmart.ceml.core.CEML;
+import eu.linksmart.ceml.core.CEMLManager;
+import eu.linksmart.ceml.intern.Const;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -24,7 +21,6 @@ import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 import com.google.gson.*;
@@ -42,7 +38,7 @@ public class CemlJavaAPI {
     static private Configurator conf = Configurator.getDefaultConfig();
     static private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
 
-    static private Map<String, LearningRequest> requests = new Hashtable<>();
+    static private Map<String, CEMLRequest> requests = new Hashtable<>();
     static private ObjectMapper mapper = new ObjectMapper();
 
 
@@ -57,7 +53,7 @@ public class CemlJavaAPI {
        // SimpleModule module = new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(aClass, ModelAutoregressiveNewralNetwork.class);
 
         mapper  .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, EPLStatement.class))
-                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, de.fraunhofer.fit.event.ceml.core.LearningStatement.class))
+                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.ceml.Statements.LearningStatement.class))
                 .registerModule(new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(Model.class, AutoregressiveNeuralNetworkModel.class))
                 .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
     }
@@ -88,20 +84,20 @@ public class CemlJavaAPI {
                         retur = mapper.writeValueAsString(requests.get(name));
                         break;
                     case "data":
-                        retur = mapper.writeValueAsString(requests.get(name).getData());
+                        retur = mapper.writeValueAsString(requests.get(name).getDescriptors());
                         break;
                     case "evaluation":
                         // retur =mapper.writeValueAsString(requests.get(name).getEvaluation());
                         retur = "";
                         break;
                     case "learning":
-                        retur = mapper.writeValueAsString((requests.get(name).getLeaningStatements()));
+                        retur = mapper.writeValueAsString((requests.get(name).getLearningStreamStatements()));
                         break;
                     case "model":
                         retur = mapper.writeValueAsString(requests.get(name).getModel());
                         break;
                     case "deployment":
-                        retur = mapper.writeValueAsString((requests.get(name).getDeployStatements()));
+                        retur = mapper.writeValueAsString((requests.get(name).getDeploymentStreamStatements()));
                         break;
                     default:
                         retur = mapper.writeValueAsString(requests.get(name));
@@ -118,7 +114,7 @@ public class CemlJavaAPI {
         return new StatementResponse("OK",DynamicConst.getId(),name, "Learning Request", "OK",200 );
 
     }
-
+/*
     public static StatementResponse update(String name, String body, String typeRequest) {
         Object retur = null;
         try {
@@ -145,7 +141,7 @@ public class CemlJavaAPI {
                         break;
 
                     case "regression":
-                      /*TODO: missing features of regression*/
+                     //TODO: missing features of regression
                         break;
 
                     case "classify":
@@ -187,7 +183,7 @@ public class CemlJavaAPI {
 
 
     }
-
+*/
     public static  MultiResourceResponses<CEMLRequest> create(String name, String body, String requestType) {
         MultiResourceResponses<CEMLRequest> responses=new MultiResourceResponses<>();
         try {

@@ -1,14 +1,13 @@
-package de.fraunhofer.fit.event.ceml.core;
+package eu.linksmart.ceml.core;
 
 import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
+import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.model.Model;
-import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
@@ -35,6 +34,7 @@ public class CEMLManager implements CEMLRequest {
     protected ArrayList<Statement> auxiliaryStatements;
     protected ArrayList<LearningStatement> learningStatements;
     protected ArrayList<Statement> deployStatements;
+    private boolean deployed=false;
 
     @Override
     public DataDescriptors getDescriptors() {
@@ -78,12 +78,22 @@ public class CEMLManager implements CEMLRequest {
 
     @Override
     public void deploy() throws Exception {
+        if (!deployed){
+            loggerService.info("Request "+name+" is being deployed");
+            MultiResourceResponses<Statement> responses =StatementFeeder.startStatements(deployStatements);
+            if((deployed=(responses.containsSuccess())))
+                loggerService.info("Request "+name+" has been deployed");
 
+        }
     }
 
     @Override
     public void undeploy() throws Exception {
-
+        if(deployed) {
+            StatementFeeder.pauseStatements(deployStatements);
+            deployed =false;
+            loggerService.info("Request "+name+" had been removed from active deployment");
+        }
     }
 
     @Override
@@ -130,5 +140,17 @@ public class CEMLManager implements CEMLRequest {
         StatementFeeder.feedStatements(deployStatements);
 
         return this;
+    }
+    public int insertInCEPEngines(){
+        int n=0;
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()      ) {
+            CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
+            if(extended!=null) {
+                extended.insertObject(name, this);
+                n++;
+            }
+
+        }
+        return n;
     }
 }
