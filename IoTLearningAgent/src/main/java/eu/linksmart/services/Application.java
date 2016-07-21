@@ -1,9 +1,7 @@
 package eu.linksmart.services;
 
-import de.fraunhofer.fit.event.ceml.api.MqttCemlAPI;
+import eu.linksmart.ceml.api.MqttCemlAPI;
 import eu.almanac.event.datafusion.core.DataFusionManagerCore;
-
-import java.net.MalformedURLException;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
