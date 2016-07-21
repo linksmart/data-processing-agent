@@ -23,7 +23,7 @@ import java.util.*;
  */
 
 // TODO TBD
-public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>,List<Double>> {
+public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>,List<Double>,List<MultiLayerNetwork>> {
 
     static {
         Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
@@ -47,7 +47,6 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 	 */
 
 
-    private List<MultiLayerNetwork> netArr;
 
     /**
      * Returns the network configuration, 2 hidden DenseLayers of size 50.
@@ -139,7 +138,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         Iterator<Double> outputIterator = trainOutputCache.iterator();
 
         int netIndex = 0;
-        for (MultiLayerNetwork nnet : netArr) {
+        for (MultiLayerNetwork nnet : lerner) {
 
             List<Double> inpuList = new LinkedList<>();
             inpuList.addAll(recentPointsCache);
@@ -171,8 +170,8 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
 
         List<Double> returnList = new LinkedList<>();
-        for (int netindex = 0; netindex < netArr.size()  ; netindex++) {
-            MultiLayerNetwork nnet = netArr.get(netindex);
+        for (int netindex = 0; netindex < lerner.size()  ; netindex++) {
+            MultiLayerNetwork nnet = lerner.get(netindex);
             // create the input list
             List<Double> inpuList = new LinkedList<>();
             inpuList.addAll(tempRecentPointersCache);
@@ -218,7 +217,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         int numNnets = descriptors.getTargetSize() / numOutputsPerNet;
 
 
-        netArr = new ArrayList<>(numNnets);
+        lerner = new ArrayList<>(numNnets);
         for (int i = 0; i < numNnets; i++) {
             // Switch these two options to do different functions with different
             // networks
@@ -229,7 +228,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
             MultiLayerNetwork nnet = new MultiLayerNetwork(conf);
             nnet.init();
 
-            netArr.add(nnet);
+            lerner.add(nnet);
         }
         return this;
     }
