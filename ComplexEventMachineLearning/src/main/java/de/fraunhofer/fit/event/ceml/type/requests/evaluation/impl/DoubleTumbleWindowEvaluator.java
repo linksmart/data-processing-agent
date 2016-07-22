@@ -64,11 +64,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
 
     }
 
-    @Override
-    public void build(DataDescriptors classesNames) throws Exception {
-        //TODO auto-generated
 
-    }
 
     public synchronized boolean trySliding() {
 
@@ -141,7 +137,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     }
 
     @Override
-    public Map<String, EvaluationMetric> getEvaluationAlgorithms() {
+    public Map<String, EvaluationMetric<? extends Number>> getEvaluationAlgorithms() {
         return windowEvaluators[learnt].getEvaluationAlgorithms();
     }
 

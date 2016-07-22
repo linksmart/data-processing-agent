@@ -26,7 +26,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     private long totalTrueNegatives = 0;
    // private long samples = 0;
 
-    EvaluationMetric samples;
+
     private double[][] confusionMatrix ;
     private ArrayList<String> classes;
 
@@ -34,7 +34,8 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
 
     public WindowEvaluator(Collection<String> namesClasses, ArrayList<TargetRequest> targets){
-        super(namesClasses, targets);
+        super( targets);
+        classes =new ArrayList<>(namesClasses);
     }
 
     @Override
@@ -56,9 +57,11 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
                     totalTrueNegatives++;
                 }
 
-            return calculateEvaluationMetrics(actual);
+
+
         }
-        return 0.0;
+
+        return calculateEvaluationMetrics(actual);
 
 
 
@@ -89,10 +92,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
 
 
-    @Override
-    public void build(DataDescriptors classesNames) throws Exception {
-        //TODO auto-generated
-    }
+
 
 
     public boolean readyToSlide(){
@@ -114,9 +114,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
        totalTrueNegatives = 0;
 
 
-
-        for(EvaluationMetric algorithm: evaluationAlgorithms.values())
-            algorithm.reset();
+        evaluationAlgorithms.values().forEach(eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric::reset);
 
         //evaluationAlgorithms.get(SlideAfter.class.getSimpleName()).reset();
 
@@ -124,10 +122,13 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
 
 
-    @SuppressWarnings("unchecked")
+   // @SuppressWarnings("unchecked")
     @Override
-    public void build(Collection<String> namesClasses){
-        classes = new ArrayList<>(namesClasses);
+    public WindowEvaluator build() throws Exception {
+        //classes = new ArrayList<>(namesClasses);
+
+        if(classes==null|| classes.isEmpty())
+            throw new Exception("Classes is a mandatory field for WindowEvaluator");
 
         confusionMatrix= new double[classes.size()][classes.size()];
         sequentialConfusionMatrix = new long[classes.size()][4];
@@ -139,10 +140,11 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
         }
 
-        super.build(namesClasses);
+        super.build();
         
-        samples = evaluationAlgorithms.get(Samples.class.getSimpleName());
 
+
+        return this;
     }
 
     public abstract class ModelEvaluationMetricSubBase extends ModelEvaluationMetricBase implements ModelEvaluationAlgorithmExtended {
@@ -580,25 +582,8 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     }
 
 
-    public class Samples extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.Samples {
-
-        public Samples(ComparisonMethod method, double target) {
-            super(method, target);
-        }
-
-    }
-    public class SlideAfter extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.Samples {
-
-        public SlideAfter(ComparisonMethod method, double target) {
-            super(method, target);
-        }
 
 
-        @Override
-        public boolean isControlMetric() {
-            return true;
-        }
-    }
 /* TODO: transform all basic metrics into algorithms
     public class TotalTruePositives   extends EvaluationAlgorithmBase<Long> {
 

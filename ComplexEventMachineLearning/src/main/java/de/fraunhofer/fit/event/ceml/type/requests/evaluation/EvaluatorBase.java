@@ -23,5 +23,8 @@ public abstract class EvaluatorBase<T>  implements Evaluator<T> {
     @JsonPropertyDescription("Evaluation metrics needed so the model is ready to be deployed")
     @JsonProperty(value = "Targets")
     protected ArrayList<TargetRequest> targets;
+    public void setTargets(ArrayList<TargetRequest> targets) {
+        this.targets = targets;
+    }
 
 }

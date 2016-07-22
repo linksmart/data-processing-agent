@@ -18,8 +18,15 @@ public class RegressionEvaluator<T> extends GenericEvaluator<T>  {
     private double N = 0; //fading increment
     private int maxQueueSize = 200;
 
-    public RegressionEvaluator(Collection<String> namesClasses, ArrayList<TargetRequest> targets) {
-        super(namesClasses, targets);
+    public RegressionEvaluator( ArrayList<TargetRequest> targets) {
+        super( targets);
+    }
+
+    @Override
+    public RegressionEvaluator<T> build() throws Exception {
+         super.build();
+
+        return this;
     }
 
 
