@@ -18,11 +18,11 @@ public interface Evaluator<T> extends JsonSerializable {
 
      boolean isDeployable();
 
-    void build(DataDescriptors classesNames) throws Exception;
+    //void build(DataDescriptors classesNames) throws Exception;
 
-    void reBuild(Evaluator evaluator);
+    void reBuild(Evaluator<T> evaluator);
 
-    Map<String,EvaluationMetric> getEvaluationAlgorithms();
+    Map<String,EvaluationMetric<? extends Number>> getEvaluationAlgorithms();
 
     String report();
 

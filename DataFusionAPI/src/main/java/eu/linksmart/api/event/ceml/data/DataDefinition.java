@@ -1,5 +1,6 @@
 package eu.linksmart.api.event.ceml.data;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 
 import java.util.ArrayList;
@@ -13,6 +14,16 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
     protected   int inputSize=-1,targetSize=-1, totalInputSize=-1;
     protected  List<DataDescriptor> input= new ArrayList<>(), targets= new ArrayList<>();
     protected  boolean lambdaTypes = false;
+    @JsonProperty("Name")
+    protected String name = "noSet";
+    @JsonProperty("NativeType")
+    protected Class javaType=DataDefinition.class;
+
+    @JsonProperty("isTarget")
+    protected boolean target =false;
+
+    @JsonProperty("Type")
+    protected DescriptorTypes type= DescriptorTypes.NUMBER;
 
     public DataDefinition(){
 
@@ -27,6 +38,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
         input = null;
         targets = null;
         lambdaTypes = true;
+
     }
 
     protected DataDefinition(DataDescriptor... definitions){
@@ -133,5 +145,38 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
 
 
         return this;
+    }
+
+    @Override
+    public Class getNativeType() {
+        return javaType;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean isTarget() {
+        return target;
+    }
+    @Override
+    public void asTarget() {
+        target =true;
+    }
+    @Override
+    public boolean isClassesDescription() {
+        return false;
+    }
+
+    @Override
+    public DataDescriptor getClassesDescription() {
+        return null;
+    }
+
+    @Override
+    public DescriptorTypes getType() {
+        return null;
     }
 }

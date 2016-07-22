@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public interface Model<Input,Return> extends JsonSerializable{
+public interface Model<Input,Return,LearningObject> extends JsonSerializable{
     final static public Map<String,Class<? extends Model>> loadedModels = new Hashtable<>();
     public static  Model factory(String name) throws Exception{
         if(!loadedModels.containsKey(name)) {

@@ -59,6 +59,26 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
     }
 
     @Override
+    public String getClass(int i) {
+        return classes.get(i);
+    }
+
+    @Override
+    public void setClass(int i, String clazz) {
+        classes.set(i,clazz);
+    }
+
+    @Override
+    public List<String> getClasses() {
+        return classes;
+    }
+
+    @Override
+    public void setClasses(List<String> classes) {
+        this.classes =classes;
+    }
+
+    @Override
     public boolean isClassesDescription() {
         return true;
     }
@@ -72,8 +92,6 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
         super.build();
 
         return this;
-
-
 
     }
 }

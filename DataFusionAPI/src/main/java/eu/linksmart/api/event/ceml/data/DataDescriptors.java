@@ -9,7 +9,7 @@ import java.util.List;
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
 //@JsonDeserialize(as = DoubleTumbleWindowEvaluator.class)
-public interface DataDescriptors extends List<DataDescriptor>, JsonSerializable{
+public interface DataDescriptors extends List<DataDescriptor>,DataDescriptor, JsonSerializable{
 
     public static DataDescriptors factory(int inputTotalSize,int targetSize){
         return new DataDefinition(inputTotalSize,targetSize);

@@ -23,4 +23,8 @@ public interface ClassesDescriptor extends DataDescriptor {
     }
     public <F >String  getClass(F selectionParameter) throws Exception;
     public<F> void setSelectionFunction(Function<F, Integer> function,Class<F> type);
+    public String getClass(int i);
+    public void setClass(int i,String clazz);
+    public List<String> getClasses();
+    public void setClasses(List<String> classes);
 }

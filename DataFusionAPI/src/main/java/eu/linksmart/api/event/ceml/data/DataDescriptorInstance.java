@@ -62,6 +62,11 @@ public class DataDescriptorInstance implements DataDescriptor {
     }
 
     @Override
+    public void asTarget() {
+        target = true;
+    }
+
+    @Override
     public DataDescriptor build() throws Exception {
         if(name==null)
             throw new Exception("The name is a mandatory field!");

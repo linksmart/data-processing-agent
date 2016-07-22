@@ -42,8 +42,9 @@ public interface DataDescriptor extends JsonSerializable {
     public String getName();
     boolean isTarget();
     boolean isClassesDescription();
-    DataDescriptor getClassesDescription();
+    public DataDescriptor getClassesDescription();
     public DescriptorTypes getType();
+    public void asTarget();
     public enum DescriptorTypes{
         NOMINAL_CLASSES,INTEGER,DOUBLE,NUMBER, DATE;
 
