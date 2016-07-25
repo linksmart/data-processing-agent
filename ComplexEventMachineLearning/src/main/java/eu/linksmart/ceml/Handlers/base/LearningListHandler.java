@@ -7,22 +7,26 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public class LearningListHandler extends LearningHandlerBase<List<Object>,List<Object>,List<Object>,Object> {
+public abstract class LearningListHandler<Input, Output> extends LearningHandlerBase<List,List<Input>,List<Output>,Object> {
 
-
-    public LearningListHandler(LearningStatement<List<Object>, List<Object>> statement) {
+    protected final Class<Input> inputType;
+    protected final Class<Output> outputClass;
+    public LearningListHandler(LearningStatement<List<Input>, List<Output>> statement) {
         super(statement);
+        inputType = (Class<Input>) genericClass()[0];
+        outputClass = (Class<Output>) genericClass()[1];
+
     }
 
     @Override
-    protected void processMessage(List<Object> input) {
+    protected void processMessage(List input) {
         if(input!=null){
             try {
-                List<Object> measuredTargets = input.subList(descriptors.getInputSize(),descriptors.getTargetSize());
-                List<Object> withoutTarget = input.subList(0, descriptors.getInputSize());
+                List<Output> measuredTargets = (List<Output>) input.subList(descriptors.getInputSize(),descriptors.getTargetSize());
+                List<Input> withoutTarget = input.subList(0, descriptors.getInputSize());
 
 
-                List<Object> prediction = model.predict(withoutTarget);
+                List<Output> prediction = model.predict(withoutTarget);
 
                 model.learn(input);
 

@@ -11,6 +11,8 @@ import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +31,7 @@ public abstract class LearningHandlerBase<Coll,Val,RetVal,LearningObject>  exten
     final protected Model<Val,RetVal,LearningObject> model;
     final protected Evaluator<RetVal> evaluator;
     final protected DataDescriptors descriptors;
+
     protected String columnNameTime = "";
     protected int leadingLerner = -1;
     protected Map<String, Integer> modelByName = new Hashtable<>();
@@ -120,6 +123,11 @@ public abstract class LearningHandlerBase<Coll,Val,RetVal,LearningObject>  exten
     @Override
     public void destroy() {
 
+    }
+    public Type[] genericClass() {
+        ParameterizedType parameterizedType = (ParameterizedType)getClass()
+                .getGenericSuperclass();
+        return parameterizedType.getActualTypeArguments();
     }
 
 }
