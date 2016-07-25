@@ -1,19 +1,14 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
+package eu.linksmart.ceml.evaluation.evaluators;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.EvaluationMetricBase;
-import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.ceml.evaluation.EvaluatorBase;
+import eu.linksmart.ceml.evaluation.metrics.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
-import eu.linksmart.api.event.ceml.evaluation.metrics.ClassEvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
-import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -130,14 +125,14 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
         }
         return null;
     }
-    public class Samples extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.Samples {
+    public class Samples extends eu.linksmart.ceml.evaluation.metrics.Samples {
 
         public Samples(ComparisonMethod method, double target) {
             super(method, target);
         }
 
     }
-    public class SlideAfter extends de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.Samples {
+    public class SlideAfter extends eu.linksmart.ceml.evaluation.metrics.Samples {
 
         public SlideAfter(ComparisonMethod method, double target) {
             super(method, target);

@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation.prediction;
+package eu.linksmart.ceml.core;
 
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 

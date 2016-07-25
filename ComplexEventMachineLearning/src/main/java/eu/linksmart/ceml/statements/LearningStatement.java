@@ -1,7 +1,7 @@
 package eu.linksmart.ceml.statements;
 
-import eu.linksmart.ceml.Handlers.LearningListHandler;
-import eu.linksmart.ceml.Handlers.LearningMapHandler;
+import eu.linksmart.ceml.handlers.base.LearningListHandler;
+import eu.linksmart.ceml.handlers.base.LearningMapHandler;
 import eu.linksmart.ceml.core.CEMLManager;
 import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.linksmart.api.event.ceml.CEMLRequest;

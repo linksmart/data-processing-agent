@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
+package eu.linksmart.ceml.evaluation.evaluators;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

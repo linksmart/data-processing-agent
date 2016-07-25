@@ -1,6 +1,6 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
+package eu.linksmart.ceml.evaluation.evaluators;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ModelEvaluationMetricBase;
+import eu.linksmart.ceml.evaluation.metrics.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 

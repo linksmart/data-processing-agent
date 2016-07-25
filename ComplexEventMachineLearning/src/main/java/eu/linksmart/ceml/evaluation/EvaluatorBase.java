@@ -1,8 +1,8 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation;
+package eu.linksmart.ceml.evaluation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl.TargetRequest;
+import eu.linksmart.ceml.evaluation.evaluators.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
 import java.util.ArrayList;

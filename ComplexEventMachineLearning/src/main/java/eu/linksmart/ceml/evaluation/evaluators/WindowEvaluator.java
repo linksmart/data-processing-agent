@@ -1,18 +1,12 @@
-package de.fraunhofer.fit.event.ceml.type.requests.evaluation.impl;
+package eu.linksmart.ceml.evaluation.evaluators;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.EvaluatorBase;
-import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ClassEvaluationMetricBase;
-import de.fraunhofer.fit.event.ceml.type.requests.evaluation.algorithms.impl.ModelEvaluationMetricBase;
+import eu.linksmart.ceml.evaluation.metrics.ClassEvaluationMetricBase;
+import eu.linksmart.ceml.evaluation.metrics.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.*;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
-import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
