@@ -10,7 +10,7 @@ import java.util.*;
  * Created by devasya on 7/20/2016.
  * For evaluating regression
  */
-public class RegressionEvaluator<T> extends GenericEvaluator<T>  {
+public class RegressionEvaluator extends GenericEvaluator<Collection<? extends  Number>>  {
 
     private static final int MAX_NUMBER_FOR_AVG = 10000;
     LinkedList<Map.Entry<Object,Object>> fixedSizeList = new LinkedList<>();
@@ -23,7 +23,7 @@ public class RegressionEvaluator<T> extends GenericEvaluator<T>  {
     }
 
     @Override
-    public RegressionEvaluator<T> build() throws Exception {
+    public RegressionEvaluator build() throws Exception {
          super.build();
 
         return this;
@@ -39,22 +39,18 @@ public class RegressionEvaluator<T> extends GenericEvaluator<T>  {
 
 
     @Override
-    public double evaluate(T predicted, T actual) {
+    public double evaluate(Collection predicted, Collection actual) {
         latestEntries.clear();
-        if(predicted instanceof Collection ) {//Add one by one on getting collection
-            Iterator iteratorPred = ((Collection)predicted).iterator();
-            for (Object actualEntry :(Collection) actual) {
-                Object predEntry = iteratorPred.next();
-                Map.Entry entry = new AbstractMap.SimpleEntry<>(predEntry, actualEntry);
-                latestEntries.add(entry);
-                addTofixedsizeList(fixedSizeList, entry);
 
-            }
-        }else {//add the single element
-            Map.Entry entry = new AbstractMap.SimpleEntry<>(predicted, actual);
+        Iterator iteratorPred = predicted.iterator();
+        for (Object actualEntry : actual) {
+            Object predEntry = iteratorPred.next();
+            Map.Entry entry = new AbstractMap.SimpleEntry<>(predEntry, actualEntry);
             latestEntries.add(entry);
             addTofixedsizeList(fixedSizeList, entry);
+
         }
+
         double accumulateMetric =0;
         int i=0;
         for(EvaluationMetric algorithm: evaluationAlgorithms.values()) {
@@ -93,6 +89,31 @@ public class RegressionEvaluator<T> extends GenericEvaluator<T>  {
                 squaredRMSE = ((N-1)/N) * squaredRMSE  + squaredError/N;
             }
             currentValue = Math.sqrt(squaredRMSE);
+            return  currentValue;
+        }
+
+
+    }
+
+    public class MAEEvaluationMetric extends ModelEvaluationMetricBase{
+
+        public MAEEvaluationMetric(ComparisonMethod method, double target) {
+            super(method, target);
+        }
+
+        @Override
+        public Double calculate() {
+            for(Map.Entry entry:latestEntries){
+                Double predicted = (Double) entry.getKey();
+                Double actual = (Double) entry.getValue();
+                double diff =  actual-predicted;
+                double absError = Math.abs(diff);
+                if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
+                    N++;
+                }
+
+                currentValue = ((N-1)/N) * currentValue  + absError/N;
+            }
             return  currentValue;
         }
 
