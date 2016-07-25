@@ -11,7 +11,7 @@ public abstract class LearningListHandler<Input, Output> extends LearningHandler
 
     protected final Class<Input> inputType;
     protected final Class<Output> outputClass;
-    public LearningListHandler(LearningStatement<List<Input>, List<Output>> statement) {
+    public LearningListHandler(LearningStatement<List<Input>, List<Output>, Object> statement) {
         super(statement);
         inputType = (Class<Input>) genericClass()[0];
         outputClass = (Class<Output>) genericClass()[1];
@@ -32,9 +32,9 @@ public abstract class LearningListHandler<Input, Output> extends LearningHandler
 
 
 
-                evaluator.evaluate( prediction,measuredTargets);
+                model.getEvaluator().evaluate(prediction, measuredTargets);
 
-                if(evaluator.isDeployable())
+                if(model.getEvaluator().isDeployable())
                     originalRequest.deploy();
                 else
                     originalRequest.undeploy();

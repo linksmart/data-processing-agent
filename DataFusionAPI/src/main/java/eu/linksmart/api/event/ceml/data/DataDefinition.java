@@ -10,8 +10,12 @@ import java.util.List;
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
 public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDescriptors{
-
-    protected   int inputSize=-1,targetSize=-1, totalInputSize=-1;
+    @JsonProperty("InputSize")
+    protected   int inputSize=-1;
+    @JsonProperty("TargetSize")
+    protected   int targetSize=-1;
+    @JsonProperty("TotalInputSize")
+    protected   int totalInputSize=-1;
     protected  List<DataDescriptor> input= new ArrayList<>(), targets= new ArrayList<>();
     protected  boolean lambdaTypes = false;
     @JsonProperty("Name")
@@ -29,7 +33,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
 
 
     }
-    protected DataDefinition(int inputSize, int targetSize){
+    protected DataDefinition(String name, int inputSize, int targetSize, DescriptorTypes type){
 
         this.inputSize=inputSize;
         this.targetSize=targetSize;
@@ -38,6 +42,8 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
         input = null;
         targets = null;
         lambdaTypes = true;
+        this.type =type;
+        this.name = name;
 
     }
 

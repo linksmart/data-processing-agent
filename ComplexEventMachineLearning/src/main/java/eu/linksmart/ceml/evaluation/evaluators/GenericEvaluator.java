@@ -1,5 +1,6 @@
 package eu.linksmart.ceml.evaluation.evaluators;
 
+import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.ceml.evaluation.EvaluatorBase;
 import eu.linksmart.ceml.evaluation.metrics.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import eu.linksmart.api.event.ceml.data.*;
 import eu.linksmart.ceml.api.CemlJavaAPI;
 import eu.linksmart.ceml.core.CEML;
 
@@ -12,10 +13,6 @@ import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
-import eu.linksmart.api.event.ceml.data.DataDefinition;
-import eu.linksmart.api.event.ceml.data.DataDescriptor;
-import eu.linksmart.api.event.ceml.data.DataDescriptorDeserializer;
-import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.model.ModelDeserializer;
 import eu.linksmart.api.event.datafusion.MultiResourceResponses;
@@ -56,7 +53,8 @@ public class CEMLRest extends Component{
 
         // SimpleModule module = new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(aClass, ModelAutoregressiveNewralNetwork.class);
 
-        mapper  .registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addAbstractTypeMapping(DataDescriptors.class, DataDefinition.class))
+        //.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addAbstractTypeMapping(DataDescriptors.class, DataDefinition.class))
+        mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()))
                 .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, EPLStatement.class))
                 .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.ceml.statements.LearningStatement.class))
                 .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))

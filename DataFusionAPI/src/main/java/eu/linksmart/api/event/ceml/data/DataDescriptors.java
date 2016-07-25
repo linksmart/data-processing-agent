@@ -11,8 +11,8 @@ import java.util.List;
 //@JsonDeserialize(as = DoubleTumbleWindowEvaluator.class)
 public interface DataDescriptors extends List<DataDescriptor>,DataDescriptor, JsonSerializable{
 
-    public static DataDescriptors factory(int inputTotalSize,int targetSize){
-        return new DataDefinition(inputTotalSize,targetSize);
+    public static DataDescriptors factory(String name,int inputSize,int targetSize, DescriptorTypes type){
+        return new DataDefinition(name,inputSize,targetSize, type);
     }
     public static DataDescriptors factory(DataDescriptor... definitions){
         return new DataDefinition(definitions);

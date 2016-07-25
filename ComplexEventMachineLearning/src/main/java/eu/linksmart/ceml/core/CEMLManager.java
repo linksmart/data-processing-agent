@@ -30,7 +30,7 @@ public class CEMLManager implements CEMLRequest {
     protected DataDescriptors descriptors;
     @JsonDeserialize(as = AutoregressiveNeuralNetworkModel.class)
     protected Model model;
-    protected Evaluator evaluator;
+
     protected ArrayList<Statement> auxiliaryStatements;
     protected ArrayList<LearningStatement> learningStatements;
     protected ArrayList<Statement> deployStatements;
@@ -46,10 +46,6 @@ public class CEMLManager implements CEMLRequest {
         return model;
     }
 
-    @Override
-    public Evaluator getEvaluator() {
-        return evaluator;
-    }
 
     @Override
     public String getName() {
@@ -104,23 +100,24 @@ public class CEMLManager implements CEMLRequest {
     @Override
     public JsonSerializable build() throws Exception {
 
-        if(descriptors==null||model==null||evaluator==null)
+        if(descriptors==null||model==null||learningStatements!=null)
             throw new Exception("The descriptors, model and evaluator are mandatory fields!");
         descriptors.build();
 
         int i=0;
-        for (Statement statement: auxiliaryStatements) {
-            statement.setCEHandler("");
-            statement.setName("AuxiliaryStream:" + name + "[" + String.valueOf(i) + "]");
-            statement.build();
-            i++;
-        }
+        if(auxiliaryStatements!=null)
+            for (Statement statement: auxiliaryStatements) {
+                statement.setCEHandler("");
+                statement.setName("AuxiliaryStream:" + name + "[" + String.valueOf(i) + "]");
+                statement.build();
+                i++;
+            }
         for (LearningStatement statement: learningStatements) {
             statement.setRequest(this);
             statement.setName("LearningStream:" + name + "[" + String.valueOf(i) + "]");
             statement.build();
         }
-
+        if(deployStatements!=null)
         for (Statement statement: deployStatements){
             statement.setName("DeploymentStream:" + name + "[" + String.valueOf(i) + "]");
             statement.build();
@@ -131,7 +128,7 @@ public class CEMLManager implements CEMLRequest {
 
         model.build();
 
-        evaluator.build();
+
 
         StatementFeeder.feedStatements(auxiliaryStatements);
         ArrayList<Statement> arrayList = new ArrayList<>();

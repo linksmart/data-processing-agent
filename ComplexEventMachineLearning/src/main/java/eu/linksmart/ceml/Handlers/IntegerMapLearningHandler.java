@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 25.07.2016 a researcher of Fraunhofer FIT.
  */
 public class IntegerMapLearningHandler extends LearningMapHandler<Integer, Integer> {
-    public IntegerMapLearningHandler(LearningStatement<Map<String, Integer>, List<Integer>> statement) throws Exception {
+    public IntegerMapLearningHandler(LearningStatement<Map<String, Integer>, List<Integer>, Object> statement) throws Exception {
         super(statement);
     }
 }

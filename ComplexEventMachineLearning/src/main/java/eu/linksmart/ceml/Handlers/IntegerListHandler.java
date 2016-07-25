@@ -9,7 +9,7 @@ import java.util.List;
  * Created by José Ángel Carvajal on 25.07.2016 a researcher of Fraunhofer FIT.
  */
 public class IntegerListHandler extends LearningListHandler<Integer,Integer> {
-    public IntegerListHandler(LearningStatement<List<Integer>, List<Integer>> statement) {
+    public IntegerListHandler(LearningStatement<List<Integer>, List<Integer>, Object> statement) {
         super(statement);
     }
 }

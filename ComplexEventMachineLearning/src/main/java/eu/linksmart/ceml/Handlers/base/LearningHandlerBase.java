@@ -27,9 +27,8 @@ public abstract class LearningHandlerBase<Coll,Val,RetVal,LearningObject>  exten
     static protected LoggerService loggerService = Utils.initDefaultLoggerService(LearningHandlerBase.class);
     protected ExecutorService executor = Executors.newCachedThreadPool();
     final protected eu.linksmart.api.event.ceml.LearningStatement statement;
-    final protected CEMLRequest<Val,RetVal> originalRequest;
+    final protected CEMLRequest<Val,RetVal, LearningObject> originalRequest;
     final protected Model<Val,RetVal,LearningObject> model;
-    final protected Evaluator<RetVal> evaluator;
     final protected DataDescriptors descriptors;
 
     protected String columnNameTime = "";
@@ -37,13 +36,12 @@ public abstract class LearningHandlerBase<Coll,Val,RetVal,LearningObject>  exten
     protected Map<String, Integer> modelByName = new Hashtable<>();
 
 
-    public LearningHandlerBase(eu.linksmart.api.event.ceml.LearningStatement<Val, RetVal> statement) {
+    public LearningHandlerBase(eu.linksmart.api.event.ceml.LearningStatement<Val, RetVal, LearningObject> statement) {
         super(statement);
         //super(LearningHandlerBase.class.getSimpleName(),"Learning Handler processes the data and input it to the learning objects");
         this.statement = statement;
         this.originalRequest =statement.getRequest();
         model = originalRequest.getModel();
-        evaluator = originalRequest.getEvaluator();
         descriptors = originalRequest.getDescriptors();
 
         if(conf.getString(Const.CEML_EngineTimeProveded)!= null ||conf.getString(Const.CEML_EngineTimeProveded)!="" )
@@ -58,7 +56,7 @@ public abstract class LearningHandlerBase<Coll,Val,RetVal,LearningObject>  exten
 
 
     }
-    static protected <Val,RetVal> void learn(String statementID, CEMLRequest<Val,RetVal> request){
+    static protected <Val,RetVal, LearningObject> void learn(String statementID, CEMLRequest<Val,RetVal, LearningObject> request){
        /* for(Model m: originalRequest.getModel())
             CEML.learn(m.getLerner(),instance);*/
 
@@ -67,7 +65,7 @@ public abstract class LearningHandlerBase<Coll,Val,RetVal,LearningObject>  exten
     protected abstract void processMessage(Coll eventMap);
 
 
-    public static <Val,RetVal> void update(String statementID, CEMLRequest<Val,RetVal> request) {
+    public static <Val,RetVal, LearningObject> void update(String statementID, CEMLRequest<Val,RetVal, LearningObject> request) {
      /*   String columnNameTime="";
         try {
             Instance instance = CEML.populateInstance(eventMap,originalRequest);

@@ -14,10 +14,10 @@ import java.util.Set;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public interface CEMLRequest<ValueType, ReturnValueType> extends JsonSerializable {
+public interface CEMLRequest<ValueType, ReturnValueType, LearningObject> extends JsonSerializable {
     public DataDescriptors getDescriptors();
-    public Model<ValueType, ReturnValueType>  getModel();
-    public Evaluator<ReturnValueType> getEvaluator();
+    public Model<ValueType, ReturnValueType,LearningObject>  getModel();
+   // public Evaluator<ReturnValueType> getEvaluator();
     public String getName();
 
     public Collection<LearningStatement> getLearningStreamStatements();

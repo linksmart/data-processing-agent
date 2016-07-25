@@ -3,6 +3,8 @@ package eu.linksmart.api.event.ceml.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
+import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 
@@ -15,17 +17,22 @@ import java.util.*;
  */
 
 // TODO TBD
-public abstract class ModelInstance<Input,Return,LearningObject> implements Model<Input,Return,LearningObject>{
+public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
     @JsonIgnore
     protected DataDescriptors descriptors;
 
     protected String name;
-    protected Class nativeType;
+    protected Class<LearningObject> nativeType;
     @JsonPropertyDescription("Algorithm use to build the model")
     @JsonProperty(value = "Type")
     protected String type;
-
+    @JsonProperty(value = "Evaluator")
+    protected final Evaluator<Output> evaluator ;
+    @JsonProperty(value = "Targets")
+    protected final ArrayList<TargetRequest> targets;
+    @JsonProperty(value = "Parameters")
+    protected final Map<String,Object> parameters;
 
 
     public String getType() {
@@ -51,11 +58,18 @@ public abstract class ModelInstance<Input,Return,LearningObject> implements Mode
 
     //final protected String modelName;
 
-    public ModelInstance(){
+    public ModelInstance(ArrayList<TargetRequest> targets,Map<String,Object> parameters, Evaluator evaluator){
+        this.targets = targets;
+        this.parameters =parameters;
+        this.evaluator = evaluator;
 
     }
 
 
+    @Override
+    public Evaluator<Output> getEvaluator() {
+        return evaluator;
+    }
 
     @Override
     public void setDescriptors(DataDescriptors descriptors) {
@@ -71,10 +85,13 @@ public abstract class ModelInstance<Input,Return,LearningObject> implements Mode
 
     @Override
     public JsonSerializable build() throws Exception {
-        if(descriptors== null || descriptors.isEmpty())
-            throw new Exception("The descriptors and learner are mandatory fields!");
+        if(descriptors== null || descriptors.isEmpty() ||evaluator== null  || lerner == null)
+            throw new Exception("The descriptors, evaluator and learner are mandatory fields!");
 
-        nativeType =lerner.getClass();
+        nativeType = (Class<LearningObject>) lerner.getClass();
+
+        evaluator.build();
+
         return this;
     }
     public String getName() {
@@ -92,4 +109,5 @@ public abstract class ModelInstance<Input,Return,LearningObject> implements Mode
     public void setNativeType(Class nativeType) {
         this.nativeType = nativeType;
     }
+
 }

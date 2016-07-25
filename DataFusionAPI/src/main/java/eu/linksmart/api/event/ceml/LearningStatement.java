@@ -6,7 +6,7 @@ import eu.linksmart.api.event.datafusion.Statement;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public interface LearningStatement<ValueType, ReturnValueType> extends Statement,JsonSerializable {
-    CEMLRequest<ValueType, ReturnValueType> getRequest();
-    void setRequest(CEMLRequest<ValueType, ReturnValueType> request);
+public interface LearningStatement<ValueType, ReturnValueType, LearningObject> extends Statement,JsonSerializable {
+    CEMLRequest<ValueType, ReturnValueType,LearningObject> getRequest();
+    void setRequest(CEMLRequest<ValueType, ReturnValueType, LearningObject> request);
 }

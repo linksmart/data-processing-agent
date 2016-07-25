@@ -18,7 +18,7 @@ public abstract class LearningMapHandler<Input, Output> extends LearningHandlerB
     protected final Class<Input> inputType;
     protected final Class<Output> outputClass;
 
-    public LearningMapHandler(LearningStatement<Map<String,Input>, List<Output>> statement) throws Exception{
+    public LearningMapHandler(LearningStatement<Map<String,Input>, List<Output>, Object> statement) throws Exception{
         super(statement);
 
 
@@ -53,9 +53,9 @@ public abstract class LearningMapHandler<Input, Output> extends LearningHandlerB
                 List<Output> prediction = model.predict(withoutTarget);
                 model.learn(eventMap);
 
-                evaluator.evaluate( prediction,measuredTargets);
+               model.getEvaluator().evaluate(prediction, measuredTargets);
 
-                if(evaluator.isDeployable())
+                if( model.getEvaluator().isDeployable())
                     originalRequest.deploy();
                 else
                     originalRequest.undeploy();

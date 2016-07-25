@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 25.07.2016 a researcher of Fraunhofer FIT.
  */
 public class MapLearningHandler extends LearningMapHandler<Object,Object> {
-    public MapLearningHandler(LearningStatement<Map<String, Object>, List<Object>> statement) throws Exception {
+    public MapLearningHandler(LearningStatement<Map<String, Object>, List<Object>, Object> statement) throws Exception {
         super(statement);
     }
 }

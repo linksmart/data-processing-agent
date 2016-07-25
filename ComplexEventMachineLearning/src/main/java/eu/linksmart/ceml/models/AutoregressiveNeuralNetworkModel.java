@@ -2,9 +2,12 @@ package eu.linksmart.ceml.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
+import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
+import eu.linksmart.ceml.evaluation.evaluators.RegressionEvaluator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -39,7 +42,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
     private int seasonalityPeriod;
 
-
+   // @Override
 	/*
 	 * Cache for holding future points. his is not exactly future points. But
 	 * this is the training data for output. Acting` as the future values to be
@@ -71,7 +74,9 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
                 .backprop(true).build();
     }
 
-    public AutoregressiveNeuralNetworkModel() {
+    public AutoregressiveNeuralNetworkModel(ArrayList<TargetRequest> targets,Map<String,Object> parameters) {
+        super(targets,parameters,new RegressionEvaluator(targets));
+
       //  super(descriptors,AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
 
 
