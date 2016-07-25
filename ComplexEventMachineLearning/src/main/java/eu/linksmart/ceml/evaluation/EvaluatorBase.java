@@ -1,11 +1,13 @@
 package eu.linksmart.ceml.evaluation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 18.12.2015 a researcher of Fraunhofer FIT.
@@ -25,6 +27,12 @@ public abstract class EvaluatorBase<T>  implements Evaluator<T> {
     protected ArrayList<TargetRequest> targets;
     public void setTargets(ArrayList<TargetRequest> targets) {
         this.targets = targets;
+    }
+
+    @JsonIgnore
+    protected Map<String, Object> parameters;
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
     }
 
 }

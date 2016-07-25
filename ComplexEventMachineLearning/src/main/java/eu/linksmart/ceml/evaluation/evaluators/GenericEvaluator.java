@@ -63,7 +63,7 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
 
     }
     @Override
-    public Map<String, EvaluationMetric<? extends Number>> getEvaluationAlgorithms(){
+    public Map<String, EvaluationMetric< Number>> getEvaluationAlgorithms(){
         return (Map)evaluationAlgorithms;
     }
     @Override

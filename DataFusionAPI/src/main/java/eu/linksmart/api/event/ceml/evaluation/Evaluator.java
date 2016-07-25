@@ -6,6 +6,7 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +23,8 @@ public interface Evaluator<T> extends JsonSerializable {
 
     void reBuild(Evaluator<T> evaluator);
 
-    Map<String,EvaluationMetric<? extends Number>> getEvaluationAlgorithms();
+    Map<String,EvaluationMetric< Number>> getEvaluationAlgorithms();
+    public void setParameters(Map<String, Object> parameters);
 
     String report();
 

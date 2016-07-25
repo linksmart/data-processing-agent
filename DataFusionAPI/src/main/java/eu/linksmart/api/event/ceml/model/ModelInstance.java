@@ -28,11 +28,11 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     @JsonProperty(value = "Type")
     protected String type;
     @JsonProperty(value = "Evaluator")
-    protected final Evaluator<Output> evaluator ;
+    protected  Evaluator<Output> evaluator ;
     @JsonProperty(value = "Targets")
-    protected final ArrayList<TargetRequest> targets;
+    protected  ArrayList<TargetRequest> targets;
     @JsonProperty(value = "Parameters")
-    protected final Map<String,Object> parameters;
+    protected  Map<String,Object> parameters;
 
 
     public String getType() {
@@ -62,6 +62,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
         this.targets = targets;
         this.parameters =parameters;
         this.evaluator = evaluator;
+        this.evaluator.setParameters(parameters);
 
     }
 
