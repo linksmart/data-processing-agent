@@ -117,17 +117,30 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
 
     @Override
     public int getTotalInputSize() {
-        return totalInputSize;
+        if(lambdaTypes)
+            return totalInputSize;
+        return size();
     }
-
+    @Override
+    public int size(){
+            return getTotalInputSize();
+    }
+    @Override
+    public boolean isEmpty(){
+        return size()>0;
+    }
     @Override
     public int getInputSize() {
-        return inputSize;
+        if(lambdaTypes)
+            return inputSize;
+        return input.size();
     }
 
     @Override
     public int getTargetSize() {
-        return targetSize;
+        if(lambdaTypes)
+            return targetSize;
+        return targets.size();
     }
 
     @Override
@@ -183,6 +196,6 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
 
     @Override
     public DescriptorTypes getType() {
-        return null;
+        return type;
     }
 }

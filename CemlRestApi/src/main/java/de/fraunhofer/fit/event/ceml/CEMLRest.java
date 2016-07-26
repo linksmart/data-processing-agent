@@ -1,15 +1,18 @@
 package de.fraunhofer.fit.event.ceml;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.ceml.data.*;
+import eu.linksmart.api.event.datafusion.GeneralRequestResponse;
 import eu.linksmart.ceml.api.CemlJavaAPI;
 import eu.linksmart.ceml.core.CEML;
 
 import eu.linksmart.ceml.core.CEMLManager;
-import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.epl.StatementInstance;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -26,6 +29,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Hashtable;
 import java.util.Map;
 import com.google.gson.*;
@@ -54,8 +60,8 @@ public class CEMLRest extends Component{
         // SimpleModule module = new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(aClass, ModelAutoregressiveNewralNetwork.class);
 
         //.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addAbstractTypeMapping(DataDescriptors.class, DataDefinition.class))
-        mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()))
-                .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, EPLStatement.class))
+        mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer()))
+                .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
                 .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.ceml.statements.LearningStatement.class))
                 .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
                 .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
@@ -172,38 +178,7 @@ public class CEMLRest extends Component{
             return new ResponseEntity<>("{\"message\":\"There was an unknown error!\"}",HttpStatus.INTERNAL_SERVER_ERROR);
 
     }*/
-    private ResponseEntity<String> create(String name, String body, String requestType){
-        MultiResourceResponses<CEMLRequest> retur ;
-        try {
 
-            switch (requestType){
-                case "":
-                    CEMLRequest request = mapper.readValue(body, CEMLManager.class);
-                    request.setName(name);
-                    retur= CemlJavaAPI.feedLearningRequest(request);
-                    break;
-                default:
-                    CEMLRequest request1 = mapper.readValue(body,CEMLManager.class);
-                    request1.setName(name);
-                    retur= CemlJavaAPI.feedLearningRequest(request1);
-            }
-
-        }catch (Exception e){
-            loggerService.error(e.getMessage(),e);
-            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-
-        }
-        if(retur!=null)
-            try {
-
-                return new ResponseEntity<>(mapper.writeValueAsString(retur),HttpStatus.ACCEPTED);
-
-            }catch (Exception e){
-                return new ResponseEntity<>("{\"message\":\"The process was done correctly. Unfortunately, the finally representation in not available!\"}",HttpStatus.MULTI_STATUS);
-            }
-        else
-            return new ResponseEntity<>("{\"message\":\"There was an unknown error!\"}",HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     @RequestMapping(value="/ceml/{name}", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getRequest(
             @PathVariable("name") String name
@@ -263,7 +238,61 @@ public class CEMLRest extends Component{
 
 
 
-        return create(name,body,"");
+            return prepareHTTPResponse(CemlJavaAPI.create(name, body, ""));
+
+    }
+    public  ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<CEMLRequest> result){
+        // preparing pointers
+        CEMLRequest statement =null;
+        String statementID =null;
+        if(!result.getResources().isEmpty()) {
+            statement = result.getHeadResource();
+            statementID = result.getHeadResource().getName();
+        }
+
+        // returning error in case neither an error was produced nor success. This case theoretical cannot happen, if it does there is a program error.
+        if(result.getResponses().isEmpty()) {
+            result.addResponse(new GeneralRequestResponse("Error",DynamicConst.getId(),statementID, "Agent", "Intern Server Error", 500, "Unknown status"));
+            loggerService.error("Impossible state reached");
+        }
+        // preparing location header
+        URI uri= null;
+        try {
+            if(statement!=null)
+                uri = new URI("/ceml/"+statement.getName());
+        } catch (URISyntaxException e) {
+            loggerService.error(e.getMessage(),e);
+
+            result.addResponse(new GeneralRequestResponse("Error",DynamicConst.getId(),statementID, "Agent", "Intern Server Error", 500, e.getMessage()));
+        }
+        // creating HTTP response
+
+        if (result.getResponses().size() == 1 ) {
+            if (uri != null)
+                return ResponseEntity.status(HttpStatus.valueOf(result.getOverallStatus())).location(uri).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
+            else
+                return ResponseEntity.status(HttpStatus.valueOf(result.getOverallStatus())).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
+        }
+        if(result.containsSuccess())
+            if (uri != null)
+                return ResponseEntity.status(HttpStatus.MULTI_STATUS).location(uri).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
+            else
+                return ResponseEntity.status(HttpStatus.MULTI_STATUS).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
+
+
+        return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
+
+    }
+    public  String toJsonString(Object message){
+
+        try {
+            return mapper.writeValueAsString(message);
+        } catch (IOException e) {
+            loggerService.error(e.getMessage(),e);
+            return "{\"Error\":\"500\",\"Error Text\":\"Internal Server Error\",\"Message\":\""+e.getMessage()+"\"}";
+        }
+
+
     }
     /*@RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateRequest(

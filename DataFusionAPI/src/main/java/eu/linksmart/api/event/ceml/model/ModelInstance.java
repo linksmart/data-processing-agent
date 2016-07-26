@@ -34,6 +34,8 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     @JsonProperty(value = "Parameters")
     protected  Map<String,Object> parameters;
 
+    @JsonIgnore
+    protected LearningObject lerner;
 
     public String getType() {
         return type;
@@ -44,15 +46,16 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     }
 
 
+    @JsonIgnore
     public LearningObject getLerner() {
         return lerner;
     }
 
+    @JsonIgnore
     public void setLerner(LearningObject lerner) {
         this.lerner = lerner;
     }
 
-    protected LearningObject lerner;
    // @JsonIgnore
    // protected Class<? extends Model>type;
 
@@ -86,8 +89,8 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     @Override
     public JsonSerializable build() throws Exception {
-        if(descriptors== null || descriptors.isEmpty() ||evaluator== null  || lerner == null)
-            throw new Exception("The descriptors, evaluator and learner are mandatory fields!");
+        if(descriptors== null || !descriptors.isEmpty() ||evaluator== null  || lerner == null)
+            throw new Exception("For the model the descriptors, evaluator and learner are mandatory fields!");
 
         nativeType = (Class<LearningObject>) lerner.getClass();
 

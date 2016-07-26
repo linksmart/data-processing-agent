@@ -3,20 +3,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import eu.linksmart.api.event.ceml.data.*;
+import eu.linksmart.api.event.ceml.model.ModelDeserializer;
 import eu.linksmart.ceml.core.CEML;
 import eu.linksmart.ceml.core.CEMLManager;
 import eu.linksmart.ceml.intern.Const;
 import eu.almanac.event.datafusion.intern.DynamicConst;
-import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.epl.StatementInstance;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
-import eu.linksmart.api.event.ceml.data.DataDescriptor;
-import eu.linksmart.api.event.ceml.data.DataDescriptorDeserializer;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.datafusion.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.api.event.datafusion.StatementResponse;
-import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
+import eu.linksmart.api.event.datafusion.GeneralRequestResponse;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -48,13 +47,14 @@ public class CemlJavaAPI {
         Configurator.addConfFile(Const.CEML_DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
 
+
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-       // SimpleModule module = new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(aClass, ModelAutoregressiveNewralNetwork.class);
 
-        mapper  .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, EPLStatement.class))
+        mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class,new DataDescriptorSerializer()))
+                .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
                 .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.ceml.statements.LearningStatement.class))
-                .registerModule(new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(Model.class, AutoregressiveNeuralNetworkModel.class))
+                .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
                 .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
     }
     public static MultiResourceResponses<CEMLRequest> feedLearningRequest(CEMLRequest request){
@@ -63,17 +63,41 @@ public class CemlJavaAPI {
             request.build();
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
-            responses = new MultiResourceResponses<CEMLRequest>();
-            responses.addResponse(new StatementResponse("Internal Server Error", DynamicConst.getId(),null,"Agent", e.getMessage(), 500));
+            responses = new MultiResourceResponses<>();
+            responses.addResponse(new GeneralRequestResponse("Internal Server Error", DynamicConst.getId(),null,"Agent", e.getMessage(), 500));
             return responses;
         }
 
-        responses.addResponse(new StatementResponse("OK",DynamicConst.getId(),request.getName(), "Learning Request", "OK",200 ));
+        responses.addResources(request.getName(),request);
+        responses.addResponse(new GeneralRequestResponse("Created",DynamicConst.getId(),request.getName(), "Learning Request", "Created",201 ));
         return responses;
 
 
     }
-    public static StatementResponse get(String name, String typeRequest) {
+    public static MultiResourceResponses<CEMLRequest> create(String name, String body, String requestType){
+        MultiResourceResponses<CEMLRequest> retur = new MultiResourceResponses<>() ;
+        CEMLRequest request;
+        try {
+            switch (requestType){
+
+
+                case "":
+                default:
+                    request = mapper.readValue(body,CEMLManager.class);
+                    request.setName(name);
+                    retur= CemlJavaAPI.feedLearningRequest(request);
+                    retur.addResources(request.getName(),request);
+            }
+
+        }catch (Exception e){
+            loggerService.error(e.getMessage(), e);
+            retur.addResponse(new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
+
+        }
+
+        return retur;
+    }
+    public static GeneralRequestResponse get(String name, String typeRequest) {
         String retur;
         try {
             if (name == null)
@@ -103,15 +127,15 @@ public class CemlJavaAPI {
                         retur = mapper.writeValueAsString(requests.get(name));
                 }
             else
-                return new StatementResponse("Not Found",DynamicConst.getId(),name, "Learning Request","Error 404 Not Found: Request with name " + name,404 );
+                return new GeneralRequestResponse("Not Found",DynamicConst.getId(),name, "Learning Request","Error 404 Not Found: Request with name " + name,404 );
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return new StatementResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 );
+            return new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 );
 
 
         }
-        return new StatementResponse("OK",DynamicConst.getId(),name, "Learning Request", "OK",200 );
+        return new GeneralRequestResponse("OK",DynamicConst.getId(),name, "Learning Request", "OK",200 );
 
     }
 /*
@@ -184,31 +208,7 @@ public class CemlJavaAPI {
 
     }
 */
-    public static  MultiResourceResponses<CEMLRequest> create(String name, String body, String requestType) {
-        MultiResourceResponses<CEMLRequest> responses=new MultiResourceResponses<>();
-        try {
 
-            MultiResourceResponses<CEMLRequest> aux;
-            switch (requestType) {
-                case "":
-                    CEMLRequest request = mapper.readValue(body, CEMLManager.class);
-                    request.setName(name);
-                    aux = feedLearningRequest(request);
-                    break;
-                default:
-                    CEMLRequest request1 = mapper.readValue(body, CEMLManager.class);
-                    request1.setName(name);
-                    aux = feedLearningRequest(request1);
-            }
-            //responses.addAllResponses(aux.getResponses());
-            //responses.getResources().putAll(aux.getResources());
-
-        } catch (Exception e) {
-            loggerService.error(e.getMessage(), e);
-            responses.addResponse(new StatementResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
-        }
-        return responses;
-    }
     public static MultiResourceResponses<CEMLRequest> create( CEMLRequest request) {
         MultiResourceResponses<CEMLRequest> responses= new MultiResourceResponses<>();
         try {
@@ -221,7 +221,7 @@ public class CemlJavaAPI {
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            responses.addResponse(new StatementResponse("Internal Server Error",DynamicConst.getId(),request.getName(), "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
+            responses.addResponse(new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),request.getName(), "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
 
         }
 
