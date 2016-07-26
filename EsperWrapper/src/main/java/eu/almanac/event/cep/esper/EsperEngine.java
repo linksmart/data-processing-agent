@@ -4,7 +4,7 @@ import com.espertech.esper.client.*;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.client.time.CurrentTimeSpanEvent;
 import eu.almanac.event.cep.intern.Const;
-import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
+import eu.almanac.event.datafusion.utils.epl.intern.StatementInstance;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.datafusion.EventType;
@@ -284,7 +284,7 @@ import java.util.*;
         ComplexEventHandler handler=null;
         // add the query and the listener for the query
         if(query.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS) {
-            ((EPLStatement)query).setCEHandler("eu.almanac.event.datafusion.handler.ComplexEventSynchHandler");
+            ((StatementInstance)query).setCEHandler("eu.almanac.event.datafusion.handler.ComplexEventSynchHandler");
             Class clazz = Class.forName(query.getCEHandler());
             Constructor constructor = clazz.getConstructor(Statement.class);
             handler = (ComplexEventHandler) constructor.newInstance(query);

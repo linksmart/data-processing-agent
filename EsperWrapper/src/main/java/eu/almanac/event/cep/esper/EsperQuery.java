@@ -1,7 +1,7 @@
 package eu.almanac.event.cep.esper;
 
 import eu.almanac.event.cep.intern.Const;
-import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.epl.StatementInstance;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
 import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -9,7 +9,7 @@ import eu.linksmart.gc.utils.configuration.Configurator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EsperQuery extends EPLStatement {
+public class EsperQuery extends StatementInstance {
 
     protected String name;
     protected String statement;
