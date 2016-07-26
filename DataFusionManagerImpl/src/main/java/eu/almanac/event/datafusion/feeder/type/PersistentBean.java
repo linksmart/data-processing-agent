@@ -1,7 +1,7 @@
 package eu.almanac.event.datafusion.feeder.type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.epl.StatementInstance;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 
@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class PersistentBean {
     @JsonProperty("statements")
-    protected ArrayList<EPLStatement> statements;
+    protected ArrayList<StatementInstance> statements;
     @JsonProperty("observations")
     protected Map<String,Observation[]> observations;
     PersistentBean(){
@@ -22,13 +22,13 @@ public class PersistentBean {
         observations = null;
     }
 
-    public ArrayList<EPLStatement> getStatements() {
+    public ArrayList<StatementInstance> getStatements() {
 
         return statements;
 
     }
 
-    public void setStatements(ArrayList<EPLStatement> statements) {
+    public void setStatements(ArrayList<StatementInstance> statements) {
         this.statements = statements;
     }
 
@@ -53,7 +53,7 @@ public class PersistentBean {
         if(statements==null)
             statements = new ArrayList<>();
 
-        statements.set(index, (EPLStatement) statement);
+        statements.set(index, (StatementInstance) statement);
 
     }
     public Observation[] getObservations(String topic) {

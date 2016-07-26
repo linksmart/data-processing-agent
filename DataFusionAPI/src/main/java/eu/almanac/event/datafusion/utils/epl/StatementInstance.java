@@ -12,7 +12,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class EPLStatement implements Statement {
+public class StatementInstance implements Statement {
 
 
     @JsonProperty("name")
@@ -46,10 +46,10 @@ public class EPLStatement implements Statement {
 
 
 
-    public EPLStatement() {
+    public StatementInstance() {
     }
 
-    public EPLStatement(String name, String statement, String[] scope) {
+    public StatementInstance(String name, String statement, String[] scope) {
         this.name = name;
         this.statement = statement;
         this.scope = scope;

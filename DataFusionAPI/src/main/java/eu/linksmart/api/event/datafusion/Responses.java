@@ -1,9 +1,6 @@
 package eu.linksmart.api.event.datafusion;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 15.07.2016 a researcher of Fraunhofer FIT.
@@ -11,14 +8,14 @@ import java.util.Map;
 public interface Responses <Resource> {
 
 
-    public Collection<StatementResponse> getResponses() ;
+    public Collection<GeneralRequestResponse> getResponses() ;
 
-    public void setResponses(Collection<StatementResponse> StatementResponses) ;
-    public void addAllResponses(Collection<StatementResponse> StatementResponses) ;
+    public void setResponses(Collection<GeneralRequestResponse> generalRequestResponses) ;
+    public void addAllResponses(Collection<GeneralRequestResponse> generalRequestResponses) ;
     public Resource getResources() ;
 
     public void setResources( Resource resources) ;
-    public void addResponse(StatementResponse StatementResponse);
+    public void addResponse(GeneralRequestResponse GeneralRequestResponse);
     public boolean containsSuccess();
 
 }

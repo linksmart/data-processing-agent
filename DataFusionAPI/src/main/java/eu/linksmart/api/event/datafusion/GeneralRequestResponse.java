@@ -1,7 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
 
-public class StatementResponse{
+public class GeneralRequestResponse {
     private  String headline;
     private  String agentID;
     private  String producerID;
@@ -11,12 +11,12 @@ public class StatementResponse{
     private MessagesTypes messageType =MessagesTypes.ERROR;
     private String topic="" ;
 
-    public StatementResponse(String headline, String agentID, String producerID, String producerName, String message, int status, String topic) {
+    public GeneralRequestResponse(String headline, String agentID, String producerID, String producerName, String message, int status, String topic) {
 
         setterStatementResponse( headline,  agentID,  producerID,  producerName,  message,  status);
         this.topic = topic;
     }
-    public StatementResponse(String headline, String agentID, String producerID, String producerName, String message, int status) {
+    public GeneralRequestResponse(String headline, String agentID, String producerID, String producerName, String message, int status) {
 
         setterStatementResponse( headline,  agentID,  producerID,  producerName,  message,  status);
     }
@@ -30,7 +30,7 @@ public class StatementResponse{
         this.messageType = MessagesTypes.get(status);
 
     }
-    public StatementResponse() {
+    public GeneralRequestResponse() {
 
     }
     public String getHeadline() {

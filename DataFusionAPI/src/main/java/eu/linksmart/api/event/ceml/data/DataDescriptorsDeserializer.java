@@ -1,21 +1,10 @@
 package eu.linksmart.api.event.ceml.data;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import eu.almanac.event.datafusion.utils.epl.EPLStatement;
-import eu.linksmart.api.event.ceml.LearningStatement;
-import eu.linksmart.api.event.ceml.model.Model;
-import eu.linksmart.api.event.ceml.model.ModelDeserializer;
-import eu.linksmart.api.event.datafusion.Statement;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
@@ -30,15 +19,18 @@ public class DataDescriptorsDeserializer extends JsonDeserializer<DataDescriptor
         int input, target, total;
 
         DataDescriptor.DescriptorTypes type = DataDescriptor.DescriptorTypes.NUMBER;
-        if(node.hasNonNull("Name")){
-            name =node.get("Name").textValue();
+        if(node.hasNonNull("Name")||node.hasNonNull("InputSize")||node.hasNonNull("TargetSize")||node.hasNonNull("TotalInputSize")){
+            if(node.hasNonNull("Name"))
+                name =node.get("Name").textValue();
+            else
+                name = UUID.randomUUID().toString();
 
 
 
             if(node.hasNonNull("TargetSize")){
                 target= node.get("TargetSize").asInt();
             }else
-                throw new IOException("TargetSize is a mandatory property!");
+                throw new IOException("TargetSize in DataDescriptors is a mandatory property!");
 
             if(node.hasNonNull("InputSize")){
                 input= node.get("InputSize").asInt();
@@ -46,12 +38,12 @@ public class DataDescriptorsDeserializer extends JsonDeserializer<DataDescriptor
                 total = node.get("TotalInputSize").asInt();
                 input = total - target;
             }else
-                throw new IOException("Either InputSize or TotalInputSize must be defined!");
+                throw new IOException("Either InputSize or TotalInputSize must be defined in DataDescriptors!");
 
             if(node.hasNonNull("Type"))
-                type= DataDescriptor.DescriptorTypes.valueOf(node.get("Type").textValue());
+                type= DataDescriptor.DescriptorTypes.valueOf(node.get("Type").textValue().toUpperCase());
             else
-                throw new IOException("Type is a mandatory property!");
+                throw new IOException("Type in DataDescriptors is a mandatory property!");
 
             return DataDescriptors.factory(name,input,target,type);
 

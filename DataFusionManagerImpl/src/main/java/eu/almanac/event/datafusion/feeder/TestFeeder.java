@@ -1,13 +1,11 @@
 package eu.almanac.event.datafusion.feeder;
 
-import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
+import eu.almanac.event.datafusion.utils.epl.intern.StatementInstance;
 import eu.almanac.ogc.sensorthing.api.datamodel.Datastream;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.Feeder;
-import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
-import eu.linksmart.gc.utils.function.Utils;
 
 import java.util.Date;
 import java.util.Hashtable;
@@ -60,7 +58,7 @@ public class TestFeeder implements Feeder, Runnable {
         observation.setId("1");
         long acc =0;
         int i=0;
-        EPLStatement statement = new EPLStatement();
+        StatementInstance statement = new StatementInstance();
         statement.setStatement("select total as messagesPerSecond from Observation.win:time(1 sec).stat:uni(cast(resultValue,double)) output last every 1 sec");
         statement.setName("test");
 

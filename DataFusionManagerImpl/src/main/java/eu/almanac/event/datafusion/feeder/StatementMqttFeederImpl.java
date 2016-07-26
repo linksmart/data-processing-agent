@@ -1,19 +1,14 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.datafusion.*;
 import eu.almanac.event.datafusion.intern.Const;
-import eu.almanac.event.datafusion.utils.epl.EPLStatement;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-import javax.xml.ws.Response;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 22.05.2015 a researcher of Fraunhofer FIT.
@@ -144,10 +139,10 @@ public class StatementMqttFeederImpl extends MqttFeederImpl {
         }
         if (responses==null){
             responses = new MultiResourceResponses<>();
-            responses.addResponse(new StatementResponse("Bad Request", DynamicConst.getId(),null,"Agent","The topic "+topic+" is not a known endpoint for receiving requests for agent this agent",400));
+            responses.addResponse(new GeneralRequestResponse("Bad Request", DynamicConst.getId(),null,"Agent","The topic "+topic+" is not a known endpoint for receiving requests for agent this agent",400));
 
         }
-        for(StatementResponse response : responses.getResponses()){
+        for(GeneralRequestResponse response : responses.getResponses()){
 
             try {
                 brokerService.publish(response.getTopic(), response.getMessage());

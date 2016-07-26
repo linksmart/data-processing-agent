@@ -1,8 +1,7 @@
 package eu.almanac.event.datafusion.handler;
 
 import eu.almanac.event.datafusion.intern.Utils;
-import eu.almanac.event.datafusion.utils.epl.intern.EPLStatement;
-import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.almanac.event.datafusion.utils.epl.intern.StatementInstance;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.utils.logging.LoggerService;
@@ -14,10 +13,10 @@ import java.util.Map;
  */
 public class ComplexEventSynchHandler extends BaseEventHandler<Map> implements ComplexEventHandler<Map> {
     protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
-    protected EPLStatement statement;
+    protected StatementInstance statement;
     public ComplexEventSynchHandler(Statement statement) {
         super(statement);
-        this.statement =(EPLStatement)statement;
+        this.statement =(StatementInstance)statement;
 
     }
 
