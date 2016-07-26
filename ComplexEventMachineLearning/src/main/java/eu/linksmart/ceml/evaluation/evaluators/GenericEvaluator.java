@@ -117,10 +117,10 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
             }
 
 
-            constructor = clazz.getConstructor(/*GenericEvaluator.class,*/EvaluationMetric.ComparisonMethod.class, target.getClass());
+            constructor = clazz.getConstructor(/*because is a child class of this*/this.getClass(),EvaluationMetric.ComparisonMethod.class, target.getClass());
 
 
-            return  constructor.newInstance(/*this,*/methodParameter,target);
+            return  constructor.newInstance(this,methodParameter,target);
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
         }

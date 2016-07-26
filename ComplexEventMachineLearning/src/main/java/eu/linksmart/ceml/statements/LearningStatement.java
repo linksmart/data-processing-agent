@@ -1,21 +1,23 @@
 package eu.linksmart.ceml.statements;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.ceml.handlers.base.LearningListHandler;
 import eu.linksmart.ceml.handlers.base.LearningMapHandler;
 import eu.linksmart.ceml.core.CEMLManager;
-import eu.almanac.event.datafusion.utils.epl.EPLStatement;
+import eu.almanac.event.datafusion.utils.epl.StatementInstance;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
-public class LearningStatement extends EPLStatement implements eu.linksmart.api.event.ceml.LearningStatement {
+public class LearningStatement extends StatementInstance implements eu.linksmart.api.event.ceml.LearningStatement {
+    @JsonIgnore
     @Override
     public CEMLRequest getRequest() {
         return manager;
     }
-
+    @JsonIgnore
     @Override
     public void setRequest(CEMLRequest request) {
         manager =request;
@@ -30,7 +32,7 @@ public class LearningStatement extends EPLStatement implements eu.linksmart.api.
         return this;
 
     }
-
+    @JsonIgnore
     private CEMLRequest manager =null;
     public LearningStatement(String name, CEMLManager manager , String statement){
         super(name,statement,new String[]{"default"});
@@ -42,6 +44,9 @@ public class LearningStatement extends EPLStatement implements eu.linksmart.api.
 
         CEHandler= LearningMapHandler.class.getCanonicalName();
         this.name =name;
+    }
+    public LearningStatement(){
+        super();
     }
 
 }

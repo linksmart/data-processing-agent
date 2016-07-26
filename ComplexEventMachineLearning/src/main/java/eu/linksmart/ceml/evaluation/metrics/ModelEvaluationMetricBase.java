@@ -10,9 +10,9 @@ public abstract class ModelEvaluationMetricBase extends EvaluationMetricBase<Dou
 
 
 
-    public ModelEvaluationMetricBase(ComparisonMethod method, double target){
+    public ModelEvaluationMetricBase(ComparisonMethod method, Double target){
         super(method, target);
-        currentValue = new Double(0.0);
+        currentValue = 0.0;
 
     }
 

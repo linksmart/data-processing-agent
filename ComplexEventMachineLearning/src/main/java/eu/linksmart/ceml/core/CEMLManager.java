@@ -1,5 +1,6 @@
 package eu.linksmart.ceml.core;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
@@ -26,13 +27,17 @@ public class CEMLManager implements CEMLRequest {
     private Configurator conf = Configurator.getDefaultConfig();
     private LoggerService loggerService = Utils.initDefaultLoggerService(CEMLManager.class);
     private int leadingModel =0;
+    @JsonProperty(value = "Descriptors")
     @JsonDeserialize(as = DataDefinition.class)
     protected DataDescriptors descriptors;
+    @JsonProperty(value = "Model")
     @JsonDeserialize(as = AutoregressiveNeuralNetworkModel.class)
     protected Model model;
-
+    @JsonProperty(value = "AuxiliaryStreams")
     protected ArrayList<Statement> auxiliaryStatements;
+    @JsonProperty(value = "LearningStreams")
     protected ArrayList<LearningStatement> learningStatements;
+    @JsonProperty(value = "DeploymentStreams")
     protected ArrayList<Statement> deployStatements;
     private boolean deployed=false;
 
@@ -100,7 +105,7 @@ public class CEMLManager implements CEMLRequest {
     @Override
     public JsonSerializable build() throws Exception {
 
-        if(descriptors==null||model==null||learningStatements!=null)
+        if(descriptors==null||model==null||learningStatements==null)
             throw new Exception("The descriptors, model and evaluator are mandatory fields!");
         descriptors.build();
 
@@ -130,11 +135,15 @@ public class CEMLManager implements CEMLRequest {
 
 
 
-        StatementFeeder.feedStatements(auxiliaryStatements);
+        if(auxiliaryStatements!=null&& !auxiliaryStatements.isEmpty())
+            StatementFeeder.feedStatements(auxiliaryStatements);
         ArrayList<Statement> arrayList = new ArrayList<>();
         arrayList.addAll(learningStatements);
         StatementFeeder.feedStatements(arrayList);
-        StatementFeeder.feedStatements(deployStatements);
+
+        if(deployStatements!=null&& !deployStatements.isEmpty())
+            StatementFeeder.feedStatements(deployStatements);
+
 
         return this;
     }

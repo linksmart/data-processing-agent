@@ -72,7 +72,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>>  {
     public class RMSEEvaluationMetric extends ModelEvaluationMetricBase{
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
-        public RMSEEvaluationMetric(ComparisonMethod method, double target) {
+        public RMSEEvaluationMetric(ComparisonMethod method, Double target) {
             super(method, target);
         }
 
@@ -100,7 +100,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>>  {
     public class MAEEvaluationMetric extends ModelEvaluationMetricBase{
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
-        public MAEEvaluationMetric(ComparisonMethod method, double target) {
+        public MAEEvaluationMetric(ComparisonMethod method, Double target) {
             super(method, target);
         }
 
@@ -135,7 +135,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>>  {
         int prev = 48,prevSeasonal=2,numHidden=24,numOutputs=24;
         int freeParamCount = ((prev+prevSeasonal*24)*numHidden+ numHidden*numOutputs)*7;
 
-        public AICcEvaluationMetric(ComparisonMethod method, double target) {
+        public AICcEvaluationMetric(ComparisonMethod method, Double target) {
             super(method, target);
             avgResidualSquare = 0;
         }

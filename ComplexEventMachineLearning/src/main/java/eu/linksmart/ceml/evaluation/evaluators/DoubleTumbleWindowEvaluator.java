@@ -136,7 +136,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     }
 
     @Override
-    public Map<String, EvaluationMetric<? extends Number>> getEvaluationAlgorithms() {
+    public Map<String, EvaluationMetric<Number>> getEvaluationAlgorithms() {
         return windowEvaluators[learnt].getEvaluationAlgorithms();
     }
 
