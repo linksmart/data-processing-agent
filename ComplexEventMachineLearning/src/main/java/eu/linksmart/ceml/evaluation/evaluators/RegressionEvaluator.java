@@ -129,11 +129,16 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>>  {
     More can be found here :http://www.ijcaonline.org/journal/number5/pxc387242.pdf
      */
     public class AICcEvaluationMetric extends ModelEvaluationMetricBase{
+        private static final int DAYS_A_WEEK = 7 ;
+        final int HOURS_A_DAY =24;
         private long N = 0; //fading increment
         double avgResidualSquare =0;
 
-        int prev = 48,prevSeasonal=2,numHidden=24,numOutputs=24;
-        int freeParamCount = ((prev+prevSeasonal*24)*numHidden+ numHidden*numOutputs)*7;
+        int prev = (Integer) parameters.get("prev");
+        int prevSeasonal=  (Integer) parameters.get("prevSeasonal");
+        int numHidden= (Integer) parameters.get("numHiddenNodes");
+
+        int freeParamCount =((prev+prevSeasonal*24)*numHidden+ numHidden* HOURS_A_DAY)*DAYS_A_WEEK;
 
         public AICcEvaluationMetric(ComparisonMethod method, Double target) {
             super(method, target);
