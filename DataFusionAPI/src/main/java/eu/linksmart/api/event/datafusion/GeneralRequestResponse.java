@@ -70,7 +70,7 @@ public class GeneralRequestResponse {
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        this.message = message.replace("\"","\\\"");
     }
 
     public int getStatus() {

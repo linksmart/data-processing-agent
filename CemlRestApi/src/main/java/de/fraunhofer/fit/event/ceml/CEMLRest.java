@@ -71,47 +71,10 @@ public class CEMLRest extends Component{
     @RequestMapping(value="/ceml", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getAll(     ) {
 
-        return get(null,null);
+        return prepareHTTPResponse(CemlJavaAPI.get(null, null));
         }
 
-    private ResponseEntity<String> get(String name, String typeRequest){
-        String retur;
-        try {
-            if(name ==null)
-                retur = (new Gson()).toJson(requests.values());
-            else if(requests.containsKey(name))
-                switch (typeRequest){
-                    case "complete":
-                        retur =mapper.writeValueAsString( requests.get(name));
-                        break;
-                    case "data":
-                        retur =mapper.writeValueAsString(requests.get(name).getDescriptors());
-                        break;
-                    case "evaluation":
-                       // retur =mapper.writeValueAsString(requests.get(name).getEvaluation());
-                        retur="";
-                        break;
-                    case "learning":
-                        retur = mapper.writeValueAsString((requests.get(name).getLearningStreamStatements()));
-                        break;
-                    case "model":
-                        retur = mapper.writeValueAsString(requests.get(name).getModel());
-                        break;
-                    case "deployment":
-                        retur = mapper.writeValueAsString((requests.get(name).getDeploymentStreamStatements()));
-                        break;
-                    default:
-                        retur = mapper.writeValueAsString(requests.get(name));
-                }
-            else
-                return new ResponseEntity<>("Error 404 Not Found: Request with name "+name, HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            loggerService.error(e.getMessage(),e);
-            return new ResponseEntity<>("Error 500 Intern Error: Error while executing method "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-
-        }
-        return new ResponseEntity<>(retur,HttpStatus.OK);
-    }/*
+  /*
     private ResponseEntity<String> update(String name, String body, String typeRequest){
         Object retur =null;
         try {
@@ -183,52 +146,57 @@ public class CEMLRest extends Component{
     public ResponseEntity<String> getRequest(
             @PathVariable("name") String name
     ){
+        return prepareHTTPResponse(CemlJavaAPI.get(name,"complete"));
 
-        return get(name,"complete");
     }
     @RequestMapping(value="/ceml/{name}/data", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getRequestData(
             @PathVariable("name") String name
     ){
-        return get(name, "data");
+        return prepareHTTPResponse(CemlJavaAPI.get(name,"data"));
     }
     @RequestMapping(value="/ceml/{name}/evaluation", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getEvaluation(
             @PathVariable("name") String name
     ){
-        return get(name, "evaluation");
+        return prepareHTTPResponse(CemlJavaAPI.get(name,"evaluation"));
     }
     @RequestMapping(value="/ceml/{name}/learning", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getLearning(
             @PathVariable("name") String name
     ){
-        return get(name,"learning");
+        return prepareHTTPResponse(CemlJavaAPI.get(name,"learning"));
+
     }
 
     @RequestMapping(value="/ceml/{name}/deployment", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getDeployment(
             @PathVariable("name") String name
     ){
-        return get(name,"deployment");
+        return prepareHTTPResponse(CemlJavaAPI.get(name,"deployment"));
     }
 
     @RequestMapping(value="/ceml/{name}/model", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getModel(
             @PathVariable("name") String name
     ){
-        return get(name,"model");
+        return prepareHTTPResponse(CemlJavaAPI.get(name,"model"));
+
     }
     @RequestMapping(value="/ceml/{name}/model/classify", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> classifyWithModel(
             @PathVariable("name") String name
     ){
-        return get(name,"classify");
+
+        return prepareHTTPResponse(CemlJavaAPI.get(name,"classify"));
+
     }
     @RequestMapping(value="/ceml/{name}/regression", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> predictWithModel(
             @PathVariable("name") String name
     ){
-        return get(name,"regression");
+        return prepareHTTPResponse(CemlJavaAPI.get(name,"regression"));
+
     }
     @RequestMapping(value="/ceml/{name}", method=  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRequest(
@@ -241,13 +209,14 @@ public class CEMLRest extends Component{
             return prepareHTTPResponse(CemlJavaAPI.create(name, body, ""));
 
     }
-    public  ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<CEMLRequest> result){
+    public <T> ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<T> result){
         // preparing pointers
-        CEMLRequest statement =null;
+        Object statement =null;
         String statementID =null;
         if(!result.getResources().isEmpty()) {
             statement = result.getHeadResource();
-            statementID = result.getHeadResource().getName();
+            if(statement instanceof CEMLRequest)
+                statementID = ((CEMLRequest)result.getHeadResource()).getName();
         }
 
         // returning error in case neither an error was produced nor success. This case theoretical cannot happen, if it does there is a program error.
@@ -259,7 +228,7 @@ public class CEMLRest extends Component{
         URI uri= null;
         try {
             if(statement!=null)
-                uri = new URI("/ceml/"+statement.getName());
+                uri = new URI("/ceml/"+statementID);
         } catch (URISyntaxException e) {
             loggerService.error(e.getMessage(),e);
 

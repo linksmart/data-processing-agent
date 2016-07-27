@@ -51,7 +51,7 @@ public class CemlJavaAPI {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
 
-        mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class,new DataDescriptorSerializer()))
+        mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer()))
                 .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
                 .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.ceml.statements.LearningStatement.class))
                 .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
@@ -97,47 +97,60 @@ public class CemlJavaAPI {
 
         return retur;
     }
-    public static GeneralRequestResponse get(String name, String typeRequest) {
+    public  static MultiResourceResponses<Object> get(String name, String typeRequest) {
         String retur;
+        MultiResourceResponses<Object> result = new MultiResourceResponses<>();
         try {
-            if (name == null)
-                retur = (new Gson()).toJson(requests.values());
-            else if (requests.containsKey(name))
+            if (name == null) {
+                Map<String,Object> map = new Hashtable<>();
+                map.putAll(requests);
+                result.setResources(map);
+            }else if (requests.containsKey(name))
+
                 switch (typeRequest) {
-                    case "complete":
-                        retur = mapper.writeValueAsString(requests.get(name));
-                        break;
                     case "data":
-                        retur = mapper.writeValueAsString(requests.get(name).getDescriptors());
+
+                        result.addResources(name, requests.get(name).getDescriptors());
                         break;
                     case "evaluation":
-                        // retur =mapper.writeValueAsString(requests.get(name).getEvaluation());
+                        result.addResources(requests.get(name).getModel().getEvaluator().getClass().getSimpleName(), requests.get(name).getModel().getEvaluator());
+
                         retur = "";
                         break;
                     case "learning":
-                        retur = mapper.writeValueAsString((requests.get(name).getLearningStreamStatements()));
+                        requests.get(name).getLearningStreamStatements().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
+
                         break;
                     case "model":
-                        retur = mapper.writeValueAsString(requests.get(name).getModel());
+                        result.addResources(requests.get(name).getModel().getClass().getSimpleName(), requests.get(name).getModel());
                         break;
                     case "deployment":
-                        retur = mapper.writeValueAsString((requests.get(name).getDeploymentStreamStatements()));
+                        requests.get(name).getDeploymentStreamStatements().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
+
                         break;
+
+                    case "auxiliary":
+                        requests.get(name).getAuxiliaryStreamStatements().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
+
+                        break;
+
+                    case "complete":
                     default:
-                        retur = mapper.writeValueAsString(requests.get(name));
+                        result.addResources(name, requests.get(name));
                 }
             else
-                return new GeneralRequestResponse("Not Found",DynamicConst.getId(),name, "Learning Request","Error 404 Not Found: Request with name " + name,404 );
+                result.addResponse( new GeneralRequestResponse("Not Found",DynamicConst.getId(),name, "Learning Request","Error 404 Not Found: Request with name " + name,404 ));
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            return new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 );
+            result.addResponse( new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
 
 
         }
-        return new GeneralRequestResponse("OK",DynamicConst.getId(),name, "Learning Request", "OK",200 );
-
+        result.addResponse( new GeneralRequestResponse("OK",DynamicConst.getId(),name, "Learning Request", "OK",200 ));
+        return result;
     }
+
 /*
     public static StatementResponse update(String name, String body, String typeRequest) {
         Object retur = null;
