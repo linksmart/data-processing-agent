@@ -59,7 +59,7 @@ import java.util.*;
 
         // add additional configuration
         Configuration config = new Configuration();
-
+        config.configure("intern.esper.conf.xml");
         //load values
         STATEMENT_INOUT_BASE_TOPIC = conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
         SIMULATION_EXTERNAL_CLOCK = conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK);
@@ -102,6 +102,7 @@ import java.util.*;
     @Override
     public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws Exception{
         Class cls= Class.forName(canonicalNameClassOrPkg);
+
         epService.getEPAdministrator().getConfiguration().addImport(cls);
         return true;
     }
@@ -334,8 +335,11 @@ import java.util.*;
                     for (EventBean event : result.getArray()) {
 
                         if (event.getUnderlying() instanceof Map)
-                            throw new Exception("The sync response in under construction");
-                           // handler.update((Map<String, Object>) event.getUnderlying());
+                            handler.update( new Object[]{event.getUnderlying()},null);
+                        else if (event.getUnderlying() instanceof Map[])
+                            handler.update( (Map[]) event.getUnderlying(),null);
+                        else if (event.getUnderlying() instanceof Object[])
+                            handler.update( (Object[])event.getUnderlying(),null);
                         else
                             throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",query.getID());
 
