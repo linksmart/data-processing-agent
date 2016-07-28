@@ -1,33 +1,53 @@
-package eu.almanac.event.datafusion.handler;
+package eu.almanac.event.datafusion.handler.base;
 
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.gc.utils.logging.LoggerService;
 
-import java.util.Map;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public abstract class BaseEventHandler<T>  implements ComplexEventHandler<T> {
+public abstract class BaseMapEventHandler<T>  implements ComplexEventHandler<T> {
     protected   EventExecutor eventExecutor = new EventExecutor();
+    protected Thread thread;
     protected Statement query;
 
-    public  BaseEventHandler(Statement statement){
+    protected final Class<T> collectionType;
+
+    public BaseMapEventHandler(Statement statement){
+        collectionType = (Class<T>) genericClass()[0];
         query = statement;
+        initThread();
     }
-    public  void update(T eventMap) {
+
+    private  void initThread(){
+
+        if(thread == null)
+            thread = new Thread(eventExecutor);
+
+        if(!thread.isAlive()){
+            thread = new Thread(eventExecutor);
+            thread.start();
+        }
+    }
+
+   public  void update(T eventMap) {
+        initThread();
         loggerService.info( Utils.getDateNowString() + " Simple update query: " + query.getName());
         eventExecutor.stack(eventMap);
 
 
 
+
+
     }
     private class EventExecutor implements Runnable{
-        private Map eventMap;
-        private LinkedBlockingQueue<T> queue = new LinkedBlockingQueue();
+        private final LinkedBlockingQueue<T> queue = new LinkedBlockingQueue<>();
         private boolean active = true;
 
         synchronized void stack(T eventMap){
@@ -83,5 +103,10 @@ public abstract class BaseEventHandler<T>  implements ComplexEventHandler<T> {
     @Override
     public void destroy() {
 
+    }
+    private Type[] genericClass() {
+        ParameterizedType parameterizedType = (ParameterizedType)getClass()
+                .getGenericSuperclass();
+        return parameterizedType.getActualTypeArguments();
     }
 }

@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.evaluation;
+package eu.linksmart.ceml.evaluation.evaluators.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
