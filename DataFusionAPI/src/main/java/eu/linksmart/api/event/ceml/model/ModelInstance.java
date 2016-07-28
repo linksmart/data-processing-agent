@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 
@@ -33,7 +34,8 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     protected  ArrayList<TargetRequest> targets;
     @JsonProperty(value = "Parameters")
     protected  Map<String,Object> parameters;
-
+    @JsonProperty(value = "Prediction")
+    protected PredictionInstance<Output> lastPrediction;
     @JsonIgnore
     protected LearningObject lerner;
 
@@ -66,6 +68,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
         this.parameters =parameters;
         this.evaluator = evaluator;
         this.evaluator.setParameters(parameters);
+        this.lastPrediction = new PredictionInstance<>();
 
     }
 
@@ -114,4 +117,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
         this.nativeType = nativeType;
     }
 
+    public PredictionInstance getLastPrediction() {
+        return lastPrediction;
+    }
 }

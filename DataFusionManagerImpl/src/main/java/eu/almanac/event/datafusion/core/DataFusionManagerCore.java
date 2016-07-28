@@ -42,12 +42,8 @@ public class DataFusionManagerCore {
 
     public static boolean start(String args){
         Boolean ret =init(args);
-        new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                statusLoop();
-            }
+        new Thread(() -> {
+            statusLoop();
         }
         ).start();
         return ret;
@@ -57,9 +53,7 @@ public class DataFusionManagerCore {
         active = true;
         while (active){
 
-            for(Feeder f:feeders)
-                if (f.isDown())
-                    active =false;
+            feeders.stream().filter(f -> f.isDown()).forEach(f -> active = false);
 
             if(active) {
                 loggerService.info("Data Fusion Manager is alive");
@@ -79,11 +73,9 @@ public class DataFusionManagerCore {
             }
         }
     }
-    protected static boolean init(String args){
-
-
+    private static void initConf(String args){
         if(args != null) {
-             Configurator.addConfFile(args);
+            Configurator.addConfFile(args);
 
         }else
             Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
@@ -96,6 +88,11 @@ public class DataFusionManagerCore {
             DynamicConst.setIsSet(true);
         else
             DynamicConst.setId(conf.getString(Const.ID_CONF_PATH));
+    }
+    protected static boolean init(String args){
+        
+        initConf(args);
+       
 
         loggerService.info(
                 "The Data-Fusion Manager is starting with ID: " + DynamicConst.getId().toString() + ";\n" +
@@ -105,29 +102,26 @@ public class DataFusionManagerCore {
                         " generating event in: " + conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH)
         );
 
-        // loading the CEP engines
-        for (String engines: conf.getList(Const.CEP_ENGINES_PATH))
-            try {
-                Class.forName(engines);
-            } catch (ClassNotFoundException e) {
-                loggerService.error(e.getMessage(),e);
-            }
-        //initializing engines
-        for (CEPEngine dfw: CEPEngine.instancedEngines.values()  ) {
-            List<String> pkgList= conf.getList(Const.AdditionalImportPackage);
-            for (String pkgName : pkgList    ) {
+        initCEPEngines();
+        initFeeders();
+        
+        initForceLoading();
+        return initFeeders();
+    }
 
+    private static void initForceLoading() {
+        if(conf.containsKey(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING))
+            conf.getList(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING).forEach(cls -> {
                 try {
-                    CEPEngineAdvanced dfwExtensions =dfw.getAdvancedFeatures();
-                    if(dfwExtensions != null)
-                        dfwExtensions.loadAdditionalPackages(pkgName);
-                } catch (Exception e) {
+                    Class c =Class.forName(cls.toString());
+                    loggerService.info("Loading extension: "+c.getSimpleName());
+                } catch (ClassNotFoundException e) {
                     loggerService.error(e.getMessage(),e);
                 }
-            }
+            });
+    }
 
-        }
-
+    private static boolean initFeeders() {
         // TODO: change the loading of feeder the same way as the CEP engines are loaded
         // loading of feeders
         Feeder feederImplEvents = null,  feederImplQuery = null, persistentFeeder=null,testFeeder = null;
@@ -137,8 +131,7 @@ public class DataFusionManagerCore {
 
             feederImplQuery = new StatementMqttFeederImpl(conf.get(Const.STATEMENT_INOUT_BROKER_CONF_PATH).toString(), conf.get(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH).toString());
 
-
-            persistentFeeder = new PersistenceFeeder(conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
+            persistentFeeder = new PersistenceFeeder((String[])conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
 
             for (CEPEngine wrapper: CEPEngine.instancedEngines.values()) {
@@ -156,7 +149,7 @@ public class DataFusionManagerCore {
         }
 
         if(feederImplQuery == null  || feederImplEvents ==null || feederImplEvents.isDown() || feederImplQuery.isDown()){
-            loggerService.error("The feeders couldn't start! MDF now is stopping");
+            loggerService.error("The feeders couldn't start! Agent now is stopping");
             return false;
         }
 
@@ -164,6 +157,31 @@ public class DataFusionManagerCore {
         feeders.add(feederImplQuery);
 
         return true;
+    }
+
+    private static void initCEPEngines() {
+        // loading the CEP engines
+        for (Object engines: conf.getList(Const.CEP_ENGINES_PATH))
+            try {
+                Class.forName(engines.toString());
+            } catch (ClassNotFoundException e) {
+                loggerService.error(e.getMessage(),e);
+            }
+        //initializing engines
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()  ) {
+            List pkgList= conf.getList(Const.AdditionalImportPackage);
+            for (Object pkgName : pkgList    ) {
+
+                try {
+                    CEPEngineAdvanced dfwExtensions =dfw.getAdvancedFeatures();
+                    if(dfwExtensions != null)
+                        dfwExtensions.loadAdditionalPackages(pkgName.toString());
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(),e);
+                }
+            }
+
+        }
 
     }
 

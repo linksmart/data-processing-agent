@@ -4,21 +4,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import eu.almanac.event.datafusion.handler.base.BaseMapEventHandler;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.DynamicConst;
-import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
-import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.logging.LoggerService;
-import eu.linksmart.gc.utils.mqtt.broker.BrokerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.almanac.ogc.sensorthing.api.datamodel.*;
-import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +29,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
-    public class ComplexEventMqttHandler extends BaseEventHandler<Map> implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler<Map> {
+    public class ComplexEventMqttHandler extends BaseMapEventHandler implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler<Map> {
 
 
     protected ArrayList<StaticBroker> brokerServices;
@@ -80,6 +76,8 @@ import java.util.concurrent.Executors;
     }
 
     private String OUTPUT_TOPIC;
+    private Object[] insertStream;
+    private Object[] removeStream;
 
     public ComplexEventMqttHandler(Statement query) throws RemoteException, MalformedURLException, StatementException {
         super(query);
@@ -226,7 +224,7 @@ import java.util.concurrent.Executors;
 
             String streamID = UUID.randomUUID().toString();
             for(Integer i=0; i<events.length;i++)
-                packObservation(i,"Measure", streamID);
+                Observation.factory(i, "Measure", streamID, query.getID());
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
@@ -235,24 +233,7 @@ import java.util.concurrent.Executors;
 
     }
 
-    public Observation packObservation(Object event, String resultType, String StreamID) {
-        Sensor sen = new Sensor();
-        sen.setId(query.getID());
-        sen.setObservations(null);
-        Datastream ds = new Datastream();
-        ds.setObservations(null);
-        ds.setId(StreamID);
-        Observation ob = new Observation();
-        ob.setDatastream(ds);
-        ob.setSensor(sen);
-        ob.setPhenomenonTime(new Date());
-        ob.setResultType(resultType);
-        ob.setResultValue(event);
-        ob.setFeatureOfInterest(null);
 
-
-        return ob;
-    }
 
     @Deprecated
     void sendEvent(Map eventMap, GenericCEP cepEvent) throws Exception {
@@ -298,7 +279,7 @@ import java.util.concurrent.Executors;
         }else {
 
 
-          return packObservation(event,description,streamID);
+          return Observation.factory(event, description, streamID, query.getID());
 
 
         }

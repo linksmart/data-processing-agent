@@ -1,13 +1,8 @@
 package eu.linksmart.ceml.statements;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import eu.linksmart.api.event.ceml.data.DataDescriptor;
-import eu.linksmart.ceml.handlers.DoubleListHandler;
-import eu.linksmart.ceml.handlers.DoubleMapLearningHandler;
-import eu.linksmart.ceml.handlers.IntegerListHandler;
-import eu.linksmart.ceml.handlers.IntegerMapLearningHandler;
-import eu.linksmart.ceml.handlers.base.LearningListHandler;
-import eu.linksmart.ceml.handlers.base.LearningMapHandler;
+import eu.linksmart.ceml.handlers.ListLearningHandler;
+import eu.linksmart.ceml.handlers.MapLearningHandler;
 import eu.linksmart.ceml.core.CEMLManager;
 import eu.almanac.event.datafusion.utils.epl.StatementInstance;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -34,28 +29,12 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
         if(manager==null||name==null||statement==null)
             throw new Exception("The name, CEMLRequest and statements are mandatory fields!");
         if(manager.getDescriptors().isLambdaTypeDefinition())
-            if(manager.getDescriptors().getType()== DataDescriptor.DescriptorTypes.NUMBER)
-                CEHandler = DoubleListHandler.class.getCanonicalName();
-            else if(manager.getDescriptors().getType()== DataDescriptor.DescriptorTypes.INTEGER)
-                CEHandler = IntegerListHandler.class.getCanonicalName();
-            else
-                CEHandler = eu.linksmart.ceml.handlers.LearningListHandler.class.getCanonicalName();
+
+                CEHandler = ListLearningHandler.class.getCanonicalName();
         else{
-            boolean allEqual = true;
-            DataDescriptor last = manager.getDescriptors().get(0);
-            for (DataDescriptor descriptor:manager.getDescriptors())
-                if(!last.equals(descriptor)){
-                    allEqual =false;
-                    break;
-                }
-            last = manager.getDescriptors().get(0);
-            if(allEqual) {
-                if (last.getType() == DataDescriptor.DescriptorTypes.NUMBER)
-                    CEHandler = DoubleMapLearningHandler.class.getCanonicalName();
-                else if (last.getType() == DataDescriptor.DescriptorTypes.INTEGER)
-                    CEHandler = IntegerMapLearningHandler.class.getCanonicalName();
-            }else
-                CEHandler = eu.linksmart.ceml.handlers.MapLearningHandler.class.getCanonicalName();
+
+
+                CEHandler = MapLearningHandler.class.getCanonicalName();
 
         }
 
@@ -70,9 +49,9 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
         this.statement =statement;
         this.manager =manager;
         if(manager.getDescriptors().isLambdaTypeDefinition())
-            CEHandler = LearningListHandler.class.getCanonicalName();
+            CEHandler = ListLearningHandler.class.getCanonicalName();
 
-        CEHandler= LearningMapHandler.class.getCanonicalName();
+        CEHandler= MapLearningHandler.class.getCanonicalName();
         this.name =name;
     }
     public LearningStatement(){

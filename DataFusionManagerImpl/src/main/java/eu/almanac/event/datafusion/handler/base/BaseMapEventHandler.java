@@ -7,20 +7,22 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public abstract class BaseMapEventHandler<T>  implements ComplexEventHandler<T> {
+public abstract class BaseMapEventHandler  implements ComplexEventHandler<Map> {
     protected   EventExecutor eventExecutor = new EventExecutor();
     protected Thread thread;
     protected Statement query;
 
-    protected final Class<T> collectionType;
+
 
     public BaseMapEventHandler(Statement statement){
-        collectionType = (Class<T>) genericClass()[0];
+
         query = statement;
         initThread();
     }
@@ -36,7 +38,7 @@ public abstract class BaseMapEventHandler<T>  implements ComplexEventHandler<T> 
         }
     }
 
-   public  void update(T eventMap) {
+   public  void update(Map eventMap) {
         initThread();
         loggerService.info( Utils.getDateNowString() + " Simple update query: " + query.getName());
         eventExecutor.stack(eventMap);
@@ -47,10 +49,10 @@ public abstract class BaseMapEventHandler<T>  implements ComplexEventHandler<T> 
 
     }
     private class EventExecutor implements Runnable{
-        private final LinkedBlockingQueue<T> queue = new LinkedBlockingQueue<>();
+        private final LinkedBlockingQueue<Map> queue = new LinkedBlockingQueue<>();
         private boolean active = true;
 
-        synchronized void stack(T eventMap){
+        synchronized void stack(Map eventMap){
             queue.add(eventMap);
             synchronized (queue) {
                 queue.notifyAll();
@@ -89,16 +91,35 @@ public abstract class BaseMapEventHandler<T>  implements ComplexEventHandler<T> 
         }
     }
 
-    protected abstract void processMessage(T events); protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+    protected abstract void processMessage(Map events); protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
 
-    public void update(T[] insertStream, T[] removeStream){
+    @Override
+    public void update(Map[] insertStream, Map[] removeStream){
         loggerService.info( Utils.getDateNowString() + " Multi-update query: " + query.getName());
         if(insertStream!=null)
-            for (T m: insertStream)
+            for (Map m: insertStream)
                 eventExecutor.stack(m);
         if(removeStream!=null)
-            for (T m: removeStream)
+            for (Map m: removeStream)
                 eventExecutor.stack(m);
+    }
+    public void update(Object[][] insertStream, Object[][] removeStream){
+        loggerService.info( Utils.getDateNowString() + " Last resort Multi-update query: " + query.getName());
+        Map aux = new HashMap<>(),aux2 = new HashMap<>();
+        if(insertStream!=null) {
+            int i=0;
+            for (Object o : insertStream)
+                aux.put(String.valueOf(i),o);
+
+        }
+        if(removeStream!=null) {
+            int i=0;
+            for (Object o : insertStream)
+                aux2.put(String.valueOf(i), o);
+        }
+
+        update(new Map[]{aux},new Map[]{aux});
+
     }
     @Override
     public void destroy() {

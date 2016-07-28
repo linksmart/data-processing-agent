@@ -1,7 +1,8 @@
 package eu.linksmart.ceml.evaluation.evaluators;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
-import eu.linksmart.ceml.evaluation.metrics.ModelEvaluationMetricBase;
+import eu.linksmart.ceml.evaluation.evaluators.base.GenericEvaluator;
+import eu.linksmart.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 
@@ -11,7 +12,7 @@ import java.util.*;
  * Created by devasya on 7/20/2016.
  * For evaluating regression
  */
-public class RegressionEvaluator extends GenericEvaluator<Collection<Number>>  {
+public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
 
     LinkedList<Map.Entry<Number,Number>> fixedSizeList = new LinkedList<>();

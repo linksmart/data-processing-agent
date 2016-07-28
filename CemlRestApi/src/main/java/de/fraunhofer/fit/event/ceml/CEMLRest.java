@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.ceml.data.*;
 import eu.linksmart.api.event.datafusion.GeneralRequestResponse;
-import eu.linksmart.ceml.api.CemlJavaAPI;
+
 import eu.linksmart.ceml.core.CEML;
 
 import eu.linksmart.ceml.core.CEMLManager;
@@ -71,7 +71,7 @@ public class CEMLRest extends Component{
     @RequestMapping(value="/ceml", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getAll(     ) {
 
-        return prepareHTTPResponse(CemlJavaAPI.get(null, null));
+        return prepareHTTPResponse(CEML.get(null, null));
         }
 
   /*
@@ -146,26 +146,26 @@ public class CEMLRest extends Component{
     public ResponseEntity<String> getRequest(
             @PathVariable("name") String name
     ){
-        return prepareHTTPResponse(CemlJavaAPI.get(name,"complete"));
+        return prepareHTTPResponse(CEML.get(name,"complete"));
 
     }
     @RequestMapping(value="/ceml/{name}/data", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getRequestData(
             @PathVariable("name") String name
     ){
-        return prepareHTTPResponse(CemlJavaAPI.get(name,"data"));
+        return prepareHTTPResponse(CEML.get(name,"data"));
     }
     @RequestMapping(value="/ceml/{name}/evaluation", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getEvaluation(
             @PathVariable("name") String name
     ){
-        return prepareHTTPResponse(CemlJavaAPI.get(name,"evaluation"));
+        return prepareHTTPResponse(CEML.get(name,"evaluation"));
     }
     @RequestMapping(value="/ceml/{name}/learning", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getLearning(
             @PathVariable("name") String name
     ){
-        return prepareHTTPResponse(CemlJavaAPI.get(name,"learning"));
+        return prepareHTTPResponse(CEML.get(name,"learning"));
 
     }
 
@@ -173,31 +173,26 @@ public class CEMLRest extends Component{
     public ResponseEntity<String> getDeployment(
             @PathVariable("name") String name
     ){
-        return prepareHTTPResponse(CemlJavaAPI.get(name,"deployment"));
+        return prepareHTTPResponse(CEML.get(name,"deployment"));
     }
 
     @RequestMapping(value="/ceml/{name}/model", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getModel(
             @PathVariable("name") String name
     ){
-        return prepareHTTPResponse(CemlJavaAPI.get(name,"model"));
+        return prepareHTTPResponse(CEML.get(name,"model"));
+
 
     }
-    @RequestMapping(value="/ceml/{name}/model/classify", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/ceml/{name}/model/prediction", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> classifyWithModel(
             @PathVariable("name") String name
     ){
 
-        return prepareHTTPResponse(CemlJavaAPI.get(name,"classify"));
+        return prepareHTTPResponse(CEML.get(name,"prediction"));
 
     }
-    @RequestMapping(value="/ceml/{name}/regression", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> predictWithModel(
-            @PathVariable("name") String name
-    ){
-        return prepareHTTPResponse(CemlJavaAPI.get(name,"regression"));
 
-    }
     @RequestMapping(value="/ceml/{name}", method=  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRequest(
             @PathVariable("name") String name,
@@ -206,7 +201,7 @@ public class CEMLRest extends Component{
 
 
 
-            return prepareHTTPResponse(CemlJavaAPI.create(name, body, ""));
+            return prepareHTTPResponse(CEML.create(name, body, ""));
 
     }
     public <T> ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<T> result){

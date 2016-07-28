@@ -2,6 +2,7 @@ package eu.linksmart.api.event.ceml.model;
 
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 
@@ -29,7 +30,8 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     public Output predict(Input input) throws Exception;
     public void setDescriptors(DataDescriptors descriptors);
     public DataDescriptors getDescriptors();
-  //  public boolean learn(Map<String, T> input) throws Exception;
+    public PredictionInstance getLastPrediction();
+    //  public boolean learn(Map<String, T> input) throws Exception;
   //  public List<T> predict(Map<String, T> input) throws Exception;
 
 

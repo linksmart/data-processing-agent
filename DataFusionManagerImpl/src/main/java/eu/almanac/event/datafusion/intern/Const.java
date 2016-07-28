@@ -42,4 +42,5 @@ public interface Const extends eu.linksmart.gc.utils.constants.Const, FeederCons
     public static final String AdditionalImportPackage ="DataFusionWrapper.AdditionalImportPackage";
 
     String TEST_FEEDER = "Feeder.Testing.Start";
+    String ADDITIONAL_CLASS_TO_BOOTSTRAPPING = "Agent.Init.Extensions";
 }

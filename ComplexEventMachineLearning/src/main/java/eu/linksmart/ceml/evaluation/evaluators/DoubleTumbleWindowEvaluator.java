@@ -1,8 +1,8 @@
 package eu.linksmart.ceml.evaluation.evaluators;
 
-import eu.linksmart.ceml.evaluation.EvaluatorBase;
+import eu.linksmart.ceml.evaluation.evaluators.base.EvaluatorBase;
 
-import eu.linksmart.ceml.evaluation.metrics.EvaluationMetricBase;
+import eu.linksmart.ceml.evaluation.metrics.base.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TumbleEvaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;

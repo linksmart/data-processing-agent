@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
+import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.ceml.evaluation.evaluators.RegressionEvaluator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -193,7 +195,9 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
             }
 
         }
-
+        Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
+        evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
+        lastPrediction = new PredictionInstance<List<Double>>(returnList,this.getName()+":"+this.getClass().getSimpleName(),evaluationMetrics);
         return  returnList;
     }
 

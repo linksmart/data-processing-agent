@@ -4,8 +4,9 @@ import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
-import eu.linksmart.ceml.evaluation.metrics.ClassEvaluationMetricBase;
-import eu.linksmart.ceml.evaluation.metrics.ModelEvaluationMetricBase;
+import eu.linksmart.ceml.evaluation.evaluators.base.GenericEvaluator;
+import eu.linksmart.ceml.evaluation.metrics.base.ClassEvaluationMetricBase;
+import eu.linksmart.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.*;
 
 import java.util.*;

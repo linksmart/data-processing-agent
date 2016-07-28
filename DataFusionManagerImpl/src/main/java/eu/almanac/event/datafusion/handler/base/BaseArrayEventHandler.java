@@ -7,6 +7,7 @@ import eu.linksmart.gc.utils.logging.LoggerService;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -37,9 +38,20 @@ public abstract class BaseArrayEventHandler implements ComplexEventHandler<Objec
     }
 
     public  void update(Object[] eventMap) {
-        initThread();
         loggerService.info( Utils.getDateNowString() + " Simple update query: " + query.getName());
-        eventExecutor.stack(eventMap);
+        initThread();
+
+        if(eventMap instanceof Map[]) {
+            Map[] aux = (Map[]) eventMap;
+            Object[] objects = new Object[eventMap.length];
+            int i=0;
+            for (Map map: aux) {
+                objects[i]= map.values().iterator().next();
+                i++;
+            }
+            eventExecutor.stack(objects);
+        }else
+            eventExecutor.stack(eventMap);
 
 
 

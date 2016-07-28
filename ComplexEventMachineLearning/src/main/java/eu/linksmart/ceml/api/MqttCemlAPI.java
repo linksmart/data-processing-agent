@@ -1,6 +1,7 @@
 package eu.linksmart.ceml.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.linksmart.ceml.core.CEML;
 import eu.linksmart.ceml.core.CEMLManager;
 import eu.linksmart.ceml.intern.Const;
 import eu.almanac.event.datafusion.utils.generic.Component;
@@ -22,16 +23,27 @@ import java.util.Observer;
  * Created by José Ángel Carvajal on 02.02.2016 a researcher of Fraunhofer FIT.
  */
 public class MqttCemlAPI extends Component {
+
+    static MqttCemlAPI me;
     protected StaticBroker brokerService;
     private Configurator conf = Configurator.getDefaultConfig();
-    private LoggerService loggerService = Utils.initDefaultLoggerService(MqttCemlAPI.class);
-    private ObjectMapper mapper = new ObjectMapper();
+    static private LoggerService loggerService = Utils.initDefaultLoggerService(MqttCemlAPI.class);
+
     private ArrayList<Observer> observers;
+static {
+    try {
+        me= new MqttCemlAPI();
+    } catch (MalformedURLException | ClassNotFoundException | MqttException e) {
+        loggerService.error(e.getMessage(),e);
+    }
+}
 
-
+    static public MqttCemlAPI getMeDafault(){
+        return me;
+    }
     public MqttCemlAPI() throws MalformedURLException, MqttException, ClassNotFoundException {
         super(MqttCemlAPI.class.getSimpleName(),"Provides a MQTT light API to the CEML logic", "MqttCemlAPI");
-        Class.forName(CemlJavaAPI.class.getCanonicalName());
+        Class.forName(CEML.class.getCanonicalName());
         brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST),conf.getString(Const.CEML_MQTT_BROKER_PORT));
         observers = new ArrayList<>();
         initAddRequest();
@@ -41,27 +53,24 @@ public class MqttCemlAPI extends Component {
     }
 
     protected void initAddRequest(){
-        Observer aux=  new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-                MqttMessage mqttMessage =(MqttMessage)arg;
-                try {
-                    CEMLRequest request = mapper.readValue(mqttMessage.getPayload(),CEMLManager.class);
+        Observer aux= (o, arg) -> {
+            MqttMessage mqttMessage =(MqttMessage)arg;
+            try {
+                CEMLRequest request = CEML.getMapper().readValue(mqttMessage.getPayload(), CEMLManager.class);
 
-                    MultiResourceResponses<CEMLRequest> response = CemlJavaAPI.create(request);
-                    reportFeedback(mapper.writeValueAsString(response));
+                MultiResourceResponses<CEMLRequest> response = CEML.create(request);
+                reportFeedback(CEML.getMapper().writeValueAsString(response));
 
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(),e);
-                    reportError(e.getMessage());
-                }
-
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+                reportError(e.getMessage());
             }
+
         };
         brokerService.addListener(conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "add/#",aux);
         observers.add(aux);
     }
-    protected void reportError(String message){
+    public void reportError(String message){
         try {
             brokerService.publish(conf.getString(Const.CEML_MQTT_ERROR_TOPIC),message);
         } catch (Exception e) {
@@ -71,7 +80,7 @@ public class MqttCemlAPI extends Component {
     }
 
 
-    protected void reportFeedback(String message){
+    public void reportFeedback(String message){
 
         try {
             brokerService.publish(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC),message);

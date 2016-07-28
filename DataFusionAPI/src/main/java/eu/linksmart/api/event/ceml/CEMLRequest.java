@@ -24,8 +24,11 @@ public interface CEMLRequest<ValueType, ReturnValueType, LearningObject> extends
     public Collection<Statement> getDeploymentStreamStatements();
     public Collection<Statement> getAuxiliaryStreamStatements();
     public Statement getStreamStatement(String StatementId);
+    public Map<String,Object> getSettings();
     public void deploy() throws Exception;
     public void undeploy() throws Exception;
+
+    public void report();
 
     void setName(String name);
 }

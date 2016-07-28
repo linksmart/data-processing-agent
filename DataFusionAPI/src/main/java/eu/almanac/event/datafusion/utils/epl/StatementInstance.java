@@ -25,7 +25,7 @@ public class StatementInstance implements Statement {
     @JsonProperty("input")
     protected String[] input ={""};
     @JsonProperty("output")
-    protected String[] output={""};
+    protected String[] output=null;
 
     @JsonProperty("CEHandler")
     protected String CEHandler= "eu.almanac.event.datafusion.handler.ComplexEventMqttHandler";

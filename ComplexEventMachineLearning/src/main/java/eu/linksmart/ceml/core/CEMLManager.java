@@ -1,6 +1,7 @@
 package eu.linksmart.ceml.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
@@ -17,12 +18,13 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
 public class CEMLManager implements CEMLRequest {
-
+    @JsonProperty(value = "Name")
     protected String name;
     private Configurator conf = Configurator.getDefaultConfig();
     private LoggerService loggerService = Utils.initDefaultLoggerService(CEMLManager.class);
@@ -39,7 +41,23 @@ public class CEMLManager implements CEMLRequest {
     protected ArrayList<LearningStatement> learningStatements;
     @JsonProperty(value = "DeploymentStreams")
     protected ArrayList<Statement> deployStatements;
+
+    @JsonProperty(value = "Settings")
+    protected Map<String,Object> settings;
+
     private boolean deployed=false;
+
+
+    @Override
+    public Map<String, Object> getSettings() {
+        return settings;
+    }
+
+    public void setSettings(Map<String, Object> settings) {
+        this.settings = settings;
+    }
+
+
 
     @Override
     public DataDescriptors getDescriptors() {
@@ -98,6 +116,16 @@ public class CEMLManager implements CEMLRequest {
     }
 
     @Override
+    public void report() {
+        try {
+            CEML.report(CEML.getMapper().writeValueAsString(this));
+
+        }catch (JsonProcessingException e) {
+            loggerService.error(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public void setName(String name) {
         this.name=name;
     }
@@ -134,15 +162,29 @@ public class CEMLManager implements CEMLRequest {
         model.build();
 
 
-
-        if(auxiliaryStatements!=null&& !auxiliaryStatements.isEmpty())
-            StatementFeeder.feedStatements(auxiliaryStatements);
+        MultiResourceResponses<Statement> responses;
+        if(auxiliaryStatements!=null&& !auxiliaryStatements.isEmpty()) {
+            responses =StatementFeeder.feedStatements(auxiliaryStatements);
+            if (!responses.containsSuccess())
+                throw new Exception(CEML.getMapper().writeValueAsString(responses));
+        }
         ArrayList<Statement> arrayList = new ArrayList<>();
         arrayList.addAll(learningStatements);
-        StatementFeeder.feedStatements(arrayList);
+        responses =StatementFeeder.feedStatements(arrayList);
+        if (!responses.containsSuccess())
+            throw new Exception(CEML.getMapper().writeValueAsString(responses));
 
-        if(deployStatements!=null&& !deployStatements.isEmpty())
-            StatementFeeder.feedStatements(deployStatements);
+        if(deployStatements!=null&& !deployStatements.isEmpty()) {
+            responses =StatementFeeder.feedStatements(deployStatements);
+            if (!responses.containsSuccess())
+                throw new Exception(CEML.getMapper().writeValueAsString(responses));
+
+            if (!(settings.containsKey("AlwaysDeploy")&&(settings.get("AlwaysDeploy") instanceof Boolean &&(settings.get("AlwaysDeploy")).equals(true))))
+                //deployStatements.forEach(s->StatementFeeder.pauseStatement(s.getID()));
+                StatementFeeder.pauseStatements(deployStatements);
+
+
+        }
 
 
         return this;

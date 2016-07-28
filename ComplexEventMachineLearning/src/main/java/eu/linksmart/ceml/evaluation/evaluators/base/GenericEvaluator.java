@@ -1,10 +1,9 @@
 package eu.linksmart.ceml.evaluation.evaluators.base;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
-import eu.linksmart.ceml.evaluation.EvaluatorBase;
 import eu.linksmart.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
 import eu.linksmart.ceml.evaluation.evaluators.WindowEvaluator;
-import eu.linksmart.ceml.evaluation.metrics.EvaluationMetricBase;
+import eu.linksmart.ceml.evaluation.metrics.base.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.gc.utils.function.Utils;

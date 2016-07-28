@@ -13,10 +13,10 @@ public class Application {
         if(args.length>0)
             confFile= args[0];
 
-        MqttCemlAPI api;
+        //MqttCemlAPI api;
         try {
             DataFusionManagerCore.start(confFile);
-             api = new MqttCemlAPI();
+          ///   api = new MqttCemlAPI();
 
             while (DataFusionManagerCore.isActive()){
                 try {

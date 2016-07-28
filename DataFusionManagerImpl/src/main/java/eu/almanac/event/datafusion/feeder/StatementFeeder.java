@@ -300,7 +300,7 @@ public class StatementFeeder implements Feeder {
 
         } catch (StatementException se) {
             result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 400, se.getErrorTopic(), se.getMessage()));
-
+            loggerService.error(se.getMessage(), se);
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
             result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 500, "Intern Server Error", e.getMessage()));
