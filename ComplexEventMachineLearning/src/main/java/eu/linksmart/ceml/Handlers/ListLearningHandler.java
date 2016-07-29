@@ -26,7 +26,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
 
     static protected Configurator conf = Configurator.getDefaultConfig();
     static protected LoggerService loggerService = Utils.initDefaultLoggerService(ListLearningHandler.class);
-    final protected eu.linksmart.api.event.ceml.LearningStatement statement;
+    final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;
     final protected DataDescriptors descriptors;
@@ -54,7 +54,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
                 List withoutTarget = input.subList(0, descriptors.getInputSize());
 
 
-                List prediction = (List) model.predict(withoutTarget);
+                List prediction = (List) model.predict(withoutTarget).getPrediction();
 
                 model.learn(input);
 
@@ -74,9 +74,5 @@ public  class ListLearningHandler extends BaseListEventHandler {
             originalRequest.report();
         }
     }
-    private Type[] genericClass() {
-        ParameterizedType parameterizedType = (ParameterizedType)getClass()
-                .getGenericSuperclass();
-        return parameterizedType.getActualTypeArguments();
-    }
+
 }

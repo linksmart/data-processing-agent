@@ -3,6 +3,7 @@ package eu.linksmart.api.event.ceml;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.model.Model;
+import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.datafusion.Statement;
 
@@ -20,6 +21,8 @@ public interface CEMLRequest<ValueType, ReturnValueType, LearningObject> extends
    // public Evaluator<ReturnValueType> getEvaluator();
     public String getName();
 
+    public Prediction<ReturnValueType> getLastPrediction();
+    public void setLastPrediction(Prediction<ReturnValueType> prediction);
     public Collection<LearningStatement> getLearningStreamStatements();
     public Collection<Statement> getDeploymentStreamStatements();
     public Collection<Statement> getAuxiliaryStreamStatements();

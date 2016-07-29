@@ -84,9 +84,4 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         }
 
     }
-    private Type[] genericClass() {
-        ParameterizedType parameterizedType = (ParameterizedType)getClass()
-                .getGenericSuperclass();
-        return parameterizedType.getActualTypeArguments();
-    }
 }

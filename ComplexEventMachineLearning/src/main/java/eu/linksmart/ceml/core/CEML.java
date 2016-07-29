@@ -6,6 +6,7 @@ import java.util.*;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -17,12 +18,19 @@ import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.*;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.model.ModelDeserializer;
+import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.ceml.api.MqttCemlAPI;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.ceml.intern.Const;
+import org.apache.commons.math3.filter.*;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
+
 /**
  * Created by angel on 13/11/15.
  */
@@ -35,6 +43,8 @@ public class CEML implements AnalyzerComponent {
     static private Map<String, CEMLRequest> requests = new Hashtable<>();
 
     static private ObjectMapper mapper = new ObjectMapper();
+    private static Map<String, KalmanFilter> filters = new Hashtable<>();
+
     public static ObjectMapper getMapper() {
         return mapper;
     }
@@ -49,7 +59,7 @@ public class CEML implements AnalyzerComponent {
 
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
+        mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
 
         mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer()))
                 .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
@@ -186,8 +196,83 @@ public class CEML implements AnalyzerComponent {
     static public Observation LastPrediction(String request){
         return Observation.factory(requests.get(request).getModel().getLastPrediction(),"Prediction",request,DynamicConst.getId());
     }
+    static public Observation PredictUsing(String request,Object input){
+        try {
+            Object aux = input;
+            if(input instanceof Object[])
+                aux=Arrays.asList((Object[])input);
+
+            Prediction prediction = requests.get(request).getModel().predict(aux);
+            requests.get(request).setLastPrediction(prediction);
+            return Observation.factory(prediction,"Prediction",request,DynamicConst.getId());
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
+            return Observation.factory(e.getMessage(),"Error",request,DynamicConst.getId());
+        }
+    }
     static void report(String message){
         MqttCemlAPI.getMeDafault().reportFeedback(message);
+    }
+    static private Map<String,Number> lastKnown = new Hashtable<>();
+    static public Number filter(String filterName,Number measurement) {
+        if (!filters.containsKey(filterName))
+            initFilter(filterName);
+
+        KalmanFilter filter = filters.get(filterName);
+        // predict the state estimate one time-step ahead
+        // optionally provide some control input
+        filter.predict();
+
+
+        // obtain measurement vector z
+        RealVector z = new ArrayRealVector(1, measurement.doubleValue());
+
+        // correct the state estimate with the latest measurement
+        filter.correct(z);
+
+        double[] stateEstimate = filter.getStateEstimation();
+
+        return stateEstimate[0];
+    }
+    static public Observation filter(String filterName,Observation measurement){
+        try {
+            if (measurement.getValue() instanceof Number)
+                return Observation.factory(filter(filterName, ((Number) measurement.getResultValue())), measurement.getResultType().toString(), measurement.getDatastream().getId(), measurement.getSensor().getId());
+            if (measurement.getValue() instanceof String) {
+                Double value = null;
+                try {
+                    value = Double.valueOf(((String) measurement.getValue()));
+                    return Observation.factory(filter(filterName, value), measurement.getResultType().toString(), measurement.getDatastream().getId(), measurement.getSensor().getId());
+                } catch (Exception ignored) {
+                }
+            }
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+        }
+
+        loggerService.error("The provided Observation is neither an Number or a known type that can be converted to a Number");
+
+        return measurement;
+
+
+    }
+    static protected void initFilter(String filterName){
+        // A = [ 1 ]
+        RealMatrix A = new Array2DRowRealMatrix(new double[] { 1d });
+        // no control input
+        RealMatrix B = null;
+        // H = [ 1 ]
+        RealMatrix H = new Array2DRowRealMatrix(new double[] { 1d });
+        // Q = [ 0 ]
+        RealMatrix Q = new Array2DRowRealMatrix(new double[] { 0.01 });
+        // R = [ 0 ]
+        RealMatrix R = new Array2DRowRealMatrix(new double[] { 0.5 });
+
+        ProcessModel pm
+                = new DefaultProcessModel(A, B, Q, new ArrayRealVector(new double[] {0.0}), null);
+        MeasurementModel mm = new DefaultMeasurementModel(H, R);
+        KalmanFilter filter = new KalmanFilter(pm, mm);
+        filters.put(filterName,filter);
     }
 /*
     public static StatementResponse update(String name, String body, String typeRequest) {

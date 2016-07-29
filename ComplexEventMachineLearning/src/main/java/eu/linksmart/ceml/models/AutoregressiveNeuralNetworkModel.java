@@ -174,31 +174,34 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
     //This method is just to localize the supperesswarning annotation.
 
     @Override
-    public List<Double> predict(List<Double> input) throws Exception {
-        List<Double> tempSeasonalCache =  input.subList(0,seasonalityPeriod * ArSeasonalP);
-        List<Double> tempRecentPointersCache = input.subList(0, ArP);
+    public PredictionInstance<List<Double>> predict(List<Double> input) throws Exception {
+        if (input.size()>=descriptors.getInputSize()) {
+            List<Double> tempSeasonalCache = input.subList(0, seasonalityPeriod * ArSeasonalP);
+            List<Double> tempRecentPointersCache = input.subList(0, ArP);
 
 
-        List<Double> returnList = new LinkedList<>();
-        for (int netindex = 0; netindex < lerner.size()  ; netindex++) {
-            MultiLayerNetwork nnet = lerner.get(netindex);
-            // create the input list
-            List<Double> inpuList = new LinkedList<>();
-            inpuList.addAll(tempRecentPointersCache);
-            inpuList.addAll(getPrevSeasonalPoints(tempSeasonalCache,netindex));
+            List<Double> returnList = new LinkedList<>();
+            for (int netindex = 0; netindex < lerner.size(); netindex++) {
+                MultiLayerNetwork nnet = lerner.get(netindex);
+                // create the input list
+                List<Double> inpuList = new LinkedList<>();
+                inpuList.addAll(tempRecentPointersCache);
+                inpuList.addAll(getPrevSeasonalPoints(tempSeasonalCache, netindex));
 
-            final INDArray inputArr = getINDArray(inpuList);
-            INDArray out = nnet.output(inputArr, false);
+                final INDArray inputArr = getINDArray(inpuList);
+                INDArray out = nnet.output(inputArr, false);
 
-            for (int i = 0; i < numOutputsPerNet; i++) {
-                returnList.add(out.getDouble(i));
+                for (int i = 0; i < numOutputsPerNet; i++) {
+                    returnList.add(out.getDouble(i));
+                }
+
             }
+            Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
+            evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
 
+            return new PredictionInstance<List<Double>>(returnList, this.getName() + ":" + this.getClass().getSimpleName(), evaluationMetrics);
         }
-        Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
-        evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
-        lastPrediction = new PredictionInstance<List<Double>>(returnList,this.getName()+":"+this.getClass().getSimpleName(),evaluationMetrics);
-        return  returnList;
+        return new PredictionInstance<>();
     }
 
     @Override

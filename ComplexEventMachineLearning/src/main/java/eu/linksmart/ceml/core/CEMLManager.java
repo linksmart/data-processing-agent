@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
+import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
@@ -46,7 +47,7 @@ public class CEMLManager implements CEMLRequest {
     protected Map<String,Object> settings;
 
     private boolean deployed=false;
-
+    Prediction lastPrediction;
 
     @Override
     public Map<String, Object> getSettings() {
@@ -73,6 +74,16 @@ public class CEMLManager implements CEMLRequest {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public Prediction getLastPrediction() {
+        return lastPrediction;
+    }
+
+    @Override
+    public void setLastPrediction(Prediction prediction) {
+        lastPrediction= prediction;
     }
 
     @Override
@@ -158,7 +169,7 @@ public class CEMLManager implements CEMLRequest {
         }
 
         model.setDescriptors(descriptors);
-
+        model.setName(name);
         model.build();
 
 
