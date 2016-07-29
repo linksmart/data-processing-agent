@@ -148,17 +148,13 @@ public class Configurator extends ConfigurationConst {
         }
 
     }
-    public List<String> getList(String key){
+    public List getList(String key){
 
-        // BugFIX: the getList is not returning a split list. I needed to do it by myself
-        //return  config.getList(String.class, key);
-        String[] strings = config.getString(key).split(",");
-        List<String> ret = new ArrayList<>();
-        for(String i: strings)
-            ret.add(i.trim());
-
-        return ret;
+        return config.getList(key);
 
 
+    }
+    public boolean containsKey(String key){
+        return config.containsKey(key);
     }
 }

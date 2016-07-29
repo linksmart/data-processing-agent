@@ -52,8 +52,10 @@ public class TopicMessageDeliverable implements Runnable{
             try {
                 message = mqttMessages.take();
                 LOG.debug("Processing incoming message of topic "+ message.getTopic());
-                for (Observer observer : observers)
-                    observer.update(null, message);
+                synchronized (this) {
+                    for (Observer observer : observers)
+                        observer.update(null, message);
+                }
 
             } catch (InterruptedException e) {
                LOG.error(e.getMessage(),e);
