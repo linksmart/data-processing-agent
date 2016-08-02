@@ -28,6 +28,6 @@
             <artifactId>SiddhiWrapper</artifactId>
         </dependency>
     </dependencies>
-
+<!--  test-->
     <packaging>jar</packaging>
 </project>
