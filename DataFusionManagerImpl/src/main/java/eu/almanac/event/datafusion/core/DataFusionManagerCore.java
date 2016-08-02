@@ -13,7 +13,7 @@ import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class DataFusionManagerCore {
 
     protected static boolean active =false;
     protected static Configurator conf;
-    protected static  LoggerService loggerService;
+    protected static  Logger loggerService;
 
     public static void run(String args){
 
@@ -81,7 +81,7 @@ public class DataFusionManagerCore {
             Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
 
-        loggerService = Utils.initDefaultLoggerService(DataFusionManagerCore.class);
+        loggerService = Utils.initLoggingConf(DataFusionManagerCore.class);
 
         String idPath= conf.getString(Const.ID_CONF_PATH);
         if(idPath.equals("*"))
@@ -96,10 +96,10 @@ public class DataFusionManagerCore {
 
         loggerService.info(
                 "The Data-Fusion Manager is starting with ID: " + DynamicConst.getId().toString() + ";\n" +
-                        " with incoming events in broker tcp://" + conf.get(Const.EVENTS_IN_BROKER_CONF_PATH) + ":" + conf.get(Const.EVENTS_IN_BROKER_PORT_CONF_PATH) +
-                        " waiting for events from the topic: " + conf.get(Const.EVENT_IN_TOPIC_CONF_PATH) + ";\n" +
-                        " waiting for queries from topic: " + conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH) +
-                        " generating event in: " + conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH)
+                        " with incoming events in broker tcp://" + conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH) + ":" + conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH) +
+                        " waiting for events from the topic: " + conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH) + ";\n" +
+                        " waiting for queries from topic: " + conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH) +
+                        " generating event in: " + conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH)
         );
 
         initCEPEngines();
@@ -127,9 +127,9 @@ public class DataFusionManagerCore {
         Feeder feederImplEvents = null,  feederImplQuery = null, persistentFeeder=null,testFeeder = null;
         try {
 
-            feederImplEvents = new EventMqttFeederImpl(conf.get(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.get(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
+            feederImplEvents = new EventMqttFeederImpl(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
 
-            feederImplQuery = new StatementMqttFeederImpl(conf.get(Const.STATEMENT_INOUT_BROKER_CONF_PATH).toString(), conf.get(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.STATEMENT_IN_TOPIC_CONF_PATH).toString());
+            feederImplQuery = new StatementMqttFeederImpl(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH).toString(), conf.getString(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH).toString());
 
             persistentFeeder = new PersistenceFeeder((String[])conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
@@ -138,7 +138,7 @@ public class DataFusionManagerCore {
                 feederImplEvents.dataFusionWrapperSignIn(wrapper);
                 feederImplQuery.dataFusionWrapperSignIn(wrapper);
                 persistentFeeder.dataFusionWrapperSignIn(wrapper);
-                if(conf.getBool(Const.TEST_FEEDER)) {
+                if(conf.getBoolean(Const.TEST_FEEDER)) {
                     testFeeder = new TestFeeder();
                     testFeeder.dataFusionWrapperSignIn(wrapper);
                 }

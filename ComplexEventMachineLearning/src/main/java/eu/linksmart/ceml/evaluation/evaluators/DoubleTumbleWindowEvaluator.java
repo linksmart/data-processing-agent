@@ -1,5 +1,6 @@
 package eu.linksmart.ceml.evaluation.evaluators;
 
+import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.ceml.evaluation.evaluators.base.EvaluatorBase;
 
 import eu.linksmart.ceml.evaluation.metrics.base.EvaluationMetricBase;
@@ -10,9 +11,10 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 import eu.linksmart.ceml.evaluation.metrics.InitialSamples;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -22,13 +24,17 @@ import java.util.Map;
 public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implements TumbleEvaluator<Integer>  {
 
 
-    protected static LoggerService loggerService = Utils.initDefaultLoggerService(DoubleTumbleWindowEvaluator.class);
+    protected static Logger loggerService = Utils.initLoggingConf(DoubleTumbleWindowEvaluator.class);
 
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
     private int learning = 0, learnt =0;
     private ModelEvaluationMetric initialSamples;
 
-    public DoubleTumbleWindowEvaluator() {
+    private ArrayList<String> classes;
+    public DoubleTumbleWindowEvaluator(ArrayList<TargetRequest> targets) {
+        this.targets =targets;
+
+
     }
 
 

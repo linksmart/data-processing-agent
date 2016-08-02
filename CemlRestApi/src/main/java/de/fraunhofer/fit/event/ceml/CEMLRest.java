@@ -22,7 +22,7 @@ import eu.linksmart.api.event.datafusion.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.Statement;
 
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +43,7 @@ import com.google.gson.*;
 public class CEMLRest extends Component{
 
     // private Configurator conf = Configurator.getDefaultConfig();
-     private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
+     private Logger loggerService = Utils.initLoggingConf(CEML.class);
 
     private Map<String, CEMLRequest> requests = new Hashtable<>();
     private ObjectMapper mapper = new ObjectMapper();

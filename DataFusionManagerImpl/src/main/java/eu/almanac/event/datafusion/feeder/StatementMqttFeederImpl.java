@@ -1,6 +1,5 @@
 package eu.almanac.event.datafusion.feeder;
 
-import com.google.gson.Gson;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.datafusion.*;
 import eu.almanac.event.datafusion.intern.Const;
@@ -16,7 +15,6 @@ import java.util.Arrays;
 
 public class StatementMqttFeederImpl extends MqttFeederImpl {
 
-    private Gson parser = new Gson();
     // configuration
     private String STATEMENT_INOUT_BASE_TOPIC ="queries/";
     @SuppressWarnings("UnusedDeclaration")

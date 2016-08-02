@@ -22,7 +22,6 @@ import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.ceml.api.MqttCemlAPI;
 import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.ceml.intern.Const;
 import org.apache.commons.math3.filter.*;
@@ -30,6 +29,7 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
+import org.slf4j.Logger;
 
 /**
  * Created by angel on 13/11/15.
@@ -38,7 +38,7 @@ public class CEML implements AnalyzerComponent {
 
     static AnalyzerComponent info;
     static private Configurator conf = Configurator.getDefaultConfig();
-    static private LoggerService loggerService = Utils.initDefaultLoggerService(CEML.class);
+    static private Logger loggerService = Utils.initLoggingConf(CEML.class);
 
     static private Map<String, CEMLRequest> requests = new Hashtable<>();
 

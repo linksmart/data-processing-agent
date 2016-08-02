@@ -4,7 +4,7 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.MetricDefinition;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationAlgorithmExtended;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;
 
@@ -16,7 +16,7 @@ import com.rits.cloning.Cloner;
 public abstract class EvaluationMetricBase<T extends Object> implements EvaluationMetric<T> {
 
     protected ComparisonMethod method= ComparisonMethod.More;
-    protected static LoggerService loggerService = Utils.initDefaultLoggerService(EvaluationMetricBase.class);
+    protected static Logger loggerService = Utils.initLoggingConf(EvaluationMetricBase.class);
 
     protected String name;
     protected T target ;

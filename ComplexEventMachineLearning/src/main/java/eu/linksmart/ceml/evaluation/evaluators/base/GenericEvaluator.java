@@ -7,7 +7,7 @@ import eu.linksmart.ceml.evaluation.metrics.base.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.Map;
  * This class is takes care of evaluating with the help of different EvaluationMetrics.
  */
 public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
-    protected static LoggerService loggerService = Utils.initDefaultLoggerService(WindowEvaluator.class);
+    protected static Logger loggerService = Utils.initLoggingConf(WindowEvaluator.class);
     protected Map<String,EvaluationMetricBase<Double>> evaluationAlgorithms = new HashMap<>();
     protected ArrayList<TargetRequest> targets;
     EvaluationMetricBase<Double> samples;

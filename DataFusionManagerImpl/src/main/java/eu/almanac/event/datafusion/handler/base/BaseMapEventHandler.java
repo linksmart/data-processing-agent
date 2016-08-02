@@ -3,7 +3,7 @@ package eu.almanac.event.datafusion.handler.base;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -91,7 +91,7 @@ public abstract class BaseMapEventHandler  implements ComplexEventHandler<Map> {
         }
     }
 
-    protected abstract void processMessage(Map events); protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+    protected abstract void processMessage(Map events); protected Logger loggerService = Utils.initLoggingConf(this.getClass());
 
     @Override
     public void update(Map[] insertStream, Map[] removeStream){

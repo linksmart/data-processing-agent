@@ -3,7 +3,7 @@ package eu.almanac.event.datafusion.handler.base;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -17,6 +17,7 @@ public abstract class BaseArrayEventHandler implements ComplexEventHandler<Objec
     protected   EventExecutor eventExecutor = new EventExecutor();
     protected Thread thread;
     protected Statement query;
+    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
 
 
 
@@ -101,7 +102,7 @@ public abstract class BaseArrayEventHandler implements ComplexEventHandler<Objec
         }
     }
 
-    protected abstract void processMessage(Object[] events); protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+    protected abstract void processMessage(Object[] events);
 
     public void update(Object[][] insertStream, Object[][] removeStream){
         loggerService.info( Utils.getDateNowString() + " Multi-update query: " + query.getName());

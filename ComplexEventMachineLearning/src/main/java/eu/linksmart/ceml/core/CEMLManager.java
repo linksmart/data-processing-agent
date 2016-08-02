@@ -14,7 +14,7 @@ import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class CEMLManager implements CEMLRequest {
     @JsonProperty(value = "Name")
     protected String name;
     private Configurator conf = Configurator.getDefaultConfig();
-    private LoggerService loggerService = Utils.initDefaultLoggerService(CEMLManager.class);
+    private Logger loggerService = Utils.initLoggingConf(CEMLManager.class);
     private int leadingModel =0;
     @JsonProperty(value = "Descriptors")
     @JsonDeserialize(as = DataDefinition.class)

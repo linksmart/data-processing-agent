@@ -7,7 +7,7 @@ import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import java.util.Map;
 @RestController
 public class RestEventFeeder extends Component implements Feeder {
     protected Map<String,CEPEngine> dataFusionWrappers = new HashMap<>();
-    protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
 
     private ObjectMapper mapper = new ObjectMapper();

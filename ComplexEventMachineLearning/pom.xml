@@ -11,7 +11,7 @@
     </parent>
     <artifactId>ceml</artifactId>
 
-    <name>CEML</name>
+
     <description>Complex-Event Machine Learning - ML module for CEP in the DataFusion Manager</description>
     <packaging>bundle</packaging>
     <dependencies>

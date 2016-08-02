@@ -1,9 +1,8 @@
 package eu.almanac.event.datafusion.handler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import eu.almanac.event.datafusion.handler.base.BaseMapEventHandler;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.DynamicConst;
@@ -41,33 +40,33 @@ import java.util.concurrent.Executors;
     protected boolean sendPerProperty;
     protected ExecutorService executor = Executors.newCachedThreadPool();
     protected String PUBLISHER_ID ;
-    Gson gson;
+
 
     // configuration
     private  String STATEMENT_INOUT_BASE_TOPIC= "queries/";
     private  String TIME_ISO_FORMAT =  "yyyy-MM-dd'T'HH:mm:ss.S'Z'";
     private String[] handlerScopes;
     static {
-        List<String> hosts = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_CONF_PATH),
+        List<Object> hosts = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_CONF_PATH),
                 ports = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_PORT_CONF_PATH),
                 aliases = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_ALIASES_CONF_PATH);
         if(hosts.size() == ports.size() && hosts.size() == aliases.size()) {
-            Iterator<String> host = hosts.iterator(),port = ports.iterator(),alias = aliases.iterator();
+            Iterator<Object> host = hosts.iterator(),port = ports.iterator(),alias = aliases.iterator();
             while (port.hasNext() && host.hasNext() && alias.hasNext()) {
 
-                knownInstances.put(alias.next(), new AbstractMap.SimpleImmutableEntry<>(
-                                host.next(),
-                                port.next()
+                knownInstances.put(alias.next().toString(), new AbstractMap.SimpleImmutableEntry<>(
+                                host.next().toString(),
+                                port.next().toString()
                         )
                 );
             }
         }else if(ports.size()==1&& hosts.size() == aliases.size()){
-            Iterator<String> host = hosts.iterator(),alias = aliases.iterator();
-            String port = ports.get(0);
+            Iterator<Object> host = hosts.iterator(),alias = aliases.iterator();
+            String port = ports.get(0).toString();
             while ( host.hasNext()) {
 
-                knownInstances.put(alias.next(), new AbstractMap.SimpleImmutableEntry<>(
-                                host.next(),
+                knownInstances.put(alias.next().toString(), new AbstractMap.SimpleImmutableEntry<>(
+                                host.next().toString(),
                                 port
                         )
                 );
@@ -98,14 +97,13 @@ import java.util.concurrent.Executors;
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
-        gson = new GsonBuilder().setDateFormat(TIME_ISO_FORMAT).create();
         parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         parser.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        parser.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
         brokerServices = new ArrayList<>();
 
 
         loadScopes();
-
         executor.execute(eventExecutor);
     }
 

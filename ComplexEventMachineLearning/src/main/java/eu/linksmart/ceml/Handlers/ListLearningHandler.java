@@ -9,7 +9,7 @@ import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.ceml.intern.Const;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 public  class ListLearningHandler extends BaseListEventHandler {
 
     static protected Configurator conf = Configurator.getDefaultConfig();
-    static protected LoggerService loggerService = Utils.initDefaultLoggerService(ListLearningHandler.class);
+    static protected Logger loggerService = Utils.initLoggingConf(ListLearningHandler.class);
     final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;

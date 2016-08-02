@@ -10,7 +10,7 @@ import eu.linksmart.api.event.datafusion.CEPEngine;
 import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
 import eu.linksmart.api.event.datafusion.Feeder;
 import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class FeederTester implements Runnable{
 
     protected static Configurator conf;
-    protected static LoggerService loggerService;
+    protected static Logger loggerService;
     EventMqttFeederImpl feederImplEvents = null;
     public FeederTester() {
         init("conf.cfg");
@@ -38,7 +38,7 @@ public class FeederTester implements Runnable{
             Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
 
-        loggerService = Utils.initDefaultLoggerService(FeederTester.class);
+        loggerService = Utils.initLoggingConf(FeederTester.class);
 
 
 
@@ -51,7 +51,7 @@ public class FeederTester implements Runnable{
 
         try {
 
-            feederImplEvents = new EventMqttFeederImpl(conf.get(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.get(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.get(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
+            feederImplEvents = new EventMqttFeederImpl(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
 
 
 

@@ -1,5 +1,6 @@
 package eu.almanac.event.datafusion.feeder;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.datafusion.CEPEngine;
@@ -23,6 +24,7 @@ public class EventMqttFeederImpl extends MqttFeederImpl {
     public EventMqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException, InstantiationException {
         super(brokerName, brokerPort, topic,EventMqttFeederImpl.class.getSimpleName(),"Provides a MQTT API to insert events into the CEP engine",MqttFeederImpl.class.getSimpleName(), Feeder.class.getSimpleName());
 
+        mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
 
     }
 

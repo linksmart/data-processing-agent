@@ -10,7 +10,7 @@ import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.ceml.intern.Const;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 public  class MapLearningHandler extends BaseMapEventHandler {
 
     static protected Configurator conf = Configurator.getDefaultConfig();
-    static protected LoggerService loggerService = Utils.initDefaultLoggerService(MapLearningHandler.class);
+    static protected Logger loggerService = Utils.initLoggingConf(MapLearningHandler.class);
     final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;

@@ -1,7 +1,6 @@
 package eu.almanac.event.datafusion.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import eu.almanac.event.datafusion.feeder.type.PersistentBean;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
@@ -11,7 +10,7 @@ import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 
 import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import org.apache.commons.io.IOUtils;
 
@@ -25,10 +24,9 @@ import java.util.ArrayList;
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 public class PersistenceFeeder extends Component implements Feeder, EventFeederLogic {
-    static protected LoggerService loggerService = Utils.initDefaultLoggerService(PersistenceFeeder.class);
+    static protected Logger loggerService = Utils.initLoggingConf(PersistenceFeeder.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
     protected ArrayList<String> filePaths = new ArrayList<>();
-    private static Gson gson = new Gson();
     private static ObjectMapper mapper = new ObjectMapper();
 
     public PersistenceFeeder(String... filePaths){

@@ -4,11 +4,12 @@ import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import eu.linksmart.services.event.cep.siddhi.intern.Const;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
 import org.wso2.siddhi.core.ExecutionPlanRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
@@ -26,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SiddhiEngine extends Component implements CEPEngine {
     private static String STATEMENT_INOUT_BASE_TOPIC = "queries/", DEFAULT_TYPE = "almanacDefault";
     private static Configurator conf =  Configurator.getDefaultConfig();
-    private LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+    private Logger loggerService = Utils.initLoggingConf(this.getClass());
     static protected SiddhiManager siddhiManager = new SiddhiManager();
     protected ConcurrentHashMap<String,ExecutionPlanRuntime> hashExecutionPlanRuntime = new ConcurrentHashMap<>();
 

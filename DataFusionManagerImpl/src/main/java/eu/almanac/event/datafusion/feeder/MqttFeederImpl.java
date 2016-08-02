@@ -6,7 +6,7 @@ import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import eu.linksmart.gc.utils.mqtt.types.Topic;
@@ -24,7 +24,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 
     private String STATEMENT_INOUT_BASE_TOPIC;
     protected Map<String,CEPEngine> dataFusionWrappers = new HashMap<>();
-    protected LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
     protected StaticBroker brokerService= null;
     protected Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();

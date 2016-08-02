@@ -6,11 +6,8 @@ import eu.almanac.event.datafusion.utils.epl.StatementInstance;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,7 +18,7 @@ import java.util.*;
  * Created by angel on 26/11/15.
  */
 public class StatementFeeder implements Feeder {
-    protected static LoggerService loggerService = Utils.initDefaultLoggerService(StatementFeeder.class);
+    protected static Logger loggerService = Utils.initLoggingConf(StatementFeeder.class);
     protected static Configurator conf =  Configurator.getDefaultConfig();
 
 
@@ -410,59 +407,7 @@ public class StatementFeeder implements Feeder {
     public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
         return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, "");
     }
-    public static ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<Statement> result){
-        // preparing pointers
-        Statement statement =null;
 
-            if(!result.getResources().isEmpty())
-             statement = result.getResources().values().iterator().next();
-
-        // Preparing sync response
-        if(statement!=null && statement.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS && result.getOverallStatus()<400) {
-            try {
-
-                statement.getSynchronousResponse();
-                result.addResponse(createSuccessMapMessage(statement.getID(), "Statement", statement.getID(), 200, "OK", "Statement Processed"));
-
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(),e);
-                result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 500, "Intern Server Error", e.getMessage()));
-            }
-
-        }
-
-        // returning error in case neither an error was produced nor success. This case theoretical cannot happen, if it does there is a program error.
-        if(result.getResponses().isEmpty()) {
-            result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 500, "Intern Server Error", "Unknown status"));
-            loggerService.error("Impossible state reached");
-        }
-        // preparing location header
-        URI uri= null;
-        try {
-            if(statement!=null)
-                uri = new URI("/statement/"+statement.getID());
-        } catch (URISyntaxException e) {
-            loggerService.error(e.getMessage(),e);
-            result.addResponse(createErrorMapMessage(DynamicConst.getId(),"Agent",500,"Intern Server Error",e.getMessage()));
-        }
-        // creating HTTP response
-
-        if (result.getResponses().size() == 1 ) {
-            if (uri != null)
-                return ResponseEntity.status(HttpStatus.valueOf(result.getOverallStatus())).location(uri).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
-            else
-                return ResponseEntity.status(HttpStatus.valueOf(result.getOverallStatus())).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
-        }
-        if(result.containsSuccess())
-            if (uri != null)
-                return ResponseEntity.status(HttpStatus.MULTI_STATUS).location(uri).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
-            else
-                return ResponseEntity.status(HttpStatus.MULTI_STATUS).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
-
-
-        return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
-
-    }
 
 
 

@@ -9,10 +9,10 @@ import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.datafusion.MultiResourceResponses;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.slf4j.Logger;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class MqttCemlAPI extends Component {
     static MqttCemlAPI me;
     protected StaticBroker brokerService;
     private Configurator conf = Configurator.getDefaultConfig();
-    static private LoggerService loggerService = Utils.initDefaultLoggerService(MqttCemlAPI.class);
+    static private Logger loggerService = Utils.initLoggingConf(MqttCemlAPI.class);
 
     private ArrayList<Observer> observers;
 static {
