@@ -2,13 +2,18 @@ package eu.linksmart.ceml.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
+import eu.linksmart.api.event.ceml.prediction.Prediction;
+import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
+import eu.linksmart.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
 import eu.linksmart.ceml.models.data.DataStructure;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import org.apache.commons.lang3.math.NumberUtils;
 import weka.classifiers.Classifier;
 import weka.classifiers.UpdateableClassifier;
@@ -34,9 +39,9 @@ public class GeneralWekaModel extends ModelInstance<Map,List<Integer>,Updateable
     @JsonProperty(value = "Evaluation")
    // public Evaluator evaluation;
     private Configurator conf = Configurator.getDefaultConfig();
-    static private LoggerService loggerService = Utils.initDefaultLoggerService(GeneralWekaModel.class);
-    public GeneralWekaModel() {
-        super();
+    static private Logger loggerService = Utils.initLoggingConf(GeneralWekaModel.class);
+    public GeneralWekaModel(ArrayList<TargetRequest> targets,Map<String,Object> parameters) {
+        super(targets,parameters,new DoubleTumbleWindowEvaluator(targets));
     }
 
 
@@ -217,11 +222,12 @@ public class GeneralWekaModel extends ModelInstance<Map,List<Integer>,Updateable
         }
     }
     @Override
-    public List<Integer> predict(Map input) throws Exception {
-        List<Integer> result  = new ArrayList<>();
-        result.add(predict(lerner,populateInstance(input,descriptors)));
+    public Prediction<List<Integer>> predict(Map input) throws Exception {
 
-        return  result;//new Prediction(i,origin.getData().getLearningTarget().getAttribute().value(i),type,new ArrayList<EvaluationMetric>(evaluation.getEvaluationAlgorithms().values()));
+        int i=predict(lerner,populateInstance(input,descriptors));
+
+        Prediction prediction = new PredictionInstance<>(i, this.getClass().getName(),new ArrayList<EvaluationMetric>(evaluator.getEvaluationAlgorithms().values()));
+        return prediction;
 
 
 

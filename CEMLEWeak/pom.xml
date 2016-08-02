@@ -21,6 +21,10 @@
 
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>ceml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
             <artifactId>data.procesing.core</artifactId>
         </dependency>
 
@@ -32,6 +36,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-        </dependency>    </dependencies>
+        </dependency>
+    </dependencies>
 
 </project>

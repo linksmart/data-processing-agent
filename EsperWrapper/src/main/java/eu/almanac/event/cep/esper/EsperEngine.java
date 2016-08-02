@@ -10,7 +10,7 @@ import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.datafusion.EventType;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -31,7 +31,7 @@ import java.util.*;
     private Map<String, String> fullTypeNameToAlias = new HashMap<>();
 
     private Map<String,Statement> deployedStatements = new Hashtable<>();
-    private  LoggerService loggerService = Utils.initDefaultLoggerService(this.getClass());
+    private  Logger loggerService = Utils.initLoggingConf(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
 
     static private EsperEngine ref= init();
@@ -62,7 +62,7 @@ import java.util.*;
         config.configure("intern.esper.conf.xml");
         //load values
         STATEMENT_INOUT_BASE_TOPIC = conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
-        SIMULATION_EXTERNAL_CLOCK = conf.getBool(Const.SIMULATION_EXTERNAL_CLOCK);
+        SIMULATION_EXTERNAL_CLOCK = conf.getBoolean(Const.SIMULATION_EXTERNAL_CLOCK);
 
         // extern clock
         if(SIMULATION_EXTERNAL_CLOCK) {
