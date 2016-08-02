@@ -1,15 +1,11 @@
 package eu.linksmart.gc.utils.mqtt.subscription;
 
-import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Observer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -31,7 +27,7 @@ public class TopicMessageDeliverable implements Runnable{
     }
 
     protected boolean activeTopic = true;
-    protected static final LoggerService LOG= new LoggerService(LoggerFactory.getLogger(TopicMessageDeliverable.class));
+    protected static final Logger LOG=  LoggerFactory.getLogger(TopicMessageDeliverable.class);
 
 
     public synchronized void addObserver(Observer observer){

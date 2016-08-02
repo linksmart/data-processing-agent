@@ -4,7 +4,6 @@ package eu.linksmart.gc.utils.mqtt.broker;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.constants.Const;
 import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.logging.LoggerService;
 import eu.linksmart.gc.utils.mqtt.subscription.ForwardingListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -52,7 +51,7 @@ public class BrokerService implements Observer, Broker {
         listener = new ForwardingListener(this,ID);
 
         // loggerService = new LoggerService(LoggerFactory.getLogger(BrokerService.class));
-        watchdog = conf.getBool(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_CONF_PATH);
+        watchdog = conf.getBoolean(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_CONF_PATH);
         preloadConfiguration();
         if (brokerName.equals("*"))
             this.brokerName = getHostName();
@@ -163,7 +162,7 @@ public class BrokerService implements Observer, Broker {
     protected void preloadConfiguration() throws MqttException {
 
         preloadedQoS =conf.getInt(Const.DEFAULT_QOS);
-        preloadedPolicy = conf.getBool(Const.DEFAULT_RETAIN_POLICY);
+        preloadedPolicy = conf.getBoolean(Const.DEFAULT_RETAIN_POLICY);
         preloadedTriesReconnect =conf.getInt(Const.RECONNECTION_TRY);
         preloadedRetryTime = conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME);
         CONNECTION_MQTT_WATCHDOG_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT);
@@ -180,7 +179,7 @@ public class BrokerService implements Observer, Broker {
             loggerService.error("property CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT not found loading hardcoded property",ex);
         }
         try {
-            CERTIFICATE_BASE_SECURITY = conf.getBool(Const.CERTIFICATE_BASE_SECURITY);
+            CERTIFICATE_BASE_SECURITY = conf.getBoolean(Const.CERTIFICATE_BASE_SECURITY);
         }catch (NoSuchElementException ex){
             loggerService.error("property CERTIFICATE_BASE_SECURITY not found loading hardcoded property",ex);
         }

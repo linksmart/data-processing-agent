@@ -1,20 +1,10 @@
 package eu.linksmart.gc.utils.mqtt.broker;
 
-import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.constants.Const;
-import eu.linksmart.gc.utils.logging.LoggerService;
-import eu.linksmart.gc.utils.mqtt.subscription.ForwardingListener;
-import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**

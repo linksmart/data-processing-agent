@@ -2,11 +2,7 @@ package eu.linksmart.gc.utils.function;
 
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.constants.Const;
-import eu.linksmart.gc.utils.logging.LoggerService;
-import eu.linksmart.gc.utils.logging.MqttLogger;
-import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +12,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import java.io.*;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.security.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -58,62 +53,17 @@ public class  Utils {
     static public String getDateNowString(){
         return getDateFormat().format(new Date());
     }
-    static public LoggerService initDefaultLoggerService(Class lass){
-
-        LoggerService loggerService = new LoggerService(LoggerFactory.getLogger(lass));
-        try {
-            Properties p = new Properties();
-            try {
-                final FileInputStream configStream = new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
-                p.load(configStream);
-                PropertyConfigurator.configure(p);
-                loggerService.info("Loading from configuration from given file");
-                configStream.close();
-            }catch(FileNotFoundException ex){
-                try {
-                    InputStream in = lass.getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
-                    p.load(in);
-                    PropertyConfigurator.configure(p);
-                    loggerService.info("Loading from configuration from jar default file");
-                    in.close();
-                }catch (Exception exx){
-                    try {
-                        InputStream in = Utils.class.getClassLoader().getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
-                        p.load(in);
-                        PropertyConfigurator.configure(p);
-                        loggerService.info("Loading from configuration from jar default file");
-                        in.close();
-                    }catch (Exception exxx){
-                        exxx.printStackTrace();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (Configurator.getDefaultConfig().getBool(Const.LOG_ONLINE_ENABLED_CONF_PATH)) {
-            try {
-                loggerService.addLoggers(Utils.createMqttLogger(lass));
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(), e);
-            }
-        }
-
-        loggerService.info("Configuration file loaded");
-        return loggerService;
-
-    }
-    static public Logger createMqttLogger(Class lass) throws MalformedURLException, MqttException {
+    static boolean isLoggingConfLoaded =false;
+   /* static public Logger createMqttLogger(Class lass) throws MalformedURLException, MqttException {
 
         return MqttLogger.getLogger(
-                lass,
+                lass.getName(),
                 new StaticBroker(
                         Configurator.getDefaultConfig().getString(Const.LOG_OUT_BROKER_CONF_PATH),
                         Configurator.getDefaultConfig().getString(Const.LOG_OUT_BROKER_PORT_CONF_PATH)
                 )
         );
-    }
+    }*/
     public static String hashIt( String string){
         if(string == null)
             return "";
@@ -125,6 +75,70 @@ public class  Utils {
             return "";
         }
         return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
+    }
+    public static Logger initLoggingConf(Class lass){
+        Logger loggerService = null;
+        try {
+            Properties p = new Properties();
+            String message=null;
+
+            if(!isLoggingConfLoaded) {
+
+                if (isFile(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))) {
+                    //loading from file system
+                    final FileInputStream configStream = new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                    p.load(configStream);
+                    PropertyConfigurator.configure(p);
+                    configStream.close();
+                    System.setProperty("log4j.configuration", Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                    message = "Loading from configuration from given file";
+                } else if (isResource(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile), lass)) {
+                    //loading from class resource file
+                    InputStream in = lass.getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                    p.load(in);
+                    PropertyConfigurator.configure(p);
+                    in.close();
+                    message = "Loading from configuration from jar default file";
+                } else if (isResource(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))) {
+                    //loading from Utils class resource file
+                    InputStream in = Utils.class.getClassLoader().getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                    p.load(in);
+                    System.setProperty("log4j.configuration", Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                    PropertyConfigurator.configure(p);
+                    in.close();
+                    message = "Loading from configuration from Utils jar default file (last resort!)";
+                } else //not loading any configuration file
+                    message="No logging configuration file found!";
+
+                loggerService = LoggerFactory.getLogger(lass);
+                loggerService.info(message);
+                isLoggingConfLoaded =true;
+            }else {
+                loggerService = LoggerFactory.getLogger(lass);
+                loggerService.debug("Ignoring reloading of logging configuration file because has bean already loaded");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+
+        }
+
+
+/*
+        if (Configurator.getDefaultConfig().getBoolean(Const.LOG_ONLINE_ENABLED_CONF_PATH)) {
+            try {
+                //loggerService.addLoggers(Utils.createMqttLogger(lass));
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
+            }
+        }*/
+        loggerService.info("Logging configuration file had been initialized");
+        return loggerService;
+
+    }
+    public static void initLoggingConf(){
+        initLoggingConf(Utils.class);
+
     }
     static public SSLSocketFactory getSocketFactory (final String caCrtFile, final String crtFile, final String keyFile, final String password) throws Exception
     {
@@ -151,5 +165,23 @@ public class  Utils {
         context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 
         return context.getSocketFactory();
+    }
+    public static boolean fileExists(String filename){
+
+        return isFile(filename)||isResource(filename);
+    }
+
+    public static boolean isFile(String filename){
+        File f = new File(filename);
+        return (f.exists() && f.isDirectory());
+    }
+    public static boolean isResource(String filename){
+
+        return   Utils.class.getClassLoader().getResource(filename)!=null;
+    }
+
+    public static boolean isResource(String filename,Class clazz){
+
+        return   clazz.getClassLoader().getResource(filename)!=null;
     }
 }

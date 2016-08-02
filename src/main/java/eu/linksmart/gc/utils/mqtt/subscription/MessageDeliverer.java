@@ -3,7 +3,7 @@ package eu.linksmart.gc.utils.mqtt.subscription;
 
 
 
-import eu.linksmart.gc.utils.logging.LoggerService;
+import org.slf4j.Logger;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class MessageDeliverer extends Observable implements Runnable {
     }
 
     private MqttMessage mqttMessage;
-    protected static final LoggerService LOG= new LoggerService(LoggerFactory.getLogger(ForwardingListener.class));
+    protected static final Logger LOG=  LoggerFactory.getLogger(ForwardingListener.class);
 
 
     @Override

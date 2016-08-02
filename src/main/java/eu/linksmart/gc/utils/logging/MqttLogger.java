@@ -5,8 +5,7 @@ import eu.linksmart.gc.utils.constants.Const;
 import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.broker.StaticBrokerService;
-import org.slf4j.Logger;
-import org.slf4j.Marker;
+
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 07.08.2015 a researcher of Fraunhofer FIT.
  */
-public class MqttLogger implements Logger {
+public class MqttLogger {/* implements Logger {
 
     protected String name;
     protected String topic;
@@ -36,14 +35,14 @@ public class MqttLogger implements Logger {
         brokerService.destroy();
     }
 
-    static public Logger getLogger(Class name, StaticBroker brokerService) {
+    static public Logger getLogger(String name, StaticBroker brokerService) {
 
 
-        if (!loggers.containsKey(name.getCanonicalName())) {
+        if (!loggers.containsKey(name)) {
             MqttLogger logger = new MqttLogger(name, brokerService);
-            loggers.put(name.getCanonicalName(),logger );
+            loggers.put(name,logger );
         }
-        return loggers.get(name.getCanonicalName());
+        return loggers.get(name);
     }
 
     protected String format(Object... objects){
@@ -72,7 +71,7 @@ public class MqttLogger implements Logger {
 
     @Override
     public boolean isTraceEnabled() {
-        return conf.getBool(Const.TRACE_LOG_CONF_PATH);
+        return conf.getBoolean(Const.TRACE_LOG_CONF_PATH);
     }
 
     @Override
@@ -132,7 +131,7 @@ public class MqttLogger implements Logger {
 
     @Override
     public boolean isDebugEnabled() {
-        return  conf.getBool(Const.DEBUG_LOG_CONF_PATH);
+        return  conf.getBoolean(Const.DEBUG_LOG_CONF_PATH);
     }
 
     @Override
@@ -217,7 +216,7 @@ public class MqttLogger implements Logger {
 
     @Override
     public boolean isInfoEnabled() {
-        return conf.getBool(Const.INFO_LOG_CONF_PATH);
+        return conf.getBoolean(Const.INFO_LOG_CONF_PATH);
     }
 
     @Override
@@ -382,7 +381,7 @@ public class MqttLogger implements Logger {
 
     @Override
     public boolean isErrorEnabled() {
-        return conf.getBool(Const.ERROR_LOG_CONF_PATH);
+        return conf.getBoolean(Const.ERROR_LOG_CONF_PATH);
     }
 
     @Override
@@ -464,8 +463,8 @@ public class MqttLogger implements Logger {
                 topic,
                 payload,
                 conf.getInt(Const.SERVICE_MQTT_QOS_CONF_PATH),
-                conf.getBool(Const.SERVICE_MQTT_RETAIN_POLICY_CONF_PATH)
+                conf.getBoolean(Const.SERVICE_MQTT_RETAIN_POLICY_CONF_PATH)
                 );
 
-    }
+    }*/
 }
