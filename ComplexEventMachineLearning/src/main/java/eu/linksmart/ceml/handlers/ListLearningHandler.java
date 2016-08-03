@@ -42,7 +42,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
         model = originalRequest.getModel();
         descriptors = originalRequest.getDescriptors();
 
-        if(conf.getString(Const.CEML_EngineTimeProveded)!= null ||conf.getString(Const.CEML_EngineTimeProveded)!="" )
+        if(conf.getString(Const.CEML_EngineTimeProveded)!= null ||conf.getString(Const.CEML_EngineTimeProveded).equals("") )
             columnNameTime = conf.getString(Const.CEML_EngineTimeProveded);
 
     }
