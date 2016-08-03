@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import de.fraunhofer.fit.event.ceml.CEMLRest;
 import de.fraunhofer.fit.event.feeder.RestEventFeeder;
 import de.fraunhofer.fit.event.feeder.RestStatementFeeder;
-import eu.almanac.event.cep.esper.EsperEngine;
 import eu.almanac.event.datafusion.core.DataFusionManagerCore;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
@@ -33,6 +32,11 @@ import java.util.Map;
 @RestController
 public class Application {
     public static void main(String[] args) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String confFile = Const.DEFAULT_CONFIGURATION_FILE;
         if(args.length>0)
             confFile= args[0];
