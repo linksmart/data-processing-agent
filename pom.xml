@@ -460,7 +460,10 @@
             <id>Eclipse Paho Repo</id>
             <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
         </repository>
-
+		<repository>
+            <id>WSO2 Repo</id>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
+        </repository>
 
 
     <repository>
