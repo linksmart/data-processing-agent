@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 @Configuration
+@PropertySource("conf.cfg")
 @Import(value = {  RestStatementFeeder.class,RestEventFeeder.class })
 @EnableAutoConfiguration
 @SpringBootApplication
