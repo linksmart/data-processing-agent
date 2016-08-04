@@ -94,7 +94,7 @@ public class  Utils {
                     message = "Loading from configuration from given file";
                 } else if (isResource(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile), lass)) {
                     //loading from class resource file
-                    InputStream in = lass.getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
+                    InputStream in = lass.getClassLoader().getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
                     p.load(in);
                     PropertyConfigurator.configure(p);
                     in.close();
