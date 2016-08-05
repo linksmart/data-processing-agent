@@ -60,12 +60,12 @@
                                 <goal>attach-artifact</goal>
                             </goals>
                             <configuration combine.self="override">
-                                <artifacts>
-                                    <artifact>
+                              <artifacts>
+                                     <!-- <artifact>
                                         <file>src/main/resources/application.properties</file>
                                         <type>properties</type>
                                         <classifier>jetty-configuration</classifier>
-                                    </artifact>
+                                    </artifact>-->
                                     <artifact>
                                         <file>src/main/resources/conf.cfg</file>
                                         <type>cfg</type>

@@ -1,5 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
+import java.util.Date;
+
 /**
  * Created by angel on 18/11/15.
  */
@@ -13,5 +15,6 @@ public interface CEPEngineAdvanced extends CEPEngine {
      * @return <code>true</code> if the Class or Package Path was loaded into the CEP engine. <code>false</code> otherwise.
      * */
     public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws Exception;
-
+    public boolean setEngineTimeTo( Date date)throws Exception;
+    public Date getEngineCurrentDate();
 }

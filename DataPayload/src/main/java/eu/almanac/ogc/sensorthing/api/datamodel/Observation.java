@@ -315,6 +315,10 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 
     }
     public static Observation factory(Object event, String resultType, String StreamID, String sensorID) {
+       return factory(event,resultType,sensorID,sensorID,(new Date()).getTime());
+
+    }
+    public static Observation factory(Object event, String resultType, String StreamID, String sensorID, long time) {
         Sensor sen = new Sensor();
         sen.setId(sensorID);
         sen.setObservations(null);
@@ -330,7 +334,7 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
         ob.setResultType(resultType);
         ob.setResultValue(event);
         ob.setFeatureOfInterest(null);
-
+        ob.setDate(new Date(time));
 
         return ob;
     }
