@@ -153,8 +153,8 @@
             <version>1.1.7</version>
         </dependency>
         <dependency>
-                <groupId>eu.linksmart.services.events.gpl</groupId>
-                <artifactId>wrapper.esper</artifactId>
+                <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>SiddhiWrapper</artifactId>
                 <version>${ls.se.agents.version}</version>
             <exclusions>
                 <exclusion>
