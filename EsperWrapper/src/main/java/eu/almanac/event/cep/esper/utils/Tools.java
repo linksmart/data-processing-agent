@@ -1,7 +1,12 @@
 package eu.almanac.event.cep.esper.utils;
 
+import eu.almanac.event.cep.esper.EsperEngine;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
+import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
+import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.almanac.event.cep.intern.Const;
+import eu.linksmart.gc.utils.function.Utils;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
@@ -162,82 +167,25 @@ public class Tools {
         return UUID.randomUUID().toString().replace("-","_").replace("#","_");
     }
 
-    static public String IoTAVG(Map entities){
-        System.out.println("test");
-        return "hola";
+    static public Observation ObservationFactory(Object event, String resultType, String StreamID, String sensorID, long time){
+        Observation ob = Observation.factory(event,resultType,StreamID,sensorID,time);
+        if(Configurator.getDefaultConfig().getBoolean(Const.SIMULATION_EXTERNAL_CLOCK))
+            try {
+                if(ob.getPhenomenonTime().after(getDateNow()))
+                    EsperEngine.getEngine().setEngineTimeTo(ob.getDate());
+            } catch (Exception e) {
+                Utils.initLoggingConf(Tools.class).error(e.getMessage(),e.getCause());
+            }
+        return ob;
+
     }
-    static public String IoTAVG(Object[] entities){
-        System.out.println("test");
-        return "hola";
+    static public long getTimeNow(){
+        return EsperEngine.getEngine().getEngineCurrentDate().getTime();
     }
-   /* static public boolean growing(Object[] objects){
-        if (objects.length<2)
-            return true;
-        Observation[] observations = (Observation[])objects;
-        for (int i=1;i<objects.length;i++)
-            if((Double)observations[i-1].getResultValue()> (Double)observations[i].getResultValue())
-                return false;
 
-        return true;
+    static public Date getDateNow(){
+        return EsperEngine.getEngine().getEngineCurrentDate();
     }
-*/
-
-  /*  static public boolean growing(Object[] objects){
-        if (objects.length<2)
-            return true;
-        Observation[] observations = (Observation[])objects;
-        Map<String,Map<Integer,Observation> > accumulatedTruth = new HashMap<>();
-        for (Observation observation: observations) {
-            if (!accumulatedTruth.containsKey(observation.getId()))
-                accumulatedTruth.put(observation.getId(), new HashMap<Integer, Observation>());
-
-            accumulatedTruth.get(observation.getId()).put(accumulatedTruth.get(observation.getId()).size() - 1, observation);
-        }
-        for (int i=1;i<objects.length;i++)
-            if((Double)observations[i-1].getResultValue()> (Double)observations[i].getResultValue())
-                return false;
-
-        return true;
-    }
-   static public Map growingSamples(Object[] objects){
-
-       Map<String,Double > lastPerID = new HashMap<>();
-       Map<String,Boolean > accumulatedTruth = new HashMap<>();
-       for (Observation ob :(Observation[])objects) {
-           if (lastPerID.containsKey(ob.getId())) {
-               if(accumulatedTruth.containsKey(ob.getId())) {
-                   if (accumulatedTruth.get(ob.getId())) {
-                       accumulatedTruth.put(ob.getId(), lastPerID.get(ob.getId()) < (Double) ob.getResultValue());
-                   }
-               }else
-                   accumulatedTruth.put(ob.getId(),lastPerID.get(ob.getId())<(Double)ob.getResultValue());
-
-           } else {
-               lastPerID.put(ob.getId(),(Double)ob.getResultValue());
-           }
-       }
-
-       return accumulatedTruth;
-   }
-    static public boolean cmpBinaryInWindow(Observation prev,Observation current,Observation first){
-        if(
-            prev== null ||
-            ((Observation)(variables.get("first"+first.getId()))).getPhenomenonTime().getTime()!= first.getPhenomenonTime().getTime()
-        ) {
-            variables.put(current.getId(),true);
-            variables.put("first"+current.getId(),first);
-        }
-
-        if( (Boolean)variables.get(current.getId()))
-            variables.put(current.getId(),(Double)prev.getResultValue()<(Double)current.getResultValue());
-        else if( !(Boolean)variables.get(current.getId()))
-            variables.put(current.getId(),false);
-
-
-        return (Boolean)variables.get(current.getId());
-
-    }*/
-
     static public String getIsoTimeFormat(){
         return "yyyy-MM-dd'T'HH:mm:ss.S'Z'";
     }

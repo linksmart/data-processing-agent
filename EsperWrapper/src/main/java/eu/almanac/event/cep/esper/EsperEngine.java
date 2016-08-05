@@ -106,6 +106,21 @@ import java.util.*;
         epService.getEPAdministrator().getConfiguration().addImport(cls);
         return true;
     }
+
+    @Override
+    public synchronized boolean setEngineTimeTo(Date date) throws Exception {
+
+            epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(date.getTime()));
+
+        return true;
+
+    }
+
+    @Override
+    public Date getEngineCurrentDate() {
+        return new Date(epService.getEPRuntime().getCurrentTime());
+    }
+
     @Override
     public boolean addEventType(String nameType,  Object type) {
 
@@ -161,9 +176,7 @@ import java.util.*;
             try {
                 epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
                 if(SIMULATION_EXTERNAL_CLOCK)
-                    synchronized (this) {
-                        epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(event.getDate().getTime()));
-                    }
+                    setEngineTimeTo(event.getDate());
             }catch(Exception e){
 
                 loggerService.error(e.getMessage(),e);
