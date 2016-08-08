@@ -34,7 +34,7 @@ import java.util.*;
     private  Logger loggerService = Utils.initLoggingConf(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
 
-    static private EsperEngine ref= init();
+    static final private EsperEngine ref= init();
     // configuration
     private String STATEMENT_INOUT_BASE_TOPIC = "queries/";
     private boolean SIMULATION_EXTERNAL_CLOCK = false;
@@ -109,10 +109,16 @@ import java.util.*;
 
     @Override
     public synchronized boolean setEngineTimeTo(Date date) throws Exception {
+        boolean done=false;
+        Date engineTime = new Date(epService.getEPRuntime().getCurrentTime());
+        if(done = date.after(engineTime))
 
             epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(date.getTime()));
+        else
+            loggerService.warn("The provided date "+ Utils.getIsoTimestamp(date)+" is from an earlier time as the current engine date "+Utils.getIsoTimestamp(date)+". " +
+                    "Setting the time back, it is not an accepted operation of the engine "+getName()+". Therefore no action had been taken");
 
-        return true;
+        return done;
 
     }
 
@@ -174,7 +180,9 @@ import java.util.*;
 
            // String[] parentTopicAndHead = getParentTopic(topic);
             try {
-                epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
+                synchronized (ref) {
+                    epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
+                }
                 if(SIMULATION_EXTERNAL_CLOCK)
                     setEngineTimeTo(event.getDate());
             }catch(Exception e){

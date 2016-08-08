@@ -4,9 +4,11 @@ import eu.almanac.event.cep.esper.EsperEngine;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
+import eu.linksmart.api.event.datafusion.EventType;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.cep.intern.Const;
 import eu.linksmart.gc.utils.function.Utils;
+import org.apache.commons.lang.time.DateUtils;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
@@ -169,13 +171,13 @@ public class Tools {
 
     static public Observation ObservationFactory(Object event, String resultType, String StreamID, String sensorID, long time){
         Observation ob = Observation.factory(event,resultType,StreamID,sensorID,time);
-        if(Configurator.getDefaultConfig().getBoolean(Const.SIMULATION_EXTERNAL_CLOCK))
-            try {
+         /*if(Configurator.getDefaultConfig().getBoolean(Const.SIMULATION_EXTERNAL_CLOCK))
+           try {
                 if(ob.getPhenomenonTime().after(getDateNow()))
                     EsperEngine.getEngine().setEngineTimeTo(ob.getDate());
             } catch (Exception e) {
                 Utils.initLoggingConf(Tools.class).error(e.getMessage(),e.getCause());
-            }
+            }*/
         return ob;
 
     }
@@ -226,6 +228,41 @@ public class Tools {
             e.printStackTrace();
         }
         return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
+    }
+    static public boolean insertMultipleEvents(long noEvents,Object event){
+         EsperEngine engine =EsperEngine.getEngine();
+        EventType eventType;
+        if(! (event instanceof EventType) )
+            eventType = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
+        else
+            eventType = (EventType) event;
+        for (int i=0; i< noEvents; i++) {
+
+            engine.addEvent("", eventType, eventType.getClass());
+            eventType.setDate(DateUtils.addHours(eventType.getDate(),1));
+        }
+        return true;
+
+    }
+    static public EventType[] creatMultipleEvents(long noEvents,Object event){
+        EventType eventType;
+        EsperEngine engine =EsperEngine.getEngine();
+        EventType[] result = new Observation[(int)noEvents];
+        if(! (event instanceof EventType) )
+            eventType = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
+        else
+            eventType = (EventType) event;
+
+        result[0] = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),DateUtils.addHours(eventType.getDate(), 1).getTime());
+
+        for (int i=1; i< noEvents; i++) {
+
+            //engine.addEvent("", eventType, eventType.getClass());
+            result[i] = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),DateUtils.addHours(result[i-1].getDate(), 1).getTime());
+
+        }
+        return result;
+
     }
  /*   static public Observation generateObservation(String id, Date date, Object observation, String resultType){
 
