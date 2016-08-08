@@ -9,6 +9,7 @@ import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
+import eu.linksmart.api.event.datafusion.EventType;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -221,9 +222,9 @@ import java.util.concurrent.Executors;
 
 
             String streamID = UUID.randomUUID().toString();
-            for(Integer i=0; i<events.length;i++)
-                Observation.factory(i, "Measure", streamID, query.getID());
-
+            for (Object event : events) {
+                publish(handleObject(event, "complex", streamID));
+            }
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
 
@@ -308,7 +309,7 @@ import java.util.concurrent.Executors;
                 arrayList.add(handleObject(eventMap.get(key), key.toString(), "").getResultValue());
             }
             try {
-                publish(handleObject(arrayList, "complex", streamID));
+                update2(arrayList.toArray());
             } catch (Exception e) {
                 loggerService.error(e.getMessage(), e);
             }
