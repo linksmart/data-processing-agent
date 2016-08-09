@@ -355,12 +355,9 @@ import java.util.*;
 
                     for (EventBean event : result.getArray()) {
 
-                        if (event.getUnderlying() instanceof Map)
-                            handler.update( new Object[]{event.getUnderlying()},null);
-                        else if (event.getUnderlying() instanceof Map[])
-                            handler.update( (Map[]) event.getUnderlying(),null);
-                        else if (event.getUnderlying() instanceof Object[])
-                            handler.update( (Object[])event.getUnderlying(),null);
+                        if ( handler.getClass().isAssignableFrom(ComplexEventSyncHandler.class))
+                            ((ComplexEventSyncHandler)handler).update(event.getUnderlying());
+
                         else
                             throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",query.getID());
 
