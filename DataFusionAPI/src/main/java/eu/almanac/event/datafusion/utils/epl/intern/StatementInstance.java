@@ -40,7 +40,7 @@ public class StatementInstance extends eu.almanac.event.datafusion.utils.epl.Sta
          this.stateLifecycle=stateLifecycle;
     }
 
-    public void setSynchronousResponse(Map response) {
+    public void setSynchronousResponse(Object response) {
 
         this.synchRespones = response;
         uuid.notifyAll();

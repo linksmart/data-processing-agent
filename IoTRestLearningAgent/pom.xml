@@ -154,7 +154,7 @@
         </dependency>
         <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>SiddhiWrapper</artifactId>
+                <artifactId>SiddhiWrapper</artifactId>
                 <version>${ls.se.agents.version}</version>
             <exclusions>
                 <exclusion>

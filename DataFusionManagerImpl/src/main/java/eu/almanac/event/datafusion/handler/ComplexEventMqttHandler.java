@@ -3,13 +3,13 @@ package eu.almanac.event.datafusion.handler;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import eu.almanac.event.datafusion.handler.base.BaseEventHandler;
 import eu.almanac.event.datafusion.handler.base.BaseMapEventHandler;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.almanac.event.datafusion.utils.generic.GenericCEP;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.SenML.Event;
-import eu.linksmart.api.event.datafusion.EventType;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -29,23 +29,20 @@ import java.util.concurrent.Executors;
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
-    public class ComplexEventMqttHandler extends BaseMapEventHandler implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler<Map> {
-
+    public class ComplexEventMqttHandler extends BaseMapEventHandler implements eu.linksmart.api.event.datafusion.ComplexEventMqttHandler {
 
     protected ArrayList<StaticBroker> brokerServices;
 
-
     private Configurator conf =  Configurator.getDefaultConfig();
     protected ObjectMapper parser = new ObjectMapper();
-    @Deprecated
-    protected boolean sendPerProperty;
+
     protected ExecutorService executor = Executors.newCachedThreadPool();
     protected String PUBLISHER_ID ;
-
 
     // configuration
     private  String STATEMENT_INOUT_BASE_TOPIC= "queries/";
     private  String TIME_ISO_FORMAT =  "yyyy-MM-dd'T'HH:mm:ss.S'Z'";
+    private boolean AGGREGATE_EVENTS =true;
     private String[] handlerScopes;
     static {
         List<Object> hosts = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_CONF_PATH),
@@ -76,8 +73,6 @@ import java.util.concurrent.Executors;
     }
 
     private String OUTPUT_TOPIC;
-    private Object[] insertStream;
-    private Object[] removeStream;
 
     public ComplexEventMqttHandler(Statement query) throws RemoteException, MalformedURLException, StatementException {
         super(query);
@@ -86,6 +81,7 @@ import java.util.concurrent.Executors;
         try {
             TIME_ISO_FORMAT = conf.getString(Const.TIME_ISO_FORMAT);
             STATEMENT_INOUT_BASE_TOPIC =conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
+            AGGREGATE_EVENTS=conf.getBoolean(Const.AGGREGATE_EVENTS_CONF);
 
             String aux= Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
             if(aux == null)
@@ -110,8 +106,6 @@ import java.util.concurrent.Executors;
 
     private void loadScopes() throws StatementException, MalformedURLException, RemoteException {
         try {
-
-
 
             if(query.getScope().length==0){
                 handlerScopes= new String[]{"local"};
@@ -143,36 +137,12 @@ import java.util.concurrent.Executors;
         }
     }
 
-
-
-
     protected void processMessage(Map eventMap){
-
-
-
         try {
 
-            if(eventMap.containsKey("SetEventPerEntity")){
-                sendPerProperty = (Boolean)eventMap.get(("SetEventPerEntity"));
-
-                eventMap.remove( ("SetEventPerEntity"));
-            }
-        }catch (Exception e){
-            loggerService.error(e.getMessage(),e);
-        }
-        try {
-
-            if (eventMap.values().toArray()[0] instanceof Object[])
-                update2((Object[]) eventMap.values().toArray()[0]);
-
-
-            if (sendPerProperty)
-                sendPerEntity(eventMap);
-            else {
-
-                sendEvent(eventMap);
-
-            }
+           // if (eventMap.values().toArray()[0] instanceof Object[])
+            //    processMessage((Object[]) eventMap.values().toArray()[0]);
+            sendEvent(eventMap);
 
 
         } catch (MqttException e) {
@@ -180,94 +150,6 @@ import java.util.concurrent.Executors;
         }
     }
 
-    @Deprecated
-    public  void update(Event event) {
-
-        loggerService.info("Updating query: " + query.getName());
-
-        try {
-
-
-            publish(event);
-
-        }catch (Exception e){
-
-            loggerService.error(e.getMessage(), e);
-        }
-
-    }
-
-
-    @Deprecated
-    public synchronized void update(Event[] events) {
-
-        if (events[0].isGenerated())
-            return;
-        update2( events);
-
-    }
-    public synchronized void update(IoTEntityEvent[] events) {
-        if (events[0].isGenerated())
-            return;
-
-        update2( events);
-
-    }
-    public synchronized void update2(Object[] events) {
-
-        loggerService.info("Updating query: " + query.getName());
-
-
-        try {
-
-
-            String streamID = UUID.randomUUID().toString();
-            for (Object event : events) {
-                publish(handleObject(event, "complex", streamID));
-            }
-        } catch (Exception e) {
-            loggerService.error(e.getMessage(),e);
-
-        }
-
-    }
-
-
-
-    @Deprecated
-    void sendEvent(Map eventMap, GenericCEP cepEvent) throws Exception {
-
-
-        for(Object key : eventMap.keySet()) {
-
-            try {
-                if (key.toString().equals(""))
-
-                if (eventMap.get(key) instanceof GenericCEP) {
-                    // ignore this event if was generated by a CEP
-                    if (((GenericCEP)eventMap.get(key)).isGenerated())
-                        return;
-
-
-                } else {
-
-                    cepEvent.addValue(key.toString(),eventMap.get(key));
-
-
-                }
-            } catch (Exception eEntity) {
-
-
-                loggerService.error(eEntity.getMessage(),eEntity);
-
-
-
-            }
-        }
-
-        publish(cepEvent);
-
-    }
     private Observation handleObject(Object event, String description, String streamID){
         if (event instanceof Observation) {
            return (Observation)event;
@@ -277,81 +159,41 @@ import java.util.concurrent.Executors;
         //    return handleObject(((EventBean)event).getUnderlying(),description,streamID);
         }else {
 
-
           return Observation.factory(event, description, streamID, query.getID());
-
-
         }
     }
     void sendEvent(Map eventMap) throws MqttException {
-
 
         String streamID = UUID.randomUUID().toString();
         ArrayList<Object> arrayList = new ArrayList<>();
         if (eventMap.size() == 1)
             try {
-
                 publish(handleObject(eventMap.get(eventMap.keySet().toArray()[0]), eventMap.keySet().toArray()[0].toString(), streamID));
 
-
             } catch (Exception eEntity) {
-
-
                 loggerService.error(eEntity.getMessage(), eEntity);
-
-
             }
         else {
-
-
-            for (Object key : eventMap.keySet()) {
-
-                arrayList.add(handleObject(eventMap.get(key), key.toString(), "").getResultValue());
-            }
-            try {
-                update2(arrayList.toArray());
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(), e);
-            }
-        }
-
-    }
-    @Deprecated
-    IoTEntityEvent sendPerEntity(Map eventMap){
-        IoTEntityEvent cepEvent = new IoTEntityEvent("DataFusionManager");
-        cepEvent.setAbout(query.getSource());
-
-
-        if(eventMap.values().toArray()[0] instanceof IoTEntityEvent[]) {
-            IoTEntityEvent[] events = (IoTEntityEvent[]) eventMap.values().toArray()[0];
-            update(events);
-        }
-
-        for(Object key : eventMap.keySet()) {
-            try {
-
-                if (eventMap.get(key) instanceof IoTEntityEvent) {
-                    IoTEntityEvent ent = (IoTEntityEvent) eventMap.get(key);
-
-
-                      publish(ent);
-
-
-
+            if(AGGREGATE_EVENTS){
+                try {
+                    publish(handleObject(eventMap,"Map",streamID));
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(), e);
                 }
-
-            } catch (Exception eEntity) {
-
-
-                loggerService.error(eEntity.getMessage(),eEntity);
-
-
+            }else {
+                eventMap.keySet().forEach(key-> {
+                            try {
+                                publish(handleObject(eventMap.get(key), key.toString(), streamID));
+                            } catch (Exception ex) {
+                                loggerService.error(ex.getMessage(), ex);
+                            }
+                        }
+            );
             }
         }
 
-        return cepEvent;
-
     }
+
     private synchronized void  publish( Object ent) throws Exception {
 
         if(handlerScopes!=query.getScope()){
@@ -368,15 +210,7 @@ import java.util.concurrent.Executors;
                 }
             else
                 brokerService.publish(OUTPUT_TOPIC+"/"+PUBLISHER_ID, parser.writeValueAsString(ent).getBytes());
-
-
-
     }
-
-
-
-
-
 
     @Override
     public  synchronized void destroy(){
@@ -389,9 +223,5 @@ import java.util.concurrent.Executors;
                 loggerService.error(e.getMessage(),e);
             }
     }
-
-
-
-
 
 }

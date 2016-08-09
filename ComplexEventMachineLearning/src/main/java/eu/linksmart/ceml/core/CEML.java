@@ -174,7 +174,7 @@ public class CEML implements AnalyzerComponent {
 
                         break;
                     case "prediction":
-                        result.addResources(requests.get(name).getModel().getLastPrediction().getPredictedBy(),requests.get(name).getModel().getLastPrediction());
+                        result.addResources(requests.get(name).getLastPrediction().getPredictedBy(),requests.get(name).getLastPrediction());
                         break;
 
                     case "complete":
@@ -194,7 +194,7 @@ public class CEML implements AnalyzerComponent {
         return result;
     }
     static public Observation LastPrediction(String request){
-        return Observation.factory(requests.get(request).getModel().getLastPrediction(),"Prediction",request,DynamicConst.getId());
+        return Observation.factory(requests.get(request).getLastPrediction(),"Prediction",request,DynamicConst.getId());
     }
     static public Observation PredictUsing(String request,Object input){
         try {

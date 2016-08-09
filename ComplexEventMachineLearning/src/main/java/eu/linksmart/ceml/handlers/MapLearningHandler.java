@@ -1,5 +1,6 @@
 package eu.linksmart.ceml.handlers;
 
+import eu.almanac.event.datafusion.handler.base.BaseEventHandler;
 import eu.almanac.event.datafusion.handler.base.BaseMapEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -12,11 +13,7 @@ import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
 import org.slf4j.Logger;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
@@ -46,11 +43,8 @@ public  class MapLearningHandler extends BaseMapEventHandler {
 
     @Override
     protected void processMessage(Map eventMap) {
-
         if(eventMap!=null){
             try {
-
-
                 Map  withoutTarget= new HashMap<>();
                 List measuredTargets = new ArrayList<>();
                 for(DataDescriptor descriptor:descriptors)
@@ -80,8 +74,6 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                loggerService.error(e.getMessage(),e);
             }
             originalRequest.report();
-
         }
-
     }
 }

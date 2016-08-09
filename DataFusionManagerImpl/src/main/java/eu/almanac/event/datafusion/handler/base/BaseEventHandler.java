@@ -7,21 +7,21 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Created by José Ángel Carvajal on 27.07.2016 a researcher of Fraunhofer FIT.
+ * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public abstract class BaseArrayEventHandler implements ComplexEventHandler<Object[]> {
+public abstract class BaseEventHandler implements ComplexEventHandler {
     protected   EventExecutor eventExecutor = new EventExecutor();
     protected Thread thread;
     protected Statement query;
-    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
 
 
 
-    public BaseArrayEventHandler(Statement statement){
+    public BaseEventHandler(Statement statement){
 
         query = statement;
         initThread();
@@ -38,32 +38,19 @@ public abstract class BaseArrayEventHandler implements ComplexEventHandler<Objec
         }
     }
 
-    public  void update(Object[] eventMap) {
-        loggerService.info( Utils.getDateNowString() + " Simple update query: " + query.getName());
+    protected abstract void processMessage(Object events);
+/*
+   public  void update(Map eventMap) {
         initThread();
+        loggerService.debug(Utils.getDateNowString() + " update map[] w/ handler " + this.getClass().getSimpleName() + " & query: " + query.getName());
+        eventExecutor.stack(eventMap);
 
-        if(eventMap instanceof Map[]) {
-            Map[] aux = (Map[]) eventMap;
-            Object[] objects = new Object[eventMap.length];
-            int i=0;
-            for (Map map: aux) {
-                objects[i]= map.values().iterator().next();
-                i++;
-            }
-            eventExecutor.stack(objects);
-        }else
-            eventExecutor.stack(eventMap);
-
-
-
-
-
-    }
-    private class EventExecutor implements Runnable{
-        private final LinkedBlockingQueue<Object[]> queue = new LinkedBlockingQueue<>();
+    }*/
+    protected class EventExecutor implements Runnable{
+        private final LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>();
         private boolean active = true;
 
-        synchronized void stack(Object[] eventMap){
+        protected synchronized void stack(Object eventMap){
             queue.add(eventMap);
             synchronized (queue) {
                 queue.notifyAll();
@@ -102,17 +89,10 @@ public abstract class BaseArrayEventHandler implements ComplexEventHandler<Objec
         }
     }
 
-    protected abstract void processMessage(Object[] events);
 
-    public void update(Object[][] insertStream, Object[][] removeStream){
-        loggerService.info( Utils.getDateNowString() + " Multi-update query: " + query.getName());
-        if(insertStream!=null)
-            for (Object[] m: insertStream)
-                eventExecutor.stack(m);
-        if(removeStream!=null)
-            for (Object[] m: removeStream)
-                eventExecutor.stack(m);
-    }
+    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
+
+
     @Override
     public void destroy() {
 

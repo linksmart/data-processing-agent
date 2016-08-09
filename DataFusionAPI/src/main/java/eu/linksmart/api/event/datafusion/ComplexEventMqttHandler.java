@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by Jose Angel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
-public interface ComplexEventMqttHandler<T> extends ComplexEventHandler<T> {
+public interface ComplexEventMqttHandler extends ComplexEventHandler {
     /***
      * Location are the brokers unknown with an alias by the Handlers
      * */

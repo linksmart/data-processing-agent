@@ -37,7 +37,7 @@ public class StatementInstance implements Statement {
     protected String[] scope={"default"};
     protected static final String uuid =UUID.randomUUID().toString();
     @JsonProperty("SynchronousResponse")
-    protected Map synchRespones = new Hashtable<>();
+    protected Object synchRespones ;
     @JsonProperty("TargetAgents")
     protected ArrayList<String> targetAgents= new  ArrayList<String>();
 
@@ -88,7 +88,7 @@ public class StatementInstance implements Statement {
     }
 
     @Override
-    public Map getSynchronousResponse() {
+    public Object getSynchronousResponse() {
         if(stateLifecycle == StatementLifecycle.SYNCHRONOUS)
             try {
                 uuid.wait(60000);

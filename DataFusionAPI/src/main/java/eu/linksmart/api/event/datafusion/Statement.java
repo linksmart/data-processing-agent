@@ -116,7 +116,7 @@ public interface Statement extends JsonSerializable {
      * @return  Lifecycle Statement State @see StatementLifecycle .
      * */
     public StatementLifecycle getStateLifecycle();
-    public Map getSynchronousResponse();
+    public Object getSynchronousResponse();
     public boolean equals(Statement org);
 
 
