@@ -176,7 +176,7 @@ public class CEMLManager implements CEMLRequest {
         MultiResourceResponses<Statement> responses;
         if(auxiliaryStatements!=null&& !auxiliaryStatements.isEmpty()) {
             responses =StatementFeeder.feedStatements(auxiliaryStatements);
-            if (!responses.containsSuccess())
+            if (!(responses.getOverallStatus()<300))
                 throw new Exception(CEML.getMapper().writeValueAsString(responses));
         }
         ArrayList<Statement> arrayList = new ArrayList<>();
@@ -187,7 +187,7 @@ public class CEMLManager implements CEMLRequest {
 
         if(deployStatements!=null&& !deployStatements.isEmpty()) {
             responses =StatementFeeder.feedStatements(deployStatements);
-            if (!responses.containsSuccess())
+            if (!(responses.getOverallStatus()<300))
                 throw new Exception(CEML.getMapper().writeValueAsString(responses));
 
             if (!(settings.containsKey("AlwaysDeploy")&&(settings.get("AlwaysDeploy") instanceof Boolean &&(settings.get("AlwaysDeploy")).equals(true))))
