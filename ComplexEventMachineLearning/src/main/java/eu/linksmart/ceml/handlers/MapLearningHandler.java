@@ -36,7 +36,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         model = originalRequest.getModel();
         descriptors = originalRequest.getDescriptors();
 
-        if(conf.getString(Const.CEML_EngineTimeProveded)!= null ||conf.getString(Const.CEML_EngineTimeProveded)!="" )
+        if(conf.getString(Const.CEML_EngineTimeProveded)!= null ||conf.getString(Const.CEML_EngineTimeProveded).equals("") )
             columnNameTime = conf.getString(Const.CEML_EngineTimeProveded);
     }
 
@@ -47,24 +47,24 @@ public  class MapLearningHandler extends BaseMapEventHandler {
             try {
                 Map  withoutTarget= new HashMap<>();
                 List measuredTargets = new ArrayList<>();
-                for(DataDescriptor descriptor:descriptors)
-                    if(descriptor.isTarget()) {
-                        if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptors.getName()).getClass()))
-                            measuredTargets.add(eventMap.get(descriptor.getName()));
-                        else
-                            loggerService.error("Type mismatch between the the expected output and received one");
-                    }else
-                        if( descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptors.getName()).getClass()))
-                            withoutTarget.put(descriptor.getName(),  eventMap.get(descriptor.getName()));
+                synchronized (originalRequest) {
+                    for (DataDescriptor descriptor : descriptors)
+                        if (descriptor.isTarget()) {
+                            if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptors.getName()).getClass()))
+                                measuredTargets.add(eventMap.get(descriptor.getName()));
+                            else
+                                loggerService.error("Type mismatch between the the expected output and received one");
+                        } else if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptors.getName()).getClass()))
+                            withoutTarget.put(descriptor.getName(), eventMap.get(descriptor.getName()));
                         else
                             loggerService.error("Type mismatch between the the expected input and received one");
 
 
-                List prediction = (List) model.predict(withoutTarget);
-                model.learn(eventMap);
+                    List prediction = (List) model.predict(withoutTarget);
+                    model.learn(eventMap);
 
-               model.getEvaluator().evaluate(prediction, measuredTargets);
-
+                    model.getEvaluator().evaluate(prediction, measuredTargets);
+                }
                 if( model.getEvaluator().isDeployable())
                     originalRequest.deploy();
                 else

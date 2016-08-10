@@ -118,12 +118,4 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
         this.nativeType = nativeType;
     }
 
-    public Prediction<Output> getLastPrediction() {
-        return lastPrediction;
-    }
-
-    @Override
-    public void setLastPrediction(Prediction<Output> value) {
-        lastPrediction=value;
-    }
 }

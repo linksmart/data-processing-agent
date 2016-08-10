@@ -31,8 +31,8 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     public Prediction<Output> predict(Input input) throws Exception;
     public void setDescriptors(DataDescriptors descriptors);
     public DataDescriptors getDescriptors();
-    public Prediction<Output> getLastPrediction();
-    public void setLastPrediction(Prediction<Output> value);
+    ///public Prediction<Output> getLastPrediction();
+   /// public void setLastPrediction(Prediction<Output> value);
     public void setName(String name);
 
     public Class getNativeType();

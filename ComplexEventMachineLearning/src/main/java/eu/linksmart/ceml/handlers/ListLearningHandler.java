@@ -68,16 +68,18 @@ public  class ListLearningHandler extends BaseListEventHandler {
     }
     protected void learn(List input) {
         if(input!=null&&input.size()>=descriptors.size()){
+
             try {
-                List measuredTargets =  input.subList(descriptors.getInputSize(),input.size());
-                List withoutTarget = input.subList(0, descriptors.getInputSize());
+                synchronized (originalRequest) {
+                    List measuredTargets = input.subList(descriptors.getInputSize(), input.size());
+                    List withoutTarget = input.subList(0, descriptors.getInputSize());
 
-                List prediction = (List) model.predict(withoutTarget).getPrediction();
+                    List prediction = (List) model.predict(withoutTarget).getPrediction();
 
-                model.learn(input);
+                    model.learn(input);
 
-                model.getEvaluator().evaluate(prediction, measuredTargets);
-
+                    model.getEvaluator().evaluate(prediction, measuredTargets);
+                }
                 if(model.getEvaluator().isDeployable())
                     originalRequest.deploy();
                 else
