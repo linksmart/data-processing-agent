@@ -312,4 +312,17 @@ public class Tools {
 
         return hadBeanUsed;
     }
+    static public boolean isTimeContinuous(EventType[] events){
+        EventType previous= null;
+
+        for (EventType event: Arrays.asList(events)) {
+
+            if (previous!=null && !DateUtils.addHours(previous.getDate(),2 ).after(event.getDate()))
+                return false;
+
+            previous = event;
+
+        }
+        return true;
+    }
 }
