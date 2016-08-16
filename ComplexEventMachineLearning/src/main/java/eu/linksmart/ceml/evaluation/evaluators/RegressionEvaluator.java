@@ -75,12 +75,14 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         private long N = 0; //fading increment
         public RMSEEvaluationMetric(ComparisonMethod method, Double target) {
             super(method, target);
+            currentValue = 100.0;
         }
 
         @Override
         public Double calculate() {
             double squaredRMSE = currentValue*currentValue;
             for(Map.Entry entry:latestEntries){
+//                Map.Entry entry = latestEntries.get(latestEntries.size()-1);
                 Double predicted = (Double) entry.getKey();
                 Double actual = (Double) entry.getValue();
                 double diff =  actual-predicted;
@@ -103,6 +105,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         private long N = 0; //fading increment
         public MAEEvaluationMetric(ComparisonMethod method, Double target) {
             super(method, target);
+            currentValue = 100.0;
         }
 
         @Override
