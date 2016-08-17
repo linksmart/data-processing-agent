@@ -210,7 +210,7 @@ public class CEML implements AnalyzerComponent {
                     aux = input;
             }if (input instanceof EventType[]){
                orgInput = new ArrayList<>(Arrays.asList((EventType[])input));
-                aux = orgInput.stream().map(i-> (Object) i.getValue()).collect(Collectors.toList());
+                aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
 
             }else if(input instanceof Object[])
                 aux=Arrays.asList((Object[])input);
@@ -256,12 +256,12 @@ public class CEML implements AnalyzerComponent {
     static public Observation filter(String filterName,Observation measurement){
         try {
             if (measurement.getValue() instanceof Number)
-                return Observation.factory(filter(filterName, ((Number) measurement.getResultValue())), measurement.getResultType().toString(), measurement.getDatastream().getId(), measurement.getSensor().getId());
+                return Observation.factory(filter(filterName, ((Number) measurement.getResultValue())), measurement.getResultType().toString(), measurement.getDatastream().getId(), measurement.getSensor().getId(),measurement.getDate().getTime());
             if (measurement.getValue() instanceof String) {
                 Double value = null;
                 try {
                     value = Double.valueOf(((String) measurement.getValue()));
-                    return Observation.factory(filter(filterName, value), measurement.getResultType().toString(), measurement.getDatastream().getId(), measurement.getSensor().getId());
+                    return Observation.factory(filter(filterName, value), measurement.getResultType().toString(), measurement.getDatastream().getId(), measurement.getSensor().getId(),measurement.getDate().getTime());
                 } catch (Exception ignored) {
                 }
             }
