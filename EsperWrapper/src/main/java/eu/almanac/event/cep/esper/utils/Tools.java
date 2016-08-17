@@ -330,23 +330,30 @@ public class Tools {
         EventType previous= null;
 
         for(EventType[] events: Arrays.asList(eventss))
-            for (EventType event: Arrays.asList(events)) {
-
-                if (previous!=null && !DateUtils.addHours(previous.getDate(),2 ).after(event.getDate()))
-                    return false;
-
-                previous = event;
-
-            }
+            if(!isTimeContinuous(events))
+                return false;
         return true;
+    }
+    static public boolean isTimeContinuous(EventType[] events1,EventType[] events2,boolean inBetweenOnly){
+
+        return (inBetweenOnly || (isTimeContinuous(events1) && isTimeContinuous(events2)) )&&
+                (DateUtils.addHours(  events1[events1.length-1].getDate(),2 ).after(  events2[0].getDate()) &&
+                        events1[events1.length-1].getDate().before(events2[0].getDate())
+                );
+
+
     }
     static public boolean isTimeContinuous(EventType[] events1,EventType[] events2){
 
-            return isTimeContinuous((EventType[]) ArrayUtils.addAll(events1, events2));
+        return isTimeContinuous(events1,events2,false);
+
 
     }
     static public boolean isTimeContinuous(Object events1,Object events2) {
         return events1 instanceof EventType[] && events2 instanceof EventType[] && isTimeContinuous((EventType[]) events1, (EventType[]) events2);
+    }
+    static public boolean isTimeContinuous(Object events1,Object events2, Object inBetweenOnly) {
+        return events1 instanceof EventType[] && events2 instanceof EventType[] && inBetweenOnly instanceof Boolean && isTimeContinuous((EventType[]) events1, (EventType[]) events2,(boolean)inBetweenOnly);
     }
     static public EventType[] flattArrays(EventType[][] eventss){
 
