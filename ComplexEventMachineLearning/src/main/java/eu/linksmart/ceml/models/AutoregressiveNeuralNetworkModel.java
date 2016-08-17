@@ -2,7 +2,6 @@ package eu.linksmart.ceml.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
-import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.model.Model;
@@ -34,6 +33,9 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
     }
 
+    private static final String MAX_INPUT_STR = "maxInputValue";
+    private static final String MIN_INPUT_STR = "minInputValue";
+
     @JsonIgnore
     private int numInputsPerNet;
     @JsonIgnore
@@ -45,10 +47,10 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
     private int ArSeasonalP;
 
     @JsonIgnore
-    private double maxInputVal;
+    private double maxInputValue = Double.POSITIVE_INFINITY;
 
     @JsonIgnore
-    private double minInputVal;
+    private double minInputValue = Double.NEGATIVE_INFINITY;
 
     @JsonIgnore
     private int seasonalityPeriod;
@@ -179,7 +181,13 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
     //This method is just to localize the supperesswarning annotation.
     private double getBoundValue(double value){
-        return value < minInputVal?minInputVal:(value>maxInputVal?maxInputVal:value);
+        if(maxInputValue != Double.POSITIVE_INFINITY)
+            if(value>maxInputValue)
+                value = maxInputValue;
+        if(minInputValue != Double.NEGATIVE_INFINITY)
+            if(value<minInputValue)
+                value = minInputValue;
+        return value;
     }
     @Override
     public PredictionInstance<List<Double>> predict(List<Double> input) throws Exception {
@@ -239,8 +247,10 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
         int numNnets = descriptors.getTargetSize() / numOutputsPerNet;
 
-        maxInputVal = (Double) parameters.get("maxInputval");
-        minInputVal = (Double) parameters.get("minInputval");
+        if(parameters.containsKey(MAX_INPUT_STR))
+            maxInputValue = (Double) parameters.get(MAX_INPUT_STR);
+        if(parameters.containsKey(MIN_INPUT_STR))
+            minInputValue = (Double) parameters.get(MIN_INPUT_STR);
 
         lerner = new ArrayList<>(numNnets);
         for (int i = 0; i < numNnets; i++) {
