@@ -15,6 +15,7 @@ import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class ModelDeserializer extends JsonDeserializer<Model> {
         String name =  node.get("Name").textValue();
 
         ArrayList<TargetRequest> targetRequests;
-        Map<String,Object> parameters = null;
+        Map<String,Object> parameters = new Hashtable<>();
         if(node.hasNonNull("Targets")) {
             targetRequests = mapper.reader(collectionType).readValue(node.get("Targets"));
 

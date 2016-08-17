@@ -40,6 +40,9 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     public void setNativeType(Class nativeType);
 
 
+    public Map<String, Object> getParameters() ;
+    public void setParameters(Map<String, Object> parameters) ;
+
     //  public boolean learn(Map<String, T> input) throws Exception;
   //  public List<T> predict(Map<String, T> input) throws Exception;
 

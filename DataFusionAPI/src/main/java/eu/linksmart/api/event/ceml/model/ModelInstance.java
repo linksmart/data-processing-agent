@@ -33,6 +33,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     protected  Evaluator<Output> evaluator ;
     @JsonProperty(value = "Targets")
     protected  ArrayList<TargetRequest> targets;
+
     @JsonProperty(value = "Parameters")
     protected  Map<String,Object> parameters;
     @JsonProperty(value = "Prediction")
@@ -116,6 +117,14 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     public void setNativeType(Class nativeType) {
         this.nativeType = nativeType;
+    }
+
+    public Map<String, Object> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
     }
 
 }
