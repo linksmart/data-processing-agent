@@ -45,6 +45,12 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
     private int ArSeasonalP;
 
     @JsonIgnore
+    private double maxInputVal;
+
+    @JsonIgnore
+    private double minInputVal;
+
+    @JsonIgnore
     private int seasonalityPeriod;
 
    // @Override
@@ -172,7 +178,9 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
     }
 
     //This method is just to localize the supperesswarning annotation.
-
+    private double getBoundValue(double value){
+        return value < minInputVal?minInputVal:(value>maxInputVal?maxInputVal:value);
+    }
     @Override
     public PredictionInstance<List<Double>> predict(List<Double> input) throws Exception {
         if (input.size()>=descriptors.getInputSize()) {
@@ -192,7 +200,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
                 INDArray out = nnet.output(inputArr, false);
 
                 for (int i = 0; i < numOutputsPerNet; i++) {
-                    returnList.add(out.getDouble(i));
+                    returnList.add(getBoundValue(out.getDouble(i)));
                 }
 
             }
@@ -231,6 +239,8 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
         int numNnets = descriptors.getTargetSize() / numOutputsPerNet;
 
+        maxInputVal = (Double) parameters.get("maxInputval");
+        minInputVal = (Double) parameters.get("minInputval");
 
         lerner = new ArrayList<>(numNnets);
         for (int i = 0; i < numNnets; i++) {
