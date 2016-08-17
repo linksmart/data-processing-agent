@@ -8,6 +8,7 @@ import eu.linksmart.api.event.datafusion.EventType;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.almanac.event.cep.intern.Const;
 import eu.linksmart.gc.utils.function.Utils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.time.DateUtils;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
@@ -325,4 +326,47 @@ public class Tools {
         }
         return true;
     }
+    static public boolean isTimeContinuous(EventType[][] eventss){
+        EventType previous= null;
+
+        for(EventType[] events: Arrays.asList(eventss))
+            for (EventType event: Arrays.asList(events)) {
+
+                if (previous!=null && !DateUtils.addHours(previous.getDate(),2 ).after(event.getDate()))
+                    return false;
+
+                previous = event;
+
+            }
+        return true;
+    }
+    static public boolean isTimeContinuous(EventType[] events1,EventType[] events2){
+
+            return isTimeContinuous((EventType[]) ArrayUtils.addAll(events1, events2));
+
+    }
+    static public boolean isTimeContinuous(Object events1,Object events2) {
+        return events1 instanceof EventType[] && events2 instanceof EventType[] && isTimeContinuous((EventType[]) events1, (EventType[]) events2);
+    }
+    static public EventType[] flattArrays(EventType[][] eventss){
+
+
+        EventType[] result  =null;
+        if(eventss!=null && eventss.length>0) {
+            if (eventss.length > 1) {
+                for (int i = 1; i < eventss.length; i++)
+                    result = (EventType[]) ArrayUtils.addAll(result, eventss[i]);
+            }
+            else result = eventss[0];
+        }
+
+            return result;
+    }
+    static public Object[] addAll(Object o, Object o2){
+        if(o instanceof Object[] && o2 instanceof Object[] ){
+            return ArrayUtils.addAll((Object[])o,(Object[])o2);
+        }
+        return new Object[]{o,o2};
+    }
+
 }
