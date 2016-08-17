@@ -4,6 +4,7 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,4 +35,12 @@ public interface Prediction<T> {
 
         return certaintyDegree;
     }
+
+    Object getOriginalInput();
+
+    void setOriginalInput(Object originalInput);
+
+    Date getMadeAt();
+
+    void setMadeAt(Date originalInput);
 }

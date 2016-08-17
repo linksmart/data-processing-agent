@@ -199,7 +199,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
             Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
             evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
 
-            return new PredictionInstance<List<Double>>(returnList, this.getName() + ":" + this.getClass().getSimpleName(), evaluationMetrics);
+            return new PredictionInstance<List<Double>>(returnList, input, this.getName() + ":" + this.getClass().getSimpleName(), evaluationMetrics);
         }
         return new PredictionInstance<>();
     }

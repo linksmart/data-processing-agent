@@ -4,6 +4,7 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,7 +15,9 @@ public class PredictionInstance<T> implements Prediction<T> {
     protected Double certaintyDegree;
     protected boolean acceptedPrediction;
     private T prediction;
+    protected Object originalInput;
     protected Collection<EvaluationMetric> evaluations = null;
+    protected Date madeAt = new Date();
 
 
     public PredictionInstance(T prediction,String predictedBy, ArrayList<EvaluationMetric> evaluations, double certaintyDegree) {
@@ -25,11 +28,12 @@ public class PredictionInstance<T> implements Prediction<T> {
 
         acceptedPrediction= certaintyDegree >.99;
     }
-    public PredictionInstance(T prediction,String predictedBy, Collection<EvaluationMetric> evaluations) {
+    public PredictionInstance(T prediction, Object input ,String predictedBy, Collection<EvaluationMetric> evaluations) {
         this.predictedBy = predictedBy;
         this.evaluations = evaluations;
         this.prediction =prediction;
         this.certaintyDegree = calculateDegreeCertainty();
+        originalInput =input;
 
 
     }
@@ -76,4 +80,23 @@ public class PredictionInstance<T> implements Prediction<T> {
     public T getPrediction() {
         return prediction;
     }
+    @Override
+    public Object getOriginalInput() {
+        return originalInput;
+    }
+    @Override
+    public void setOriginalInput(Object originalInput) {
+        this.originalInput = originalInput;
+    }
+
+    @Override
+    public Date getMadeAt() {
+        return madeAt;
+    }
+
+    @Override
+    public void setMadeAt(Date date) {
+        madeAt =date;
+    }
+
 }

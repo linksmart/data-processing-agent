@@ -34,7 +34,7 @@ import java.util.Date;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventType<String,String,Object>
+public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventType<String,Object>
 {
 	/**
 	 * The time point/period of when the observation happens. To be rendered as

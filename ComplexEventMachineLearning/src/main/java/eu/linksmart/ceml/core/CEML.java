@@ -3,6 +3,7 @@ package eu.linksmart.ceml.core;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -199,12 +200,30 @@ public class CEML implements AnalyzerComponent {
     static public Observation PredictUsing(String request,Object input){
         try {
             Object aux = input;
-            if(input instanceof Object[])
+            ArrayList<EventType> orgInput= null;
+            if(input instanceof ArrayList) {
+                ArrayList aux1= (ArrayList)input;
+                if(!aux1.isEmpty()&& aux1.get(1) instanceof EventType) {
+                    orgInput = (ArrayList<EventType>) aux1;
+                    aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
+                }else
+                    aux = input;
+            }if (input instanceof EventType[]){
+               orgInput = new ArrayList<>(Arrays.asList((EventType[])input));
+                aux = orgInput.stream().map(i-> (Object) i.getValue()).collect(Collectors.toList());
+
+            }else if(input instanceof Object[])
                 aux=Arrays.asList((Object[])input);
 
             Prediction prediction = requests.get(request).getModel().predict(aux);
+            prediction.setOriginalInput(input);
+
             requests.get(request).setLastPrediction(prediction);
-            return Observation.factory(prediction,"Prediction",request,DynamicConst.getId());
+            if(orgInput==null)
+                return Observation.factory(prediction,"Prediction",request,DynamicConst.getId());
+            else {
+                return Observation.factory(prediction,"Prediction",request,DynamicConst.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
+            }
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
             return Observation.factory(e.getMessage(),"Error",request,DynamicConst.getId());
