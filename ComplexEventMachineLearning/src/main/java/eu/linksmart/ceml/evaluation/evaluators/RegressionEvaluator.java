@@ -66,7 +66,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
                 i++;
             }
         }
-        return accumulateMetric/(evaluationAlgorithms.size()-i);
+        return accumulateMetric/(evaluationAlgorithms.size());
     }
 
 

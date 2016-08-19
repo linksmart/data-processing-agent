@@ -91,6 +91,16 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
         return descriptors;
     }
 
+    @Override
+    public Prediction<Output> getLastPrediction() {
+        return lastPrediction;
+    }
+
+    @Override
+    public void setLastPrediction(Prediction<Output> value) {
+        lastPrediction = value;
+    }
+
 
     @Override
     public JsonSerializable build() throws Exception {

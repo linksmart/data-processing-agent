@@ -3,6 +3,8 @@ package eu.linksmart.ceml.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.almanac.event.datafusion.feeder.StatementFeeder;
+import eu.almanac.event.datafusion.intern.DynamicConst;
+import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
@@ -18,8 +20,10 @@ import org.slf4j.Logger;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
@@ -173,6 +177,7 @@ public class CEMLManager implements CEMLRequest {
         model.build();
 
 
+        insertInCEPEngines();
         MultiResourceResponses<Statement> responses;
         if(auxiliaryStatements!=null&& !auxiliaryStatements.isEmpty()) {
             responses =StatementFeeder.feedStatements(auxiliaryStatements);
@@ -197,7 +202,6 @@ public class CEMLManager implements CEMLRequest {
 
         }
 
-
         return this;
     }
     public int insertInCEPEngines(){
@@ -211,5 +215,37 @@ public class CEMLManager implements CEMLRequest {
 
         }
         return n;
+    }
+    public EventType predict(Object input){
+        try {
+            Object aux = input;
+            ArrayList<EventType> orgInput= null;
+            if(input instanceof ArrayList) {
+                ArrayList aux1= (ArrayList)input;
+                if(!aux1.isEmpty()&& aux1.get(1) instanceof EventType) {
+                    orgInput = (ArrayList<EventType>) aux1;
+                    aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
+                }else
+                    aux = input;
+            }if (input instanceof EventType[]){
+                orgInput = new ArrayList<>(Arrays.asList((EventType[]) input));
+                aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
+
+            }else if(input instanceof Object[])
+                aux=Arrays.asList((Object[])input);
+
+            Prediction prediction = model.predict(aux);
+            prediction.setOriginalInput(input);
+
+           setLastPrediction(prediction);
+            if(orgInput==null)
+                return Observation.factory(prediction,"Prediction",name, DynamicConst.getId());
+            else {
+                return Observation.factory(prediction,"Prediction",name,DynamicConst.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
+            }
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
+            return Observation.factory(e.getMessage(),"Error",name,DynamicConst.getId());
+        }
     }
 }

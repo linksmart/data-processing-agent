@@ -31,8 +31,8 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     public Prediction<Output> predict(Input input) throws Exception;
     public void setDescriptors(DataDescriptors descriptors);
     public DataDescriptors getDescriptors();
-    ///public Prediction<Output> getLastPrediction();
-   /// public void setLastPrediction(Prediction<Output> value);
+    public Prediction<Output> getLastPrediction();
+    public void setLastPrediction(Prediction<Output> value);
     public void setName(String name);
 
     public Class getNativeType();
@@ -43,10 +43,4 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     public Map<String, Object> getParameters() ;
     public void setParameters(Map<String, Object> parameters) ;
 
-    //  public boolean learn(Map<String, T> input) throws Exception;
-  //  public List<T> predict(Map<String, T> input) throws Exception;
-
-
-//    public Map<String, T> predictInMap(List<T> input) throws Exception;
- //   public Map<String, T> predictInMap(Map<String, T> input) throws Exception;
 }

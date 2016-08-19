@@ -6,6 +6,8 @@ import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
+import eu.linksmart.api.event.ceml.prediction.Prediction;
+import eu.linksmart.api.event.datafusion.EventType;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.ceml.intern.Const;
 import eu.linksmart.gc.utils.configuration.Configurator;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
@@ -34,8 +37,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
     final protected DataDescriptors descriptors;
 
     protected String columnNameTime = "";
-    protected int leadingLerner = -1;
-    protected Map<String, Integer> modelByName = new Hashtable<>();
+    protected List<Object> lastTarget =null;
     public ListLearningHandler(Statement statement) {
         super(statement);
 
@@ -67,19 +69,31 @@ public  class ListLearningHandler extends BaseListEventHandler {
         return aux;
     }
     protected void learn(List input) {
-        if(input!=null&&input.size()>=descriptors.size()){
+        if(input!=null&&input.size()>=descriptors.size()+descriptors.getTargetSize()){
 
             try {
                 synchronized (originalRequest) {
-                    List measuredTargets = input.subList(descriptors.getInputSize(), input.size());
-                    List withoutTarget = input.subList(0, descriptors.getInputSize());
+                    List auxInput;
+                    if(input.get(0) instanceof EventType)
+                        auxInput = (List) input.stream().map(m->((EventType)m).getValue()).collect(Collectors.toList());
+                    else
+                        auxInput = input;
+                    List learningInput = auxInput.subList(0, descriptors.size());
+                    model.learn(learningInput);
 
-                    List prediction = (List) model.predict(withoutTarget).getPrediction();
+                  //  if(auxInput.size()>= descriptors.size()+descriptors.getTargetSize()) {
+                    List groundTruth = auxInput.subList(descriptors.size(), descriptors.size()+descriptors.getTargetSize());
+                    List predictionInput = auxInput.subList(descriptors.getTargetSize(), descriptors.getTargetSize()+descriptors.getInputSize());
+                    Prediction prediction = model.predict(predictionInput);
+                    model.getEvaluator().evaluate(prediction.getPrediction(), groundTruth);
 
-                    model.learn(input);
 
-                    model.getEvaluator().evaluate(prediction, measuredTargets);
+                  //  }
+
                 }
+
+
+
                 if(model.getEvaluator().isDeployable())
                     originalRequest.deploy();
                 else
