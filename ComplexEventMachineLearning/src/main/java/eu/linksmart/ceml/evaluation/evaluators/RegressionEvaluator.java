@@ -66,7 +66,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
                 i++;
             }
         }
-        return accumulateMetric/(evaluationAlgorithms.size());
+        return accumulateMetric/(i);
     }
 
 
@@ -81,18 +81,21 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         @Override
         public Double calculate() {
             double squaredRMSE = currentValue*currentValue;
+            double squaredSum = 0.0;
             for(Map.Entry entry:latestEntries){
 //                Map.Entry entry = latestEntries.get(latestEntries.size()-1);
                 Double predicted = (Double) entry.getKey();
                 Double actual = (Double) entry.getValue();
                 double diff =  actual-predicted;
-                double squaredError = diff * diff;
-                if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
-                    N++;
-                }
-
-                squaredRMSE = ((N-1)/N) * squaredRMSE  + squaredError/N;
+                squaredSum += diff * diff;
             }
+            double squaredError = squaredSum/latestEntries.size();
+
+            if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
+                N++;
+            }
+
+            squaredRMSE =((N-1) * squaredRMSE  + squaredError)/N;
             currentValue = Math.sqrt(squaredRMSE);
             return  currentValue;
         }
@@ -110,17 +113,20 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
         @Override
         public Double calculate() {
+            double absErrorSum = 0.0;
             for(Map.Entry entry:latestEntries){
                 Double predicted = (Double) entry.getKey();
                 Double actual = (Double) entry.getValue();
                 double diff =  actual-predicted;
-                double absError = Math.abs(diff);
-                if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
-                    N++;
-                }
+                absErrorSum += Math.abs(diff);
 
-                currentValue = ((N-1)/N) * currentValue  + absError/N;
             }
+            double absError = absErrorSum/latestEntries.size();
+            if(N != MAX_NUMBER_FOR_AVG){//ignore very old values
+                N++;
+            }
+
+            currentValue = ((N-1) * currentValue  + absError)/N;
             return  currentValue;
         }
 
