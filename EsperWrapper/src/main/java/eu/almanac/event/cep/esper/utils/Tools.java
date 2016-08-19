@@ -375,5 +375,34 @@ public class Tools {
         }
         return new Object[]{o,o2};
     }
+    static public Object[] removeAll(Object o, Object o2){
+        List<Object> list=null, list2=null, result;
+        if(o instanceof Object[]){
+             list= Arrays.asList((Object[])o);
+        }else if(o instanceof List){
+            list= (List<Object>)o;
+        }
+
+        if(o2 instanceof Object[]){
+            list2= Arrays.asList((Object[])o2);
+        }else if(o2 instanceof List){
+            list2= (List<Object>)o2;
+        }
+
+        if(list!= null && list2!=null){
+            list.removeAll(list2);
+            return list.toArray();
+        }else if(list!=null){
+            list.remove(o2);
+            return list.toArray();
+        }else if(list2!=null){
+            list = new LinkedList<>();
+            list.add(o);
+            list.removeAll(list2);
+            return list.toArray();
+        }
+
+        return new Object[0];
+    }
 
 }
