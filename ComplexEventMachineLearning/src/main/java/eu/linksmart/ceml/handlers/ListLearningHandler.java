@@ -37,7 +37,6 @@ public  class ListLearningHandler extends BaseListEventHandler {
     final protected DataDescriptors descriptors;
 
     protected String columnNameTime = "";
-    protected List<Object> lastTarget =null;
     public ListLearningHandler(Statement statement) {
         super(statement);
 
@@ -69,30 +68,55 @@ public  class ListLearningHandler extends BaseListEventHandler {
         return aux;
     }
     protected void learn(List input) {
+        // learning process with independent learning input and learning target/ground truth, and  prediction input and evaluation ground truth
         if(input!=null&&input.size()>=descriptors.size()+descriptors.getTargetSize()){
-
             try {
                 synchronized (originalRequest) {
                     List auxInput;
-                    if(input.get(0) instanceof EventType)
-                        auxInput = (List) input.stream().map(m->((EventType)m).getValue()).collect(Collectors.toList());
+                    if (input.get(0) instanceof EventType)
+                        auxInput = (List) input.stream().map(m -> ((EventType) m).getValue()).collect(Collectors.toList());
                     else
                         auxInput = input;
                     List learningInput = auxInput.subList(0, descriptors.size());
                     model.learn(learningInput);
 
-                  //  if(auxInput.size()>= descriptors.size()+descriptors.getTargetSize()) {
-                    List groundTruth = auxInput.subList(descriptors.size(), descriptors.size()+descriptors.getTargetSize());
-                    List predictionInput = auxInput.subList(descriptors.getTargetSize(), descriptors.getTargetSize()+descriptors.getInputSize());
+                    List groundTruth = auxInput.subList(descriptors.size(), descriptors.size() + descriptors.getTargetSize());
+                    List predictionInput = auxInput.subList(descriptors.getTargetSize(), descriptors.getTargetSize() + descriptors.getInputSize());
                     Prediction prediction = model.predict(predictionInput);
                     model.getEvaluator().evaluate(prediction.getPrediction(), groundTruth);
 
+                }
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+            }
 
-                  //  }
+        // learning process with same learning input as prediction input, and learning target/ground truth and evaluation ground truth
+        }else if(input!=null&&input.size()>=descriptors.size()){
+            try {
+                synchronized (originalRequest) {
+                    List auxInput;
+                    if (input.get(0) instanceof EventType)
+                        auxInput = (List) input.stream().map(m -> ((EventType) m).getValue()).collect(Collectors.toList());
+                    else
+                        auxInput = input;
+                    List groundTruth = auxInput.subList(descriptors.getInputSize(), descriptors.getTargetSize());
+                    List learningInput = auxInput.subList(0, descriptors.size());
+
+                    Prediction prediction = model.predict(learningInput);
+
+                    model.learn(learningInput);
+
+                    model.getEvaluator().evaluate(prediction.getPrediction(), groundTruth);
+
 
                 }
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+            }
 
-
+        }
+        if(input!=null&&input.size()>=descriptors.size()){
+            try {
 
                 if(model.getEvaluator().isDeployable())
                     originalRequest.deploy();
@@ -102,7 +126,6 @@ public  class ListLearningHandler extends BaseListEventHandler {
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
             }
-
             originalRequest.report();
         }
     }
