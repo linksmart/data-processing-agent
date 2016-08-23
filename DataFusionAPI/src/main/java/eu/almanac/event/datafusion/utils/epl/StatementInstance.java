@@ -28,7 +28,7 @@ public class StatementInstance implements Statement {
     protected String[] output=null;
 
     @JsonProperty("CEHandler")
-    protected String CEHandler= "eu.almanac.event.datafusion.handler.ComplexEventMqttHandler";
+    protected String CEHandler= "eu.almanac.event.datafusion.handler.ComplexEventHandler";
 
     @JsonProperty("stateLifecycle")
     protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;
@@ -205,7 +205,7 @@ public class StatementInstance implements Statement {
         this.stateLifecycle=stateLifecycle;
     }
 
-    public void setSynchronousResponse(Map response) {
+    public void setSynchronousResponse(Object response) {
 
         this.synchRespones = response;
         uuid.notifyAll();

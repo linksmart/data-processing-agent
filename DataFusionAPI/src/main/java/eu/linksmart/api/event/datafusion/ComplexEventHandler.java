@@ -25,12 +25,7 @@ public interface ComplexEventHandler extends AnalyzerComponent{
 
 
 
-    /**
-     * This function is called after as a response of a Statement from an CEP engine.
-     *
-     * @param eventMap the result of a statement
-     *
-     * */
+
 
     /***
      *
@@ -38,6 +33,8 @@ public interface ComplexEventHandler extends AnalyzerComponent{
      *
      * */
     public void destroy();
+
+
 
 
 }

@@ -178,7 +178,7 @@ public class SiddhiEngine extends Component implements CEPEngine {
 
             try {
                 executionPlanRuntime.addCallback(query.getName(), new SiddhiCEPHandler(query));
-            } catch (RemoteException|MalformedURLException e) {
+            } catch (Exception e) {
                 throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+query.getID(),e.getMessage(),e);
             }
 

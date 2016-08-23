@@ -1,6 +1,6 @@
 package eu.linksmart.services.event.cep.siddhi;
 
-import  eu.almanac.event.datafusion.handler.ComplexEventMqttHandler;
+import eu.almanac.event.datafusion.handler.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
 import org.wso2.siddhi.core.event.Event;
@@ -15,9 +15,9 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 13.06.2016 a researcher of Fraunhofer FIT.
  */
 public class SiddhiCEPHandler extends QueryCallback {
-    protected ComplexEventMqttHandler mqttHandler;
-    public SiddhiCEPHandler(Statement query) throws RemoteException, MalformedURLException, StatementException {
-        mqttHandler = new ComplexEventMqttHandler(query);
+    protected ComplexEventHandler mqttHandler;
+    public SiddhiCEPHandler(Statement query) throws Exception, StatementException {
+        mqttHandler = new ComplexEventHandler(query);
     }
 
     @Override

@@ -50,7 +50,7 @@ public abstract class BaseEventHandler implements ComplexEventHandler {
         private final LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>();
         private boolean active = true;
 
-        protected synchronized void stack(Object eventMap){
+        public synchronized void stack(Object eventMap){
             queue.add(eventMap);
             synchronized (queue) {
                 queue.notifyAll();

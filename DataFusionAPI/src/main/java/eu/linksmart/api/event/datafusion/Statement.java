@@ -135,7 +135,7 @@ public interface Statement extends JsonSerializable {
 
     public void setStateLifecycle(StatementLifecycle stateLifecycle);
 
-    public void setSynchronousResponse(Map response) ;
+    public void setSynchronousResponse(Object response) ;
     public void setId(String id);
 
     public void setTargetAgents(ArrayList<String> targetAgents);
