@@ -178,6 +178,7 @@ public class CEMLRest extends Component{
         return prepareHTTPResponse(CEML.get(name,"deployment"));
     }
 
+
     @RequestMapping(value="/ceml/{name}/model", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getModel(
             @PathVariable("name") String name
@@ -186,6 +187,8 @@ public class CEMLRest extends Component{
 
 
     }
+
+    @CrossOrigin
     @RequestMapping(value="/ceml/{name}/model/prediction", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> classifyWithModel(
             @PathVariable("name") String name
@@ -199,7 +202,7 @@ public class CEMLRest extends Component{
     public ResponseEntity<String> createRequest(
             @RequestBody() String body
     ){
-        return prepareHTTPResponse(CEML.create("CEML_"+ UUID.randomUUID().toString().replace("-","_"), body, ""));
+        return prepareHTTPResponse(CEML.create("CEML_" + UUID.randomUUID().toString().replace("-", "_"), body, ""));
     }
     @RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRequest(
