@@ -23,6 +23,7 @@ import java.util.Vector;
  | Measurement or Parameters | e    | Array  |
  +---------------------------+------+--------+
  */
+@Deprecated // needs refactoring
 public class Event implements java.io.Serializable, GenericCEP<Event> {
     private static final long serialVersionUID = -1510508593277110230L;
     private String bn;
@@ -32,6 +33,7 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
     private Vector<Measurement> e;
     private Boolean eNameChanged;
     private Map<String,Integer> index;
+    final private Object lock = new Object();
 
     public  Event(){
         index = null;
@@ -199,7 +201,7 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
         return null;
     }
     private  void  indexing(){
-        synchronized(eNameChanged) {
+        synchronized(lock) {
             if (index.size() != e.size() || eNameChanged)
                 for (int i = 0; i < e.size(); i++) {
                     index.put(e.get(i).getName(), i);
@@ -248,7 +250,7 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
         }
 
         public void setN(String n) {
-            synchronized(eNameChanged) {
+            synchronized(lock) {
                 this.n = n;
                 eNameChanged = true;
             }
@@ -316,7 +318,7 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
         }
 
         public void setName(String n) {
-            synchronized(eNameChanged) {
+            synchronized(lock) {
                 this.n = n;
                 eNameChanged = true;
             }
@@ -411,7 +413,7 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
             }
 
 
-            return sv;
+            return null;
         }
 
     }

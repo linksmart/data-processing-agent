@@ -106,6 +106,6 @@ public  abstract class CommonControlInfo {
     public String toString(){
         if(id!=null)
             return "ID: "+id;
-        return null;
+        return this.getClass().getCanonicalName();
     }
 }

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncoding;
 import org.geojson.GeoJsonObject;
 
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -110,8 +111,8 @@ public class Location extends CCIEncoding
     @Override
     public String toString(){
         if(location!=null)
-            return "ID: "+id+"; Description: "+description+"; "+"Location: "+location.getBbox().toString();
-        return null;
+            return "ID: "+id+"; Description: "+description+"; "+"Location: "+ Arrays.toString(location.getBbox());
+        return super.toString();
     }
     @Override
     public int hashCode(){

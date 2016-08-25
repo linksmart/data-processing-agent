@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -29,7 +30,7 @@ public class MqttCemlAPI extends Component {
     private Configurator conf = Configurator.getDefaultConfig();
     static private Logger loggerService = Utils.initLoggingConf(MqttCemlAPI.class);
 
-    private ArrayList<Observer> observers;
+    private List<Observer> observers;
 static {
     try {
         me= new MqttCemlAPI();
@@ -107,17 +108,13 @@ static {
         observers.add(aux);
     }
     protected void initGetRequest(){
-        Observer aux=new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-                MqttMessage mqttMessage =(MqttMessage)arg;
-                try {
+        Observer aux= (o, arg) -> {
+            try {
 
-                    throw new NoSuchMethodException("not yet implemented");
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(),e);
-                    reportError(e.getMessage());
-                }
+                throw new NoSuchMethodException("not yet implemented");
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+                reportError(e.getMessage());
             }
         };
         brokerService.addListener(conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "get", aux);
@@ -125,12 +122,13 @@ static {
     }
 
     @Override
-    protected void finalize() {
-        super.finalize();
+    protected void finalize() throws Throwable {
         try {
             brokerService.destroy();
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         }
+
+        super.finalize();
     }
 }

@@ -29,15 +29,9 @@ public abstract class Component {
         info.setDescription(desc);
 
         if(!AnalyzerComponent.loadedComponents.containsKey(info.getImplementationName()))
-            AnalyzerComponent.loadedComponents.put(info.getImplementationName(), new Hashtable<Component, ComponentInfo>());
+            AnalyzerComponent.loadedComponents.put(info.getImplementationName(), new Hashtable<>());
 
         AnalyzerComponent.loadedComponents.get(info.getImplementationName()).put(this, info);
-
-    }
-    protected void finalize(){
-
-        AnalyzerComponent.loadedComponents.get(info.getImplementationName()).remove(this);
-
 
     }
 

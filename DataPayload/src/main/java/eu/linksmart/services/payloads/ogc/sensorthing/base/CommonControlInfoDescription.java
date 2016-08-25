@@ -27,7 +27,7 @@ public abstract class CommonControlInfoDescription extends CommonControlInfo {
     public String toString(){
         if(id!=null)
             return "ID: "+id+"; Description: "+description;
-        return null;
+        return CommonControlInfo.class.getCanonicalName();
     }
 
     /**

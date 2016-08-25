@@ -7,6 +7,7 @@ import eu.linksmart.gc.utils.function.Utils;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 
 import com.rits.cloning.Cloner;
 
@@ -112,7 +113,7 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
             Object[] targets = (Object[])target,current = (Object[])currentValue;
             String s= this.getClass().getSimpleName() + ": [";
             for (int i = 0; i<targets.length; i++) {
-                s += " Class: " + String.valueOf(i)+"  Value: " + current[i].toString() + " Target: " + targets.toString();
+                s += " Class: " + String.valueOf(i)+"  Value: " + current[i].toString() + " Target: " + Arrays.toString(targets);
                 if(i+1<targets.length)
                     s+=", ";
             }

@@ -43,7 +43,7 @@ public class StatementInstance extends eu.almanac.event.datafusion.utils.epl.Sta
     public void setSynchronousResponse(Object response) {
 
         this.synchRespones = response;
-        uuid.notifyAll();
+        lock.notifyAll();
 
     }
     public void setId(String id){

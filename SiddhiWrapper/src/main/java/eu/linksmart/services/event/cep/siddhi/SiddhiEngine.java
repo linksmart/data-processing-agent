@@ -44,10 +44,6 @@ public class SiddhiEngine extends Component implements CEPEngine {
         super(implName, desc, implOf);
     }
 
-    @Override
-    protected void finalize() {
-        super.finalize();
-    }
 
     static SiddhiEngine init(){
         SiddhiEngine SE= new SiddhiEngine();

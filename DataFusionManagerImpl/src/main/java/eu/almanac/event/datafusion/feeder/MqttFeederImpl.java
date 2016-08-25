@@ -79,8 +79,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
         return true;
     }
 
-    
-    @SuppressWarnings("SynchronizeOnNonFinalField")
+
     public boolean isDown(){
 
         boolean tmp ;
@@ -93,17 +92,14 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
         return tmp;
     }
 
-    @SuppressWarnings("SynchronizeOnNonFinalField")
     @Override
     public void run(){
         while (!down) {
-            synchronized (toShutdown) {
+            synchronized (lockDown) {
                 if (toShutdown  ) {
 
 
-
-                    for (CEPEngine i : dataFusionWrappers.values())
-                        i.destroy();
+                    dataFusionWrappers.values().forEach(eu.linksmart.api.event.datafusion.CEPEngine::destroy);
 
 
 

@@ -1,6 +1,7 @@
 package eu.almanac.event.datafusion.utils.epl;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.api.event.datafusion.Statement;
@@ -36,6 +37,8 @@ public class StatementInstance implements Statement {
     @JsonProperty("scope")
     protected String[] scope={"default"};
     protected static final String uuid =UUID.randomUUID().toString();
+    @JsonIgnore
+    protected static final Object lock =new Object();
     @JsonProperty("SynchronousResponse")
     protected Object synchRespones ;
     @JsonProperty("TargetAgents")
@@ -91,7 +94,7 @@ public class StatementInstance implements Statement {
     public Object getSynchronousResponse() {
         if(stateLifecycle == StatementLifecycle.SYNCHRONOUS)
             try {
-                uuid.wait(60000);
+                lock.wait(60000);
             } catch (InterruptedException e) {
 
             }
@@ -155,9 +158,10 @@ public class StatementInstance implements Statement {
         scope[0] ="local";
     }
     @Override
-    public boolean equals(Statement obj) {
+    public boolean equals(Object object) {
 
-        return  (this == obj) ||
+        Statement obj;
+        return  (object instanceof Statement && (obj = (Statement) object) == object) &&
                 (
                         this.name.equals(obj.getName()) &&
                         this.statement.equals(obj.getStatement()) &&
@@ -208,7 +212,7 @@ public class StatementInstance implements Statement {
     public void setSynchronousResponse(Object response) {
 
         this.synchRespones = response;
-        uuid.notifyAll();
+        lock.notifyAll();
 
     }
     public void setId(String id){
@@ -227,7 +231,7 @@ public class StatementInstance implements Statement {
     @Override
     public void destroy() throws Exception {
 
-        uuid.notifyAll();
+        lock.notifyAll();
     }
 
 

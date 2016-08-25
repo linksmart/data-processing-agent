@@ -117,7 +117,7 @@ public interface Statement extends JsonSerializable {
      * */
     public StatementLifecycle getStateLifecycle();
     public Object getSynchronousResponse();
-    public boolean equals(Statement org);
+    public boolean equals(Object org);
 
 
     public void setScope(String[] scope);
