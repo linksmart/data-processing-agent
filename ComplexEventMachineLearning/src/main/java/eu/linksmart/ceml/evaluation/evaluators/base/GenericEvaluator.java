@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,9 +22,9 @@ import java.util.Map;
 public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
     protected static Logger loggerService = Utils.initLoggingConf(WindowEvaluator.class);
     protected Map<String,EvaluationMetricBase<Double>> evaluationAlgorithms = new HashMap<>();
-    protected ArrayList<TargetRequest> targets;
+    protected List<TargetRequest> targets;
     EvaluationMetricBase<Double> samples;
-    public GenericEvaluator( ArrayList<TargetRequest> targets) {
+    public GenericEvaluator( List<TargetRequest> targets) {
         this.targets=targets;
         try {
             build();
@@ -91,6 +92,11 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
 
         }
         return this;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        // nothing
     }
 
 

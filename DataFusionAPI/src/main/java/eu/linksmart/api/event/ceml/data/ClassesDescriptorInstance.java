@@ -94,4 +94,9 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
         return this;
 
     }
+
+    @Override
+    public void destroy() throws Exception {
+        // nothing
+    }
 }

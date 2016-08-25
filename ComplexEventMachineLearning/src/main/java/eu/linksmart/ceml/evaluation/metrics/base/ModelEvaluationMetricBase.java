@@ -1,5 +1,6 @@
 package eu.linksmart.ceml.evaluation.metrics.base;
 
+import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 
 /**
@@ -50,6 +51,13 @@ public abstract class ModelEvaluationMetricBase extends EvaluationMetricBase<Dou
     public ModelEvaluationMetricBase build(){
         // TODO aot-generated
         return this;
+    }
+
+
+
+    @Override
+    public void destroy() throws Exception {
+        // nothing
     }
 
 }

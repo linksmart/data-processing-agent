@@ -16,13 +16,11 @@ import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
 import eu.linksmart.gc.utils.configuration.Configurator;
 import eu.linksmart.gc.utils.function.Utils;
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,11 +39,11 @@ public class CEMLManager implements CEMLRequest {
     @JsonDeserialize(as = AutoregressiveNeuralNetworkModel.class)
     protected Model model;
     @JsonProperty(value = "AuxiliaryStreams")
-    protected ArrayList<Statement> auxiliaryStatements;
+    protected List<Statement> auxiliaryStatements;
     @JsonProperty(value = "LearningStreams")
-    protected ArrayList<LearningStatement> learningStatements;
+    protected List<LearningStatement> learningStatements;
     @JsonProperty(value = "DeploymentStreams")
-    protected ArrayList<Statement> deployStatements;
+    protected List<Statement> deployStatements;
 
     @JsonProperty(value = "Settings")
     protected Map<String,Object> settings;
@@ -147,62 +145,221 @@ public class CEMLManager implements CEMLRequest {
 
     @Override
     public JsonSerializable build() throws Exception {
+        boolean[] phasesDone = {false, false, false, false, false, false, false, false, false, false};
+        String[] phasesNames ={
+                "pre-requisites", "descriptors building", "auxiliary statement building", "learning statement building",
+                "deployment statement building", "model building", "request insertion", "auxiliary statement creation", "learning statement creation",
+                "deployment statement creation"};
+        int[] statementsCounter ={0,0,0,0,0,0};
+        Exception exception =null;
+        List<MultiResourceResponses<Statement>> responses = new LinkedList<>();
 
-        if(descriptors==null||model==null||learningStatements==null)
-            throw new Exception("The descriptors, model and evaluator are mandatory fields!");
-        descriptors.build();
+        // preRequisites, descriptorBuilt, statementAuxiliaryBuilt, statementLearningBuilt, statementDeploymentBuilt, modelBuilt, requestInserted, learningStatementDeploy, auxiliaryStatementDeploy, deploymentStatementDeploy;
 
-        int i=0;
-        if(auxiliaryStatements!=null)
-            for (Statement statement: auxiliaryStatements) {
-                statement.setCEHandler("");
-                statement.setName("AuxiliaryStream:" + name + "[" + String.valueOf(i) + "]");
-                statement.build();
-                i++;
+        try {
+
+            if (descriptors == null || model == null || learningStatements == null)
+                throw new Exception("The descriptors, model and evaluator are mandatory fields!");
+            phasesDone[0] =true;
+
+            descriptors.build();
+            phasesDone[1] = true;
+
+            if(phasesDone[1]) {
+                if (auxiliaryStatements != null)
+                    for (Statement statement : auxiliaryStatements) {
+                        statement.setCEHandler("");
+                        statement.setName("AuxiliaryStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
+                        statement.setId("AS[" + String.valueOf(statementsCounter[0]) + "]:" + name);
+                        statement.setStatement(statement.getStatement().replace("<id>",name));
+                        statement.build();
+                        statementsCounter[0]++;
+                    }
+                phasesDone[2] =  (auxiliaryStatements == null || (auxiliaryStatements.size() == statementsCounter[0]));
+
+                if (learningStatements != null)
+                    for (LearningStatement statement : learningStatements) {
+                        statement.setRequest(this);
+                        statement.setName("LearningStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
+                        statement.setId("LS[" + String.valueOf(statementsCounter[0]) + "]:" + name );
+                        statement.setStatement(statement.getStatement().replace("<id>",name));
+                        statement.build();
+                        statementsCounter[1]++;
+                    }
+                phasesDone[3]=(learningStatements != null && learningStatements.size() == statementsCounter[1]);
+
+                if (deployStatements != null)
+                    for (Statement statement : deployStatements) {
+                        statement.setName("DeploymentStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
+                        statement.setId("DS[" + String.valueOf(statementsCounter[0]) + "]:" + name );
+                        statement.setStatement(statement.getStatement().replace("<id>",name));
+                        statement.build();
+                        statementsCounter[2]++;
+
+                    }
+                phasesDone[4] = (deployStatements == null || (deployStatements.size() == statementsCounter[2]));
             }
-        for (LearningStatement statement: learningStatements) {
-            statement.setRequest(this);
-            statement.setName("LearningStream:" + name + "[" + String.valueOf(i) + "]");
-            statement.build();
+
+            if(phasesDone[4]) {
+                model.setDescriptors(descriptors);
+                model.setName(name);
+                model.build();
+                phasesDone[5] = true;
+            }
+
+            if(phasesDone[5]) {
+                insertInCEPEngines();
+                phasesDone[6] = true;
+            }
+
+            if (phasesDone[6] && auxiliaryStatements != null && !auxiliaryStatements.isEmpty()) {
+                MultiResourceResponses<Statement> response;
+                for (Statement statement : auxiliaryStatements) {
+                    response = StatementFeeder.feedStatement(statement);
+                    responses.add(response);
+                    if (!(phasesDone[7] = response.getOverallStatus() < 300))
+                        break;
+                    statementsCounter[3]++;
+                    //throw new Exception(CEML.getMapper().writeValueAsString(responses));
+                }
+            } else
+                phasesDone[7] = phasesDone[6];
+
+            if (phasesDone[7] && learningStatements != null && !learningStatements.isEmpty()) {
+                MultiResourceResponses<Statement> response;
+                for (Statement statement : learningStatements) {
+                    response = StatementFeeder.feedStatement(statement);
+                    responses.add(response);
+                    if (!(phasesDone[8] = response.getOverallStatus() < 300))
+                        break;
+                    statementsCounter[4]++;
+                    //throw new Exception(CEML.getMapper().writeValueAsString(responses));
+                }
+            }
+            if (phasesDone[8] && deployStatements != null && !deployStatements.isEmpty()) {
+                MultiResourceResponses<Statement> response;
+                for (Statement statement : deployStatements) {
+                    response = StatementFeeder.feedStatement(statement);
+                    responses.add(response);
+                    if (!(phasesDone[9] = response.getOverallStatus() < 300))
+                        break;
+
+                    StatementFeeder.pauseStatement(statement);
+                    statementsCounter[5]++;
+                }
+
+            } else
+                phasesDone[9] = phasesDone[8];
+
+
+        }catch (Exception e){
+            exception =e;
         }
-        if(deployStatements!=null)
-        for (Statement statement: deployStatements){
-            statement.setName("DeploymentStream:" + name + "[" + String.valueOf(i) + "]");
-            statement.build();
-
-        }
-
-        model.setDescriptors(descriptors);
-        model.setName(name);
-        model.build();
-
-
-        insertInCEPEngines();
-        MultiResourceResponses<Statement> responses;
-        if(auxiliaryStatements!=null&& !auxiliaryStatements.isEmpty()) {
-            responses =StatementFeeder.feedStatements(auxiliaryStatements);
-            if (!(responses.getOverallStatus()<300))
-                throw new Exception(CEML.getMapper().writeValueAsString(responses));
-        }
-        ArrayList<Statement> arrayList = new ArrayList<>();
-        arrayList.addAll(learningStatements);
-        responses =StatementFeeder.feedStatements(arrayList);
-        if (!responses.containsSuccess())
-            throw new Exception(CEML.getMapper().writeValueAsString(responses));
-
-        if(deployStatements!=null&& !deployStatements.isEmpty()) {
-            responses =StatementFeeder.feedStatements(deployStatements);
-            if (!(responses.getOverallStatus()<300))
-                throw new Exception(CEML.getMapper().writeValueAsString(responses));
-
-            if (!(settings.containsKey("AlwaysDeploy")&&(settings.get("AlwaysDeploy") instanceof Boolean &&(settings.get("AlwaysDeploy")).equals(true))))
-                //deployStatements.forEach(s->StatementFeeder.pauseStatement(s.getID()));
-                StatementFeeder.pauseStatements(deployStatements);
-
-
-        }
+        errorHandling(phasesDone,phasesNames,statementsCounter,exception, !responses.isEmpty()? responses.get(responses.size()-1): null);
 
         return this;
+    }
+/*
+    @Override
+    public void rebuild(CEMLRequest me) throws Exception {
+
+    }
+*/
+    @Override
+    public void destroy() throws Exception{
+
+        rollbackStatements(deployStatements, deployStatements.size());
+
+        rollbackStatements(learningStatements,learningStatements.size());
+
+        rollbackStatements(auxiliaryStatements,auxiliaryStatements.size());
+
+        dropInCEPEngines();
+
+        model.destroy();
+
+        descriptors.destroy();
+
+
+    }
+    private void errorHandling(boolean[] phasesDone,String[] phasesNames,int[] buildStatements, Exception exception,  MultiResourceResponses<Statement> response)throws Exception{
+        int i =0;
+        for(; i<phasesDone.length && phasesDone[i];) i++;
+
+        if(i<10) {
+            String base = "Error in the " + phasesNames[i] + " phase (" + String.valueOf(i) + ") of CEML creation phases ";
+            String message = null;
+            if (exception != null)
+                message = base + ": " + exception.getMessage();
+
+            if ((i < 3 || (i > 4 && i < 6)) && (exception == null))
+                message = base + ": Basic requisites for building the request have not being met";
+            else if ((i > 2 && i < 5) || (i > 6 && i < 10)) {
+                base += " on statement [" + String.valueOf(buildStatements[i - (i<5? 3: 4)]) + "]: ";
+                if (exception != null)
+                    message = base + exception.getMessage();
+                else if (i > 2 && i < 5) {
+                    message = base + "Unknown error while building the statement";
+                } else if (i > 6 && i < 10) {
+                    if (response != null)
+                        message = base + " " + response.getResponsesTail().getMessage();
+                    else
+                        message = base + " Unknown error while inserting the learning statement into the engine";
+                }
+                if (i > 6 && i < 10) {
+                    try {
+                        rollback(i, buildStatements);
+                    } catch (Exception e) {
+                        message = "The request failed due to: " + message + ". The agent tried to rollback to a satisfactory state and failed due to: " + e.getMessage();
+                    }
+                }
+            } else if (i == 6 && exception == null) {
+                message = base + ": Unknown error while inserting the request object into the engine";
+            }
+
+            if (message != null) {
+                throw new Exception(message);
+            }
+        }
+
+    }
+
+    private void rollback(int fromPhase, int[] buildStatements) throws Exception{
+        if(fromPhase>8){
+            if(deployStatements!=null && !deployStatements.isEmpty())
+                rollbackStatements(deployStatements,buildStatements[5]);
+        }
+        if(fromPhase>7){
+            if(learningStatements!=null && !learningStatements.isEmpty()) {
+                rollbackStatements(learningStatements, buildStatements[4]);
+            }
+        }
+        if(fromPhase>6){
+            if(auxiliaryStatements!=null && !auxiliaryStatements.isEmpty())
+                rollbackStatements(auxiliaryStatements,buildStatements[3]);
+        }
+
+        if(fromPhase>5){
+            dropInCEPEngines();
+        }
+
+    }
+    private void rollbackStatements(List statements, int till) throws Exception{
+
+        Statement aux = null;
+        try {
+            for (int i=0; i<till;i++) {
+                if(statements.get(i) instanceof Statement) {
+                    aux = (Statement) statements.get(i);
+                    StatementFeeder.removeStatement(aux);
+                }
+            }
+        }catch (Exception e){
+            if(aux!=null)
+                throw new Exception("Error while rolling back statement named "+aux.getName()+ " with ID "+aux.getID()+"; the agent may had being left in an unstable state");
+            else
+                throw new Exception("Error while rolling back statements; the agent may had being left in an unstable state");
+        }
     }
     public int insertInCEPEngines(){
         int n=0;
@@ -210,6 +367,18 @@ public class CEMLManager implements CEMLRequest {
             CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
             if(extended!=null) {
                 extended.insertObject(name, this);
+                n++;
+            }
+
+        }
+        return n;
+    }
+    public int dropInCEPEngines(){
+        int n=0;
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()      ) {
+            CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
+            if(extended!=null) {
+                extended.dropObject(name);
                 n++;
             }
 

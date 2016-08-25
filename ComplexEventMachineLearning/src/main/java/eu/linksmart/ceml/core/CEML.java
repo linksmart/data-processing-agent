@@ -138,7 +138,36 @@ public class CEML implements AnalyzerComponent {
 
         return responses;
     }
+    public static MultiResourceResponses<CEMLRequest> delete(String name, String requestType) {
+        MultiResourceResponses<CEMLRequest> result = new MultiResourceResponses<>();
+        CEMLRequest request;
+        try {
+            switch (requestType){
 
+
+                case "":
+                default:
+                    if (requests.containsKey(name)) {
+                        request =requests.get(name);
+                        requests.remove(name);
+                        request.destroy();
+                        result.addResponse(new GeneralRequestResponse("OK", DynamicConst.getId(), name, "Learning Request", "Success 200 OK: request with name " + name + " was deleted", 200));
+                        result.addResources(name,request);
+                    }else {
+                        result.addResponse(new GeneralRequestResponse("Bad Request", DynamicConst.getId(), name, "Learning Request", "Error 400 Bad Request: request with name " + name + " does not exists", 400));
+                    }
+
+
+            }
+
+        }catch (Exception e){
+            loggerService.error(e.getMessage(), e);
+            result.addResponse(new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
+
+        }
+
+        return result;
+    }
     public  static MultiResourceResponses<Object> get(String name, String typeRequest) {
         String retur;
         MultiResourceResponses<Object> result = new MultiResourceResponses<>();
@@ -293,6 +322,8 @@ public class CEML implements AnalyzerComponent {
         KalmanFilter filter = new KalmanFilter(pm, mm);
         filters.put(filterName,filter);
     }
+
+
 /*
     public static StatementResponse update(String name, String body, String typeRequest) {
         Object retur = null;

@@ -28,6 +28,10 @@ public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Ma
         return generalRequestResponses;
     }
     @Override
+    public GeneralRequestResponse getResponsesTail() {
+        return ((ArrayList<GeneralRequestResponse>)generalRequestResponses).get(generalRequestResponses.size()-1);
+    }
+    @Override
     public void setResponses(Collection<GeneralRequestResponse> generalRequestResponses) {
         this.generalRequestResponses = generalRequestResponses;
     }

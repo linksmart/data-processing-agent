@@ -31,4 +31,5 @@ public interface DataDescriptors extends List<DataDescriptor>,DataDescriptor, Js
     public int getInputSize();
     public int getTargetSize();
     public boolean isLambdaTypeDefinition();
+
 }

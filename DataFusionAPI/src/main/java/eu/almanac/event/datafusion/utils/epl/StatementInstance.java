@@ -224,5 +224,11 @@ public class StatementInstance implements Statement {
         return this;
     }
 
+    @Override
+    public void destroy() throws Exception {
+
+        uuid.notifyAll();
+    }
+
 
 }

@@ -34,4 +34,5 @@ public interface CEMLRequest<ValueType, ReturnValueType, LearningObject> extends
     public void report();
 
     void setName(String name);
+
 }

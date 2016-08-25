@@ -29,7 +29,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     private  long[][] sequentialConfusionMatrix;
 
 
-    public WindowEvaluator(Collection<String> namesClasses, ArrayList<TargetRequest> targets){
+    public WindowEvaluator(Collection<String> namesClasses, List<TargetRequest> targets){
         super( targets);
         classes =new ArrayList<>(namesClasses);
     }

@@ -33,6 +33,9 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     public DataDescriptors getDescriptors();
     public Prediction<Output> getLastPrediction();
     public void setLastPrediction(Prediction<Output> value);
+
+    String getName();
+
     public void setName(String name);
 
     public Class getNativeType();
@@ -43,4 +46,7 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     public Map<String, Object> getParameters() ;
     public void setParameters(Map<String, Object> parameters) ;
 
+    List<TargetRequest> getTargets();
+
+    void setTargets(List<TargetRequest> targets);
 }

@@ -76,4 +76,20 @@ public class DataDescriptorInstance implements DataDescriptor {
         return this;
 
     }
+/*
+    @Override
+    public void rebuild(DataDescriptor me) throws Exception {
+
+        if(!DescriptorTypes.getNativeType(me.getType()).equals(me.getNativeType()))
+            throw new Exception("Error while rebuilding"+name+" The given native type and type descriptor don't match");
+        name = me.getName();
+        target = me.isTarget();
+        type = me.getType();
+        build();
+    }
+*/
+    @Override
+    public void destroy() throws Exception {
+        // nothing
+    }
 }

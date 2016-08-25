@@ -17,5 +17,6 @@ public interface Responses <Resource> {
     public void setResources( Resource resources) ;
     public void addResponse(GeneralRequestResponse GeneralRequestResponse);
     public boolean containsSuccess();
+    GeneralRequestResponse getResponsesTail();
 
 }

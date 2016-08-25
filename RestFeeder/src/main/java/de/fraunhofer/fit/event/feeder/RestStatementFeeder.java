@@ -81,10 +81,16 @@ public class RestStatementFeeder extends Component implements Feeder {
     public ResponseEntity<String> addStatement(
             @RequestBody String statementString
     ) {
+        return prepareHTTPResponse(StatementFeeder.addNewStatement(statementString, "DP_"+ UUID.randomUUID().toString().replace("-","_"),null));
+
+    }
+    @RequestMapping(value = "/statement/add", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> createStatement(
+            @RequestBody String statementString
+    ) {
         return prepareHTTPResponse(StatementFeeder.addNewStatement(statementString, null,null));
 
     }
-
     @RequestMapping(value = "/statement/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> changeStatement(
             @RequestBody String statementString,

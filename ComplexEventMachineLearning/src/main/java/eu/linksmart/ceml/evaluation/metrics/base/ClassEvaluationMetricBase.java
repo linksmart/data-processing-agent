@@ -85,4 +85,9 @@ public abstract class ClassEvaluationMetricBase<T extends  Comparable<T>> extend
         // TODO aot-generated
         return this;
     }
+
+    @Override
+    public void destroy() throws Exception {
+        // nothing
+    }
 }

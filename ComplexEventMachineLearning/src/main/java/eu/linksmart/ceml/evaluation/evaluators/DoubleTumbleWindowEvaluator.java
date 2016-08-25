@@ -126,11 +126,10 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
         if(initialSamples== null)
             initialSamples = new InitialSamples(EvaluationMetric.ComparisonMethod.More,-1);
 
-        windowEvaluators[0] = new WindowEvaluator(namesClasses,targets);
+        windowEvaluators[0] = new WindowEvaluator(namesClasses, targets);
         windowEvaluators[1] = new WindowEvaluator(namesClasses,targets);
 
     }
-
     @Override
     public void reBuild(Evaluator evaluator) {
         if(evaluator instanceof DoubleTumbleWindowEvaluator){
@@ -140,7 +139,6 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
         }
 
     }
-
     @Override
     public Map<String, EvaluationMetric<Number>> getEvaluationAlgorithms() {
         return windowEvaluators[learnt].getEvaluationAlgorithms();
@@ -160,5 +158,10 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     public JsonSerializable build() throws Exception {
         //TODO auto-generated
         return null;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        // nothing
     }
 }

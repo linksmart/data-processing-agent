@@ -31,6 +31,11 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         return this;
     }
 
+    @Override
+    public void destroy() throws Exception {
+        // nothing
+    }
+
 
     private void addTofixedsizeList(LinkedList<Map.Entry<Number, Number>> list, Map.Entry<Number, Number> entry){
         if(list.size()== maxQueueSize){

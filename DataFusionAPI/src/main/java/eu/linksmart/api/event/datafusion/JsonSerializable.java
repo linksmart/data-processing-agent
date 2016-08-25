@@ -8,5 +8,6 @@ import java.io.Serializable;
 public interface JsonSerializable extends Serializable{
 
     JsonSerializable build() throws Exception;
-
+ //   void rebuild(T me) throws Exception;
+    public void destroy()throws Exception;
 }

@@ -17,4 +17,6 @@ public interface CEPEngineAdvanced extends CEPEngine {
     public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws Exception;
     public boolean setEngineTimeTo( Date date)throws Exception;
     public Date getEngineCurrentDate();
+
+    void dropObject(String name);
 }

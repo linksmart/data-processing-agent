@@ -167,6 +167,11 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
     }
 
     @Override
+    public void destroy() throws Exception {
+        // nothing
+    }
+
+    @Override
     public Class getNativeType() {
         return javaType;
     }

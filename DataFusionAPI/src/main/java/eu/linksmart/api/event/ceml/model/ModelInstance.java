@@ -31,8 +31,9 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     protected String type;
     @JsonProperty(value = "Evaluator")
     protected  Evaluator<Output> evaluator ;
+
     @JsonProperty(value = "Targets")
-    protected  ArrayList<TargetRequest> targets;
+    protected  List<TargetRequest> targets;
 
     @JsonProperty(value = "Parameters")
     protected  Map<String,Object> parameters;
@@ -65,7 +66,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     //final protected String modelName;
 
-    public ModelInstance(ArrayList<TargetRequest> targets,Map<String,Object> parameters, Evaluator evaluator){
+    public ModelInstance(List<TargetRequest> targets,Map<String,Object> parameters, Evaluator evaluator){
         this.targets = targets;
         this.parameters =parameters;
         this.evaluator = evaluator;
@@ -103,7 +104,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
 
     @Override
-    public JsonSerializable build() throws Exception {
+    public Model<Input, Output, LearningObject> build() throws Exception {
         if(descriptors== null || !descriptors.isEmpty() ||evaluator== null  || lerner == null)
             throw new Exception("For the model the descriptors, evaluator and learner are mandatory fields!");
 
@@ -113,28 +114,58 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
         return this;
     }
+/*
+    @Override
+    public void rebuild(Model<Input, Output, LearningObject> me) throws Exception {
+        if(me.getTargets()!=null)
+            this.targets = me.getTargets();
+        if(me.getParameters()!=null)
+            this.parameters =me.getParameters();
+
+        if(me.getEvaluator()!=null || me.getParameters()!=null)
+            this.evaluator.rebuild(me.getEvaluator());
+        if(me.getLastPrediction()!=null)
+            this.lastPrediction = me.getLastPrediction();
+    }
+*/
+
+    @Override
+    public void destroy() throws Exception {
+        // nothing
+    }
+    @Override
     public String getName() {
         return name;
     }
-
+    @Override
     public void setName(String name) {
         this.name = name;
     }
-
+    @Override
     public Class getNativeType() {
         return nativeType;
     }
-
+    @Override
     public void setNativeType(Class nativeType) {
         this.nativeType = nativeType;
     }
-
+    @Override
     public Map<String, Object> getParameters() {
         return parameters;
     }
-
+    @Override
     public void setParameters(Map<String, Object> parameters) {
         this.parameters = parameters;
     }
+
+    @Override
+    public List<TargetRequest> getTargets() {
+        return targets;
+    }
+    @Override
+    public void setTargets(List<TargetRequest> targets) {
+        this.targets = targets;
+    }
+
 
 }

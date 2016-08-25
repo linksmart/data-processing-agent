@@ -50,7 +50,19 @@ public class StatementFeeder implements Feeder {
             }
 
         return response;
-    } /*
+    }
+    public static MultiResourceResponses<Statement> feedStatement(Statement statement) {
+        boolean success =true;
+        String retur="";
+        MultiResourceResponses<Statement> response ;
+
+
+         response = addNewStatement(statement, null, null);
+
+
+        return response;
+    }
+     /*
     public static ArrayList<StatementResponse> feedStatement(Statement statement){
         boolean success =true;
 

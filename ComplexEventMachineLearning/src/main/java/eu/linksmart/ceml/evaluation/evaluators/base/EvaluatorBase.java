@@ -7,6 +7,7 @@ import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,14 +19,14 @@ public abstract class EvaluatorBase<T>  implements Evaluator<T> {
         targets =null;
     }
 
-    public ArrayList<TargetRequest> getTargets() {
+    public List<TargetRequest> getTargets() {
         return targets;
     }
 
     @JsonPropertyDescription("Evaluation metrics needed so the model is ready to be deployed")
     @JsonProperty(value = "Targets")
-    protected ArrayList<TargetRequest> targets;
-    public void setTargets(ArrayList<TargetRequest> targets) {
+    protected List<TargetRequest> targets;
+    public void setTargets(List<TargetRequest> targets) {
         this.targets = targets;
     }
 

@@ -34,6 +34,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.UUID;
+
 import com.google.gson.*;
 
 /**
@@ -193,16 +195,24 @@ public class CEMLRest extends Component{
 
     }
 
-    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/ceml/add", method=  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> createRequest(
+            @RequestBody() String body
+    ){
+        return prepareHTTPResponse(CEML.create("CEML_"+ UUID.randomUUID().toString().replace("-","_"), body, ""));
+    }
+    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRequest(
             @PathVariable("name") String name,
             @RequestBody() String body
     ){
-
-
-
-            return prepareHTTPResponse(CEML.create(name, body, ""));
-
+        return prepareHTTPResponse(CEML.create(name, body, ""));
+    }
+    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteRequest(
+            @PathVariable("name") String name
+    ){
+        return prepareHTTPResponse(CEML.delete(name, ""));
     }
     public <T> ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<T> result){
         // preparing pointers
