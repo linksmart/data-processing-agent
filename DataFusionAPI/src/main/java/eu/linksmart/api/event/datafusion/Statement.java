@@ -139,7 +139,7 @@ public interface Statement extends JsonSerializable {
     public void setSynchronousResponse(Object response) ;
     public void setId(String id);
 
-    public void setTargetAgents(ArrayList<String> targetAgents);
+    public void setTargetAgents(List<String> targetAgents);
 
     /***
      * Represent the possible States of a Statement can be in runtime.

@@ -235,7 +235,7 @@ public class StatementInstance implements Statement {
         this.id =id;
     }
 
-    public void setTargetAgents(ArrayList<String> targetAgents) {
+    public void setTargetAgents(List<String> targetAgents) {
         this.targetAgents = targetAgents;
     }
 
