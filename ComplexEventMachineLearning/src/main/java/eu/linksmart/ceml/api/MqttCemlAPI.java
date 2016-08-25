@@ -31,18 +31,18 @@ public class MqttCemlAPI extends Component {
     static private Logger loggerService = Utils.initLoggingConf(MqttCemlAPI.class);
 
     private List<Observer> observers;
-static {
-    try {
-        me= new MqttCemlAPI();
-    } catch (MalformedURLException | ClassNotFoundException | MqttException e) {
-        loggerService.error(e.getMessage(),e);
+    static {
+        try {
+            me= new MqttCemlAPI();
+        } catch (MalformedURLException | ClassNotFoundException | MqttException e) {
+            loggerService.error(e.getMessage(),e);
+        }
     }
-}
 
     static public MqttCemlAPI getMeDafault(){
         return me;
     }
-    public MqttCemlAPI() throws MalformedURLException, MqttException, ClassNotFoundException {
+    protected MqttCemlAPI() throws MalformedURLException, MqttException, ClassNotFoundException {
         super(MqttCemlAPI.class.getSimpleName(),"Provides a MQTT light API to the CEML logic", "MqttCemlAPI");
         Class.forName(CEML.class.getCanonicalName());
         brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST),conf.getString(Const.CEML_MQTT_BROKER_PORT));
@@ -121,14 +121,5 @@ static {
         observers.add(aux);
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            brokerService.destroy();
-        } catch (Exception e) {
-            loggerService.error(e.getMessage(),e);
-        }
 
-        super.finalize();
-    }
 }

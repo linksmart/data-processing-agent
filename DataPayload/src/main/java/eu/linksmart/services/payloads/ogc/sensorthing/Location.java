@@ -120,7 +120,7 @@ public class Location extends CCIEncoding
     }
     @Override
     public boolean equals(Object obj) {
-        return obj == this || obj instanceof Location && ((Location) obj).location.getBbox().equals(location.getBbox());
+        return obj == this || obj instanceof Location && Arrays.equals(((Location) obj).location.getBbox(),location.getBbox());
     }
 
 }

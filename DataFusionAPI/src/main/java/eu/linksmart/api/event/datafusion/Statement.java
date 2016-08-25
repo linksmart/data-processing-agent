@@ -2,6 +2,7 @@ package eu.linksmart.api.event.datafusion;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -109,7 +110,7 @@ public interface Statement extends JsonSerializable {
      *
      * @return  List of targeted Agents address to process the statement, otherwise empty (all available agents):
      * */
-    public ArrayList<String> getTargetAgents();
+    public List<String> getTargetAgents();
     /***
      * Return the state of the Statement, which determines how the statement will be at runtime.
      *

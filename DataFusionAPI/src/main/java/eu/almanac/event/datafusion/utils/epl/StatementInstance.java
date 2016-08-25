@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class StatementInstance implements Statement {
 
@@ -42,10 +43,12 @@ public class StatementInstance implements Statement {
     @JsonProperty("SynchronousResponse")
     protected Object synchRespones ;
     @JsonProperty("TargetAgents")
-    protected ArrayList<String> targetAgents= new  ArrayList<String>();
+    protected List<String> targetAgents= new  ArrayList<String>();
 
     @JsonProperty("ID")
     protected String id = "";
+
+    private transient String hash;
 
 
 
@@ -82,7 +85,7 @@ public class StatementInstance implements Statement {
     }
 
     @Override
-    public ArrayList<String> getTargetAgents() {
+    public List<String> getTargetAgents() {
         return targetAgents;
     }
 
@@ -93,10 +96,12 @@ public class StatementInstance implements Statement {
     @Override
     public Object getSynchronousResponse() {
         if(stateLifecycle == StatementLifecycle.SYNCHRONOUS)
-            try {
-                lock.wait(60000);
-            } catch (InterruptedException e) {
+            synchronized (lock) {
+                try {
+                    lock.wait(60000);
+                } catch (InterruptedException e) {
 
+                }
             }
 
         return synchRespones;
@@ -176,8 +181,19 @@ public class StatementInstance implements Statement {
                 );
 
     }
-
-
+   @Override
+   public int hashCode(){
+       return (this.name +
+               this.statement +
+               this.source +
+               Arrays.toString(this.input) +
+               Arrays.toString(this.output) +
+               this.CEHandler +
+               this.stateLifecycle +
+               Arrays.toString(this.scope) +
+               this.targetAgents.stream().map(Object::toString).collect(Collectors.joining()) +
+               id).hashCode();
+   }
     public void setScope(String[] scope) {
         this.scope = scope;
     }
