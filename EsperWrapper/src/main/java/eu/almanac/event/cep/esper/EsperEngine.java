@@ -128,6 +128,12 @@ import java.util.*;
     }
 
     @Override
+    public void dropObject(String name) {
+
+        epService.getEPAdministrator().getConfiguration().removeVariable(name,true);
+    }
+
+    @Override
     public boolean addEventType(String nameType,  Object type) {
 
 
@@ -397,7 +403,9 @@ import java.util.*;
         if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
 
-        ((ComplexEventHandler)epService.getEPAdministrator().getStatement(id).getSubscriber()).destroy();
+        ComplexEventHandler handler = ((ComplexEventHandler)epService.getEPAdministrator().getStatement(id).getSubscriber());
+        if(handler!=null)
+            handler.destroy();
 
         epService.getEPAdministrator().getStatement(id).destroy();
 
