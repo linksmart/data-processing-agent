@@ -33,7 +33,7 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
 
 
             ComparisonMethod methodParameter = ComparisonMethod.More;
-            if(method.trim().toLowerCase().equals("equal")){
+            if("equal".equals(method.trim().toLowerCase())){
                 methodParameter =ComparisonMethod.Equal;
 
             } else if(method.trim().toLowerCase().contains("smaller")|| method.trim().toLowerCase().contains("less")){

@@ -20,14 +20,7 @@ public class PredictionInstance<T> implements Prediction<T> {
     protected Date madeAt = new Date();
 
 
-    public PredictionInstance(T prediction,String predictedBy, ArrayList<EvaluationMetric> evaluations, double certaintyDegree) {
-        this.predictedBy = predictedBy;
-        this.certaintyDegree = certaintyDegree;
-        this.evaluations = evaluations;
-        this.prediction =prediction;
 
-        acceptedPrediction= certaintyDegree >.99;
-    }
     public PredictionInstance(T prediction, Object input ,String predictedBy, Collection<EvaluationMetric> evaluations) {
         this.predictedBy = predictedBy;
         this.evaluations = evaluations;

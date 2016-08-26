@@ -84,7 +84,7 @@ public class DataFusionManagerCore {
         loggerService = Utils.initLoggingConf(DataFusionManagerCore.class);
 
         String idPath= conf.getString(Const.ID_CONF_PATH);
-        if(idPath.equals("*"))
+        if("*".equals(idPath))
             DynamicConst.setIsSet(true);
         else
             DynamicConst.setId(conf.getString(Const.ID_CONF_PATH));

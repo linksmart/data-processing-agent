@@ -12,13 +12,6 @@ public class Classified<T> extends PredictionInstance<T> {
 
     protected String predictedClassName;
 
-    public Classified(T prediction, String predictedClassName, String predictedBy, ArrayList<EvaluationMetric> evaluations, double evaluationMetricResult) {
-        super(prediction,predictedBy,evaluations,evaluationMetricResult);
-
-        this.predictedClassName = predictedClassName;
-
-
-    }
     public Classified(T prediction, Object originInput, String predictedClassName, String predictedBy, ArrayList<EvaluationMetric> evaluations) {
         super(prediction,originInput,predictedBy,evaluations);
 
