@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Created by angel on 26/11/15.
  */
-public class GeneralWekaModel extends ModelInstance<Map,List<Integer>,UpdateableClassifier> {
+public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassifier> {
 
     @JsonPropertyDescription("Attributes for the model")
     @JsonProperty(value = "Parameters")
@@ -109,7 +109,7 @@ public class GeneralWekaModel extends ModelInstance<Map,List<Integer>,Updateable
 
     }
     static public Instance populateInstance(Map<String, Object> events, DataDescriptors descriptors1){
-        if(!(descriptors1 instanceof DataStructure))
+        if(events!=null&&!(descriptors1 instanceof DataStructure))
             return null;
         DataStructure descriptors = (DataStructure) descriptors1;
                     // TODO: check what makes more sense originalRequest.getData().getAttributes().size() or eventMap.size()
@@ -222,12 +222,12 @@ public class GeneralWekaModel extends ModelInstance<Map,List<Integer>,Updateable
         }
     }
     @Override
-    public Prediction<List<Integer>> predict(Map input) throws Exception {
+    public Prediction<Integer> predict(Map input) throws Exception {
 
         int i=predict(lerner,populateInstance(input,descriptors));
 
-        Prediction prediction = new PredictionInstance<>(i, this.getClass().getName(),new ArrayList<EvaluationMetric>(evaluator.getEvaluationAlgorithms().values()));
-        return prediction;
+
+        return new PredictionInstance<>(i, input,this.getClass().getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
 
 
 
