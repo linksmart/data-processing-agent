@@ -1,4 +1,4 @@
-package eu.almanac.event.datafusion.utils.epl;
+package eu.linksmart.api.event.datafusion;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -228,7 +228,9 @@ public class StatementInstance implements Statement {
     public void setSynchronousResponse(Object response) {
 
         this.synchRespones = response;
-        lock.notifyAll();
+        synchronized (lock) {
+            lock.notifyAll();
+        }
 
     }
     public void setId(String id){

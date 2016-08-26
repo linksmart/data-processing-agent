@@ -1,16 +1,10 @@
 package eu.almanac.event.datafusion.handler;
 
 import eu.almanac.event.datafusion.handler.base.BaseEventHandler;
-import eu.almanac.event.datafusion.handler.base.BaseMapEventHandler;
 import eu.almanac.event.datafusion.intern.Utils;
-import eu.almanac.event.datafusion.utils.epl.intern.StatementInstance;
 import eu.linksmart.api.event.datafusion.*;
-import eu.linksmart.api.event.datafusion.ComplexEventHandler;
 import org.slf4j.Logger;
 
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 16.12.2015 a researcher of Fraunhofer FIT.

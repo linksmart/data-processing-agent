@@ -1,7 +1,5 @@
 package eu.linksmart.ceml.core;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,7 +10,7 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.almanac.event.datafusion.intern.DynamicConst;
-import eu.almanac.event.datafusion.utils.epl.StatementInstance;
+import eu.linksmart.api.event.datafusion.StatementInstance;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;

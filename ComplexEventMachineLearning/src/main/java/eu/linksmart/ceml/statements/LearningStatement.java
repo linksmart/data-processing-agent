@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.ceml.handlers.ListLearningHandler;
 import eu.linksmart.ceml.handlers.MapLearningHandler;
 import eu.linksmart.ceml.core.CEMLManager;
-import eu.almanac.event.datafusion.utils.epl.StatementInstance;
+import eu.linksmart.api.event.datafusion.StatementInstance;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
 

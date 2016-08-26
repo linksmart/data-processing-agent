@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
-
+@Deprecated
 public class IoTProperty implements java.io.Serializable, GenericCEP<IoTEntityEvent> {
     private ArrayList<IoTValue> IoTStateObservation =null;
     private String About = null;

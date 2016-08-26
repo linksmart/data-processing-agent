@@ -1,7 +1,7 @@
 package eu.almanac.event.datafusion.feeder.type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.almanac.event.datafusion.utils.epl.StatementInstance;
+import eu.linksmart.api.event.datafusion.StatementInstance;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 

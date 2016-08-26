@@ -1,6 +1,6 @@
 package eu.almanac.event.datafusion.feeder;
 
-import eu.almanac.event.datafusion.utils.epl.intern.StatementInstance;
+import eu.linksmart.api.event.datafusion.StatementInstance;
 import eu.almanac.ogc.sensorthing.api.datamodel.Datastream;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.datafusion.CEPEngine;

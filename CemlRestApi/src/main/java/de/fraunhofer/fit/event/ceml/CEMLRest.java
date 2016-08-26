@@ -1,7 +1,6 @@
 package de.fraunhofer.fit.event.ceml;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -11,8 +10,7 @@ import eu.linksmart.api.event.datafusion.GeneralRequestResponse;
 
 import eu.linksmart.ceml.core.CEML;
 
-import eu.linksmart.ceml.core.CEMLManager;
-import eu.almanac.event.datafusion.utils.epl.StatementInstance;
+import eu.linksmart.api.event.datafusion.StatementInstance;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -35,8 +33,6 @@ import java.net.URISyntaxException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.UUID;
-
-import com.google.gson.*;
 
 /**
  * Created by angel on 13/11/15.
