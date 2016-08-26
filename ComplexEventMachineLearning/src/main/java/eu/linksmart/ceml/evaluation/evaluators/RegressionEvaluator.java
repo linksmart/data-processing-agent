@@ -20,7 +20,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
     private int maxQueueSize = 200;
 
-    public RegressionEvaluator( ArrayList<TargetRequest> targets) {
+    public RegressionEvaluator( List<TargetRequest> targets) {
         super( targets);
     }
 
@@ -145,7 +145,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
      */
     public class AICcEvaluationMetric extends ModelEvaluationMetricBase{
         private static final int DAYS_A_WEEK = 7 ;
-        final int HOURS_A_DAY =24;
+        private static final int HOURS_A_DAY =24;
         private long N = 0; //fading increment
         double avgResidualSquare =0;
 

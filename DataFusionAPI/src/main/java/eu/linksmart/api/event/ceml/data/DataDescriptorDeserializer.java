@@ -36,7 +36,7 @@ public class DataDescriptorDeserializer extends JsonDeserializer<DataDescriptor>
         boolean isTarget =  node.hasNonNull("isTarget");
         if(isTarget)
             isTarget =  node.get("isTarget").asBoolean();
-        ArrayList<String> classes= null;
+        List<String> classes= null;
         if(node.hasNonNull("Classes")) {
             classes = mapper.reader(collectionType).readValue(node.get("Classes"));
             type = DataDescriptor.DescriptorTypes.NOMINAL_CLASSES;

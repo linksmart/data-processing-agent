@@ -16,17 +16,17 @@ import java.util.*;
  */
 public class WindowEvaluator extends GenericEvaluator<Integer> implements Evaluator<Integer>{
 
-    private long totalFalsePositives = 0;
-    private long totalFalseNegatives = 0;
-    private long totalTruePositives = 0;
-    private long totalTrueNegatives = 0;
+    private transient long totalFalsePositives = 0;
+    private transient long totalFalseNegatives = 0;
+    private transient long totalTruePositives = 0;
+    private transient long totalTrueNegatives = 0;
    // private long samples = 0;
 
 
-    private double[][] confusionMatrix ;
-    private ArrayList<String> classes;
+    private transient double[][] confusionMatrix ;
+    private transient List<String> classes;
 
-    private  long[][] sequentialConfusionMatrix;
+    private transient long[][] sequentialConfusionMatrix;
 
 
     public WindowEvaluator(Collection<String> namesClasses, List<TargetRequest> targets){

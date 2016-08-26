@@ -14,8 +14,9 @@ import eu.linksmart.gc.utils.function.Utils;
 import org.slf4j.Logger;
 
 
-import java.util.ArrayList;
+
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,8 +31,8 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     private int learning = 0, learnt =0;
     private ModelEvaluationMetric initialSamples;
 
-    private ArrayList<String> classes;
-    public DoubleTumbleWindowEvaluator(ArrayList<TargetRequest> targets) {
+    private List<String> classes;
+    public DoubleTumbleWindowEvaluator(List<TargetRequest> targets) {
         this.targets =targets;
 
 

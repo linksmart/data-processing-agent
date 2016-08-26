@@ -11,26 +11,31 @@ public class StatementException extends Exception {
         return errorTopic;
     }
 
-    protected String errorTopic;
+    protected final String errorTopic;
     @Deprecated
     public StatementException() {
         super();
+        errorTopic= "unknown/error";
     }
     @Deprecated
     public StatementException(String message) {
         super(message);
+        errorTopic= "unknown/error";
     }
     @Deprecated
     public StatementException(String message, Throwable cause) {
         super(message, cause);
+        errorTopic= "unknown/error";
     }
     @Deprecated
     public StatementException(Throwable cause) {
         super(cause);
+        errorTopic= "unknown/error";
     }
     @Deprecated
     public StatementException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+        errorTopic= "unknown/error";
     }
     public StatementException(String errorTopic, String message) {
         super(message);

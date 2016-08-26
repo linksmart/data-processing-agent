@@ -24,15 +24,18 @@ import java.util.List;
  */
 public class DataFusionManagerCore {
 
-    protected static ArrayList<Feeder> feeders = new ArrayList<>();
+    protected static List<Feeder> feeders = new ArrayList<>();
+
+    private DataFusionManagerCore() {
+    }
 
     public static boolean isActive() {
         return active;
     }
 
     protected static boolean active =false;
-    protected static Configurator conf;
-    protected static  Logger loggerService;
+    protected transient static Configurator conf;
+    protected transient static  Logger loggerService;
 
     public static void run(String args){
 
@@ -42,10 +45,7 @@ public class DataFusionManagerCore {
 
     public static boolean start(String args){
         Boolean ret =init(args);
-        new Thread(() -> {
-            statusLoop();
-        }
-        ).start();
+        new Thread(() ->statusLoop()).start();
         return ret;
 
     }

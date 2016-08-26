@@ -388,9 +388,9 @@ public class CEMLManager implements CEMLRequest {
     public EventType predict(Object input){
         try {
             Object aux = input;
-            ArrayList<EventType> orgInput= null;
+            List<EventType> orgInput= null;
             if(input instanceof ArrayList) {
-                ArrayList aux1= (ArrayList)input;
+                List aux1= (ArrayList)input;
                 if(!aux1.isEmpty()&& aux1.get(1) instanceof EventType) {
                     orgInput = (ArrayList<EventType>) aux1;
                     aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());

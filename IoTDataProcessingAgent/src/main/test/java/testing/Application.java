@@ -10,6 +10,9 @@ import java.util.ArrayList;
 public class Application  {
 
 
+    private Application() {
+    }
+
     public static void main(String[] args) {
 
 

@@ -249,7 +249,9 @@ public class StatementInstance implements Statement {
     @Override
     public void destroy() throws Exception {
 
-        lock.notifyAll();
+        synchronized (lock) {
+            lock.notifyAll();
+        }
     }
 
 

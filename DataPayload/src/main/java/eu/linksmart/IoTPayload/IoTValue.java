@@ -5,9 +5,9 @@ package eu.linksmart.IoTPayload;
  */
 public class IoTValue implements java.io.Serializable {
     private static final long serialVersionUID = 3048266813171001513L;
-    public String Value;
-    public String PhenomenonTime;
-    public String ResultTime;
+    protected String Value;
+    protected String PhenomenonTime;
+    protected String ResultTime;
     public  IoTValue(){
         Value = null;
         PhenomenonTime= null;

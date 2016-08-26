@@ -109,7 +109,7 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
 
 
             EvaluationMetric.ComparisonMethod methodParameter = EvaluationMetric.ComparisonMethod.More;
-            if("equal".equals(method.trim().toLowerCase())){
+            if("equal".equalsIgnoreCase(method.trim())){
                 methodParameter = EvaluationMetric.ComparisonMethod.Equal;
 
             } else if(method.trim().toLowerCase().contains("smaller")|| method.trim().toLowerCase().contains("less")){

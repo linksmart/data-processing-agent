@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 public class PersistenceFeeder extends Component implements Feeder, EventFeederLogic {
     static protected Logger loggerService = Utils.initLoggingConf(PersistenceFeeder.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
-    protected ArrayList<String> filePaths = new ArrayList<>();
+    protected List<String> filePaths = new ArrayList<>();
     private static ObjectMapper mapper = new ObjectMapper();
 
     public PersistenceFeeder(String... filePaths){

@@ -10,6 +10,9 @@ public class DynamicConst implements Const {
 
     protected static String id = UUID.randomUUID().toString();
 
+    private DynamicConst() {
+    }
+
     public static void setIsSet(boolean isSet) {
         DynamicConst.isSet = isSet;
     }

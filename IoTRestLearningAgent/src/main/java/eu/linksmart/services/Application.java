@@ -74,4 +74,6 @@ public class Application {
 
 
     }
+    private Application() {
+    }
 }

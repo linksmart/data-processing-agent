@@ -28,13 +28,13 @@ public class HTTPPublisher implements Publisher{
     private List<String> scopes;
     private String id;
     private Logger loggerService = Utils.initLoggingConf(this.getClass());
-    private Configurator conf = Configurator.getDefaultConfig();
+    private transient Configurator conf = Configurator.getDefaultConfig();
     private Map<String,Request> requesters = new HashMap<>();
 
     /***
      * Location are the brokers unknown with an alias by the Handlers
      * */
-    public static Map<String,Map.Entry<String,String>> knownInstances= new Hashtable<>();
+    public final static Map<String,Map.Entry<String,String>> knownInstances= new Hashtable<>();
     public static boolean addKnownLocations(String statement) throws StatementException {
         String[] nameURL = statement.toLowerCase().replace("add instance", "").trim().split("=");
         if (nameURL.length == 2) {

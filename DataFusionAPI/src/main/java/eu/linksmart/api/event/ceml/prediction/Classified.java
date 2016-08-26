@@ -4,6 +4,7 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 28.07.2016 a researcher of Fraunhofer FIT.
@@ -12,15 +13,10 @@ public class Classified<T> extends PredictionInstance<T> {
 
     protected String predictedClassName;
 
-    public Classified(T prediction, Object originInput, String predictedClassName, String predictedBy, ArrayList<EvaluationMetric> evaluations) {
+    public Classified(T prediction, Object originInput, String predictedClassName, String predictedBy, List<EvaluationMetric> evaluations) {
         super(prediction,originInput,predictedBy,evaluations);
 
         this.predictedClassName = predictedClassName;
-
-
-
-
-
     }
     public Classified() {
         super();

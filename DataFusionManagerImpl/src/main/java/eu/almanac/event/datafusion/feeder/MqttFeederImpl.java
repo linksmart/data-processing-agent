@@ -11,11 +11,9 @@ import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
 import eu.linksmart.gc.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.*;
-import sun.awt.Mutex;
 
 import java.net.MalformedURLException;
 import java.util.*;
-import java.util.concurrent.locks.Lock;
 
 /**
  * Created by Caravajal on 22.05.2015.

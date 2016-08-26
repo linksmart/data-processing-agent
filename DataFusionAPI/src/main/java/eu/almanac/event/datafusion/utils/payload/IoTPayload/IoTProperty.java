@@ -6,10 +6,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 @Deprecated
 public class IoTProperty implements java.io.Serializable, GenericCEP<IoTEntityEvent> {
-    private ArrayList<IoTValue> IoTStateObservation =null;
+    private List<IoTValue> IoTStateObservation =null;
     private String About = null;
 
     public IoTProperty (){
@@ -20,7 +21,7 @@ public class IoTProperty implements java.io.Serializable, GenericCEP<IoTEntityEv
         this.About = about;
         this.IoTStateObservation = new ArrayList<IoTValue>();
     }
-    public IoTProperty (ArrayList<IoTValue> IoTStateObservation, String about){
+    public IoTProperty (List<IoTValue> IoTStateObservation, String about){
         this.About = about;
         this.IoTStateObservation = IoTStateObservation;
     }
@@ -47,12 +48,12 @@ public class IoTProperty implements java.io.Serializable, GenericCEP<IoTEntityEv
         IoTStateObservation.add( new IoTValue(value,nowAsISO,nowAsISO));
     }
 
-    public ArrayList<IoTValue> getIoTStateObservation() {
+    public List<IoTValue> getIoTStateObservation() {
 
            return IoTStateObservation;
        }
     public void setIoTStateObservation( IoTValue[] value) {
-        this.IoTStateObservation = new ArrayList<IoTValue>(value.length);
+        this.IoTStateObservation = new ArrayList<>(value.length);
         for (IoTValue v : value)
             this.IoTStateObservation.add(v);
     }

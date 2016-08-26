@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -14,7 +15,7 @@ import java.util.TimeZone;
 @Deprecated
  public class IoTEntityEvent implements java.io.Serializable, GenericCEP<IoTEntityEvent> {
 
-    private ArrayList<IoTProperty> Properties;
+    private List<IoTProperty> Properties;
     private String About;
 
    public IoTEntityEvent (){
@@ -73,7 +74,7 @@ import java.util.TimeZone;
     }
 
 
-    public ArrayList<IoTProperty> getProperties() {
+    public List<IoTProperty> getProperties() {
         return Properties;
     }
     public boolean hasLikeProperty(String property){

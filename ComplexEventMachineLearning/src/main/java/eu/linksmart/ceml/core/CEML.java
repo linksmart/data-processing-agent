@@ -36,13 +36,16 @@ import org.slf4j.Logger;
 public class CEML implements AnalyzerComponent {
 
     static AnalyzerComponent info;
-    static private Configurator conf = Configurator.getDefaultConfig();
-    static private Logger loggerService = Utils.initLoggingConf(CEML.class);
+    static transient private Configurator conf = Configurator.getDefaultConfig();
+    static transient private Logger loggerService = Utils.initLoggingConf(CEML.class);
 
     static private Map<String, CEMLRequest> requests = new Hashtable<>();
 
     static private ObjectMapper mapper = new ObjectMapper();
     private static Map<String, KalmanFilter> filters = new Hashtable<>();
+
+    private CEML() {
+    }
 
     public static ObjectMapper getMapper() {
         return mapper;
@@ -227,7 +230,7 @@ public class CEML implements AnalyzerComponent {
     static public Observation PredictUsing(String request,Object input){
         try {
             Object aux = input;
-            ArrayList<EventType> orgInput= null;
+            List<EventType> orgInput= null;
             if(input instanceof ArrayList) {
                 ArrayList aux1= (ArrayList)input;
                 if(!aux1.isEmpty()&& aux1.get(1) instanceof EventType) {

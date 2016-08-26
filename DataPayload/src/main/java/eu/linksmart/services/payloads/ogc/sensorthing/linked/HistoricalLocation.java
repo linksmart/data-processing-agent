@@ -10,6 +10,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateSer
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 01.04.2016 a researcher of Fraunhofer FIT.
@@ -46,12 +47,12 @@ public class HistoricalLocation extends eu.linksmart.services.payloads.ogc.senso
     public void setLocationsNavigationLink(String value) {   }
 
     @JsonProperty(value = "locations")
-    public ArrayList<Location> getLocations() {
+    public List<Location> getLocations() {
         return locations;
     }
 
     @JsonProperty(value = "locations")
-    public void setLocations(ArrayList<Location> locations) {
+    public void setLocations(List<Location> locations) {
         this.locations = locations;
     }
 
@@ -64,13 +65,13 @@ public class HistoricalLocation extends eu.linksmart.services.payloads.ogc.senso
     @JsonDeserialize(using =DateDeserializer.class)
     @JsonSerialize(using = DateSerializer.class)
     @JsonProperty(value = "locations")
-    ArrayList<Location> locations;
+    List<Location> locations;
 
-    public ArrayList<Location> getHistoricalLocations() {
+    public List<Location> getHistoricalLocations() {
         return locations;
     }
 
-    public void setHistoricalLocations(ArrayList<Location> historicalLocations) {
+    public void setHistoricalLocations(List<Location> historicalLocations) {
         this.locations = historicalLocations;
     }
 

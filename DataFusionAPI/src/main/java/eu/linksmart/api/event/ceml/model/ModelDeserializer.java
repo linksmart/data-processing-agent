@@ -31,7 +31,7 @@ public class ModelDeserializer extends JsonDeserializer<Model> {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String name =  node.get("Name").textValue();
 
-        ArrayList<TargetRequest> targetRequests;
+        List<TargetRequest> targetRequests;
         Map<String,Object> parameters = new Hashtable<>();
         if(node.hasNonNull("Targets")) {
             targetRequests = mapper.reader(collectionType).readValue(node.get("Targets"));

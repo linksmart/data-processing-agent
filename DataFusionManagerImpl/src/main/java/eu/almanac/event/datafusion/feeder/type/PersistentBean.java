@@ -7,6 +7,7 @@ import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public class PersistentBean {
     @JsonProperty("statements")
-    protected ArrayList<StatementInstance> statements;
+    protected List<StatementInstance> statements;
     @JsonProperty("observations")
     protected Map<String,Observation[]> observations;
     PersistentBean(){
@@ -22,13 +23,13 @@ public class PersistentBean {
         observations = null;
     }
 
-    public ArrayList<StatementInstance> getStatements() {
+    public List<StatementInstance> getStatements() {
 
         return statements;
 
     }
 
-    public void setStatements(ArrayList<StatementInstance> statements) {
+    public void setStatements(List<StatementInstance> statements) {
         this.statements = statements;
     }
 
@@ -60,7 +61,7 @@ public class PersistentBean {
         if(observations!=null)
             return observations.get(topic);
         else
-            return null;
+            return new Observation[0];
     }
 
     public void setObservations(String key,Observation[] observation) {

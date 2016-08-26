@@ -87,7 +87,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
                 .backprop(true).build();
     }
 
-    public AutoregressiveNeuralNetworkModel(ArrayList<TargetRequest> targets,Map<String,Object> parameters) {
+    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets,Map<String,Object> parameters) {
         super(targets,parameters,new RegressionEvaluator(targets));
 
       //  super(descriptors,AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
@@ -181,13 +181,14 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
     //This method is just to localize the supperesswarning annotation.
     private double getBoundValue(double value){
+        double result =value;
         if(maxInputValue != Double.POSITIVE_INFINITY)
             if(value>maxInputValue)
-                value = maxInputValue;
+                result = maxInputValue;
         if(minInputValue != Double.NEGATIVE_INFINITY)
             if(value<minInputValue)
-                value = minInputValue;
-        return value;
+                result = minInputValue;
+        return result;
     }
     @Override
     public PredictionInstance<List<Double>> predict(List<Double> input) throws Exception {

@@ -21,7 +21,7 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
 
     protected String name;
     protected T target ;
-    public T currentValue;
+    protected T currentValue;
     protected Cloner cloner = new Cloner();
 
     static public EvaluationMetric instanceEvaluationAlgorithm(String canonicalName, String method, Object target)  {
@@ -33,7 +33,7 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
 
 
             ComparisonMethod methodParameter = ComparisonMethod.More;
-            if("equal".equals(method.trim().toLowerCase())){
+            if("equal".equalsIgnoreCase(method.trim())){
                 methodParameter =ComparisonMethod.Equal;
 
             } else if(method.trim().toLowerCase().contains("smaller")|| method.trim().toLowerCase().contains("less")){

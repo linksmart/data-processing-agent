@@ -26,14 +26,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SiddhiEngine extends Component implements CEPEngine {
     private static String STATEMENT_INOUT_BASE_TOPIC = "queries/", DEFAULT_TYPE = "almanacDefault";
-    private static Configurator conf =  Configurator.getDefaultConfig();
-    private Logger loggerService = Utils.initLoggingConf(this.getClass());
-    static protected SiddhiManager siddhiManager = new SiddhiManager();
-    protected ConcurrentHashMap<String,ExecutionPlanRuntime> hashExecutionPlanRuntime = new ConcurrentHashMap<>();
+    private transient static Configurator conf =  Configurator.getDefaultConfig();
+    private transient Logger loggerService = Utils.initLoggingConf(this.getClass());
+    static transient protected SiddhiManager siddhiManager = new SiddhiManager();
+    protected Map<String,ExecutionPlanRuntime> hashExecutionPlanRuntime = new ConcurrentHashMap<>();
 
-    protected ConcurrentHashMap<String,Statement> hashStatement = new ConcurrentHashMap<>();
-    protected ConcurrentHashMap<String,InputHandler> hashInputHandler = new ConcurrentHashMap<>();
-    protected ConcurrentHashMap<String,String> typeNameSiddhiDeffinition = new ConcurrentHashMap<>();
+    protected Map<String,Statement> hashStatement = new ConcurrentHashMap<>();
+    protected Map<String,InputHandler> hashInputHandler = new ConcurrentHashMap<>();
+    protected Map<String,String> typeNameSiddhiDeffinition = new ConcurrentHashMap<>();
     protected BidiMap topicTypeName = new DualHashBidiMap();
 
     protected SiddhiEngine(String implName, String desc, String implOf) {

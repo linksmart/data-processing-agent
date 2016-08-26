@@ -22,12 +22,12 @@ public class DefaultMQTTPublisher implements Publisher {
     private List<String> scopes;
     private String id;
     private Map<String, StaticBroker> brokers = new Hashtable<>();
-    private Logger loggerService = Utils.initLoggingConf(this.getClass());
-    private Configurator conf = Configurator.getDefaultConfig();
+    private transient Logger loggerService = Utils.initLoggingConf(this.getClass());
+    private transient Configurator conf = Configurator.getDefaultConfig();
     /***
      * Location are the brokers unknown with an alias by the Handlers
      * */
-    public static Map<String,Map.Entry<String,String>> knownInstances= new Hashtable<>();
+    public final static Map<String,Map.Entry<String,String>> knownInstances= new Hashtable<>();
     public static boolean addKnownLocations(String statement) throws StatementException {
         String[] nameURL = statement.toLowerCase().replace("add instance", "").trim().split("=");
         if (nameURL.length == 2) {

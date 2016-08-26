@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
@@ -22,14 +23,14 @@ public class FeatureOfInterest extends eu.linksmart.services.payloads.ogc.sensor
     /** TBD. */
    // @OneToMany(mappedBy="featureOfInterest", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     @JsonBackReference
-    protected ArrayList<Observation> observations;
+    protected List<Observation> observations;
 
 
-    public ArrayList<Observation> getObservations() {
+    public List<Observation> getObservations() {
         return observations;
     }
 
-    public void setObservations(ArrayList<Observation> observations) {
+    public void setObservations(List<Observation> observations) {
         if(observations==null)
             observations= new ArrayList<>();
         this.observations = observations;

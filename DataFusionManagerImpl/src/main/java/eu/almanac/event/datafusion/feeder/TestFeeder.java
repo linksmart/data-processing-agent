@@ -9,13 +9,14 @@ import eu.linksmart.api.event.datafusion.StatementException;
 
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 09.03.2016 a researcher of Fraunhofer FIT.
  */
 public class TestFeeder implements Feeder, Runnable {
     private final Thread simulation;
-    private Hashtable<String, CEPEngine> dataFusionWrappers = new Hashtable<>();
+    private Map<String, CEPEngine> dataFusionWrappers = new Hashtable<>();
 
     @Override
     public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
