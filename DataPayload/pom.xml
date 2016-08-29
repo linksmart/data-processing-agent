@@ -21,7 +21,7 @@
             <artifactId>api.agents</artifactId>
         </dependency>
         <dependency>
-            <groupId>eu.linksmart.gc</groupId>
+            <groupId>eu.linksmart.services.events</groupId>
             <artifactId>utils</artifactId>
         </dependency>
 

@@ -59,7 +59,7 @@
             <artifactId>data.procesing.core</artifactId>
         </dependency>
         <dependency>
-            <groupId>eu.linksmart.gc</groupId>
+            <groupId>eu.linksmart.services.events</groupId>
             <artifactId>utils</artifactId>
         </dependency>
     </dependencies>
