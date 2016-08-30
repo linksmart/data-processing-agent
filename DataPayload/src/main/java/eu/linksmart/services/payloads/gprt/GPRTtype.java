@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.datafusion.EventType;
-import eu.linksmart.gc.utils.function.Utils;
 import eu.linksmart.services.payloads.generic.Event;
 
 /**

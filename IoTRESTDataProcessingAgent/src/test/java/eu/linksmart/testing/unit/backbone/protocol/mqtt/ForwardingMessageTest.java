@@ -5,12 +5,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
+import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.almanac.ogc.sensorthing.api.datamodel.*;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -6,11 +6,10 @@ import eu.linksmart.ceml.evaluation.evaluators.WindowEvaluator;
 import eu.linksmart.ceml.evaluation.metrics.base.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

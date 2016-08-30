@@ -8,10 +8,10 @@ import eu.almanac.event.datafusion.feeder.StatementMqttFeederImpl;
 import eu.almanac.event.datafusion.feeder.TestFeeder;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.almanac.event.datafusion.intern.Utils;
-import eu.linksmart.api.event.datafusion.CEPEngine;
-import eu.linksmart.api.event.datafusion.CEPEngineAdvanced;
-import eu.linksmart.api.event.datafusion.Feeder;
-import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.CEPEngineAdvanced;
+import eu.linksmart.api.event.datafusion.components.Feeder;
+import eu.linksmart.services.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
 import org.slf4j.Logger;
 

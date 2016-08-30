@@ -3,10 +3,10 @@ package eu.almanac.event.datafusion.feeder;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.datafusion.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
 import eu.linksmart.api.event.datafusion.EventType;
-import eu.linksmart.api.event.datafusion.Feeder;
-import eu.linksmart.gc.utils.mqtt.types.Topic;
+import eu.linksmart.api.event.datafusion.components.Feeder;
+import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import sun.security.pkcs.ParsingException;
 

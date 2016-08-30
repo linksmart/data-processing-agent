@@ -3,7 +3,7 @@ package eu.linksmart.ceml.evaluation.metrics.base;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.MetricDefinition;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationAlgorithmExtended;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;

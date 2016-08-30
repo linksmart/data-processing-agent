@@ -3,7 +3,7 @@ package eu.linksmart.ceml.intern;
 /**
  * Created by José Ángel Carvajal on 18.12.2015 a researcher of Fraunhofer FIT.
  */
-public interface Const extends eu.linksmart.gc.utils.constants.Const {
+public interface Const extends eu.linksmart.services.utils.constants.Const {
     static final public String DefaultEvaluatorConfPath = "CEML.Evaluation.Default";
     public static final String COMPLEX_LEARNING_HANDLER ="COMPLEX_LEARNING_HANDLER";
 

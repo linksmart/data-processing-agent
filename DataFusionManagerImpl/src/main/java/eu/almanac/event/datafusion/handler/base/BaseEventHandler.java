@@ -1,14 +1,12 @@
 package eu.almanac.event.datafusion.handler.base;
 
 import eu.almanac.event.datafusion.intern.Utils;
-import eu.linksmart.api.event.datafusion.ComplexEventHandler;
+import eu.linksmart.api.event.datafusion.components.ComplexEventHandler;
 import eu.linksmart.api.event.datafusion.Statement;
 import org.slf4j.Logger;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**

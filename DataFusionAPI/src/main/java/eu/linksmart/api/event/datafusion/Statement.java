@@ -1,10 +1,7 @@
 package eu.linksmart.api.event.datafusion;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * This is the part of the API offered by Data Fusion. The Statement is the Interface that any statement object must fulfill. This interface is a generalization of any statement of a CEP engine.<p>
@@ -14,7 +11,7 @@ import java.util.Set;
  * @author Jose Angel Carvajal Soto
  * @version     0.03
  * @since       0.03
- * @see  CEPEngine
+ * @see  eu.linksmart.api.event.datafusion.components.CEPEngine
  *
  * */
 public interface Statement extends JsonSerializable {

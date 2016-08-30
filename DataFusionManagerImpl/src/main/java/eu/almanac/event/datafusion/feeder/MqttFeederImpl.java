@@ -3,13 +3,14 @@ package eu.almanac.event.datafusion.feeder;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.datafusion.*;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.Feeder;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
-import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;
-import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
-import eu.linksmart.gc.utils.mqtt.types.MqttMessage;
-import eu.linksmart.gc.utils.mqtt.types.Topic;
+import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
+import eu.linksmart.services.utils.mqtt.types.MqttMessage;
+import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.*;
 
 import java.net.MalformedURLException;
@@ -97,7 +98,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
                 if (toShutdown  ) {
 
 
-                    dataFusionWrappers.values().forEach(eu.linksmart.api.event.datafusion.CEPEngine::destroy);
+                    dataFusionWrappers.values().forEach(CEPEngine::destroy);
 
 
 
@@ -111,7 +112,7 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
 	 * For the feeder is enable to interact with a Data Fusion Engine,
 	 * the wrapper of the engine has to explicitly subscribe to the feeder as a Data Fusion engine.<p>
 	 * Doing so through this function
-	 * @param dfw is the {@link eu.linksmart.api.event.datafusion.CEPEngine} which what to be subscribed.
+	 * @param dfw is the {@link eu.linksmart.api.event.datafusion.components.CEPEngine} which what to be subscribed.
 	 *
 	 * @return <code>true</code> in a successful subscription, <code>false</code> otherwise.
 	 * */

@@ -11,12 +11,12 @@ import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
-import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.model.Model;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.CEPEngineAdvanced;
 import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
-import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.function.Utils;
-import org.apache.commons.lang.ArrayUtils;
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 

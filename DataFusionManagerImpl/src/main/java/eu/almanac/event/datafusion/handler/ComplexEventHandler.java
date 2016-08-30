@@ -5,17 +5,19 @@ import eu.almanac.event.datafusion.handler.base.BaseMapEventHandler;
 import eu.almanac.event.datafusion.intern.Const;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.datafusion.*;
-import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.api.event.datafusion.components.ComplexEventPropagationHandler;
+import eu.linksmart.api.event.datafusion.components.Enveloper;
+import eu.linksmart.api.event.datafusion.components.Publisher;
+import eu.linksmart.api.event.datafusion.components.Serializer;
+import eu.linksmart.services.utils.configuration.Configurator;
 
-import java.net.MalformedURLException;
-import java.rmi.RemoteException;
 import java.util.*;
 
 
 /**
  * Created by José Ángel Carvajal on 06.10.2014 a researcher of Fraunhofer FIT.
  */
-    public class ComplexEventHandler extends BaseMapEventHandler implements ComplexEventPropagationHandler{
+    public class ComplexEventHandler extends BaseMapEventHandler implements ComplexEventPropagationHandler {
 
     protected Publisher publisher;
     protected Enveloper<String,Object> enveloper;

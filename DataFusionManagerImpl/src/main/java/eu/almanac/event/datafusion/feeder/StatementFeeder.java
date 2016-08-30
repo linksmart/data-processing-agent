@@ -4,8 +4,10 @@ package eu.almanac.event.datafusion.feeder;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.datafusion.StatementInstance;
 import eu.linksmart.api.event.datafusion.*;
-import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.Feeder;
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 

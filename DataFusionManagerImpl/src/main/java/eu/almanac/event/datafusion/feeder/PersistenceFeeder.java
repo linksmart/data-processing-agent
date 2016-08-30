@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.event.datafusion.feeder.type.PersistentBean;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.datafusion.CEPEngine;
-import eu.linksmart.api.event.datafusion.Feeder;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.Feeder;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.core.EventFeederLogic;
 
-import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import org.apache.commons.io.IOUtils;

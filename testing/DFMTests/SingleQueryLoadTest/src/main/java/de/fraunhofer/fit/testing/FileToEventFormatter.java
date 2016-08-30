@@ -2,7 +2,7 @@ package de.fraunhofer.fit.testing;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Datastream;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.services.utils.function.Utils;
 
 import java.io.BufferedReader;
 

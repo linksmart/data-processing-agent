@@ -5,7 +5,7 @@ import eu.almanac.event.datafusion.core.DataFusionManagerCore;
 import de.fraunhofer.fit.event.feeder.*;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
-import eu.linksmart.api.event.datafusion.AnalyzerComponent;
+import eu.linksmart.api.event.datafusion.components.AnalyzerComponent;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -10,7 +10,7 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 import eu.linksmart.ceml.evaluation.metrics.InitialSamples;
 import eu.linksmart.api.event.datafusion.JsonSerializable;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 
 

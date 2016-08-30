@@ -6,14 +6,11 @@ package eu.almanac.event.datafusion.intern;
 import eu.almanac.event.datafusion.feeder.FeederConst;
 import eu.almanac.event.datafusion.handler.HandlerConst;
 
-import java.util.UUID;
-
-
 
 /**
  * Created by José Ángel Carvajal on 06.08.2015 a researcher of Fraunhofer FIT.
  */
-public interface Const extends eu.linksmart.gc.utils.constants.Const, FeederConst, HandlerConst {
+public interface Const extends eu.linksmart.services.utils.constants.Const, FeederConst, HandlerConst {
 
     public static final String STATEMENT_INOUT_BASE_TOPIC_CONF_PATH ="STATEMENT_INOUT_BASE_TOPIC";
     public static final String STATEMENT_IN_TOPIC_CONF_PATH ="STATEMENT_IN_TOPIC";

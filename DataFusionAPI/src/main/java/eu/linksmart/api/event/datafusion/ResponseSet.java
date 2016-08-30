@@ -15,8 +15,8 @@ package eu.linksmart.api.event.datafusion;
  * @author Jos� �ngel Carvajal Soto
  * @version     0.01
  * @since       0.01
- * @see CEPEngine
- * @see Cell
+ * @see eu.linksmart.api.event.datafusion.components.CEPEngine
+ * @see ResponseSet.Response.Cell
  * @see ResponseSet.Response
  * */
 public interface ResponseSet {
@@ -63,7 +63,7 @@ public interface ResponseSet {
 	 * @author Jos� �ngel Carvajal Soto
 	 * @version     0.01
 	 * @since       0.01
-	 * @see CEPEngine
+	 * @see eu.linksmart.api.event.datafusion.components.CEPEngine
 	 * @see ResponseSet.Response.Cell
 	 * */
 	public interface Response {
@@ -135,7 +135,7 @@ public interface ResponseSet {
 		 * @author Jos� �ngel Carvajal Soto
 		 * @version     0.01
 		 * @since       0.01
-		 * @see CEPEngine
+		 * @see eu.linksmart.api.event.datafusion.components.CEPEngine
 		 * 
 		 * */
 		public interface Cell {

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.datafusion.EventType;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.services.utils.function.Utils;
 
 import java.util.Date;
 
@@ -122,10 +122,10 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 	/**
 	 * Provides the estimated value of an observedProperty from the observation.
 	 * This is intended as a Measure with value and unit (e.g.,
-	 * {@link javax.measure.}).
+	 * {@link Number}).
 	 *
 	 * @return the resultValue The value as an Object (typically a
-	 *         {@link javax.measure.DecimalMeasure})
+	 *         {@link Number})
 	 */
 	@JsonPropertyDescription("The estimated value of an observedProperty from the observation. This will be intended as a Measure with value and unit.")
 	@JsonProperty(value = "ResultValue")
@@ -137,11 +137,11 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 	/**
 	 * Sets the estimated value of an observedProperty from the observation.
 	 * This is intended as a Measure with value and unit (e.g.,
-	 * {@link javax.measure.DecimalMeasure}).
+	 * {@link Number}).
 	 *
 	 * @param resultValue
 	 *            the resultValue to set, typically a
-	 *            {@link javax.measure.DecimalMeasure}
+	 *            {@link Number}
 	 */
 	@JsonPropertyDescription("The estimated value of an observedProperty from the observation. This will be intended as a Measure with value and unit.")
 	@JsonProperty(value = "ResultValue")

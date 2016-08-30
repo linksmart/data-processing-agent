@@ -1,22 +1,14 @@
 package eu.almanac.event.datafusion.handler;
 
 import eu.almanac.event.datafusion.intern.Const;
-import eu.linksmart.api.event.datafusion.Publisher;
+import eu.linksmart.api.event.datafusion.components.Publisher;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.api.event.datafusion.StatementException;
-import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.function.Utils;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpVersion;
 import org.apache.http.client.fluent.*;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.rmi.RemoteException;
 import java.util.*;
 
 /**

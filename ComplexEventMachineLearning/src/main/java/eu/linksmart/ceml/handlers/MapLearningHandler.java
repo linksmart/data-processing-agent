@@ -1,6 +1,5 @@
 package eu.linksmart.ceml.handlers;
 
-import eu.almanac.event.datafusion.handler.base.BaseEventHandler;
 import eu.almanac.event.datafusion.handler.base.BaseMapEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -9,8 +8,8 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.datafusion.Statement;
 import eu.linksmart.ceml.intern.Const;
-import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 
 import java.util.*;

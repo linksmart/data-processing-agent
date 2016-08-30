@@ -4,17 +4,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.fit.testing.FileToEventFormatter;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.gc.utils.function.Utils;
-import eu.linksmart.gc.utils.mqtt.broker.StaticBroker;
+import eu.linksmart.services.utils.function.Utils;
+import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by José Ángel Carvajal on 22.12.2015 a researcher of Fraunhofer FIT.

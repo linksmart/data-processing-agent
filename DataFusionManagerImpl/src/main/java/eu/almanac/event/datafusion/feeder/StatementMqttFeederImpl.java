@@ -3,6 +3,8 @@ package eu.almanac.event.datafusion.feeder;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.datafusion.*;
 import eu.almanac.event.datafusion.intern.Const;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.Feeder;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;

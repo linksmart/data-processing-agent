@@ -5,7 +5,9 @@ import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
-import eu.linksmart.gc.utils.configuration.Configurator;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.Feeder;
+import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;
 
 import org.springframework.http.HttpStatus;

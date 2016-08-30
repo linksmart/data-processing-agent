@@ -1,8 +1,7 @@
 package eu.almanac.event.datafusion.utils.generic;
 
-import eu.linksmart.api.event.datafusion.AnalyzerComponent;
+import eu.linksmart.api.event.datafusion.components.AnalyzerComponent;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**

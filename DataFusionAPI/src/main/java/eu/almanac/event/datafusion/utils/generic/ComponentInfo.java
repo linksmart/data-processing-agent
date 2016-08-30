@@ -1,6 +1,6 @@
 package eu.almanac.event.datafusion.utils.generic;
 
-import eu.linksmart.api.event.datafusion.AnalyzerComponent;
+import eu.linksmart.api.event.datafusion.components.AnalyzerComponent;
 
 /**
  * Created by José Ángel Carvajal on 15.12.2015 a researcher of Fraunhofer FIT.

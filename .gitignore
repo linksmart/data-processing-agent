@@ -42,3 +42,13 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+distributions/mqtt/IoTDataProcessingAgent/target/
+distributions/mqtt/IoTLearningAgent/target/
+distributions/mqtt/target/
+distributions/rest/IoTDataProcessingAgent/target/
+distributions/rest/IoTLearningAgent/target/
+distributions/rest/target/
+distributions/target/
+target/
+/classes/
+/gpl-artifacts/

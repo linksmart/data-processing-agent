@@ -3,8 +3,8 @@ package eu.almanac.event.datafusion.feeder;
 import eu.linksmart.api.event.datafusion.StatementInstance;
 import eu.almanac.ogc.sensorthing.api.datamodel.Datastream;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.datafusion.CEPEngine;
-import eu.linksmart.api.event.datafusion.Feeder;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.Feeder;
 import eu.linksmart.api.event.datafusion.StatementException;
 
 import java.util.Date;
