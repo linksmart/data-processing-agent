@@ -65,53 +65,7 @@ public class StatementFeeder implements Feeder {
 
         return response;
     }
-     /*
-    public static ArrayList<StatementResponse> feedStatement(Statement statement){
-        boolean success =true;
 
-        ArrayList<StatementResponse> response = new ArrayList<>();
-
-        if(!statement.getTargetAgents().isEmpty()) {
-            success = false;
-            for (int i = 1; i < statement.getTargetAgents().size(); i++)
-                if (statement.getTargetAgents().get(i).equals(DynamicConst.getId()))
-                    success = true;
-        }
-
-
-        if(!success) {
-            loggerService.info("Discarding statement " + statement.getID() +" is not addressed to me (ID ="+ DynamicConst.getId()+")");
-            response.add(new StatementResponse("Discarding statement " + statement.getID() +" is not addressed to me (ID ="+ DynamicConst.getId()+")", HttpStatus.NOT_ACCEPTABLE, true));
-
-        }else {
-            for (CEPEngine dfw : CEPEngine.instancedEngines.values()) {
-
-                try {
-                    if (!dfw.addStatement(statement))
-                        response.add(new StatementResponse("Unexpected error in statement " + statement.getName() + " with hash " + statement.getID() + " in engine " + dfw.getName(), HttpStatus.INTERNAL_SERVER_ERROR, false));
-
-                } catch (StatementException e) {
-
-                    loggerService.error(e.getMessage(), e);
-                    response.add(new StatementResponse(e.getMessage(), HttpStatus.BAD_REQUEST, e.getErrorTopic(), false));
-                    success = false;
-
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(), e);
-                    response.add(new StatementResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, false));
-
-                    success = false;
-                }
-                if (success) {
-                    loggerService.info("Statement " + statement.getID() + " was successful");
-                    response.add(new StatementResponse("Statement " + statement.getName() + " with hash " + statement.getID() + " in engine " + dfw.getName() + " was processed successfully", HttpStatus.OK, true));
-
-                }
-
-            }
-        }
-        return response;
-    }*/
     static public  MultiResourceResponses<Statement> pauseStatements(Collection<Statement> statements) {
 
         MultiResourceResponses<Statement> response = new MultiResourceResponses<Statement>();
@@ -255,8 +209,6 @@ public class StatementFeeder implements Feeder {
     }
     public static void processRequestInWrapper(CEPEngine dfw,MultiResourceResponses<Statement> result, Statement org){
 
-
-
         String id= result.getHeadResource().getID();
         try {
             if (org==null) {
@@ -311,7 +263,7 @@ public class StatementFeeder implements Feeder {
             }
 
         } catch (StatementException se) {
-            result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 400, se.getErrorTopic(), se.getMessage()));
+            result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 400, se.getErrorProducerId(), se.getMessage()));
             loggerService.error(se.getMessage(), se);
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);

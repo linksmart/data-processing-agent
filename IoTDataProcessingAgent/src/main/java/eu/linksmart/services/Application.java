@@ -1,6 +1,6 @@
 package eu.linksmart.services;
 
-import eu.almanac.event.datafusion.core.DataFusionManagerCore;
+import eu.almanac.event.datafusion.core.DataProcessingCore;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
@@ -12,7 +12,7 @@ public class Application {
         if(args.length>0)
             confFile= args[0];
 
-        DataFusionManagerCore.run(confFile);
+        DataProcessingCore.run(confFile);
 
 
     }

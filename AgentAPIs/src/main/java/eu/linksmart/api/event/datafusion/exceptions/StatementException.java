@@ -3,54 +3,22 @@ package eu.linksmart.api.event.datafusion.exceptions;
 /**
  * Created by Jose Angel Carvajal on 12.08.2015 a researcher of Fraunhofer FIT.
  */
-public class StatementException extends Exception {
+public class StatementException extends TraceableException {
 
-    private static final long serialVersionUID = 5614280930770087934L;
 
-    public String getErrorTopic() {
-        return errorTopic;
+    public StatementException(String errorProducerId, String message) {
+        super(errorProducerId, message);
     }
 
-    protected final String errorTopic;
-    @Deprecated
-    public StatementException() {
-        super();
-        errorTopic= "unknown/error";
+    public StatementException(String message, String errorProducerId, Throwable cause) {
+        super(message, errorProducerId, cause);
     }
-    @Deprecated
-    public StatementException(String message) {
-        super(message);
-        errorTopic= "unknown/error";
+
+    public StatementException(Throwable cause, String errorProducerId) {
+        super(cause, errorProducerId);
     }
-    @Deprecated
-    public StatementException(String message, Throwable cause) {
-        super(message, cause);
-        errorTopic= "unknown/error";
-    }
-    @Deprecated
-    public StatementException(Throwable cause) {
-        super(cause);
-        errorTopic= "unknown/error";
-    }
-    @Deprecated
-    public StatementException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        errorTopic= "unknown/error";
-    }
-    public StatementException(String errorTopic, String message) {
-        super(message);
-        this.errorTopic =errorTopic;
-    }
-    public StatementException(String message, String errorTopic, Throwable cause) {
-        super(message, cause);
-        this.errorTopic =errorTopic;
-    }
-    public StatementException(Throwable cause, String errorTopic) {
-        super(cause);
-        this.errorTopic =errorTopic;
-    }
-    public StatementException(String message, String errorTopic, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        this.errorTopic =errorTopic;
+
+    public StatementException(String message, String errorProducerId, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, errorProducerId, cause, enableSuppression, writableStackTrace);
     }
 }

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import de.fraunhofer.fit.event.ceml.CEMLRest;
 import de.fraunhofer.fit.event.feeder.RestEventFeeder;
 import de.fraunhofer.fit.event.feeder.RestStatementFeeder;
-import eu.almanac.event.datafusion.core.DataFusionManagerCore;
+import eu.almanac.event.datafusion.core.DataProcessingCore;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.datafusion.components.AnalyzerComponent;
@@ -39,7 +39,7 @@ public class Application {
 
         if(args.length>0)
             confFile= args[0];
-        Boolean hasStarted = DataFusionManagerCore.start(confFile);
+        Boolean hasStarted = DataProcessingCore.start(confFile);
         if(hasStarted) {
 
             SpringApplication.run(Application.class, args);

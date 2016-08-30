@@ -133,11 +133,6 @@ public abstract class MqttFeederImpl extends Component implements Runnable, Feed
         }
 
     }
-
-
-
-
-
     @Override
     public void update(Observable topic, Object mqttMessage)  {
 

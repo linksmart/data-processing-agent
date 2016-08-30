@@ -1,7 +1,6 @@
 package eu.linksmart.services;
 
-import eu.linksmart.ceml.api.MqttCemlAPI;
-import eu.almanac.event.datafusion.core.DataFusionManagerCore;
+import eu.almanac.event.datafusion.core.DataProcessingCore;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
@@ -15,10 +14,10 @@ public class Application {
 
         //MqttCemlAPI api;
         try {
-            DataFusionManagerCore.start(confFile);
+            DataProcessingCore.start(confFile);
           ///   api = new MqttCemlAPI();
 
-            while (DataFusionManagerCore.isActive()){
+            while (DataProcessingCore.isActive()){
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {

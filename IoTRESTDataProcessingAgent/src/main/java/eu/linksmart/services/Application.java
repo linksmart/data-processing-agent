@@ -1,7 +1,7 @@
 package eu.linksmart.services;
 
 import com.google.gson.Gson;
-import eu.almanac.event.datafusion.core.DataFusionManagerCore;
+import eu.almanac.event.datafusion.core.DataProcessingCore;
 import de.fraunhofer.fit.event.feeder.*;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
@@ -37,7 +37,7 @@ public class Application {
             confFile= args[0];
 
 
-        Boolean hasStarted = DataFusionManagerCore.start(confFile);
+        Boolean hasStarted = DataProcessingCore.start(confFile);
         if(hasStarted)
             SpringApplication.run(Application.class, args);
 

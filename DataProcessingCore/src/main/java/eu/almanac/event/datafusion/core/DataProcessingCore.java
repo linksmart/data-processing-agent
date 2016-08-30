@@ -11,6 +11,7 @@ import eu.almanac.event.datafusion.intern.Utils;
 import eu.linksmart.api.event.datafusion.components.CEPEngine;
 import eu.linksmart.api.event.datafusion.components.CEPEngineAdvanced;
 import eu.linksmart.api.event.datafusion.components.Feeder;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.almanac.event.datafusion.intern.Const;
 import org.slf4j.Logger;
@@ -22,11 +23,11 @@ import java.util.List;
  * Created by J. Angel Caravajal on 06.10.2014.
  *
  */
-public class DataFusionManagerCore {
+public class DataProcessingCore {
 
     protected static List<Feeder> feeders = new ArrayList<>();
 
-    private DataFusionManagerCore() {
+    private DataProcessingCore() {
     }
 
     public static boolean isActive() {
@@ -81,7 +82,7 @@ public class DataFusionManagerCore {
             Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
 
-        loggerService = Utils.initLoggingConf(DataFusionManagerCore.class);
+        loggerService = Utils.initLoggingConf(DataProcessingCore.class);
 
         String idPath= conf.getString(Const.ID_CONF_PATH);
         if("*".equals(idPath))
@@ -183,6 +184,18 @@ public class DataFusionManagerCore {
 
         }
 
+    }
+    public static String feedbackTopic(String thingId, String sourceId ){
+        return thingId+"/"+sourceId;
+    }
+    public static String feedbackTopic(String sourceId ){
+        return feedbackTopic(DynamicConst.getId(), sourceId);
+    }
+    public static String feedbackTopic(String thingId,TraceableException exception){
+        return feedbackTopic(thingId, exception.getErrorProducerId());
+    }
+    public static String feedbackTopic(TraceableException exception){
+        return feedbackTopic(DynamicConst.getId(), exception.getErrorProducerId());
     }
 
 }

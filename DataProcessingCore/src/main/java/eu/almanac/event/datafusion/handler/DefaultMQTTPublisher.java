@@ -126,7 +126,7 @@ public class DefaultMQTTPublisher implements Publisher {
 
             for(String scope: scopes) {
                 if (!knownInstances.containsKey(scope.toLowerCase()))
-                    throw new StatementException(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH) + id, "The selected scope (" + scopes.get(0) + ") is unknown");
+                    throw new StatementException( id, "The selected scope (" + scopes.get(0) + ") is unknown");
 
                 brokers.put(scope, new StaticBroker(
                         knownInstances.get(scope.toLowerCase()).getKey(),
