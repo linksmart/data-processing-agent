@@ -1,16 +1,13 @@
 package eu.linksmart.api.event.ceml;
 
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
-import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
-import eu.linksmart.api.event.datafusion.Statement;
+import eu.linksmart.api.event.datafusion.types.JsonSerializable;
+import eu.linksmart.api.event.datafusion.types.Statement;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.

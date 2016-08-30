@@ -3,11 +3,9 @@ package eu.linksmart.api.event.ceml.model;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
-import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
+import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;

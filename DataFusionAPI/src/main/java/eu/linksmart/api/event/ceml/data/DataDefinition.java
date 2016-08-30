@@ -1,7 +1,7 @@
 package eu.linksmart.api.event.ceml.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
+import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 
 import java.util.ArrayList;
 import java.util.List;

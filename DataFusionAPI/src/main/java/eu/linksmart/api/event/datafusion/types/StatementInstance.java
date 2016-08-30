@@ -1,13 +1,10 @@
-package eu.linksmart.api.event.datafusion;
+package eu.linksmart.api.event.datafusion.types;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
-import eu.linksmart.api.event.datafusion.Statement;
 
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

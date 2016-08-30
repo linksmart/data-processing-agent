@@ -2,7 +2,7 @@ package eu.linksmart.api.event.ceml.evaluation.metrics;
 
 
 
-import eu.linksmart.api.event.datafusion.JsonSerializable;
+import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 
 /**
  * Created by angel on 4/12/15.

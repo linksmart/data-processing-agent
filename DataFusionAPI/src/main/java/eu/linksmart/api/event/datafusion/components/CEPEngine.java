@@ -1,8 +1,8 @@
 package eu.linksmart.api.event.datafusion.components;
 
-import eu.linksmart.api.event.datafusion.EventType;
-import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.api.event.datafusion.StatementException;
+import eu.linksmart.api.event.datafusion.types.EventType;
+import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
 
 import java.util.Hashtable;
 import java.util.Map;

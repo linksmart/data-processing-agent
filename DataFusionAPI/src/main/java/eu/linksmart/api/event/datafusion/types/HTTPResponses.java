@@ -1,6 +1,4 @@
-package eu.linksmart.api.event.datafusion;
-
-import java.util.Collection;
+package eu.linksmart.api.event.datafusion.types;
 
 /**
  * Created by José Ángel Carvajal on 15.07.2016 a researcher of Fraunhofer FIT.
