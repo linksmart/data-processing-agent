@@ -4,6 +4,7 @@ package eu.almanac.event.datafusion.utils.generic;
 /**
  * Created by Caravajal on 01.04.2015.
  */
+@Deprecated
 public interface GenericCEP<T> {
     public static final String GENERATED = "@CEPEvent";
     public static final String TIMESTAMP = "@Timestamp";

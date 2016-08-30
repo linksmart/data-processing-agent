@@ -7,6 +7,7 @@ import java.util.Hashtable;
 /**
  * Created by José Ángel Carvajal on 14.12.2015 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public abstract class Component {
 
     ComponentInfo info =  new ComponentInfo();
