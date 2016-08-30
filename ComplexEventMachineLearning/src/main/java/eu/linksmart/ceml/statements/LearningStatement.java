@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.ceml.handlers.ListLearningHandler;
 import eu.linksmart.ceml.handlers.MapLearningHandler;
 import eu.linksmart.ceml.core.CEMLManager;
-import eu.linksmart.api.event.datafusion.StatementInstance;
+import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
 import eu.linksmart.api.event.ceml.CEMLRequest;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
+import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.

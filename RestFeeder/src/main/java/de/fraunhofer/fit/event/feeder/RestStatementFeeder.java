@@ -4,9 +4,11 @@ import eu.almanac.event.datafusion.feeder.StatementFeeder;
 import eu.almanac.event.datafusion.intern.DynamicConst;
 import eu.almanac.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.datafusion.components.CEPEngine;
 import eu.linksmart.api.event.datafusion.components.Feeder;
+import eu.linksmart.api.event.datafusion.types.impl.GeneralRequestResponse;
+import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
+import eu.linksmart.api.event.datafusion.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;
 

@@ -103,11 +103,10 @@
     </prerequisites>
 	<modules>
         <module>Utils</module>
-        <module>DataFusionAPI</module>
-        <module>DataFusionCoreAPI</module>
+        <module>AgentAPIs</module>
         <module>DataPayload</module>
         <module>SiddhiWrapper</module>
-        <module>DataFusionManagerImpl</module>
+        <module>DataProcessingCore</module>
         <module>IoTDataProcessingAgent</module>
         <module>RestFeeder</module>
         <module>IoTRESTDataProcessingAgent</module>

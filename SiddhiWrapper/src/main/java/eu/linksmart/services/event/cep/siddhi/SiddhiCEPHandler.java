@@ -1,13 +1,11 @@
 package eu.linksmart.services.event.cep.siddhi;
 
 import eu.almanac.event.datafusion.handler.ComplexEventHandler;
-import eu.linksmart.api.event.datafusion.Statement;
-import eu.linksmart.api.event.datafusion.StatementException;
+import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 
-import java.net.MalformedURLException;
-import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.Map;
 

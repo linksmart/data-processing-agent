@@ -19,7 +19,6 @@ package eu.almanac.ogc.sensorthing.api.datamodel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import eu.linksmart.api.event.datafusion.EventType;
 
 import java.util.HashSet;
 import java.util.Set;

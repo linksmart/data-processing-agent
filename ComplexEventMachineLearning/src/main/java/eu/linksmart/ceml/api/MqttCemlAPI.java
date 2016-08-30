@@ -5,7 +5,7 @@ import eu.linksmart.ceml.core.CEMLManager;
 import eu.linksmart.ceml.intern.Const;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
-import eu.linksmart.api.event.datafusion.MultiResourceResponses;
+import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;

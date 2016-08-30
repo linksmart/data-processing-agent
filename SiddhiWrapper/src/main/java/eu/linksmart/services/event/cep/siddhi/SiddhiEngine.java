@@ -1,9 +1,11 @@
 package eu.linksmart.services.event.cep.siddhi;
 
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.datafusion.components.CEPEngine;
 import eu.linksmart.api.event.datafusion.components.CEPEngineAdvanced;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.types.EventType;
+import eu.linksmart.api.event.datafusion.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;

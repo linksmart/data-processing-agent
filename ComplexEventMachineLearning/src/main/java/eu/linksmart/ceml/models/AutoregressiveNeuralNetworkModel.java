@@ -7,7 +7,6 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
-import eu.linksmart.api.event.datafusion.JsonSerializable;
 import eu.linksmart.ceml.evaluation.evaluators.RegressionEvaluator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
