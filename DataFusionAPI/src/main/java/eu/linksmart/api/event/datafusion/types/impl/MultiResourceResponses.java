@@ -1,6 +1,7 @@
-package eu.linksmart.api.event.datafusion.types;
+package eu.linksmart.api.event.datafusion.types.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.linksmart.api.event.datafusion.types.HTTPResponses;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +11,7 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 15.07.2016 a researcher of Fraunhofer FIT.
  */
-public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Map<String,ResourceObject>>{
+public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Map<String,ResourceObject>> {
     Collection<GeneralRequestResponse> generalRequestResponses = new ArrayList<>();
     Map<String,ResourceObject> resources= new Hashtable<>();
     int overallStatus = 0;

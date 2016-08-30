@@ -1,8 +1,10 @@
-package eu.linksmart.api.event.datafusion.types;
+package eu.linksmart.api.event.datafusion.types.impl;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.datafusion.types.JsonSerializable;
+import eu.linksmart.api.event.datafusion.types.Statement;
 
 
 import java.math.BigInteger;
