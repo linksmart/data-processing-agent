@@ -7,11 +7,16 @@ import eu.almanac.event.cep.intern.Const;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.*;
 import eu.linksmart.api.event.datafusion.EventType;
-import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.api.event.datafusion.components.CEPEngine;
+import eu.linksmart.api.event.datafusion.components.CEPEngineAdvanced;
+import eu.linksmart.api.event.datafusion.components.ComplexEventHandler;
+import eu.linksmart.api.event.datafusion.components.ComplexEventSyncHandler;
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
@@ -237,7 +242,10 @@ import java.util.*;
         Boolean ret = false;
 
         try {
-            addQuery(statement);
+            if(epService.getEPAdministrator().getStatement(statement.getID())!=null)
+                throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+ statement.getID(), ("Query with id " + statement.getID() + " already added"));
+
+            addEsperStatement(statement);
             // if there is no exception set add statement as success
             ret = true;
 
@@ -245,13 +253,76 @@ import java.util.*;
 
             throw e;
 
-        } catch (Exception e) {
+        } catch (IllegalAccessException| InvocationTargetException| InstantiationException e){
+
+
+        }catch (Exception e) {
             loggerService.error(e.getMessage(), e);
             ret = false;
         }
 
 
         return ret;
+    }
+    private void addEsperStatement( Statement statement) throws StatementException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        ComplexEventHandler handler=null;
+        // add the query and the listener for the query
+        if(statement.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS) {
+            statement.setCEHandler("eu.almanac.event.datafusion.handler.ComplexEventSynchHandler");
+            Class clazz = Class.forName(statement.getCEHandler());
+            Constructor constructor = clazz.getConstructor(Statement.class);
+            handler = (ComplexEventHandler) constructor.newInstance(statement);
+        }else if (statement.getCEHandler() != null && !statement.getCEHandler().equals("")) {
+            Class clazz = Class.forName(statement.getCEHandler());
+            Constructor constructor = clazz.getConstructor(Statement.class);
+            handler = (ComplexEventHandler) constructor.newInstance(statement);
+        }
+       manageStatementLifeCycle(statement, handler);
+    }
+
+    private void manageStatementLifeCycle(Statement statement, ComplexEventHandler handler) throws StatementException{
+        switch (statement.getStateLifecycle()) {
+            case ONCE:
+            case SYNCHRONOUS:
+                EPOnDemandQueryResult result;
+                try {
+                    result = epService.getEPRuntime().executeQuery(statement.getStatement());
+                }catch (EPStatementException e){
+                    throw new StatementException(e.getMessage(),statement.getID(),e.getCause());
+                }
+                if (handler != null) {
+
+                    for (EventBean event : result.getArray()) {
+
+                        if ( handler.getClass().isAssignableFrom(ComplexEventSyncHandler.class))
+                            ((ComplexEventSyncHandler)handler).update(event.getUnderlying());
+                        else
+                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",statement.getID());
+                    }
+                }
+                break;
+            case RUN:
+            case PAUSE:
+            default:
+                EPStatement epl;
+                try {
+                    epl = epService.getEPAdministrator().createEPL(statement.getStatement(), statement.getID());
+                }catch (EPStatementException e){
+                    throw new StatementException(e.getMessage(),statement.getID(),e.getCause());
+                }
+                if (handler != null) {
+                    epl.setSubscriber(handler);
+                }
+                switch (statement.getStateLifecycle()) {
+                    case PAUSE:
+                        epl.stop();
+                        break;
+                    case RUN:
+                    default:
+                        epl.start();
+                }
+                deployedStatements.put(statement.getID(), statement);
+        }
     }
 
     @Override
@@ -290,89 +361,8 @@ import java.util.*;
         return this;
     }
 
-    public void addQuery(Statement query) throws Exception{
 
 
-
-
-        if(epService.getEPAdministrator().getStatement(query.getID())!=null) {
-
-            throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+ query.getID(), ("Query with id " + query.getID() + " already added"));
-
-        }
-
-        queryReady.put(query.getName(), true);
-
-
-        addEsperStatement(query);
-
-    }
-    private void addEsperStatement( Statement query) throws Exception {
-        ComplexEventHandler handler=null;
-        // add the query and the listener for the query
-        if(query.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS) {
-            query.setCEHandler("eu.almanac.event.datafusion.handler.ComplexEventSynchHandler");
-            Class clazz = Class.forName(query.getCEHandler());
-            Constructor constructor = clazz.getConstructor(Statement.class);
-            handler = (ComplexEventHandler) constructor.newInstance(query);
-        }else if (query.getCEHandler() != null && !query.getCEHandler().equals("")) {
-            Class clazz = Class.forName(query.getCEHandler());
-            Constructor constructor = clazz.getConstructor(Statement.class);
-            handler = (ComplexEventHandler) constructor.newInstance(query);
-        }
-
-        switch (query.getStateLifecycle()) {
-            case RUN:
-            case PAUSE:
-                EPStatement statement;
-                try {
-
-                    statement = epService.getEPAdministrator().createEPL(query.getStatement(), query.getID());
-                }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),query.getID(),e.getCause());
-                }
-
-                if (handler != null) {
-
-                    statement.setSubscriber(handler);
-                }
-                switch (query.getStateLifecycle()) {
-                    case RUN:
-                        statement.start();
-                        break;
-                    case PAUSE:
-                        statement.stop();
-                        break;
-
-                }
-
-                deployedStatements.put(query.getID(), query);
-                break;
-            case ONCE:
-            case SYNCHRONOUS:
-                EPOnDemandQueryResult result;
-                try {
-                     result = epService.getEPRuntime().executeQuery(query.getStatement());
-                }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),query.getID(),e.getCause());
-                }
-                if (handler != null) {
-
-                    for (EventBean event : result.getArray()) {
-
-                        if ( handler.getClass().isAssignableFrom(ComplexEventSyncHandler.class))
-                            ((ComplexEventSyncHandler)handler).update(event.getUnderlying());
-
-                        else
-                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",query.getID());
-
-                    }
-                }
-                break;
-        }
-
-
-    }
 
     public boolean pauseQuery(String id) {
 

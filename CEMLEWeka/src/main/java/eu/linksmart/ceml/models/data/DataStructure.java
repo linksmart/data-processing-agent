@@ -2,9 +2,8 @@ package eu.linksmart.ceml.models.data;
 
 import com.fasterxml.jackson.annotation.*;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
-import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 import weka.core.Attribute;
 import weka.core.Instances;

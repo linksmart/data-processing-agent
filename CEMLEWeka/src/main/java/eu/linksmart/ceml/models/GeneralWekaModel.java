@@ -3,7 +3,6 @@ package eu.linksmart.ceml.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
-import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
@@ -11,8 +10,8 @@ import eu.linksmart.ceml.models.data.DataStructure;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
-import eu.linksmart.gc.utils.configuration.Configurator;
-import eu.linksmart.gc.utils.function.Utils;
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 import org.apache.commons.lang3.math.NumberUtils;
 import weka.classifiers.Classifier;
@@ -24,7 +23,6 @@ import weka.core.Instances;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**

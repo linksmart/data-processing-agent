@@ -36,7 +36,7 @@
     <modules>
         <module>EsperWrapper</module>
         <module>distributions</module>
-        <!--<module>CEMLEWeak</module>-->
+        <module>CEMLEWeka</module>
     </modules>
     <licenses>
         <license>
