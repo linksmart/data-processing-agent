@@ -59,7 +59,6 @@ public class StatementInstance implements Statement {
         this.statement = statement;
         this.scope = scope;
     }
-
     public static String hashIt( String string){
         if(string == null)
             return "";
