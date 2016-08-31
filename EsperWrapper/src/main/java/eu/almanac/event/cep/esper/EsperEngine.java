@@ -26,35 +26,28 @@ import java.util.*;
  public class EsperEngine extends Component implements CEPEngineAdvanced {
 
     private static EPServiceProvider epService;
-    @Deprecated
-    private Map<String, Map<String,String>> topicName = new HashMap<>();
-    @Deprecated
-    private Map<String, Map<String,String>> nameTopic = new HashMap<>();
-    @Deprecated
-    private Map<String, Boolean> queryReady = new HashMap<>();
+    static final private EsperEngine ref= init();
 
     private Map<String, String> fullTypeNameToAlias = new HashMap<>();
-
     private Map<String,Statement> deployedStatements = new Hashtable<>();
     private  Logger loggerService = Utils.initLoggingConf(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
 
-    static final private EsperEngine ref= init();
     // configuration
     private String STATEMENT_INOUT_BASE_TOPIC = "queries/";
     private boolean SIMULATION_EXTERNAL_CLOCK = false;
 
-    static EsperEngine init(){
+    static protected EsperEngine init(){
         EsperEngine EE= new EsperEngine();
 
         instancedEngines.put(EE.getName(),EE);
         return EE;
     }
 
-
     public static EsperEngine getEngine(){
         return  ref;
     }
+
     protected EsperEngine(){
         super(EsperEngine.class.getSimpleName(),"Default handler for complex events", CEPEngine.class.getSimpleName(),CEPEngineAdvanced.class.getSimpleName());
 
@@ -148,43 +141,12 @@ import java.util.*;
         return true;
 
     }
-    private void checkQueriesReadiness( String newEventWithTopic){
 
-        if(topicName.containsKey(newEventWithTopic))
-            for(String queryName: topicName.get(newEventWithTopic).values()) {
-                nameTopic.get(queryName).remove(newEventWithTopic);
-                queryReady.put(queryName, nameTopic.get(queryName).isEmpty());
-            }
-
-
-
-    }
     @Override
     public String getName() {
         return this.getClass().getSimpleName();
     }
 
-
-
-
-
-
-
-    /*public String[] getParentTopic(String topic){
-        String esperParentTopic;
-        if(topic.charAt(0)== '/')
-            topic = topic.substring(1);
-
-        String [] esperTopicArray = topic.split("/");
-
-        esperParentTopic = esperTopicArray[0];
-        for (int i=1; i<esperTopicArray.length-2;i++) {
-            esperParentTopic += "."+esperTopicArray[i];
-
-        }
-
-        return new String[]{esperParentTopic, esperTopicArray[esperTopicArray.length-2]};
-    }*/
     @Override
     public boolean addEvent(String topic, EventType event,Class type) {
 
@@ -202,32 +164,9 @@ import java.util.*;
 
                 return false;
             }
-            //insertStream(((Observation)event).getId(),parentTopicAndHead[0]);
-            //createPersistent(((Observation)event).getId(),parentTopicAndHead[0]);
-
 
         return true;
     }
-
-
-
-    private boolean insertStream(String head, String paretTopic){
-        if (epService.getEPAdministrator().getStatement(head)!=null)
-            return false;
-        EPStatement statement;
-        try {
-             statement = epService.getEPAdministrator().createEPL("insert into O"+head+" select * from observation(id = '"+head+"')" , head);
-
-
-        }catch (EPStatementSyntaxException Esyn){
-            loggerService.error(Esyn.getMessage(),Esyn);
-            return false;
-        }
-
-
-        return statement.getState() != EPStatementState.STARTED;
-    }
-
     @Override
     public boolean addEventType(String nameType, String[] eventSchema, Class[] eventTypes)throws StatementException {
         return false;
@@ -244,7 +183,7 @@ import java.util.*;
 
         try {
             if(epService.getEPAdministrator().getStatement(statement.getID())!=null)
-                throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+ statement.getID(), ("Query with id " + statement.getID() + " already added"));
+                throw new StatementException(statement.getID(), ("Query with id " + statement.getID() + " already added"));
 
             addEsperStatement(statement);
             // if there is no exception set add statement as success
@@ -308,6 +247,7 @@ import java.util.*;
                 EPStatement epl;
                 try {
                     epl = epService.getEPAdministrator().createEPL(statement.getStatement(), statement.getID());
+
                 }catch (EPStatementException e){
                     throw new StatementException(e.getMessage(),statement.getID(),e.getCause());
                 }
@@ -328,28 +268,54 @@ import java.util.*;
 
     @Override
     public boolean removeStatement(String id) throws StatementException {
-        return removeQuery(id);
+
+        if(epService.getEPAdministrator().getStatement(id)==null)
+            return false;
+
+        ComplexEventHandler handler = ((ComplexEventHandler)epService.getEPAdministrator().getStatement(id).getSubscriber());
+        if(handler!=null)
+            handler.destroy();
+
+        epService.getEPAdministrator().getStatement(id).destroy();
+
+        deployedStatements.remove(id);
+
+        return true;
     }
 
     @Override
     public boolean pauseStatement(String id) throws StatementException {
-       return pauseQuery(id);
+        if(epService.getEPAdministrator().getStatement(id)==null)
+            return false;
 
+        epService.getEPAdministrator().getStatement(id).stop();
 
+        // TODO: deployedStatements.get(id) mark as stopped
+
+        return true;
     }
     @Override
     public boolean startStatement(String id) throws StatementException {
-        return startQuery(id);
+        if(epService.getEPAdministrator().getStatement(id)==null)
+            return false;
+        epService.getEPAdministrator().getStatement(id).start();
 
+
+        // TODO: deployedStatements.get(id) mark as stopped
+        return true;
 
     }
 
     @Override
     public void destroy() {
-        for (String i: epService.getEPAdministrator().getStatementNames())
-            removeQuery(i);
+        Arrays.stream(epService.getEPAdministrator().getStatementNames()).forEach((id) -> {
+            try {
+                removeStatement(id);
+            }catch (Exception e){
+                loggerService.error(e.getMessage(),e);
+            }
+        });
         loggerService.info(getName() + " logged off");
-
     }
 
     @Override
@@ -365,43 +331,6 @@ import java.util.*;
 
 
 
-    public boolean pauseQuery(String id) {
 
-        if(epService.getEPAdministrator().getStatement(id)==null)
-            return false;
-
-        epService.getEPAdministrator().getStatement(id).stop();
-
-        // TODO: deployedStatements.get(id) mark as stopped
-
-        return true;
-    }
-
-    public boolean startQuery(String id) {
-
-        if(epService.getEPAdministrator().getStatement(id)==null)
-            return false;
-        epService.getEPAdministrator().getStatement(id).start();
-
-
-        // TODO: deployedStatements.get(id) mark as stopped
-        return true;
-    }
-
-    public boolean removeQuery(String id) {
-
-        if(epService.getEPAdministrator().getStatement(id)==null)
-            return false;
-
-        ComplexEventHandler handler = ((ComplexEventHandler)epService.getEPAdministrator().getStatement(id).getSubscriber());
-        if(handler!=null)
-            handler.destroy();
-
-        epService.getEPAdministrator().getStatement(id).destroy();
-
-        deployedStatements.remove(id);
-
-        return true;
-    }
 
 }
