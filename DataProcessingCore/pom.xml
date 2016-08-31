@@ -6,7 +6,7 @@
     <parent>
         <groupId>eu.linksmart.services.events</groupId>
         <artifactId>parent</artifactId>
-        <version>1.3.1-SNAPSHOT</version>
+        <version>1.3.1</version>
     </parent>
     <artifactId>data.procesing.core</artifactId>
 
@@ -19,10 +19,6 @@
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>api.agents</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>api.agents.core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
