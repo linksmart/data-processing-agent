@@ -26,7 +26,7 @@ import eu.linksmart.api.event.datafusion.components.AnalyzerComponent;
 import eu.linksmart.api.event.datafusion.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
-import eu.linksmart.ceml.api.MqttCemlAPI;
+import eu.linksmart.services.event.ceml.api.MqttCemlAPI;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.ceml.intern.Const;

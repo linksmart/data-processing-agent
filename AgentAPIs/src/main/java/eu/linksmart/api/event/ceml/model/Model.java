@@ -18,7 +18,7 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
 
     public static  Model factory(String name,List<TargetRequest> targetRequests, Map<String, Object> parameters) throws Exception{
         if(!loadedModels.containsKey(name)) {
-            Class.forName("eu.linksmart.ceml.models."+name);
+            Class.forName("eu.linksmart.services.event.ceml.models."+name);
         }
         return loadedModels.get(name).getConstructor(List.class,Map.class).newInstance(targetRequests,parameters);
         //throw new Exception("No valid models had been loaded");

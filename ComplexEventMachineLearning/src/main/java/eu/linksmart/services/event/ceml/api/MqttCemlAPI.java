@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.api;
+package eu.linksmart.services.event.ceml.api;
 
 import eu.linksmart.ceml.core.CEML;
 import eu.linksmart.ceml.core.CEMLManager;
