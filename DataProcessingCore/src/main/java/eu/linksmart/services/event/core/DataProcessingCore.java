@@ -123,25 +123,19 @@ public class DataProcessingCore {
     }
 
     private static boolean initFeeders() {
-        // TODO: change the loading of feeder the same way as the CEP engines are loaded
+
         // loading of feeders
         Feeder feederImplEvents = null,  feederImplQuery = null, persistentFeeder=null,testFeeder = null;
         //IncomingConnector mqtt = null;
         try {
 
-         //   feederImplEvents = new EventMqttObserver(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
-
-            //feederImplQuery = new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH).toString(), conf.getString(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH).toString());
             mqtt = MqttIncomingConnectorService.getReference();
 
-            persistentFeeder = new PersistenceFeeder((String[])conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
+            persistentFeeder = new PersistenceFeeder((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
+            for (CEPEngine wrapper : CEPEngine.instancedEngines.values()) {
 
-            for (CEPEngine wrapper: CEPEngine.instancedEngines.values()) {
-//                feederImplEvents.dataFusionWrapperSignIn(wrapper);
- //               feederImplQuery.dataFusionWrapperSignIn(wrapper);
-
-                if(conf.getBoolean(Const.TEST_FEEDER)) {
+                if (conf.getBoolean(Const.TEST_FEEDER)) {
                     testFeeder = new TestFeeder();
 
                 }

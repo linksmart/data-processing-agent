@@ -15,9 +15,6 @@ public class DefaultEnveloper implements Enveloper<String,Object> {
         if (payload instanceof Observation) {
             return (Observation)payload;
 
-            // TODO: Esper Specific code must be moved to esper artifact
-            // }else if (event instanceof EventBean){
-            //    return handleObject(((EventBean)event).getUnderlying(),description,streamID);
         }else {
 
             return Observation.factory(payload, description, idProperty, id);
