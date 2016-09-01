@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.core;
+package eu.linksmart.services.event.ceml.core;
 
 import java.io.IOException;
 import java.util.*;

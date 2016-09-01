@@ -8,7 +8,7 @@ import eu.linksmart.services.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.ceml.data.*;
 import eu.linksmart.api.event.datafusion.types.impl.GeneralRequestResponse;
 
-import eu.linksmart.ceml.core.CEML;
+import eu.linksmart.services.event.ceml.core.CEML;
 
 import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
 import eu.almanac.event.datafusion.utils.generic.Component;

@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.core;
+package eu.linksmart.services.event.ceml.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;

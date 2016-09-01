@@ -7,7 +7,7 @@ import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.handlers.ListLearningHandler;
 import eu.linksmart.services.event.ceml.handlers.MapLearningHandler;
-import eu.linksmart.ceml.core.CEMLManager;
+import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.datafusion.types.JsonSerializable;
