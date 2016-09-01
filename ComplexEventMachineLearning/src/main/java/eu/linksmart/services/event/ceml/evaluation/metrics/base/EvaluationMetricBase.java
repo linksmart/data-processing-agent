@@ -63,8 +63,6 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
     }
     public EvaluationMetricBase(ComparisonMethod method, T target){
 
-        // TODO: broke, the target copy the reference of the object insted of making a new reference,
-        // I solved this by creating the reference outside the constructor
         name = this.getClass().getSimpleName();
         this.method = method;
         this.target=cloner.deepClone(target);

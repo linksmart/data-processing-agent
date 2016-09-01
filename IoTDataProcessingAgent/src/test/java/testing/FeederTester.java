@@ -1,6 +1,6 @@
 package testing;
 
-import eu.linksmart.services.event.feeder.EventMqttFeederImpl;
+import eu.linksmart.services.event.feeder.Observers.EventMqttObserver;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
@@ -16,7 +16,7 @@ public class FeederTester implements Runnable{
 
     protected static Configurator conf;
     protected static Logger loggerService;
-    EventMqttFeederImpl feederImplEvents = null;
+    EventMqttObserver feederImplEvents = null;
     public FeederTester() {
         init("conf.cfg");
     }
@@ -44,7 +44,7 @@ public class FeederTester implements Runnable{
 
         try {
 
-            feederImplEvents = new EventMqttFeederImpl(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
+           // feederImplEvents = new EventMqttFeederImpl(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
 
 
 
@@ -53,10 +53,10 @@ public class FeederTester implements Runnable{
             return false;
         }
 
-        if(feederImplEvents ==null || feederImplEvents.isDown() ){
+       /* if(feederImplEvents ==null || feederImplEvents.isDown() ){
             loggerService.error("The feeders couldn't start! MDF now is stopping");
             return false;
-        }
+        }*/
 
 
 

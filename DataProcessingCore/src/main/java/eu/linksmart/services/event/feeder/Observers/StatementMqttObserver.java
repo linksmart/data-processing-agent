@@ -1,12 +1,12 @@
-package eu.linksmart.services.event.feeder;
+package eu.linksmart.services.event.feeder.Observers;
 
+import eu.linksmart.services.event.feeder.StatementFeeder;
 import eu.linksmart.services.event.intern.DynamicConst;
-import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.api.event.components.CEPEngine;
-import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;
@@ -17,15 +17,11 @@ import java.util.Arrays;
  * Created by José Ángel Carvajal on 22.05.2015 a researcher of Fraunhofer FIT.
  */
 
-public class StatementMqttFeederImpl extends MqttFeederImpl {
+public class StatementMqttObserver extends IncomingMqttObserver {
 
-    // configuration
-    private String STATEMENT_INOUT_BASE_TOPIC ="queries/";
-    @SuppressWarnings("UnusedDeclaration")
-    public StatementMqttFeederImpl(String brokerName, String brokerPort, String topic) throws MalformedURLException, MqttException, InstantiationException {
-        super(brokerName, brokerPort, topic,StatementMqttFeederImpl.class.getSimpleName(),"Provides a statement MQTT API",MqttFeederImpl.class.getSimpleName(), Feeder.class.getSimpleName());
-
-        STATEMENT_INOUT_BASE_TOPIC = conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
+    private StaticBroker brokerService;
+    public StatementMqttObserver(StaticBroker broker)  {
+        brokerService =broker;
     }
 
 
@@ -45,7 +41,7 @@ public class StatementMqttFeederImpl extends MqttFeederImpl {
         * */
         if(topicParts.size()>1){ // case BASE/add/
             if(topicParts.get(1).equals("add")){
-                responses = StatementFeeder.addNewStatement(new String(rawEvent),null,null);
+                responses = StatementFeeder.addNewStatement(new String(rawEvent), null, null);
             }else if(topicParts.get(1).equals("new") && topicParts.size()>2){ //  BASE/new/<statementID>/
                 responses = StatementFeeder.addNewStatement(new String(rawEvent),topicParts.get(2),null);
 
@@ -86,29 +82,5 @@ public class StatementMqttFeederImpl extends MqttFeederImpl {
 
 
     }
-    // NOTE: consider move this code to an Feeder abstract class if not TODO: document the function
-/*
-    protected boolean processInternStatement(Statement statement) throws StatementException {
-        if (statement.getStatement().toLowerCase().equals("shutdown")) {
-            synchronized (lockToShutdown) {
-                toShutdown = true;
-            }
-            return true;
-        }
 
-        if (statement.getStatement() == null || statement.getStatement().toLowerCase().equals("")) {
-            StatementFeeder.changeStatement(statement.getID(),statement.getStateLifecycle());
-
-        } else if (statement.getStatement().toLowerCase().contains("add instance ")) {
-            FixForJava7Handler.addKnownLocations(statement.getStatement());
-
-        } else if (statement.getStatement().toLowerCase().contains("remove instance ")) {
-            FixForJava7Handler.removeKnownLocations(statement.getStatement());
-
-        } else
-            return false;
-
-        return true;
-    }
-*/
 }

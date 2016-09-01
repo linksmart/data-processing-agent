@@ -1,10 +1,10 @@
 package eu.linksmart.services.event.core;
 
-import eu.linksmart.services.event.feeder.EventMqttFeederImpl;
+import eu.linksmart.api.event.components.IncomingConnector;
+import eu.linksmart.services.event.feeder.MqttIncomingConnectorService;
 
 
 import eu.linksmart.services.event.feeder.PersistenceFeeder;
-import eu.linksmart.services.event.feeder.StatementMqttFeederImpl;
 import eu.linksmart.services.event.feeder.TestFeeder;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
@@ -25,8 +25,9 @@ import java.util.List;
  */
 public class DataProcessingCore {
 
-    protected static List<Feeder> feeders = new ArrayList<>();
+ //   protected static List<Feeder> feeders = new ArrayList<>();
 
+    protected static IncomingConnector mqtt =null;
     private DataProcessingCore() {
     }
 
@@ -54,7 +55,7 @@ public class DataProcessingCore {
         active = true;
         while (active){
 
-            feeders.stream().filter(f -> f.isDown()).forEach(f -> active = false);
+            active = mqtt.isUp();
 
             if(active) {
                 loggerService.info("Data Fusion Manager is alive");
@@ -126,18 +127,20 @@ public class DataProcessingCore {
         // TODO: change the loading of feeder the same way as the CEP engines are loaded
         // loading of feeders
         Feeder feederImplEvents = null,  feederImplQuery = null, persistentFeeder=null,testFeeder = null;
+        //IncomingConnector mqtt = null;
         try {
 
-            feederImplEvents = new EventMqttFeederImpl(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
+         //   feederImplEvents = new EventMqttObserver(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH).toString(), conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH).toString());
 
-            feederImplQuery = new StatementMqttFeederImpl(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH).toString(), conf.getString(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH).toString());
+            //feederImplQuery = new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH).toString(), conf.getString(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH).toString(), conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH).toString());
+            mqtt = MqttIncomingConnectorService.getReference();
 
             persistentFeeder = new PersistenceFeeder((String[])conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
 
             for (CEPEngine wrapper: CEPEngine.instancedEngines.values()) {
-                feederImplEvents.dataFusionWrapperSignIn(wrapper);
-                feederImplQuery.dataFusionWrapperSignIn(wrapper);
+//                feederImplEvents.dataFusionWrapperSignIn(wrapper);
+ //               feederImplQuery.dataFusionWrapperSignIn(wrapper);
                 persistentFeeder.dataFusionWrapperSignIn(wrapper);
                 if(conf.getBoolean(Const.TEST_FEEDER)) {
                     testFeeder = new TestFeeder();
@@ -149,13 +152,11 @@ public class DataProcessingCore {
             loggerService.error(e.getMessage(),e);
         }
 
-        if(feederImplQuery == null  || feederImplEvents ==null || feederImplEvents.isDown() || feederImplQuery.isDown()){
+        if(mqtt!=null&& !mqtt.isUp()){
             loggerService.error("The feeders couldn't start! Agent now is stopping");
             return false;
         }
 
-        feeders.add(feederImplEvents);
-        feeders.add(feederImplQuery);
 
         return true;
     }
