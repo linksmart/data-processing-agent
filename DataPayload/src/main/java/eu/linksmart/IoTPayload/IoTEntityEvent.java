@@ -12,6 +12,7 @@ import java.util.TimeZone;
 /**
  * Created by Caravajal on 29.09.2014.
  */
+@Deprecated
  public class IoTEntityEvent implements java.io.Serializable, GenericCEP<IoTEntityEvent> {
 
     private List<IoTProperty> Properties;

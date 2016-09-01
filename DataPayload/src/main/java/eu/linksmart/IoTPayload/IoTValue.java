@@ -3,6 +3,7 @@ package eu.linksmart.IoTPayload;
 /**
  * Created by Caravajal on 03.10.2014.
  */
+@Deprecated
 public class IoTValue implements java.io.Serializable {
     private static final long serialVersionUID = 3048266813171001513L;
     protected String Value;
