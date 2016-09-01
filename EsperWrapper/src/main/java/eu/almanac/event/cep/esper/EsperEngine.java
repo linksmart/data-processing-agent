@@ -5,7 +5,9 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.client.time.CurrentTimeSpanEvent;
 import eu.almanac.event.cep.intern.Const;
 import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.linksmart.api.event.datafusion.exceptions.InternalException;
 import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownException;
 import eu.linksmart.api.event.datafusion.types.EventType;
 import eu.linksmart.api.event.datafusion.components.CEPEngine;
 import eu.linksmart.api.event.datafusion.components.CEPEngineAdvanced;
@@ -178,33 +180,34 @@ import java.util.*;
     }
 
     @Override
-    public boolean addStatement(Statement statement) throws StatementException {
-        Boolean ret = false;
-
+    public boolean addStatement(Statement statement) throws StatementException, UnknownException, InternalException {
+        boolean result = false;
         try {
-            if(epService.getEPAdministrator().getStatement(statement.getID())!=null)
-                throw new StatementException(statement.getID(), ("Query with id " + statement.getID() + " already added"));
+            // if the statement does not exists
+            if(epService.getEPAdministrator().getStatement(statement.getID())==null) {
 
-            addEsperStatement(statement);
-            // if there is no exception set add statement as success
-            ret = true;
-
+                result = addEsperStatement(statement);
+            }
         } catch (StatementException  e) {
 
+            loggerService.error(e.getMessage(), e);
             throw e;
 
-        } catch (IllegalAccessException| InvocationTargetException| InstantiationException e){
+        }catch (ClassNotFoundException e){
 
-
-        }catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            ret = false;
+
+            throw new UnknownException(statement.getID(), "Statement","The given handler of the statement ID:"+statement.getID()+" is unknown by this agent. If no handler was given this is an internal server error, otherwise the user provide wrong handler name");
+
+        }catch (Exception e){
+            loggerService.error(e.getMessage(), e);
+            throw new InternalException(statement.getID(),e.getMessage(),e.getCause());
+
         }
 
-
-        return ret;
+        return result;
     }
-    private void addEsperStatement( Statement statement) throws StatementException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private boolean addEsperStatement( Statement statement) throws StatementException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         ComplexEventHandler handler=null;
         // add the query and the listener for the query
         if(statement.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS) {
@@ -212,15 +215,16 @@ import java.util.*;
             Class clazz = Class.forName(statement.getCEHandler());
             Constructor constructor = clazz.getConstructor(Statement.class);
             handler = (ComplexEventHandler) constructor.newInstance(statement);
-        }else if (statement.getCEHandler() != null && !statement.getCEHandler().equals("")) {
+        }else if (statement.getCEHandler() != null && ! "".equals(statement.getCEHandler()) && statement.getStateLifecycle() != Statement.StatementLifecycle.REMOVE) {
             Class clazz = Class.forName(statement.getCEHandler());
             Constructor constructor = clazz.getConstructor(Statement.class);
             handler = (ComplexEventHandler) constructor.newInstance(statement);
         }
-       manageStatementLifeCycle(statement, handler);
+       return manageStatementLifeCycle(statement, handler);
     }
 
-    private void manageStatementLifeCycle(Statement statement, ComplexEventHandler handler) throws StatementException{
+    private boolean manageStatementLifeCycle(Statement statement, ComplexEventHandler handler) throws StatementException{
+        boolean end = false;
         switch (statement.getStateLifecycle()) {
             case ONCE:
             case SYNCHRONOUS:
@@ -237,9 +241,13 @@ import java.util.*;
                         if ( handler.getClass().isAssignableFrom(ComplexEventSyncHandler.class))
                             ((ComplexEventSyncHandler)handler).update(event.getUnderlying());
                         else
-                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",statement.getID());
+                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",statement.getID(), "Statement");
                     }
                 }
+                end = true;
+                break;
+            case REMOVE:
+                end = removeStatement(statement.getID());
                 break;
             case RUN:
             case PAUSE:
@@ -263,7 +271,9 @@ import java.util.*;
                         epl.start();
                 }
                 deployedStatements.put(statement.getID(), statement);
+                end = true;
         }
+        return end;
     }
 
     @Override
@@ -290,7 +300,7 @@ import java.util.*;
 
         epService.getEPAdministrator().getStatement(id).stop();
 
-        // TODO: deployedStatements.get(id) mark as stopped
+        deployedStatements.get(id).setStateLifecycle(Statement.StatementLifecycle.PAUSE);
 
         return true;
     }
@@ -301,7 +311,7 @@ import java.util.*;
         epService.getEPAdministrator().getStatement(id).start();
 
 
-        // TODO: deployedStatements.get(id) mark as stopped
+        deployedStatements.get(id).setStateLifecycle(Statement.StatementLifecycle.RUN);
         return true;
 
     }
