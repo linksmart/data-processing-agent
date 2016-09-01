@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.statements;
+package eu.linksmart.services.event.ceml.statements;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.api.event.datafusion.exceptions.StatementException;
