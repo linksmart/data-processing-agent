@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.handlers;
+package eu.linksmart.services.event.ceml.handlers;
 
 import eu.linksmart.services.event.datafusion.handler.base.BaseListEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
