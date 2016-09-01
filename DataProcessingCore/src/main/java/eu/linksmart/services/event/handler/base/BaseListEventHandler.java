@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.datafusion.handler.base;
+package eu.linksmart.services.event.handler.base;
 
 import eu.linksmart.api.event.types.Statement;
 

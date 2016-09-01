@@ -1,6 +1,6 @@
-package eu.linksmart.services.event.datafusion.handler.base;
+package eu.linksmart.services.event.handler.base;
 
-import eu.linksmart.services.event.datafusion.intern.Utils;
+import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.ComplexEventHandler;
 import eu.linksmart.api.event.types.Statement;
 import org.slf4j.Logger;

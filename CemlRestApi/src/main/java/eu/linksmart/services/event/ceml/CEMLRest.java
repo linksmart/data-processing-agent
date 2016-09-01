@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import eu.linksmart.services.event.datafusion.intern.DynamicConst;
+import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.ceml.data.*;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 

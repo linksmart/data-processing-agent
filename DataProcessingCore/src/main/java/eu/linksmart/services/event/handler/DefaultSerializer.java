@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.datafusion.handler;
+package eu.linksmart.services.event.handler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;

@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.datafusion.intern;
+package eu.linksmart.services.event.intern;
 
 import java.util.UUID;
 

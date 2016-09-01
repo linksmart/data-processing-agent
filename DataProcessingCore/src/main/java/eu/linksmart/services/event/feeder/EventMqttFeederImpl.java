@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.datafusion.feeder;
+package eu.linksmart.services.event.feeder;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;

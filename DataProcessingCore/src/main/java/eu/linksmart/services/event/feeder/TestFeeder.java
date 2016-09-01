@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.datafusion.feeder;
+package eu.linksmart.services.event.feeder;
 
 import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.almanac.ogc.sensorthing.api.datamodel.Datastream;

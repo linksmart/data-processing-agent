@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.datafusion.handler;
+package eu.linksmart.services.event.handler;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.

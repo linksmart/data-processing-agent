@@ -1,7 +1,7 @@
 package eu.linksmart.services.event.feeder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.linksmart.services.event.datafusion.intern.Utils;
+import eu.linksmart.services.event.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.CEPEngine;

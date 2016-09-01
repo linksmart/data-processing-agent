@@ -1,6 +1,6 @@
-package eu.linksmart.services.event.datafusion.handler;
+package eu.linksmart.services.event.handler;
 
-import eu.linksmart.services.event.datafusion.intern.Const;
+import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.exceptions.StatementException;

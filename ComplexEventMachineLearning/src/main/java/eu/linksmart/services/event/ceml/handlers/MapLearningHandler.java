@@ -1,6 +1,6 @@
 package eu.linksmart.services.event.ceml.handlers;
 
-import eu.linksmart.services.event.datafusion.handler.base.BaseMapEventHandler;
+import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;

@@ -1,7 +1,7 @@
-package eu.linksmart.services.event.datafusion.feeder;
+package eu.linksmart.services.event.feeder;
 
 
-import eu.linksmart.services.event.datafusion.intern.DynamicConst;
+import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.UnknownException;

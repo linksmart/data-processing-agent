@@ -1,7 +1,7 @@
-package eu.linksmart.services.event.datafusion.feeder;
+package eu.linksmart.services.event.feeder;
 
-import eu.linksmart.services.event.datafusion.intern.DynamicConst;
-import eu.linksmart.services.event.datafusion.intern.Const;
+import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;

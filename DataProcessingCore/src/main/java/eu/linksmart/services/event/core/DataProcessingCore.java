@@ -1,19 +1,19 @@
-package eu.linksmart.services.event.datafusion.core;
+package eu.linksmart.services.event.core;
 
-import eu.linksmart.services.event.datafusion.feeder.EventMqttFeederImpl;
+import eu.linksmart.services.event.feeder.EventMqttFeederImpl;
 
 
-import eu.linksmart.services.event.datafusion.feeder.PersistenceFeeder;
-import eu.linksmart.services.event.datafusion.feeder.StatementMqttFeederImpl;
-import eu.linksmart.services.event.datafusion.feeder.TestFeeder;
-import eu.linksmart.services.event.datafusion.intern.DynamicConst;
-import eu.linksmart.services.event.datafusion.intern.Utils;
+import eu.linksmart.services.event.feeder.PersistenceFeeder;
+import eu.linksmart.services.event.feeder.StatementMqttFeederImpl;
+import eu.linksmart.services.event.feeder.TestFeeder;
+import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.event.datafusion.intern.Const;
+import eu.linksmart.services.event.intern.Const;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;

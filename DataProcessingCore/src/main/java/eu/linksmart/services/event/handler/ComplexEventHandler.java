@@ -1,9 +1,9 @@
-package eu.linksmart.services.event.datafusion.handler;
+package eu.linksmart.services.event.handler;
 
 
-import eu.linksmart.services.event.datafusion.handler.base.BaseMapEventHandler;
-import eu.linksmart.services.event.datafusion.intern.Const;
-import eu.linksmart.services.event.datafusion.intern.DynamicConst;
+import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
+import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.components.ComplexEventPropagationHandler;
 import eu.linksmart.api.event.components.Enveloper;
 import eu.linksmart.api.event.components.Publisher;

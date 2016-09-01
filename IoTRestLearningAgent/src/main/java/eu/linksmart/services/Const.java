@@ -1,7 +1,7 @@
 package eu.linksmart.services;
 
-import eu.linksmart.services.event.datafusion.feeder.FeederConst;
-import eu.linksmart.services.event.datafusion.handler.HandlerConst;
+import eu.linksmart.services.event.feeder.FeederConst;
+import eu.linksmart.services.event.handler.HandlerConst;
 
 /**
  * Created by José Ángel Carvajal on 15.03.2016 a researcher of Fraunhofer FIT.

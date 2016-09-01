@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.datafusion.feeder.type;
+package eu.linksmart.services.event.feeder.type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.types.impl.StatementInstance;

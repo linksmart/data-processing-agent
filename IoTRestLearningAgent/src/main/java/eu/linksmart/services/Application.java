@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import eu.linksmart.services.event.ceml.CEMLRest;
 import eu.linksmart.services.event.feeder.RestEventFeeder;
 import eu.linksmart.services.event.feeder.RestStatementFeeder;
-import eu.linksmart.services.event.datafusion.core.DataProcessingCore;
+import eu.linksmart.services.event.core.DataProcessingCore;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;

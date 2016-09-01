@@ -1,10 +1,10 @@
-package eu.linksmart.services.event.datafusion.intern;
+package eu.linksmart.services.event.intern;
 
 
 
 
-import eu.linksmart.services.event.datafusion.feeder.FeederConst;
-import eu.linksmart.services.event.datafusion.handler.HandlerConst;
+import eu.linksmart.services.event.feeder.FeederConst;
+import eu.linksmart.services.event.handler.HandlerConst;
 
 
 /**
