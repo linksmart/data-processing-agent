@@ -4,7 +4,7 @@ import eu.almanac.event.cep.esper.EsperEngine;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.datafusion.types.EventType;
+import eu.linksmart.api.event.types.EventType;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.time.DateUtils;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptorInstance;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import weka.core.Attribute;
 
 public class AttributeStructure extends ClassesDescriptorInstance implements DataDescriptor {
