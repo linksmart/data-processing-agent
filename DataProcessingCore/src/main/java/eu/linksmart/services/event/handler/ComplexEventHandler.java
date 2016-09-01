@@ -10,6 +10,7 @@ import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.components.Serializer;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.event.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.configuration.Configurator;
 
 import java.util.*;

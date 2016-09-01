@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.api.event.components.Deserializer;
 import eu.linksmart.api.event.types.EventType;
 import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.event.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import sun.security.pkcs.ParsingException;
@@ -20,12 +22,12 @@ public class EventMqttObserver extends IncomingMqttObserver {
     protected Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();
     protected Map<String,String> classToAlias= new Hashtable<String, String>();
 
-    private ObjectMapper mapper = new ObjectMapper();
+    Deserializer deserializer = new DefaultDeserializer();
     private Map<String, Class> compiledTopicClass = new Hashtable<>();
 
     public EventMqttObserver() throws MalformedURLException, MqttException, InstantiationException {
 
-        mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
+
         try {
             LoadTypesIntoEngines();
         } catch (InstantiationException e) {
@@ -36,22 +38,22 @@ public class EventMqttObserver extends IncomingMqttObserver {
 
     protected void mangeEvent(String topic,byte[] rawEvent) {
           try {
-          if(mapper==null)
-                mapper = new ObjectMapper();
+          if(deserializer==null)
+              deserializer = new DefaultDeserializer();
             Object event=null;
             if(!compiledTopicClass.containsKey(topic)) {
                 if(topicToClass.isEmpty())
-                    event = mapper.readValue(rawEvent, Observation.class);
+                    event = deserializer.deserialize(rawEvent, Observation.class);
                 else
                     for (Topic t : topicToClass.keySet()) {
                         if (t.equals(topic)) {
-                            event = mapper.readValue(rawEvent, topicToClass.get(t));
+                            event = deserializer.deserialize(rawEvent, topicToClass.get(t));
                             compiledTopicClass.put(topic, topicToClass.get(t));
                             break;
                         }
                     }
             }else{
-                event = mapper.readValue(rawEvent, compiledTopicClass.get(topic));
+                event = deserializer.deserialize(rawEvent, compiledTopicClass.get(topic));
             }
 
             if(event!=null) {
