@@ -211,7 +211,7 @@ import java.util.*;
         ComplexEventHandler handler=null;
         // add the query and the listener for the query
         if(statement.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS) {
-            statement.setCEHandler("eu.almanac.event.datafusion.handler.ComplexEventSynchHandler");
+            //statement.setCEHandler("eu.linksmart.services.event.datafusion.handler.ComplexEventSynchHandler");
             Class clazz = Class.forName(statement.getCEHandler());
             Constructor constructor = clazz.getConstructor(Statement.class);
             handler = (ComplexEventHandler) constructor.newInstance(statement);
