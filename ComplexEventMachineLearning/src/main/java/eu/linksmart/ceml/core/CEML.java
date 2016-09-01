@@ -6,16 +6,14 @@ import java.util.stream.Collectors;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import eu.almanac.event.datafusion.intern.DynamicConst;
+import eu.linksmart.services.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.datafusion.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.datafusion.exceptions.StatementException;
 import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.datafusion.types.*;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -38,7 +36,6 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.slf4j.Logger;
-import sun.security.pkcs.ParsingException;
 
 /**
  * Created by angel on 13/11/15.

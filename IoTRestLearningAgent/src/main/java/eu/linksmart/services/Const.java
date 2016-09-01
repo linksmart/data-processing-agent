@@ -1,7 +1,7 @@
 package eu.linksmart.services;
 
-import eu.almanac.event.datafusion.feeder.FeederConst;
-import eu.almanac.event.datafusion.handler.HandlerConst;
+import eu.linksmart.services.event.datafusion.feeder.FeederConst;
+import eu.linksmart.services.event.datafusion.handler.HandlerConst;
 
 /**
  * Created by José Ángel Carvajal on 15.03.2016 a researcher of Fraunhofer FIT.

@@ -1,6 +1,6 @@
 package eu.linksmart.ceml.handlers;
 
-import eu.almanac.event.datafusion.handler.base.BaseListEventHandler;
+import eu.linksmart.services.event.datafusion.handler.base.BaseListEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;

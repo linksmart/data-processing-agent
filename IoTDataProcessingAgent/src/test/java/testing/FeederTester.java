@@ -1,8 +1,8 @@
 package testing;
 
-import eu.almanac.event.datafusion.feeder.EventMqttFeederImpl;
-import eu.almanac.event.datafusion.intern.Const;
-import eu.almanac.event.datafusion.intern.Utils;
+import eu.linksmart.services.event.datafusion.feeder.EventMqttFeederImpl;
+import eu.linksmart.services.event.datafusion.intern.Const;
+import eu.linksmart.services.event.datafusion.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;

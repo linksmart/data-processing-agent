@@ -2,8 +2,8 @@ package eu.linksmart.ceml.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import eu.almanac.event.datafusion.feeder.StatementFeeder;
-import eu.almanac.event.datafusion.intern.DynamicConst;
+import eu.linksmart.services.event.datafusion.feeder.StatementFeeder;
+import eu.linksmart.services.event.datafusion.intern.DynamicConst;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.data.DataDefinition;

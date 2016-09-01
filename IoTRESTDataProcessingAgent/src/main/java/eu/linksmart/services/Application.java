@@ -1,7 +1,7 @@
 package eu.linksmart.services;
 
 import com.google.gson.Gson;
-import eu.almanac.event.datafusion.core.DataProcessingCore;
+import eu.linksmart.services.event.datafusion.core.DataProcessingCore;
 import de.fraunhofer.fit.event.feeder.*;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;

@@ -1,8 +1,8 @@
 package de.fraunhofer.fit.event.feeder;
 
-import eu.almanac.event.datafusion.feeder.StatementFeeder;
-import eu.almanac.event.datafusion.intern.DynamicConst;
-import eu.almanac.event.datafusion.intern.Utils;
+import eu.linksmart.services.event.datafusion.feeder.StatementFeeder;
+import eu.linksmart.services.event.datafusion.intern.DynamicConst;
+import eu.linksmart.services.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.datafusion.components.CEPEngine;
 import eu.linksmart.api.event.datafusion.components.Feeder;
