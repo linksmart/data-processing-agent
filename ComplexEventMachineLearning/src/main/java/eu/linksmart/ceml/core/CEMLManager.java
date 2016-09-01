@@ -336,9 +336,13 @@ public class CEMLManager implements CEMLRequest {
                             throw new UnknownException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
                     else if (exception instanceof UnknownUntraceableException)
                         throw new UnknownUntraceableException(message, exception);
-                }else
-                    throw new UnknownUntraceableException(message);
-
+                }else {
+                    if (response != null){
+                        response.getResponsesTail().setMessage(message);
+                        throw new ErrorResponseException(response.getResponsesTail());
+                    }else
+                        throw new UnknownUntraceableException(message);
+                }
             }
         }
 

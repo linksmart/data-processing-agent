@@ -1,6 +1,7 @@
 package eu.linksmart.api.event.datafusion.types.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.datafusion.types.HTTPResponses;
 
 import java.util.ArrayList;
@@ -12,9 +13,12 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 15.07.2016 a researcher of Fraunhofer FIT.
  */
 public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Map<String,ResourceObject>> {
+    @JsonIgnore
     Collection<GeneralRequestResponse> generalRequestResponses = new ArrayList<>();
+    @JsonIgnore
     Map<String,ResourceObject> resources= new Hashtable<>();
-    int overallStatus = 0;
+    @JsonIgnore
+    int  overallStatus = 0;
 
     boolean containsSuccess = false;
 
@@ -23,14 +27,6 @@ public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Ma
         this.resources = resources;
     }
     public MultiResourceResponses() {
-    }
-    @Override
-    public Collection<GeneralRequestResponse> getResponses() {
-        return generalRequestResponses;
-    }
-    @Override
-    public GeneralRequestResponse getResponsesTail() {
-        return ((ArrayList<GeneralRequestResponse>)generalRequestResponses).get(generalRequestResponses.size()-1);
     }
     @Override
     public void setResponses(Collection<GeneralRequestResponse> generalRequestResponses) {
@@ -54,11 +50,23 @@ public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Ma
     }
 
     @Override
+    @JsonProperty
+    public Collection<GeneralRequestResponse> getResponses() {
+        return generalRequestResponses;
+    }
+    @Override
+    @JsonIgnore
+    public GeneralRequestResponse getResponsesTail() {
+        return ((ArrayList<GeneralRequestResponse>)generalRequestResponses).get(generalRequestResponses.size()-1);
+    }
+    @Override
+    @JsonProperty
     public int getOverallStatus() {
         return overallStatus;
     }
 
     @Override
+    @JsonProperty
     public Map<String, ResourceObject> getResources() {
         return resources;
     }
@@ -79,7 +87,7 @@ public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Ma
             this.resources = new Hashtable<>();
         resources.put(key, resource);
     }
-
+    @JsonIgnore
     public boolean containsSuccess() {
         return containsSuccess;
     }

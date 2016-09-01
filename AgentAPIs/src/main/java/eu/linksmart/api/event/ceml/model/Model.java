@@ -20,7 +20,7 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
         if(!loadedModels.containsKey(name)) {
             Class.forName("eu.linksmart.ceml.models."+name);
         }
-        return loadedModels.get(name).getConstructor(targetRequests.getClass(),Map.class).newInstance(targetRequests,parameters);
+        return loadedModels.get(name).getConstructor(List.class,Map.class).newInstance(targetRequests,parameters);
         //throw new Exception("No valid models had been loaded");
    }
 
