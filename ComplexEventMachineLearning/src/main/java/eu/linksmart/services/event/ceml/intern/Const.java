@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.intern;
+package eu.linksmart.services.event.ceml.intern;
 
 /**
  * Created by José Ángel Carvajal on 18.12.2015 a researcher of Fraunhofer FIT.

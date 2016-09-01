@@ -7,7 +7,7 @@ import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.datafusion.types.Statement;
-import eu.linksmart.ceml.intern.Const;
+import eu.linksmart.services.event.ceml.intern.Const;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;

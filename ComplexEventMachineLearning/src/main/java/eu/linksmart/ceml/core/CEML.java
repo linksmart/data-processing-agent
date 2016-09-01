@@ -29,7 +29,7 @@ import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
 import eu.linksmart.services.event.ceml.api.MqttCemlAPI;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
-import eu.linksmart.ceml.intern.Const;
+import eu.linksmart.services.event.ceml.intern.Const;
 import org.apache.commons.math3.filter.*;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
