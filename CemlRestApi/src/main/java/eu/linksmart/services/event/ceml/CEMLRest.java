@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.event.ceml;
+package eu.linksmart.services.event.ceml;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;

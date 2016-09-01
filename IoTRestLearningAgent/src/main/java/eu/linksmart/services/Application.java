@@ -1,7 +1,7 @@
 package eu.linksmart.services;
 
 import com.google.gson.Gson;
-import de.fraunhofer.fit.event.ceml.CEMLRest;
+import eu.linksmart.services.event.ceml.CEMLRest;
 import de.fraunhofer.fit.event.feeder.RestEventFeeder;
 import de.fraunhofer.fit.event.feeder.RestStatementFeeder;
 import eu.linksmart.services.event.datafusion.core.DataProcessingCore;
