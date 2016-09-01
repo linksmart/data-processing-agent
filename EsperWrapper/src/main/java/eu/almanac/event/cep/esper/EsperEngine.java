@@ -257,7 +257,7 @@ import java.util.*;
                     epl = epService.getEPAdministrator().createEPL(statement.getStatement(), statement.getID());
 
                 }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),statement.getID(),e.getCause());
+                    throw new StatementException(e.getMessage(),statement.getID(),e );
                 }
                 if (handler != null) {
                     epl.setSubscriber(handler);

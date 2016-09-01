@@ -3,6 +3,8 @@ package eu.linksmart.ceml.models.data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import weka.core.Attribute;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class ClassesAttributeStructure extends  AttributeStructure {
     }
 
     @Override
-    public ClassesDescriptor build() throws Exception {
+    public ClassesDescriptor build() throws StatementException, UntraceableException {
         super.build();
         if (attributesClasses != null)
             if (!attributesClasses.isEmpty()) {

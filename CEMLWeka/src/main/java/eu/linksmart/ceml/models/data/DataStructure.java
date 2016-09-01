@@ -3,6 +3,8 @@ package eu.linksmart.ceml.models.data;
 import com.fasterxml.jackson.annotation.*;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 import weka.core.Attribute;
@@ -87,7 +89,7 @@ public class DataStructure extends DataDefinition {
         return instances;
     }
 
-    public DataStructure build() throws Exception {
+    public DataStructure build() throws TraceableException, UntraceableException {
         super.build();
         ArrayList<AttributeStructure> temp= new ArrayList<>();
         boolean isTarget = false;

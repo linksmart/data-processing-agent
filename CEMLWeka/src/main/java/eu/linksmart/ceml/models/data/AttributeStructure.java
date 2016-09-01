@@ -7,6 +7,8 @@ import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptorInstance;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptorInstance;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import weka.core.Attribute;
 
 public class AttributeStructure extends ClassesDescriptorInstance implements DataDescriptor {
@@ -67,7 +69,7 @@ public class AttributeStructure extends ClassesDescriptorInstance implements Dat
 
 
         }
-        public ClassesDescriptor build() throws Exception {
+        public ClassesDescriptor build() throws StatementException, UntraceableException {
             super.build();
 
             attribute = new Attribute(name);

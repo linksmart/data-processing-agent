@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
+import eu.linksmart.api.event.datafusion.exceptions.InternalException;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
 import eu.linksmart.ceml.models.data.DataStructure;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
@@ -36,8 +40,8 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
     @JsonPropertyDescription("Evaluator definition and current evaluation status")
     @JsonProperty(value = "Evaluation")
    // public Evaluator evaluation;
-    private Configurator conf = Configurator.getDefaultConfig();
-    static private Logger loggerService = Utils.initLoggingConf(GeneralWekaModel.class);
+    private transient Configurator conf = Configurator.getDefaultConfig();
+    static transient private Logger loggerService = Utils.initLoggingConf(GeneralWekaModel.class);
     public GeneralWekaModel(ArrayList<TargetRequest> targets,Map<String,Object> parameters) {
         super(targets,parameters,new DoubleTumbleWindowEvaluator(targets));
     }
@@ -49,18 +53,25 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
 
 
     }
-    public GeneralWekaModel build() throws Exception {
+    public GeneralWekaModel build() throws TraceableException, UntraceableException {
 
         // TODO: do this with new API
+        try {
 
+            initialize();
+            descriptors =new DataStructure( descriptors);
+            descriptors.build();
 
-        initialize();
-        descriptors =new DataStructure( descriptors);
-        descriptors.build();
+            ((Classifier)lerner).buildClassifier(((DataStructure) descriptors).getInstances());
 
-        ((Classifier)lerner).buildClassifier(((DataStructure) descriptors).getInstances());
-
-         return this;
+            return this;
+        }catch (TraceableException|UntraceableException e){
+            throw  e;
+        }catch (ClassNotFoundException| IllegalAccessException| InstantiationException e){
+            throw new InternalException(this.getName(),this.getClass().getName(),e.getMessage(),e);
+        }catch (Exception e){
+            throw new UnknownException(this.getName(),this.getClass().getName(),e.getMessage(),e);
+        }
     }
     static public Instance createInstance(int n, Instances instances){
         Instance inst = new DenseInstance(n);
