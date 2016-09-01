@@ -1,15 +1,21 @@
 package eu.linksmart.ceml.core;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.almanac.event.datafusion.intern.DynamicConst;
+import eu.linksmart.api.event.datafusion.exceptions.ErrorResponseException;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.datafusion.types.*;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -32,6 +38,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.slf4j.Logger;
+import sun.security.pkcs.ParsingException;
 
 /**
  * Created by angel on 13/11/15.
@@ -83,7 +90,22 @@ public class CEML implements AnalyzerComponent {
         MultiResourceResponses<CEMLRequest> responses = new MultiResourceResponses<>();
         try {
             request.build();
-        } catch (Exception e) {
+        } catch (ErrorResponseException e) {
+            loggerService.error(e.getMessage(),e);
+            responses = new MultiResourceResponses<>();
+            responses.addResponse(new GeneralRequestResponse(e.getRequestResponse().getHeadline(),e.getRequestResponse().getAgentID(),e.getErrorProducerId(),e.getErrorProducerType(), e.getMessage(), e.getRequestResponse().getStatus()));
+            return responses;
+        }catch (StatementException e) {
+            loggerService.error(e.getMessage(),e);
+            responses = new MultiResourceResponses<>();
+            responses.addResponse(new GeneralRequestResponse("Bad Request", DynamicConst.getId(),e.getErrorProducerId(),e.getErrorProducerType(), e.getMessage(), 400));
+            return responses;
+        }catch (TraceableException e) {
+            loggerService.error(e.getMessage(),e);
+            responses = new MultiResourceResponses<>();
+            responses.addResponse(new GeneralRequestResponse("Internal Server Error", DynamicConst.getId(),e.getErrorProducerId(),e.getErrorProducerType(), e.getMessage(), 500));
+            return responses;
+        }catch (Exception e) {
             loggerService.error(e.getMessage(),e);
             responses = new MultiResourceResponses<>();
             responses.addResponse(new GeneralRequestResponse("Internal Server Error", DynamicConst.getId(),null,"Agent", e.getMessage(), 500));
@@ -96,7 +118,7 @@ public class CEML implements AnalyzerComponent {
 
 
     }
-    public static MultiResourceResponses<CEMLRequest> create(String name, String body, String requestType){
+    public static MultiResourceResponses<CEMLRequest> create(String name, String body, String requestType)  {
         MultiResourceResponses<CEMLRequest> result ;
         CEMLRequest request;
         try {
@@ -109,8 +131,13 @@ public class CEML implements AnalyzerComponent {
                     request.setName(name);
                     result = create(request);
             }
+        } catch (IOException e){
+            loggerService.error(e.getMessage(), e);
+            result = new MultiResourceResponses<>();
+            result.addResponse(new GeneralRequestResponse("Bad Request",DynamicConst.getId(),name, "Learning Request","Error 400 Bad Request: Error while parsing request  " + e.getMessage(),400 ));
 
-        }catch (Exception e){
+        }
+        catch (Exception e){
             loggerService.error(e.getMessage(), e);
             result = new MultiResourceResponses<>();
             result.addResponse(new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));

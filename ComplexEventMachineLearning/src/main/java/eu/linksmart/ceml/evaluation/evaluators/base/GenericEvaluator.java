@@ -1,6 +1,9 @@
 package eu.linksmart.ceml.evaluation.evaluators.base;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
 import eu.linksmart.ceml.evaluation.evaluators.WindowEvaluator;
 import eu.linksmart.ceml.evaluation.metrics.base.EvaluationMetricBase;
@@ -78,19 +81,25 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
 
 
     @Override
-    public Evaluator<T> build() throws Exception {
-        samples = evaluationAlgorithms.get(Samples.class.getSimpleName());
-        for(TargetRequest target:targets){
-            String algorithm = this.getClass().getCanonicalName()+"$"+target.getName();
+    public Evaluator<T> build() throws TraceableException,UntraceableException {
+        try {
 
-            evaluationAlgorithms.put(
-                    target.getName(),
-                    (EvaluationMetricBase<Double>) instanceEvaluationAlgorithm(algorithm,target.getMethod(),target.getThreshold())
-            );
+            samples = evaluationAlgorithms.get(Samples.class.getSimpleName());
+            for(TargetRequest target:targets){
+                String algorithm = this.getClass().getCanonicalName()+"$"+target.getName();
+
+                evaluationAlgorithms.put(
+                        target.getName(),
+                        (EvaluationMetricBase<Double>) instanceEvaluationAlgorithm(algorithm,target.getMethod(),target.getThreshold())
+                );
 
 
-        }
+            }
         return this;
+
+        }catch (Exception e){
+            throw new UnknownUntraceableException(e.getMessage(),e);
+        }
     }
 
     @Override

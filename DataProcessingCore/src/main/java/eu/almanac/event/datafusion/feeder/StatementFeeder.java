@@ -2,7 +2,10 @@ package eu.almanac.event.datafusion.feeder;
 
 
 import eu.almanac.event.datafusion.intern.DynamicConst;
+import eu.linksmart.api.event.datafusion.exceptions.InternalException;
 import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.datafusion.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.types.Statement;
@@ -213,7 +216,12 @@ public class StatementFeeder implements Feeder {
         try {
             if (org==null) {
                 if (!dfw.addStatement(result.getHeadResource())) {
-                    result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 500, "Intern Server Error", "Ups we have a problem"));
+                    if(dfw.getStatements().containsKey(result.getHeadResource().getID()))
+                        result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 304, "Not modified", "This exact statement already exists in this agent"));
+                    else if (result.getHeadResource().getStateLifecycle() == Statement.StatementLifecycle.REMOVE)
+                        result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 400, "Bad Request", "The remove statement with id "+result.getHeadResource().getID()+" does not exist"));
+                    else
+                        result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 500, "Internal Server Error", "Oops we have a problem"));
                 }
                 loggerService.info("Statement " + result.getHeadResource().getID() + " was successful");
                 result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getID(), 201, "Created", "Statement " + result.getHeadResource().getID() + " was successful"));
@@ -233,41 +241,51 @@ public class StatementFeeder implements Feeder {
 
                     }
                 }
-
                 if (result.getResponses().isEmpty() && org.getSource() != null && !org.getSource().equals(result.getHeadResource().getSource())) {
+                    // if no response had being created, and the source had not being changed
                      dfw.getStatements().get(id).setSource(result.getHeadResource().getSource());
-
                 }
                 if (result.getResponses().isEmpty() && org.getSource() != null && !org.getSource().equals(result.getHeadResource().getSource())) {
+                    // TODO: update the source property
                     loggerService.error("Statement " + result.getHeadResource().getID() + " try to change an outdated statement property");
-                    result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 400, "Bad Request", "The source property is an deprecated property"));
+                    result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 500, "Internal Server Error", "The source property is not available in this agent version"));
 
                 }
                 if (result.getResponses().isEmpty() && org.getName() != null && !org.getName().equals(result.getHeadResource().getName())) {
+                    // the name of the statement had being change. Then we update it.
                      dfw.getStatements().get(id).setName(result.getHeadResource().getName());
-
                 }
                 if (result.getResponses().isEmpty()) {
+                    // if there is any other change in other property is irrelevant, so is consider successful.
                     loggerService.info("Statement " + result.getHeadResource().getID() + " was successful");
-                    result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getID(), 200, "OK", "Statement " + result.getHeadResource().getID() + " was successful"));
+                    result.addResponse(createSuccessMapMessage(result.getHeadResource().getID(), "Statement", result.getHeadResource().getID(), 200, "OK", "Statement " + result.getHeadResource().getID() + " was successful"));
                 }
                 if (result.getResponses().isEmpty() && org.getTargetAgents() != null && !org.getTargetAgents().equals(result.getHeadResource().getTargetAgents()) && !result.getHeadResource().getTargetAgents().isEmpty()) {
                     if (result.getHeadResource().getTargetAgents().contains(DynamicConst.getId())) {
+                        // the statement addresses me as processing agent
                          dfw.getStatements().get(id).setTargetAgents(result.getHeadResource().getTargetAgents());
                     } else {
+                        // the statement doesn't address me as processing agent
                         loggerService.warn("Statement " + result.getHeadResource().getID() + " was not modified because I was not addressed in the request.");
-                        result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 100, "Not Modified", "The resource is located at the server but the request do not address my as processing agent of the request. If this request was intent to be an implicit DELETE request, this message should be read as Bad Request 400"));
+                        result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 100, "Not Modified", "The resource is located at the server but the request do not address me as processing agent of the request. If this request was intent to be an implicit DELETE request, this message should be read as Bad Request 400"));
                     }
                 }
 
             }
 
         } catch (StatementException se) {
-            result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 400, se.getErrorProducerId(), se.getMessage()));
+            result.addResponse(createErrorMapMessage(se.getErrorProducerId(), se.getErrorProducerType(), 400, "Bad Request", se.getMessage()));
             loggerService.error(se.getMessage(), se);
-        } catch (Exception e) {
+
+        }catch (InternalException e) {
             loggerService.error(e.getMessage(), e);
-            result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 500, "Intern Server Error", e.getMessage()));
+            result.addResponse(createErrorMapMessage(e.getErrorProducerId(), e.getErrorProducerType(), 500, "Intern Server Error", e.getMessage()));
+        }catch (UnknownException e){
+            loggerService.error(e.getMessage(), e);
+            result.addResponse(createErrorMapMessage(e.getErrorProducerId(), e.getErrorProducerType(), 500, "Unexpected Intern Server Error", e.getMessage()));
+        }catch (Exception e){
+            loggerService.error(e.getMessage(), e);
+            result.addResponse(createErrorMapMessage(dfw.getName(), "CEPEngine", 500, "Unknown Source Intern Server Error", e.getMessage()));
         }
     }
     public static MultiResourceResponses<Statement>  addNewStatement(/*@NotNull*/ String stringStatement,/*@Nullable*/ String id,/*@Nullable*/ String cepEngine){

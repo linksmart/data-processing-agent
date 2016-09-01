@@ -156,7 +156,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
 
 
     @Override
-    public JsonSerializable build() throws Exception {
+    public JsonSerializable build()  {
         //TODO auto-generated
         return null;
     }

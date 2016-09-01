@@ -1,6 +1,9 @@
 package eu.linksmart.ceml.evaluation.evaluators;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.ceml.evaluation.evaluators.base.GenericEvaluator;
 import eu.linksmart.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
@@ -25,7 +28,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
     }
 
     @Override
-    public RegressionEvaluator build() throws Exception {
+    public RegressionEvaluator build() throws UntraceableException, TraceableException {
          super.build();
 
         return this;

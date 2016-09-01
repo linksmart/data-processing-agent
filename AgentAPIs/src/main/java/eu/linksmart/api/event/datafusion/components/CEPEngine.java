@@ -1,5 +1,7 @@
 package eu.linksmart.api.event.datafusion.components;
 
+import eu.linksmart.api.event.datafusion.exceptions.InternalException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownException;
 import eu.linksmart.api.event.datafusion.types.EventType;
 import eu.linksmart.api.event.datafusion.types.Statement;
 import eu.linksmart.api.event.datafusion.exceptions.StatementException;
@@ -75,7 +77,7 @@ public interface CEPEngine extends AnalyzerComponent {
 	 * 
 	 * @return <code>true</code> if the query is successfully deployed in the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addStatement( Statement query) throws StatementException;
+	public boolean addStatement( Statement query) throws StatementException, UnknownException, InternalException;
 
     public boolean removeStatement( String id) throws StatementException;
 

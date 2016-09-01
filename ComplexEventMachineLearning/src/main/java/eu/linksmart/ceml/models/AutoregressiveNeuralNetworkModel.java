@@ -7,6 +7,9 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.ceml.evaluation.evaluators.RegressionEvaluator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -232,38 +235,42 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
 
     @Override
-    public AutoregressiveNeuralNetworkModel build() throws Exception {
+    public AutoregressiveNeuralNetworkModel build() throws UntraceableException,TraceableException {
+        try {
+            int seasonalityPeriod= 168;
+            int P = descriptors.getInputSize()/seasonalityPeriod;
+            int p = 48;
+            int numNodes=24;
 
-        int seasonalityPeriod= 168;
-        int P = descriptors.getInputSize()/seasonalityPeriod;
-        int p = 48;
-        int numNodes=24;
 
+            ArP = p;
+            ArSeasonalP = P;
+            numInputsPerNet = p + (P * numOutputsPerNet);
+            this.seasonalityPeriod = seasonalityPeriod;
 
-        ArP = p;
-        ArSeasonalP = P;
-        numInputsPerNet = p + (P * numOutputsPerNet);
-        this.seasonalityPeriod = seasonalityPeriod;
+            int numNnets = descriptors.getTargetSize() / numOutputsPerNet;
 
-        int numNnets = descriptors.getTargetSize() / numOutputsPerNet;
+            if(parameters.containsKey(MAX_INPUT_STR))
+                maxInputValue = (Double) parameters.get(MAX_INPUT_STR);
+            if(parameters.containsKey(MIN_INPUT_STR))
+                minInputValue = (Double) parameters.get(MIN_INPUT_STR);
 
-        if(parameters.containsKey(MAX_INPUT_STR))
-            maxInputValue = (Double) parameters.get(MAX_INPUT_STR);
-        if(parameters.containsKey(MIN_INPUT_STR))
-            minInputValue = (Double) parameters.get(MIN_INPUT_STR);
+            lerner = new ArrayList<>(numNnets);
+            for (int i = 0; i < numNnets; i++) {
+                // Switch these two options to do different functions with different
+                // networks
 
-        lerner = new ArrayList<>(numNnets);
-        for (int i = 0; i < numNnets; i++) {
-            // Switch these two options to do different functions with different
-            // networks
+                final MultiLayerConfiguration conf = getSimpleDenseLayerNetworkConfiguration(numNodes);
 
-            final MultiLayerConfiguration conf = getSimpleDenseLayerNetworkConfiguration(numNodes);
+                // Create the network
+                MultiLayerNetwork nnet = new MultiLayerNetwork(conf);
+                nnet.init();
 
-            // Create the network
-            MultiLayerNetwork nnet = new MultiLayerNetwork(conf);
-            nnet.init();
+                lerner.add(nnet);
+            }
 
-            lerner.add(nnet);
+        }catch (Exception e){
+            throw new UnknownUntraceableException(e.getMessage(),e);
         }
         super.build();
         return this;

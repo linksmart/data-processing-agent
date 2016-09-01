@@ -3,6 +3,9 @@ package eu.linksmart.api.event.datafusion.types.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 import eu.linksmart.api.event.datafusion.types.Statement;
 
@@ -240,7 +243,7 @@ public class StatementInstance implements Statement {
     }
 
     @Override
-    public JsonSerializable build() throws Exception {
+    public JsonSerializable build() throws TraceableException, UntraceableException {
         return this;
     }
 

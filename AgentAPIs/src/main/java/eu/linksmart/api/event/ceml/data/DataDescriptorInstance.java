@@ -1,6 +1,8 @@
 package eu.linksmart.api.event.ceml.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.Date;
@@ -67,9 +69,9 @@ public class DataDescriptorInstance implements DataDescriptor {
     }
 
     @Override
-    public DataDescriptor build() throws Exception {
+    public DataDescriptor build() throws UntraceableException, StatementException {
         if(name==null)
-            throw new Exception("The name is a mandatory field!");
+            throw new StatementException(this.getClass().getName(), this.getClass().getCanonicalName(),"The name is a mandatory field for the data descriptor!");
 
         javaType =DescriptorTypes.getNativeType(type);
 

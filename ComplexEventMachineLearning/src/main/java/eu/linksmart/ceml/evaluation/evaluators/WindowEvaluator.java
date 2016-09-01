@@ -4,6 +4,10 @@ import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.ceml.evaluation.evaluators.base.GenericEvaluator;
 import eu.linksmart.ceml.evaluation.metrics.base.ClassEvaluationMetricBase;
 import eu.linksmart.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
@@ -120,20 +124,24 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
    // @SuppressWarnings("unchecked")
     @Override
-    public WindowEvaluator build() throws Exception {
+    public WindowEvaluator build() throws TraceableException, UntraceableException {
         //classes = new ArrayList<>(namesClasses);
+        try {
 
-        if(classes==null|| classes.isEmpty())
-            throw new Exception("Classes is a mandatory field for WindowEvaluator");
+            if(classes==null|| classes.isEmpty())
+                throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(),"Classes is a mandatory field for WindowEvaluator");
 
-        confusionMatrix= new double[classes.size()][classes.size()];
-        sequentialConfusionMatrix = new long[classes.size()][4];
-        for(int i=0; i<classes.size();i++) {
+            confusionMatrix= new double[classes.size()][classes.size()];
+            sequentialConfusionMatrix = new long[classes.size()][4];
+            for(int i=0; i<classes.size();i++) {
 
-            sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]  = 0;
-            sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()]  = 0;
-            sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
-            sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]  = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()]  = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
+            }
+        }catch (Exception e){
+            throw new UnknownUntraceableException(e.getMessage(),e);
         }
 
         super.build();

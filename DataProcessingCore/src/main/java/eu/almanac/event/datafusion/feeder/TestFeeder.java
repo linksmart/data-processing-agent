@@ -66,7 +66,7 @@ public class TestFeeder implements Feeder, Runnable {
         for (CEPEngine dfw : dataFusionWrappers.values())
             try {
                 dfw.addStatement(statement);
-            } catch (StatementException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

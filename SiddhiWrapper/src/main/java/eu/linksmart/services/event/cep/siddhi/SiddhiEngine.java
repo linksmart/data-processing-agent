@@ -140,7 +140,7 @@ public class SiddhiEngine extends Component implements CEPEngine {
                     siddhiHeaderStreamDefinition += ");";
                 }
             }else //TODO: check which is the correct general error topic
-                throw new StatementException(STATEMENT_INOUT_BASE_TOPIC,"The type "+type+" of attribute "+name+" is not supported by Siddhi");
+                throw new StatementException(this.getName(),"CEEngine","The type "+type+" of attribute "+name+" is not supported by Siddhi");
         }
         typeNameSiddhiDeffinition.put(nameType,siddhiHeaderStreamDefinition);
 
@@ -167,7 +167,7 @@ public class SiddhiEngine extends Component implements CEPEngine {
     public synchronized boolean  addStatement(Statement query) throws StatementException {
 
         if(query.getInput() != null && query.getInput().length!=0) {
-            throw new StatementException(STATEMENT_INOUT_BASE_TOPIC + query.getID(), "Input non default type not yet available");
+            throw new StatementException( query.getID(), "Statement", "Input non default type not yet available");
         }else if(!hashStatement.containsKey(query.getID())){
             hashStatement.put(query.getID(), query);
             hashExecutionPlanRuntime.put(query.getID(),siddhiManager.createExecutionPlanRuntime(typeNameSiddhiDeffinition.get(DEFAULT_TYPE)+query.getStatement()));

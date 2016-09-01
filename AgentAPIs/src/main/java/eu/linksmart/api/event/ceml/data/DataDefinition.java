@@ -1,6 +1,9 @@
 package eu.linksmart.api.event.ceml.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 
 import java.util.ArrayList;
@@ -149,7 +152,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
     }
 
     @Override
-    public JsonSerializable build() throws Exception {
+    public JsonSerializable build() throws TraceableException, UntraceableException {
         if((inputSize==-1)&&(totalInputSize==-1)&&(targetSize==-1)) {
 
             for (DataDescriptor descriptor : this)

@@ -8,6 +8,9 @@ import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 
 
 import java.util.*;
@@ -103,9 +106,9 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
 
     @Override
-    public Model<Input, Output, LearningObject> build() throws Exception {
+    public Model<Input, Output, LearningObject> build() throws TraceableException, UntraceableException {
         if(descriptors== null || !descriptors.isEmpty() ||evaluator== null  || lerner == null)
-            throw new Exception("For the model the descriptors, evaluator and learner are mandatory fields!");
+            throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(),"For the model the descriptors, evaluator and learner are mandatory fields!");
 
         nativeType = (Class<LearningObject>) lerner.getClass();
 

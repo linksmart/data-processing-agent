@@ -6,19 +6,19 @@ package eu.linksmart.api.event.datafusion.exceptions;
 public class StatementException extends TraceableException {
 
 
-    public StatementException(String errorProducerId, String message) {
-        super(errorProducerId, message);
+    public StatementException(String errorProducerId, String errorProducerType, String message) {
+        super(errorProducerId, errorProducerType, message);
     }
 
-    public StatementException(String message, String errorProducerId, Throwable cause) {
-        super(message, errorProducerId, cause);
+    public StatementException(String errorProducerId, String errorProducerType, String message, Throwable cause) {
+        super(errorProducerId, errorProducerType, message, cause);
     }
 
-    public StatementException(Throwable cause, String errorProducerId) {
-        super(cause, errorProducerId);
+    public StatementException(String errorProducerId, String errorProducerType, Throwable cause) {
+        super(errorProducerId, errorProducerType, cause);
     }
 
-    public StatementException(String message, String errorProducerId, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, errorProducerId, cause, enableSuppression, writableStackTrace);
+    public StatementException(String errorProducerId, String errorProducerType, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(errorProducerId, errorProducerType, message, cause, enableSuppression, writableStackTrace);
     }
 }

@@ -3,6 +3,8 @@ package eu.linksmart.api.event.ceml.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 
 import java.util.ArrayList;
 
@@ -86,9 +88,9 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
 
 
     @Override
-    public ClassesDescriptor build() throws Exception {
+    public ClassesDescriptor build() throws StatementException, UntraceableException {
         if(classes==null|| classes.isEmpty())
-            throw new Exception("The classes is a mandatory field!");
+            throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(), "The classes is a mandatory field for the clasess descriptor!");
         super.build();
 
         return this;

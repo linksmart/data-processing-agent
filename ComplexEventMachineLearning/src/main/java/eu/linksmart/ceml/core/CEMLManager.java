@@ -13,6 +13,7 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.datafusion.components.CEPEngine;
 import eu.linksmart.api.event.datafusion.components.CEPEngineAdvanced;
+import eu.linksmart.api.event.datafusion.exceptions.*;
 import eu.linksmart.api.event.datafusion.types.EventType;
 import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
@@ -147,7 +148,7 @@ public class CEMLManager implements CEMLRequest {
     }
 
     @Override
-    public JsonSerializable build() throws Exception {
+    public JsonSerializable build() throws TraceableException, UnknownUntraceableException {
         boolean[] phasesDone = {false, false, false, false, false, false, false, false, false, false};
         String[] phasesNames ={
                 "pre-requisites", "descriptors building", "auxiliary statement building", "learning statement building",
@@ -285,7 +286,7 @@ public class CEMLManager implements CEMLRequest {
 
 
     }
-    private void errorHandling(boolean[] phasesDone,String[] phasesNames,int[] buildStatements, Exception exception,  MultiResourceResponses<Statement> response)throws Exception{
+    private void errorHandling(boolean[] phasesDone,String[] phasesNames,int[] buildStatements, Exception exception,  MultiResourceResponses<Statement> response)throws TraceableException, UnknownUntraceableException {
         int i =0;
         for(; i<phasesDone.length && phasesDone[i];) i++;
 
@@ -321,7 +322,23 @@ public class CEMLManager implements CEMLRequest {
             }
 
             if (message != null) {
-                throw new Exception(message);
+
+                if(exception!=null) {
+                    if (exception instanceof StatementException || exception instanceof InternalException || exception instanceof UnknownException)
+                        if(response!=null) {
+                            response.getResponsesTail().setMessage(message);
+                            throw new ErrorResponseException(response.getResponsesTail());
+                        }else if (exception instanceof StatementException )
+                            throw new StatementException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
+                        else   if ( exception instanceof InternalException )
+                            throw new InternalException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
+                        else
+                            throw new UnknownException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
+                    else if (exception instanceof UnknownUntraceableException)
+                        throw new UnknownUntraceableException(message, exception);
+                }else
+                    throw new UnknownUntraceableException(message);
+
             }
         }
 

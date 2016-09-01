@@ -1,6 +1,10 @@
 package eu.linksmart.ceml.statements;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import eu.linksmart.ceml.handlers.ListLearningHandler;
 import eu.linksmart.ceml.handlers.MapLearningHandler;
 import eu.linksmart.ceml.core.CEMLManager;
@@ -24,18 +28,23 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
     }
 
     @Override
-    public JsonSerializable build() throws Exception {
+    public JsonSerializable build() throws TraceableException, UntraceableException{
 
         if(manager==null||name==null||statement==null)
-            throw new Exception("The name, CEMLRequest and statements are mandatory fields!");
-        if(manager.getDescriptors().isLambdaTypeDefinition())
+            throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(), "The name, CEMLRequest and statements are mandatory fields for a Statment!");
+        try {
+
+            if(manager.getDescriptors().isLambdaTypeDefinition())
 
                 CEHandler = ListLearningHandler.class.getCanonicalName();
-        else{
+            else{
 
 
                 CEHandler = MapLearningHandler.class.getCanonicalName();
 
+            }
+        }catch (Exception e){
+            throw new UnknownUntraceableException(e.getMessage(),e);
         }
 
         return this;
