@@ -1,4 +1,4 @@
-package de.fraunhofer.fit.event.feeder;
+package eu.linksmart.services.event.feeder;
 
 import eu.linksmart.services.event.datafusion.feeder.StatementFeeder;
 import eu.linksmart.services.event.datafusion.intern.DynamicConst;
