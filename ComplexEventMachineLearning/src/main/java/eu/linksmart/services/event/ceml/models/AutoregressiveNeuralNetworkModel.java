@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.models;
+package eu.linksmart.services.event.ceml.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;

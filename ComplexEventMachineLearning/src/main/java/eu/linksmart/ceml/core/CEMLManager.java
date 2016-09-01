@@ -18,7 +18,7 @@ import eu.linksmart.api.event.datafusion.types.EventType;
 import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.datafusion.types.Statement;
-import eu.linksmart.ceml.models.AutoregressiveNeuralNetworkModel;
+import eu.linksmart.services.event.ceml.models.AutoregressiveNeuralNetworkModel;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
