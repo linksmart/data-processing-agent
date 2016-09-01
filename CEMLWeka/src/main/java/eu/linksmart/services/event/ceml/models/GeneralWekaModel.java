@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.models;
+package eu.linksmart.services.event.ceml.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -9,8 +9,8 @@ import eu.linksmart.api.event.datafusion.exceptions.InternalException;
 import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
 import eu.linksmart.api.event.datafusion.exceptions.UnknownException;
 import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
-import eu.linksmart.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
-import eu.linksmart.ceml.models.data.DataStructure;
+import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
+import eu.linksmart.services.event.ceml.models.data.DataStructure;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.ModelInstance;

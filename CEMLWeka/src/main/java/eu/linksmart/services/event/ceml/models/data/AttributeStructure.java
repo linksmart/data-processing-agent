@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.models.data;
+package eu.linksmart.services.event.ceml.models.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptorInstance;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
-import eu.linksmart.api.event.ceml.data.DataDescriptorInstance;
 import eu.linksmart.api.event.datafusion.exceptions.StatementException;
 import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
 import weka.core.Attribute;

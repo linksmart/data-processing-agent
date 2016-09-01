@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.models.data;
+package eu.linksmart.services.event.ceml.models.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
