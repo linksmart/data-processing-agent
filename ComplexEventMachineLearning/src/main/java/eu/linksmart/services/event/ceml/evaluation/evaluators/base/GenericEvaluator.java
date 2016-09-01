@@ -1,12 +1,12 @@
-package eu.linksmart.ceml.evaluation.evaluators.base;
+package eu.linksmart.services.event.ceml.evaluation.evaluators.base;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
 import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
-import eu.linksmart.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
-import eu.linksmart.ceml.evaluation.evaluators.WindowEvaluator;
-import eu.linksmart.ceml.evaluation.metrics.base.EvaluationMetricBase;
+import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
+import eu.linksmart.services.event.ceml.evaluation.evaluators.WindowEvaluator;
+import eu.linksmart.services.event.ceml.evaluation.metrics.base.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.services.utils.function.Utils;
@@ -141,14 +141,14 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
         }
         return null;
     }
-    public class Samples extends eu.linksmart.ceml.evaluation.metrics.Samples {
+    public class Samples extends eu.linksmart.services.event.ceml.evaluation.metrics.Samples {
 
         public Samples(ComparisonMethod method, double target) {
             super(method, target);
         }
 
     }
-    public class SlideAfter extends eu.linksmart.ceml.evaluation.metrics.Samples {
+    public class SlideAfter extends eu.linksmart.services.event.ceml.evaluation.metrics.Samples {
 
         public SlideAfter(ComparisonMethod method, double target) {
             super(method, target);

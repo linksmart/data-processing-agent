@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.evaluation.evaluators.base;
+package eu.linksmart.services.event.ceml.evaluation.evaluators.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

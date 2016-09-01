@@ -1,6 +1,6 @@
-package eu.linksmart.ceml.evaluation.metrics;
+package eu.linksmart.services.event.ceml.evaluation.metrics;
 
-import eu.linksmart.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
+import eu.linksmart.services.event.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
 
 public class InitialSamples extends ModelEvaluationMetricBase {
 

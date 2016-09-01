@@ -10,7 +10,7 @@ import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
 import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
-import eu.linksmart.ceml.evaluation.evaluators.RegressionEvaluator;
+import eu.linksmart.services.event.ceml.evaluation.evaluators.RegressionEvaluator;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;

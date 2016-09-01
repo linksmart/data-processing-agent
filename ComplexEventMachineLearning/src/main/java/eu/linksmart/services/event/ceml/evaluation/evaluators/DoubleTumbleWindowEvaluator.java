@@ -1,14 +1,14 @@
-package eu.linksmart.ceml.evaluation.evaluators;
+package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
-import eu.linksmart.ceml.evaluation.evaluators.base.EvaluatorBase;
+import eu.linksmart.services.event.ceml.evaluation.evaluators.base.EvaluatorBase;
 
-import eu.linksmart.ceml.evaluation.metrics.base.EvaluationMetricBase;
+import eu.linksmart.services.event.ceml.evaluation.metrics.base.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TumbleEvaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
-import eu.linksmart.ceml.evaluation.metrics.InitialSamples;
+import eu.linksmart.services.event.ceml.evaluation.metrics.InitialSamples;
 import eu.linksmart.api.event.datafusion.types.JsonSerializable;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;

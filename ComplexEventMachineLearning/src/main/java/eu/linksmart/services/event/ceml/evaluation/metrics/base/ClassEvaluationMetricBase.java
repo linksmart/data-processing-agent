@@ -1,4 +1,4 @@
-package eu.linksmart.ceml.evaluation.metrics.base;
+package eu.linksmart.services.event.ceml.evaluation.metrics.base;
 
 import eu.linksmart.api.event.ceml.evaluation.metrics.ClassEvaluationMetric;
 
