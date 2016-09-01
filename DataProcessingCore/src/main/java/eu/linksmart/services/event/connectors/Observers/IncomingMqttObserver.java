@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.feeder.Observers;
+package eu.linksmart.services.event.connectors.Observers;
 
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;

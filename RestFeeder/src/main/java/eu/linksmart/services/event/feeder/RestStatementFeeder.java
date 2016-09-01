@@ -30,7 +30,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 @RestController
 public class RestStatementFeeder extends Component implements Feeder {
-    protected Map<String, CEPEngine> dataFusionWrappers = new HashMap<>();
     protected static Logger loggerService = Utils.initLoggingConf(RestStatementFeeder.class);
     protected Configurator conf = Configurator.getDefaultConfig();
 
@@ -38,33 +37,11 @@ public class RestStatementFeeder extends Component implements Feeder {
 
     public RestStatementFeeder() {
         super(RestStatementFeeder.class.getSimpleName(), "REST API for insert Statements into the CEP Engines", Feeder.class.getSimpleName());
-        for (CEPEngine wrapper : CEPEngine.instancedEngines.values())
-            dataFusionWrapperSignIn(wrapper);
-    }
 
-    @Override
-    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
 
-        dataFusionWrappers.put(dfw.getName(), dfw);
-
-        //TODO: add code for the OSGi future
-        return true;
-    }
-
-    @Override
-    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
-        dataFusionWrappers.remove(dfw.getName());
-
-        //TODO: add code for the OSGi future
-        return true;
     }
 
 
-
-    @Override
-    public boolean isDown() {
-        return false;
-    }
 
     @RequestMapping(value = "/statement/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getStatements() {

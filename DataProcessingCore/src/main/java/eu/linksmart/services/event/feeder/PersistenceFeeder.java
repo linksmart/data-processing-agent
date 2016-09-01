@@ -123,25 +123,6 @@ public class PersistenceFeeder extends Component implements Feeder {
         }
     }
 
-    @Override
-    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
-        loadFiles(dfw);
-        //TODO: add code for the OSGi future
-        return true;
-    }
-
-    @Override
-    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
-
-        //TODO: add code for the OSGi future
-        return true;
-    }
-
-
-    @Override
-    public boolean isDown() {
-        return false;
-    }
 
 
 }

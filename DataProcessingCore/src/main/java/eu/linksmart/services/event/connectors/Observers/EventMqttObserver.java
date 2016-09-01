@@ -1,11 +1,10 @@
-package eu.linksmart.services.event.feeder.Observers;
+package eu.linksmart.services.event.connectors.Observers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.types.EventType;
-import eu.linksmart.services.event.feeder.Observers.IncomingMqttObserver;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.MqttException;

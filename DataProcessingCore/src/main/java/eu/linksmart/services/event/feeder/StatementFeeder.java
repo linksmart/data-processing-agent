@@ -31,20 +31,7 @@ public class StatementFeeder implements Feeder {
        // super(StatementFeeder.class.getSimpleName(), "Provide intern infrastructure to feed the CEP with learning DF statements ", Feeder.class.getSimpleName(),"CEML");
     }
 
-    @Override
-    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
-        return false;
-    }
 
-    @Override
-    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
-        return false;
-    }
-
-    @Override
-    public boolean isDown() {
-        return true;
-    }
    public static MultiResourceResponses<Statement> feedStatements(Collection<Statement> statements) {
         boolean success =true;
         String retur="";

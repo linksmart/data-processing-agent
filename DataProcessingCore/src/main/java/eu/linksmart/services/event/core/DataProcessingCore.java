@@ -1,7 +1,7 @@
 package eu.linksmart.services.event.core;
 
 import eu.linksmart.api.event.components.IncomingConnector;
-import eu.linksmart.services.event.feeder.MqttIncomingConnectorService;
+import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
 
 import eu.linksmart.services.event.feeder.PersistenceFeeder;
@@ -16,7 +16,6 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -141,10 +140,10 @@ public class DataProcessingCore {
             for (CEPEngine wrapper: CEPEngine.instancedEngines.values()) {
 //                feederImplEvents.dataFusionWrapperSignIn(wrapper);
  //               feederImplQuery.dataFusionWrapperSignIn(wrapper);
-                persistentFeeder.dataFusionWrapperSignIn(wrapper);
+
                 if(conf.getBoolean(Const.TEST_FEEDER)) {
                     testFeeder = new TestFeeder();
-                    testFeeder.dataFusionWrapperSignIn(wrapper);
+
                 }
             }
 

@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.feeder.Observers;
+package eu.linksmart.services.event.connectors.Observers;
 
 import eu.linksmart.services.event.feeder.StatementFeeder;
 import eu.linksmart.services.event.intern.DynamicConst;
@@ -7,9 +7,7 @@ import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
-import org.eclipse.paho.client.mqttv3.MqttException;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 

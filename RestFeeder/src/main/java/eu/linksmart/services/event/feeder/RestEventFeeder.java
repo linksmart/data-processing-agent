@@ -21,7 +21,6 @@ import java.util.Map;
  */
 @RestController
 public class RestEventFeeder extends Component implements Feeder {
-    protected Map<String,CEPEngine> dataFusionWrappers = new HashMap<>();
     protected Logger loggerService = Utils.initLoggingConf(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
 
@@ -29,30 +28,10 @@ public class RestEventFeeder extends Component implements Feeder {
 
     public RestEventFeeder() {
         super(RestEventFeeder.class.getSimpleName(),"REST API for insert HTTP Events into the CEP Engines", Feeder.class.getSimpleName());
-        for(CEPEngine wrapper: CEPEngine.instancedEngines.values())
-        dataFusionWrapperSignIn(wrapper);
+
     }
 
-    @Override
-    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
 
-        dataFusionWrappers.put(dfw.getName(), dfw);
-
-        //TODO: add code for the OSGi future
-        return true;
-    }
-
-    @Override
-    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
-        dataFusionWrappers.remove(dfw.getName());
-
-        //TODO: add code for the OSGi future
-        return true;
-    }
-    @Override
-    public boolean isDown() {
-        return false;
-    }
 
     @RequestMapping(value="event/{federation}/{pi}/{ver}/observation/{thingId}/{streamId}", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addObservation(
@@ -63,7 +42,7 @@ public class RestEventFeeder extends Component implements Feeder {
             @PathVariable("thingId") String thingId,
             @PathVariable("streamId") String streamId
     ) {
-        if( dataFusionWrappers.size()==0)
+        if(  CEPEngine.instancedEngines.size()==0)
             return new ResponseEntity<>("Service Unavailable: No Data-Fusion engine has been deployed", HttpStatus.SERVICE_UNAVAILABLE);
         Observation event;
         int count =0;
@@ -80,7 +59,7 @@ public class RestEventFeeder extends Component implements Feeder {
             loggerService.error(e.getMessage(),e);
             return new ResponseEntity<>("The Observation sent is not OGC SensorThing compliant",HttpStatus.BAD_REQUEST);
         }
-        for (CEPEngine i : dataFusionWrappers.values())
+        for (CEPEngine i : CEPEngine.instancedEngines.values())
             try {
 
                 if(i.addEvent(federation+"/"+pi+"/"+version+"/observation/"+thingId+"/"+streamId, event, event.getClass()))
@@ -94,7 +73,7 @@ public class RestEventFeeder extends Component implements Feeder {
                 engines+=i.getName()+", ";
 
             }
-        return getStandardResponse(engines,error, thingId,count,dataFusionWrappers.size());
+        return getStandardResponse(engines,error, thingId,count, CEPEngine.instancedEngines.size());
     }
     private static ResponseEntity<String> getStandardResponse(String engines,String error, String success, int count, int dfwCount){
 

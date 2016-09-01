@@ -17,22 +17,7 @@ public class TestFeeder implements Feeder, Runnable {
     private final Thread simulation;
     private Map<String, CEPEngine> dataFusionWrappers = new Hashtable<>();
 
-    @Override
-    public boolean dataFusionWrapperSignIn(CEPEngine dfw) {
-        dataFusionWrappers.put(dfw.getName(), dfw);
-        simulation.start();
-        return true;
-    }
 
-    @Override
-    public boolean dataFusionWrapperSignOut(CEPEngine dfw) {
-        return false;
-    }
-
-    @Override
-    public boolean isDown() {
-        return false;
-    }
 
 
     public TestFeeder(){

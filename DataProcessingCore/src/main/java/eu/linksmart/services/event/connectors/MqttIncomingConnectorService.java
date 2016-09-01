@@ -1,7 +1,7 @@
-package eu.linksmart.services.event.feeder;
+package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
-import eu.linksmart.services.event.feeder.Observers.StatementMqttObserver;
+import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
