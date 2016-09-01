@@ -1,8 +1,8 @@
 package eu.linksmart.services.event.datafusion.feeder.type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.types.impl.StatementInstance;
+import eu.linksmart.api.event.types.Statement;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 
 import java.util.ArrayList;

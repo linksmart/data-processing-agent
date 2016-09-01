@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.linksmart.services.event.datafusion.feeder.type.PersistentBean;
 import eu.linksmart.services.event.datafusion.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.datafusion.components.CEPEngine;
-import eu.linksmart.api.event.datafusion.components.Feeder;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.api.event.components.Feeder;
+import eu.linksmart.api.event.types.Statement;
 
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;

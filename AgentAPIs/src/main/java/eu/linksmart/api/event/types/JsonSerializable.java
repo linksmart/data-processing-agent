@@ -1,8 +1,7 @@
-package eu.linksmart.api.event.datafusion.types;
+package eu.linksmart.api.event.types;
 
-import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 
 import java.io.Serializable;
 

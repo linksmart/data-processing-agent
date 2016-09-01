@@ -1,8 +1,8 @@
 package eu.linksmart.services.event.datafusion.handler;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.datafusion.components.Enveloper;
-import eu.linksmart.api.event.datafusion.types.EventType;
+import eu.linksmart.api.event.components.Enveloper;
+import eu.linksmart.api.event.types.EventType;
 
 import java.util.Date;
 

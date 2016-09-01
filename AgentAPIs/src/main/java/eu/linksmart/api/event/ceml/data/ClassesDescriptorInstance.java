@@ -3,8 +3,8 @@ package eu.linksmart.api.event.ceml.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 
 import java.util.ArrayList;
 

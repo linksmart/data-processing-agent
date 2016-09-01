@@ -8,9 +8,9 @@ import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
-import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 
 
 import java.util.*;

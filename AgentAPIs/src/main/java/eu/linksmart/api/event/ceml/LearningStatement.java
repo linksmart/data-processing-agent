@@ -1,7 +1,7 @@
 package eu.linksmart.api.event.ceml;
 
-import eu.linksmart.api.event.datafusion.types.JsonSerializable;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.types.JsonSerializable;
+import eu.linksmart.api.event.types.Statement;
 
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.

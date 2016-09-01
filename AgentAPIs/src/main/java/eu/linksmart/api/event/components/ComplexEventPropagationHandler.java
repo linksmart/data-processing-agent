@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.components;
+package eu.linksmart.api.event.components;
 
 /**
  * Created by Jose Angel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.

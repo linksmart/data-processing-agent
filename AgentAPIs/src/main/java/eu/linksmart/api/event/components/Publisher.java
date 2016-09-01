@@ -1,9 +1,6 @@
-package eu.linksmart.api.event.datafusion.components;
+package eu.linksmart.api.event.components;
 
-import java.util.AbstractMap;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 23.08.2016 a researcher of Fraunhofer FIT.

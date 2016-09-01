@@ -1,8 +1,8 @@
 package eu.linksmart.services.event.cep.siddhi;
 
 import eu.linksmart.services.event.datafusion.handler.ComplexEventHandler;
-import eu.linksmart.api.event.datafusion.types.Statement;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.api.event.exceptions.StatementException;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 

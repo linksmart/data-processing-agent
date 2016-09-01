@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.components;
+package eu.linksmart.api.event.components;
 
 /**
  * This is the part of the API offered by EventFeeder. The EventsFeeder make an abstraction layer between the event provider/s and the CEP-engines.<p>

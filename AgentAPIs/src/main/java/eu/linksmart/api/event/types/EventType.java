@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.types;
+package eu.linksmart.api.event.types;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

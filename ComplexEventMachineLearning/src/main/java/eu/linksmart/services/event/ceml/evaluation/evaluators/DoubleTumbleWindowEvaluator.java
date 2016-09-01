@@ -9,7 +9,7 @@ import eu.linksmart.api.event.ceml.evaluation.TumbleEvaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 import eu.linksmart.services.event.ceml.evaluation.metrics.InitialSamples;
-import eu.linksmart.api.event.datafusion.types.JsonSerializable;
+import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 

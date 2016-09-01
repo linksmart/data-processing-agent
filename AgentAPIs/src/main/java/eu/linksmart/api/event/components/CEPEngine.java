@@ -1,10 +1,10 @@
-package eu.linksmart.api.event.datafusion.components;
+package eu.linksmart.api.event.components;
 
-import eu.linksmart.api.event.datafusion.exceptions.InternalException;
-import eu.linksmart.api.event.datafusion.exceptions.UnknownException;
-import eu.linksmart.api.event.datafusion.types.EventType;
-import eu.linksmart.api.event.datafusion.types.Statement;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.InternalException;
+import eu.linksmart.api.event.exceptions.UnknownException;
+import eu.linksmart.api.event.types.EventType;
+import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.api.event.exceptions.StatementException;
 
 import java.util.Hashtable;
 import java.util.Map;

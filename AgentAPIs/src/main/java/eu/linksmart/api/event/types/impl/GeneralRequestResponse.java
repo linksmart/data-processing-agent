@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.types.impl;
+package eu.linksmart.api.event.types.impl;
 
 
 public class GeneralRequestResponse {

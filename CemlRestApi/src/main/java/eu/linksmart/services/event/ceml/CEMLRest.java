@@ -6,18 +6,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.services.event.datafusion.intern.DynamicConst;
 import eu.linksmart.api.event.ceml.data.*;
-import eu.linksmart.api.event.datafusion.types.impl.GeneralRequestResponse;
+import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 
 import eu.linksmart.services.event.ceml.core.CEML;
 
-import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
+import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.model.ModelDeserializer;
-import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.types.impl.MultiResourceResponses;
+import eu.linksmart.api.event.types.Statement;
 
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;

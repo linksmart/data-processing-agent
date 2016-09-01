@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.exceptions;
+package eu.linksmart.api.event.exceptions;
 
 /**
  * Created by José Ángel Carvajal on 30.08.2016 a researcher of Fraunhofer FIT.

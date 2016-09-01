@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.components;
+package eu.linksmart.api.event.components;
 
 import java.util.Date;
 

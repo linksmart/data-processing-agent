@@ -4,12 +4,12 @@ package eu.linksmart.services.event.datafusion.handler;
 import eu.linksmart.services.event.datafusion.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.event.datafusion.intern.Const;
 import eu.linksmart.services.event.datafusion.intern.DynamicConst;
-import eu.linksmart.api.event.datafusion.components.ComplexEventPropagationHandler;
-import eu.linksmart.api.event.datafusion.components.Enveloper;
-import eu.linksmart.api.event.datafusion.components.Publisher;
-import eu.linksmart.api.event.datafusion.components.Serializer;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.components.ComplexEventPropagationHandler;
+import eu.linksmart.api.event.components.Enveloper;
+import eu.linksmart.api.event.components.Publisher;
+import eu.linksmart.api.event.components.Serializer;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
 
 import java.util.*;

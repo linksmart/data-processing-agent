@@ -1,6 +1,6 @@
-package eu.linksmart.api.event.datafusion.types;
+package eu.linksmart.api.event.types;
 
-import eu.linksmart.api.event.datafusion.types.impl.GeneralRequestResponse;
+import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 
 import java.util.Collection;
 

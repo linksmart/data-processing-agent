@@ -1,8 +1,6 @@
-package eu.linksmart.api.event.datafusion.exceptions;
+package eu.linksmart.api.event.exceptions;
 
-import eu.linksmart.api.event.datafusion.types.Statement;
-import eu.linksmart.api.event.datafusion.types.impl.GeneralRequestResponse;
-import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
+import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 
 /**
  * Created by José Ángel Carvajal on 31.08.2016 a researcher of Fraunhofer FIT.

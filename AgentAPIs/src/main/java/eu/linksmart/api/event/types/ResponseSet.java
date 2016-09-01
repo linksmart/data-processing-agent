@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.types;
+package eu.linksmart.api.event.types;
 
 
 /**
@@ -15,7 +15,7 @@ package eu.linksmart.api.event.datafusion.types;
  * @author Jos� �ngel Carvajal Soto
  * @version     0.01
  * @since       0.01
- * @see eu.linksmart.api.event.datafusion.components.CEPEngine
+ * @see eu.linksmart.api.event.components.CEPEngine
  * @see ResponseSet.Response.Cell
  * @see ResponseSet.Response
  * */
@@ -63,7 +63,7 @@ public interface ResponseSet {
 	 * @author Jos� �ngel Carvajal Soto
 	 * @version     0.01
 	 * @since       0.01
-	 * @see eu.linksmart.api.event.datafusion.components.CEPEngine
+	 * @see eu.linksmart.api.event.components.CEPEngine
 	 * @see ResponseSet.Response.Cell
 	 * */
 	public interface Response {
@@ -135,7 +135,7 @@ public interface ResponseSet {
 		 * @author Jos� �ngel Carvajal Soto
 		 * @version     0.01
 		 * @since       0.01
-		 * @see eu.linksmart.api.event.datafusion.components.CEPEngine
+		 * @see eu.linksmart.api.event.components.CEPEngine
 		 * 
 		 * */
 		public interface Cell {

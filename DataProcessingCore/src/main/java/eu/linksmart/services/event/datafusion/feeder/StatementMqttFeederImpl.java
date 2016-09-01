@@ -2,11 +2,11 @@ package eu.linksmart.services.event.datafusion.feeder;
 
 import eu.linksmart.services.event.datafusion.intern.DynamicConst;
 import eu.linksmart.services.event.datafusion.intern.Const;
-import eu.linksmart.api.event.datafusion.components.CEPEngine;
-import eu.linksmart.api.event.datafusion.components.Feeder;
-import eu.linksmart.api.event.datafusion.types.impl.GeneralRequestResponse;
-import eu.linksmart.api.event.datafusion.types.impl.MultiResourceResponses;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.api.event.components.Feeder;
+import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
+import eu.linksmart.api.event.types.impl.MultiResourceResponses;
+import eu.linksmart.api.event.types.Statement;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;

@@ -3,8 +3,8 @@ package eu.linksmart.api.event.ceml;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
-import eu.linksmart.api.event.datafusion.types.JsonSerializable;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.types.JsonSerializable;
+import eu.linksmart.api.event.types.Statement;
 
 import java.util.Collection;
 import java.util.Map;

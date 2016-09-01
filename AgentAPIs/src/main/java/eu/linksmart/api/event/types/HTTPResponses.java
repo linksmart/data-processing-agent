@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.types;
+package eu.linksmart.api.event.types;
 
 /**
  * Created by José Ángel Carvajal on 15.07.2016 a researcher of Fraunhofer FIT.

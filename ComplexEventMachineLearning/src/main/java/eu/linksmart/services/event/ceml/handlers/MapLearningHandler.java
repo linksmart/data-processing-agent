@@ -6,7 +6,7 @@ import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.ceml.intern.Const;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;

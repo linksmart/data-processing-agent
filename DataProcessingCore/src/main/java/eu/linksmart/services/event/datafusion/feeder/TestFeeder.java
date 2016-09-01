@@ -1,10 +1,10 @@
 package eu.linksmart.services.event.datafusion.feeder;
 
-import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
+import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.almanac.ogc.sensorthing.api.datamodel.Datastream;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.datafusion.components.CEPEngine;
-import eu.linksmart.api.event.datafusion.components.Feeder;
+import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.api.event.components.Feeder;
 
 import java.util.Date;
 import java.util.Hashtable;

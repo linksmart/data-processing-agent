@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.datafusion.types;
+package eu.linksmart.api.event.types;
 
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author Jose Angel Carvajal Soto
  * @version     0.03
  * @since       0.03
- * @see  eu.linksmart.api.event.datafusion.components.CEPEngine
+ * @see  eu.linksmart.api.event.components.CEPEngine
  *
  * */
 public interface Statement extends JsonSerializable {

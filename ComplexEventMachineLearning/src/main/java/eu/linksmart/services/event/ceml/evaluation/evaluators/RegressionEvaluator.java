@@ -1,8 +1,8 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
-import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.base.GenericEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;

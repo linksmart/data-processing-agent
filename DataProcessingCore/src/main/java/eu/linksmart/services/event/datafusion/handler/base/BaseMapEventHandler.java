@@ -1,7 +1,7 @@
 package eu.linksmart.services.event.datafusion.handler.base;
 
 import eu.linksmart.services.event.datafusion.intern.Utils;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.types.Statement;
 
 import java.util.Hashtable;
 import java.util.Map;

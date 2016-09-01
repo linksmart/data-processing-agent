@@ -1,8 +1,8 @@
-package eu.linksmart.api.event.datafusion.types.impl;
+package eu.linksmart.api.event.types.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.datafusion.types.HTTPResponses;
+import eu.linksmart.api.event.types.HTTPResponses;
 
 import java.util.ArrayList;
 import java.util.Collection;

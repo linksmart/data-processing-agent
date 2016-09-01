@@ -1,6 +1,6 @@
 package eu.linksmart.api.event.ceml.data;
 
-import eu.linksmart.api.event.datafusion.types.JsonSerializable;
+import eu.linksmart.api.event.types.JsonSerializable;
 
 import java.util.Date;
 import java.util.List;

@@ -20,7 +20,7 @@ package eu.almanac.ogc.sensorthing.api.datamodel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import eu.linksmart.api.event.datafusion.types.EventType;
+import eu.linksmart.api.event.types.EventType;
 import eu.linksmart.services.utils.function.Utils;
 
 import java.util.Date;

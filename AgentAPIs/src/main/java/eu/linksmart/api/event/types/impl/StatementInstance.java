@@ -1,13 +1,12 @@
-package eu.linksmart.api.event.datafusion.types.impl;
+package eu.linksmart.api.event.types.impl;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
-import eu.linksmart.api.event.datafusion.types.JsonSerializable;
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.JsonSerializable;
+import eu.linksmart.api.event.types.Statement;
 
 
 import java.math.BigInteger;

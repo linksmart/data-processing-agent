@@ -1,9 +1,9 @@
 package eu.linksmart.services.event.datafusion.handler;
 
 import eu.linksmart.services.event.datafusion.intern.Const;
-import eu.linksmart.api.event.datafusion.components.Publisher;
-import eu.linksmart.api.event.datafusion.types.Statement;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
+import eu.linksmart.api.event.components.Publisher;
+import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;

@@ -1,16 +1,16 @@
 package eu.linksmart.services.event.ceml.statements;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
-import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.handlers.ListLearningHandler;
 import eu.linksmart.services.event.ceml.handlers.MapLearningHandler;
 import eu.linksmart.services.event.ceml.core.CEMLManager;
-import eu.linksmart.api.event.datafusion.types.impl.StatementInstance;
+import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.api.event.ceml.CEMLRequest;
-import eu.linksmart.api.event.datafusion.types.JsonSerializable;
+import eu.linksmart.api.event.types.JsonSerializable;
 
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.

@@ -1,6 +1,6 @@
 package eu.linksmart.services.event.datafusion.handler.base;
 
-import eu.linksmart.api.event.datafusion.types.Statement;
+import eu.linksmart.api.event.types.Statement;
 
 import java.util.ArrayList;
 import java.util.Arrays;

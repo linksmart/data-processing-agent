@@ -1,10 +1,9 @@
 package eu.linksmart.api.event.ceml.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.Date;
 
 /**

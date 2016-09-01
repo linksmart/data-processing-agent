@@ -1,9 +1,8 @@
-package eu.linksmart.api.event.datafusion.components;
+package eu.linksmart.api.event.components;
 
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 

@@ -1,6 +1,6 @@
-package eu.linksmart.api.event.datafusion.components;
+package eu.linksmart.api.event.components;
 
-import eu.linksmart.api.event.datafusion.types.EventType;
+import eu.linksmart.api.event.types.EventType;
 
 import java.util.Date;
 

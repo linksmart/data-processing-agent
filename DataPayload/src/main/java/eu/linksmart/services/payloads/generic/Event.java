@@ -1,7 +1,7 @@
 package eu.linksmart.services.payloads.generic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.datafusion.types.EventType;
+import eu.linksmart.api.event.types.EventType;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Date;

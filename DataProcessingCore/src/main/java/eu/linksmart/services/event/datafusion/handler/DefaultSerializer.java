@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import eu.linksmart.api.event.datafusion.components.Serializer;
+import eu.linksmart.api.event.components.Serializer;
 
 /**
  * Created by José Ángel Carvajal on 23.08.2016 a researcher of Fraunhofer FIT.

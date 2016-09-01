@@ -4,10 +4,10 @@ import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
-import eu.linksmart.api.event.datafusion.exceptions.StatementException;
-import eu.linksmart.api.event.datafusion.exceptions.TraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UnknownUntraceableException;
-import eu.linksmart.api.event.datafusion.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.base.GenericEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.metrics.base.ClassEvaluationMetricBase;
 import eu.linksmart.services.event.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
