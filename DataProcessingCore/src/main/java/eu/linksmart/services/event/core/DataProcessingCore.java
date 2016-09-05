@@ -4,14 +4,11 @@ import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
 
-import eu.linksmart.services.event.feeder.PersistenceFeeder;
-import eu.linksmart.services.event.feeder.TestFeeder;
+import eu.linksmart.services.event.connectors.FileConnector;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
-import eu.linksmart.api.event.components.Feeder;
-import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
 import org.slf4j.Logger;
@@ -125,21 +122,15 @@ public class DataProcessingCore {
     private static boolean initFeeders() {
 
         // loading of feeders
-        Feeder feederImplEvents = null,  feederImplQuery = null, persistentFeeder=null,testFeeder = null;
         //IncomingConnector mqtt = null;
         try {
 
             mqtt = MqttIncomingConnectorService.getReference();
 
-            persistentFeeder = new PersistenceFeeder((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
+            FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
-            for (CEPEngine wrapper : CEPEngine.instancedEngines.values()) {
+            persistentFeeder.loadFiles();
 
-                if (conf.getBoolean(Const.TEST_FEEDER)) {
-                    testFeeder = new TestFeeder();
-
-                }
-            }
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
@@ -178,18 +169,6 @@ public class DataProcessingCore {
 
         }
 
-    }
-    public static String feedbackTopic(String thingId, String sourceId ){
-        return thingId+"/"+sourceId;
-    }
-    public static String feedbackTopic(String sourceId ){
-        return feedbackTopic(DynamicConst.getId(), sourceId);
-    }
-    public static String feedbackTopic(String thingId,TraceableException exception){
-        return feedbackTopic(thingId, exception.getErrorProducerId());
-    }
-    public static String feedbackTopic(TraceableException exception){
-        return feedbackTopic(DynamicConst.getId(), exception.getErrorProducerId());
     }
 
 }

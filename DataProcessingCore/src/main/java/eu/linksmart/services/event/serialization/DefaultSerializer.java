@@ -6,11 +6,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import eu.linksmart.api.event.components.Serializer;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 
 /**
  * Created by José Ángel Carvajal on 23.08.2016 a researcher of Fraunhofer FIT.
  */
-public class DefaultSerializer implements Serializer<Object> {
+public class DefaultSerializer implements Serializer{
 
     protected ObjectMapper parser = new ObjectMapper();
 
@@ -22,13 +24,22 @@ public class DefaultSerializer implements Serializer<Object> {
     }
 
     @Override
-    public byte[] serialize(Object object) throws JsonProcessingException {
-        return parser.writeValueAsString(object).getBytes();
+    public byte[] serialize(Object object) throws UntraceableException {
+
+        try {
+            return parser.writeValueAsString(object).getBytes();
+        } catch (JsonProcessingException e) {
+            throw new UntraceableException(e.getMessage(),e);
+        }
     }
 
     @Override
-    public String toString(Object object) throws JsonProcessingException {
-        return parser.writeValueAsString(object);
+    public String toString(Object object) throws UntraceableException {
+        try {
+            return parser.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new UntraceableException(e.getMessage(),e);
+        }
     }
 
     @Override

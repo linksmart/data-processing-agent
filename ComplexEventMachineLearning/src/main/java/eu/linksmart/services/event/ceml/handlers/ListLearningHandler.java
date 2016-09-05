@@ -1,12 +1,12 @@
 package eu.linksmart.services.event.ceml.handlers;
 
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.handler.base.BaseListEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
-import eu.linksmart.api.event.types.EventType;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.ceml.intern.Const;
 import eu.linksmart.services.utils.configuration.Configurator;
@@ -66,8 +66,8 @@ public  class ListLearningHandler extends BaseListEventHandler {
             try {
                 synchronized (originalRequest) {
                     List auxInput;
-                    if (input.get(0) instanceof EventType)
-                        auxInput = (List) input.stream().map(m -> ((EventType) m).getValue()).collect(Collectors.toList());
+                    if (input.get(0) instanceof EventEnvelope)
+                        auxInput = (List) input.stream().map(m -> ((EventEnvelope) m).getValue()).collect(Collectors.toList());
                     else
                         auxInput = input;
                     List learningInput = auxInput.subList(0, descriptors.size());
@@ -88,8 +88,8 @@ public  class ListLearningHandler extends BaseListEventHandler {
             try {
                 synchronized (originalRequest) {
                     List auxInput;
-                    if (input.get(0) instanceof EventType)
-                        auxInput = (List) input.stream().map(m -> ((EventType) m).getValue()).collect(Collectors.toList());
+                    if (input.get(0) instanceof EventEnvelope)
+                        auxInput = (List) input.stream().map(m -> ((EventEnvelope) m).getValue()).collect(Collectors.toList());
                     else
                         auxInput = input;
                     List groundTruth = auxInput.subList(descriptors.getInputSize(), descriptors.getTargetSize());

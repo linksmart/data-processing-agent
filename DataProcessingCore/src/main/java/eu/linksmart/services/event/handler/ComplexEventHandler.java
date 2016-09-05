@@ -22,8 +22,8 @@ import java.util.*;
     public class ComplexEventHandler extends BaseMapEventHandler implements ComplexEventPropagationHandler {
 
     protected Publisher publisher;
-    protected Enveloper<String,Object> enveloper;
-    protected Serializer<Object> serializer;
+    protected Enveloper enveloper;
+    protected Serializer serializer;
 
 
     private Configurator conf =  Configurator.getDefaultConfig();

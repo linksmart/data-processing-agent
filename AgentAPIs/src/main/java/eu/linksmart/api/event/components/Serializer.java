@@ -1,12 +1,55 @@
 package eu.linksmart.api.event.components;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
+import eu.linksmart.api.event.exceptions.UntraceableException;
 
 /**
- * Created by José Ángel Carvajal on 23.08.2016 a researcher of Fraunhofer FIT.
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
  */
-public interface Serializer<T> {
-    public byte[] serialize(T object) throws JsonProcessingException;
-    public String toString(T object) throws JsonProcessingException;
+/**
+ * Interface hides the underlying serialization technology used in the IoT Agents.
+ * E.g. Jackson, Gson, etc.
+ *
+ *
+ * @author Jose Angel Carvajal Soto
+ * @since  1.1.1
+ * @see eu.linksmart.api.event.components.ComplexEventHandler
+ *
+ * */
+public interface Serializer {
+    /**
+     * Serialize in bytes a given object.
+     * @param object to be serialized
+     *
+     * @return the serialized object
+     * @exception eu.linksmart.api.event.exceptions.UntraceableException if the object cannot be serialized
+     * */
+    public<T> byte[] serialize(T object) throws UntraceableException;
+
+    /**
+     * Serialize in a string a given object.
+     * @param object to be serialized
+     *
+     * @return the serialized object as string
+     * @exception eu.linksmart.api.event.exceptions.UntraceableException if the object cannot be serialized
+     * */
+    public<T> String toString(T object) throws UntraceableException;
+    /**
+     * Endorse the Deserializer to release resources if is needed.
+     * */
     void close();
 }

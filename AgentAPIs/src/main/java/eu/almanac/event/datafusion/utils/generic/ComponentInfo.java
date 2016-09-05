@@ -6,7 +6,7 @@ import eu.linksmart.api.event.components.AnalyzerComponent;
  * Created by José Ángel Carvajal on 15.12.2015 a researcher of Fraunhofer FIT.
  */
 @Deprecated
-public class ComponentInfo implements AnalyzerComponent {
+public class ComponentInfo  {
 
     protected String implementationName;
 

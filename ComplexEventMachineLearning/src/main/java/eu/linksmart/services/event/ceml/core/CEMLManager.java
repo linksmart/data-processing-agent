@@ -2,6 +2,7 @@ package eu.linksmart.services.event.ceml.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.feeder.StatementFeeder;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
@@ -14,7 +15,6 @@ import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.api.event.exceptions.*;
-import eu.linksmart.api.event.types.EventType;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
@@ -409,19 +409,19 @@ public class CEMLManager implements CEMLRequest {
         }
         return n;
     }
-    public EventType predict(Object input){
+    public EventEnvelope predict(Object input){
         try {
             Object aux = input;
-            List<EventType> orgInput= null;
+            List<EventEnvelope> orgInput= null;
             if(input instanceof ArrayList) {
                 List aux1= (ArrayList)input;
-                if(!aux1.isEmpty()&& aux1.get(1) instanceof EventType) {
-                    orgInput = (ArrayList<EventType>) aux1;
+                if(!aux1.isEmpty()&& aux1.get(1) instanceof EventEnvelope) {
+                    orgInput = (ArrayList<EventEnvelope>) aux1;
                     aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
                 }else
                     aux = input;
-            }if (input instanceof EventType[]){
-                orgInput = new ArrayList<>(Arrays.asList((EventType[]) input));
+            }if (input instanceof EventEnvelope[]){
+                orgInput = new ArrayList<>(Arrays.asList((EventEnvelope[]) input));
                 aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
 
             }else if(input instanceof Object[])

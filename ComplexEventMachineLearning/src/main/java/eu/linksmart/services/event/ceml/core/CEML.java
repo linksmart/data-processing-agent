@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -40,7 +41,7 @@ import org.slf4j.Logger;
 /**
  * Created by angel on 13/11/15.
  */
-public class CEML implements AnalyzerComponent {
+public class CEML implements AnalyzerComponent , Feeder {
 
     static AnalyzerComponent info;
     static transient private Configurator conf = Configurator.getDefaultConfig();
@@ -257,16 +258,16 @@ public class CEML implements AnalyzerComponent {
     static public Observation PredictUsing(String request,Object input){
         try {
             Object aux = input;
-            List<EventType> orgInput= null;
+            List<EventEnvelope> orgInput= null;
             if(input instanceof ArrayList) {
                 ArrayList aux1= (ArrayList)input;
-                if(!aux1.isEmpty()&& aux1.get(1) instanceof EventType) {
-                    orgInput = (ArrayList<EventType>) aux1;
+                if(!aux1.isEmpty()&& aux1.get(1) instanceof EventEnvelope) {
+                    orgInput = (ArrayList<EventEnvelope>) aux1;
                     aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
                 }else
                     aux = input;
-            }if (input instanceof EventType[]){
-               orgInput = new ArrayList<>(Arrays.asList((EventType[])input));
+            }if (input instanceof EventEnvelope[]){
+               orgInput = new ArrayList<>(Arrays.asList((EventEnvelope[])input));
                 aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
 
             }else if(input instanceof Object[])

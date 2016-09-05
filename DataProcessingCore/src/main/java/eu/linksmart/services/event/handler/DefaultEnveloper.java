@@ -2,22 +2,23 @@ package eu.linksmart.services.event.handler;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.Enveloper;
-import eu.linksmart.api.event.types.EventType;
+import eu.linksmart.api.event.types.EventEnvelope;
 
 import java.util.Date;
 
 /**
  * Created by José Ángel Carvajal on 23.08.2016 a researcher of Fraunhofer FIT.
  */
-public class DefaultEnveloper implements Enveloper<String,Object> {
+public class DefaultEnveloper implements Enveloper  {
+
     @Override
-    public EventType<String, Object> pack(Object payload, Date date, String id, String idProperty, String description) {
+    public <IDType , ValueType > EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description) {
         if (payload instanceof Observation) {
-            return (Observation)payload;
+            return (Observation) payload;
 
         }else {
 
-            return Observation.factory(payload, description, idProperty, id);
+            return Observation.factory(payload, description, idProperty.toString(), id.toString());
         }
     }
 

@@ -1,7 +1,7 @@
 package eu.linksmart.services.payloads.generic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.types.EventType;
+import eu.linksmart.api.event.types.EventEnvelope;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Created by José Ángel Carvajal on 16.08.2016 a researcher of Fraunhofer FIT.
  */
-public class Event implements EventType<Object,Object > {
+public class Event implements EventEnvelope<Object,Object > {
     @JsonProperty("Date")
     protected Date date;
     @JsonProperty("ID")
@@ -88,28 +88,28 @@ public class Event implements EventType<Object,Object > {
         return getIsoTimestamp();
     }
 
-    static public <T, M> EventType factory(Date date, T id, T attributeId, M value) {
+    static public <T, M> EventEnvelope factory(Date date, T id, T attributeId, M value) {
         return new Event(date,id,attributeId,value);
     }
-    static public<T extends Object> EventType factory(Date date) {
-        EventType event= new Event();
+    static public<T extends Object> EventEnvelope factory(Date date) {
+        EventEnvelope event= new Event();
         event.setDate(date);
         return event;
     }
-    static public<T , M> EventType factory(Date date, T id, M value) {
-        EventType event= new Event();
+    static public<T , M> EventEnvelope factory(Date date, T id, M value) {
+        EventEnvelope event= new Event();
         event.setDate(date);
         event.setId(id);
         return event;
     }
-    static public<T extends Object> EventType factory(Date date, T value) {
-        EventType event= new Event();
+    static public<T extends Object> EventEnvelope factory(Date date, T value) {
+        EventEnvelope event= new Event();
         event.setDate(date);
         event.setValue(value);
         return event;
     }
-    static public<T extends Object> EventType factory(Object value) {
-        EventType event= new Event();
+    static public<T extends Object> EventEnvelope factory(Object value) {
+        EventEnvelope event= new Event();
         event.setValue(value);
         return event;
     }

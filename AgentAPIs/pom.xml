@@ -15,7 +15,7 @@
     <artifactId>api.agents</artifactId>
     <name>Event Agents API</name>
     <description>Set of interfaces to access the Event agents</description>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

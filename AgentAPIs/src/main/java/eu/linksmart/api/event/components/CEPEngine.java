@@ -1,31 +1,51 @@
 package eu.linksmart.api.event.components;
 
-import eu.linksmart.api.event.exceptions.InternalException;
-import eu.linksmart.api.event.exceptions.UnknownException;
-import eu.linksmart.api.event.types.EventType;
+import eu.linksmart.api.event.exceptions.*;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.api.event.exceptions.StatementException;
 
 import java.util.Hashtable;
 import java.util.Map;
-
+/**
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ */
 /**
  * 
- * The DF wrapper is an Interface . The Interface provide API in which the several engines connect to the Almanac framework. 
- * This API can be accessed natively in a OSGi environment or by Web Services,
- *  allowing the a high decupled infrastructure in which any engine could be added so long implement a Wrapper which interact through Web Services. 
+ * The interface provide access to an implementation of a Complex-Event Processing (CEP) engine service.
+ * This interface is the basic functionality needed by the agent to use an CEP engine. The implementation of
+ * this interface should be a service.
+ * Any engine that don't provide all functionality that is not marked as deprecated, it is not a good fit for
+ * the agents.
  * 
  * @author Jose Angel Carvajal Soto
- * @version     0.03
  * @since       0.03
- * @see  CEPEngine
+ * @see  AnalyzerComponent
  * 
  * */
 
 
 public interface CEPEngine extends AnalyzerComponent {
 
-    static final public Map<String,CEPEngine> instancedEngines= new Hashtable<String, CEPEngine>();
+    /**
+     *
+     * All CEP engines that implement this interface must add themselves into this Map.
+     *
+     * */
+    static final public Map<String,CEPEngine> instancedEngines= new Hashtable<>();
 	/**
 	 * Return the name of the CEP which implement the interface
 	 * 
@@ -34,17 +54,18 @@ public interface CEPEngine extends AnalyzerComponent {
 	 * */
 	public String getName();
 	/**
-	 * Add send and event to the CEP engine 
-	 *
+	 * Add send and event to the CEP engine
+     *
 	 * @param event is the event itself. A map of values and values names
-	 * 
+	 * @param type the native type of the event.
+     *
 	 * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
 	 * */
-	public boolean addEvent(String topic, EventType event, Class type);
+	public boolean addEvent( EventEnvelope event, Class type) throws TraceableException, UntraceableException;
 	/**
 	 * Configure a particular type in the engine.
 	 * 
-	 *  This functionality is consider deprecated due to the unclearness of this concept as general concept for all DataFusionWrapper.<p>
+	 *  This functionality is consider deprecated due to the uncleanness of this concept as general concept for all CEWrapper.<p>
 	 *  More research must be done about this to discard this feature or not. 
 	 * 
 	 * @param nameType are the names of type added in the engine
@@ -55,35 +76,71 @@ public interface CEPEngine extends AnalyzerComponent {
 	 * */
 	@Deprecated
 	public boolean addEventType(String nameType, String[] eventSchema, Class[] eventTypes)throws StatementException;
-	public boolean addEventType(String nameType,  Object type);
+    /**
+     * Configure a particular type in the engine.
+     *
+     * @param nameType are the alias name of type added in the engine (canonical name is recommended)
+     * @param type the java type to be added
+     *
+     * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
+     * */
+	public <T> boolean addEventType(String nameType,  Class<T> type);
 
 	/**
-	 * Configure a particular type to a particular topic.<p>
-	 * More research must be done about this to discard this feature or not. 
-	 * 
-	 * @param topic to be associated whit a topic.
-	 * @param eventType is the pre-configured in the CEP engine type which will be associated with a topic. 
-	 * 
-	 * @return <code>true</code> if the topic was configurated to the CEP engine. <code>false</code> otherwise.
+	 * Add a statement to the CEP engine which would be later handler with a handler.<p>
+	 *
+	 * @param statement to add in the engine
+	 *
+     * @return <code>true</code> if the query is successfully deployed in the CEP engine. <code>false</code> otherwise.
+     *
+     * @exception eu.linksmart.api.event.exceptions.StatementException is thrown if any of the statement
+     * properties don't complaint with the underlying implementation of the CEP engine. E.g. if the syntax of the property
+     * statement do not match with the language of the underlying implementation.
+     * @exception eu.linksmart.api.event.exceptions.InternalException is thrown if an known exception happens, but the source of
+     * the exception is not related to the input itself. In other words, exceptions which are known and expected by the developer.
+     * @exception eu.linksmart.api.event.exceptions.UnknownException is thrown when an exception happens but the reason of
+     * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
+     * the developer.
+     *
 	 * */
-	@Deprecated
-	public boolean setTopicToEventType(String topic, String eventType);
-	/**
-	 * Add a query to the CEP engine which would be later handler whith a handler.<p>
-	 * 
-	 * NOTE: currently there is no abstract data fusion language, therefore the query sent is a engine specific, this will change along with this function!
-	 * 
-	 * @param query to add in the engine
-	 * 
-	 * @return <code>true</code> if the query is successfully deployed in the CEP engine. <code>false</code> otherwise.
-	 * */
-	public boolean addStatement( Statement query) throws StatementException, UnknownException, InternalException;
+	public boolean addStatement( Statement statement) throws StatementException, UnknownException, InternalException;
 
-    public boolean removeStatement( String id) throws StatementException;
-
-	public boolean pauseStatement( String id) throws StatementException;
-
-	public boolean startStatement( String id) throws StatementException;
+    /**
+     * Removes an statement form the CEP engine.
+     *
+     * @param id of the statement to be removed.
+     *
+     * @exception eu.linksmart.api.event.exceptions.StatementException is thrown if any of the statement
+     * properties don't complaint with the underlying implementation of the CEP engine. E.g. if the syntax of the property
+     * @exception eu.linksmart.api.event.exceptions.UnknownException is thrown when an exception happens but the reason of
+     * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
+     * the developer.
+     * */
+    public boolean removeStatement( String id)  throws UnknownException, StatementException;
+    /**
+     * Pauses an statement form the CEP engine.
+     *
+     * @param id of the statement to be pause.
+     *
+     * @exception eu.linksmart.api.event.exceptions.StatementException is thrown if any of the statement
+     * properties don't complaint with the underlying implementation of the CEP engine. E.g. if the syntax of the property
+     * @exception eu.linksmart.api.event.exceptions.UnknownException is thrown when an exception happens but the reason of
+     * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
+     * the developer.
+     * */
+	public boolean pauseStatement( String id) throws UnknownException, StatementException;
+    /**
+     * Starts an statement form the CEP engine.
+     *
+     * @param id of the statement to be started.
+     *
+     * @exception eu.linksmart.api.event.exceptions.StatementException is thrown if any of the statement
+     * properties don't complaint with the underlying implementation of the CEP engine. E.g. if the syntax of the property
+     * @exception eu.linksmart.api.event.exceptions.UnknownException is thrown when an exception happens but the reason of
+     * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
+     * the developer.
+     * */
+	public boolean startStatement( String id) throws UnknownException, StatementException;
     /***
      *
      * Terminate the Wrapper, releasing any resource us by it.
@@ -91,14 +148,23 @@ public interface CEPEngine extends AnalyzerComponent {
      * */
     public void destroy();
 
-
-
+    /**
+     *
+     * Returns all statements deployed in the engine regardless if they are active (stared) or paused.
+     * Removed statements will not be listed by this Map.
+     *
+     * @return the Map of all statement. The key is the id of the statement.
+     *
+     * */
     public Map<String,Statement> getStatements();
 
 	/**
 	 * Return the advanced features of the DataFusionManager if the implementation support it.
 	 * If the implementation do no support it, then the will return null
-	 * @return an instance of DataFusionWrapperAdvanced or null in case the Wrapper do not support those features
+	 *
+     * @return an instance of DataFusionWrapperAdvanced or null in case the Wrapper do not support those features
+     *
+     * @see eu.linksmart.api.event.components.CEPEngineAdvanced
      */
 	public CEPEngineAdvanced getAdvancedFeatures();
 

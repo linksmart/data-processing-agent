@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import eu.linksmart.api.event.components.Feeder;
+import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.ceml.data.*;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
@@ -38,7 +40,7 @@ import java.util.UUID;
  * Created by angel on 13/11/15.
  */
 @RestController
-public class CEMLRest extends Component{
+public class CEMLRest extends Component implements IncomingConnector{
 
     // private Configurator conf = Configurator.getDefaultConfig();
      private Logger loggerService = Utils.initLoggingConf(CEML.class);
@@ -197,6 +199,11 @@ public class CEMLRest extends Component{
         }
 
 
+    }
+
+    @Override
+    public boolean isUp() {
+        return true;
     }
     /*@RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateRequest(

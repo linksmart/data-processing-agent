@@ -20,7 +20,7 @@ package eu.almanac.ogc.sensorthing.api.datamodel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import eu.linksmart.api.event.types.EventType;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.utils.function.Utils;
 
 import java.util.Date;
@@ -34,7 +34,7 @@ import java.util.Date;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventType<String,Object>
+public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventEnvelope<String,Object>
 {
 	/**
 	 * The time point/period of when the observation happens. To be rendered as

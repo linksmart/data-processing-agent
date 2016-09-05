@@ -17,11 +17,10 @@ import java.util.Arrays;
 
 public class StatementMqttObserver extends IncomingMqttObserver {
 
-    private StaticBroker brokerService;
-    public StatementMqttObserver(StaticBroker broker)  {
-        brokerService =broker;
-    }
 
+    public StatementMqttObserver(StaticBroker broker) {
+        super(broker);
+    }
 
     @Override
     protected void mangeEvent(String topic,byte[] rawEvent) {
@@ -69,14 +68,7 @@ public class StatementMqttObserver extends IncomingMqttObserver {
             responses.addResponse(new GeneralRequestResponse("Bad Request", DynamicConst.getId(),null,"Agent","The topic "+topic+" is not a known endpoint for receiving requests for agent this agent",400));
 
         }
-        for(GeneralRequestResponse response : responses.getResponses()){
-
-            try {
-                brokerService.publish(response.getTopic(), response.getMessage());
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(), e);
-            }
-        }
+        responses.getResponses().forEach(this::publishFeedback);
 
 
     }

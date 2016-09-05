@@ -1,10 +1,12 @@
 package eu.linksmart.services.event.feeder;
 
-import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.almanac.ogc.sensorthing.api.datamodel.Datastream;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.Feeder;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.impl.StatementInstance;
 
 import java.util.Date;
 import java.util.Hashtable;
@@ -13,6 +15,7 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 09.03.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class TestFeeder implements Feeder, Runnable {
     private final Thread simulation;
     private Map<String, CEPEngine> dataFusionWrappers = new Hashtable<>();
@@ -59,7 +62,13 @@ public class TestFeeder implements Feeder, Runnable {
             long start = System.nanoTime();
             i++;
             for (CEPEngine dfw : dataFusionWrappers.values())
-                dfw.addEvent("/f1/p1/v2/1/1", observation, observation.getClass());
+                try {
+                    dfw.addEvent( observation, observation.getClass());
+                } catch (TraceableException e) {
+                    e.printStackTrace();
+                } catch (UntraceableException e) {
+                    e.printStackTrace();
+                }
             acc+=System.nanoTime()-start;
             if(acc/1000000>1000){
                 System.out.println((i*1000000000.0)/acc);

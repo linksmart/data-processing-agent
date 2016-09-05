@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Configuration
 @PropertySource("conf.cfg")
-@Import(value = {  RestStatementFeeder.class,RestEventFeeder.class })
+@Import(value = {  RestConnector.class })
 @EnableAutoConfiguration
 @SpringBootApplication
 @RestController

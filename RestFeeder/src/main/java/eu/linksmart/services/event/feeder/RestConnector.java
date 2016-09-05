@@ -1,9 +1,13 @@
 package eu.linksmart.services.event.feeder;
 
+import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.api.event.components.IncomingConnector;
+import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
@@ -29,14 +33,14 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 
 @RestController
-public class RestStatementFeeder extends Component implements Feeder {
-    protected static Logger loggerService = Utils.initLoggingConf(RestStatementFeeder.class);
+public class RestConnector extends Component implements IncomingConnector {
+    protected static Logger loggerService = Utils.initLoggingConf(RestConnector.class);
     protected Configurator conf = Configurator.getDefaultConfig();
 
     protected static ObjectMapper parser =new ObjectMapper();
 
-    public RestStatementFeeder() {
-        super(RestStatementFeeder.class.getSimpleName(), "REST API for insert Statements into the CEP Engines", Feeder.class.getSimpleName());
+    public RestConnector() {
+        super(RestConnector.class.getSimpleName(), "REST API for insert Statements into the CEP Engines", Feeder.class.getSimpleName());
 
 
     }
@@ -104,6 +108,31 @@ public class RestStatementFeeder extends Component implements Feeder {
         return prepareHTTPResponse(StatementFeeder.deleteStatement(id));
 
     }
+
+
+    @RequestMapping(value="event/{federation}/{pi}/{ver}/observation/{thingId}/{streamId}", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addObservation(
+            @RequestBody String rawEvent,
+            @PathVariable("federation") String federation,
+            @PathVariable("pi") String pi,
+            @PathVariable("ver") String version,
+            @PathVariable("thingId") String thingId,
+            @PathVariable("streamId") String streamId
+    ) {
+        if(  CEPEngine.instancedEngines.size()==0)
+            return new ResponseEntity<>("Service Unavailable: No Data-Fusion engine has been deployed", HttpStatus.SERVICE_UNAVAILABLE);
+
+        String error ="";
+        try {
+            EventFeeder.feed(federation+"/"+pi+"/"+version+"/"+thingId+"/"+streamId,rawEvent);
+        } catch (StatementException e) {
+            return new ResponseEntity<>("Bad Reques 400: parsing error:"+e.getMessage(),HttpStatus.BAD_REQUEST);
+        } catch (TraceableException | UntraceableException e) {
+            return new ResponseEntity<>("Internal Server Error 500:",HttpStatus.OK);
+        }
+        return new ResponseEntity<>("OK 200: event had being feeded",HttpStatus.OK);
+    }
+
     public static ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<Statement> result){
         // preparing pointers
         Statement statement =null;
@@ -174,5 +203,10 @@ public class RestStatementFeeder extends Component implements Feeder {
         }
 
 
+    }
+
+    @Override
+    public boolean isUp() {
+        return true;
     }
 }

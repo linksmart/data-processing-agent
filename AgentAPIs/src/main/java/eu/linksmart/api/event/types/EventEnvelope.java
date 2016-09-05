@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by angel on 17/11/15.
  */
-public interface EventType< IDType, ValueType> {
+public interface EventEnvelope< IDType, ValueType> {
     public void topicDataConstructor(String topic);
 
     public Date getDate();

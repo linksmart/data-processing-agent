@@ -4,7 +4,7 @@ import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.api.event.exceptions.StatementException;
-import eu.linksmart.api.event.types.EventType;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
@@ -78,7 +78,7 @@ public class SiddhiEngine extends Component implements CEPEngine {
     }
 
     @Override
-    public boolean addEvent(String topic, EventType event, Class type) {
+    public boolean addEvent( EventEnvelope event, Class type) {
         Object[] rawEvent = packEvent(event);
         for(InputHandler inputHandler: hashInputHandler.values()){
             try {
@@ -114,12 +114,12 @@ public class SiddhiEngine extends Component implements CEPEngine {
 
 
     }
-    private Object[] packEvent(EventType eventType){
+    private Object[] packEvent(EventEnvelope eventEnvelope){
         Object[] rawEvent = new Object[4];
-        rawEvent[0]=eventType.getId();
-        rawEvent[1]=eventType.getDate().getTime();
-        rawEvent[2]=getNumeric(eventType.getValue());
-        rawEvent[3]=eventType.getValue().toString();
+        rawEvent[0]= eventEnvelope.getId();
+        rawEvent[1]= eventEnvelope.getDate().getTime();
+        rawEvent[2]=getNumeric(eventEnvelope.getValue());
+        rawEvent[3]= eventEnvelope.getValue().toString();
 
         return rawEvent;
     }
@@ -148,18 +148,9 @@ public class SiddhiEngine extends Component implements CEPEngine {
     }
 
     @Override
-    public boolean addEventType(String nameType, Object type) {
+    public <T> boolean addEventType(String nameType, Class<T> type) {
 
         loggerService.error("addEventType(String nameType, Object type) function not implemented");
-        return false;
-    }
-
-    @Override
-    public boolean setTopicToEventType(String topic, String eventType) {
-        if(!topicTypeName.containsValue(eventType) ){
-            topicTypeName.put(topic,eventType);
-            return true;
-        }
         return false;
     }
 
@@ -203,7 +194,7 @@ public class SiddhiEngine extends Component implements CEPEngine {
     }
 
     @Override
-    public boolean removeStatement(String id) throws StatementException {
+    public boolean removeStatement(String id)  {
 
         loggerService.error("addEventType(String nameType, Object type) function not implemented");
         return false;

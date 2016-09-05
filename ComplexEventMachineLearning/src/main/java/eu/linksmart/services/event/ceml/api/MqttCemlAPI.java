@@ -1,5 +1,7 @@
 package eu.linksmart.services.event.ceml.api;
 
+import eu.linksmart.api.event.components.Feeder;
+import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.services.event.ceml.core.CEML;
 import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.ceml.intern.Const;
@@ -21,7 +23,7 @@ import java.util.Observer;
 /**
  * Created by José Ángel Carvajal on 02.02.2016 a researcher of Fraunhofer FIT.
  */
-public class MqttCemlAPI extends Component {
+public class MqttCemlAPI extends Component implements IncomingConnector {
 
     static MqttCemlAPI me;
     protected StaticBroker brokerService;
@@ -120,4 +122,8 @@ public class MqttCemlAPI extends Component {
     }
 
 
+    @Override
+    public boolean isUp() {
+        return brokerService.isConnected();
+    }
 }
