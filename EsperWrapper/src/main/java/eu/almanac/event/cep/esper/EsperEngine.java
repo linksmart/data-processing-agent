@@ -8,7 +8,7 @@ import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.UnknownException;
-import eu.linksmart.api.event.types.EventType;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.api.event.components.ComplexEventHandler;
@@ -78,8 +78,8 @@ import java.util.*;
 
 
         // default event type
-        addEventType( EventType.class.getCanonicalName(), "Event");
-        fullTypeNameToAlias.put("Event", EventType.class.getCanonicalName());
+        addEventType( EventEnvelope.class.getCanonicalName(), EventEnvelope.class);
+        fullTypeNameToAlias.put("Event", EventEnvelope.class.getCanonicalName());
 
         loggerService.info("Esper engine has started!");
 
@@ -100,25 +100,37 @@ import java.util.*;
     }*/
 
     @Override
-    public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws Exception{
+    public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws InternalException{
 //        Class cls= Class.forName(canonicalNameClassOrPkg);
 
-        epService.getEPAdministrator().getConfiguration().addImport(canonicalNameClassOrPkg);
+        try {
+            epService.getEPAdministrator().getConfiguration().addImport(canonicalNameClassOrPkg);
+
+        }catch (Exception e){
+            throw new InternalException(getName(),getClass().getCanonicalName(),e.getMessage(),e);
+
+        }
         return true;
     }
 
     @Override
-    public synchronized boolean setEngineTimeTo(Date date) throws Exception {
-        boolean done=false;
-        Date engineTime = new Date(epService.getEPRuntime().getCurrentTime());
-        if(done = date.after(engineTime))
+    public synchronized boolean setEngineTimeTo(Date date) throws InternalException {
+        try {
+            boolean done=false;
+            Date engineTime = new Date(epService.getEPRuntime().getCurrentTime());
+            if(done = date.after(engineTime))
 
-            epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(date.getTime()));
-        else
-            loggerService.warn("The provided date "+ Utils.getIsoTimestamp(date)+" is from an earlier time as the current engine date "+Utils.getIsoTimestamp(date)+". " +
-                    "Setting the time back, it is not an accepted operation of the engine "+getName()+". Therefore no action had been taken");
+                epService.getEPRuntime().sendEvent(new CurrentTimeSpanEvent(date.getTime()));
+            else
+                loggerService.warn("The provided date "+ Utils.getIsoTimestamp(date)+" is from an earlier time as the current engine date "+Utils.getIsoTimestamp(date)+". " +
+                        "Setting the time back, it is not an accepted operation of the engine "+getName()+". Therefore no action had been taken");
 
-        return done;
+            return done;
+
+        }catch (Exception e){
+            throw new InternalException(getName(),getClass().getCanonicalName(),e.getMessage(),e);
+
+        }
 
     }
 
@@ -128,17 +140,24 @@ import java.util.*;
     }
 
     @Override
-    public void dropObject(String name) {
+    public boolean dropObject(String name) {
 
-        epService.getEPAdministrator().getConfiguration().removeVariable(name,true);
+        try {
+
+            return epService.getEPAdministrator().getConfiguration().removeVariable(name,true);
+
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+            return false;
+        }
     }
 
     @Override
-    public boolean addEventType(String nameType,  Object type) {
+    public <T> boolean addEventType(String nameType,  Class<T> type) {
 
 
         fullTypeNameToAlias.put(type.getClass().getName(),nameType);
-        epService.getEPAdministrator().getConfiguration().addEventType(nameType, type.getClass());
+        epService.getEPAdministrator().getConfiguration().addEventType(nameType, type);
 
         return true;
 
@@ -150,7 +169,7 @@ import java.util.*;
     }
 
     @Override
-    public boolean addEvent(String topic, EventType event,Class type) {
+    public boolean addEvent( EventEnvelope event,Class type) {
 
 
            // String[] parentTopicAndHead = getParentTopic(topic);
@@ -174,10 +193,6 @@ import java.util.*;
         return false;
     }
 
-    @Override
-    public boolean setTopicToEventType(String topic, String eventType) {
-        return false;
-    }
 
     @Override
     public boolean addStatement(Statement statement) throws StatementException, UnknownException, InternalException {
@@ -277,7 +292,7 @@ import java.util.*;
     }
 
     @Override
-    public boolean removeStatement(String id) throws StatementException {
+    public boolean removeStatement(String id)  {
 
         if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
@@ -294,7 +309,7 @@ import java.util.*;
     }
 
     @Override
-    public boolean pauseStatement(String id) throws StatementException {
+    public boolean pauseStatement(String id)  {
         if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
 
@@ -305,7 +320,7 @@ import java.util.*;
         return true;
     }
     @Override
-    public boolean startStatement(String id) throws StatementException {
+    public boolean startStatement(String id)  {
         if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
         epService.getEPAdministrator().getStatement(id).start();

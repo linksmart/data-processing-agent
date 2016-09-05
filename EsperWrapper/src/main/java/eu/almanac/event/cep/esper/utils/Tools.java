@@ -4,7 +4,7 @@ import eu.almanac.event.cep.esper.EsperEngine;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.types.EventType;
+import eu.linksmart.api.event.types.EventEnvelope;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.time.DateUtils;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
@@ -229,33 +229,33 @@ public class Tools {
     }
     static public boolean insertMultipleEvents(long noEvents,Object event){
          EsperEngine engine =EsperEngine.getEngine();
-        EventType eventType;
-        if(! (event instanceof EventType) )
-            eventType = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
+        EventEnvelope eventEnvelope;
+        if(! (event instanceof EventEnvelope) )
+            eventEnvelope = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
         else
-            eventType = (EventType) event;
+            eventEnvelope = (EventEnvelope) event;
         for (int i=0; i< noEvents; i++) {
 
-            engine.addEvent("", eventType, eventType.getClass());
-            eventType.setDate(DateUtils.addHours(eventType.getDate(),1));
+            engine.addEvent(  eventEnvelope, eventEnvelope.getClass());
+            eventEnvelope.setDate(DateUtils.addHours(eventEnvelope.getDate(),1));
         }
         return true;
 
     }
-    static public EventType[] creatMultipleEvents(long noEvents,Object event){
-        EventType eventType;
+    static public EventEnvelope[] creatMultipleEvents(long noEvents,Object event){
+        EventEnvelope eventEnvelope;
         EsperEngine engine =EsperEngine.getEngine();
-        EventType[] result = new Observation[(int)noEvents];
-        if(! (event instanceof EventType) )
-            eventType = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
+        EventEnvelope[] result = new Observation[(int)noEvents];
+        if(! (event instanceof EventEnvelope) )
+            eventEnvelope = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
         else
-            eventType = (EventType) event;
+            eventEnvelope = (EventEnvelope) event;
 
-        result[0] = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),DateUtils.addHours(eventType.getDate(), 1).getTime());
+        result[0] = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),DateUtils.addHours(eventEnvelope.getDate(), 1).getTime());
 
         for (int i=1; i< noEvents; i++) {
 
-            //engine.addEvent("", eventType, eventType.getClass());
+            //engine.addEvent("", eventEnvelope, eventEnvelope.getClass());
             result[i] = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),DateUtils.addHours(result[i-1].getDate(), 1).getTime());
 
         }
@@ -310,10 +310,10 @@ public class Tools {
 
         return hadBeanUsed;
     }
-    static public boolean isTimeContinuous(EventType[] events){
-        EventType previous= null;
+    static public boolean isTimeContinuous(EventEnvelope[] events){
+        EventEnvelope previous= null;
 
-        for (EventType event: Arrays.asList(events)) {
+        for (EventEnvelope event: Arrays.asList(events)) {
 
             if (previous!=null && !DateUtils.addHours(previous.getDate(),2 ).after(event.getDate()))
                 return false;
@@ -323,15 +323,15 @@ public class Tools {
         }
         return true;
     }
-    static public boolean isTimeContinuous(EventType[][] eventss){
-        EventType previous= null;
+    static public boolean isTimeContinuous(EventEnvelope[][] eventss){
+        EventEnvelope previous= null;
 
-        for(EventType[] events: Arrays.asList(eventss))
+        for(EventEnvelope[] events: Arrays.asList(eventss))
             if(!isTimeContinuous(events))
                 return false;
         return true;
     }
-    static public boolean isTimeContinuous(EventType[] events1,EventType[] events2,boolean inBetweenOnly){
+    static public boolean isTimeContinuous(EventEnvelope[] events1,EventEnvelope[] events2,boolean inBetweenOnly){
 
         return (inBetweenOnly || (isTimeContinuous(events1) && isTimeContinuous(events2)) )&&
                 (DateUtils.addHours(  events1[events1.length-1].getDate(),2 ).after(  events2[0].getDate()) &&
@@ -340,26 +340,26 @@ public class Tools {
 
 
     }
-    static public boolean isTimeContinuous(EventType[] events1,EventType[] events2){
+    static public boolean isTimeContinuous(EventEnvelope[] events1,EventEnvelope[] events2){
 
         return isTimeContinuous(events1,events2,false);
 
 
     }
     static public boolean isTimeContinuous(Object events1,Object events2) {
-        return events1 instanceof EventType[] && events2 instanceof EventType[] && isTimeContinuous((EventType[]) events1, (EventType[]) events2);
+        return events1 instanceof EventEnvelope[] && events2 instanceof EventEnvelope[] && isTimeContinuous((EventEnvelope[]) events1, (EventEnvelope[]) events2);
     }
     static public boolean isTimeContinuous(Object events1,Object events2, Object inBetweenOnly) {
-        return events1 instanceof EventType[] && events2 instanceof EventType[] && inBetweenOnly instanceof Boolean && isTimeContinuous((EventType[]) events1, (EventType[]) events2,(boolean)inBetweenOnly);
+        return events1 instanceof EventEnvelope[] && events2 instanceof EventEnvelope[] && inBetweenOnly instanceof Boolean && isTimeContinuous((EventEnvelope[]) events1, (EventEnvelope[]) events2,(boolean)inBetweenOnly);
     }
-    static public EventType[] flattArrays(EventType[][] eventss){
+    static public EventEnvelope[] flattArrays(EventEnvelope[][] eventss){
 
 
-        EventType[] result  =null;
+        EventEnvelope[] result  =null;
         if(eventss!=null && eventss.length>0) {
             if (eventss.length > 1) {
                 for (int i = 1; i < eventss.length; i++)
-                    result = (EventType[]) ArrayUtils.addAll(result, eventss[i]);
+                    result = (EventEnvelope[]) ArrayUtils.addAll(result, eventss[i]);
             }
             else result = eventss[0];
         }
