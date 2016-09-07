@@ -1,31 +1,100 @@
 package eu.linksmart.api.event.types;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
 /**
- * Created by angel on 17/11/15.
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
  */
-public interface EventEnvelope< IDType, ValueType> {
+/**
+ * Interface hides the underlying event envelope implementation.
+ * The envelope is the basic information that any IoT event must contain.
+ *
+ * The IDType is the id and the id of the attribute. The semantics depends on the implementation.
+ *      Any type given must be able to be transform into a string (e.g. int, double, string, UIID)
+ * The ValueType is the type of the actual payload of the event.
+ *
+ * All interfaces an function signatures defined in the IoT agent name space (eu.linksmart.event.*) should use
+ * this interface and not any underlying implementation.
+ *
+ * @author Jose Angel Carvajal Soto
+ * @since  1.0.0
+ *
+ * */
+public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
+    /**
+     * Some cases the some extra data of the event may be extracted from the topic/path of the event.
+     * In this case, the topic/path can be provided so the underlying implementation extracts the needed data.
+     *
+     * */
     public void topicDataConstructor(String topic);
-
+    /**
+     * returns the time of the event as date. The time semantic could be anything (e.g. time when the event happens).
+     *
+     * @return time as date
+     * */
     public Date getDate();
+    /**
+     * returns date as string in an ISO 8601
+     *
+     * @return date as string
+     * */
     public String getIsoTimestamp();
+    /**
+     * returns the id as IDType (the semantic depends on the implementation)
+     *
+     * @return id  as IDType
+     * */
     public IDType getId();
+    /**
+     * returns the id of the attribute as IDType (the semantic depends on the implementation)
+     *
+     * @return id of the attribute as IDType
+     * */
     public IDType getAttributeId();
+
+    /**
+     * returns the value/measurement
+     *
+     * @return value as ValueType
+     * */
     public ValueType getValue();
-
-
-    public void setDate(Date value);
-    @JsonIgnore
-    public void  setId(IDType value);
-    public void setAttributeId(IDType value);
+    /**
+     * setts the time of the event as date. The time semantic could be anything (e.g. time when the event happens).
+     *
+     * @param time is the time as date
+     * */
+    public void setDate(Date time);
+    /**
+     * setts the id (the semantic depends on the implementation)
+     *
+     * @param id is the id as IDType
+     * */
+    public void  setId(IDType id);
+    /**
+     * setts the id of the attribute (the semantic depends on the implementation)
+     *
+     * @param id is the id of the attribute as IDType
+     * */
+    public void setAttributeId(IDType id);
+    /**
+     * setts the value/measurement
+     *
+     * @param value is the value/measurement to be setted
+     * */
     public void setValue(ValueType value);
-
-
-
-
-
-
 }

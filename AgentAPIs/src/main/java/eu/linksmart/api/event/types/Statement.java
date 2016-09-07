@@ -2,16 +2,34 @@ package eu.linksmart.api.event.types;
 
 
 import java.util.List;
-
 /**
- * This is the part of the API offered by Data Fusion. The Statement is the Interface that any statement object must fulfill. This interface is a generalization of any statement of a CEP engine.<p>
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
  *
- * This is the API offered to the CEP engine wrapper/s.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ */
+/**
+ * This interface represents an data processing statement, the implementation may varies with the underlying implementation of the CEPEngine.
+ * The property statement is completely CEPEngine dependent. The other features are common to all the data processing framework of the agents.
+ * This interface is a generalization of any statement of a CEPengine.<p>
+ *
  *
  * @author Jose Angel Carvajal Soto
  * @version     0.03
  * @since       0.03
  * @see  eu.linksmart.api.event.components.CEPEngine
+ * @see eu.linksmart.api.event.types.JsonSerializable
  *
  * */
 public interface Statement extends JsonSerializable {
@@ -22,32 +40,32 @@ public interface Statement extends JsonSerializable {
      * */
     public String getName();
     /***
-     * The statement on the CEP engine (Typically EPL)
+     * The native statement for specific underling implementation of a CEP engine (e.g. EPL)
      *
      * @return  returns the statement in the native CEP language as string
      * */
     public String getStatement();
     /***
-     * The source broker where the events are coming
+     * The source message handler (broker/http server) where the events are coming
      *
-     * @return  The broker URL or alias as string
+     * @return  The alias of message handler (broker/http server) as string
      * */
     public String getSource();
     /***
-     * The input topics of the statement (DEPRECATED)
+     * The input topics/paths of the statement (DEPRECATED)
      *
-     * @return  return the list of topics that are needed in the statement
+     * @return  return the list of topics/paths that are needed in the statement
      * */
     @Deprecated
      public String[] getInput();
     /***
-     * The output brokers where the events will be published
+     * return the scope. The scope is the output endpoints (e.g. broker, http server) where the events will be published
      *
-     * @return  The broker URLs or aliases as string
+     * @return  aliases of the endpoints as string
      * */
     public String[] getScope();
     /***
-     * The input topic number i of the statement (DEPRECATED)
+     * The input topic/path number i of the statement (DEPRECATED)
      *
      * @param index of the topic selected to return
      *
@@ -56,7 +74,7 @@ public interface Statement extends JsonSerializable {
     @Deprecated
     public String getInput(int index);
     /***
-     * The output broker number i of the statement
+     * The output message handler (broker/http server) number i of the statement
      *
      * @param index of the broker selected to return
      *
@@ -64,9 +82,9 @@ public interface Statement extends JsonSerializable {
      * */
     public String getScope(int index);
     /***
-     * The output topics where the events will be published
+     * The output topics/paths where the events will be published/posted
      *
-     * @return  The output topics as string
+     * @return  The output topics/paths as string
      * */
     public String[] getOutput();
     /***
@@ -90,7 +108,7 @@ public interface Statement extends JsonSerializable {
      * */
     public boolean haveScope();
     /***
-     * Returns the hash ID of the statement. By default this is the SHA256 of the name.
+     * Returns the hash ID of the statement. By default this is the SHA256 of the statement.
      *
      * @return  The ID as string.
      * */
@@ -114,28 +132,100 @@ public interface Statement extends JsonSerializable {
      * @return  Lifecycle Statement State @see StatementLifecycle .
      * */
     public StatementLifecycle getStateLifecycle();
+    /***
+     * In case the LifeCycle of the statement is Sync, the response will be collected by this function instead of an handler.
+     *
+     * @return the response as an object (the type an semantic depends on the statement).
+     * */
     public Object getSynchronousResponse();
+    /**
+     * Alike to the equals from the Object class.
+     * The frameworks needs to determinate if two statements are logically equal or not.
+     *
+     * @see java.lang.Object
+     * */
     public boolean equals(Object org);
+    /**
+     * Alike to the hashCode from the Object class.
+     * The frameworks needs to determinate if two statements are logically equal or not,
+     * and if equal is overwritten then hashCode must be overwrite too.
+     *
+     *
+     * @see java.lang.Object
+     * */
+    public int hashCode();
 
-
-    public void setScope(String[] scope);
-
+    /***
+     * Setts the scope. The scope is the output endpoints (e.g. broker, http server) where the events will be published
+     *
+     * @param scopes  are a list of  aliases of the endpoints where will be published
+     * */
+    public void setScope(String[] scopes);
+    /***
+     * The output topics/paths where the events will be published/posted
+     *
+     * @param output array of output topics/paths as string
+     * */
     public void setOutput(String[] output);
-
+    /***
+     * The input topics/paths of the statement (DEPRECATED)
+     *
+     * @param  input is the list of topics/paths to be set in the statement
+     * */
+    @Deprecated
     public void setInput(String[] input);
-
+    /***
+     * Sets the sources. The source message handler (broker/http server) where the events are coming.
+     *
+     * @param source as alias of message handler (broker/http server) as string
+     * */
     public void setSource(String source);
-
+    /***
+     * Set the statement. The native statement for specific underling implementation of a CEP engine (e.g. EPL)
+     *
+     * @param statement in the native CEP language as string
+     * */
     public void setStatement(String statement);
-
+    /***
+     * sets the name of the statement. The user defined name of the statement
+     *
+     * @param name is the new given name of the statement as string
+     * */
     public void setName(String name);
+    /***
+     * setts the handler selected to process the result of the complex event, @Default ComplexEventHandlerImpl.
+     * Note: The value "" or null is a valid response, this value represent silent events, events that just happen inside the CEP engine.
+     *
+     *
+     * @param  CEHandler is the canonical name of ComplexEventHandler of the statement, @Default ComplexEventHandlerImpl..
+     *
+     * */
     public void setCEHandler(String CEHandler);
-
+    /***
+     * sets the state of the Statement, which determines how the statement will be at runtime.
+     *
+     * @see StatementLifecycle .
+     * @param  stateLifecycle is the Lifecycle Statement State
+     *
+     * */
     public void setStateLifecycle(StatementLifecycle stateLifecycle);
-
+    /***
+     * In case the LifeCycle of the statement is Sync, the response will be set by this function instead of an handler.
+     *
+     * @param response the response as an object (the type an semantic depends on the statement).
+     * */
     public void setSynchronousResponse(Object response) ;
+    /***
+     * setts the hash ID of the statement. By default this is the SHA256 of the statement.
+     *
+     * @param id as string.
+     * */
     public void setId(String id);
-
+    /***
+     * setts the IDs of the selected agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
+     *
+     * @param targetAgents is the list of targeted agents address to process the statement, otherwise empty (all available agents):
+     * */
     public void setTargetAgents(List<String> targetAgents);
 
     /***
