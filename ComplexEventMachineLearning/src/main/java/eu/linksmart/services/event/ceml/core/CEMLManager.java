@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.ceml.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.linksmart.api.event.types.EventEnvelope;
@@ -33,9 +34,6 @@ import java.util.stream.Collectors;
 public class CEMLManager implements CEMLRequest {
     @JsonProperty(value = "Name")
     protected String name;
-    private Configurator conf = Configurator.getDefaultConfig();
-    private Logger loggerService = Utils.initLoggingConf(CEMLManager.class);
-    private int leadingModel =0;
     @JsonProperty(value = "Descriptors")
     @JsonDeserialize(as = DataDefinition.class)
     protected DataDescriptors descriptors;
@@ -48,12 +46,19 @@ public class CEMLManager implements CEMLRequest {
     protected List<LearningStatement> learningStatements;
     @JsonProperty(value = "DeploymentStreams")
     protected List<Statement> deployStatements;
-
     @JsonProperty(value = "Settings")
     protected Map<String,Object> settings;
+    @JsonProperty(value = "isDeployed")
+    protected boolean deployed=false;
+    @JsonProperty(value = "LastPrediction")
+    protected Prediction lastPrediction;
 
-    private boolean deployed=false;
-    Prediction lastPrediction;
+    @JsonIgnore
+    private transient Configurator conf = Configurator.getDefaultConfig();
+    @JsonIgnore
+    private transient Logger loggerService = Utils.initLoggingConf(CEMLManager.class);
+    @JsonIgnore
+    private transient boolean built =false;
 
     @Override
     public Map<String, Object> getSettings() {
@@ -113,7 +118,7 @@ public class CEMLManager implements CEMLRequest {
     }
 
     @Override
-    public void deploy() throws Exception {
+    public void deploy()  {
         if (!deployed){
             loggerService.info("Request "+name+" is being deployed");
             MultiResourceResponses<Statement> responses =StatementFeeder.startStatements(deployStatements);
@@ -124,7 +129,7 @@ public class CEMLManager implements CEMLRequest {
     }
 
     @Override
-    public void undeploy() throws Exception {
+    public void undeploy() {
         if(deployed) {
             StatementFeeder.pauseStatements(deployStatements);
             deployed =false;
@@ -144,7 +149,10 @@ public class CEMLManager implements CEMLRequest {
 
     @Override
     public void setName(String name) {
-        this.name=name;
+        if(!built)
+            this.name=name;
+        else
+            loggerService.error("An illegal intent of changing the name of the request "+this.name+" after the building process");
     }
 
     @Override
@@ -261,6 +269,7 @@ public class CEMLManager implements CEMLRequest {
         }
         errorHandling(phasesDone,phasesNames,statementsCounter,exception, !responses.isEmpty()? responses.get(responses.size()-1): null);
 
+        built=true;
         return this;
     }
 /*

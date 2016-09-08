@@ -1,7 +1,10 @@
 package eu.linksmart.services.payloads.generic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.JsonSerializable;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -112,5 +115,15 @@ public class Event implements EventEnvelope<Object,Object > {
         EventEnvelope event= new Event();
         event.setValue(value);
         return event;
+    }
+
+    @Override
+    public JsonSerializable build() throws TraceableException, UntraceableException {
+        return this;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        // nothing
     }
 }

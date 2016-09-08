@@ -20,7 +20,10 @@ package eu.almanac.ogc.sensorthing.api.datamodel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.services.utils.function.Utils;
 
 import java.util.Date;
@@ -340,4 +343,13 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
     }
 
 
+    @Override
+    public Observation build() throws TraceableException, UntraceableException {
+        return this;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        ///nothing
+    }
 }

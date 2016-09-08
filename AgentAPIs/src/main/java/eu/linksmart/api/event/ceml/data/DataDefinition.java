@@ -112,10 +112,6 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
         return DataDescriptor.factory(DataDescriptor.DescriptorTypes.NUMBER,String.valueOf(i),i<inputSize);
     }
 
-    @Override
-    public List<DataDescriptor> getTargets() {
-        return targets;
-    }
 
     @Override
     public int getTotalInputSize() {
@@ -188,17 +184,8 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
         return target;
     }
     @Override
-    public void asTarget() {
+    public void toggleTarget() {
         target =true;
-    }
-    @Override
-    public boolean isClassesDescription() {
-        return false;
-    }
-
-    @Override
-    public DataDescriptor getClassesDescription() {
-        return null;
     }
 
     @Override

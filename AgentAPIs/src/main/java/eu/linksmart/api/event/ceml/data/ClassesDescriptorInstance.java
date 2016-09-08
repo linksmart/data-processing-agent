@@ -80,10 +80,6 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
         this.classes =classes;
     }
 
-    @Override
-    public boolean isClassesDescription() {
-        return true;
-    }
 
 
 

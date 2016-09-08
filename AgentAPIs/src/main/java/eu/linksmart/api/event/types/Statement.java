@@ -22,11 +22,10 @@ import java.util.List;
 /**
  * This interface represents an data processing statement, the implementation may varies with the underlying implementation of the CEPEngine.
  * The property statement is completely CEPEngine dependent. The other features are common to all the data processing framework of the agents.
- * This interface is a generalization of any statement of a CEPengine.<p>
+ * This interface is a generalization of any statement of a CEPEngine.<p>
  *
  *
  * @author Jose Angel Carvajal Soto
- * @version     0.03
  * @since       0.03
  * @see  eu.linksmart.api.event.components.CEPEngine
  * @see eu.linksmart.api.event.types.JsonSerializable
@@ -36,7 +35,7 @@ public interface Statement extends JsonSerializable {
     /***
      * Name of the statement
      *
-     * @return  returns the name of the statement as string
+     * @return the name of the statement as string
      * */
     public String getName();
     /***

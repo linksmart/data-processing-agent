@@ -47,15 +47,7 @@ public class DataDescriptorInstance implements DataDescriptor {
         return target;
     }
 
-    @Override
-    public boolean isClassesDescription() {
-        return false;
-    }
 
-    @Override
-    public DataDescriptor getClassesDescription() {
-        return null;
-    }
 
     @Override
     public DescriptorTypes getType() {
@@ -63,7 +55,7 @@ public class DataDescriptorInstance implements DataDescriptor {
     }
 
     @Override
-    public void asTarget() {
+    public void toggleTarget() {
         target = true;
     }
 
