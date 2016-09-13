@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
+import eu.linksmart.services.event.connectors.Observers.EventMqttObserver;
 import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;
@@ -41,7 +42,7 @@ public class MqttIncomingConnectorService implements IncomingConnector {
     }
     void initEventObserver() throws MalformedURLException, MqttException {
         eventBroker = new StaticBroker(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH),conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH));
-        eventBroker.addListener(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new StatementMqttObserver(statementBroker));
+        eventBroker.addListener(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver(statementBroker));
     }
 
     @Override

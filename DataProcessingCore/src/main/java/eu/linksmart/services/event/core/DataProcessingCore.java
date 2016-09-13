@@ -5,6 +5,9 @@ import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
 
 import eu.linksmart.services.event.connectors.FileConnector;
+import eu.linksmart.services.event.feeder.EventFeeder;
+import eu.linksmart.services.event.feeder.StatementFeeder;
+import eu.linksmart.services.event.feeder.type.PersistentBean;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.CEPEngine;
@@ -124,8 +127,11 @@ public class DataProcessingCore {
         // loading of feeders
         //IncomingConnector mqtt = null;
         try {
-
+            Class.forName(EventFeeder.class.getCanonicalName());
+            Class.forName(StatementFeeder.class.getCanonicalName());
+            Class.forName(PersistentBean.class.getCanonicalName());
             mqtt = MqttIncomingConnectorService.getReference();
+
 
             FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 

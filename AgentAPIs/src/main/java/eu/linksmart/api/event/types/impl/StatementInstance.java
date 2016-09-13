@@ -56,7 +56,7 @@ public class StatementInstance implements Statement {
     protected String[] output=null;
 
     @JsonProperty("CEHandler")
-    protected String CEHandler= "eu.linksmart.services.event.datafusion.handler.ComplexEventHandler";
+    protected String CEHandler= "eu.linksmart.services.event.handler.ComplexEventHandler";
 
     @JsonProperty("stateLifecycle")
     protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;

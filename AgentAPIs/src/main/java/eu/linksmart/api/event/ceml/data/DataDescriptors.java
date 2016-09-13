@@ -39,7 +39,7 @@ import java.util.List;
  * The structure of MeasuredInput is defined in the InputDescriptors
  *
  * There are two kids of DataDescriptors(s), the nominal and the lambda. The nominal DataDescriptors are define one-by-one by a DataDescriptor.
- * The lambda DataDescriptors is described by the himself. In this case the DataDescriptors is also a DataDescriptor (please notice the 's' at the end of the words).
+ * The lambda DataDescriptors is described by the itself. In this case the DataDescriptors is also a DataDescriptor (please notice the 's' at the end of the words).
  * In a lambda DataDescriptors the DataDescriptor(s) are generated with anonymous names based on the definition of the DataDescriptors.
  * The lambda DataDescriptors is used when the Input and Target are uniform collections/map/etc. of the same type whiteout entities by the own.
  * e.g. The last 100 temperatures of the deice x.
