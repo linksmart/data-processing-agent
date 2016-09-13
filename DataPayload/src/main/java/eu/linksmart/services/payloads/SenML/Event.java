@@ -27,6 +27,10 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
    // @JsonProperty("bn")
     //private String bn;
     //@JsonProperty("bt")
+
+
+
+
     //private Long bt;
     @JsonProperty("bu")
     private String bu;
