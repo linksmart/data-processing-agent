@@ -1,14 +1,13 @@
-package eu.linksmart.SenML;
+package eu.linksmart.services.payloads.SenML;
 
 
-import eu.almanac.event.datafusion.utils.generic.GenericCEP;
-import eu.linksmart.IoTPayload.IoTEntityEvent;
-import eu.linksmart.IoTPayload.IoTProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventEnvelope;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Created by Caravajal on 13.02.2015.
@@ -23,195 +22,178 @@ import java.util.Vector;
  | Measurement or Parameters | e    | Array  |
  +---------------------------+------+--------+
  */
-@Deprecated // needs refactoring
-public class Event implements java.io.Serializable, GenericCEP<Event> {
+public class Event extends eu.linksmart.services.payloads.generic.Event<String,Vector<Event.Measurement>> implements EventEnvelope<String,Vector<Event.Measurement>>{
     private static final long serialVersionUID = -1510508593277110230L;
-    private String bn;
-    private Long bt;
+   // @JsonProperty("bn")
+    //private String bn;
+    //@JsonProperty("bt")
+    //private Long bt;
+    @JsonProperty("bu")
     private String bu;
+    @JsonProperty("ver")
     private Short ver;
-    private Vector<Measurement> e;
-    private Boolean eNameChanged;
-    private Map<String,Integer> index;
-    final private Object lock = new Object();
+   // @JsonProperty("e")
+   // private Vector<Measurement> e;
+    @JsonIgnore
+    private transient Boolean eNameChanged;
+    @JsonIgnore
+    private transient Map<String,Integer> index;
+    @JsonIgnore
+    final private transient Object lock = new Object();
 
     public  Event(){
+        super();
         index = null;
         eNameChanged = false;
-        bn = null;
-        bt = null;
         bu = null;
         ver = null;
-        e = null;
     }
 
-    public Event(String baseName){
 
-        index = null;
-        this.bn = baseName;
-        e = new Vector<Measurement>();
-        eNameChanged = false;
-        bt = null;
-        bu = null;
-        ver = null;
-
-    }
-    public Event(IoTEntityEvent entityEvent){
-        index = new HashMap<String, Integer>();
-        this.bn = entityEvent.getAbout();
-
-        e = new Vector<Measurement>(entityEvent.getProperties().size());
-        for (IoTProperty p : entityEvent.getProperties())
-            addValue(p.getAbout(),p.getValue(p.getAbout()));
-
-
-
-        eNameChanged = true;
-        indexing();
-        bt = new Date().getTime();
-        bu = null;
-        ver = 1;
-    }
-
+    @JsonProperty("bn")
     public String getBn() {
-        return bn;
+        return id;
     }
-
+    @JsonProperty("bn")
     public void setBn(String bn) {
-        this.bn = bn;
+        this.id = bn;
     }
-
+    @JsonProperty("bt")
     public Long getBt() {
-        return bt;
+        return date.getTime();
     }
-
+    @JsonProperty("bt")
     public void setBt(Long bt) {
-        this.bt = bt;
+        date = new Date(bt);
     }
-
+    @JsonProperty("bu")
     public String getBu() {
         return bu;
     }
-
+    @JsonProperty("bu")
     public void setBu(String bu) {
         this.bu = bu;
     }
 
+    @JsonProperty("ver")
     public Short getVer() {
         return ver;
     }
-
+    @JsonProperty("ver")
     public void setVer(Short ver) {
         this.ver = ver;
     }
-
+    @JsonProperty("e")
     public Vector<Measurement> getE() {
-        return e;
+        return value;
     }
-
+    @JsonProperty("e")
     public void setE(Vector<Measurement> e) {
-        this.e = e;
+        this.value = e;
     }
-
+    @JsonProperty("bn")
     public String getBaseName() {
-        return bn;
+        return id;
     }
-
+    @JsonProperty("bt")
     public Long getBaseTime() {
-        return bt;
+        return date.getTime();
     }
-
+    @JsonProperty("bu")
     public String getBaseUnits() {
         return bu;
     }
-
+    @JsonProperty("ver")
     public Short getVersion() {
         return ver;
     }
-
+    @JsonProperty("e")
     public Vector<Measurement> getElements() {
-        return e;
+        return value;
     }
 
-    public Object getValue(){
-        for (Measurement m : e){
-            if (! m.getName().startsWith("@") )
-                return m.getAutoValue();
-
-        }
-        return null;
-
-    }
-    @Override
-    public Event aggregateToAnEvent(Event cepEvent) {
-        cepEvent.addValue(bn,e.get(0));
-
-        return cepEvent;
-    }
-
-    @Override
+    @JsonIgnore
     public void addValue(String key, Object value) {
         addProperty(key).setAutoValue(value);
 
     }
 
-    @Override
+    @JsonIgnore
     public Object getValue(String key) {
         return getEbyName(key);
     }
-    @Override
-    public boolean isGenerated() {
 
-        return getValue(GenericCEP.GENERATED) != null;
-    }
-    @Override
+    @JsonProperty("bn")
     public void setBaseName(String baseName) {
-        this.bn = baseName;
+        setBn(baseName);
     }
-
+    @JsonProperty("bt")
     public void setBaseTime(Long baseTime) {
-        this.bt = baseTime;
+        setBt(baseTime);
     }
-
+    @JsonProperty("bu")
     public void setBaseUnits(String baseUnits) {
-        this.bu = baseUnits;
+        setBu(baseUnits);
     }
-
+    @JsonProperty("ver")
     public void setVersion(Short version) {
         this.ver = version;
     }
-
+    @JsonProperty("e")
     public void setElements(Vector<Measurement> elements) {
-        this.e = elements;
+        setE(elements);
     }
-
+    @JsonIgnore
     public Measurement addProperty(String name){
-        e.add(new Measurement(name));
-        return e.lastElement();
+        value.add(new Measurement());
+        value.lastElement().setName(name);
+        return value.lastElement();
     }
-
+    @JsonIgnore
     public Measurement getEbyName(String name){
 
         indexing();
 
         try {
 
-            return e.get(index.get(name));
+            return value.get(index.get(name));
         }catch (Exception e){}
         return null;
     }
+    @JsonIgnore
     private  void  indexing(){
         synchronized(lock) {
-            if (index.size() != e.size() || eNameChanged)
-                for (int i = 0; i < e.size(); i++) {
-                    index.put(e.get(i).getName(), i);
+            if (index.size() != value.size() || eNameChanged)
+                for (int i = 0; i < value.size(); i++) {
+                    index.put(value.get(i).getName(), i);
                 }
             eNameChanged = false;
         }
 
     }
+    @JsonIgnore
+    @Override
+    public Event build() throws TraceableException, UntraceableException {
+         indexing();
+        return this;
+    }
+    @JsonIgnore
+    @Override
+    public void destroy() throws Exception {
+
+    }
+    @JsonIgnore
+    public Measurement getFirst(){
+        return value.firstElement();
+    }
+
+    @JsonIgnore
+    public Measurement getLast(){
+        return value.lastElement();
+    }
+
     /**
-     * Created by Caravajal on 13.02.2015.
+     * Created by Carvajal on 13.02.2015.
      *   +---------------+------+----------------+
      |         SenML | JSON | Notes          |
      +---------------+------+----------------+
@@ -225,101 +207,109 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
      |   Update Time | ut   | Number         |
      +---------------+------+----------------+
      */
-    public class Measurement  implements java.io.Serializable{
+    public class Measurement  extends eu.linksmart.services.payloads.generic.Event<String,Number>  implements EventEnvelope<String,Number>{
         private static final long serialVersionUID = -3921246268323727465L;
-        private String n;
+
         private String u;
-        private Double v;
         private String sv;
         private Boolean bv;
         private Double s;
-        private Long t;
         private Long ut;
 
 
         public  Measurement(){
-
-        }
-        public  Measurement(String name){
-            n = name;
+            super();
+            id = Event.this.id;
         }
 
-
+        @JsonProperty("n")
         public String getN() {
-            return n;
+            return attributeId;
         }
-
+        @JsonProperty("n")
         public void setN(String n) {
             synchronized(lock) {
-                this.n = n;
+                this.attributeId = n;
                 eNameChanged = true;
             }
         }
-
+        @JsonProperty("u")
         public String getU() {
             return u;
         }
-
+        @JsonProperty("u")
         public void setU(String u) {
             this.u = u;
         }
 
-        public Double getV() {
-            return v;
+        @JsonProperty("v")
+        public Number getV() {
+            return value;
         }
 
+        @JsonProperty("v")
         public void setV(Double v) {
-            this.v = v;
+            this.value = v;
         }
 
+        @JsonProperty("sv")
         public String getSv() {
             return sv;
         }
 
+        @JsonProperty("sv")
         public void setSv(String sv) {
             this.sv = sv;
         }
 
+        @JsonProperty("bv")
         public Boolean getBv() {
             return bv;
         }
 
+        @JsonProperty("bv")
         public void setBv(Boolean bv) {
             this.bv = bv;
         }
 
+        @JsonProperty("s")
         public Double getS() {
             return s;
         }
 
+        @JsonProperty("s")
         public void setS(Double s) {
             this.s = s;
         }
 
+        @JsonProperty("t")
         public Long getT() {
-            return t;
+            return date.getTime();
         }
 
+        @JsonProperty("t")
         public void setT(Long t) {
-            this.t = t;
+            this.date = new Date(Event.this.date.getTime()+t);
         }
 
+        @JsonProperty("ut")
         public Long getUt() {
             return ut;
         }
 
+        @JsonProperty("ut")
         public void setUt(Long ut) {
             this.ut = ut;
         }
 
         //============================================
         public String getName() {
-            return n;
+            return attributeId;
         }
 
         public void setName(String n) {
             synchronized(lock) {
-                this.n = n;
+                this.attributeId = n;
                 eNameChanged = true;
             }
         }
@@ -332,13 +322,7 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
             this.u = u;
         }
 
-        public Double getValue() {
-            return v;
-        }
 
-        public void setValue(Double v) {
-            this.v = v;
-        }
 
         public String getStringValue() {
             return sv;
@@ -365,11 +349,11 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
         }
 
         public Long getTime() {
-            return t;
+            return getT();
         }
 
         public void setTime(Long t) {
-            this.t = t;
+            setT(t);
         }
 
         public Long getUpdateTime() {
@@ -381,12 +365,9 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
         }
         public void setAutoValue(Object value){
              if (value instanceof Long){
-                t = (Long)value;
-            }else if (value instanceof Double){
-                v = (Double)value;
-
-            }else if (value instanceof Integer){
-                v = ((Integer)value).doubleValue();
+                setT((Long)value);
+            }else if (value instanceof Number){
+                this.value = (Number)value;
 
             } else if (value instanceof Boolean){
                 bv = (Boolean)value;
@@ -399,10 +380,8 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
 
         }
         public Object getAutoValue(){
-            if (t != null){
-               return t;
-            }else if (v != null){
-                return v;
+            if (value != null){
+                return value;
 
             } else if (bv != null){
                 return bv;
@@ -410,12 +389,23 @@ public class Event implements java.io.Serializable, GenericCEP<Event> {
             }else if (sv != null){
                 return sv;
 
+            } else if (date != null){
+                return date.getTime();
             }
 
 
             return null;
         }
 
+        @Override
+        public Measurement build() throws TraceableException, UntraceableException {
+            return this;
+        }
+
+        @Override
+        public void destroy() throws Exception {
+            /// nothing
+        }
     }
 
 }

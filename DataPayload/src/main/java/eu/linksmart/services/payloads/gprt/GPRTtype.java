@@ -9,7 +9,7 @@ import eu.linksmart.services.payloads.generic.Event;
 /**
  * Created by angel on 12/11/15.
  */
-public class GPRTtype extends Event implements Serializable {
+public class GPRTtype extends Event<Integer,Double> implements Serializable {
 
     public GPRTtype() {
         super();

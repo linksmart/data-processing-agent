@@ -13,23 +13,23 @@ import java.util.UUID;
 /**
  * Created by José Ángel Carvajal on 16.08.2016 a researcher of Fraunhofer FIT.
  */
-public class Event implements EventEnvelope<Object,Object > {
+public class Event<IDType, ValueType> implements EventEnvelope<IDType,ValueType > {
     @JsonProperty("Date")
     protected Date date;
     @JsonProperty("ID")
-    protected Object id;
+    protected IDType id;
     @JsonProperty("AttributeID")
-    protected Object attributeId;
+    protected IDType attributeId;
     @JsonProperty("Value")
-    protected Object value;
+    protected ValueType value;
 
     protected Event(){
         date = new Date();
-        id = UUID.randomUUID().toString();
-        attributeId = UUID.randomUUID().toString();
+        id = null;
+        attributeId = null;
         value = null;
     }
-    protected Event(Date date, Object id, Object attributeId, Object value){
+    protected Event(Date date, IDType id, IDType attributeId, ValueType value){
         this.date = date;
         this.id = id;
         this.attributeId = attributeId;
@@ -53,17 +53,17 @@ public class Event implements EventEnvelope<Object,Object > {
     }
     @JsonProperty("ID")
     @Override
-    public Object getId() {
+    public IDType getId() {
         return id;
     }
     @JsonProperty("AttributeID")
     @Override
-    public Object getAttributeId() {
+    public IDType getAttributeId() {
         return attributeId;
     }
     @JsonProperty("Value")
     @Override
-    public Object getValue() {
+    public ValueType getValue() {
         return value;
     }
     @JsonProperty("Date")
@@ -73,17 +73,17 @@ public class Event implements EventEnvelope<Object,Object > {
     }
     @JsonProperty("ID")
     @Override
-    public void setId(Object value) {
+    public void setId(IDType value) {
         id=value;
     }
     @JsonProperty("AttributeID")
     @Override
-    public void setAttributeId(Object value) {
+    public void setAttributeId(IDType value) {
         attributeId=value;
     }
     @JsonProperty("Value")
     @Override
-    public void setValue(Object value) {
+    public void setValue(ValueType value) {
         this.value=value;
     }
     @Override
