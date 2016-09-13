@@ -156,7 +156,7 @@ import java.util.*;
     public <T> boolean addEventType(String nameType,  Class<T> type) {
 
 
-        fullTypeNameToAlias.put(type.getClass().getName(),nameType);
+        fullTypeNameToAlias.put(type.getCanonicalName() ,nameType);
         epService.getEPAdministrator().getConfiguration().addEventType(nameType, type);
 
         return true;
