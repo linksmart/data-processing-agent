@@ -1,6 +1,5 @@
 package eu.linksmart.services.event.core;
 
-import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
 
@@ -9,7 +8,7 @@ import eu.linksmart.services.event.connectors.Observers.EventMqttObserver;
 import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
 import eu.linksmart.services.event.feeder.EventFeeder;
 import eu.linksmart.services.event.feeder.StatementFeeder;
-import eu.linksmart.services.event.feeder.type.BootstrappingBean;
+import eu.linksmart.api.event.types.impl.BootstrappingBean;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.CEPEngine;

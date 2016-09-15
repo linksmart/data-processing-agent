@@ -6,7 +6,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.services.event.feeder.type.BootstrappingBean;
+import eu.linksmart.api.event.types.impl.BootstrappingBean;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.event.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.configuration.Configurator;
