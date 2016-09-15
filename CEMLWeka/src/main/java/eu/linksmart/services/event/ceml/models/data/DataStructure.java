@@ -116,7 +116,7 @@ public class DataStructure extends DataDefinition {
 
                 if(structures.isTarget() && !isTarget) {
                     isTarget = true;
-                    aux.asTarget();
+                    aux.toggleTarget();
                 }else if(structures.isTarget() )
                     loggerService.error("Unexpected second target!");
 
@@ -125,21 +125,16 @@ public class DataStructure extends DataDefinition {
                     e.printStackTrace();
                 }
             }
-
-
-
         }
         attributesStructures = temp;
         if(!isTarget)
-            attributesStructures.get(attributesStructures.size()-1).asTarget();
+            attributesStructures.get(attributesStructures.size()-1).toggleTarget();
         ArrayList<Attribute> orderAttributes= new ArrayList<>();
 
         for (AttributeStructure structures:attributesStructures ) {
-
             structures.build();
             attributes.put(structures.getName(),structures);
             orderAttributes.add(structures.getAttribute());
-
         }
         attributeTargetName = orderAttributes.get(orderAttributes.size()-1).name();
         loggerService.info("attribute target name: "+attributeTargetName);
