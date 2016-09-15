@@ -1,5 +1,6 @@
 package eu.linksmart.services.payloads.generic;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
@@ -14,13 +15,13 @@ import java.util.UUID;
  * Created by José Ángel Carvajal on 16.08.2016 a researcher of Fraunhofer FIT.
  */
 public class Event<IDType, ValueType> implements EventEnvelope<IDType,ValueType > {
-    @JsonProperty("Date")
+   @JsonIgnore
     protected Date date;
-    @JsonProperty("ID")
+    @JsonIgnore
     protected IDType id;
-    @JsonProperty("AttributeID")
+    @JsonIgnore
     protected IDType attributeId;
-    @JsonProperty("Value")
+    @JsonIgnore
     protected ValueType value;
 
     protected Event(){
@@ -39,49 +40,50 @@ public class Event<IDType, ValueType> implements EventEnvelope<IDType,ValueType 
     public void topicDataConstructor(String topic) {
         // there is non-generic method
     }
-    @JsonProperty("Date")
+    @JsonIgnore
     @Override
     public Date getDate() {
         return date;
     }
 
+    @JsonIgnore
     @Override
     public String getIsoTimestamp() {
 
         return DateTimeFormatter.ISO_INSTANT.format(date.toInstant());
 
     }
-    @JsonProperty("ID")
+    @JsonIgnore
     @Override
     public IDType getId() {
         return id;
     }
-    @JsonProperty("AttributeID")
+    @JsonIgnore
     @Override
     public IDType getAttributeId() {
         return attributeId;
     }
-    @JsonProperty("Value")
+    @JsonIgnore
     @Override
     public ValueType getValue() {
         return value;
     }
-    @JsonProperty("Date")
+    @JsonIgnore
     @Override
     public void setDate(Date value) {
         date=value;
     }
-    @JsonProperty("ID")
+    @JsonIgnore
     @Override
     public void setId(IDType value) {
         id=value;
     }
-    @JsonProperty("AttributeID")
+    @JsonIgnore
     @Override
     public void setAttributeId(IDType value) {
         attributeId=value;
     }
-    @JsonProperty("Value")
+    @JsonIgnore
     @Override
     public void setValue(ValueType value) {
         this.value=value;

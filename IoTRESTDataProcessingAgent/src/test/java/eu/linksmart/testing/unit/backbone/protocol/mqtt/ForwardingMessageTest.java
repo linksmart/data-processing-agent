@@ -246,7 +246,7 @@ public class ForwardingMessageTest implements Observer {
             Long l = new Long(0);
             int id = 0;
             ob.setId(String.valueOf(1));
-            //PersistentBean bean;
+            //BootstrappingBean bean;
             Map<String,ArrayList<Observation>> test= new Hashtable<>();
 
             String topic= "/federation1/smat/v2/observation/00a467b9290129a71c6b496813cf52b437d878f25148773494967e2b85a2031b/00a467b9290129a71c6b496813cf52b437d878f25148773494967e2b85a2031b";

@@ -5,9 +5,11 @@ import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
 
 import eu.linksmart.services.event.connectors.FileConnector;
+import eu.linksmart.services.event.connectors.Observers.EventMqttObserver;
+import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
 import eu.linksmart.services.event.feeder.EventFeeder;
 import eu.linksmart.services.event.feeder.StatementFeeder;
-import eu.linksmart.services.event.feeder.type.PersistentBean;
+import eu.linksmart.services.event.feeder.type.BootstrappingBean;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.CEPEngine;
@@ -26,7 +28,7 @@ public class DataProcessingCore {
 
  //   protected static List<Feeder> feeders = new ArrayList<>();
 
-    protected static IncomingConnector mqtt =null;
+    protected static MqttIncomingConnectorService mqtt =null;
     private DataProcessingCore() {
     }
 
@@ -122,6 +124,7 @@ public class DataProcessingCore {
             });
     }
 
+
     private static boolean initFeeders() {
 
         // loading of feeders
@@ -129,9 +132,11 @@ public class DataProcessingCore {
         try {
             Class.forName(EventFeeder.class.getCanonicalName());
             Class.forName(StatementFeeder.class.getCanonicalName());
-            Class.forName(PersistentBean.class.getCanonicalName());
+            Class.forName(BootstrappingBean.class.getCanonicalName());
             mqtt = MqttIncomingConnectorService.getReference();
 
+            mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH), new StatementMqttObserver());
+            mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH),conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH),conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver());
 
             FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 

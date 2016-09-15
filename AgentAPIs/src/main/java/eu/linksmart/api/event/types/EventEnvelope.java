@@ -1,6 +1,8 @@
 package eu.linksmart.api.event.types;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 /**
@@ -41,30 +43,35 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      * In this case, the topic/path can be provided so the underlying implementation extracts the needed data.
      *
      * */
+    @JsonIgnore
     public void topicDataConstructor(String topic);
     /**
      * returns the time of the event as date. The time semantic could be anything (e.g. time when the event happens).
      *
      * @return time as date
      * */
+    @JsonIgnore
     public Date getDate();
     /**
      * returns date as string in an ISO 8601
      *
      * @return date as string
      * */
+    @JsonIgnore
     public String getIsoTimestamp();
     /**
      * returns the id as IDType (the semantic depends on the implementation)
      *
      * @return id  as IDType
      * */
+    @JsonIgnore
     public IDType getId();
     /**
      * returns the id of the attribute as IDType (the semantic depends on the implementation)
      *
      * @return id of the attribute as IDType
      * */
+    @JsonIgnore
     public IDType getAttributeId();
 
     /**
@@ -72,29 +79,34 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      *
      * @return value as ValueType
      * */
+    @JsonIgnore
     public ValueType getValue();
     /**
      * setts the time of the event as date. The time semantic could be anything (e.g. time when the event happens).
      *
      * @param time is the time as date
      * */
+    @JsonIgnore
     public void setDate(Date time);
     /**
      * setts the id (the semantic depends on the implementation)
      *
      * @param id is the id as IDType
      * */
+    @JsonIgnore
     public void  setId(IDType id);
     /**
      * setts the id of the attribute (the semantic depends on the implementation)
      *
      * @param id is the id of the attribute as IDType
      * */
+    @JsonIgnore
     public void setAttributeId(IDType id);
     /**
      * setts the value/measurement
      *
      * @param value is the value/measurement to be setted
      * */
+    @JsonIgnore
     public void setValue(ValueType value);
 }

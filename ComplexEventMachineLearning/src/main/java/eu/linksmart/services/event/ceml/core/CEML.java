@@ -287,8 +287,8 @@ public class CEML implements AnalyzerComponent , Feeder {
             return Observation.factory(e.getMessage(),"Error",request,DynamicConst.getId());
         }
     }
-    static void report(String message){
-        MqttCemlAPI.getMeDafault().reportFeedback(message);
+    static void report(String id, String message){
+        MqttCemlAPI.getMeDafault().reportFeedback(id,message);
     }
     static private Map<String,Number> lastKnown = new Hashtable<>();
     static public Number filter(String filterName,Number measurement) {

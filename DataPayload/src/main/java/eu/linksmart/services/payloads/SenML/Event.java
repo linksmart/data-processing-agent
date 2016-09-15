@@ -7,6 +7,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -22,15 +23,27 @@ import java.util.*;
  | Measurement or Parameters | e    | Array  |
  +---------------------------+------+--------+
  */
+/**
+ * Created by Carvajal on 13.02.2015.
+ *   +---------------+------+----------------+
+ |         SenML | JSON | Notes          |
+ +---------------+------+----------------+
+ |          Name | n    | String         |
+ |         Units | u    | String         |
+ |         Value | v    | Floating point |
+ |  String Value | sv   | String         |
+ | Boolean Value | bv   | Boolean        |
+ |     Value Sum | s    | Floating point |
+ |          Time | t    | Number         |
+ |   Update Time | ut   | Number         |
+ +---------------+------+----------------+
+ */
 public class Event extends eu.linksmart.services.payloads.generic.Event<String,Vector<Event.Measurement>> implements EventEnvelope<String,Vector<Event.Measurement>>{
+
     private static final long serialVersionUID = -1510508593277110230L;
    // @JsonProperty("bn")
     //private String bn;
     //@JsonProperty("bt")
-
-
-
-
     //private Long bt;
     @JsonProperty("bu")
     private String bu;
@@ -45,12 +58,75 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
     @JsonIgnore
     final private transient Object lock = new Object();
 
+    static public Event factory(Object bn, Object bt, Object bu,Object ver, Object n, Object u, Object v, Object sv, Object bv, Object s, Object t, Object ut){
+        Event event = new Event();
+
+        if(bn!=null && bn instanceof String)
+            event.setBn((String)bn);
+
+        if(bt!=null && bt instanceof Long)
+            event.setBt((Long) bt);
+
+        if(bu!=null && bu instanceof String)
+            event.setBu((String)bu);
+
+        if(ver!=null && ver instanceof Short)
+            event.setVer((Short) ver);
+
+        if(n!=null || v!=null || sv!=null|| bv!=null|| s!=null|| t!=null|| ut!=null){
+            Measurement m = new Measurement();
+            if(n!=null && n instanceof String)
+                m.setN((String) n);
+            if(u!=null && u instanceof String)
+                m.setU((String) u);
+            if(v!=null && v instanceof Number)
+                m.setV((Number) v);
+            if(sv!=null && sv instanceof String)
+                m.setSv((String) sv);
+            if(bv!=null && bv instanceof Boolean)
+                m.setBv((Boolean) bv);
+            if(s!=null && s instanceof Number)
+                m.setS((Double) s);
+            if(t!=null && t instanceof Long)
+                m.setT((Long) t);
+            if(ut!=null && ut instanceof Long)
+                m.setUt((Long) ut);
+            event.setE(m);
+        }
+
+        return event;
+
+
+    }
+    static public Event factory(Object bn, Object n, Object autoValue){
+
+        Object v=null,sv=null,bv=null;
+        if(autoValue!=null && autoValue instanceof Number)
+            v = (Double)autoValue;
+        if(autoValue!=null && autoValue instanceof String)
+            sv = (String)autoValue;
+        if(autoValue!=null && autoValue instanceof Boolean)
+            bv = (Boolean)autoValue;
+        return factory(bn,n,0L,(short)1,n,null,v,sv,bv,null,(new Date()).getTime(),null);
+    }
+    static public Event factory(Object bn, Object n, Object autoValue,Object ut){
+
+        Object v=null,sv=null,bv=null;
+        if(autoValue!=null && autoValue instanceof Number)
+            v = (Double)autoValue;
+        if(autoValue!=null && autoValue instanceof String)
+            sv = (String)autoValue;
+        if(autoValue!=null && autoValue instanceof Boolean)
+            bv = (Boolean)autoValue;
+        return factory(bn,n,0L,(short)1,n,null,v,sv,bv,null,(new Date()).getTime(),ut);
+    }
     public  Event(){
         super();
         index = null;
         eNameChanged = false;
         bu = null;
         ver = null;
+        value = new Vector<>();
     }
 
 
@@ -91,27 +167,41 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
     public Vector<Measurement> getE() {
         return value;
     }
-    @JsonProperty("e")
+    @JsonIgnore
     public void setE(Vector<Measurement> e) {
         this.value = e;
     }
-    @JsonProperty("bn")
+    @JsonProperty("e")
+    public void setE(Measurement[] e) {
+        this.value = new Vector<Measurement>(Arrays.asList(e));
+    }
+    @JsonProperty("e")
+    public Measurement getE(int i) {
+        return value.get(i);
+    }
+    @JsonIgnore
+    public void setE(Measurement e) {
+        this.value.add(e);
+    }
+
+    //======================================================
+    @JsonIgnore
     public String getBaseName() {
         return id;
     }
-    @JsonProperty("bt")
+    @JsonIgnore
     public Long getBaseTime() {
         return date.getTime();
     }
-    @JsonProperty("bu")
+    @JsonIgnore
     public String getBaseUnits() {
         return bu;
     }
-    @JsonProperty("ver")
+    @JsonIgnore
     public Short getVersion() {
         return ver;
     }
-    @JsonProperty("e")
+    @JsonIgnore
     public Vector<Measurement> getElements() {
         return value;
     }
@@ -126,24 +216,23 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
     public Object getValue(String key) {
         return getEbyName(key);
     }
-
-    @JsonProperty("bn")
+    @JsonIgnore
     public void setBaseName(String baseName) {
         setBn(baseName);
     }
-    @JsonProperty("bt")
+    @JsonIgnore
     public void setBaseTime(Long baseTime) {
         setBt(baseTime);
     }
-    @JsonProperty("bu")
+    @JsonIgnore
     public void setBaseUnits(String baseUnits) {
         setBu(baseUnits);
     }
-    @JsonProperty("ver")
+    @JsonIgnore
     public void setVersion(Short version) {
         this.ver = version;
     }
-    @JsonProperty("e")
+    @JsonIgnore
     public void setElements(Vector<Measurement> elements) {
         setE(elements);
     }
@@ -211,19 +300,22 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
      |   Update Time | ut   | Number         |
      +---------------+------+----------------+
      */
-    public class Measurement  extends eu.linksmart.services.payloads.generic.Event<String,Number>  implements EventEnvelope<String,Number>{
+    public static class Measurement  extends eu.linksmart.services.payloads.generic.Event<String,Number>  implements EventEnvelope<String,Number>{
         private static final long serialVersionUID = -3921246268323727465L;
-
+        @JsonProperty("u")
         private String u;
+        @JsonProperty("sv")
         private String sv;
+        @JsonProperty("bv")
         private Boolean bv;
+        @JsonProperty("s")
         private Double s;
+        @JsonProperty("ut")
         private Long ut;
 
 
         public  Measurement(){
             super();
-            id = Event.this.id;
         }
 
         @JsonProperty("n")
@@ -232,10 +324,9 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
         }
         @JsonProperty("n")
         public void setN(String n) {
-            synchronized(lock) {
+
                 this.attributeId = n;
-                eNameChanged = true;
-            }
+
         }
         @JsonProperty("u")
         public String getU() {
@@ -252,7 +343,7 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
         }
 
         @JsonProperty("v")
-        public void setV(Double v) {
+        public void setV(Number v) {
             this.value = v;
         }
 
@@ -293,7 +384,7 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
 
         @JsonProperty("t")
         public void setT(Long t) {
-            this.date = new Date(Event.this.date.getTime()+t);
+            this.date = new Date(t);
         }
 
         @JsonProperty("ut")
@@ -306,67 +397,80 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
             this.ut = ut;
         }
 
+
         //============================================
+        @JsonIgnore
         public String getName() {
             return attributeId;
         }
-
+        @JsonIgnore
         public void setName(String n) {
-            synchronized(lock) {
-                this.attributeId = n;
-                eNameChanged = true;
-            }
+           setN(n);
         }
 
+        @JsonIgnore
         public String getUnit() {
             return u;
         }
 
+        @JsonIgnore
         public void setUnit(String u) {
             this.u = u;
         }
 
 
 
+        @JsonIgnore
         public String getStringValue() {
             return sv;
         }
 
+        @JsonIgnore
         public void setStringValue(String sv) {
             this.sv = sv;
         }
 
+        @JsonIgnore
         public Boolean getBooleanValue() {
             return bv;
         }
 
+        @JsonIgnore
         public void setBooleanValue(Boolean bv) {
             this.bv = bv;
         }
 
+        @JsonIgnore
         public Double getSum() {
             return s;
         }
 
+        @JsonIgnore
         public void setSum(Double s) {
             this.s = s;
         }
 
+        @JsonIgnore
         public Long getTime() {
             return getT();
         }
 
+        @JsonIgnore
         public void setTime(Long t) {
             setT(t);
         }
 
+        @JsonIgnore
         public Long getUpdateTime() {
             return ut;
         }
 
+        @JsonIgnore
         public void setUpdateTime(Long ut) {
             this.ut = ut;
         }
+
+        @JsonIgnore
         public void setAutoValue(Object value){
              if (value instanceof Long){
                 setT((Long)value);
@@ -383,6 +487,8 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
                 sv = value.toString();
 
         }
+
+        @JsonIgnore
         public Object getAutoValue(){
             if (value != null){
                 return value;

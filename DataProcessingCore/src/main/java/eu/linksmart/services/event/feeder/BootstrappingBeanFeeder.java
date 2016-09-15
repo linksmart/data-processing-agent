@@ -6,7 +6,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.services.event.feeder.type.PersistentBean;
+import eu.linksmart.services.event.feeder.type.BootstrappingBean;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.event.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.configuration.Configurator;
@@ -17,31 +17,32 @@ import java.io.IOException;
 /**
  * Created by José Ángel Carvajal on 05.09.2016 a researcher of Fraunhofer FIT.
  */
-public class PersistentBeanFeeder implements Feeder {
+public class BootstrappingBeanFeeder implements Feeder {
 
     protected static Deserializer deserializer = new DefaultDeserializer();
-    static protected Logger loggerService = Utils.initLoggingConf(PersistentBeanFeeder.class);
+    static protected Logger loggerService = Utils.initLoggingConf(BootstrappingBeanFeeder.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
     static public void feed(String rawData){
-        //PersistentBean persistentBean= gson.fromJson(rawData, PersistentBean.class);
-        PersistentBean persistentBean= null;
+        //BootstrappingBean BootstrappingBean= gson.fromJson(rawData, BootstrappingBean.class);
+        BootstrappingBean BootstrappingBean = null;
         try {
-            persistentBean = deserializer.parse(rawData,PersistentBean.class);
+           // "[{\"name\":\"aggregatedConsumption\",\"statement\":\"select Event.factory(begin.bn, String.valueOf(begin.last.v), power.sumof(i=>cast(i.last.v,double)), cast(fin.last.t, long) - cast(begin.last.t,long) ) from pattern[ every begin=SenML(last.n='WS0024' and cast(last.v,int)!=0)-> ( (power=SenML(last.n='WSS0017')) until (fin=SenML(last.n='WS0024' and cast(last.v,int)=0))) ]\"}]"
+            BootstrappingBean = deserializer.parse(rawData,BootstrappingBean.class);
         } catch (IOException e) {
             loggerService.error(e.getMessage(),e);
         }
 
-        if(persistentBean!=null) {
-            if (persistentBean.getStatements() != null && !persistentBean.getStatements().isEmpty()) {
-                for (Statement stm : persistentBean.getStatements()) {
+            if(BootstrappingBean !=null) {
+            if (BootstrappingBean.getStatements() != null && !BootstrappingBean.getStatements().isEmpty()) {
+                for (Statement stm : BootstrappingBean.getStatements()) {
                     StatementFeeder.addNewStatement(stm,null,null);
                 }
             }
-            if (persistentBean.getObservations() != null && !persistentBean.getObservations().isEmpty()) {
-                for (String topic : persistentBean.getObservations().keySet()) {
+            if (BootstrappingBean.getObservations() != null && !BootstrappingBean.getObservations().isEmpty()) {
+                for (String topic : BootstrappingBean.getObservations().keySet()) {
 
                     String id= getThingID(topic);
-                    for(EventEnvelope observation: persistentBean.getObservations(topic)) {
+                    for(EventEnvelope observation: BootstrappingBean.getObservations(topic)) {
                         observation.setId(id);
                         try {
                            EventFeeder.feed(topic,observation);

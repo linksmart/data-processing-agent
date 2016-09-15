@@ -140,7 +140,7 @@ public class CEMLManager implements CEMLRequest {
     @Override
     public void report() {
         try {
-            CEML.report(CEML.getMapper().writeValueAsString(this));
+            CEML.report(name,CEML.getMapper().writeValueAsString(this));
 
         }catch (JsonProcessingException e) {
             loggerService.error(e.getMessage(),e);

@@ -39,6 +39,7 @@ import java.util.Date;
  */
 public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventEnvelope<String,Object>
 {
+
 	/**
 	 * The time point/period of when the observation happens. To be rendered as
 	 * ISO8601 time point/period string.

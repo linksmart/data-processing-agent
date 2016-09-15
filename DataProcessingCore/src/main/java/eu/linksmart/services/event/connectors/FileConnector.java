@@ -1,7 +1,7 @@
 package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
-import eu.linksmart.services.event.feeder.PersistentBeanFeeder;
+import eu.linksmart.services.event.feeder.BootstrappingBeanFeeder;
 import eu.linksmart.services.event.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;
@@ -54,9 +54,9 @@ public class FileConnector extends Component implements IncomingConnector {
                     found =true;
             }
             if(!found)
-                loggerService.warn("There is no persistency file ");
+                loggerService.warn("There is no bootstrapping file ");
             else
-                PersistentBeanFeeder.feed(IOUtils.toString(inputStream));
+                BootstrappingBeanFeeder.feed(IOUtils.toString(inputStream));
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         } finally {

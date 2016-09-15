@@ -13,8 +13,8 @@ public class DefaultEnveloper implements Enveloper  {
 
     @Override
     public <IDType , ValueType > EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description) {
-        if (payload instanceof Observation) {
-            return (Observation) payload;
+        if (payload instanceof EventEnvelope) {
+            return (EventEnvelope) payload;
 
         }else {
 

@@ -18,8 +18,8 @@ import java.util.Arrays;
 public class StatementMqttObserver extends IncomingMqttObserver {
 
 
-    public StatementMqttObserver(StaticBroker broker) {
-        super(broker);
+    public StatementMqttObserver() {
+        super();
     }
 
     @Override

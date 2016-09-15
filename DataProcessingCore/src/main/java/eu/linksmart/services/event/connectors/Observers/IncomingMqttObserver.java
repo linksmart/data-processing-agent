@@ -23,10 +23,20 @@ public abstract class IncomingMqttObserver implements Observer {
     protected long debugCount=0;
     protected Logger loggerService = Utils.initLoggingConf(this.getClass());
     protected Configurator conf =  Configurator.getDefaultConfig();
+
+
+
     protected StaticBroker brokerService;
 
-    public IncomingMqttObserver(StaticBroker broker)  {
-        brokerService =broker;
+    public IncomingMqttObserver()  {
+
+    }
+    public StaticBroker getBrokerService() {
+        return brokerService;
+    }
+
+    public void setBrokerService(StaticBroker brokerService) {
+        this.brokerService = brokerService;
     }
     @Override
     public void update(Observable topic, Object mqttMessage)  {

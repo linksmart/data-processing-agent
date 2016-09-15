@@ -23,8 +23,8 @@ import java.util.*;
 public class EventMqttObserver extends IncomingMqttObserver {
 
 
-    public EventMqttObserver(StaticBroker broker) {
-        super(broker);
+    public EventMqttObserver() {
+        super();
     }
 
     protected void mangeEvent(String topic,byte[] rawEvent) {
