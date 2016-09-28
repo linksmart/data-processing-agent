@@ -39,16 +39,16 @@ public class ObservedProperty extends OGCSensorThingsAPIDataModelEntry
 	private String urn;
 	
 	/**
-	 * The unit of measurement for the observations measuring this
+	 * The unit of measurement for the events measuring this
 	 * observedProperty. This is obtained by exploiting the JSciene library.
 	 */
-	@JsonPropertyDescription("The unit of measurement for the observations measuring this observedProperty. This is obtained by exploiting the JSciene library.")
+	@JsonPropertyDescription("The unit of measurement for the events measuring this observedProperty. This is obtained by exploiting the JSciene library.")
 	@JsonProperty(value = "UnitOfMeasurement")
 	private String unitOfMeasurement;
 	
 	/**
-	 * The observations of a datastream observe the same observedProperty. The
-	 * observations of different datastreams could observe the same
+	 * The events of a datastream observe the same observedProperty. The
+	 * events of different datastreams could observe the same
 	 * observedProperty.
 	 */
 	@JsonProperty(value = "Datastreams")
@@ -70,7 +70,7 @@ public class ObservedProperty extends OGCSensorThingsAPIDataModelEntry
 	 * @param urn
 	 *            The URN(URI) identifying the observed property
 	 * @param unitOfMeasurement
-	 *            The unit of measure adopted for observations about the
+	 *            The unit of measure adopted for events about the
 	 *            property. Should in principle be part of the <a
 	 *            href="http://unitsofmeasure.org/trac/">UCUM</a> set.
 	 */
@@ -123,7 +123,7 @@ public class ObservedProperty extends OGCSensorThingsAPIDataModelEntry
 	 * 
 	 * @return the unitOfMeasurement associated with this property.
 	 */
-	@JsonPropertyDescription("The unit of measurement for the observations measuring this observedProperty. This is obtained by exploiting the JSciene library.")
+	@JsonPropertyDescription("The unit of measurement for the events measuring this observedProperty. This is obtained by exploiting the JSciene library.")
 	@JsonProperty(value = "UnitOfMeasurement")
 	public String getUnitOfMeasurement()
 	{
@@ -136,7 +136,7 @@ public class ObservedProperty extends OGCSensorThingsAPIDataModelEntry
 	 * @param unitOfMeasurement
 	 *            the unitOfMeasurement to set.
 	 */
-	@JsonPropertyDescription("The unit of measurement for the observations measuring this observedProperty. This is obtained by exploiting the JSciene library.")
+	@JsonPropertyDescription("The unit of measurement for the events measuring this observedProperty. This is obtained by exploiting the JSciene library.")
 	@JsonProperty(value = "UnitOfMeasurement")
 	public void setUnitOfMeasurement(String unitOfMeasurement)
 	{

@@ -42,7 +42,7 @@ public class Sensor extends eu.linksmart.services.payloads.ogc.sensorthing.Senso
 
     /**
      * A thing can have zero-to-many datastreams. A datastream entity can only
-     * link to a thing as a collection of observations or properties.
+     * link to a thing as a collection of events or properties.
      */
     @JsonBackReference(value = "datastreams")
     @JsonDeserialize(as=HashSet.class)

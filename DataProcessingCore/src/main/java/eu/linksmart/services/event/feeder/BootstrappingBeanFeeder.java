@@ -38,11 +38,11 @@ public class BootstrappingBeanFeeder implements Feeder {
                     StatementFeeder.addNewStatement(stm,null,null);
                 }
             }
-            if (BootstrappingBean.getObservations() != null && !BootstrappingBean.getObservations().isEmpty()) {
-                for (String topic : BootstrappingBean.getObservations().keySet()) {
+            if (BootstrappingBean.getEvents() != null && !BootstrappingBean.getEvents().isEmpty()) {
+                for (String topic : BootstrappingBean.getEvents().keySet()) {
 
                     String id= getThingID(topic);
-                    for(EventEnvelope observation: BootstrappingBean.getObservations(topic)) {
+                    for(EventEnvelope observation: BootstrappingBean.getEvent(topic)) {
                         observation.setId(id);
                         try {
                            EventFeeder.feed(topic,observation);

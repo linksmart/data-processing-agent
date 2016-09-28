@@ -105,7 +105,7 @@ public class OGCSensorThingLinkedUnitTest {
                         " \"result\": 70.4,\n" +
                         "\"featureOfInterest\": {" +
                             "\"@iot.id\":1," +
-                            "\t\"observations\": [1],"+
+                            "\t\"events\": [1],"+
                           //  "\"@iot.selfLink\":\"0\"," +
                             "\"description\":\"This is a weather station.\"," +
                             "\"encodingType\":\"application/vnd.geo+json\"," +

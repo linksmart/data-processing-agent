@@ -5,5 +5,5 @@ package eu.linksmart.services.utils.logging;
  */
 public interface LoggerServiceConst {
 
-    public static final String LoggingDefaultLoggingFile  ="Logging.Default.Logging.File";
+    public static final String LoggingDefaultLoggingFile  ="logging.default.configuration.file";
 }

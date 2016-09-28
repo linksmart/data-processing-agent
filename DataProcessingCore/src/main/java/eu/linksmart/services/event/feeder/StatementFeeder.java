@@ -281,7 +281,7 @@ public class StatementFeeder implements Feeder {
         return addNewStatement(result.getHeadResource(),cepEngine,result);
     }
     public static MultiResourceResponses<Statement>  addNewStatement(/*@NotNull*/ Statement statement, String cepEngine,MultiResourceResponses<Statement> result){
-
+        GeneralRequestResponse error;
         if(result==null){
             result = new MultiResourceResponses<>();
             result.addResources(statement.getID(),statement);
@@ -305,10 +305,13 @@ public class StatementFeeder implements Feeder {
         id = statement.getID();
         // checking which wrappers exist
         if (CEPEngine.instancedEngines.size() == 0){
-            result.addResponse(createErrorMapMessage(DynamicConst.getId(),"Agent",503,"Service Unavailable","No CEP engine found to deploy statement"));
-
+            error = createErrorMapMessage(DynamicConst.getId(), "Agent", 503, "Service Unavailable", "No CEP engine found to deploy statement");
+            result.addResponse(error);
+            loggerService.error(error.getMessage());
         }else if (!(workingCEPsList = getCEPwithStatement(id)).isEmpty() && !update) { // if the id exists but is not an update
-            result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 409, "Conflict", "The id sent in the request exists already. If want to be updated make an update/PUT request"));
+            error = createErrorMapMessage(DynamicConst.getId(), "Agent", 409, "Conflict", "The id sent in the request exists already. If want to be updated make an update/PUT request");
+            result.addResponse(error);
+            loggerService.error(error.getMessage());
         }else {
 
             Statement org = null;
@@ -341,8 +344,9 @@ public class StatementFeeder implements Feeder {
                     loggerService.error(e.getMessage(), e);
                     result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 500, "Internal Server Error", e.getMessage()));
                 }else {
-
-                    result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 400, "Bad Request", "The cep engine named " + cepEngine + " doesn't exists"));
+                    error = createErrorMapMessage(DynamicConst.getId(), "Agent", 400, "Bad Request", "The cep engine named " + cepEngine + " doesn't exists");
+                    result.addResponse(error);
+                    loggerService.error(error.getMessage());
                 }
             }
         }

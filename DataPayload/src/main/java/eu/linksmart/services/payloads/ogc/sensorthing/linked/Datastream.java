@@ -33,8 +33,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * <strong>Definition:</strong> A datastream groups a collection of observations
- * that are related in some way. The one constraint is that the observations in
+ * <strong>Definition:</strong> A datastream groups a collection of events
+ * that are related in some way. The one constraint is that the events in
  * a datastream must measure the same observed property (i.e., one phenomenon).
  * 
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
@@ -48,7 +48,7 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
     @JsonProperty(value = "observationType")
     @JsonPropertyDescription("TBD")
 
-	@JsonBackReference(value = "observations")
+	@JsonBackReference(value = "events")
 	protected Set<Observation> observations;
     @JsonPropertyDescription("TBD.")
     @JsonProperty(value = "Observations@iot.navigationLink")
@@ -105,14 +105,14 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
     public void setThingNavigationLink(String value) {   }
 
 	/**
-	 * Provides a Live reference to the list of observations belonging to this
+	 * Provides a Live reference to the list of events belonging to this
 	 * {@link eu.linksmart.services.payloads.ogc.sensorthing.linked.Datastream} instance. The underlying data structure is not
 	 * Thread-safe, therefore synchronization and concurrent modification issues
 	 * might arise in multi-threaded environments.
 	 *
 	 * @return the live reference to the inner {@link java.util.Set}<{@link eu.almanac.ogc.sensorthing.api.datamodel.Observation}>.
 	 */
-	@JsonProperty(value = "observations")
+	@JsonProperty(value = "events")
 	public Set<Observation> getObservations()
 	{
 		return observations;
@@ -124,16 +124,16 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	 * discarded.
 	 *
 	 * @param observations
-	 *            the observations to set.
+	 *            the events to set.
 	 */
-	@JsonProperty(value = "observations")
+	@JsonProperty(value = "events")
 	public void setObservations(Set<Observation> observations)
 	{
 		this.observations = observations;
 	}
 
 	/**
-	 * Adds a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} to the set of observations belonging to
+	 * Adds a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} to the set of events belonging to
 	 * this {@link eu.linksmart.services.payloads.ogc.sensorthing.linked.Datastream} instance.
 	 *
 	 * @param observation
@@ -148,7 +148,7 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	}
 
 	/**
-	 * Removes a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} from the set of observations
+	 * Removes a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} from the set of events
 	 * belonging to this {@link eu.linksmart.services.payloads.ogc.sensorthing.linked.Datastream} instance.
 	 *
 	 * @param observation
@@ -171,7 +171,7 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 
 	/**
 	 * Provides the {@link eu.almanac.ogc.sensorthing.api.datamodel.ObservedProperty} instance describing the property to
-	 * which observations belonging to this data stream belong.
+	 * which events belonging to this data stream belong.
 	 *
 	 * @return the observedProperty
 	 */
@@ -182,7 +182,7 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 
 	/**
 	 * Sets the {@link eu.almanac.ogc.sensorthing.api.datamodel.ObservedProperty} instance describing the property to
-	 * which observations belonging to this data stream belong.
+	 * which events belonging to this data stream belong.
 	 * 
 	 * @param observedProperty
 	 *            the observedProperty to set

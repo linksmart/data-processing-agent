@@ -15,7 +15,7 @@ public class ObservedProperty extends eu.linksmart.services.payloads.ogc.sensort
 
     /**
      * A thing can have zero-to-many datastreams. A datastream entity can only
-     * link to a thing as a collection of observations or properties.
+     * link to a thing as a collection of events or properties.
      */
 
     @JsonProperty(value = "datastreams")

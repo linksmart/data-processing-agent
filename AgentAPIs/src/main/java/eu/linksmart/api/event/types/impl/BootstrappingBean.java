@@ -2,7 +2,6 @@ package eu.linksmart.api.event.types.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.api.event.types.Statement;
 
 import java.util.ArrayList;
@@ -16,11 +15,11 @@ import java.util.Map;
 public class BootstrappingBean {
     @JsonProperty("statements")
     protected List<Statement> statements;
-    @JsonProperty("observations")
-    protected Map<String,EventEnvelope[]> observations;
+    @JsonProperty("events")
+    protected Map<String,EventEnvelope[]> events;
     public BootstrappingBean(){
         statements = null;
-        observations = null;
+        events = null;
     }
 
     public List<Statement> getStatements() {
@@ -33,12 +32,12 @@ public class BootstrappingBean {
         this.statements = statements;
     }
 
-    public Map<String,EventEnvelope[]> getObservations() {
-        return observations;
+    public Map<String,EventEnvelope[]> getEvents() {
+        return events;
     }
 
-    public void setObservations(Map<String,EventEnvelope[]> observations) {
-        this.observations = observations;
+    public void setEvents(Map<String, EventEnvelope[]> events) {
+        this.events = events;
     }
 
     public Statement getStatement(int index) {
@@ -57,18 +56,18 @@ public class BootstrappingBean {
         statements.set(index, (StatementInstance) statement);
 
     }
-    public EventEnvelope[] getObservations(String topic) {
-        if(observations!=null)
-            return observations.get(topic);
+    public EventEnvelope[] getEvent(String topic) {
+        if(events !=null)
+            return events.get(topic);
         else
             return null;
     }
 
-    public void setObservations(String key,EventEnvelope[] observation) {
-        if(observations==null)
-            observations = new Hashtable<>();
+    public void setEvent(String key, EventEnvelope[] observation) {
+        if(events ==null)
+            events = new Hashtable<>();
 
-        observations.put(key, observation);
+        events.put(key, observation);
 
     }
 }

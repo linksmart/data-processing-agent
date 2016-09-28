@@ -26,7 +26,6 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     final protected Model model;
     final protected DataDescriptors descriptors;
 
-    protected String columnNameTime = "";
     public MapLearningHandler(Statement statement) {
         super(statement);
 
@@ -35,8 +34,6 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         model = originalRequest.getModel();
         descriptors = originalRequest.getDescriptors();
 
-        if(conf.getString(Const.CEML_EngineTimeProveded)!= null ||conf.getString(Const.CEML_EngineTimeProveded).equals("") )
-            columnNameTime = conf.getString(Const.CEML_EngineTimeProveded);
     }
 
 

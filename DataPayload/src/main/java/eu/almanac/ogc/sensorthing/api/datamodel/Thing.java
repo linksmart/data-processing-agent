@@ -62,7 +62,7 @@ public class Thing extends OGCSensorThingsAPIDataModelEntry
 	
 	/**
 	 * A thing can have zero-to-many datastreams. A datastream entity can only
-	 * link to a thing as a collection of observations or properties.
+	 * link to a thing as a collection of events or properties.
 	 */
 	@JsonProperty(value = "Datastreams")
 	private Set<Datastream> datastreams;

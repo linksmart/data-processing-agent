@@ -35,8 +35,8 @@ import org.geojson.Polygon;
 import java.util.*;
 
 /**
- * <strong>Definition:</strong> A datastream groups a collection of observations
- * that are related in some way. The one constraint is that the observations in
+ * <strong>Definition:</strong> A datastream groups a collection of events
+ * that are related in some way. The one constraint is that the events in
  * a datastream must measure the same observed property (i.e., one phenomenon).
  * 
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>

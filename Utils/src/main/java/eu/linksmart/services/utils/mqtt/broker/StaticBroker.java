@@ -1,10 +1,13 @@
 package eu.linksmart.services.utils.mqtt.broker;
 
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.constants.Const;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by José Ángel Carvajal on 23.10.2015 a researcher of Fraunhofer FIT.
@@ -16,16 +19,23 @@ public class StaticBroker implements Broker{
     protected Map<Topic,ArrayList<Observer>> observersByTopic = new Hashtable<>();
     protected Map<Observer,Topic> observers = new Hashtable<>();
     protected boolean needsReconnect = false;
-
+    private Configurator conf = Configurator.getDefaultConfig();
 
     public StaticBroker(String brokerName, String brokerPort) throws MalformedURLException, MqttException {
         clientID = UUID.randomUUID();
-        brokerService = StaticBrokerService.getBrokerService(clientID, brokerName,brokerPort);
+        brokerService = StaticBrokerService.getBrokerService(clientID, "");
+
+    }
+    public StaticBroker(String alias) throws MalformedURLException, MqttException {
+        clientID = UUID.randomUUID();
+
+        brokerService = StaticBrokerService.getBrokerService(clientID, alias);
+
 
     }
     public StaticBroker() throws MalformedURLException, MqttException {
         clientID = UUID.randomUUID();
-        brokerService = StaticBrokerService.getBrokerService(clientID, "localhost","1883");
+        brokerService = StaticBrokerService.getBrokerService(clientID, "");
     }
     @Override
     public boolean isConnected() {
@@ -145,17 +155,25 @@ public class StaticBroker implements Broker{
 
     @Override
     public boolean addListener(String topic, Observer stakeholder) {
+        topicObserversManagement(topic,stakeholder);
+
+        return brokerService.addListener(topic,stakeholder);
+    }
+    @Override
+    public boolean addListener(String topic, Observer stakeholder, int QoS) {
+       topicObserversManagement(topic,stakeholder);
+
+        return brokerService.addListener(topic,stakeholder,QoS);
+    }
+    private void topicObserversManagement(String topic, Observer stakeholder){
         Topic t = new Topic(topic);
         if(!observersByTopic.containsKey(t))
-            observersByTopic.put(t,new ArrayList<Observer>());
+            observersByTopic.put(t,new ArrayList<>());
         if(!observersByTopic.get(t).contains(stakeholder)) {
             observers.put(stakeholder,t);
             observersByTopic.get(t).add(stakeholder);
         }
-
-        return brokerService.addListener(topic,stakeholder);
     }
-
     @Override
     public boolean removeListener(String topic, Observer stakeholder) {
         observersByTopic.get(new Topic(topic)).remove(stakeholder);
@@ -177,8 +195,36 @@ public class StaticBroker implements Broker{
     }
 
     @Override
+    public String getAlias() {
+        return brokerService.getAlias();
+    }
+
+    @Override
     public void update(Observable o, Object arg) {
         brokerService.update(o,arg);
 
+    }
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this)
+            return true;
+        if (o!=null && o instanceof StaticBroker) {
+            StaticBroker aux = (StaticBroker) o;
+
+            return brokerService.equals(aux.brokerService);
+        }
+        return false;
+    }
+    @Override
+    public String toString(){
+
+        return brokerService.toString();
+
+    }
+    @Override
+    public int hashCode(){
+
+        return toString().hashCode();
     }
 }

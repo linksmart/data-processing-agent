@@ -9,10 +9,12 @@ import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by José Ángel Carvajal on 23.08.2016 a researcher of Fraunhofer FIT.
@@ -27,22 +29,14 @@ public class DefaultMQTTPublisher implements Publisher {
     /***
      * Location are the brokers unknown with an alias by the Handlers
      * */
-    public final static Map<String,Map.Entry<String,String>> knownInstances= new Hashtable<>();
+    public final static Set<String> knownInstances= new HashSet<>();
     public static boolean addKnownLocations(String statement) throws StatementException {
-        String[] nameURL = statement.toLowerCase().replace("add instance", "").trim().split("=");
-        if (nameURL.length == 2) {
-            String namePort[] = nameURL[1].split(":");
-
-            knownInstances.put(nameURL[0], new AbstractMap.SimpleImmutableEntry<>(namePort[0], namePort[1]));
-
-        } else {
-            return false;
-        }
-        return true;
+        // todo need to define how we add new locations into the Agent configuration
+       throw new NotImplementedException();
     }
 
     public static boolean removeKnownLocations(String alias) throws StatementException {
-        if( knownInstances.containsKey(alias))
+        if( knownInstances.contains(alias))
             knownInstances.remove(alias);
         else
             return false;
@@ -50,25 +44,10 @@ public class DefaultMQTTPublisher implements Publisher {
         return true;
     }
     static {
-        List<Object> alias = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_ALIASES_CONF_PATH);
-        List<Object> brokerHostname = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_CONF_PATH);
-        List<Object> brokerPort = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_BROKER_PORT_CONF_PATH);
-        if(alias.size()!=brokerHostname.size()&& alias.size()!=brokerPort.size())
-            Utils.initLoggingConf(DefaultMQTTPublisher.class).error("Inconsistent configuration in "+
-                            Const.EVENTS_OUT_BROKER_ALIASES_CONF_PATH+ " and/or " +
-                            Const.EVENTS_OUT_BROKER_CONF_PATH+ " and/or " +
-                            Const.EVENTS_OUT_BROKER_CONF_PATH
-            );
-        else {
-            for(int i=0;i<alias.size();i++)
-                knownInstances.put(
-                        alias.get(i).toString(),
-                        new AbstractMap.SimpleEntry<>(
-                            brokerHostname.get(i).toString(),
-                            brokerPort.get(i).toString()
-                        )
-                );
-        }
+        List<Object> alias = Configurator.getDefaultConfig().getList(Const.BROKERS_ALIAS);
+
+        knownInstances.addAll(alias.stream().map(Object::toString).collect(Collectors.toList()));
+
     }
     public DefaultMQTTPublisher(Statement statement) {
         outputs = statement.getOutput()!=null ? Arrays.asList(statement.getOutput()) : new ArrayList<>();
@@ -125,13 +104,10 @@ public class DefaultMQTTPublisher implements Publisher {
             }
 
             for(String scope: scopes) {
-                if (!knownInstances.containsKey(scope.toLowerCase()))
+                if (!knownInstances.contains(scope.toLowerCase()))
                     throw new StatementException( id,"Statement", "The selected scope (" + scopes.get(0) + ") is unknown");
 
-                brokers.put(scope, new StaticBroker(
-                        knownInstances.get(scope.toLowerCase()).getKey(),
-                        knownInstances.get(scope.toLowerCase()).getValue()
-                ));
+                brokers.put(scope, new StaticBroker(scope));
             }
 
         } catch (MqttException e) {

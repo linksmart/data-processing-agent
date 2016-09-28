@@ -23,8 +23,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import java.util.Set;
 
 /**
- * <strong>Definition:</strong> A datastream groups a collection of observations
- * that are related in some way. The one constraint is that the observations in
+ * <strong>Definition:</strong> A datastream groups a collection of events
+ * that are related in some way. The one constraint is that the events in
  * a datastream must measure the same observed property (i.e., one phenomenon).
  * 
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
@@ -42,21 +42,21 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 
 	/**
 	 * A thing can have zero-to-many datastreams. A datastream entity can only
-	 * link to a thing as a collection of observations or properties.
+	 * link to a thing as a collection of events or properties.
 	 */
 	@JsonProperty(value = "Thing")
 	private Thing thing;
 
 	/**
-	 * A datastream can have zero-to-many observations. One observation must
+	 * A datastream can have zero-to-many events. One observation must
 	 * occur in one and only one datastream.
 	 */
 	@JsonProperty(value = "Observations")
 	private Set<Observation> observations;
 
 	/**
-	 * The observations of a datastream observe the same observedProperty. The
-	 * observations of different datastreams could observe the same
+	 * The events of a datastream observe the same observedProperty. The
+	 * events of different datastreams could observe the same
 	 * observedProperty.
 	 */
 	@JsonProperty(value = "ObservedProperty")
@@ -81,7 +81,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 	 * @param thing
 	 *            The {@link Thing} instance generating this stream of data.
 	 * @param observedProperty
-	 *            The {@link ObservedProperty} about which are observations
+	 *            The {@link ObservedProperty} about which are events
 	 *            belonging to this datastream.
 	 */
 	public Datastream(String description, Thing thing, ObservedProperty observedProperty)
@@ -144,7 +144,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 	}
 
 	/**
-	 * Provides a Live reference to the list of observations belonging to this
+	 * Provides a Live reference to the list of events belonging to this
 	 * {@link Datastream} instance. The underlying data structure is not
 	 * Thread-safe, therefore synchronization and concurrent modification issues
 	 * might arise in multi-threaded environments.
@@ -163,7 +163,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 	 * discarded.
 	 *
 	 * @param observations
-	 *            the observations to set.
+	 *            the events to set.
 	 */
 	@JsonProperty(value = "Observations")
 	public void setObservations(Set<Observation> observations)
@@ -172,7 +172,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 	}
 
 	/**
-	 * Adds a single {@link Observation} to the set of observations belonging to
+	 * Adds a single {@link Observation} to the set of events belonging to
 	 * this {@link Datastream} instance.
 	 *
 	 * @param observation
@@ -187,7 +187,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 	}
 
 	/**
-	 * Removes a single {@link Observation} from the set of observations
+	 * Removes a single {@link Observation} from the set of events
 	 * belonging to this {@link Datastream} instance.
 	 *
 	 * @param observation
@@ -210,7 +210,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 
 	/**
 	 * Provides the {@link ObservedProperty} instance describing the property to
-	 * which observations belonging to this data stream belong.
+	 * which events belonging to this data stream belong.
 	 *
 	 * @return the observedProperty
 	 */
@@ -221,7 +221,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 
 	/**
 	 * Sets the {@link ObservedProperty} instance describing the property to
-	 * which observations belonging to this data stream belong.
+	 * which events belonging to this data stream belong.
 	 * 
 	 * @param observedProperty
 	 *            the observedProperty to set

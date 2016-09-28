@@ -64,7 +64,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     protected MqttCemlAPI() throws MalformedURLException, MqttException, ClassNotFoundException {
         super(MqttCemlAPI.class.getSimpleName(), "Provides a MQTT light API to the CEML logic", "MqttCemlAPI");
         Class.forName(CEML.class.getCanonicalName());
-        brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST),conf.getString(Const.CEML_MQTT_BROKER_PORT));
+        brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST));
         initAddRequest();
         initGetRequest();
         initRemoveRequest();
@@ -76,7 +76,6 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
         try {
             MqttIncomingConnectorService.getReference().addAddListener(
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
-                    conf.getString(Const.CEML_MQTT_BROKER_PORT),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "add/",
                     new IncomingMqttObserver() {
                         @Override
@@ -105,7 +104,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
         try {
             MqttIncomingConnectorService.getReference().addAddListener(
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
-                    conf.getString(Const.CEML_MQTT_BROKER_PORT),
+                  //  conf.getString(Const.CEML_MQTT_BROKER_PORT),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "remove/+",
                     new IncomingMqttObserver() {
                         @Override
@@ -141,7 +140,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
         try {
             MqttIncomingConnectorService.getReference().addAddListener(
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
-                    conf.getString(Const.CEML_MQTT_BROKER_PORT),
+                   // conf.getString(Const.CEML_MQTT_BROKER_PORT),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "get/+",
                     new IncomingMqttObserver() {
                         @Override

@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  * <strong>Definition:</strong> Features or feature collections that represent
  * the identifiable object(s) on which the sensor systems are making
- * observations. In the case of an in-situ sensor or observations being
+ * events. In the case of an in-situ sensor or events being
  * attributes of the thing, the feature of interest could be the thing itself.
  * For remote sensors, this may be the geographical area or volume that is being
  * sensed.
@@ -61,7 +61,7 @@ public class FeatureOfInterest extends OGCSensorThingsAPIDataModelEntry
 	
 	/**
 	 * An observation observes on one and only one feature of interest. One
-	 * feature of interest could be observed by zero-to-many observations.
+	 * feature of interest could be observed by zero-to-many events.
 	 */
 	private Set<Observation> observations;
 	
@@ -169,12 +169,12 @@ public class FeatureOfInterest extends OGCSensorThingsAPIDataModelEntry
 	}
 	
 	/**
-	 * Provides the list of observations about this {@link FeatureOfInterest}
+	 * Provides the list of events about this {@link FeatureOfInterest}
 	 * instance. The returned set is Live reference to the internal data
 	 * structure which is not Thread-safe. Synchronization and concurrent
 	 * modification issues might arise in multi-threaded environments.
 	 * 
-	 * @return the observations
+	 * @return the events
 	 */
 	public Set<Observation> getObservations()
 	{
@@ -186,7 +186,7 @@ public class FeatureOfInterest extends OGCSensorThingsAPIDataModelEntry
 	 * Removes any list previously existing.
 	 * 
 	 * @param observations
-	 *            the observations to set
+	 *            the events to set
 	 */
 	public void setObservations(Set<Observation> observations)
 	{
@@ -194,7 +194,7 @@ public class FeatureOfInterest extends OGCSensorThingsAPIDataModelEntry
 	}
 	
 	/**
-	 * Adds a single {@link Observation} to the set of observations about this
+	 * Adds a single {@link Observation} to the set of events about this
 	 * {@link FeatureOfInterest}.
 	 * 
 	 * @param observation
@@ -209,7 +209,7 @@ public class FeatureOfInterest extends OGCSensorThingsAPIDataModelEntry
 	}
 	
 	/**
-	 * Removes a single {@link Observation} from the set of observations about
+	 * Removes a single {@link Observation} from the set of events about
 	 * this {@link FeatureOfInterest}.
 	 * 
 	 * @param observation

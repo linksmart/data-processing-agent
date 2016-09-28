@@ -15,6 +15,7 @@ import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -97,8 +98,8 @@ public class DataProcessingCore {
        
 
         loggerService.info(
-                "The Data-Fusion Manager is starting with ID: " + DynamicConst.getId().toString() + ";\n" +
-                        " with incoming events in broker tcp://" + conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH) + ":" + conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH) +
+                "The Data-Fusion Manager is starting with ID: " + DynamicConst.getId() + ";\n" +
+                        " with incoming events in broker " + (new BrokerConfiguration(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH)).getURL())+
                         " waiting for events from the topic: " + conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH) + ";\n" +
                         " waiting for queries from topic: " + conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH) +
                         " generating event in: " + conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH)
@@ -134,8 +135,9 @@ public class DataProcessingCore {
             Class.forName(BootstrappingBean.class.getCanonicalName());
             mqtt = MqttIncomingConnectorService.getReference();
 
-            mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH), new StatementMqttObserver());
-            mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH),conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH),conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver());
+            if(conf.getBoolean(Const.STATRT_MQTT_STATEMENT_API))
+             mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH)/*,conf.getString(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH)*/,conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH), new StatementMqttObserver());
+            mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH)/*,conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH)*/,conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver());
 
             FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 

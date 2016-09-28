@@ -4,16 +4,29 @@ package eu.linksmart.services.utils.mqtt.broker;
  * Created by José Ángel Carvajal on 06.08.2015 a researcher of Fraunhofer FIT.
  */
 public interface BrokerServiceConst {
-    public static final String CONNECTION_MQTT_WATCHDOG_TIMEOUT = "CONNECTION_MQTT_WATCHDOG_TIMEOUT";
-    public static final String CONNECTION_MQTT_WATCHDOG_CONF_PATH = "CONNECTION_MQTT_WATCHDOG";
+    public static final String BROKERS_ALIAS = "connection.brokers.aliases";
 
-    public static final String RECONNECTION_TRY = "RECONNECTION_TRY";
-    public static final String RECONNECTION_MQTT_RETRY_TIME = "RECONNECTION_MQTT_RETRY_TIME";
+    public static final String DEFAULT_HOSTNAME= "connection.broker.mqtt.hostname";
+    public static final String DEFAULT_PORT= "connection.broker.mqtt.port";
+    public static final String DEFAULT_PORT_SECURE= "connection.broker.mqtt.security.port";
+    public static final String DEFAULT_CONNECTION_PERSISTENCY= "connection.broker.mqtt.enableFileConnectionPersistency";
+    public static final String RECONNECTION_TRY = "connection.broker.mqtt.noReconnectTry";
+    public static final String RECONNECTION_MQTT_RETRY_TIME = "connection.broker.mqtt.reconnectWaitingTime";
+    public static final String CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT = "connection.broker.mqtt.keepAlive";
+    public static final String CONNECTION_MQTT_CONNECTION_TIMEOUT = "connection.broker.mqtt.timeOut";
 
-    public static final String DEFAULT_QOS = "DEFAULT_QOS";
-    public static final String DEFAULT_RETAIN_POLICY= "DEFAULT_RETAIN_POLICY";
+    public static final String DEFAULT_PUBLISH_QOS = "messaging.client.mqtt.pub.qos";
+    public static final String DEFAULT_RETAIN_POLICY= "messaging.client.mqtt.enableRetainPolicy";
+    public static final String DEFAULT_SUBSCRIPTION_QoS ="messaging.client.mqtt.sub.qos";
 
-    public static final String CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT = "mqtt.keepAlive";
-    public static final String CONNECTION_MQTT_CONNECTION_TIMEOUT = "mqtt.connectionTimeout";
-    public static final String SUBSCRIPTION_QoS ="Default.Subscription.QoS";
+    public static final String CA_CERTIFICATE_PATH ="connection.broker.mqtt.security.caCertificatePath";
+    public static final String CERTIFICATE_FILE_PATH ="connection.broker.mqtt.security.certificatePath";
+    public static final String KEY_FILE_PATH ="connection.broker.mqtt.security.keyPath";
+    public static final String CERTIFICATE_BASE_SECURITY ="connection.broker.mqtt.security.certificateBaseSecurityEnabled";
+
+    public static final String CERTIFICATE_PASSWORD = "connection.broker.mqtt.security.certificatePassword";
+    public static final String KEY_PASSWORD = "connection.broker.mqtt.security.keyPassword";
+    public static final String CA_CERTIFICATE_PASSWORD = "connection.broker.mqtt.security.caCertificatePassword";
+
+
 }

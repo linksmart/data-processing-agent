@@ -66,7 +66,7 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 	protected Object resultType;
 
 	/**
-	 * A datastream can have zero-to-many observations. One observation must
+	 * A datastream can have zero-to-many events. One observation must
 	 * occur in one and only one datastream.
 	 */
 	@JsonProperty(value = "Datastream")
@@ -74,7 +74,7 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 
 	/**
 	 * An observation observes on one and only one feature of interest. One
-	 * feature of interest could be observed by one to many observations.
+	 * feature of interest could be observed by one to many events.
 	 *
 	 */
 	@JsonProperty(value = "FeatureOfInterest")
@@ -82,7 +82,7 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 
 	/**
 	 * An observation is performed by one and only one sensor. One sensor could
-	 * produce zero to many observations.
+	 * produce zero to many events.
 	 */
 	@JsonProperty(value = "Sensor")
 	protected Sensor sensor;

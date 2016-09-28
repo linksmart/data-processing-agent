@@ -8,41 +8,42 @@ import java.util.*;
 /**
  * Created by José Ángel Carvajal on 07.08.2015 a researcher of Fraunhofer FIT.
  */
-public class StaticBrokerService extends BrokerService implements Broker{
-    static Map<String,StaticBrokerService> brokerServices = new Hashtable<String, StaticBrokerService>();
+public class StaticBrokerService extends BrokerService implements Broker {
+    static Map<BrokerConfiguration, StaticBrokerService> brokerServices = new Hashtable<>();
 
-    protected static ArrayList<UUID> clients = new  ArrayList<UUID>();
+    protected static Map<UUID,BrokerConfiguration> clients = new Hashtable<>();
 
-    private StaticBrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
-        super(brokerName, brokerPort, ID);
+
+    private StaticBrokerService(String alias, UUID ID) throws MqttException {
+        super(alias, ID);
 
     }
+    static public StaticBrokerService getBrokerService(UUID uuid, String alias) throws MalformedURLException, MqttException {
 
+        BrokerConfiguration bConf = new BrokerConfiguration(alias);
 
-    static public StaticBrokerService getBrokerService( UUID uuid, String name, String port) throws MalformedURLException, MqttException {
-
-        String url = BrokerService.getBrokerURL(name,port);
-
-
-
-        if(!BrokerService.isBrokerURL(url))
-            throw new MalformedURLException(url+" is not an broker URL");
-        if(brokerServices.containsKey(url)) {
-            if(!clients.contains(uuid))
-                clients.add(uuid);
-            return brokerServices.get(url);
+        if (!Broker.isBrokerURL(bConf.getURL()))
+            throw new MalformedURLException(bConf.getURL() + " is not an broker URL");
+        if (brokerServices.containsKey(bConf)) {
+            if (!clients.containsKey(uuid))
+                clients.put(uuid, bConf);
+            return brokerServices.get(bConf);
         }
 
-        brokerServices.put(url,new StaticBrokerService(name,port,uuid));
+        brokerServices.put(bConf, new StaticBrokerService(alias, uuid));
 
-        if(!clients.contains(uuid))
-            clients.add(uuid);
+        if (!clients.containsKey(uuid))
+            clients.put(uuid, bConf);
 
-        return brokerServices.get(url);
+        return brokerServices.get(bConf);
 
     }
     static public StaticBrokerService getBrokerService( String brokerName, String port) throws MalformedURLException, MqttException {
-        return getBrokerService(UUID.randomUUID(), brokerName, port);
+        return getBrokerService(UUID.randomUUID(), "");
+
+    }
+    static public StaticBrokerService getBrokerService(String alias) throws MalformedURLException, MqttException {
+        return getBrokerService("localhost","1883");
 
     }
     static public StaticBrokerService getDefaultBrokerService(String clientID) throws MalformedURLException, MqttException {
@@ -65,9 +66,20 @@ public class StaticBrokerService extends BrokerService implements Broker{
         throw new UnsupportedOperationException("The method is not possible for the class "+StaticBrokerService.class.getCanonicalName());
 
     }
+
+    @Override
+    public String getAlias() {
+        throw new UnsupportedOperationException("The method is not possible for the class "+StaticBrokerService.class.getCanonicalName());
+    }
+    public String getAlias(UUID clientID) {
+        if(clients.containsKey(clientID))
+            return brokerServices.get(clients.get(clientID)).getAlias();
+
+        return null;
+    }
     public boolean connect(UUID clientID) throws Exception {
 
-        if(clients.contains(clientID)){
+        if(clients.containsKey(clientID)){
 
             _connect();
 
@@ -77,7 +89,7 @@ public class StaticBrokerService extends BrokerService implements Broker{
         return isConnected(clientID);
     }
     public void disconnect(UUID clientID) throws Exception {
-        if(clients.contains(clientID)){
+        if(clients.containsKey(clientID)){
 
             if(clients.size() == 1){
 
@@ -88,7 +100,7 @@ public class StaticBrokerService extends BrokerService implements Broker{
             throw new Exception("This BrokerService do not contain any client with ID: "+clientID);
     }
     public void destroy(UUID clientID) throws Exception {
-            if(clients.contains(clientID)){
+            if(clients.containsKey(clientID)){
 
                 if(clients.size() == 1){
                     remove(this);
@@ -115,7 +127,7 @@ public class StaticBrokerService extends BrokerService implements Broker{
     }
     public boolean isConnected(UUID clientID)  {
 
-        return clients.contains(clientID) && mqttClient.isConnected();
+        return clients.containsKey(clientID) && mqttClient.isConnected();
 
 
     }

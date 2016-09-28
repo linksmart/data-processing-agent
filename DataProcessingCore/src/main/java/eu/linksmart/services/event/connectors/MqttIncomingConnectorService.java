@@ -8,6 +8,7 @@ import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.mqtt.broker.Broker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBrokerService;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -38,21 +39,19 @@ public class MqttIncomingConnectorService implements IncomingConnector {
     protected MqttIncomingConnectorService() throws MalformedURLException, MqttException {
 
     }
-
-    public void addAddListener(String brokerHostname, String brokerPort, String topic, IncomingMqttObserver listener) throws InternalException{
+    public void addAddListener(String alias, String topic, IncomingMqttObserver listener) throws InternalException{
         try {
-            StaticBroker broker = new StaticBroker(brokerHostname,brokerPort);
+            StaticBroker broker = new StaticBroker(alias);
             listener.setBrokerService(broker);
             broker.addListener(topic, listener);
             brokers.add(broker);
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
-            throw new InternalException(StaticBrokerService.getBrokerURL(brokerHostname,brokerPort),"Broker", e.getMessage(),e);
+            throw new InternalException(alias,"Broker", e.getMessage(),e);
         }
 
 
     }
-
     @Override
     public boolean isUp() {
 

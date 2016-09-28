@@ -62,7 +62,7 @@ public class StatementInstance implements Statement {
     protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;
 
     @JsonProperty("scope")
-    protected String[] scope={"default"};
+    protected String[] scope={"outgoing"};
     protected static final String uuid =UUID.randomUUID().toString();
     @JsonIgnore
     protected static final Object lock =new Object();
@@ -73,10 +73,6 @@ public class StatementInstance implements Statement {
 
     @JsonProperty("ID")
     protected String id = "";
-
-    private transient String hash;
-
-
 
     public StatementInstance() {
     }

@@ -100,7 +100,7 @@ public class OGCSensorThingUnitTest {
                         "\"featureOfInterest\": {" +
                             "\"@iot.id\":2," +
                           //  "\t\"objectID\": 2,"+
-                            "\t\"observations\": [1],"+
+                            "\t\"events\": [1],"+
                             "\"@iot.selfLink\":\"http://linksmart.eu/v1.0/FeaturesOfInterest(1)\"," +
                             "\"Observations@iot.navigationLink\":\"FeaturesOfInterest(1)/Observations\"," +
                             "\"description\":\"This is a weather station.\"," +

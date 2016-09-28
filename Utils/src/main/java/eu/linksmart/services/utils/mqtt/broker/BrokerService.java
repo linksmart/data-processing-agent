@@ -2,65 +2,46 @@ package eu.linksmart.services.utils.mqtt.broker;
 
 
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.constants.Const;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.subscription.ForwardingListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import org.apache.log4j.Logger;
 
-import javax.net.ssl.SSLSocketFactory;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BrokerService implements Observer, Broker {
-    protected static Logger loggerService = Logger.getLogger(BrokerService.class.getName());
+    protected transient static Logger loggerService = Logger.getLogger(BrokerService.class.getName());
     // this is the MQTT client to broker in the local broker
-    private Configurator conf = Configurator.getDefaultConfig();
-    protected MqttClient mqttClient;
-    protected ForwardingListener listener;
-    private UUID ID;
+    private transient Configurator conf = Configurator.getDefaultConfig();
+    protected transient MqttClient mqttClient;
+    protected transient ForwardingListener listener;
+
     protected ArrayList<String> topics = new ArrayList<String>();
 
-    protected int preloadedQoS = 0,preloadedTriesReconnect = 10, preloadedRetryTime =3000;
-    protected boolean preloadedPolicy = false;
+    private transient Boolean watchdog = false;
 
-    private int CONNECTION_MQTT_WATCHDOG_TIMEOUT = 30000;
-    private int SUBSCRIPTION_QoS =0;
+    private final transient static Object lock  = new Object();
 
-    private boolean CERTIFICATE_BASE_SECURITY = false;
-    private String CA_CERTIFICATE_PATH ="";
-    private String CLIENT_CERTIFICATE_PATH="";
-    private String KEY_PATH="";
-    private String CERTIFICATE_KEY_PASSWORD="";
+    protected final BrokerConfiguration brokerConf;
 
-    private Boolean watchdog = false;
+    public BrokerService(String alias, UUID ID) throws MqttException {
 
-    private final static Object lock  = new Object();
-    private String brokerName ;
-    private String brokerPort;
-    private int CONNECTION_MQTT_CONNECTION_TIMEOUT=60000;
-    private int CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT=60000;
-    private MqttConnectOptions mqttOptions;
-
-    public BrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
+        brokerConf = new BrokerConfiguration(alias,ID.toString());
         listener = new ForwardingListener(this,ID);
 
-        // loggerService = new LoggerService(LoggerFactory.getLogger(BrokerService.class));
-        watchdog = conf.getBoolean(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_CONF_PATH);
-        preloadConfiguration();
-        if (brokerName.equals("*"))
-            this.brokerName = getHostName();
-        else
-            this.brokerName = brokerName;
+        createClient();
 
-        this.brokerPort = brokerPort;
-        this.ID = ID;
-       createClient();
+    }
+    public BrokerService(String brokerName, String brokerPort, UUID ID) throws MqttException {
+
+        brokerConf = new BrokerConfiguration("",ID.toString());
+        brokerConf.setHostname(brokerName);
+        brokerConf.setPort(Integer.valueOf(brokerPort));
+        listener = new ForwardingListener(this,ID);
+
+        createClient();
 
     }
     public boolean isConnected()  {
@@ -70,17 +51,17 @@ public class BrokerService implements Observer, Broker {
     protected void _connect() throws Exception {
 
 
-        loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is connecting...");
+        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" URL:"+this.getBrokerURL()+" is connecting...");
         if(!mqttClient.isConnected()) {
 
-            mqttClient.connect(mqttOptions);
+            mqttClient.connect(brokerConf.getMqttConnectOptions());
 
         }
         startWatchdog();
-        loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is connected");
+        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" URL:"+this.getBrokerURL()+" is connected");
     }
     protected void _disconnect() throws Exception {
-        loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is disconnecting...");
+        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" URL:"+this.getBrokerURL()+" is disconnecting...");
         stopWatchdog();
         try {
 
@@ -89,7 +70,7 @@ public class BrokerService implements Observer, Broker {
             loggerService.error(e.getMessage(),e);
             throw e;
         }
-        loggerService.info("MQTT broker UUID:"+ID.toString()+" URL:"+this.getBrokerURL()+" is disconnected");
+        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" URL:"+this.getBrokerURL()+" is disconnected");
 
     }
     protected void _destroy() throws Exception {
@@ -121,131 +102,49 @@ public class BrokerService implements Observer, Broker {
         _destroy();
 
     }
-    public static String getBrokerURL(String brokerName, String brokerPort){
 
-        if (ipPattern.matcher(brokerName).find())
-            return "tcp://"+brokerName+":"+brokerPort;
-        else
-            return "tcp://"+brokerName;
-    }
-    public static String getSecureBrokerURL(String brokerName, String brokerPort){
-
-        if (ipPattern.matcher(brokerName).find())
-            return "ssl://"+brokerName+":"+brokerPort;
-        else
-            return "ssl://"+brokerName;
-    }
-    public static String getBrokerURL(String brokerName, String brokerPort, boolean isSSL_URL){
-
-        if (isSSL_URL)
-            return getSecureBrokerURL(brokerName,brokerPort);
-        else
-            return getBrokerURL(brokerName, brokerPort);
-    }
-    public static boolean isBrokerURL(String string){
-
-      return  urlPattern.matcher(string).find();
-
-    }
     public String getBrokerURL(){
-        return getBrokerURL(brokerName, brokerPort, CERTIFICATE_BASE_SECURITY);
+        return brokerConf.getURL();
     }
 
     public void createClient() throws MqttException {
 
-        mqttClient = new MqttClient(getBrokerURL(),ID.toString()+":"+UUID.randomUUID().toString(), new MemoryPersistence());
+        mqttClient = brokerConf.initClient();
         connectionWatchdog();
 
         mqttClient.setCallback(listener);
     }
 
-    protected void preloadConfiguration() throws MqttException {
 
-        preloadedQoS =conf.getInt(Const.DEFAULT_QOS);
-        preloadedPolicy = conf.getBoolean(Const.DEFAULT_RETAIN_POLICY);
-        preloadedTriesReconnect =conf.getInt(Const.RECONNECTION_TRY);
-        preloadedRetryTime = conf.getInt(Const.RECONNECTION_MQTT_RETRY_TIME);
-        CONNECTION_MQTT_WATCHDOG_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_WATCHDOG_TIMEOUT);
-        SUBSCRIPTION_QoS = conf.getInt(BrokerServiceConst.SUBSCRIPTION_QoS);
-        try {
-            CONNECTION_MQTT_CONNECTION_TIMEOUT = conf.getInt(BrokerServiceConst.CONNECTION_MQTT_CONNECTION_TIMEOUT);
-        }catch (NoSuchElementException ex){
-            loggerService.error("property CONNECTION_MQTT_CONNECTION_TIMEOUT not found loading hardcoded property",ex);
-        }
-        try {
-
-            CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT= conf.getInt(BrokerServiceConst.CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT);
-        }catch (NoSuchElementException ex){
-            loggerService.error("property CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT not found loading hardcoded property",ex);
-        }
-        try {
-            CERTIFICATE_BASE_SECURITY = conf.getBoolean(Const.CERTIFICATE_BASE_SECURITY);
-        }catch (NoSuchElementException ex){
-            loggerService.error("property CERTIFICATE_BASE_SECURITY not found loading hardcoded property",ex);
-        }
-
-        try {
-            if(CERTIFICATE_BASE_SECURITY) {
-                CA_CERTIFICATE_PATH = conf.getString(Const.CA_CERTIFICATE_PATH);
-                CLIENT_CERTIFICATE_PATH = conf.getString(Const.CERTIFICATE_FILE_PATH);
-                KEY_PATH = conf.getString(Const.KEY_FILE_PATH);
-                CERTIFICATE_KEY_PASSWORD = conf.getString(Const.CERTIFICATE_KEY_PASSWORD);
-            }
-        }catch (NoSuchElementException ex){
-            loggerService.error("security properties not found loading hardcoded property",ex);
-        }
-
-
-        mqttOptions = new MqttConnectOptions();
-
-        mqttOptions.setConnectionTimeout(CONNECTION_MQTT_CONNECTION_TIMEOUT/1000);
-        mqttOptions.setKeepAliveInterval(CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT/1000);
-        mqttOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
-
-
-        if(CERTIFICATE_BASE_SECURITY) {
-            SSLSocketFactory socketFactory = null;
-            try {
-                socketFactory = Utils.getSocketFactory(CA_CERTIFICATE_PATH, CLIENT_CERTIFICATE_PATH, KEY_PATH, CERTIFICATE_KEY_PASSWORD);
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(), e);
-                throw new MqttException(e);
-            }
-            mqttOptions.setSocketFactory(socketFactory);
-        }
-    }
     private void connectionWatchdog(){
 
         if(watchdog) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (watchdog) {
+            new Thread(() -> {
+                while (watchdog) {
 
+                    try {
                         try {
-                            try {
 
-                                preloadConfiguration();
+                            // TODO define what we do with the watchdog
 
-                            }catch (Exception e){
-                                loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
-                            }
-
-                            synchronized (lock) {
-                                if (!mqttClient.isConnected())
-                                    _connect();
-                            }
-                        } catch (Exception e) {
-                            loggerService.error("Error in the watch dog of broker service:" + e.getMessage(), e);
+                        }catch (Exception e){
+                            loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
                         }
 
-                        try {
-                            Thread.sleep(CONNECTION_MQTT_WATCHDOG_TIMEOUT);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        synchronized (lock) {
+                            if (!mqttClient.isConnected())
+                                _connect();
                         }
-
+                    } catch (Exception e) {
+                        loggerService.error("Error in the watch dog of broker service:" + e.getMessage(), e);
                     }
+
+                    try {
+                        Thread.sleep(brokerConf.getTimeOut());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
             ).start();
@@ -270,24 +169,6 @@ public class BrokerService implements Observer, Broker {
         }
 
     }
-
-
-
-    private String getHostName(){
-        String hostname = "localhost";
-
-        try
-        {
-            InetAddress addr;
-            addr = InetAddress.getLocalHost();
-            hostname = addr.getHostName();
-        }
-        catch (UnknownHostException ex)
-        {
-            loggerService.error("Error while getting hostname:"+ex.getMessage(),ex);
-        }
-        return hostname;
-    }
     public void publish(String topic, byte[] payload, int qos, boolean retained) throws Exception {
 
         if(!mqttClient.isConnected())
@@ -304,8 +185,8 @@ public class BrokerService implements Observer, Broker {
         publish(
                 topic,
                 payload,
-                preloadedQoS,
-                preloadedPolicy);
+                brokerConf.getPubQoS(),
+                brokerConf.isRetainPolicy());
     }
     public void publish(String topic, String payload) throws Exception {
 
@@ -315,14 +196,14 @@ public class BrokerService implements Observer, Broker {
 
 
     public String getBrokerName() {
-        return brokerName;
+        return brokerConf.getHostname();
     }
 
     public void setBrokerName(String brokerName) throws Exception {
         boolean wasConnected =isConnected();
-        if(!this.brokerName.equals(brokerName)) {
+        if(!this.brokerConf.getHostname().equals(brokerName)) {
 
-            this.brokerName = brokerName;
+            this.brokerConf.setHostname(brokerName);
 
           restart(wasConnected);
 
@@ -331,28 +212,28 @@ public class BrokerService implements Observer, Broker {
     }
 
     public String getBrokerPort() {
-        return brokerPort;
+        return String.valueOf(brokerConf.getPort());
     }
 
     public void setBrokerPort(String brokerPort) throws Exception {
         boolean wasConnected =isConnected();
 
-        if(!this.brokerPort.equals(brokerPort)) {
-            this.brokerPort = brokerPort;
+        if(!getBrokerPort().equals(brokerPort)) {
+            brokerConf.setPort(Integer.valueOf(brokerPort));
 
             restart(wasConnected);
         }
     }
     public void setBroker(String brokerName, String brokerPort) throws Exception {
         boolean wasConnected =isConnected();
-        if(!this.brokerName.equals(brokerName) || !this.brokerPort.equals(brokerPort)) {
+        if(!this.getBrokerName().equals(brokerName) || !this.getBrokerPort().equals(brokerPort)) {
 
-            if (!this.brokerPort.equals(brokerPort)) {
-                this.brokerPort = brokerPort;
+            if (!this.getBrokerPort().equals(brokerPort)) {
+                brokerConf.setPort(Integer.valueOf(brokerPort));
 
             }
-            if (!this.brokerName.equals(brokerName)) {
-                this.brokerName = brokerName;
+            if (!this.getBrokerName().equals(brokerName)) {
+                this.brokerConf.setHostname(brokerName);
 
             }
 
@@ -373,7 +254,11 @@ public class BrokerService implements Observer, Broker {
         }
 
     }
-    public synchronized boolean addListener(String topic, Observer stakeholder)  {
+    public boolean addListener(String topic, Observer stakeholder)  {
+
+        return addListener(topic,stakeholder,brokerConf.getSubQoS());
+    }
+    public synchronized boolean addListener(String topic, Observer stakeholder, int QoS)  {
 
 
         try {
@@ -383,14 +268,14 @@ public class BrokerService implements Observer, Broker {
             topics.add(topic);
             String[] aux = topics.toArray(new String[topics.size()] ) ;
             int[] qoss= new int[aux.length];
-            Arrays.fill(qoss,SUBSCRIPTION_QoS);
+            Arrays.fill(qoss,QoS);
             mqttClient.subscribe(aux,qoss);
 
             listener.addObserver(topic, stakeholder);
         } catch (Exception e) {
-                loggerService.error(e.getMessage(), e);
-                return false;
-            }
+            loggerService.error(e.getMessage(), e);
+            return false;
+        }
         return true;
     }
     public synchronized boolean removeListener(String topic, Observer stakeholder){
@@ -413,15 +298,15 @@ public class BrokerService implements Observer, Broker {
         ForwardingListener source = (ForwardingListener)arg;
         switch (source.getStatus()){
             case Disconnected:
-                for(int i=0; i<preloadedTriesReconnect && !mqttClient.isConnected();i++){
+                for(int i=0; i<brokerConf.getNoTries() && !mqttClient.isConnected();i++){
                     try {
-                        mqttClient.connect(mqttOptions);
+                        mqttClient.connect(brokerConf.getMqttConnectOptions());
 
                     } catch (MqttException e) {
                         loggerService.error(e.getMessage(), e);
                     }
                     try {
-                        Thread.sleep(preloadedRetryTime);
+                        Thread.sleep(brokerConf.getReconnectWaitingTime());
                     } catch (InterruptedException e) {
                         loggerService.error(e.getMessage(), e);
                     }
@@ -430,5 +315,36 @@ public class BrokerService implements Observer, Broker {
                 break;
         }
 
+    }
+
+    @Override
+    public String getAlias() {
+        return brokerConf.getAlias();
+    }
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this)
+            return true;
+        if (o!=null && o instanceof BrokerService) {
+            BrokerService aux = (BrokerService) o;
+
+            return brokerConf.equals(aux.brokerConf) && topics.equals(aux.topics);
+        }
+        return false;
+    }
+    @Override
+    public String toString(){
+
+        return "{" +
+                "\"brokerConfiguration\":"+brokerConf.toString()+"," +
+                "\"subscribedTopics\":["+topics.stream().map(i->"\""+i+"\"").collect(Collectors.joining(","))+"]" +
+                "}";
+
+    }
+    @Override
+    public int hashCode(){
+
+        return toString().hashCode();
     }
 }
