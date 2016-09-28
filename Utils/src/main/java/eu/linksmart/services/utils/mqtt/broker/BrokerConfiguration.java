@@ -84,8 +84,7 @@ public class BrokerConfiguration {
             if(brokerConf.secConf!=null) {
                 SSLSocketFactory socketFactory = null;
                 try {
-                    // todo separate in different configuration passwords
-                    socketFactory = Utils.getSocketFactory(brokerConf.secConf.CApath, brokerConf.secConf.clientCertificatePath,brokerConf.secConf.keyPath, brokerConf.secConf.CAPassword);
+                    socketFactory = Utils.getSocketFactory(brokerConf.secConf.CApath, brokerConf.secConf.clientCertificatePath,brokerConf.secConf.keyPath, brokerConf.secConf.CAPassword,brokerConf.secConf.clientCertificatePassword,brokerConf.secConf.keyPassword);
                 } catch (Exception e) {
                     throw new InternalError(e);
                 }
@@ -121,7 +120,6 @@ public class BrokerConfiguration {
                 brokerConf.secConf.CApath = getString(Const.CA_CERTIFICATE_PATH, aux);
                 brokerConf.secConf.clientCertificatePath = getString(Const.CERTIFICATE_FILE_PATH, aux);
                 brokerConf.secConf.keyPath = getString(Const.KEY_FILE_PATH, aux);
-                // todo separate in different configuration passwords
                 brokerConf.secConf.CAPassword = getString(Const.CA_CERTIFICATE_PASSWORD, aux);
                 brokerConf.secConf.clientCertificatePassword = getString(Const.CERTIFICATE_PASSWORD, aux);
                 brokerConf.secConf.keyPassword = getString(Const.KEY_PASSWORD, aux);

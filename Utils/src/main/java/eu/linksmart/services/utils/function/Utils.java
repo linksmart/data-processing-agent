@@ -140,13 +140,15 @@ public class  Utils {
         initLoggingConf(Utils.class);
 
     }
-    static public SSLSocketFactory getSocketFactory (final String caCrtFile, final String crtFile, final String keyFile, final String password) throws Exception
+    static public SSLSocketFactory getSocketFactory (final String caCrtFile, final String crtFile, final String keyFile, final String caPassword, final String crtPassword, final String keyPassword) throws Exception
     {
+
+        // todo check if the CA needs or can use the password
         final FileInputStream crtStream = new FileInputStream(crtFile);
         final FileInputStream keyStream = new FileInputStream(keyFile);
         // CA certificate is used to authenticate server
         final KeyStore caKs = KeyStore.getInstance("JKS");
-        caKs.load(crtStream, password.toCharArray());
+        caKs.load(crtStream, crtPassword.toCharArray());
         final TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
         tmf.init(caKs);
 
@@ -154,9 +156,9 @@ public class  Utils {
 
         // client key and certificates are sent to server so it can authenticate us
         final KeyStore ks = KeyStore.getInstance("JKS");
-        ks.load(keyStream, password.toCharArray());
+        ks.load(keyStream, keyPassword.toCharArray());
         final KeyManagerFactory kmf = KeyManagerFactory.getInstance("PKIX");
-        kmf.init(ks, password.toCharArray());
+        kmf.init(ks, keyPassword.toCharArray());
 
         keyStream.close();
 
