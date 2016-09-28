@@ -35,8 +35,6 @@ import java.util.*;
     private  Logger loggerService = Utils.initLoggingConf(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
 
-    // configuration
-    private String STATEMENT_INOUT_BASE_TOPIC = "queries/";
     private boolean SIMULATION_EXTERNAL_CLOCK = false;
 
     static protected EsperEngine init(){
@@ -60,8 +58,7 @@ import java.util.*;
         // add additional configuration
         Configuration config = new Configuration();
         config.configure("intern.esper.conf.xml");
-        //load values
-        STATEMENT_INOUT_BASE_TOPIC = conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH);
+
         SIMULATION_EXTERNAL_CLOCK = conf.getBoolean(Const.SIMULATION_EXTERNAL_CLOCK);
 
         // extern clock

@@ -266,9 +266,9 @@ public class Tools {
 
         Sensor sen = new Sensor();
         sen.setId(id);
-        sen.setObservations(null);
+        sen.setEvent(null);
         Datastream ds = new Datastream();
-        ds.setObservations(null);
+        ds.setEvent(null);
         ds.setId(hashIt(UUID.randomUUID().toString()));
         Observation ob = new Observation();
         ob.setDatastream(ds);
