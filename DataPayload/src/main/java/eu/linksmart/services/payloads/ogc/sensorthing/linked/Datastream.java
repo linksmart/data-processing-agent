@@ -20,24 +20,14 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescription;
-import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
-import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateDeserializer;
-import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateSerializer;
-import org.geojson.Polygon;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * <strong>Definition:</strong> A datastream groups a collection of events
  * that are related in some way. The one constraint is that the events in
  * a datastream must measure the same observed property (i.e., one phenomenon).
- * 
- * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
+ *
  *
  */
 public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.Datastream
@@ -110,7 +100,7 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	 * Thread-safe, therefore synchronization and concurrent modification issues
 	 * might arise in multi-threaded environments.
 	 *
-	 * @return the live reference to the inner {@link java.util.Set}<{@link eu.almanac.ogc.sensorthing.api.datamodel.Observation}>.
+	 * @return the live reference to the inner {@link java.util.Set} {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation}.
 	 */
 	@JsonProperty(value = "events")
 	public Set<Observation> getObservations()
@@ -119,7 +109,7 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	}
 
 	/**
-	 * Updates the {@link java.util.Set}<{@link eu.almanac.ogc.sensorthing.api.datamodel.Observation}> gbelonging to this
+	 * Updates the {@link java.util.Set} {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation}  gbelonging to this
 	 * {@link eu.linksmart.services.payloads.ogc.sensorthing.linked.Datastream} instance. Any previously existing information is
 	 * discarded.
 	 *

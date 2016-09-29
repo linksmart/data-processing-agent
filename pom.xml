@@ -73,6 +73,7 @@
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <build.helper.maven.plugin.version>1.10</build.helper.maven.plugin.version>
         <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
+        <maven.source.version>2.2.1</maven.source.version>
 
         <!-- documentation plugins  versions-->
         <project-info-reports.version>2.7</project-info-reports.version>
@@ -266,18 +267,6 @@
                 <scope>runtime</scope>
             </dependency>
 
-            <!-- Weka -->
-            <dependency>
-                <groupId>nz.ac.waikato.cms.weka</groupId>
-                <artifactId>weka-dev</artifactId>
-                <version>${weka.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
             <!-- Apache -->
             <dependency>
@@ -315,6 +304,8 @@
                 <version>${java.junit.version}</version>
                 <scope>test</scope>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -413,6 +404,13 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <!-- Site related plugins -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${project-info-reports.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -439,17 +437,31 @@
             </plugin>
             <!-- build sources  -->
             <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>attach-sources</id>
-                    <goals>
-                        <goal>jar</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven.source.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- site plugin and webdav dependency for deployment of site onto Nexus repository -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${site.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-webdav-jackrabbit</artifactId>
+                        <version>2.6</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -497,13 +509,13 @@
       <snapshotRepository>
           <id>snapshots</id>
           <name>Snapshots</name>
-          <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+          <url>https://linksmart.eu/repo/content/repositories/snapshots/eu/linksmart/services/events</url>
           <uniqueVersion>false</uniqueVersion>
       </snapshotRepository>
       <site>
           <id>linksmart-repo</id>
-          <name>linksmart-site-repository</name>
-          <url>dav:https://linksmart.eu/repo/content/sites/doc/</url>
+          <name>linksmart-service-agents-repository</name>
+          <url>dav:https://linksmart.eu/repo/content/sites/doc/services/agents</url>
       </site>
 	</distributionManagement>
 

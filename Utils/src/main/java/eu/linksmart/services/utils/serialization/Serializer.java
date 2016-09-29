@@ -34,6 +34,8 @@ import java.io.IOException;
 public interface Serializer {
     /**
      * Serialize in bytes a given object.
+     *
+     * @param <T> type of the object to be serialized
      * @param object to be serialized
      *
      * @return the serialized object
@@ -43,6 +45,8 @@ public interface Serializer {
 
     /**
      * Serialize in a string a given object.
+     *
+     * @param <T> type of the object to be serialize
      * @param object to be serialized
      *
      * @return the serialized object as string

@@ -24,7 +24,7 @@ public class ObservedProperty extends CommonControlInfoDescription {
      * Provides the URN(URI) of the observed property or phenomenon modeled by
      * this instance.
      *
-     * @return the uri The phenomenon URI as a {@LINK String}
+     * @return the uri The phenomenon URI as a {@link String}
      */
     @JsonProperty(value = "URI")
     @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")

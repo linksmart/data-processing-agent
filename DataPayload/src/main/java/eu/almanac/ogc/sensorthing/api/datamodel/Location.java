@@ -148,7 +148,7 @@ public class Location extends OGCSensorThingsAPIDataModelEntry
 	}
 
 	/**
-	 * Provides a Live reference to the {@link Set}<{@link Thing}> being in this
+	 * Provides a Live reference to the {@link Set}:{@link Thing} being in this
 	 * location at the represented time instant. As the reference is live and
 	 * the underlying data-structure is not Thread-safe, synchronization and
 	 * concurrent access issues might arise in multi-threaded environments.

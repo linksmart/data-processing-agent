@@ -89,7 +89,7 @@ public interface Statement extends JsonSerializable {
     /***
      * The Input value is a optional value. This return if the value has been defined or not (DEPRECATED)
      *
-     * @return  <code>true</code> if there is Input has being defined, <code>false</code> otherwise
+     * @return  true if there is Input has being defined, false otherwise
      * */
 
     @Deprecated
@@ -97,13 +97,13 @@ public interface Statement extends JsonSerializable {
     /***
      * The output value is a optional value. This return if the value has been defined or not
      *
-     * @return  <code>true</code> if there is output has being defined, <code>false</code> otherwise
+     * @return  true if there is output has being defined, false otherwise
      * */
     public boolean haveOutput();
     /***
      * The Scope value is a optional value. This return if the value has been defined or not
      *
-     * @return  <code>true</code> if there is Scope has being defined, <code>false</code> otherwise
+     * @return  true if there is Scope has being defined, false otherwise
      * */
     public boolean haveScope();
     /***
