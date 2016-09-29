@@ -1,16 +1,15 @@
-package eu.linksmart.services.event.serialization;
+package eu.linksmart.services.utils.serialization;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import eu.linksmart.api.event.components.Serializer;
-import eu.linksmart.api.event.exceptions.StatementException;
-import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.utils.constants.Const;
+import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
+
+import java.io.IOException;
 
 /**
  * Created by José Ángel Carvajal on 23.08.2016 a researcher of Fraunhofer FIT.
@@ -30,21 +29,21 @@ public class DefaultSerializer implements Serializer{
     }
 
     @Override
-    public byte[] serialize(Object object) throws UntraceableException {
+    public byte[] serialize(Object object) throws IOException {
 
         try {
             return parser.writeValueAsString(object).getBytes();
         } catch (JsonProcessingException e) {
-            throw new UntraceableException(e.getMessage(),e);
+            throw new IOException(e.getMessage(),e);
         }
     }
 
     @Override
-    public String toString(Object object) throws UntraceableException {
+    public String toString(Object object) throws IOException {
         try {
             return parser.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new UntraceableException(e.getMessage(),e);
+            throw new IOException(e.getMessage(),e);
         }
     }
 

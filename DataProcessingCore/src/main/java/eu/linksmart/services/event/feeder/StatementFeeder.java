@@ -13,6 +13,8 @@ import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
+import eu.linksmart.services.utils.serialization.DefaultDeserializer;
+import eu.linksmart.services.utils.serialization.Deserializer;
 import org.slf4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -26,6 +28,11 @@ public class StatementFeeder implements Feeder {
     protected static Logger loggerService = Utils.initLoggingConf(StatementFeeder.class);
     protected static Configurator conf =  Configurator.getDefaultConfig();
 
+    protected static Deserializer deserializer =new DefaultDeserializer();
+
+    static {
+        deserializer.defineClassToInterface(Statement.class,StatementInstance.class);
+    }
 
     private StatementFeeder() {
        // super(StatementFeeder.class.getSimpleName(), "Provide intern infrastructure to feed the CEP with learning DF statements ", Feeder.class.getSimpleName(),"CEML");
@@ -167,8 +174,6 @@ public class StatementFeeder implements Feeder {
         }
         return response;
     }
-;
-    protected static ObjectMapper parser =new ObjectMapper();
 
     public static MultiResourceResponses<Statement> createReturnStructure(){
         MultiResourceResponses<Statement> result = new MultiResourceResponses<Statement>();
@@ -180,7 +185,7 @@ public class StatementFeeder implements Feeder {
         MultiResourceResponses<Statement> result = createReturnStructure();
 
         try {
-            statement = parser.readValue(statementString, StatementInstance.class);
+            statement = deserializer.parse(statementString, Statement.class);
         } catch (IOException e) {
             loggerService.error(e.getMessage(), e);
             result.getResponses().add(createErrorMapMessage(
@@ -363,18 +368,6 @@ public class StatementFeeder implements Feeder {
 
         return result;
     }
-   public static String toJsonString(Object message){
-
-        try {
-            return parser.writeValueAsString(message);
-        } catch (IOException e) {
-            loggerService.error(e.getMessage(),e);
-            return "{\"Error\":\"500\",\"Error Text\":\"Internal Server Error\",\"Message\":\""+e.getMessage()+"\"}";
-        }
-
-
-    }
-
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy,String producerType,int codeNo, String codeTxt,String message){
         return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, "");

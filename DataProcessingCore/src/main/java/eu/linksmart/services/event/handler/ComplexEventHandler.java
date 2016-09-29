@@ -7,10 +7,10 @@ import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.components.ComplexEventPropagationHandler;
 import eu.linksmart.api.event.components.Enveloper;
 import eu.linksmart.api.event.components.Publisher;
-import eu.linksmart.api.event.components.Serializer;
+import eu.linksmart.services.utils.serialization.Serializer;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.services.event.serialization.DefaultSerializer;
+import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.configuration.Configurator;
 
 import java.util.*;
@@ -119,17 +119,6 @@ import java.util.*;
         enveloper.close();
         serializer.close();
     }
-
-    @Override
-    public Serializer getSerializer() {
-        return serializer;
-    }
-
-    @Override
-    public void setSerializer(Serializer serializer) {
-        this.serializer = serializer;
-    }
-
     @Override
     public Enveloper getEnveloper() {
         return enveloper;

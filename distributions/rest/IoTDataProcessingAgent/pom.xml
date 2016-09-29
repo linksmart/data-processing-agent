@@ -16,6 +16,12 @@
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>iot.data.processing.rest.impl</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>eu.linksmart.services.events.gpl</groupId>
+                    <artifactId>wrapper.esper</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

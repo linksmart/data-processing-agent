@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.components;
+package eu.linksmart.services.utils.serialization;
 
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -28,8 +28,6 @@ import java.io.IOException;
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.1.1
- * @see eu.linksmart.api.event.components.Feeder
- * @see eu.linksmart.api.event.components.IncomingConnector
  *
  * */
 public interface Deserializer {
@@ -66,6 +64,8 @@ public interface Deserializer {
      *
      * */
     <T> T deserialize(byte[] bytes, Class<T> tClass) throws IOException, NotImplementedException;
+
+    <I,C extends I> boolean defineClassToInterface(Class<I> tInterface,Class<C> tClass );
     /**
      * Endorse the Deserializer to release resources if is needed.
      * */

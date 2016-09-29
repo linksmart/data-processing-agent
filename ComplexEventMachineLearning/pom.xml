@@ -80,7 +80,7 @@
                         <configuration combine.self="override">
                             <artifacts>
                                 <artifact>
-                                    <file>src/main/resources/ceml.cfg</file>
+                                    <file>src/main/resources/conf.cfg</file>
                                     <type>cfg</type>
                                     <classifier>configuration</classifier>
                                 </artifact>
@@ -89,19 +89,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
 
-                <extensions>true</extensions>
-                <configuration combine.self="override">
-                    <instructions>
-                        <Embed-Dependency>weka-dev</Embed-Dependency>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>!*</Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

@@ -2,7 +2,7 @@ package eu.linksmart.services.event.feeder;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.CEPEngine;
-import eu.linksmart.api.event.components.Deserializer;
+import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
@@ -11,13 +11,11 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;
-import eu.linksmart.services.event.serialization.DefaultDeserializer;
+import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.slf4j.Logger;
-import sun.security.pkcs.ParsingException;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +58,6 @@ public class EventFeeder implements Feeder {
     }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
         try {
-            if(deserializer==null)
-                deserializer = new DefaultDeserializer();
             Object event=null;
             if(!compiledTopicClass.containsKey(topic)) {
                 if(topicToClass.isEmpty())
