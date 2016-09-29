@@ -4,7 +4,7 @@
 	<groupId>eu.linksmart.services.events</groupId>
 	<artifactId>parent</artifactId>
 
-	<version>1.3.2</version>
+	<version>1.3.3-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -42,7 +42,7 @@
     </licenses>
     <properties>
         <!-- main version -->
-        <ls.se.agents.version>1.3.2</ls.se.agents.version>
+        <ls.se.agents.version>1.3.3-SNAPSHOT</ls.se.agents.version>
         <!-- LS GC version
         <linksmart.gc.version>0.3.0-SNAPSHOT</linksmart.gc.version>-->
 
