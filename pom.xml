@@ -31,6 +31,19 @@
                 <artifactId>wrapper.esper</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
+            <!-- Weka -->
+            <dependency>
+                <groupId>nz.ac.waikato.cms.weka</groupId>
+                <artifactId>weka-dev</artifactId>
+                <version>${weka.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <modules>
