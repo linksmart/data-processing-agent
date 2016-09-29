@@ -73,6 +73,8 @@ public class StatementInstance implements Statement {
 
     @JsonProperty("ID")
     protected String id = "";
+    @JsonProperty("isRestOutput")
+    private boolean restOutput;
 
     public StatementInstance() {
     }
@@ -260,6 +262,16 @@ public class StatementInstance implements Statement {
 
     public void setTargetAgents(List<String> targetAgents) {
         this.targetAgents = targetAgents;
+    }
+
+    @Override
+    public boolean isRESTOutput() {
+        return restOutput;
+    }
+
+    @Override
+    public void isRESTOutput(boolean active) {
+        restOutput = active;
     }
 
     @Override

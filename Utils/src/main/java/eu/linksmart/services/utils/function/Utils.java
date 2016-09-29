@@ -28,10 +28,7 @@ public class  Utils {
     static private DateFormat isoDateFormat = new SimpleDateFormat(Const.TIME_ISO_FORMAT);
     static public DateFormat getDateFormat(){
         DateFormat dateFormat;
-        String tzs = Configurator.getDefaultConfig().getString(Const.TIME_TIMEZONE_CONF_PATH);
-        if(tzs == null || tzs.equals(""))
-            tzs = "UTC";
-        TimeZone tz = TimeZone.getTimeZone(tzs);
+        TimeZone tz = getTimeZone();
         if(Configurator.getDefaultConfig().getString(Const.TIME_FORMAT_CONF_PATH) == null)
 
             dateFormat= new SimpleDateFormat(Const.TIME_ISO_FORMAT);
@@ -43,6 +40,13 @@ public class  Utils {
 
         return dateFormat;
 
+    }
+    static public TimeZone getTimeZone(){
+        String tzs = Configurator.getDefaultConfig().getString(Const.TIME_TIMEZONE_CONF_PATH);
+        if(tzs == null || tzs.equals(""))
+            tzs = "UTC";
+
+        return TimeZone.getTimeZone(tzs);
     }
     static public String getTimestamp(Date date){
         return dateFormat.format(date);

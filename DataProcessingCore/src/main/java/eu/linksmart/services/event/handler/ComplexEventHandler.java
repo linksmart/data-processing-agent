@@ -35,7 +35,10 @@ import java.util.*;
         try {
             serializer = new DefaultSerializer();
             enveloper = new DefaultEnveloper();
-            publisher = new DefaultMQTTPublisher(query);
+            if(!query.isRESTOutput())
+                publisher = new DefaultMQTTPublisher(query);
+            else
+                publisher = new HTTPPublisher(query);
 
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);

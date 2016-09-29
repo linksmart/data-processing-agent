@@ -59,7 +59,7 @@ public class DataProcessingCore {
             active = mqtt.isUp();
 
             if(active) {
-                loggerService.info("Data Fusion Manager is alive");
+                loggerService.info("The Agent with ID "+DynamicConst.getId()+" is alive");
                 int hb = 5000;
                 try {
                      hb=conf.getInt(Const.LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH);
@@ -98,7 +98,7 @@ public class DataProcessingCore {
        
 
         loggerService.info(
-                "The Data-Fusion Manager is starting with ID: " + DynamicConst.getId() + ";\n" +
+                "The Agent streaming core is starting with ID: " + DynamicConst.getId() + ";\n" +
                         " with incoming events in broker " + (new BrokerConfiguration(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH)).getURL())+
                         " waiting for events from the topic: " + conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH) + ";\n" +
                         " waiting for queries from topic: " + conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH) +

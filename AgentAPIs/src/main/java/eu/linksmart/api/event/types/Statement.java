@@ -226,6 +226,18 @@ public interface Statement extends JsonSerializable {
      * @param targetAgents is the list of targeted agents address to process the statement, otherwise empty (all available agents):
      * */
     public void setTargetAgents(List<String> targetAgents);
+    /***
+     *
+     *
+     * @return if the output of the statement are REST endpoints instead of MQTT topics
+     * */
+    public boolean isRESTOutput();
+    /***
+     * setts if the output of the statement are REST endpoints instead of MQTT topics
+     *
+     * @param active true the outputs are REST endpoints, false the outputs are topics
+     * */
+    public void isRESTOutput(boolean active);
 
     /***
      * Represent the possible States of a Statement can be in runtime.

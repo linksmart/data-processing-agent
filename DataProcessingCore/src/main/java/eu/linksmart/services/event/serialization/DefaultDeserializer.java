@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.components.Deserializer;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.types.impl.StatementInstance;
+import eu.linksmart.services.event.intern.Utils;
 
 import java.io.IOException;
 
@@ -19,6 +20,8 @@ public class DefaultDeserializer implements Deserializer{
     public DefaultDeserializer(){
         mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
         mapper.registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class));
+        mapper.setDateFormat(Utils.getDateFormat());
+        mapper.setTimeZone(Utils.getTimeZone());
     }
 
     @Override
