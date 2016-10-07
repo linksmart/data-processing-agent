@@ -23,6 +23,7 @@ public class DefaultMQTTPublisher implements Publisher {
     private List<String> outputs;
     private List<String> scopes;
     private String id;
+    private String agentID;
     private Map<String, StaticBroker> brokers = new Hashtable<>();
     private transient Logger loggerService = Utils.initLoggingConf(this.getClass());
     private transient Configurator conf = Configurator.getDefaultConfig();
@@ -49,10 +50,11 @@ public class DefaultMQTTPublisher implements Publisher {
         knownInstances.addAll(alias.stream().map(Object::toString).collect(Collectors.toList()));
 
     }
-    public DefaultMQTTPublisher(Statement statement) {
+    public DefaultMQTTPublisher(Statement statement, String agentID) {
         outputs = statement.getOutput()!=null ? Arrays.asList(statement.getOutput()) : new ArrayList<>();
         scopes =  statement.getScope()!=null  ? Arrays.asList(statement.getScope())  : new ArrayList<>();
         id = statement.getID();
+        this.agentID =agentID;
 
         try {
             initScopes();
@@ -62,10 +64,11 @@ public class DefaultMQTTPublisher implements Publisher {
         }
 
     }
-    public DefaultMQTTPublisher(String id,String[] outputs, String[] scopes){
+    public DefaultMQTTPublisher(String id, String agentID,String[] outputs, String[] scopes){
         this.outputs =  Arrays.asList(outputs);
         this.scopes =  Arrays.asList(scopes);
         this.id = id;
+        this.agentID =agentID;
 
         try {
             initScopes();
@@ -80,9 +83,9 @@ public class DefaultMQTTPublisher implements Publisher {
         if(outputs==null ||outputs.isEmpty()){
             String aux= Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
             if(aux == null)
-                aux = "/federation1/amiat/v2/cep/";
+                aux = "/outgoing/";
 
-            outputs = Arrays.asList(aux + id);
+            outputs = Arrays.asList(aux + id+"/"+agentID);
         }
     }
 

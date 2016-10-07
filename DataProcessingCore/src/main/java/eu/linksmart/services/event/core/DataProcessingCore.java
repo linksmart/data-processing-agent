@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.core;
 
+import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
 
@@ -18,7 +19,9 @@ import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import org.slf4j.Logger;
 
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by J. Angel Caravajal on 06.10.2014.
@@ -37,19 +40,24 @@ public class DataProcessingCore {
     }
 
     protected static boolean active =false;
+    protected static boolean started =false;
     protected transient static Configurator conf;
     protected transient static  Logger loggerService;
 
     public static void run(String args){
-
-         init(args);
-        statusLoop();
+        if(!started) {
+            init(args);
+            statusLoop();
+        }
     }
 
     public static boolean start(String args){
-        Boolean ret =init(args);
-        new Thread(() ->statusLoop()).start();
-        return ret;
+        if(!started) {
+            Boolean ret = init(args);
+            new Thread(() -> statusLoop()).start();
+            return ret;
+        }
+        return false;
 
     }
     static protected void statusLoop(){
@@ -92,24 +100,20 @@ public class DataProcessingCore {
         else
             DynamicConst.setId(conf.getString(Const.ID_CONF_PATH));
     }
-    protected static boolean init(String args){
-        
-        initConf(args);
-       
 
-        loggerService.info(
-                "The Agent streaming core is starting with ID: " + DynamicConst.getId() + ";\n" +
-                        " with incoming events in broker " + (new BrokerConfiguration(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH)).getURL())+
-                        " waiting for events from the topic: " + conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH) + ";\n" +
-                        " waiting for queries from topic: " + conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH) +
-                        " generating event in: " + conf.getString(Const.STATEMENT_IN_TOPIC_CONF_PATH)
-        );
+    protected static synchronized boolean init(String args){
+        started =true;
+        initConf(args);
+
+
+
+        loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + DynamicConst.getId());
 
         initCEPEngines();
-        initFeeders();
+        boolean success = initFeeders();
         
         initForceLoading();
-        return initFeeders();
+        return success;
     }
 
     private static void initForceLoading() {
@@ -136,8 +140,8 @@ public class DataProcessingCore {
             mqtt = MqttIncomingConnectorService.getReference();
 
             if(conf.getBoolean(Const.STATRT_MQTT_STATEMENT_API))
-             mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH)/*,conf.getString(Const.STATEMENT_INOUT_BROKER_PORT_CONF_PATH)*/,conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH), new StatementMqttObserver());
-            mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH)/*,conf.getString(Const.EVENTS_IN_BROKER_PORT_CONF_PATH)*/,conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver());
+            mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver());
+            mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH),conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver());
 
             FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 

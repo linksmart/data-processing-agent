@@ -7,6 +7,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
+import io.swagger.annotations.ApiModelProperty;
 
 
 import java.math.BigInteger;
@@ -44,35 +45,62 @@ public class StatementInstance implements Statement {
 
 
     @JsonProperty("name")
-    protected String name = UUID.randomUUID().toString();
+    @ApiModelProperty(notes = "Name of the statement. For add a statement (POST) is mandatory")
+    protected String name = "";
     @JsonProperty("statement")
+    @ApiModelProperty(notes = "Statement or Query in the underlying implementation of the CEP engine. For most of the cases is mandatory")
     protected String statement="";
 
     @JsonProperty("source")
+    @ApiModelProperty(notes = "Server source for the event")
+    @Deprecated
     protected String source = "";
+
+    @ApiModelProperty(notes = "The input URIs of the events")
+    @Deprecated
     @JsonProperty("input")
     protected String[] input ={""};
+
+    @ApiModelProperty(notes = "The output URIs of the events")
+    @Deprecated
     @JsonProperty("output")
     protected String[] output=null;
 
+    @ApiModelProperty(notes = "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean")
+    @Deprecated
     @JsonProperty("CEHandler")
     protected String CEHandler= "eu.linksmart.services.event.handler.ComplexEventHandler";
 
-    @JsonProperty("stateLifecycle")
+    @ApiModelProperty(notes = "Statement's Lifecycle.")
+    @Deprecated
+    @JsonProperty("StateLifecycle")
     protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;
 
+    @ApiModelProperty(notes = "Server where the events will be pushed")
+    @Deprecated
     @JsonProperty("scope")
     protected String[] scope={"outgoing"};
     protected static final String uuid =UUID.randomUUID().toString();
     @JsonIgnore
     protected static final Object lock =new Object();
+
+    @ApiModelProperty(notes = "In case of a synchronous request, the response will be sent here.")
+    @Deprecated
     @JsonProperty("SynchronousResponse")
     protected Object synchRespones ;
+
+    @ApiModelProperty(notes = "Indicates the agent ID which should process the statement. Not used for REST API")
+    @Deprecated
     @JsonProperty("TargetAgents")
     protected List<String> targetAgents= new  ArrayList<String>();
 
+    @ApiModelProperty(notes = "Unique identifier of the statement in the agent")
+    @Deprecated
     @JsonProperty("ID")
     protected String id = "";
+
+    @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
+    @Deprecated
     @JsonProperty("isRestOutput")
     private boolean restOutput;
 

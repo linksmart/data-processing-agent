@@ -1,3 +1,14 @@
+ - 1.3.3 RELEASE:
+    Features:
+        * The swagger Data-Processing API is introduced
+        * Small info notifications improvements
+        * The topics for the Statement API can be changed now
+    DEV:
+
+    FIXs:
+        * MQTT notifications related to the MQTT Statement API
+        * correct several problems with the Statement Feeder
+
 29.09.2016 - 1.3.2 RELEASE:
     Features:
         * add http output setting in statements.

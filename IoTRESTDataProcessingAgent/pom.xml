@@ -42,7 +42,8 @@
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>feeder.rest</artifactId>
+            <artifactId>connector.rest</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
 
 

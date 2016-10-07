@@ -18,7 +18,7 @@
             <email>jose.angel.angel.carvajal&lt;at&gt;fit.fraunhofer.de</email>
             <name>Jose Angel Carvajal Soto</name>
             <roles>
-                <role>Java developer</role>
+                <role>Developer</role>
                 <role>Researcher</role>
             </roles>
             <organization>Fraunhofer FIT</organization>
@@ -28,7 +28,7 @@
     </developers>
 
     <organization>
-        <name>Fraunhofer Institute FIT</name>
+        <name>Fraunhofer FIT Institute</name>
         <url>http://www.fit.fraunhofer.de</url>
     </organization>
 
@@ -76,10 +76,14 @@
         <maven.source.version>2.2.1</maven.source.version>
 
         <!-- documentation plugins  versions-->
-        <project-info-reports.version>2.7</project-info-reports.version>
-        <site.plugin.version>3.4</site.plugin.version>
-        <maven.javadoc.version>2.10</maven.javadoc.version>
-        <surefire-report.version>2.17</surefire-report.version>
+        <project-info-reports.version>2.9</project-info-reports.version>
+        <site.plugin.version>3.5.1</site.plugin.version>
+        <maven.javadoc.version>2.10.4</maven.javadoc.version>
+        <surefire-report.version>2.19.1</surefire-report.version>
+        <wagon-webdav-version>2.10</wagon-webdav-version>
+
+        <!-- -->
+        <swagger.version>1.5.10</swagger.version>
 
 
         <!-- configuration settings  -->
@@ -293,7 +297,31 @@
                 <version>${slf4j.version}</version>
             </dependency>
 
+            <!-- documentation (swagger) -->
+            <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.4.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>2.4.0</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+            </dependency>
             <!-- Configuration  -->
 
 
@@ -365,6 +393,15 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven.jar.plugin.version}</version>
+                    <!-- correct versioning on the manifest -->
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
                 </plugin>
 
                 <!-- build embedded web spring server with dependencies -->
@@ -458,10 +495,12 @@
                     <dependency>
                         <groupId>org.apache.maven.wagon</groupId>
                         <artifactId>wagon-webdav-jackrabbit</artifactId>
-                        <version>2.6</version>
+                        <version>${wagon-webdav-version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
+
+
         </plugins>
     </build>
 
@@ -513,9 +552,9 @@
           <uniqueVersion>false</uniqueVersion>
       </snapshotRepository>
       <site>
-          <id>linksmart-repo</id>
+          <id>agents</id>
           <name>linksmart-service-agents-repository</name>
-          <url>dav:https://linksmart.eu/repo/content/sites/doc/services/agents</url>
+          <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
       </site>
 	</distributionManagement>
 
@@ -600,6 +639,11 @@
                                         <enabled>true</enabled>
                                         <updatePolicy>daily</updatePolicy>
                                     </snapshots>
+                                    <site>
+                                        <id>agents</id>
+                                        <name>linksmart-service-agents-repository</name>
+                                        <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
+                                    </site>
                                 </repository>
                             </remoteRepositories>
                         </configuration>

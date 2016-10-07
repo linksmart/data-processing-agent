@@ -26,6 +26,16 @@ public class  Utils {
     static private DateFormat dateFormat = getDateFormat();
 
     static private DateFormat isoDateFormat = new SimpleDateFormat(Const.TIME_ISO_FORMAT);
+    public static synchronized String getVersion() {
+        final Properties properties = new Properties();
+        try {
+            properties.load(Utils.class.getClassLoader().getResourceAsStream("ver.properties"));
+            return properties.getProperty("version");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
     static public DateFormat getDateFormat(){
         DateFormat dateFormat;
         TimeZone tz = getTimeZone();

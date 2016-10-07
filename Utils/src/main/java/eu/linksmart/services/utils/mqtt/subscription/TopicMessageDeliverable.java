@@ -1,5 +1,6 @@
 package eu.linksmart.services.utils.mqtt.subscription;
 
+import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ public class TopicMessageDeliverable implements Runnable{
     private LinkedBlockingQueue<MqttMessage> mqttMessages = new LinkedBlockingQueue<>();
     private LinkedList<Observer> observers = new LinkedList<Observer>();
     //static protected ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);// Executors.newCachedThreadPool();
-
+    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
     public TopicMessageDeliverable() {
         LOG.debug("Starting new ");
         Thread thread =new Thread(this);
@@ -31,7 +32,10 @@ public class TopicMessageDeliverable implements Runnable{
 
 
     public synchronized void addObserver(Observer observer){
-        observers.add(observer);
+        if(!observers.contains(observer))
+            observers.add(observer);
+        else
+            loggerService.warn("the same observer was intent to be added in the same Message");
     }
 
 

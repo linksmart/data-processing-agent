@@ -2,6 +2,7 @@ package eu.linksmart.services.event.feeder;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -35,7 +36,7 @@ public class EventFeeder implements Feeder {
     protected Logger loggerService = Utils.initLoggingConf(this.getClass());
 
     protected Deserializer deserializer = new DefaultDeserializer();
-    private Map<String, Class> compiledTopicClass = new Hashtable<>();
+    private Map<String, Class> compiledTopicClass = new Hashtable<>(), aliasToClass =new Hashtable<>();
 
     protected EventFeeder() {
         try {
@@ -50,16 +51,19 @@ public class EventFeeder implements Feeder {
         me.addEvent(topic,rawEvent);
     }
     public static void feed(String topic, EventEnvelope event) throws TraceableException, UntraceableException{
-        me.addEvent(topic,event);
+        me.addEvent(event,topic);
     }
 
     public static void feed(String topic, String unparsedEvent) throws TraceableException, UntraceableException{
-        me.addEvent(topic,me.parseEvent(topic,unparsedEvent));
+        EventEnvelope eventEnvelope = me.parseEvent(topic, unparsedEvent);
+        me.addEvent(eventEnvelope,topic);
     }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
         try {
             Object event=null;
+
             if(!compiledTopicClass.containsKey(topic)) {
+
                 if(topicToClass.isEmpty())
                     event = deserializer.deserialize(rawEvent, Observation.class);
                 else
@@ -74,10 +78,18 @@ public class EventFeeder implements Feeder {
                 event = deserializer.deserialize(rawEvent, compiledTopicClass.get(topic));
             }
 
-            if(event instanceof EventEnvelope)
-                addEvent(topic,(EventEnvelope)event);
-            else
+            if(event instanceof EventEnvelope) {
+
+                ((EventEnvelope)event).topicDataConstructor(topic);
+
+                addEvent( (EventEnvelope) event,topic);
+            }else
+            if(event!=null)
                 throw new StatementException(event.getClass().getCanonicalName(),"Event","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+            else
+                throw new StatementException(DynamicConst.getId(),"Agent","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+
+
         }catch(TraceableException|UntraceableException e) {
             loggerService.error(e.getMessage(), e);
             throw e;
@@ -107,7 +119,7 @@ public class EventFeeder implements Feeder {
                 event = deserializer.parse(rawEvent, compiledTopicClass.get(topic));
             }
             if(!(event instanceof EventEnvelope))
-                throw new StatementException(event.getClass().getCanonicalName(),"Event","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+                throw new StatementException(topic,"Event","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
 
         }catch(TraceableException e) {
             loggerService.error(e.getMessage(), e);
@@ -118,13 +130,12 @@ public class EventFeeder implements Feeder {
         }
         return (EventEnvelope) event;
     }
-    protected void addEvent(String topic,EventEnvelope event) throws TraceableException, UntraceableException{
+    protected void addEvent(EventEnvelope event,String topic) throws TraceableException, UntraceableException{
         try {
 
             if(event!=null) {
 
                 event.topicDataConstructor(topic);
-
                 for (CEPEngine i : CEPEngine.instancedEngines.values())
                     i.addEvent(event, event.getClass());
             }else
@@ -155,6 +166,7 @@ public class EventFeeder implements Feeder {
                 try {
                     Class aClass = Class.forName(classes.get(i).toString());
                     topicToClass.put(new Topic(topics.get(i).toString()),aClass);
+                    aliasToClass.put(aliases.get(i).toString(), aClass);
                     classToAlias.put(aClass.getCanonicalName(),aliases.get(i).toString());
                     dfw.addEventType(aliases.get(i).toString(), aClass );
                 } catch (ClassNotFoundException e) {
