@@ -83,6 +83,7 @@ public class CEML implements AnalyzerComponent , Feeder {
         }catch (Exception e){
             e.printStackTrace();
         }
+        loggerService.info("The CEML has started in the Agent with ID "+DynamicConst.getId());
     }
     public static MultiResourceResponses<CEMLRequest> feedLearningRequest(CEMLRequest request){
         MultiResourceResponses<CEMLRequest> responses = new MultiResourceResponses<>();
@@ -288,7 +289,8 @@ public class CEML implements AnalyzerComponent , Feeder {
         }
     }
     static void report(String id, String message){
-        MqttCemlAPI.getMeDafault().reportFeedback(id,message);
+        if(conf.getBoolean(Const.CEML_GenerateReports))
+            MqttCemlAPI.getMeDafault().reportFeedback(id,message);
     }
     static private Map<String,Number> lastKnown = new Hashtable<>();
     static public Number filter(String filterName,Number measurement) {

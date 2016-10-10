@@ -1,19 +1,22 @@
 package eu.linksmart.services.event.handler;
 
 
+import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.components.ComplexEventPropagationHandler;
 import eu.linksmart.api.event.components.Enveloper;
 import eu.linksmart.api.event.components.Publisher;
-import eu.linksmart.api.event.components.Serializer;
+import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
+import eu.linksmart.services.utils.serialization.Serializer;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.services.event.serialization.DefaultSerializer;
+import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.configuration.Configurator;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -35,11 +38,19 @@ import java.util.*;
         try {
             serializer = new DefaultSerializer();
             enveloper = new DefaultEnveloper();
-            publisher = new DefaultMQTTPublisher(query);
-
+            if(!query.isRESTOutput()) {
+                publisher = new DefaultMQTTPublisher(query,DynamicConst.getId());
+                loggerService.info("The Agent(ID:" + DynamicConst.getId() + ") generating events for statement ID "+query.getID()+" in the broker " + query.getScope(0) + "  URL: " + (new BrokerConfiguration(query.getID()).getURL()));
+                loggerService.info("The Agent(ID:"+DynamicConst.getId()+") generating event in the topic(s): " + publisher.getOutputs().stream().collect(Collectors.joining(",")));
+            }else {
+                publisher = new HTTPPublisher(query);
+            }
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
+
+
+
     }
 
 
@@ -116,17 +127,6 @@ import java.util.*;
         enveloper.close();
         serializer.close();
     }
-
-    @Override
-    public Serializer getSerializer() {
-        return serializer;
-    }
-
-    @Override
-    public void setSerializer(Serializer serializer) {
-        this.serializer = serializer;
-    }
-
     @Override
     public Enveloper getEnveloper() {
         return enveloper;

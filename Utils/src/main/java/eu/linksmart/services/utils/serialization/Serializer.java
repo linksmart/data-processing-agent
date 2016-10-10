@@ -1,7 +1,9 @@
-package eu.linksmart.api.event.components;
+package eu.linksmart.services.utils.serialization;
 
 
-import eu.linksmart.api.event.exceptions.UntraceableException;
+
+
+import java.io.IOException;
 
 /**
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
@@ -27,27 +29,30 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.1.1
- * @see eu.linksmart.api.event.components.ComplexEventHandler
  *
  * */
 public interface Serializer {
     /**
      * Serialize in bytes a given object.
+     *
+     * @param <T> type of the object to be serialized
      * @param object to be serialized
      *
      * @return the serialized object
-     * @exception eu.linksmart.api.event.exceptions.UntraceableException if the object cannot be serialized
+     * @exception java.io.IOException if the object cannot be serialized
      * */
-    public<T> byte[] serialize(T object) throws UntraceableException;
+    public<T> byte[] serialize(T object) throws IOException;
 
     /**
      * Serialize in a string a given object.
+     *
+     * @param <T> type of the object to be serialize
      * @param object to be serialized
      *
      * @return the serialized object as string
-     * @exception eu.linksmart.api.event.exceptions.UntraceableException if the object cannot be serialized
+     * @exception java.io.IOException if the object cannot be serialized
      * */
-    public<T> String toString(T object) throws UntraceableException;
+    public<T> String toString(T object) throws IOException;
     /**
      * Endorse the Deserializer to release resources if is needed.
      * */

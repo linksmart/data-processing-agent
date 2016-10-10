@@ -94,7 +94,7 @@ public class ObservedProperty extends OGCSensorThingsAPIDataModelEntry
 	 * Provides the URN(URI) of the observed property or phenomenon modeled by
 	 * this instance.
 	 * 
-	 * @return the urn The phenomenon URI as a {@LINK String}
+	 * @return the urn The phenomenon URI as a {@link String}
 	 */
 	@JsonProperty(value = "URI")
 	@JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
@@ -149,7 +149,7 @@ public class ObservedProperty extends OGCSensorThingsAPIDataModelEntry
 	 * not Thread-safe. Synchronization and concurrent modification issues might
 	 * arise in multi-threaded environments.
 	 * 
-	 * @return the {@link Set}<{@link Datastream}> of datastreams gassociated to
+	 * @return the {@link Set} {@link Datastream}  of datastreams gassociated to
 	 *         this {@link ObservedProperty} instance.
 	 */
 	@JsonProperty(value = "Datastreams")

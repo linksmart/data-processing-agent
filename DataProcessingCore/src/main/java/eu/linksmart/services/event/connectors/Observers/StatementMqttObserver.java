@@ -1,11 +1,14 @@
 package eu.linksmart.services.event.connectors.Observers;
 
+import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.feeder.StatementFeeder;
+import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 
 import java.util.ArrayList;
@@ -20,12 +23,15 @@ public class StatementMqttObserver extends IncomingMqttObserver {
 
     public StatementMqttObserver() {
         super();
+        loggerService.info("The Agent(ID:"+DynamicConst.getId()+") waiting for queries from BASE/[OPERATION] topic: " + conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+ "["+conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH)+"]");
+
     }
 
     @Override
     protected void mangeEvent(String topic,byte[] rawEvent) {
         ArrayList<String> topicParts = new ArrayList<>(Arrays.asList(topic.split("/")));
         topicParts.remove("");
+        String part1 = topicParts.get(1)+"/";
 
         MultiResourceResponses<Statement> responses = null;
 
@@ -37,38 +43,35 @@ public class StatementMqttObserver extends IncomingMqttObserver {
         *  <discriminator> is on of the followings: new, update, delete
         * */
         if(topicParts.size()>1){ // case BASE/add/
-            if(topicParts.get(1).equals("add")){
+            if(part1.equals(conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH))){
                 responses = StatementFeeder.addNewStatement(new String(rawEvent), null, null);
-            }else if(topicParts.get(1).equals("new") && topicParts.size()>2){ //  BASE/new/<statementID>/
-                responses = StatementFeeder.addNewStatement(new String(rawEvent),topicParts.get(2),null);
+            }else if(part1.equals(conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH)) && topicParts.size()>2){ //  BASE/new/<statementID>/
+                responses = StatementFeeder.addNewStatement(new String(rawEvent), topicParts.get(2), null);
 
-            } else if(topicParts.get(1).equals("delete") && topicParts.size()>2){//  BASE/delete/<statementID>/
+            } else if(part1.equals(conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH)) && topicParts.size()>2){//  BASE/delete/<statementID>/
                 responses = StatementFeeder.deleteStatement(topicParts.get(2));
-            } else if(topicParts.get(1).equals("update") && topicParts.size()>2){//  BASE/update/<statementID>/
-                responses = StatementFeeder.addNewStatement(new String(rawEvent),topicParts.get(2),null);
+            } else if(part1.equals(conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH)) && topicParts.size()>2){//  BASE/update/<statementID>/
+                responses = StatementFeeder.addNewStatement(new String(rawEvent), topicParts.get(2), null);
             }else if( CEPEngine.instancedEngines.containsKey(topicParts.get(1)) && topicParts.size()>3){ //  BASE/<targetCEP>/add/ or BASE/<targetCEP>/<discriminator>/<statementID>/
 
                     String targetCEP = CEPEngine.instancedEngines.get(topicParts.get(1)).getName();
+                    String part2 = topicParts.get(2)+"/";
 
-                    if(topicParts.get(2).equals("add")){// BASE/<targetCEP>/add/
-                        responses = StatementFeeder.addNewStatement(new String(rawEvent),null,targetCEP);
-                    }else if(topicParts.get(2).equals("new")){ //BASE/<targetCEP>/new/<statementID>/
+                    if(part2.equals(conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH))){// BASE/<targetCEP>/add/
+                        responses = StatementFeeder.addNewStatement(new String(rawEvent), null, targetCEP);
+                    }else if(part2.equals(conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH))){ //BASE/<targetCEP>/new/<statementID>/
                         responses = StatementFeeder.addNewStatement(new String(rawEvent),topicParts.get(3),targetCEP);
 
-                    } else if(topicParts.get(2).equals("delete") ){ //BASE/<targetCEP>/delete/<statementID>/
+                    } else if(part2.equals(conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH)) ){ //BASE/<targetCEP>/delete/<statementID>/
                         responses = StatementFeeder.deleteStatement(topicParts.get(3));
-                    } else if(topicParts.get(2).equals("update") ){ //BASE/<targetCEP>/update/<statementID>/
+                    } else if(part2.equals(conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH)) ){ //BASE/<targetCEP>/update/<statementID>/
                         responses = StatementFeeder.addNewStatement(new String(rawEvent),topicParts.get(3),targetCEP);
                     }
 
             }
         }
-        if (responses==null){
-            responses = new MultiResourceResponses<>();
-            responses.addResponse(new GeneralRequestResponse("Bad Request", DynamicConst.getId(),null,"Agent","The topic "+topic+" is not a known endpoint for receiving requests for agent this agent",400));
-
-        }
-        responses.getResponses().forEach(this::publishFeedback);
+        if(responses!=null)
+            responses.getResponses().forEach(this::publishFeedback);
 
 
     }

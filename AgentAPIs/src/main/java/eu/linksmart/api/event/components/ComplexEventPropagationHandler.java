@@ -32,7 +32,6 @@ package eu.linksmart.api.event.components;
  * @see CEPEngine
  * @see eu.linksmart.api.event.components.Enveloper
  * @see eu.linksmart.api.event.components.Publisher
- * @see eu.linksmart.api.event.components.Serializer
  *
  */
 public interface ComplexEventPropagationHandler extends ComplexEventHandler {
@@ -52,13 +51,6 @@ public interface ComplexEventPropagationHandler extends ComplexEventHandler {
      * */
     public void setPublisher(Publisher publisher);
     /**
-     * Sets the Serializer used by the handler. If non is given an Default implementation should be used.
-     *
-     * @param serializer used to serialized the already packed compound-event received by the @link CEPEngine.
-     *
-     * */
-    public void setSerializer(Serializer serializer);
-    /**
      * Provide the Enveloper used by the handler. If non is given an Default implementation should be used.
      *
      * @return an Enveloper used to pack the compound event received by the @link CEPEngine.
@@ -72,13 +64,6 @@ public interface ComplexEventPropagationHandler extends ComplexEventHandler {
      *
      * */
     public Publisher getPublisher();
-    /**
-     * Provide the Serializer used by the handler. If non is given an Default implementation should be used.
-     *
-     * @return an Serializer used to serialized the already packed compound-event received by the @link CEPEngine.
-     *
-     * */
-    public Serializer getSerializer();
 
 
 }

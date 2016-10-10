@@ -1,0 +1,74 @@
+ - 1.3.3 RELEASE:
+    Features:
+        * The swagger Data-Processing API is introduced
+        * Small info notifications improvements
+        * The topics for the Statement API can be changed now
+    DEV:
+
+    FIXs:
+        * MQTT notifications related to the MQTT Statement API
+        * correct several problems with the Statement Feeder
+
+29.09.2016 - 1.3.2 RELEASE:
+    Features:
+        * add http output setting in statements.
+        * add time zone and date format configurable
+        * add the use of different passwords in the certificate based security for the SSL socket creation
+        * CRUD CEML MQTT API is now complete
+        * add SenML into the supported in the data-payloads
+        * add a serialization abstraction. Now serializing and deserializing can be done without knowing the underlying implementation
+        * separate the Feeders (high level API related component) from the Connectors (protocol related component)
+        * BIG Change: The configuration file has being restructured:
+            * all properties had changed its names.
+            * The logic and concepts how the brokers had bing changed
+
+    DEV:
+        * Change List added
+        * BootstrappingBean it's now part of API artifact
+        * (De)serializers are new part of Utils
+        * the CEML MQTT API had being adjusted to fit in the architecture of the agents (API now is MQTTIncomingObserver based)
+        * the code documentation of the API is completed
+        * removed the OSGi related code from some components
+        * restructuring namespaces for make it homogeneous: change naming, moving classes, remove old namespace, etc
+        * moved the out of date payload to a non-usable location till are up to date
+        * add a new fine exception handling in the agent framework
+
+    FIXs:
+        * include non-connection related configuration settings now are also discriminator for comparison between two BrokerService(s)
+        * the BootstrappingBean had being fixed
+        * the bootstrapping of data types in the engine is fully functional again
+
+31.08.2016 - 1.3.1 RELEASE:
+    Features:
+        * Enable Cross-Origin Resource Sharing for GET request from web browsers. Currently enabled for predictions
+        * Improve the CEML API to be RESTful compliant
+        * add the double functionality in list handler. One, an independent ground truth (evaluation), target (learning), learning input, prediction Input. Two, same input ground truth (evaluation) = target (learning), learning input = prediction input
+        * Add lase evaluation into the model.
+        * add insertion of the CEML request into the CEP engine.
+        * remove the necessity to define min and max bound in the Auto-regressive NNM
+        * Providing original input in the prediction, therefore adapt some functions that use the prediction class
+        * Parameters to decide high and low input values. Now "Model" should have an additional attribute for AutoregressiveNeuralNetworkModel:
+                "Parameters":{
+                "maxInputval":100.0,
+                "minInputval":1.0
+                }
+        * add some configuration properties needed to configure jetty security in the conf.cfg file
+        * the newest WSO2 CEP is working now with the agents
+        * unifying the jetty conf file with the agent conf file
+    DEV:
+        * starting the Docker integration (unfinished)
+        * big refactoring (name changed, packages, etc.) to fit better in the architecture and to be more homogeneous
+        * GC Utils move back to Event namespace (welcome back). Now it is simply Utils
+        * improve code stile in several. The room for improvement areas were pointed out by sonar Qube
+        * handlers now are not a single process of packing, serializing, and publishing. Now this is done in different by a Serializer, Enveloper, and Publisher. Now, there is a MQTT Publisher (default) and a HTTP Publisher. The HTTP publisher allows the agent to generate REST request
+        * improving the EventType and provide a basic implantation.
+        * change the SSL socket to reduce unnecessary dependencies
+    FIXs:
+        * RMSE Evaluator and MAE evaluator: changed logic
+        * evaluation with list learning handler.
+        * fixing some minor auxiliary functions
+        * Avoiding possible race conditions on learning process
+        * the issue that the Evaluation Metric was always "More"
+        * some handlers issues regarding the casting of the handlers made by Esper. The fix triggered an issue that the events didn't arrive in order by the List handler
+        * add dependencies to run in linux
+        * loading configuration file from the given Class instead of the given ClassLoader. This was making the loading fail.

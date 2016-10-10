@@ -18,9 +18,11 @@ package eu.linksmart.api.event.types.impl;
  *
  */
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Reference implementation of a response.
@@ -91,6 +93,8 @@ public class GeneralRequestResponse implements JsonSerializable{
     public GeneralRequestResponse() {
 
     }
+    @ApiModelProperty(notes = "Provide the content title of the response", required = true)
+    @JsonProperty
     public String getHeadline() {
         return headline;
     }
@@ -99,6 +103,8 @@ public class GeneralRequestResponse implements JsonSerializable{
         this.headline = headline;
     }
 
+    @ApiModelProperty(notes = "Provide the id of the agent where the response was generated", required = true)
+    @JsonProperty
     public String getAgentID() {
         return agentID;
     }
@@ -107,6 +113,8 @@ public class GeneralRequestResponse implements JsonSerializable{
         this.agentID = agentID;
     }
 
+    @ApiModelProperty(notes = "Provide the id of the request that provide a response", required = true)
+    @JsonProperty
     public String getProducerID() {
         return producerID;
     }
@@ -115,6 +123,8 @@ public class GeneralRequestResponse implements JsonSerializable{
         this.producerID = producerID;
     }
 
+    @ApiModelProperty(notes = "Provide the name of the request that provide a response", required = true)
+    @JsonProperty
     public String getProducerName() {
         return producerName;
     }
@@ -123,6 +133,8 @@ public class GeneralRequestResponse implements JsonSerializable{
         this.producerName = producerName;
     }
 
+    @ApiModelProperty(notes = "Message of the response", required = true)
+    @JsonProperty
     public String getMessage() {
         return message;
     }
@@ -131,6 +143,8 @@ public class GeneralRequestResponse implements JsonSerializable{
         this.message = message.replace("\"","\\\"");
     }
 
+    @ApiModelProperty(notes = "Code of the response", required = true)
+    @JsonProperty
     public int getStatus() {
         return status;
     }
@@ -139,6 +153,8 @@ public class GeneralRequestResponse implements JsonSerializable{
         this.status = status;
     }
 
+    @ApiModelProperty(notes = "Verbose code of the response", required = true)
+    @JsonProperty
     public MessagesTypes getMessageType() {
         return messageType;
     }
@@ -147,6 +163,8 @@ public class GeneralRequestResponse implements JsonSerializable{
         this.messageType = messageType;
     }
 
+    @ApiModelProperty(notes = "Topic of the response. Used as URI", required = true)
+    @JsonProperty
     public String getTopic() {
         if(topic== null || topic.equals("")){
             topic="";

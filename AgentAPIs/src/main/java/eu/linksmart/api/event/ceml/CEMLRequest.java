@@ -157,7 +157,9 @@ public interface CEMLRequest  extends JsonSerializable {
      * */
     public Collection<Statement> getAuxiliaryStreamStatements();
     /***
-     * Reruns any Statement defined either as AuxiliaryStatements, LearningStreams, or DeploymentStreams.
+     * Reruns any selected statement per ID Statement defined either as AuxiliaryStatements, LearningStreams, or DeploymentStreams.
+     *
+     * @param StatementId to be returned
      *
      * @return the selected statement as Statements.
      * @see eu.linksmart.api.event.types.Statement

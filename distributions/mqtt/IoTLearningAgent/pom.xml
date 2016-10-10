@@ -5,7 +5,7 @@
     <parent>
         <groupId>eu.linksmart.services.events.distributions.mqtt</groupId>
         <artifactId>mqtt.reactor</artifactId>
-        <version>1.3.2-SNAPSHOT</version>
+        <version>1.3.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,6 +18,12 @@
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>iot.learning.impl</artifactId>
             <version>${ls.se.agents.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>eu.linksmart.services.events.gpl</groupId>
+                    <artifactId>wrapper.esper</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -58,11 +64,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
 
-            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>

@@ -23,7 +23,7 @@ import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
  *
  * This exception is an complex exception. This exception is obtained when an internal exception happens
  * and the exception had being assessed and managed by an component, and the components must thrown an exception.
- * E.g. Having component A, B, C where  A-calls->B-->C and C produces an exception. B asses and generates an responds
+ * E.g. Having component A, B, C where  A-calls-&lt;B--&lt;C and C produces an exception. B asses and generates an responds
  * to A. B throws its response in form of a ErrorResponseException to A.
  * Usually, this exception is translated as REST error code as whatever the assessment in the GeneralRequestResponse
  * had being already decided.

@@ -4,7 +4,7 @@
 	<groupId>eu.linksmart.services.events</groupId>
 	<artifactId>parent</artifactId>
 
-	<version>1.3.2-SNAPSHOT</version>
+	<version>1.3.3-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -18,7 +18,7 @@
             <email>jose.angel.angel.carvajal&lt;at&gt;fit.fraunhofer.de</email>
             <name>Jose Angel Carvajal Soto</name>
             <roles>
-                <role>Java developer</role>
+                <role>Developer</role>
                 <role>Researcher</role>
             </roles>
             <organization>Fraunhofer FIT</organization>
@@ -28,7 +28,7 @@
     </developers>
 
     <organization>
-        <name>Fraunhofer Institute FIT</name>
+        <name>Fraunhofer FIT Institute</name>
         <url>http://www.fit.fraunhofer.de</url>
     </organization>
 
@@ -42,7 +42,7 @@
     </licenses>
     <properties>
         <!-- main version -->
-        <ls.se.agents.version>1.3.2-SNAPSHOT</ls.se.agents.version>
+        <ls.se.agents.version>1.3.3-SNAPSHOT</ls.se.agents.version>
         <!-- LS GC version
         <linksmart.gc.version>0.3.0-SNAPSHOT</linksmart.gc.version>-->
 
@@ -73,12 +73,17 @@
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <build.helper.maven.plugin.version>1.10</build.helper.maven.plugin.version>
         <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
+        <maven.source.version>2.2.1</maven.source.version>
 
         <!-- documentation plugins  versions-->
-        <project-info-reports.version>2.7</project-info-reports.version>
-        <site.plugin.version>3.4</site.plugin.version>
-        <maven.javadoc.version>2.10</maven.javadoc.version>
-        <surefire-report.version>2.17</surefire-report.version>
+        <project-info-reports.version>2.9</project-info-reports.version>
+        <site.plugin.version>3.5.1</site.plugin.version>
+        <maven.javadoc.version>2.10.4</maven.javadoc.version>
+        <surefire-report.version>2.19.1</surefire-report.version>
+        <wagon-webdav-version>2.10</wagon-webdav-version>
+
+        <!-- -->
+        <swagger.version>1.5.10</swagger.version>
 
 
         <!-- configuration settings  -->
@@ -266,18 +271,6 @@
                 <scope>runtime</scope>
             </dependency>
 
-            <!-- Weka -->
-            <dependency>
-                <groupId>nz.ac.waikato.cms.weka</groupId>
-                <artifactId>weka-dev</artifactId>
-                <version>${weka.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
             <!-- Apache -->
             <dependency>
@@ -304,7 +297,31 @@
                 <version>${slf4j.version}</version>
             </dependency>
 
+            <!-- documentation (swagger) -->
+            <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.4.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>2.4.0</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+            </dependency>
             <!-- Configuration  -->
 
 
@@ -315,6 +332,8 @@
                 <version>${java.junit.version}</version>
                 <scope>test</scope>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -374,6 +393,15 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven.jar.plugin.version}</version>
+                    <!-- correct versioning on the manifest -->
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
                 </plugin>
 
                 <!-- build embedded web spring server with dependencies -->
@@ -413,6 +441,13 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <!-- Site related plugins -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${project-info-reports.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -439,17 +474,33 @@
             </plugin>
             <!-- build sources  -->
             <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>attach-sources</id>
-                    <goals>
-                        <goal>jar</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven.source.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- site plugin and webdav dependency for deployment of site onto Nexus repository -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${site.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-webdav-jackrabbit</artifactId>
+                        <version>${wagon-webdav-version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+
         </plugins>
     </build>
 
@@ -497,13 +548,13 @@
       <snapshotRepository>
           <id>snapshots</id>
           <name>Snapshots</name>
-          <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+          <url>https://linksmart.eu/repo/content/repositories/snapshots/eu/linksmart/services/events</url>
           <uniqueVersion>false</uniqueVersion>
       </snapshotRepository>
       <site>
-          <id>linksmart-repo</id>
-          <name>linksmart-site-repository</name>
-          <url>dav:https://linksmart.eu/repo/content/sites/doc/</url>
+          <id>agents</id>
+          <name>linksmart-service-agents-repository</name>
+          <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
       </site>
 	</distributionManagement>
 
@@ -588,6 +639,11 @@
                                         <enabled>true</enabled>
                                         <updatePolicy>daily</updatePolicy>
                                     </snapshots>
+                                    <site>
+                                        <id>agents</id>
+                                        <name>linksmart-service-agents-repository</name>
+                                        <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
+                                    </site>
                                 </repository>
                             </remoteRepositories>
                         </configuration>

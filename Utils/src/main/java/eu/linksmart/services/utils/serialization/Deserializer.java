@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.components;
+package eu.linksmart.services.utils.serialization;
 
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -28,14 +28,13 @@ import java.io.IOException;
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.1.1
- * @see eu.linksmart.api.event.components.Feeder
- * @see eu.linksmart.api.event.components.IncomingConnector
  *
  * */
 public interface Deserializer {
     /**
      * The class takes a text representation of an object, probably json, and parse and construct an java object from it.
      *
+     * @param <T> type of the object to be parsed
      * @param objectString is the string representation of an object
      * @param tClass is the java class that will be constructing using the object string representation
      *
@@ -43,7 +42,7 @@ public interface Deserializer {
      *
      * @exception java.io.IOException when the parsing didn't work
      * @exception sun.reflect.generics.reflectiveObjects.NotImplementedException when this method had not implemented.
-     * This may happens if the Deserializer is used just for byte[]->object and not string->object, as deserializer and not as parser.
+     * This may happens if the Deserializer is used just for byte[] to object and not string to object, as deserializer and not as parser.
      * In this case, the function <code>deserialize</code> must be implemented.
      *
      *
@@ -53,6 +52,7 @@ public interface Deserializer {
      * The class takes a array of bytes which may be a serialized object or the serialization of the string representation of an object,
      * and instantiate an object out of it.
      *
+     * @param <T> type of the object to be deserialized
      * @param bytes is array of bytes that either is an serialized object or the serialized string representation of an object.
      * @param tClass is the java class that will be constructing using the object string representation
      *
@@ -60,12 +60,14 @@ public interface Deserializer {
      *
      * @exception java.io.IOException when the serialization didn't work
      * @exception sun.reflect.generics.reflectiveObjects.NotImplementedException when this method had not implemented.
-     * This may happens if the Deserializer is used just for string->object and not byte[]->object, as parser and not as deserializer.
+     * This may happens if the Deserializer is used just for string to object and not byte[] to object, as parser and not as deserializer.
      * In this case, the function <code>parse</code> must be implemented.
      *
      *
      * */
     <T> T deserialize(byte[] bytes, Class<T> tClass) throws IOException, NotImplementedException;
+
+    <I,C extends I> boolean defineClassToInterface(Class<I> tInterface,Class<C> tClass );
     /**
      * Endorse the Deserializer to release resources if is needed.
      * */

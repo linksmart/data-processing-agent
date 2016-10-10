@@ -31,9 +31,9 @@ import java.util.List;
  *
  * Summary of Predicting, learning, and evaluating  process
  *
- * For Learning: Learn(MeasuredInput, MeasuredTarget)= void     =side effect=> Model Learn
- * For Predicting: Predict(MeasuredInput) = Prediction  =side effect=> None
- * For Evaluating: Evaluate(MeasuredInput, MeasuredTarget, Prediction) =side effect=> Assessment of the state of the Model is updated
+ * For Learning: Learn(MeasuredInput, MeasuredTarget)= void     =side effect=&lt;  Model Learn
+ * For Predicting: Predict(MeasuredInput) = Prediction  =side effect=&lt; None
+ * For Evaluating: Evaluate(MeasuredInput, MeasuredTarget, Prediction) =side effect=&lt; Assessment of the state of the Model is updated
  *
  * The structure of MeasuredInput and Prediction are the same, and is defined in the TargetDescriptors
  * The structure of MeasuredInput is defined in the InputDescriptors

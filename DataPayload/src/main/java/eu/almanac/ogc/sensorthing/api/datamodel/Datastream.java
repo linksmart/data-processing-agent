@@ -149,7 +149,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 	 * Thread-safe, therefore synchronization and concurrent modification issues
 	 * might arise in multi-threaded environments.
 	 *
-	 * @return the live reference to the inner {@link Set}<{@link Observation}>.
+	 * @return the live reference to the inner {@link Set} {@link Observation} .
 	 */
 	@JsonProperty(value = "Observations")
 	public Set<Observation> getObservations()
@@ -158,7 +158,7 @@ public class Datastream extends OGCSensorThingsAPIDataModelEntry
 	}
 
 	/**
-	 * Updates the {@link Set}<{@link Observation}> gbelonging to this
+	 * Updates the {@link Set} {@link Observation}  gbelonging to this
 	 * {@link Datastream} instance. Any previously existing information is
 	 * discarded.
 	 *

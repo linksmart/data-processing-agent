@@ -12,9 +12,14 @@ import eu.linksmart.services.event.handler.HandlerConst;
  */
 public interface Const extends eu.linksmart.services.utils.constants.Const, FeederConst, HandlerConst {
 
-    public static final String STATEMENT_INOUT_BASE_TOPIC_CONF_PATH ="api.statements.mqtt.topic.base";
-    public static final String STATEMENT_IN_TOPIC_CONF_PATH ="api.statements.mqtt.topic";
+
     public static final String STATEMENT_INOUT_BROKER_CONF_PATH ="api.statements.mqtt.broker";
+    public static final String STATEMENT_INOUT_BASE_TOPIC_CONF_PATH ="api.statements.mqtt.topic.base";
+    public static final String STATEMENT_IN_TOPIC_ADD_CONF_PATH ="api.statements.mqtt.topic.base.add";
+    public static final String STATEMENT_IN_TOPIC_CREATE_CONF_PATH ="api.statements.mqtt.topic.base.create";
+    public static final String STATEMENT_IN_TOPIC_DELETE_CONF_PATH ="api.statements.mqtt.topic.base.remove";
+    public static final String STATEMENT_IN_TOPIC_UPDATE_CONF_PATH ="api.statements.mqtt.topic.base.update";
+    public static final String STATEMENT_OUT_TOPIC_ERROR_CONF_PATH ="api.statements.mqtt.topic.base.errors";
 
     public static final String EVENT_IN_TOPIC_CONF_PATH = "api.events.mqtt.topic.incoming";
     public static final String EVENTS_IN_BROKER_CONF_PATH ="api.events.mqtt.broker.incoming";
