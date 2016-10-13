@@ -77,7 +77,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
             MqttIncomingConnectorService.getReference().addAddListener(
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "add/",
-                    new IncomingMqttObserver() {
+                    new IncomingMqttObserver(   conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "add/") {
                         @Override
                         protected void mangeEvent(String topic, byte[] payload) {
                             try {
@@ -106,7 +106,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
                   //  conf.getString(Const.CEML_MQTT_BROKER_PORT),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "remove/+",
-                    new IncomingMqttObserver() {
+                    new IncomingMqttObserver(conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "remove/+") {
                         @Override
                         protected void mangeEvent(String topic, byte[] payload) {
                             try {
@@ -142,7 +142,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
                    // conf.getString(Const.CEML_MQTT_BROKER_PORT),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "get/+",
-                    new IncomingMqttObserver() {
+                    new IncomingMqttObserver(conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "get/+") {
                         @Override
                         protected void mangeEvent(String topic, byte[] payload) {
                             try {

@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.core;
 
+import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
@@ -21,6 +22,7 @@ import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -146,8 +148,16 @@ public class DataProcessingCore {
             persistentFeeder.loadFiles();
 
             if(conf.getBoolean(Const.STATRT_MQTT_STATEMENT_API))
-                mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver());
-            mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH),conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver());
+                mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
+            //
+            conf.getList(Const.FeederPayloadTopic).stream().forEach(i->{
+                try {
+                    mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH), i.toString(), new EventMqttObserver(i.toString()));
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(),e);
+                }
+            });
+
 
 
         } catch (Exception e) {

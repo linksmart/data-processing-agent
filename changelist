@@ -4,6 +4,10 @@
         * Small info (Logging) notifications improvements
         * The topics for the Statement API can be changed now
         * Now is possible to bootstrap the CEML request into the IoT-LA
+        * The incoming event topic now is a list of topics define in 'api.events.mqtt.topics.incoming' and not as before a single topic in 'api.events.mqtt.topic.incoming'
+        * The incoming events now comes from several input topics
+        * The properties 'feeder.payload.type.class' and 'feeder.payload.type.alias' change name to 'connector.observers.payload.type.classes' and 'connector.observers.type.aliases', respectively
+        * The property 'feeder.payload.type.topic' was removed, now is used the new property 'api.events.mqtt.topics.incoming' as described above.
     DEV:
         * The order of loading initialization has changed. Now looks as following:
             being: '->' followed by, ':' including the process, inside of '()' is  sub sequence of process, inside of '[]' optional sequence, inside of '||' parallel(-like) process):
