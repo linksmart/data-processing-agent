@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.components.Feeder;
+import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.services.event.ceml.api.FileCemlAPI;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -41,7 +43,7 @@ import org.slf4j.Logger;
 /**
  * Created by angel on 13/11/15.
  */
-public class CEML implements AnalyzerComponent , Feeder {
+public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
     static AnalyzerComponent info;
     static transient private Configurator conf = Configurator.getDefaultConfig();
@@ -76,13 +78,16 @@ public class CEML implements AnalyzerComponent , Feeder {
                 .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class))
                 .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
                 .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
+
+        if(conf.containsKey(Const.CEML_INIT_BOOTSTRAPPING))
+            (new FileCemlAPI(conf.getString(Const.CEML_INIT_BOOTSTRAPPING))).loadFiles();
         try {
-
             Class.forName(MqttCemlAPI.class.getCanonicalName());
-
         }catch (Exception e){
             e.printStackTrace();
         }
+        Feeder.feeders.put(CEML.class.getCanonicalName(), new CEML());
+        // bootstrap requests
         loggerService.info("The CEML has started in the Agent with ID "+DynamicConst.getId());
     }
     public static MultiResourceResponses<CEMLRequest> feedLearningRequest(CEMLRequest request){
@@ -355,6 +360,13 @@ public class CEML implements AnalyzerComponent , Feeder {
     }
 
 
+    @Override
+    public void feed(String topicURI, String payload) throws TraceableException, UntraceableException {
+        create(topicURI,payload,"");
+    }
 
-
+    @Override
+    public void feed(String topicURI, CEMLRequest payload) throws TraceableException, UntraceableException {
+        create(payload);
+    }
 }

@@ -32,7 +32,7 @@ public class DefaultDeserializer implements Deserializer{
     @Override
     public <I,C extends I> boolean defineClassToInterface(Class<I> tInterface,Class<C> tClass ) {
         mapper.registerModule(new SimpleModule(tInterface.getName(), Version.unknownVersion()).addAbstractTypeMapping(tInterface, tClass));
-        return false;
+        return true;
     }
 
     @Override

@@ -1,11 +1,9 @@
 package eu.linksmart.services.event.feeder;
 
 
+import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
-import eu.linksmart.api.event.exceptions.InternalException;
-import eu.linksmart.api.event.exceptions.StatementException;
-import eu.linksmart.api.event.exceptions.UnknownException;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Created by angel on 26/11/15.
  */
-public class StatementFeeder implements Feeder {
+public class StatementFeeder implements Feeder<Statement> {
     protected static Logger loggerService = Utils.initLoggingConf(StatementFeeder.class);
     protected static Configurator conf =  Configurator.getDefaultConfig();
 
@@ -34,6 +32,7 @@ public class StatementFeeder implements Feeder {
 
     static {
         deserializer.defineClassToInterface(Statement.class,StatementInstance.class);
+        Feeder.feeders.put(StatementFeeder.class.getCanonicalName(),new StatementFeeder());
     }
 
     private StatementFeeder() {
@@ -489,5 +488,15 @@ public class StatementFeeder implements Feeder {
 
             // todo there are some properties can be updated that are not yet implemented
 
+    }
+
+    @Override
+    public void feed(String id, String payload) throws TraceableException, UntraceableException {
+        StatementFeeder.addNewStatement(payload,id,null);
+    }
+
+    @Override
+    public void feed(String id, Statement payload) throws TraceableException, UntraceableException {
+        StatementFeeder.addNewStatement(payload,id,null, new MultiResourceResponses<>());
     }
 }

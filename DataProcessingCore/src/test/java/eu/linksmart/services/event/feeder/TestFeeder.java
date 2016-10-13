@@ -78,4 +78,14 @@ public class TestFeeder implements Feeder, Runnable {
         }
 
     }
+
+    @Override
+    public void feed(String topicURI, String payload) throws TraceableException, UntraceableException {
+
+    }
+
+    @Override
+    public void feed(String topicURI, Object payload) throws TraceableException, UntraceableException {
+
+    }
 }

@@ -34,10 +34,10 @@ public class FileConnector extends Component implements IncomingConnector {
 
     }
     public void loadFiles(){
-        filePaths.forEach(eu.linksmart.services.event.connectors.FileConnector::loadFile);
+        filePaths.forEach(this::loadFile);
 
     }
-    static void loadFile(String filePath){
+    protected void loadFile(String filePath){
         InputStream inputStream = null;
         try {
             boolean found =false;
@@ -56,7 +56,8 @@ public class FileConnector extends Component implements IncomingConnector {
             if(!found)
                 loggerService.warn("There is no bootstrapping file ");
             else
-                BootstrappingBeanFeeder.feed(IOUtils.toString(inputStream));
+                loadStream(IOUtils.toString(inputStream));
+
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         } finally {
@@ -67,6 +68,9 @@ public class FileConnector extends Component implements IncomingConnector {
                 loggerService.error(e.getMessage(), e);
             }
         }
+    }
+    protected void loadStream(String inputStream) throws IOException {
+        BootstrappingBeanFeeder.feed(inputStream);
     }
 
 
