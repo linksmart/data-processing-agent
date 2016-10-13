@@ -124,9 +124,24 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
     }
     @Override
     public double getNormalizedResult(){
-        if(((Double)getResult()/((Double)getTarget()))>1.0)
-            return 1.0;
-        return ((Double)getResult()/((Double)getTarget()));
+        double normalizedVal = 0;
+
+        switch (this.method){
+            case Equal:
+                double EPSILON = 0.0000001;// very small value for floating point equality.
+                normalizedVal = (Math.abs((Double)getTarget() - (Double)getResult())) < EPSILON ? 1.0:0.0;
+                break;
+            case Less:
+            case LessEqual:
+                normalizedVal = (((Double)getTarget())/(Double)getResult());
+                break;
+            case More:
+            case MoreEqual:
+                normalizedVal = ((Double)getResult()/((Double)getTarget()));
+        }
+        if(normalizedVal>1.0)
+            normalizedVal =  1.0;
+        return normalizedVal;
     }
 
     @Override
