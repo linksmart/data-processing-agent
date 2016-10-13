@@ -34,7 +34,7 @@ public class Classified<T> extends PredictionInstance<T> {
     }
     @Override
     public String toString(){
-        return "\n(R) Prediction> prediction (index, name):("+getPrediction().toString()+", "+predictedClassName+") accepted: "+acceptedPrediction+" evaluationRate: "+ certaintyDegree;
+        return "\n(R) Prediction> prediction (index, name):("+getPrediction().toString()+", "+predictedClassName+") accepted: "+isAcceptedPrediction()+" evaluationRate: "+ certaintyDegree;
     }
 
 }

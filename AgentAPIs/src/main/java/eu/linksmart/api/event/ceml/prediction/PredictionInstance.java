@@ -1,5 +1,6 @@
 package eu.linksmart.api.event.ceml.prediction;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class PredictionInstance<T> implements Prediction<T> {
         this.evaluations = evaluations;
         this.prediction =prediction;
         this.certaintyDegree = calculateDegreeCertainty();
+        this.acceptedPrediction = certaintyDegree>= 1.0;
         originalInput =input;
 
 
@@ -45,6 +47,7 @@ public class PredictionInstance<T> implements Prediction<T> {
 
     public  void setCertaintyDegree(double certaintyDegree) {
         this.certaintyDegree = certaintyDegree;
+        acceptedPrediction = certaintyDegree >=1;
     }
 
     public boolean isAcceptedPrediction() {
