@@ -21,7 +21,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, Feed
     public static final String STATEMENT_IN_TOPIC_UPDATE_CONF_PATH ="api.statements.mqtt.topic.base.update";
     public static final String STATEMENT_OUT_TOPIC_ERROR_CONF_PATH ="api.statements.mqtt.topic.base.errors";
 
-    public static final String EVENT_IN_TOPIC_CONF_PATH = "api.events.mqtt.topic.incoming";
+    public static final String EVENT_IN_TOPIC_CONF_PATH = "api.events.mqtt.topics.incoming";
     public static final String EVENTS_IN_BROKER_CONF_PATH ="api.events.mqtt.broker.incoming";
 
     public static final String LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH = "core.monitoring.heartbeat.every.milliseconds";
@@ -33,9 +33,9 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, Feed
     public static final String DEFAULT_CONFIGURATION_FILE = "conf.cfg";
     public static final String ID_CONF_PATH = "agent.id";
 
-    public static final String FeederPayloadTopic ="feeder.payload.type.topic";
-    public static final String FeederPayloadClass ="feeder.payload.type.class";
-    public static final String FeederPayloadAlias ="feeder.payload.type.alias";
+   // public static final String FeederPayloadTopic ="feeder.payload.type.topic";
+    public static final String FeederPayloadClass ="connector.observers.payload.type.classes";
+    public static final String FeederPayloadAlias ="connector.observers.type.aliases";
 
 
     public static final String AdditionalImportPackage ="cep.init.additionalImportPackage";

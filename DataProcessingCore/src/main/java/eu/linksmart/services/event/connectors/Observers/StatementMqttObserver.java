@@ -13,6 +13,7 @@ import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 22.05.2015 a researcher of Fraunhofer FIT.
@@ -21,12 +22,16 @@ import java.util.Arrays;
 public class StatementMqttObserver extends IncomingMqttObserver {
 
 
-    public StatementMqttObserver() {
-        super();
+    public StatementMqttObserver(List<String> topics) {
+        super(topics);
         loggerService.info("The Agent(ID:"+DynamicConst.getId()+") waiting for queries from BASE/[OPERATION] topic: " + conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+ "["+conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH)+"]");
 
     }
+    public StatementMqttObserver(String topic)  {
+        super(topic);
+        loggerService.info("The Agent(ID:"+DynamicConst.getId()+") waiting for queries from BASE/[OPERATION] topic: " + conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+ "["+conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH)+"|"+conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH)+"]");
 
+    }
     @Override
     protected void mangeEvent(String topic,byte[] rawEvent) {
         ArrayList<String> topicParts = new ArrayList<>(Arrays.asList(topic.split("/")));
