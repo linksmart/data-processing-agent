@@ -308,7 +308,7 @@ public class RestConnector extends Component implements IncomingConnector {
         if(  CEPEngine.instancedEngines.size()==0)
             return new ResponseEntity<>("Service Unavailable: No CEP engine has been deployed", HttpStatus.SERVICE_UNAVAILABLE);
         try {
-            EventFeeder.feed(
+            EventFeeder.getFeeder().feed(
                     (((String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE))).replace("/event",""),
                     rawEvent);
         } catch (StatementException e) {

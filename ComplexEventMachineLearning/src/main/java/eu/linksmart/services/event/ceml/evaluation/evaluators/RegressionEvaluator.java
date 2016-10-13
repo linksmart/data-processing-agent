@@ -77,10 +77,10 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
     }
 
 
-    public class RMSEEvaluationMetric extends ModelEvaluationMetricBase{
+    public class RMSE extends ModelEvaluationMetricBase{
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
-        public RMSEEvaluationMetric(ComparisonMethod method, Double target) {
+        public RMSE(ComparisonMethod method, Double target) {
             super(method, target);
             currentValue = 100.0;
         }
@@ -110,10 +110,10 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
     }
 
-    public class MAEEvaluationMetric extends ModelEvaluationMetricBase{
+    public class MAE extends ModelEvaluationMetricBase{
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
-        public MAEEvaluationMetric(ComparisonMethod method, Double target) {
+        public MAE(ComparisonMethod method, Double target) {
             super(method, target);
             currentValue = 100.0;
         }
@@ -145,7 +145,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
     Overal Picture: https://en.wikipedia.org/wiki/Akaike_information_criterion
     More can be found here :http://www.ijcaonline.org/journal/number5/pxc387242.pdf
      */
-    public class AICcEvaluationMetric extends ModelEvaluationMetricBase{
+    public class AICc extends ModelEvaluationMetricBase{
         private static final int DAYS_A_WEEK = 7 ;
         private static final int HOURS_A_DAY =24;
         private long N = 0; //fading increment
@@ -157,7 +157,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
         int freeParamCount =((prev+prevSeasonal*24)*numHidden+ numHidden* HOURS_A_DAY)*DAYS_A_WEEK;
 
-        public AICcEvaluationMetric(ComparisonMethod method, Double target) {
+        public AICc(ComparisonMethod method, Double target) {
             super(method, target);
             avgResidualSquare = 0;
         }

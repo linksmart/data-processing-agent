@@ -17,6 +17,7 @@ import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
+import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
@@ -110,9 +111,9 @@ public class DataProcessingCore {
         loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + DynamicConst.getId());
 
         initCEPEngines();
-        boolean success = initFeeders();
-        
         initForceLoading();
+        boolean success = initFeeders();
+
         return success;
     }
 
@@ -139,13 +140,14 @@ public class DataProcessingCore {
             Class.forName(BootstrappingBean.class.getCanonicalName());
             mqtt = MqttIncomingConnectorService.getReference();
 
-            if(conf.getBoolean(Const.STATRT_MQTT_STATEMENT_API))
-            mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver());
-            mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH),conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver());
 
             FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
             persistentFeeder.loadFiles();
+
+            if(conf.getBoolean(Const.STATRT_MQTT_STATEMENT_API))
+                mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver());
+            mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH),conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH), new EventMqttObserver());
 
 
         } catch (Exception e) {
@@ -184,7 +186,29 @@ public class DataProcessingCore {
             }
 
         }
+        intoCEPTypes();
 
     }
+    protected static void intoCEPTypes() {
 
+        List classes =conf.getList(Const.FeederPayloadClass);
+        List aliases =conf.getList(Const.FeederPayloadAlias);
+
+        if(classes.size()!=aliases.size())
+            loggerService.error("The configuration parameters of "
+                    +Const.FeederPayloadAlias+" "
+                    +Const.FeederPayloadClass+" do not match");
+
+        for (CEPEngine dfw: CEPEngine.instancedEngines.values()) {
+            for(int i=0; i<classes.size();i++) {
+                try {
+                    Class aClass = Class.forName(classes.get(i).toString());
+                    dfw.addEventType(aliases.get(i).toString(), aClass );
+                } catch (ClassNotFoundException e) {
+                    loggerService.error(e.getMessage(), e);
+                }
+            }
+
+        }
+    }
 }

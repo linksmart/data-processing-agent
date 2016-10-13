@@ -1,6 +1,7 @@
 package eu.linksmart.api.event.types.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
 
@@ -17,6 +18,9 @@ public class BootstrappingBean {
     protected List<Statement> statements;
     @JsonProperty("events")
     protected Map<String,EventEnvelope[]> events;
+
+
+
     public BootstrappingBean(){
         statements = null;
         events = null;
@@ -70,4 +74,15 @@ public class BootstrappingBean {
         events.put(key, observation);
 
     }
+  /*  @JsonProperty("learningRequests")
+    protected List<CEMLRequest> learningRequests;
+    public List<CEMLRequest> getLearningRequests() {
+        return learningRequests;
+    }
+
+    public void setLearningRequests(List<CEMLRequest> learningRequests) {
+        this.learningRequests = learningRequests;
+    }*/
+
 }
+

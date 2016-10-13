@@ -16,6 +16,13 @@ package eu.linksmart.api.event.components;
  *
  *
  */
+
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
+
+import java.util.Hashtable;
+import java.util.Map;
+
 /**
  * This interface indicates that the implementation of it is a Feeder of the agent.
  * A Feeder is a service that inputs data (control, event, metadata, etc.) from payloads coming from some protocol and it is inserted to the CEPEngine.
@@ -30,7 +37,10 @@ package eu.linksmart.api.event.components;
  * 
  * */
 
-public interface Feeder extends AnalyzerComponent {
+public interface Feeder <T> extends AnalyzerComponent {
+    static public Map<String,Feeder> feeders = new Hashtable<>();
 
+    public void feed(String topicURI, String payload)throws TraceableException, UntraceableException;
+    public void feed(String topicURI, T payload)throws TraceableException, UntraceableException;
 
 }

@@ -1,10 +1,13 @@
  - 1.3.3 RELEASE:
     Features:
         * The swagger Data-Processing API is introduced
-        * Small info notifications improvements
+        * Small info (Logging) notifications improvements
         * The topics for the Statement API can be changed now
+        * Now is possible to bootstrap the CEML request into the IoT-LA
     DEV:
-
+        * The order of loading initialization has changed. Now looks as following:
+            being: '->' followed by, ':' including the process, inside of '()' is  sub sequence of process, inside of '[]' optional sequence, inside of '||' parallel(-like) process):
+                initConf->CEP:(engine->loadEngineTypes)->ForcePackageLoading:[CEML:Core->API:(FILE->MQTT)]->Feeders:(Event->Statement->Bootstrapping)->Connector(File->MQTT)->[|ConnectorREST[,CEML_REST_API]|]
     FIXs:
         * MQTT notifications related to the MQTT Statement API
         * correct several problems with the Statement Feeder

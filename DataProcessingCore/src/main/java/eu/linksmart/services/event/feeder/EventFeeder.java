@@ -24,10 +24,11 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 05.09.2016 a researcher of Fraunhofer FIT.
  */
-public class EventFeeder implements Feeder {
+public class EventFeeder implements Feeder<EventEnvelope> {
     static protected EventFeeder me;
     static {
         me = new EventFeeder();
+        Feeder.feeders.put(me.getClass().getCanonicalName(),me);
     }
 
     protected Configurator conf =  Configurator.getDefaultConfig();
@@ -50,12 +51,16 @@ public class EventFeeder implements Feeder {
     public static void feed(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
         me.addEvent(topic,rawEvent);
     }
-    public static void feed(String topic, EventEnvelope event) throws TraceableException, UntraceableException{
-        me.addEvent(event,topic);
+    public static EventFeeder getFeeder(){
+        return me;
     }
 
-    public static void feed(String topic, String unparsedEvent) throws TraceableException, UntraceableException{
-        EventEnvelope eventEnvelope = me.parseEvent(topic, unparsedEvent);
+    public void feed(String topic, String unparsedEvent) throws TraceableException, UntraceableException{
+        EventEnvelope eventEnvelope = parseEvent(topic, unparsedEvent);
+        addEvent(eventEnvelope,topic);
+    }
+    public void feed(String topic, EventEnvelope eventEnvelope) throws TraceableException, UntraceableException{
+
         me.addEvent(eventEnvelope,topic);
     }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
@@ -168,7 +173,7 @@ public class EventFeeder implements Feeder {
                     topicToClass.put(new Topic(topics.get(i).toString()),aClass);
                     aliasToClass.put(aliases.get(i).toString(), aClass);
                     classToAlias.put(aClass.getCanonicalName(),aliases.get(i).toString());
-                    dfw.addEventType(aliases.get(i).toString(), aClass );
+                   // dfw.addEventType(aliases.get(i).toString(), aClass );
                 } catch (ClassNotFoundException e) {
                     loggerService.error(e.getMessage(), e);
                 }
