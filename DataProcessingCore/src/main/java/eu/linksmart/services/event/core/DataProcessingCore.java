@@ -150,7 +150,7 @@ public class DataProcessingCore {
             if(conf.getBoolean(Const.STATRT_MQTT_STATEMENT_API))
                 mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
             //
-            conf.getList(Const.FeederPayloadTopic).stream().forEach(i->{
+            conf.getList(Const.EVENT_IN_TOPIC_CONF_PATH).stream().forEach(i->{
                 try {
                     mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH), i.toString(), new EventMqttObserver(i.toString()));
                 } catch (Exception e) {

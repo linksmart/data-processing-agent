@@ -155,7 +155,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
 
     }
     protected void LoadTypesIntoEngines() throws  InstantiationException {
-        List topics =conf.getList(Const.FeederPayloadTopic);
+        List topics =conf.getList(Const.EVENT_IN_TOPIC_CONF_PATH);
         List classes =conf.getList(Const.FeederPayloadClass);
         List aliases =conf.getList(Const.FeederPayloadAlias);
 
@@ -164,7 +164,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
                     "The configuration parameters of "
                             +Const.FeederPayloadAlias+" "
                             +Const.FeederPayloadClass+" "
-                            +Const.FeederPayloadTopic+" do not match"
+                            +Const.EVENT_IN_TOPIC_CONF_PATH+" do not match"
             );
         for (CEPEngine dfw: CEPEngine.instancedEngines.values()) {
             for(int i=0; i<classes.size();i++) {
