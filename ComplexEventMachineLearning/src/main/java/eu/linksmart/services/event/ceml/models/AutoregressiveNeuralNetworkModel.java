@@ -240,14 +240,14 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
             int seasonalityPeriod= 168;
             int P = descriptors.getInputSize()/seasonalityPeriod;
             int p = 48;
-            int numNodes=24;
+
 
 
             ArP = p;
             ArSeasonalP = P;
             numInputsPerNet = p + (P * numOutputsPerNet);
             this.seasonalityPeriod = seasonalityPeriod;
-
+            int numNodes= (numInputsPerNet+numOutputsPerNet)/2;
             int numNnets = descriptors.getTargetSize() / numOutputsPerNet;
 
             if(parameters.containsKey(MAX_INPUT_STR))
