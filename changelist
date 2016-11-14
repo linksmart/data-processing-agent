@@ -24,6 +24,7 @@
         * the configuration file loading, in particular, the function fileExist, had being fixed
         * the function filter (from CEML) now accepts double, and integer.
         * the URL generation of the broker was ignoring the port
+        * the G MQ LA was not taking the correct conf.cfg file. It's fix, but the reason why the G MQ DPA builds different to the G MQ LA it's still unknown.
 
 29.09.2016 - 1.3.2 RELEASE:
     Features:
