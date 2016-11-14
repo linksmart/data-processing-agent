@@ -21,20 +21,24 @@ public class StaticBrokerService extends BrokerService implements Broker {
     static public StaticBrokerService getBrokerService(UUID uuid, String alias) throws MalformedURLException, MqttException {
 
         BrokerConfiguration bConf = new BrokerConfiguration(alias);
-
+        loggerService.info("Searching for proper broker...");
         if (!Broker.isBrokerURL(bConf.getURL()))
             throw new MalformedURLException(bConf.getURL() + " is not an broker URL");
         if (brokerServices.containsKey(bConf)) {
+            loggerService.info("Selecting existing broker...");
+            loggerService.info("No. of brokers stay "+brokerServices.size()+" .");
             if (!clients.containsKey(uuid))
                 clients.put(uuid, bConf);
             return brokerServices.get(bConf);
         }
 
+        loggerService.info("Creating a new broker connection...");
         brokerServices.put(bConf, new StaticBrokerService(alias, uuid));
 
         if (!clients.containsKey(uuid))
             clients.put(uuid, bConf);
 
+        loggerService.info("No. of brokers now is "+brokerServices.size()+" .");
         return brokerServices.get(bConf);
 
     }

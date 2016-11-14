@@ -9,9 +9,11 @@ import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +27,11 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
@@ -36,20 +40,31 @@ import java.util.Map;
 @PropertySource("conf.cfg")
 @Import(value = {RestConnector.class,  CEMLRest.class})
 @EnableAutoConfiguration
+@ConfigurationProperties
 @SpringBootApplication
 @RestController
 @EnableSwagger2
 public class Application {
+
     public static void main(String[] args) {
 
         String confFile = Const.DEFAULT_CONFIGURATION_FILE;
 
         if(args.length>0)
             confFile= args[0];
+        System.setProperty("spring.config.name",confFile);
         Boolean hasStarted = DataProcessingCore.start(confFile);
         if(hasStarted) {
+            SpringApplication springApp =  new SpringApplication(Application.class);
+            try {
+                springApp.setDefaultProperties(Utils.createPropertyFiles(confFile));
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            springApp.run(args);
 
-            SpringApplication.run(Application.class, args);
+
         }
 
     }

@@ -57,11 +57,12 @@ public class Configurator extends  CompositeConfiguration {
 
             if(!fileExists(filename)){
                 filename ="etc/linksmart/" +configurationFile;
-            }else {
-                System.err.println("File named " + configurationFile + " was not found in '.', './etc/' and 'etc/linksmart/'");
-                System.err.println("Trying to load configuration from environmental variables ");
-                filename =null;
-                addConfiguration(new EnvironmentConfiguration());
+                if(!fileExists(filename)) {
+                    System.err.println("File named " + configurationFile + " was not found in '.', './etc/' and 'etc/linksmart/'");
+                    System.err.println("Trying to load configuration from environmental variables ");
+                    filename =null;
+                    addConfiguration(new EnvironmentConfiguration());
+                }
             }
         }
         if(filename!=null){
@@ -101,7 +102,7 @@ public class Configurator extends  CompositeConfiguration {
     private static boolean fileExists(String filename){
         File f = new File(filename);
         URL u = Utils.class.getClassLoader().getResource(filename);
-        return (f.exists() && f.isDirectory())|| u!=null;
+        return (f.exists() && !f.isDirectory())|| u!=null;
     }
 
     public Date getDate(String key){

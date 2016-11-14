@@ -189,7 +189,7 @@ public class  Utils {
 
     public static boolean isFile(String filename){
         File f = new File(filename);
-        return (f.exists() && f.isDirectory());
+        return (f.exists() && !f.isDirectory());
     }
     public static boolean isResource(String filename){
 
@@ -199,5 +199,15 @@ public class  Utils {
     public static boolean isResource(String filename,Class clazz){
 
         return   clazz.getClassLoader().getResource(filename)!=null;
+    }
+
+    public static Properties createPropertyFiles(String source) throws IOException{
+        Properties properties = new Properties();
+        if(isFile(source))
+            properties.load(new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)));
+        else
+            properties.load(Utils.class.getClassLoader().getResourceAsStream(source));
+
+        return properties;
     }
 }

@@ -79,7 +79,10 @@ public class BrokerConfiguration {
             mqttOptions.setConnectionTimeout(brokerConf.timeOut/1000);
             mqttOptions.setKeepAliveInterval(brokerConf.keepAlive/1000);
             mqttOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
-
+            //mqttOptions.setCleanSession();
+            //mqttOptions.setPassword();
+            //mqttOptions.setUserName();
+            //mqttOptions.setWill();
 
             if(brokerConf.secConf!=null) {
                 SSLSocketFactory socketFactory = null;

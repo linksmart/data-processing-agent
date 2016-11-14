@@ -49,7 +49,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>SiddhiWrapper</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
 
 
     </dependencies>
