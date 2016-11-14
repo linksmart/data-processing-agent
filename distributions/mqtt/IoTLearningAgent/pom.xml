@@ -11,21 +11,79 @@
 
     <artifactId>iot.learning.agent</artifactId>
     <name>IoT Learning agent</name>
-    <packaging>jar</packaging>
 
+    <packaging>jar</packaging>
     <dependencies>
 		<dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>iot.learning.impl</artifactId>
-            <version>${ls.se.agents.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>iot.learning.impl:configuration</artifactId>
+                    <groupId>eu.linksmart.services.events</groupId>
+
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>
             <artifactId>wrapper.esper</artifactId>
         </dependency>
-
     </dependencies>
 
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+
+            </plugin>
+            <!-- for compile jars with dependencies -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${start-class}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptors>
+                        <descriptor>src/main/assembly/build.xml</descriptor>
+                    </descriptors>
+                    <descriptorRefs>
+
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

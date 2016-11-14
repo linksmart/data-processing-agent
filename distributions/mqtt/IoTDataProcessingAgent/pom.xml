@@ -13,6 +13,7 @@
     <name>IoT Data-Processing agent</name>
 
     <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
@@ -22,10 +23,9 @@
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>
             <artifactId>wrapper.esper</artifactId>
-
         </dependency>
-
     </dependencies>
+
     <build>
             <plugins>
 
@@ -73,7 +73,6 @@
                     </executions>
                 </plugin>
             </plugins>
-
     </build>
 
 </project>
