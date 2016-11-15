@@ -69,6 +69,12 @@
             <groupId>org.nd4j</groupId>
             <version>${canova.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-jackson</artifactId>
+            <version>${nd4j.version}</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
