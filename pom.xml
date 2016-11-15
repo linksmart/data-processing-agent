@@ -118,6 +118,7 @@
         <module>IoTLearningAgent</module>
         <module>IoTRestLearningAgent</module>
         <module>distributions</module>
+        <module>test</module>
 
     </modules>
     <dependencyManagement>
