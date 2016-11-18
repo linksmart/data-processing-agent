@@ -38,16 +38,18 @@ public class FileConnector extends Component implements IncomingConnector {
 
     }
     protected void loadFile(String filePath){
+
         InputStream inputStream = null;
         try {
             boolean found =false;
             File f = new File(filePath);
             if(f.exists() && !f.isDirectory()) {
-
+                loggerService.info("Loading file "+ filePath);
                 inputStream = new FileInputStream(filePath);
 
                 found =true;
             }else {
+                loggerService.info("Loading resource "+ filePath);
                 ClassLoader classloader = Thread.currentThread().getContextClassLoader();
                 inputStream = classloader.getResourceAsStream(filePath);
                 if(inputStream.markSupported())

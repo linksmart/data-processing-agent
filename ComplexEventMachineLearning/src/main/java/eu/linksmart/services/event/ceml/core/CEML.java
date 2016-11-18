@@ -298,6 +298,12 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
             MqttCemlAPI.getMeDafault().reportFeedback(id,message);
     }
     static private Map<String,Number> lastKnown = new Hashtable<>();
+    static public Number filter(String filterName,Double measurement) {
+        return filter(filterName,(Number) measurement);
+    }
+    static public Number filter(String filterName,Integer measurement) {
+       return filter(filterName, (Number)measurement);
+    }
     static public Number filter(String filterName,Number measurement) {
         if (!filters.containsKey(filterName))
             initFilter(filterName);

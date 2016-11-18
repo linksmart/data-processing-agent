@@ -7,7 +7,7 @@
     <parent>
         <groupId>eu.linksmart.services.events</groupId>
         <artifactId>parent</artifactId>
-        <version>1.3.3</version>
+        <version>1.4.0-SNAPSHOT</version>
     </parent>
     <artifactId>ceml</artifactId>
 
@@ -42,6 +42,12 @@
             <artifactId>deeplearning4j-core</artifactId>
             <version>${dl4j.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-buffer</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native</artifactId>
@@ -61,6 +67,12 @@
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native</artifactId>
+        </dependency>
+<dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native</artifactId>
+            <version>0.4-rc3.10</version>
+            <classifier>linux-x86_64</classifier>
             <version>${nd4j.version}</version>
             <classifier>linux-arm</classifier>
         </dependency>
@@ -84,6 +96,12 @@
             <artifactId>nd4j-native-platform</artifactId>
             <version>${nd4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-jackson</artifactId>
+            <version>${nd4j.version}</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

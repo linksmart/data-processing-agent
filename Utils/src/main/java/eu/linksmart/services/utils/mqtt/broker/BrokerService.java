@@ -51,17 +51,17 @@ public class BrokerService implements Observer, Broker {
     protected void _connect() throws Exception {
 
 
-        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" URL:"+this.getBrokerURL()+" is connecting...");
+        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" with configuration "+brokerConf.toString()+" is connecting...");
         if(!mqttClient.isConnected()) {
 
             mqttClient.connect(brokerConf.getMqttConnectOptions());
 
         }
         startWatchdog();
-        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" URL:"+this.getBrokerURL()+" is connected");
+        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" is connected");
     }
     protected void _disconnect() throws Exception {
-        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" URL:"+this.getBrokerURL()+" is disconnecting...");
+        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" with configuration "+brokerConf.toString()+" is disconnecting...");
         stopWatchdog();
         try {
 
@@ -70,7 +70,7 @@ public class BrokerService implements Observer, Broker {
             loggerService.error(e.getMessage(),e);
             throw e;
         }
-        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" URL:"+this.getBrokerURL()+" is disconnected");
+        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" is disconnected");
 
     }
     protected void _destroy() throws Exception {

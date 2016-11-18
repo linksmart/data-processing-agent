@@ -58,14 +58,14 @@ public interface Broker extends Observer{
         if (ipPattern.matcher(brokerName).find())
             return "tcp://"+brokerName+":"+brokerPort;
         else
-            return "tcp://"+brokerName;
+            return "tcp://"+brokerName+":"+brokerPort;
     }
     public static String getSecureBrokerURL(String brokerName, String brokerPort){
 
         if (ipPattern.matcher(brokerName).find())
             return "ssl://"+brokerName+":"+brokerPort;
         else
-            return "ssl://"+brokerName;
+            return "ssl://"+brokerName+":"+brokerPort;
     }
     public static String getBrokerURL(String brokerName, int brokerPort){
         return getBrokerURL(brokerName,String.valueOf(brokerPort));

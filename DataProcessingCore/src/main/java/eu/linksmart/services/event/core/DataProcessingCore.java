@@ -123,8 +123,10 @@ public class DataProcessingCore {
         if(conf.containsKey(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING))
             conf.getList(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING).forEach(cls -> {
                 try {
-                    Class c =Class.forName(cls.toString());
-                    loggerService.info("Loading extension: "+c.getSimpleName());
+                    if(!"".equals(cls)) {
+                        Class c = Class.forName(cls.toString());
+                        loggerService.info("Loading extension: " + c.getSimpleName());
+                    }
                 } catch (ClassNotFoundException e) {
                     loggerService.error(e.getMessage(),e);
                 }

@@ -28,10 +28,12 @@ public class FileCemlAPI extends FileConnector {
     @Override
     protected void loadStream(String inputStream){
         try {
+            loggerService.info("Bootstrapping CEML request...");
             List<CEMLRequest> requests = CEML.getMapper().readValue(inputStream,new TypeReference< ArrayList<CEMLManager>>() {} );
             ArrayList<GeneralRequestResponse> responses = new ArrayList<>();
             requests.stream().forEach(i->responses.addAll(CEML.create(i).getResponses()));
             responses.stream().filter(i->i.getStatus()>299).forEach(i->loggerService.error(i.getHeadline()+": "+i.getMessage()));
+            loggerService.info("... CEML request finished");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,8 @@
-13.10.2016 - 1.3.3 RELEASE:
+ - 1.4.0 RELEASE:
+    Features:
+    DEV:
+    FIXs:
+15.11.2016 - 1.3.3 RELEASE:
     Features:
         * The swagger Data-Processing API is introduced
         * Small info (Logging) notifications improvements
@@ -8,6 +12,7 @@
         * The incoming events now comes from several input topics
         * The properties 'feeder.payload.type.class' and 'feeder.payload.type.alias' change name to 'connector.observers.payload.type.classes' and 'connector.observers.type.aliases', respectively
         * The property 'feeder.payload.type.topic' was removed, now is used the new property 'api.events.mqtt.topics.incoming' as described above.
+        * Add customization of Autoregressive NN
     DEV:
         * The order of loading initialization has changed. Now looks as following:
             being: '->' followed by, ':' including the process, inside of '()' is  sub sequence of process, inside of '[]' optional sequence, inside of '||' parallel(-like) process):
@@ -16,6 +21,10 @@
         * MQTT notifications related to the MQTT Statement API
         * correct several problems with the Statement Feeder
         * The acceptedPrediction in prediction was not being updated
+        * the configuration file loading, in particular, the function fileExist, had being fixed
+        * the function filter (from CEML) now accepts double, and integer.
+        * the URL generation of the broker was ignoring the port
+        * the G MQ LA was not taking the correct conf.cfg file. It's fix, but the reason why the G MQ DPA builds different to the G MQ LA it's still unknown.
 
 29.09.2016 - 1.3.2 RELEASE:
     Features:

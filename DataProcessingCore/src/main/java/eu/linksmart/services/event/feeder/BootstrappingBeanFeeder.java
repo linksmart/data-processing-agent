@@ -31,7 +31,7 @@ public class BootstrappingBeanFeeder implements Feeder<BootstrappingBean> {
     }
     static public void feed(String rawData) {
         //bootstrappingBean bootstrappingBean= gson.fromJson(rawData, bootstrappingBean.class);
-
+        loggerService.info("Bootstrapping events and statements...");
         BootstrappingBean bootstrappingBean = null;
         try {
             // "[{\"name\":\"aggregatedConsumption\",\"statement\":\"select Event.factory(begin.bn, String.valueOf(begin.last.v), power.sumof(i=>cast(i.last.v,double)), cast(fin.last.t, long) - cast(begin.last.t,long) ) from pattern[ every begin=SenML(last.n='WS0024' and cast(last.v,int)!=0)-> ( (power=SenML(last.n='WSS0017')) until (fin=SenML(last.n='WS0024' and cast(last.v,int)=0))) ]\"}]"
@@ -42,7 +42,7 @@ public class BootstrappingBeanFeeder implements Feeder<BootstrappingBean> {
 
         feed(bootstrappingBean);
 
-
+        loggerService.info("...Bootstrapped!");
     }
     private static String getThingID(String topic){
         String [] aux = topic.split("/");
