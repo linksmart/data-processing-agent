@@ -96,7 +96,8 @@
         <!-- CEML dependencies -->
         <nd4j.backend>nd4j-native</nd4j.backend>
         <shadedClassifier>bin</shadedClassifier>
-        <nd4j.version>0.6.1-SNAPSHOT</nd4j.version>
+        <nd4j.version>0.6.0</nd4j.version>
+        <nd4jpi.version>0.6.1-pi</nd4jpi.version>
         <dl4j.version>0.6.0</dl4j.version>
         <canova.version>0.0.0.17</canova.version>
     </properties>

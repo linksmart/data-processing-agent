@@ -45,41 +45,37 @@
 
         <dependency>
             <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-buffer</artifactId>
-            <version>${dl4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native</artifactId>
-            <version>${nd4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nd4j</groupId>
             <artifactId>nd4j-api</artifactId>
-            <version>${nd4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-buffer</artifactId>
-            <version>0.6.0</version>
+            <version>${nd4jpi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native</artifactId>
+            <version>${nd4jpi.version}</version>
         </dependency>
-<dependency>
+        <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native</artifactId>
-            <version>0.4-rc3.10</version>
-            <classifier>linux-x86_64</classifier>
-            <version>${nd4j.version}</version>
+            <version>${nd4jpi.version}</version>
             <classifier>linux-arm</classifier>
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native-api</artifactId>
+            <artifactId>nd4j-buffer</artifactId>
             <version>0.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native</artifactId>
+            <version>0.4-rc3.10</version>
+            <classifier>linux-x86_64</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native-api</artifactId>
+            <version>${nd4jpi.version}</version>
         </dependency>
         <dependency>
             <artifactId>canova-nd4j-image</artifactId>
@@ -94,7 +90,7 @@
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
-            <version>${nd4j.version}</version>
+            <version>${nd4jpi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
