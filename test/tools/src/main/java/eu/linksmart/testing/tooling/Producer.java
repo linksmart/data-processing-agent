@@ -1,6 +1,9 @@
 package eu.linksmart.testing.tooling;
 
 
+import sun.misc.Cleaner;
+
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -9,8 +12,9 @@ import java.util.Date;
 public class Producer extends Counter implements Runnable{
 
     static {
-        cleaner = new Thread(new Producer.Cleaner());
-        cleaner.start();
+        cleaner = new Producer.Cleaner();
+        cleanerThread = new Thread(cleaner);
+        cleanerThread.start();
     }
     final String baseTopic;
     final int max;
@@ -20,7 +24,7 @@ public class Producer extends Counter implements Runnable{
     final long lot;
     final boolean shareIndex;
     int localI =0;
-    public Producer( int index,String baseTopic, String broker, int max, String basePayload, long lot,boolean shareIndex) {
+    public Producer(int index, String baseTopic, String broker, int max, String basePayload, long lot, boolean shareIndex, int qos) {
         super();
         this.max=max;
         if (index<0)
@@ -33,6 +37,9 @@ public class Producer extends Counter implements Runnable{
         this.basePayloadWithWildcard = basePayload.contains("<?>");
         this.lot = lot;
         this.shareIndex = shareIndex;
+        this.qos = qos;
+        if(validator==null)
+            validator = new MQTTMessageValidator(this.getClass(),String.valueOf(id),(int)lot);
 
 
 
@@ -45,30 +52,36 @@ public class Producer extends Counter implements Runnable{
     public void run() {
         try {
             create();
-            String sid =String.valueOf(id);
+            String  auxTopic=baseTopic.replace("<sid>", String.valueOf(id));
+            boolean shouldPublish, next=true;
 
-            boolean shouldPublish;
-
-            for (long j =lot;j!=0;j-- )
+            while (next)
                 try {
                     synchronized (object){
 
                         shouldPublish = i<max||max<0;
                     }
                     if(shouldPublish) {
-                        String aux;
-                        if (shareIndex)
-                            aux= basePayload.replace("<i>",String.valueOf(i)).replace("<epoch>", String.valueOf((new Date()).getTime()));
-                        else
-                            aux= basePayload.replace("<i>",String.valueOf(localI)).replace("<epoch>", String.valueOf((new Date()).getTime()));
 
-                        mqttClient.publish(baseTopic.replace("<sid>",String.valueOf(sid)), aux.getBytes(), 0, false);
+                        String auxPayload, now;
+                        int payloadInt;
                         synchronized (object) {
+                            if (shareIndex)
+                                payloadInt = i;
+                            else
+                                payloadInt = localI;
 
-                            i ++;
+
+                            now = String.valueOf((new Date()).getTime());
+                            i++;
                             localI++;
-                            informed =false;
+                            informed = false;
+
                         }
+                        auxPayload = basePayload.replace("<i>", String.valueOf(payloadInt)).replace("<epoch>", now);
+                        publish(auxTopic, auxPayload, payloadInt);
+
+                        next = lot > -1 && localI < lot || lot < 0;
                     }else {
 
                         synchronized (object) {
@@ -84,9 +97,33 @@ public class Producer extends Counter implements Runnable{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            Thread.sleep(2000);
+            boolean exited = false;
+            while (!exited)
+                try {
+                    synchronized (object) {
+                        activeThreads--;
+                    }
+                    exited=true;
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            System.out.println(
+                    "{\"total\": "+String.valueOf(total)+
+                            ", \"sid\": "+String.valueOf(id)+
+                            ", \"localI\": "+String.valueOf(localI)+
+                            ", \"shared\": "+String.valueOf(i)+
+                            ", \"messages\": "+String.valueOf(0)+
+                            ", \"time\":\""+ Instant.now().toString()+"\"}");
+            mqttClient.disconnect();
+            mqttClient.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+       //cleaner.count =false;
+
     }
 
 }

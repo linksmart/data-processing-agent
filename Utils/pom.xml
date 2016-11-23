@@ -18,32 +18,26 @@
         <dependency>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <groupId>org.eclipse.paho</groupId>
-            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
-            <version>1.10</version>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
@@ -69,7 +63,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>eu.linksmart.services.events.testing</groupId>
+            <artifactId>tools</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <resources>

@@ -1,15 +1,22 @@
 package eu.linksmart.services.utils.mqtt.subscription;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.constants.Const;
+import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.types.CurrentStatus;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
 import eu.linksmart.services.utils.mqtt.types.Topic;
+import eu.linksmart.services.utils.serialization.DefaultDeserializer;
+import eu.linksmart.services.utils.serialization.Deserializer;
+import eu.linksmart.testing.tooling.MQTTMessageValidator;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 
-
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -26,10 +33,27 @@ public  class ForwardingListener implements MqttCallback {
     protected final  Object muxMessageDelivererSet = new Object();
     protected  Set<Topic> messageDelivererSet = new HashSet<>();
 
+
     protected CurrentStatus status;
+
+    //Start of code made for testing performance
+    protected final boolean VALIDATION_MODE;
+    private final Deserializer deserializer;
+    private final MQTTMessageValidator validator;
+    //End of code made for testing performance
 
     public ForwardingListener(String listening, Observer mqttEventsListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
+
+        /// Code for validation and test proposes
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_FORWARDING)) {
+            deserializer = new DefaultDeserializer();
+            validator = new MQTTMessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
+        }else{
+            deserializer = null;
+            validator = null;
+        }
+
         initObserver(listening, mqttEventsListener);
 
     }
@@ -37,23 +61,43 @@ public  class ForwardingListener implements MqttCallback {
     public ForwardingListener(String listening, Observer connectionListener, Observer mqttEventsListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
         this.connectionListener = connectionListener;
+
+        /// Code for validation and test proposes
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_LOT_SIZE)) {
+            deserializer = new DefaultDeserializer();
+            validator = new MQTTMessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
+        }else{
+            deserializer = null;
+            validator = null;
+        }
+
         initObserver(listening, mqttEventsListener);
     }
     public ForwardingListener( Observer connectionListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
         this.connectionListener = connectionListener;
-        observables = new Hashtable<Topic, TopicMessageDeliverable>();
+
+        /// Code for validation and test proposes
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_LOT_SIZE)) {
+            deserializer = new DefaultDeserializer();
+            validator = new MQTTMessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
+        }else{
+            deserializer = null;
+            validator = null;
+        }
+
+        observables = new Hashtable<>();
     }
 
 
     protected void initObserver(String listening, Observer mqttEventsListener){
-        observables = new Hashtable<Topic, TopicMessageDeliverable>();
-        observables.put(new Topic(listening), new TopicMessageDeliverable());
+        observables = new Hashtable<>();
+        observables.put(new Topic(listening), new TopicMessageDeliverable(listening));
     }
     public void addObserver(String topic, Observer listener){
         Topic t = new Topic(topic);
         if(!observables.containsKey(t))
-            observables.put(t, new TopicMessageDeliverable());
+            observables.put(t, new TopicMessageDeliverable(topic));
 
         observables.get(t).addObserver(listener);
         synchronized (muxMessageDelivererSet) {
@@ -102,15 +146,18 @@ public  class ForwardingListener implements MqttCallback {
         sequence = (sequence + 1) % Long.MAX_VALUE;
         return sequence;
     }
+
     @Override
     public void messageArrived(String topic, org.eclipse.paho.client.mqttv3.MqttMessage mqttMessage) {
         LOG.debug("Message arrived in listener:" + topic);
 
+        if(VALIDATION_MODE) toValidation(topic,mqttMessage.getPayload());
+
         boolean processed= false;
         if(!compiledTopic.containsKey(topic)){
-
             for(Topic t: messageDelivererSet)
                 if(t.equals(topic)) {
+
                     compiledTopic.put(topic, observables.get(t));
                     compiledTopic.get(topic).addMessage(new MqttMessage(topic, mqttMessage.getPayload(), mqttMessage.getQos(), mqttMessage.isRetained(), getMessageIdentifier(), originProtocol));
 
@@ -139,7 +186,16 @@ public  class ForwardingListener implements MqttCallback {
     public CurrentStatus getStatus(){
         return status;
     }
+    /// for validation and evaluation propose
+    private void toValidation(String topic, byte[] payload){
+        if (VALIDATION_MODE)
+            try {
+                validator.addMessage(topic,(int)deserializer.deserialize(payload, Hashtable.class).get("ResultValue"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+    }
 
 
 }

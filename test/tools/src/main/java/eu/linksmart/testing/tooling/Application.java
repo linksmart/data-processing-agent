@@ -1,6 +1,6 @@
 package eu.linksmart.testing.tooling;
 
-import eu.linksmart.services.utils.configuration.Configurator;
+
 import org.apache.commons.cli.*;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -8,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Application  {
 
@@ -151,17 +152,20 @@ public class Application  {
 
 
 
-        ArrayList<Thread> threads = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+
         for (int i=1; i<nThread+1;i++) {
 
 
-            threads.add(new Thread(new Producer(i, topic, broker, max, payload, lot, shareIndex)));
+            threads.add(new Thread(new Producer(i+sid, topic, broker, max, payload, lot, shareIndex, qos)));
             threads.get(threads.size() - 1).start();
         }
 
         threads.forEach((thread) -> {
             try {
                 thread.join();
+
+
             }catch (Exception e){
                 e.printStackTrace();
             }
