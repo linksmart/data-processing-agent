@@ -13,7 +13,8 @@
 
 
     <description>Complex-Event Machine Learning - ML module for CEP in the DataFusion Manager</description>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
+
     <dependencies>
 
         <dependency>
@@ -42,23 +43,27 @@
             <artifactId>deeplearning4j-core</artifactId>
             <version>${dl4j.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-buffer</artifactId>
-            <version>${dl4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native</artifactId>
             <version>${nd4j.version}</version>
         </dependency>
-        <dependency>
+
+
+        <!--<dependency>-->
+            <!--<groupId>org.nd4j</groupId>-->
+            <!--<artifactId>nd4j-api</artifactId>-->
+            <!--<version>${nd4jpi.version}</version>-->
+            <!--<classifier>linux-arm</classifier>-->
+        <!--</dependency>-->
+
+       <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native</artifactId>
             <version>${nd4j.version}</version>
             <classifier>linux-x86_64</classifier>
         </dependency>
+
         <dependency>
             <artifactId>canova-nd4j-image</artifactId>
             <groupId>org.nd4j</groupId>
@@ -69,12 +74,38 @@
             <groupId>org.nd4j</groupId>
             <version>${canova.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-jackson</artifactId>
             <version>${nd4j.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-api</artifactId>
+            <version>${nd4jcust.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native</artifactId>
+            <version>${nd4jcust.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native-api</artifactId>
+            <version>${nd4jcust.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native-platform</artifactId>
+            <version>${nd4jcust.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native</artifactId>
+            <version>${nd4jpi.version}</version>
+            <classifier>linux-arm</classifier>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
