@@ -46,9 +46,14 @@ public class BrokerConfiguration {
     protected int noTries=10;
     //reconnect waiting time
     protected int reconnectWaitingTime=60000;
+    //maximum messages can be one the messaging queue waiting to be sent
+    protected int maxInFlightMessages=10;
+    //version of the Mqtt protocol possible are 3.1 or 3.1.1. Default goes to 3.1.1, if fails then 3.1. Version 3 is a non-existing dummy enumeration member
+    private MqttVersion version = MqttVersion.DEFAULT;
 
     private transient MqttConnectOptions mqttOptions = null;
     private transient static Configurator conf = Configurator.getDefaultConfig();
+
 
     public static Map<String,BrokerConfiguration> loadConfigurations() throws UnknownError{
         try {
@@ -78,14 +83,14 @@ public class BrokerConfiguration {
 
             mqttOptions.setConnectionTimeout(brokerConf.timeOut/1000);
             mqttOptions.setKeepAliveInterval(brokerConf.keepAlive/1000);
-            mqttOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
+            mqttOptions.setMqttVersion(brokerConf.version.ordinal());
             //mqttOptions.setCleanSession();
             //mqttOptions.setPassword();
             //mqttOptions.setUserName();
             //mqttOptions.setWill();
 
             if(brokerConf.secConf!=null) {
-                SSLSocketFactory socketFactory = null;
+                SSLSocketFactory socketFactory;
                 try {
                     socketFactory = Utils.getSocketFactory(brokerConf.secConf.CApath, brokerConf.secConf.clientCertificatePath,brokerConf.secConf.keyPath, brokerConf.secConf.CAPassword,brokerConf.secConf.clientCertificatePassword,brokerConf.secConf.keyPassword);
                 } catch (Exception e) {
@@ -118,6 +123,8 @@ public class BrokerConfiguration {
             brokerConf.pubQoS = getInt(Const.DEFAULT_PUBLISH_QOS, aux);
             brokerConf.timeOut = getInt(BrokerServiceConst.CONNECTION_MQTT_CONNECTION_TIMEOUT, aux);
             brokerConf.keepAlive = getInt(BrokerServiceConst.CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT, aux);
+            brokerConf.maxInFlightMessages = getInt(BrokerServiceConst.MAX_IN_FLIGHT, aux);
+            brokerConf.version =  MqttVersion.valueOf(getString(BrokerServiceConst.MQTT_VERSION, aux));
             if ((conf.containsKey(Const.CERTIFICATE_BASE_SECURITY) ||  conf.containsKey(Const.CERTIFICATE_BASE_SECURITY + aux))&& getBoolean(Const.CERTIFICATE_BASE_SECURITY, aux)) {
                 brokerConf.secConf = brokerConf.getInitSecurityConfiguration();
                 brokerConf.secConf.CApath = getString(Const.CA_CERTIFICATE_PATH, aux);
@@ -343,6 +350,8 @@ public class BrokerConfiguration {
                 "\"keepAlive\":\""+keepAlive+"\"," +
                 "\"timeOut\":\""+timeOut+"\"," +
                 "\"noTries\":\""+noTries+"\"," +
+                "\"version\":\""+version.toString()+"\"," +
+                "\"inFlightMessages\":\""+maxInFlightMessages+"\"," +
                 "\"reconnectWaitingTime\":\""+reconnectWaitingTime +"\""+
                 ( ( secConf != null ) ? (",\"brokerSecurityConfiguration\":"+secConf.toString() ): ("") )
                 +"}";
@@ -449,6 +458,11 @@ public class BrokerConfiguration {
 
             return toString().hashCode();
         }
+    }
+    public enum  MqttVersion{
+        DEFAULT, V3,V3_1,V3_1_1;
+
+
     }
 
 }

@@ -1,6 +1,7 @@
 package eu.linksmart.testing.tooling;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -27,9 +28,13 @@ public abstract class Counter {
     }
 
     void create() throws MqttException {
-        mqttClient =  new MqttClient("tcp://"+broker+":1883", UUID.randomUUID().toString(), new MemoryPersistence());
-
-        mqttClient.connect();
+        if(mqttClient==null)
+            mqttClient =  new MqttClient("tcp://"+broker+":1883", UUID.randomUUID().toString(), new MemoryPersistence());
+        MqttConnectOptions options = new MqttConnectOptions();
+        options.setMaxInflight(100);
+        options.setCleanSession(true);
+        
+        mqttClient.connect(options);
 
 
     }
@@ -42,7 +47,13 @@ public abstract class Counter {
                 validator.addMessage(topic, i);
                 published=true;
             } catch (Exception e) {
+                System.err.println(e.getMessage());
                 e.printStackTrace();
+                try {
+                    Thread.sleep(100);
+                }catch (Exception e1){
+                    System.err.println(e1.getMessage());
+                }
             }
         }
     }
@@ -54,17 +65,15 @@ public abstract class Counter {
 
         @Override
         public void run() {
-            long acc =0;
-            long start= System.nanoTime();
-            double messages = 0, avg=0, n =1;
+            double messages , avg, n =1;
             while (activeThreads>0){
                 try {
                     Thread.sleep(1000);
-                    acc = (System.nanoTime() - start);
+
                     synchronized (object) {
                         messages = i;
                         total += messages;
-                        avg = (total/n)/nThreads;
+                        avg = total/n;
                         i = 0;
                         n++;
                     }
@@ -73,9 +82,6 @@ public abstract class Counter {
                                     ", \"messages\": "+String.valueOf(messages)+
                                     ", \"avg\": "+String.valueOf(avg)+
                                     ", \"time\":\""+ Instant.now().toString()+"\"}");
-                    start = System.nanoTime();
-                    acc = 0;
-
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();

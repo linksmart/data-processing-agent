@@ -29,4 +29,6 @@ public interface BrokerServiceConst {
     public static final String CA_CERTIFICATE_PASSWORD = "connection.broker.mqtt.security.caCertificatePassword";
 
 
+    public static final String MAX_IN_FLIGHT = "messaging.client.mqtt.maxInFlightMessages";
+    public static final String MQTT_VERSION = "messaging.client.mqtt.version";
 }

@@ -15,6 +15,7 @@
     <packaging>pom</packaging>
     <properties>
         <apache.commons.cli>1.2</apache.commons.cli>
+        <start-class>eu.linksmart.testing.tooling.Application</start-class>
     </properties>
     <modules>
         <module>tools</module>
