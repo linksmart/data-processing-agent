@@ -1,16 +1,14 @@
 package eu.linksmart.services.utils.mqtt.subscription;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.constants.Const;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.types.CurrentStatus;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
-import eu.linksmart.testing.tooling.MQTTMessageValidator;
+import eu.linksmart.testing.tooling.MessageValidator;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -39,7 +37,7 @@ public  class ForwardingListener implements MqttCallback {
     //Start of code made for testing performance
     protected final boolean VALIDATION_MODE;
     private final Deserializer deserializer;
-    private final MQTTMessageValidator validator;
+    private final MessageValidator validator;
     //End of code made for testing performance
 
     public ForwardingListener(String listening, Observer mqttEventsListener, UUID originProtocol) {
@@ -48,7 +46,7 @@ public  class ForwardingListener implements MqttCallback {
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_FORWARDING)) {
             deserializer = new DefaultDeserializer();
-            validator = new MQTTMessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
+            validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
         }else{
             deserializer = null;
             validator = null;
@@ -63,9 +61,9 @@ public  class ForwardingListener implements MqttCallback {
         this.connectionListener = connectionListener;
 
         /// Code for validation and test proposes
-        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_LOT_SIZE)) {
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_FORWARDING)) {
             deserializer = new DefaultDeserializer();
-            validator = new MQTTMessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
+            validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
         }else{
             deserializer = null;
             validator = null;
@@ -78,9 +76,9 @@ public  class ForwardingListener implements MqttCallback {
         this.connectionListener = connectionListener;
 
         /// Code for validation and test proposes
-        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_LOT_SIZE)) {
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_FORWARDING)) {
             deserializer = new DefaultDeserializer();
-            validator = new MQTTMessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
+            validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
         }else{
             deserializer = null;
             validator = null;
@@ -178,7 +176,7 @@ public  class ForwardingListener implements MqttCallback {
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-        LOG.debug("delivery complete  in listener");
+        LOG.debug("delivery complete in listener");
 
     }
 

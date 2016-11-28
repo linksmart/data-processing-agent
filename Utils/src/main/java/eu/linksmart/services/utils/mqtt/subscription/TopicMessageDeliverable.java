@@ -6,7 +6,7 @@ import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
-import eu.linksmart.testing.tooling.MQTTMessageValidator;
+import eu.linksmart.testing.tooling.MessageValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ public class TopicMessageDeliverable implements Runnable{
     //Start of code made for testing performance
     private final boolean VALIDATION_MODE;
     private final Deserializer deserializer;
-    private final MQTTMessageValidator validator;
+    private final MessageValidator validator;
     //End of code made for testing performance
 
     protected transient Logger loggerService = Utils.initLoggingConf(this.getClass());
@@ -39,9 +39,9 @@ public class TopicMessageDeliverable implements Runnable{
         this.topic=topic;
 
         /// Code for validation and test proposes
-        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_LOT_SIZE)) {
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_DELIVERER)) {
             deserializer = new DefaultDeserializer();
-            validator = new MQTTMessageValidator(this.getClass(),topic,Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
+            validator = new MessageValidator(this.getClass(),topic,Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
         }else{
             deserializer = null;
             validator = null;

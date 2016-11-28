@@ -18,12 +18,12 @@ public interface BrokerServiceConst {
     public static final String DEFAULT_PUBLISH_QOS = "messaging.client.mqtt.pub.qos";
     public static final String DEFAULT_RETAIN_POLICY= "messaging.client.mqtt.enableRetainPolicy";
     public static final String DEFAULT_SUBSCRIPTION_QoS ="messaging.client.mqtt.sub.qos";
+    public static final String CLEAN_SESSION = "messaging.client.mqtt.session.clean.enabled";
 
     public static final String CA_CERTIFICATE_PATH ="connection.broker.mqtt.security.caCertificatePath";
     public static final String CERTIFICATE_FILE_PATH ="connection.broker.mqtt.security.certificatePath";
     public static final String KEY_FILE_PATH ="connection.broker.mqtt.security.keyPath";
     public static final String CERTIFICATE_BASE_SECURITY ="connection.broker.mqtt.security.certificateBaseSecurityEnabled";
-
     public static final String CERTIFICATE_PASSWORD = "connection.broker.mqtt.security.certificatePassword";
     public static final String KEY_PASSWORD = "connection.broker.mqtt.security.keyPassword";
     public static final String CA_CERTIFICATE_PASSWORD = "connection.broker.mqtt.security.caCertificatePassword";
@@ -31,4 +31,8 @@ public interface BrokerServiceConst {
 
     public static final String MAX_IN_FLIGHT = "messaging.client.mqtt.maxInFlightMessages";
     public static final String MQTT_VERSION = "messaging.client.mqtt.version";
+    public static final String AUTOMATIC_RECONNECT = "messaging.client.mqtt.automaticReconnect";
+
+    public static final String USER = "messaging.client.mqtt.security.user";
+    public static final String PASSWORD = "messaging.client.mqtt.security.password";
 }

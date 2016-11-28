@@ -26,22 +26,30 @@ public class MqttIncomingConnectorService implements IncomingConnector {
 
     static protected MqttIncomingConnectorService me = null;
 
+    /*
+    todo if you read this and still is not being use remove it
     static public MqttIncomingConnectorService getReference() throws MalformedURLException, MqttException {
         if(me == null)
             me= new MqttIncomingConnectorService();
         return me;
+    }*/
+    static public MqttIncomingConnectorService getReference(String will, String willTopic) throws MalformedURLException, MqttException {
+        if(me == null)
+            me= new MqttIncomingConnectorService(will, willTopic);
+        return me;
     }
-
-    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
-    protected Configurator conf =  Configurator.getDefaultConfig();
+    protected transient Logger loggerService = Utils.initLoggingConf(this.getClass());
+    protected transient Configurator conf =  Configurator.getDefaultConfig();
     protected List<StaticBroker> brokers = new ArrayList<>();
+    final protected String will, willTopic;
 
-    protected MqttIncomingConnectorService() throws MalformedURLException, MqttException {
-
+    protected MqttIncomingConnectorService(String will, String willTopic) throws MalformedURLException, MqttException {
+        this.will =will;
+        this.willTopic =willTopic;
     }
     public void addAddListener(String alias, String topic, IncomingMqttObserver listener) throws InternalException{
         try {
-            StaticBroker broker = new StaticBroker(alias);
+            StaticBroker broker = new StaticBroker(alias, will,willTopic);
             listener.setBrokerService(broker);
             broker.addListener(topic, listener);
             brokers.add(broker);

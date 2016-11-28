@@ -11,7 +11,7 @@ import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
-import eu.linksmart.testing.tooling.MQTTMessageValidator;
+import eu.linksmart.testing.tooling.MessageValidator;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public abstract class IncomingMqttObserver implements Observer {
     //Start of code made for testing performance
     protected final boolean VALIDATION_MODE;
     private final Deserializer deserializer;
-    private final MQTTMessageValidator validator;
+    private final MessageValidator validator;
     //End of code made for testing performance
 
     public IncomingMqttObserver(List<String> topics)  {
@@ -41,7 +41,7 @@ public abstract class IncomingMqttObserver implements Observer {
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE)) {
             deserializer = new DefaultDeserializer();
-            validator = new MQTTMessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE));
+            validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE));
         }else{
             deserializer = null;
             validator = null;
@@ -53,7 +53,7 @@ public abstract class IncomingMqttObserver implements Observer {
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(eu.linksmart.services.utils.constants.Const.VALIDATION_OBSERVERS   )) {
             deserializer = new DefaultDeserializer();
-            validator = new MQTTMessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE));
+            validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE));
         }else{
             deserializer = null;
             validator = null;

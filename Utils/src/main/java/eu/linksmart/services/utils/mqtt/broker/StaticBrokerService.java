@@ -14,11 +14,11 @@ public class StaticBrokerService extends BrokerService implements Broker {
     protected static Map<UUID,BrokerConfiguration> clients = new Hashtable<>();
 
 
-    private StaticBrokerService(String alias, UUID ID) throws MqttException {
-        super(alias, ID);
+    private StaticBrokerService(String alias, UUID ID, String will, String willTopic) throws MqttException {
+        super(alias, ID, will, willTopic);
 
     }
-    static public StaticBrokerService getBrokerService(UUID uuid, String alias) throws MalformedURLException, MqttException {
+    static public StaticBrokerService getBrokerService(UUID uuid, String alias, String will, String willTopic) throws MalformedURLException, MqttException {
 
         BrokerConfiguration bConf = new BrokerConfiguration(alias);
         loggerService.info("Searching for proper broker...");
@@ -33,7 +33,7 @@ public class StaticBrokerService extends BrokerService implements Broker {
         }
 
         loggerService.info("Creating a new broker connection...");
-        brokerServices.put(bConf, new StaticBrokerService(alias, uuid));
+        brokerServices.put(bConf, new StaticBrokerService(alias, uuid,will,willTopic));
 
         if (!clients.containsKey(uuid))
             clients.put(uuid, bConf);
@@ -42,16 +42,16 @@ public class StaticBrokerService extends BrokerService implements Broker {
         return brokerServices.get(bConf);
 
     }
-    static public StaticBrokerService getBrokerService( String brokerName, String port) throws MalformedURLException, MqttException {
-        return getBrokerService(UUID.randomUUID(), "");
+    static public StaticBrokerService getBrokerService( String brokerName, String port, String will, String willTopic) throws MalformedURLException, MqttException {
+        return getBrokerService(UUID.randomUUID(), "",will,willTopic);
 
     }
-    static public StaticBrokerService getBrokerService(String alias) throws MalformedURLException, MqttException {
-        return getBrokerService("localhost","1883");
+    static public StaticBrokerService getBrokerService(String alias,String will, String willTopic) throws MalformedURLException, MqttException {
+        return getBrokerService("localhost","1883",will,willTopic);
 
     }
-    static public StaticBrokerService getDefaultBrokerService(String clientID) throws MalformedURLException, MqttException {
-        return getBrokerService("localhost","1883");
+    static public StaticBrokerService getDefaultBrokerService(String clientID,String will, String willTopic) throws MalformedURLException, MqttException {
+        return getBrokerService("localhost","1883",will,willTopic);
 
     }
     public void connect() throws Exception {

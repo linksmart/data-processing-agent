@@ -47,6 +47,7 @@ public interface Broker extends Observer{
     public  boolean addListener(String topic, Observer stakeholder, int QoS);
     public  boolean removeListener(String topic, Observer stakeholder);
     public  void removeListener( Observer stakeholder);
+    public BrokerConfiguration getConfiguration();
 
     public String getAlias();
 

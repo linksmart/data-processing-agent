@@ -188,6 +188,12 @@
                 <artifactId>utils</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
+            <!-- LS SE Event Testing -->
+            <dependency>
+                <groupId>eu.linksmart.services.events.testing</groupId>
+                <artifactId>tools</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
 
             <!--  External  Dependencies -->
             <!-- jackson related dependencies -->

@@ -50,6 +50,18 @@ public class BrokerConfiguration {
     protected int maxInFlightMessages=10;
     //version of the Mqtt protocol possible are 3.1 or 3.1.1. Default goes to 3.1.1, if fails then 3.1. Version 3 is a non-existing dummy enumeration member
     private MqttVersion version = MqttVersion.DEFAULT;
+    // define if the reconnection is managed by paho (true) or by the BrokerService (false)
+    private boolean automaticReconnect = true;
+    // define if the broker must remember the connection state
+    private boolean cleanSession = false;
+    // will (testament) of the client left in the broker in case the connection to it is completely lost
+    protected String will = "adios from client id "+id+" aka "+alias;
+    // topic of the will (see above)
+    protected String willTopic = "adios";
+    // user for connecting to the broker
+    private String user = null;
+    // password of the user (above) for connecting to the broker
+    private String password = null;
 
     private transient MqttConnectOptions mqttOptions = null;
     private transient static Configurator conf = Configurator.getDefaultConfig();
@@ -84,11 +96,16 @@ public class BrokerConfiguration {
             mqttOptions.setConnectionTimeout(brokerConf.timeOut/1000);
             mqttOptions.setKeepAliveInterval(brokerConf.keepAlive/1000);
             mqttOptions.setMqttVersion(brokerConf.version.ordinal());
-            //mqttOptions.setCleanSession();
-            //mqttOptions.setPassword();
-            //mqttOptions.setUserName();
-            //mqttOptions.setWill();
+            mqttOptions.setAutomaticReconnect(brokerConf.automaticReconnect);
+            mqttOptions.setCleanSession(brokerConf.cleanSession);
+            if(brokerConf.user!=null) {
+                mqttOptions.setUserName(brokerConf.user);
+                mqttOptions.setPassword(brokerConf.password.toCharArray());
+            }
+            mqttOptions.setWill(brokerConf.willTopic, brokerConf.will.getBytes(),2,true);
 
+          //  mqttOptions.setServerURIs();
+          //  mqttOptions.setSSLProperties();
             if(brokerConf.secConf!=null) {
                 SSLSocketFactory socketFactory;
                 try {
@@ -125,6 +142,13 @@ public class BrokerConfiguration {
             brokerConf.keepAlive = getInt(BrokerServiceConst.CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT, aux);
             brokerConf.maxInFlightMessages = getInt(BrokerServiceConst.MAX_IN_FLIGHT, aux);
             brokerConf.version =  MqttVersion.valueOf(getString(BrokerServiceConst.MQTT_VERSION, aux));
+            brokerConf.automaticReconnect = getBoolean(BrokerServiceConst.AUTOMATIC_RECONNECT,aux);
+            brokerConf.cleanSession = getBoolean(BrokerServiceConst.CLEAN_SESSION,aux);
+            if(conf.containsKey(BrokerServiceConst.USER + aux)&& conf.containsKey(BrokerServiceConst.USER )) {
+                brokerConf.user = getString(BrokerServiceConst.USER, aux);
+                brokerConf.password = getString(BrokerServiceConst.PASSWORD, aux);
+            }
+
             if ((conf.containsKey(Const.CERTIFICATE_BASE_SECURITY) ||  conf.containsKey(Const.CERTIFICATE_BASE_SECURITY + aux))&& getBoolean(Const.CERTIFICATE_BASE_SECURITY, aux)) {
                 brokerConf.secConf = brokerConf.getInitSecurityConfiguration();
                 brokerConf.secConf.CApath = getString(Const.CA_CERTIFICATE_PATH, aux);
@@ -165,7 +189,7 @@ public class BrokerConfiguration {
         else
             mqttClient = new MqttClient(Broker.getBrokerURL(brokerConf.getHostname(),brokerConf.getPort()),brokerConf.getId(),new MemoryPersistence());
 
-        mqttClient.connect(initMqttOptions(brokerConf));
+        //mqttClient.connect(initMqttOptions(brokerConf));
 
         return mqttClient;
     }
@@ -260,6 +284,8 @@ public class BrokerConfiguration {
         return mqttOptions;
     }
     public MqttConnectOptions getMqttConnectOptions(){
+        if(mqttOptions==null)
+            mqttOptions = initMqttOptions(this);
         return mqttOptions;
     }
 
@@ -362,6 +388,61 @@ public class BrokerConfiguration {
 
         return toString().hashCode();
     }
+    public int getMaxInFlightMessages() {
+        return maxInFlightMessages;
+    }
+
+    public void setMaxInFlightMessages(int maxInFlightMessages) {
+        this.maxInFlightMessages = maxInFlightMessages;
+    }
+
+    public MqttVersion getVersion() {
+        return version;
+    }
+
+    public void setVersion(MqttVersion version) {
+        this.version = version;
+    }
+
+    public boolean isAutomaticReconnect() {
+        return automaticReconnect;
+    }
+
+    public void setAutomaticReconnect(boolean automaticReconnect) {
+        this.automaticReconnect = automaticReconnect;
+    }
+
+    public boolean isCleanSession() {
+        return cleanSession;
+    }
+
+    public void setCleanSession(boolean cleanSession) {
+        this.cleanSession = cleanSession;
+    }
+
+    public String getWill() {
+        return will;
+    }
+
+    public void setWill(String will) {
+        this.will = will;
+    }
+
+    public String getWillTopic() {
+        return willTopic;
+    }
+
+    public void setWillTopic(String willTopic) {
+        this.willTopic = willTopic;
+    }
+
+    public MqttConnectOptions getMqttOptions() {
+        return mqttOptions;
+    }
+
+    public void setMqttOptions(MqttConnectOptions mqttOptions) {
+        this.mqttOptions = mqttOptions;
+    }
 
     public class BrokerSecurityConfiguration{
         protected String CApath = "";
@@ -458,6 +539,7 @@ public class BrokerConfiguration {
 
             return toString().hashCode();
         }
+
     }
     public enum  MqttVersion{
         DEFAULT, V3,V3_1,V3_1_1;

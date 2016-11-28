@@ -1,7 +1,5 @@
 package eu.linksmart.services.event.core;
 
-import eu.linksmart.api.event.exceptions.InternalException;
-import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
 
@@ -17,14 +15,9 @@ import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
-import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.slf4j.Logger;
 
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by J. Angel Caravajal on 06.10.2014.
@@ -142,14 +135,14 @@ public class DataProcessingCore {
             Class.forName(EventFeeder.class.getCanonicalName());
             Class.forName(StatementFeeder.class.getCanonicalName());
             Class.forName(BootstrappingBean.class.getCanonicalName());
-            mqtt = MqttIncomingConnectorService.getReference();
+            mqtt = MqttIncomingConnectorService.getReference(conf.getString(Const.WILL_TOPIC)+"/"+DynamicConst.getId()+"/",conf.getString(Const.WILL_MESSAGE).replace("<id>",DynamicConst.getId()));
 
 
             FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
             persistentFeeder.loadFiles();
 
-            if(conf.getBoolean(Const.STATRT_MQTT_STATEMENT_API))
+            if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))
                 mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
             //
             conf.getList(Const.EVENT_IN_TOPIC_CONF_PATH).stream().forEach(i->{
