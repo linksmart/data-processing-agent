@@ -1,8 +1,6 @@
 package eu.linksmart.testing.tooling;
 
 
-import sun.misc.Cleaner;
-
 import java.time.Instant;
 import java.util.Date;
 
@@ -18,14 +16,14 @@ public class Producer extends Counter implements Runnable{
     }
     final String baseTopic;
     final int max;
-    static Boolean informed = false;
+    static Boolean informed = false, retainPolicy=false;
     final String basePayload;
     final boolean basePayloadWithWildcard;
     final long lot;
     final boolean shareIndex;
     int localI =0;
-    public Producer(int index, String baseTopic, String broker, int max, String basePayload, long lot, boolean shareIndex, int qos) {
-        super();
+    public Producer(int index, String baseTopic, String broker, int max, String basePayload, long lot, boolean shareIndex, int qos,int sleeping,boolean retain, Publisher publisher) {
+        super(publisher);
         this.max=max;
         if (index<0)
             id++;
@@ -38,10 +36,10 @@ public class Producer extends Counter implements Runnable{
         this.lot = lot;
         this.shareIndex = shareIndex;
         this.qos = qos;
+        this.sleeping =sleeping;
+        retainPolicy =retain;
         if(validator==null)
-            validator = new MQTTMessageValidator(this.getClass(),String.valueOf(id),(int)lot);
-
-
+            validator = new MessageValidator(this.getClass(),String.valueOf(id),(int)lot);
 
     }
 
@@ -51,10 +49,17 @@ public class Producer extends Counter implements Runnable{
     @Override
     public void run() {
         try {
-            create();
+
             String  auxTopic=baseTopic.replace("<sid>", String.valueOf(id));
             boolean shouldPublish, next=true;
+            Date before = new Date();
 
+            String auxPayload, now;
+            int payloadInt;
+
+            now = String.valueOf((new Date()).getTime());
+            auxPayload = basePayload.replace("<i>", "-1").replace("<epoch>", now);
+            publish(auxTopic, auxPayload, -1);
             while (next)
                 try {
                     synchronized (object){
@@ -63,8 +68,6 @@ public class Producer extends Counter implements Runnable{
                     }
                     if(shouldPublish) {
 
-                        String auxPayload, now;
-                        int payloadInt;
                         synchronized (object) {
                             if (shareIndex)
                                 payloadInt = i;
@@ -97,6 +100,8 @@ public class Producer extends Counter implements Runnable{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+            Date after= new Date();
             Thread.sleep(2000);
             boolean exited = false;
             while (!exited)
@@ -110,11 +115,13 @@ public class Producer extends Counter implements Runnable{
                 }
             System.out.println(
                     "{\"total\": "+String.valueOf(total)+
+                            ", \"totalTime\": "+(after.getTime()-before.getTime())/1000.0+
                             ", \"sid\": "+String.valueOf(id)+
                             ", \"localI\": "+String.valueOf(localI)+
                             ", \"shared\": "+String.valueOf(i)+
                             ", \"messages\": "+String.valueOf(0)+
                             ", \"time\":\""+ Instant.now().toString()+"\"}");
+
             mqttClient.disconnect();
             mqttClient.close();
         } catch (Exception e) {
