@@ -24,6 +24,10 @@
             <groupId>eu.linksmart.services.events.gpl</groupId>
             <artifactId>wrapper.esper</artifactId>
         </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events.gpl</groupId>
+            <artifactId>configuration.agent.data.processing</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -62,15 +66,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
 
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <phase>none</phase>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
     </build>

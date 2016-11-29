@@ -18,6 +18,10 @@
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>iot.learning.impl</artifactId>
         </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events.gpl</groupId>
+            <artifactId>configuration.agent.data.processing</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>
@@ -58,7 +62,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+          <!--  <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>${build.helper.maven.plugin.version}</version>
@@ -80,7 +84,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>

@@ -31,6 +31,18 @@
                 <artifactId>wrapper.esper</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>eu.linksmart.services.events.gpl</groupId>
+                <artifactId>configuration.agent.data.processing</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.linksmart.services.events.gpl</groupId>
+                <artifactId>configuration.agent.learning.agent</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
             <!-- Weka -->
             <dependency>
                 <groupId>nz.ac.waikato.cms.weka</groupId>
@@ -47,6 +59,7 @@
         </dependencies>
     </dependencyManagement>
     <modules>
+        <module>configurations</module>
         <module>EsperWrapper</module>
         <module>distributions</module>
         <module>CEMLWeka</module>
