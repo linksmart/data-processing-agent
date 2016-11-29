@@ -1,9 +1,0 @@
-{
-  "statements":[
-    {
-      "name":"mesPerSec",
-      "statement":"select count(*) from Observation.win:time_batch(1 sec) "
-    }
-  ]
-
-}
