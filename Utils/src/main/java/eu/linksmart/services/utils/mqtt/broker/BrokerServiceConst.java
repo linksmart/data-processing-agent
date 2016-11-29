@@ -4,6 +4,8 @@ package eu.linksmart.services.utils.mqtt.broker;
  * Created by José Ángel Carvajal on 06.08.2015 a researcher of Fraunhofer FIT.
  */
 public interface BrokerServiceConst {
+    public static final String MULTI_CONNECTION = "connection.brokers.service.connection.multiple";
+
     public static final String BROKERS_ALIAS = "connection.brokers.aliases";
 
     public static final String DEFAULT_HOSTNAME= "connection.broker.mqtt.hostname";
