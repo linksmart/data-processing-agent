@@ -95,12 +95,13 @@ public class DataProcessingCore {
             DynamicConst.setIsSet(true);
         else
             DynamicConst.setId(conf.getString(Const.ID_CONF_PATH));
+        DynamicConst.setWill(conf.getString(Const.WILL_MESSAGE).replace("<id>",DynamicConst.getId()));
+        DynamicConst.setWillTopic(conf.getString(Const.WILL_TOPIC)+"/"+DynamicConst.getId()+"/");
     }
 
     protected static synchronized boolean init(String args){
         started =true;
         initConf(args);
-
 
 
         loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + DynamicConst.getId());
@@ -135,7 +136,7 @@ public class DataProcessingCore {
             Class.forName(EventFeeder.class.getCanonicalName());
             Class.forName(StatementFeeder.class.getCanonicalName());
             Class.forName(BootstrappingBean.class.getCanonicalName());
-            mqtt = MqttIncomingConnectorService.getReference(conf.getString(Const.WILL_TOPIC)+"/"+DynamicConst.getId()+"/",conf.getString(Const.WILL_MESSAGE).replace("<id>",DynamicConst.getId()));
+            mqtt = MqttIncomingConnectorService.getReference(DynamicConst.getWill(),DynamicConst.getWillTopic());
 
 
             FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));

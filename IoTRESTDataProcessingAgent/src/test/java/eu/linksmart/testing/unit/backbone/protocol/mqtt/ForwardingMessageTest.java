@@ -42,7 +42,7 @@ public class ForwardingMessageTest implements Observer {
 
         String payload = "{\"value\":1,\"timestamp\":\"2015-11-16T17:45:52.23Z\"}", payload2 = "{\"value\":30.0,\"timestamp\":\"2015-11-16T17:45:52.23Z\"}", topic = "/storage/devices/46/variables/5/measurements", topic2 = "/storage/devices/6/variables/0/measurements";
         try {
-            StaticBroker broker = new StaticBroker("almanac","1883" );
+            StaticBroker broker = new StaticBroker("almanac","1883" , "i'm dead","will/");
             broker.connect();
             while (true) {
                 broker.publish(topic, payload.getBytes());

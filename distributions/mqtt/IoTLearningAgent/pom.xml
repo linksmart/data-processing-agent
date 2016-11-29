@@ -18,12 +18,6 @@
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>iot.learning.impl</artifactId>
             <version>${ls.se.agents.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>eu.linksmart.services.events.gpl</groupId>
-                    <artifactId>wrapper.esper</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
