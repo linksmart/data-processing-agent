@@ -127,6 +127,7 @@
 	<modules>
         <module>Utils</module>
         <module>AgentAPIs</module>
+        <module>configurations</module>
         <module>DataPayload</module>
         <module>SiddhiWrapper</module>
         <module>DataProcessingCore</module>
@@ -180,6 +181,23 @@
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
                 <artifactId>SiddhiWrapper</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>configuration.agent.data.processing</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>configuration.agent.learning.agent</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>configuration.la</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
             <!--  LS GC  Dependencies -->
