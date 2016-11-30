@@ -110,7 +110,7 @@ public class DefaultMQTTPublisher implements Publisher {
                 if (!knownInstances.contains(scope.toLowerCase()))
                     throw new StatementException( id,"Statement", "The selected scope (" + scopes.get(0) + ") is unknown");
 
-                brokers.put(scope, new StaticBroker(scope));
+                brokers.put(scope, new StaticBroker(scope,"Publisher with id: "+id+" of agent: "+ agentID + " is dead","will/"));
             }
 
         } catch (MqttException e) {

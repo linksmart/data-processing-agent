@@ -3,6 +3,7 @@ package eu.linksmart.services.utils.mqtt.broker;
 
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.subscription.ForwardingListener;
+import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -18,7 +19,8 @@ public class BrokerService implements Observer, Broker {
     protected transient MqttClient mqttClient;
     protected transient ForwardingListener listener;
 
-    protected ArrayList<String> topics = new ArrayList<String>();
+    protected ArrayList<String> topics = new ArrayList<>();
+    protected ArrayList<Integer> qoss = new ArrayList<>();
 
     private transient Boolean watchdog = false;
 
@@ -26,9 +28,11 @@ public class BrokerService implements Observer, Broker {
 
     protected final BrokerConfiguration brokerConf;
 
-    public BrokerService(String alias, UUID ID) throws MqttException {
+    public BrokerService(String alias, UUID ID, String will, String topicWill) throws MqttException {
 
         brokerConf = new BrokerConfiguration(alias,ID.toString());
+        brokerConf.setWill(will);
+        brokerConf.setWillTopic(topicWill);
         listener = new ForwardingListener(this,ID);
 
         createClient();
@@ -51,14 +55,14 @@ public class BrokerService implements Observer, Broker {
     protected void _connect() throws Exception {
 
 
-        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" with configuration "+brokerConf.toString()+" is connecting...");
-        if(!mqttClient.isConnected()) {
 
+        if(!mqttClient.isConnected()) {
+            loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" with configuration "+brokerConf.toString()+" is connecting...");
             mqttClient.connect(brokerConf.getMqttConnectOptions());
 
+            startWatchdog();
+            loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" is connected");
         }
-        startWatchdog();
-        loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" is connected");
     }
     protected void _disconnect() throws Exception {
         loggerService.info("MQTT broker UUID:"+brokerConf.getId()+" Alias:"+brokerConf.getAlias()+" with configuration "+brokerConf.toString()+" is disconnecting...");
@@ -113,6 +117,13 @@ public class BrokerService implements Observer, Broker {
         connectionWatchdog();
 
         mqttClient.setCallback(listener);
+        try {
+            _connect();
+        } catch (MqttException e) {
+            throw e;
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
+        }
     }
 
 
@@ -266,10 +277,10 @@ public class BrokerService implements Observer, Broker {
             _connect();
 
             topics.add(topic);
-            String[] aux = topics.toArray(new String[topics.size()] ) ;
-            int[] qoss= new int[aux.length];
-            Arrays.fill(qoss,QoS);
-            mqttClient.subscribe(aux,qoss);
+            qoss.add(QoS);
+
+
+            subscribeAll();
 
             listener.addObserver(topic, stakeholder);
         } catch (Exception e) {
@@ -294,15 +305,30 @@ public class BrokerService implements Observer, Broker {
     }
 
     @Override
+    public BrokerConfiguration getConfiguration() {
+        return brokerConf;
+    }
+
+    private synchronized void subscribeAll() throws MqttException {
+
+        mqttClient.subscribe(topics.toArray(new String[topics.size()]), ArrayUtils.toPrimitive(qoss.toArray(new Integer[qoss.size()])));
+
+    }
+
+    @Override
     public void update(Observable o, Object arg) {
         ForwardingListener source = (ForwardingListener)arg;
         switch (source.getStatus()){
             case Disconnected:
+                loggerService.warn("Disconnection of the client with id: " + brokerConf.getId() + " and alias: " + brokerConf.getAlias() + " with conf: " + brokerConf.toString());
                 for(int i=0; i<brokerConf.getNoTries() && !mqttClient.isConnected();i++){
                     try {
-                        mqttClient.connect(brokerConf.getMqttConnectOptions());
+                        loggerService.info("Reconnecting...");
+                        _connect();
 
-                    } catch (MqttException e) {
+                        subscribeAll();
+
+                    } catch (Exception e) {
                         loggerService.error(e.getMessage(), e);
                     }
                     try {

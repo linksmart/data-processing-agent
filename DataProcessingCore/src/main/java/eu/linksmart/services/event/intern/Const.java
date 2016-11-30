@@ -42,5 +42,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, Feed
 
     public static final String ADDITIONAL_CLASS_TO_BOOTSTRAPPING = "agent.init.extensions";
 
-    public static final String STATRT_MQTT_STATEMENT_API = "api.statements.mqtt.enable";
+    public static final String START_MQTT_STATEMENT_API = "api.statements.mqtt.enable";
+    public static final String WILL_TOPIC = "api.statements.mqtt.topic.base.will";
+    public static final String WILL_MESSAGE = "api.statements.mqtt.message.base.will";
 }

@@ -1,7 +1,24 @@
  - 1.4.0 RELEASE:
     Features:
+        * Adding Raspberry PI nd4j distribution
+        * Upgrade paho clients to 1.1.0
+        * Adding configuration setting for mqtt:
+                messaging.client.mqtt.version (for selecting mqtt protocol version)
+                messaging.client.mqtt.maxInFlightMessages (maximum message in process to be sent in the client side)
+                messaging.client.mqtt.automaticReconnect (set paho to reconnect automatically instead to do it by the BrokerService client code)
+                messaging.client.mqtt.session.clean.enabled (enabling or disabling clean sessions )
+                messaging.client.mqtt.enableRetainPolicy (allowing retain policy)
+                messaging.client.mqtt.security.user (allowing to set user)
+                messaging.client.mqtt.security.password (allowing to set password)
+                api.statements.mqtt.topic.base.will (allowing to set a testament topic if the connection is lost)
+                api.statements.mqtt.message.base.will (allowing to set a testament message if the connection is lost)
+                connection.brokers.service.connection.multiple (enable to open a connection per soft-client [experimental feature])
     DEV:
+        * Creating evaluation tools artifacts
+        * Inserting evaluation code. This can be enable by conf
+        * Insert valuation code on the messaging related classes
     FIXs:
+        * When the connection is lost now resubscribed. The fix is irrelevant if the messaging.client.mqtt.automaticReconnect is enabled.
 15.11.2016 - 1.3.3 RELEASE:
     Features:
         * The swagger Data-Processing API is introduced

@@ -17,13 +17,10 @@
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>iot.data.processing.impl</artifactId>
-            <version>${ls.se.agents.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>eu.linksmart.services.events.gpl</groupId>
-                    <artifactId>wrapper.esper</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>configuration.agent.data.processing</artifactId>
         </dependency>
 
         <dependency>
@@ -32,6 +29,42 @@
         </dependency>
 
     </dependencies>
+    <build>
+        <plugins>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+
+            </plugin>
+            <!-- for compile jars with dependencies -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${start-class}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+        </plugins>
+
+    </build>
 
 </project>

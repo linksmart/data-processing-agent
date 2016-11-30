@@ -21,21 +21,17 @@ public class StaticBroker implements Broker{
     protected boolean needsReconnect = false;
     private Configurator conf = Configurator.getDefaultConfig();
 
-    public StaticBroker(String brokerName, String brokerPort) throws MalformedURLException, MqttException {
+    public StaticBroker(String brokerName, String brokerPort, String will, String willTopic) throws MalformedURLException, MqttException {
         clientID = UUID.randomUUID();
-        brokerService = StaticBrokerService.getBrokerService(clientID, "");
+        brokerService = StaticBrokerService.getBrokerService(clientID, "",will,willTopic);
 
     }
-    public StaticBroker(String alias) throws MalformedURLException, MqttException {
+    public StaticBroker(String alias, String will, String willTopic) throws MalformedURLException, MqttException {
         clientID = UUID.randomUUID();
 
-        brokerService = StaticBrokerService.getBrokerService(clientID, alias);
+        brokerService = StaticBrokerService.getBrokerService(clientID, alias,will,willTopic);
 
 
-    }
-    public StaticBroker() throws MalformedURLException, MqttException {
-        clientID = UUID.randomUUID();
-        brokerService = StaticBrokerService.getBrokerService(clientID, "");
     }
     @Override
     public boolean isConnected() {
@@ -192,6 +188,11 @@ public class StaticBroker implements Broker{
 
          brokerService.removeListener(stakeholder);
 
+    }
+
+    @Override
+    public BrokerConfiguration getConfiguration() {
+        return brokerService.brokerConf;
     }
 
     @Override

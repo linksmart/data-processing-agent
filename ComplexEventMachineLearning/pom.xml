@@ -107,33 +107,6 @@
             <classifier>linux-arm</classifier>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration combine.self="override">
-                            <artifacts>
-                                <artifact>
-                                    <file>src/main/resources/conf.cfg</file>
-                                    <type>cfg</type>
-                                    <classifier>configuration</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
 
 </project>

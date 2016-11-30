@@ -14,5 +14,9 @@ public interface Const extends   BrokerServiceConst,LoggerServiceConst {
 
     public static final  String CONFIGURATION_CLASS_FILE = "eu.linksmart.services.Application";
 
+    public static String VALIDATION_LOT_SIZE = "test.validation.lot.size";
+    public static String VALIDATION_FORWARDING = "test.validation.message.forwarding.enabled";
+    public static String VALIDATION_OBSERVERS = "test.validation.mqtt.observers.enabled";
 
+    public static String VALIDATION_DELIVERER = "test.validation.message.deliverer";
 }

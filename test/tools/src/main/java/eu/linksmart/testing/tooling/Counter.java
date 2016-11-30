@@ -1,75 +1,88 @@
 package eu.linksmart.testing.tooling;
 
-import eu.linksmart.services.utils.function.Utils;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.util.UUID;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * Created by José Ángel Carvajal on 14.03.2016 a researcher of Fraunhofer FIT.
  */
 public abstract class Counter {
 
-    protected static Thread cleaner ;
-    protected static int i=0, total;
+    protected static Thread cleanerThread ;
+    protected static Cleaner cleaner;
+    protected static int i=0, total,  sharedId=0,nThreads = 0,activeThreads;
     protected static final  Object object = new Object();
-    protected static int id=0;
-    protected MqttClient mqttClient = null;
+    protected int id=0, qos, sleeping =0;
+    protected Publisher mqttClient = null;
     protected String broker;
-    static protected int nThreads = 0;
+    static protected MessageValidator validator = null;
 
 
-    protected Counter(){
-        nThreads++;
+    protected Counter(Publisher publisher){
+        mqttClient =publisher;
+        nThreads = (activeThreads = nThreads+1);
     }
 
-    void create() throws MqttException {
-        mqttClient =  new MqttClient("tcp://"+broker+":1883", UUID.randomUUID().toString(), new MemoryPersistence());
 
-        mqttClient.connect();
+    public void publish(String topic, String payload, int i) throws Exception {
+        boolean published = false;
 
+        while (!published) {
+            try {
+                mqttClient.publish(topic, payload.getBytes(),qos, true);
+                validator.addMessage(topic, i);
+                published=true;
+                try {
+                    Thread.sleep(sleeping);
+                }catch (Exception e1){
+                    System.err.println(this.getClass().getName() + "(" + id + ") "+e1.getMessage());
+                }
+            } catch (Exception e) {
+                System.err.println(this.getClass().getName() + "(" + id + ") "+e.getMessage());
+                //e.printStackTrace();
 
+            }
+        }
     }
     static protected class Cleaner implements Runnable{
 
         public Cleaner() {
         }
 
+
         @Override
         public void run() {
-            long acc =0;
-            long start= System.nanoTime();
-            double messages = 0, avg=0, n =1;
-            while (true){
+            double messages , avg, n =1;
+            Date before = new Date(), after;
+            do {
                 try {
                     Thread.sleep(1000);
-                    acc = (System.nanoTime() - start);
+
                     synchronized (object) {
                         messages = i;
+                        total += messages;
+                        avg = total/n;
+                        i = 0;
+                        n++;
                     }
-                    total += messages;
-                    avg = (total/n)/nThreads;
+                    after= new Date();
                     System.out.println(
                             "{\"total\": "+String.valueOf(total)+
+                                   // ", \"lapsed\": "+(after.getTime()-before.getTime())/1000.0+
                                     ", \"messages\": "+String.valueOf(messages)+
                                     ", \"avg\": "+String.valueOf(avg)+
-                                    ", \"time\":\""+ Utils.getDateNowString()+"\"}");
-                    start = System.nanoTime();
-                    acc = 0;
+                                    ", \"time\":\""+ Instant.now().toString()+"\"}");
+                    before = new Date();
 
-                    n++;
-                    synchronized (object) {
-                        i = 0;
-
-
-                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
+            }while (activeThreads>0);
+
+
 
         }
+
     }
 }
