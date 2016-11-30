@@ -47,4 +47,6 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     List<TargetRequest> getTargets();
 
     void setTargets(List<TargetRequest> targets);
+
+
 }
