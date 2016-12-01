@@ -197,7 +197,7 @@
 
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
-                <artifactId>configuration.la</artifactId>
+                <artifactId>configuration.utils</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
             <!--  LS GC  Dependencies -->
