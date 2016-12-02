@@ -139,9 +139,13 @@ public class DataProcessingCore {
             mqtt = MqttIncomingConnectorService.getReference(DynamicConst.getWill(),DynamicConst.getWillTopic());
 
 
-            FileConnector persistentFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
+            FileConnector fileFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
-            persistentFeeder.loadFiles();
+            fileFeeder.loadFiles();
+
+            FileConnector directoryFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_DIRECTORY).toArray(new String[conf.getList(Const.PERSISTENT_DATA_DIRECTORY).size()]));
+
+            directoryFeeder.loadFiles();
 
             if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))
                 mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));

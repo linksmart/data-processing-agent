@@ -23,7 +23,7 @@ public class Consumer implements MqttCallback{
         options = new MqttConnectOptions();
         options.setCleanSession(false);
         options.setMaxInflight(1000);
-        options.setAutomaticReconnect(true);
+        options.setAutomaticReconnect(false);
     }
 
     @Override
