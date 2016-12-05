@@ -38,7 +38,6 @@ import java.util.*;
 public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>,List<Double>,List<MultiLayerNetwork>> {
 
     static {
-        CollectionType collectionType = TypeFactory.defaultInstance().constructCollectionType(List.class, MultiLayerNetwork.class);
         Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
 
     }
@@ -74,6 +73,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
 
 
+
     /**
      * Returns the network configuration, 2 hidden DenseLayers of size 50.
      */
@@ -97,8 +97,8 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
                 .backprop(true).build();
     }
 
-    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets,Map<String,Object> parameters) {
-        super(targets,parameters,new RegressionEvaluator(targets));
+    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets,Map<String,Object> parameters, Object learner) {
+        super(targets,parameters,new RegressionEvaluator(targets),learner);
 
       //  super(descriptors,AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
 
@@ -292,7 +292,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         // todo there is something to destroy?
     }
 
-    public String toJson(){
+/*    public String toJson(){
         String retVal = null;
         List<NNModelSerializer> nnModelSerializers = new ArrayList<>();
         for (MultiLayerNetwork lernerElmnt: learner) {
@@ -321,5 +321,5 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
             e.printStackTrace();
         }
 
-    }
+    }*/
 }

@@ -21,6 +21,7 @@ import java.util.*;
  */
 
 // TODO TBD
+
 public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
     @JsonIgnore
@@ -69,13 +70,13 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     //final protected String modelName;
 
-    public ModelInstance(List<TargetRequest> targets,Map<String,Object> parameters, Evaluator evaluator){
+    public ModelInstance(List<TargetRequest> targets,Map<String,Object> parameters, Evaluator evaluator, Object learner){
         this.targets = targets;
         this.parameters =parameters;
         this.evaluator = evaluator;
         this.evaluator.setParameters(parameters);
         this.lastPrediction = new PredictionInstance<>();
-
+        this.learner = (LearningObject) learner;
     }
 
 
