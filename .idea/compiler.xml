@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!?*.java" />
@@ -23,6 +22,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="ceml.weka" />
+        <module name="configuration.agent.data.processing" />
+        <module name="configuration.agent.learning.agent" />
         <module name="iot.data.processing.agent" />
         <module name="iot.data.processing.rest.agent" />
         <module name="iot.learning.agent" />
@@ -31,13 +33,17 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ceml.weka" target="1.8" />
+      <module name="configuration.agent.data.processing" target="1.8" />
+      <module name="configuration.agent.learning.agent" target="1.8" />
+      <module name="configurations" target="1.8" />
       <module name="iot.data.processing.agent" target="1.8" />
       <module name="iot.data.processing.rest.agent" target="1.8" />
       <module name="iot.learning.agent" target="1.8" />
       <module name="iot.learning.rest.agent" target="1.8" />
       <module name="mqtt.reactor" target="1.8" />
-      <module name="parent.reactor (1) (eu.linksmart.services.events.gpl.distributions)" target="1.8" />
-      <module name="parent.reactor (2) (eu.linksmart.services.events.gpl)" target="1.8" />
+      <module name="parent.reactor" target="1.8" />
+      <module name="reactor" target="1.8" />
       <module name="rest.reactor" target="1.8" />
       <module name="wrapper.esper" target="1.8" />
     </bytecodeTargetLevel>
