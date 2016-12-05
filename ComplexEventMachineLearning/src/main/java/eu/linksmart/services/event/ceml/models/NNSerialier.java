@@ -28,7 +28,6 @@ public class NNSerialier extends JsonSerializer<MultiLayerNetwork> {
         jsonGenerator.writeStartObject();
         ObjectMapper mapper = new ObjectMapper();
         serializerProvider.defaultSerializeField("MultiLayerConfiguration",mapper.readValue(layerwiseConfiguration.toJson(), new TypeReference<Map<String, Object>>(){}),jsonGenerator);
-        //jsonGenerator.writeObjectField("MultiLayerConfiguration",layerwiseConfiguration.toJson());
 
         byte[] params = Nd4j.toByteArray(nnet.params());
         jsonGenerator.writeBinaryField("params",params);

@@ -50,19 +50,8 @@ public class ModelDeserializer extends JsonDeserializer<Model> {
          //   throw new IOException("The field Parameters is a mandatory field!");
         Object learner = null;
         if(node.hasNonNull("Learner")) {
-            //CollectionType learnersListType =TypeFactory.defaultInstance().constructCollectionType(List.class,MultiLayerNetwork.class);
-
-         //   try {
-                //Class clazz = Class.forName("eu.linksmart.services.event.ceml.models."+name);
-                JavaType learnerType = learners.get(name);
-                //JavaType type = TypeFactory.defaultInstance().constructType(learnerType);
-                learner = mapper.reader(learnerType).readValue(node.get("Learner"));
-           // } catch (ClassNotFoundException e) {
-             //   e.printStackTrace();
-            //} catch (NoSuchMethodException e) {
-              //  e.printStackTrace();
-            //}
-
+            JavaType learnerType = learners.get(name);
+            learner = mapper.reader(learnerType).readValue(node.get("Learner"));
         }
         try {
             return Model.factory(name,targetRequests,parameters,learner);

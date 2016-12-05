@@ -26,15 +26,10 @@ import java.util.Map;
 public class NNDeserialier extends JsonDeserializer<MultiLayerNetwork> {
     @Override
     public MultiLayerNetwork deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        //ObjectCodec oc = jsonParser.getCodec();
-        //JsonNode node = oc.readTree(jsonParser);
         JsonNode node = jsonParser.getCodec().readValue(jsonParser, JsonNode.class);
         byte[] paramsByteArr = node.get("params").binaryValue();
         INDArray params = Nd4j.fromByteArray(paramsByteArr);
-//        ByteArrayInputStream  bis = new ByteArrayInputStream(paramsByteArr);
-//        DataInputStream dis = new DataInputStream(bis);
         MultiLayerConfiguration MLC = MultiLayerConfiguration.fromJson(node.get("MultiLayerConfiguration").toString());
-       // MultiLayerConfiguration jsonString = (MultiLayerConfiguration)node.get("MultiLayerConfiguration");
         MultiLayerNetwork nn = new MultiLayerNetwork(MLC, params);
         if(node.hasNonNull("updater")) {
             byte[] updateByteArr = node.get("updater").binaryValue();
