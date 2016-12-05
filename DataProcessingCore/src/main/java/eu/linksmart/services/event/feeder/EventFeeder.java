@@ -17,6 +17,7 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,16 @@ public class EventFeeder implements Feeder<EventEnvelope> {
     public static EventFeeder getFeeder(){
         return me;
     }
+    public void feed(String rawEvent) {
+        try {
+            Map<String,String> rawMap = deserializer.parse(rawEvent,Map.class);
+            for(Map.Entry<String,String> entry: rawMap.entrySet())
+                me.feed(entry.getKey(), entry.getValue());
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
+        }
 
+    }
     public void feed(String topic, String unparsedEvent) throws TraceableException, UntraceableException{
         EventEnvelope eventEnvelope = parseEvent(topic, unparsedEvent);
         addEvent(eventEnvelope,topic);

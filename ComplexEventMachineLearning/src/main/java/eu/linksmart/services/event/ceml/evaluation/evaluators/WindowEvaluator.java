@@ -515,9 +515,10 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
 
     }
-    public class MatthewsCorrelationCoefficient extends ModelEvaluationMetricSubBase {
+    // MatthewsCorrelationCoefficient
+    public class MCC extends ModelEvaluationMetricSubBase {
 
-        public MatthewsCorrelationCoefficient(ComparisonMethod method, double target) {
+        public MCC(ComparisonMethod method, double target) {
             super(method, target);
         }
 

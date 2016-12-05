@@ -17,6 +17,7 @@
         * Creating evaluation tools artifacts
         * Inserting evaluation code. This can be enable by conf
         * Insert valuation code on the messaging related classes
+        * New Message MQTT API for Broker API in Utils.
     FIXs:
         * When the connection is lost now resubscribed. The fix is irrelevant if the messaging.client.mqtt.automaticReconnect is enabled.
 15.11.2016 - 1.3.3 RELEASE:

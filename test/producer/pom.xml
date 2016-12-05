@@ -35,7 +35,10 @@
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>utils</artifactId>
-
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>configuration.utils</artifactId>
         </dependency>
     </dependencies>
     <build>

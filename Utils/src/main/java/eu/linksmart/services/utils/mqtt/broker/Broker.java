@@ -1,5 +1,6 @@
 package eu.linksmart.services.utils.mqtt.broker;
 
+import eu.linksmart.services.utils.mqtt.subscription.MqttMessageObserver;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.util.Observable;
@@ -23,17 +24,15 @@ public interface Broker extends Observer{
 
     public void createClient() throws MqttException;
 
-
-    public boolean isWatchdog() ;
+    //public boolean isWatchdog() ;
 
     public void startWatchdog() ;
     public void stopWatchdog();
 
-
-
     public void publish(String topic, byte[] payload, int qos, boolean retained) throws Exception;
     public void publish(String topic, byte[] payload) throws Exception ;
     public void publish(String topic, String payload) throws Exception;
+
     public String getBrokerName();
 
     public void setBrokerName(String brokerName) throws Exception ;
@@ -43,8 +42,17 @@ public interface Broker extends Observer{
     public void setBrokerPort(String brokerPort) throws Exception ;
     public void setBroker(String brokerName, String brokerPort) throws Exception;
 
-    public  boolean addListener(String topic, Observer stakeholder)  ;
+    public  boolean addListener(String topic, Observer stakeholder);
     public  boolean addListener(String topic, Observer stakeholder, int QoS);
+
+    default public  boolean addListener(String topic, MqttMessageObserver stakeholder){
+      return addListener(topic,(Observer)stakeholder);
+    }
+
+    default public  boolean addListener(String topic, MqttMessageObserver stakeholder, int QoS){
+        return addListener(topic,(Observer)stakeholder,QoS);
+    }
+
     public  boolean removeListener(String topic, Observer stakeholder);
     public  void removeListener( Observer stakeholder);
     public BrokerConfiguration getConfiguration();

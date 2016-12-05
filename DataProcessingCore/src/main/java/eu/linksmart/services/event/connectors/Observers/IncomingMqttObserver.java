@@ -8,6 +8,7 @@ import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
+import eu.linksmart.services.utils.mqtt.subscription.MqttMessageObserver;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
@@ -20,7 +21,7 @@ import java.util.*;
 /**
  * Created by José Ángel Carvajal on 01.09.2016 a researcher of Fraunhofer FIT.
  */
-public abstract class IncomingMqttObserver implements Observer {
+public abstract class IncomingMqttObserver implements MqttMessageObserver {
 
     protected transient long debugCount=0;
     protected transient Logger loggerService = Utils.initLoggingConf(this.getClass());
@@ -73,23 +74,23 @@ public abstract class IncomingMqttObserver implements Observer {
         return topics;
     }
     @Override
-    public void update(Observable topic, Object mqttMessage)  {
+    public void update(String topic, MqttMessage mqttMessage)  {
 
         debugCount=(debugCount+1)%Long.MAX_VALUE;
         try {
             if(debugCount%conf.getInt(Const.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH) == 0)
-                loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " + ((MqttMessage) mqttMessage).getTopic());
+                loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
 
         }catch (Exception e){
             loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
             if(debugCount%20== 0)
-                loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " + ((MqttMessage) mqttMessage).getTopic());
+                loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
 
         }
 
-        mangeEvent(((MqttMessage) mqttMessage).getTopic(), ((MqttMessage) mqttMessage).getPayload());
+        mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
 
-        if(VALIDATION_MODE) toValidation(((MqttMessage) mqttMessage).getTopic(), ((MqttMessage) mqttMessage).getPayload());
+        if(VALIDATION_MODE) toValidation(mqttMessage.getTopic(),  mqttMessage.getPayload());
     }
 
     protected abstract void mangeEvent(String topic, byte[] payload) ;
