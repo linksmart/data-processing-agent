@@ -17,6 +17,11 @@ package eu.linksmart.api.event.components;
  *
  *
  */
+
+import eu.linksmart.api.event.exceptions.UntraceableException;
+
+import java.util.Observer;
+
 /**
  * This interface indicates that the implementation of it is a IncomingConnector of the agent.
  * A IncomingConnector is the service that receives the payload from an specific protocol,
@@ -36,4 +41,44 @@ public interface IncomingConnector {
      * @return <code>true</code> if is run and connected, <code>false</code> otherwise.
      * */
     boolean isUp();
+    /**
+     * Creates a subscription to data arriving from the given protocol in the given host to the given topic, the result will be notified to the given observer.
+     *
+     * @param protocol the desired protocol sources of the messages
+     * @param host the desired host sources of the messages
+     * @param topic the desired topic sources of the messages
+     * @param observer the callbacker that will receive the messages when arrived
+     *
+     * @exception UntraceableException if the given observer is already in use in other subscription
+     *
+     * */
+    //void subscribe(String protocol, String host, String topic, Observer observer) throws UntraceableException;
+    /*
+     * Creates a subscription to data arriving from the given protocol in the given host to the given topic, the result will be notified to the given observer.
+     *
+     * @param protocol the desired protocol sources of the messages
+     * @param topic the desired topic sources of the messages
+     * @param observer the callbacker that will receive the messages when arrived
+     *
+     * @exception UntraceableException if the given observer is already in use in other subscription
+     *
+     * */
+   // void subscribe(String protocol, String topic, Observer observer) throws UntraceableException;
+    /*
+     * Creates a subscription to data arriving from the given protocol in the given host to the given topic, the result will be notified to the given observer.
+     *
+     * @param topic the desired topic sources of the messages
+     * @param observer the callbacker that will receive the messages when arrived
+     *
+     * @exception UntraceableException if the given observer is already in use in other subscription
+     * */
+    //void subscribe(String topic, Observer observer) throws UntraceableException;
+    /*
+     * Remove a subscription of a observer
+     * @param observer to remove
+     *
+     * * */
+
+    //boolean unsubscribe(Observer observer)throws UntraceableException;
+
 }

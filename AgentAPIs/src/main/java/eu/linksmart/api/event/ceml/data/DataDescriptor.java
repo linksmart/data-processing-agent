@@ -158,7 +158,17 @@ public interface DataDescriptor extends JsonSerializable {
          * */
         NUMBER,
         /**
-         * If the descriptor is an Date, java native translation is Date
+         * If the descriptor is an BOOLEAN, java native translation is Boolean
+         * @see java.lang.Double
+         * */
+        BOOLEAN,
+        /**
+         * If the descriptor is an OBJECT, java native translation is Object
+         * @see java.lang.Double
+         * */
+        OBJECT,
+        /**
+         * If the descriptor is an DATE, java native translation is Date
          * @see java.util.Date
          * */
         DATE;
@@ -177,6 +187,10 @@ public interface DataDescriptor extends JsonSerializable {
                     return Date.class;
                 case INTEGER:
                     return Integer.class;
+                case BOOLEAN:
+                    return Boolean.class;
+                case OBJECT:
+                    return Object.class;
                 case NUMBER:
                 case DOUBLE:
                 default:

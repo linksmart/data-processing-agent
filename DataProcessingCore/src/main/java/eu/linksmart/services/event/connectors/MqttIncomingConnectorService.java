@@ -22,18 +22,11 @@ import java.util.Observer;
 /**
  * Created by José Ángel Carvajal on 01.09.2016 a researcher of Fraunhofer FIT.
  */
-public class MqttIncomingConnectorService implements IncomingConnector {
+public class MqttIncomingConnectorService extends  IncommingSyncConnector implements IncomingConnector {
 
     static protected MqttIncomingConnectorService me = null;
 
-    /*
-    todo if you read this and still is not being use remove it
-    static public MqttIncomingConnectorService getReference() throws MalformedURLException, MqttException {
-        if(me == null)
-            me= new MqttIncomingConnectorService();
-        return me;
-    }*/
-    static public MqttIncomingConnectorService getReference(String will, String willTopic) throws MalformedURLException, MqttException {
+       static public MqttIncomingConnectorService getReference(String will, String willTopic) throws MalformedURLException, MqttException {
         if(me == null)
             me= new MqttIncomingConnectorService(will, willTopic);
         return me;
