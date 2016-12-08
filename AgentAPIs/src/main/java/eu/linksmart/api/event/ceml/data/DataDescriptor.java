@@ -82,6 +82,12 @@ public interface DataDescriptor extends JsonSerializable {
             case INTEGER:
                 result= new DataDescriptorInstance(name,Integer.class,isTarget);
                 break;
+            case BOOLEAN:
+                result= new DataDescriptorInstance(name,Boolean.class,isTarget);
+                break;
+            case OBJECT:
+                result= new DataDescriptorInstance(name,Object.class,isTarget);
+                break;
             case NUMBER:
             case DOUBLE:
             default:
