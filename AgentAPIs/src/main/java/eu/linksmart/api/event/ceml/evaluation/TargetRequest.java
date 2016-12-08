@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.ceml.evaluation.metrics.MetricDefinition;
 
+import java.util.Map;
+
 /**
  * Created by angel on 4/12/15.
  */
@@ -33,6 +35,8 @@ public class TargetRequest implements MetricDefinition {
     @JsonPropertyDescription("Evaluation methodology to compare with threshold: more, less, more or equal, less or equal, equal")
     @JsonProperty(value = "Method")
     private String method = "more";
+
+    private Map<String,Object> lerner = null;
 
     public String getMethod() {
         return method;

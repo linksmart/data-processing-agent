@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.components.IncomingConnector;
+import eu.linksmart.services.event.ceml.models.NNDeserialier;
+import eu.linksmart.services.event.ceml.models.NNSerialier;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.ceml.data.*;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
@@ -22,6 +24,7 @@ import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
 
 import eu.linksmart.services.utils.function.Utils;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -64,7 +67,10 @@ public class CEMLRest extends Component implements IncomingConnector{
                 .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
                 .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class))
                 .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
-                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
+                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()))
+                .registerModule(new SimpleModule("DNNModel", Version.unknownVersion()).addDeserializer(MultiLayerNetwork.class, new NNDeserialier() ))
+                .registerModule(new SimpleModule("SNNModel", Version.unknownVersion()).addSerializer(MultiLayerNetwork.class, new NNSerialier() ));
+
     }
 
 

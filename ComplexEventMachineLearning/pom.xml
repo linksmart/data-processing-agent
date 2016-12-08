@@ -106,6 +106,16 @@
             <version>${nd4jpi.version}</version>
             <classifier>linux-arm</classifier>
         </dependency>
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-dev</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-dev</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 
 

@@ -8,11 +8,16 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.api.FileCemlAPI;
+import eu.linksmart.services.event.ceml.models.AutoregressiveNeuralNetworkModel;
+import eu.linksmart.services.event.ceml.models.NNSerialier;
+import eu.linksmart.services.event.ceml.models.NNDeserialier;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -38,7 +43,9 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.slf4j.Logger;
+import weka.classifiers.UpdateableClassifier;
 
 /**
  * Created by angel on 13/11/15.
@@ -72,13 +79,21 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
+        Module MLNdeserializermodule = new SimpleModule("DNNModel", Version.unknownVersion()).addDeserializer(MultiLayerNetwork.class, new NNDeserialier() );
+        Module MNLserializermodule = new SimpleModule("SNNModel", Version.unknownVersion()).addSerializer(MultiLayerNetwork.class, new NNSerialier() );
 
         mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer()))
                 .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
                 .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class))
                 .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
-                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
+                //.registerModule(new SimpleModule("AutoregressiveNeuralNetwork", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
+                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()))
+                .registerModule(MLNdeserializermodule)
+                .registerModule(MNLserializermodule);
 
+        ModelDeserializer.setLearnerType(AutoregressiveNeuralNetworkModel.class.getSimpleName(), TypeFactory.defaultInstance().constructCollectionType(List.class,MultiLayerNetwork.class));
+        //ModelDeserializer.setLearnerType("GeneralWekaModel", TypeFactory.defaultInstance().constructType(UpdateableClassifier.class));
+        ModelDeserializer.registermodule(MLNdeserializermodule);
         if(conf.containsKey(Const.CEML_INIT_BOOTSTRAPPING))
             (new FileCemlAPI(conf.getString(Const.CEML_INIT_BOOTSTRAPPING))).loadFiles();
         try {

@@ -1,6 +1,11 @@
 package eu.linksmart.services.event.ceml.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
@@ -21,6 +26,7 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -33,6 +39,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
     static {
         Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
+
     }
 
     private static final String MAX_INPUT_STR = "maxInputValue";
@@ -66,6 +73,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
 
 
+
     /**
      * Returns the network configuration, 2 hidden DenseLayers of size 50.
      */
@@ -89,8 +97,8 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
                 .backprop(true).build();
     }
 
-    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets,Map<String,Object> parameters) {
-        super(targets,parameters,new RegressionEvaluator(targets));
+    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets,Map<String,Object> parameters, Object learner) {
+        super(targets,parameters,new RegressionEvaluator(targets),learner);
 
       //  super(descriptors,AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
 
@@ -158,7 +166,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         Iterator<Double> outputIterator = trainOutputCache.iterator();
 
         int netIndex = 0;
-        for (MultiLayerNetwork nnet : lerner) {
+        for (MultiLayerNetwork nnet : learner) {
 
             List<Double> inpuList = new LinkedList<>();
             inpuList.addAll(recentPointsCache);
@@ -200,8 +208,8 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
 
 
             List<Double> returnList = new LinkedList<>();
-            for (int netindex = 0; netindex < lerner.size(); netindex++) {
-                MultiLayerNetwork nnet = lerner.get(netindex);
+            for (int netindex = 0; netindex < learner.size(); netindex++) {
+                MultiLayerNetwork nnet = learner.get(netindex);
                 // create the input list
                 List<Double> inpuList = new LinkedList<>();
                 inpuList.addAll(tempRecentPointersCache);
@@ -255,24 +263,27 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
             if(parameters.containsKey(MIN_INPUT_STR))
                 minInputValue = (Double) parameters.get(MIN_INPUT_STR);
 
-            lerner = new ArrayList<>(numNnets);
-            for (int i = 0; i < numNnets; i++) {
-                // Switch these two options to do different functions with different
-                // networks
+            if(learner == null) {
+                learner = new ArrayList<>(numNnets);
+                for (int i = 0; i < numNnets; i++) {
+                    // Switch these two options to do different functions with different
+                    // networks
 
-                final MultiLayerConfiguration conf = getSimpleDenseLayerNetworkConfiguration(numNodes);
+                    final MultiLayerConfiguration conf = getSimpleDenseLayerNetworkConfiguration(numNodes);
 
-                // Create the network
-                MultiLayerNetwork nnet = new MultiLayerNetwork(conf);
-                nnet.init();
+                    // Create the network
+                    MultiLayerNetwork nnet = new MultiLayerNetwork(conf);
+                    nnet.init();
 
-                lerner.add(nnet);
+                    learner.add(nnet);
+                }
             }
-
         }catch (Exception e){
             throw new UnknownUntraceableException(e.getMessage(),e);
         }
+
         super.build();
+
         return this;
     }
 
@@ -280,4 +291,35 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
     public void destroy() throws Exception {
         // todo there is something to destroy?
     }
+
+/*    public String toJson(){
+        String retVal = null;
+        List<NNModelSerializer> nnModelSerializers = new ArrayList<>();
+        for (MultiLayerNetwork lernerElmnt: learner) {
+            nnModelSerializers.add(new NNModelSerializer(lernerElmnt));
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            retVal = mapper.writeValueAsString(nnModelSerializers);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
+    public void fromJson(String jsonString){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            List<NNModelSerializer> nnModelSerializers = mapper.readValue(jsonString,new TypeReference<List<NNModelSerializer>>(){});
+            learner.clear();
+            for (NNModelSerializer nnModelSerializer :
+                    nnModelSerializers) {
+                learner.add(nnModelSerializer.toMultiLayerNetwork());
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }*/
 }

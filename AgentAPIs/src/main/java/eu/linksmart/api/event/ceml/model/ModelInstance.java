@@ -21,6 +21,7 @@ import java.util.*;
  */
 
 // TODO TBD
+
 public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
     @JsonIgnore
@@ -41,8 +42,9 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     protected  Map<String,Object> parameters;
     @JsonProperty(value = "Prediction")
     protected Prediction<Output> lastPrediction;
-    @JsonIgnore
-    protected LearningObject lerner;
+
+    @JsonProperty(value = "Learner")
+    protected LearningObject learner;
 
     public String getType() {
         return type;
@@ -53,14 +55,14 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     }
 
 
-    @JsonIgnore
-    public LearningObject getLerner() {
-        return lerner;
+
+    public LearningObject getLearner() {
+        return learner;
     }
 
-    @JsonIgnore
-    public void setLerner(LearningObject lerner) {
-        this.lerner = lerner;
+
+    public void setLearner(LearningObject learner) {
+        this.learner = learner;
     }
 
    // @JsonIgnore
@@ -68,13 +70,13 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     //final protected String modelName;
 
-    public ModelInstance(List<TargetRequest> targets,Map<String,Object> parameters, Evaluator evaluator){
+    public ModelInstance(List<TargetRequest> targets,Map<String,Object> parameters, Evaluator evaluator, Object learner){
         this.targets = targets;
         this.parameters =parameters;
         this.evaluator = evaluator;
         this.evaluator.setParameters(parameters);
         this.lastPrediction = new PredictionInstance<>();
-
+        this.learner = (LearningObject) learner;
     }
 
 
@@ -107,10 +109,10 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     @Override
     public Model<Input, Output, LearningObject> build() throws TraceableException, UntraceableException {
-        if(descriptors== null || !descriptors.isEmpty() ||evaluator== null  || lerner == null)
+        if(descriptors== null || !descriptors.isEmpty() ||evaluator== null  || learner == null)
             throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(),"For the model the descriptors, evaluator and learner are mandatory fields!");
 
-        nativeType = (Class<LearningObject>) lerner.getClass();
+        nativeType = (Class<LearningObject>) learner.getClass();
 
         evaluator.build();
 

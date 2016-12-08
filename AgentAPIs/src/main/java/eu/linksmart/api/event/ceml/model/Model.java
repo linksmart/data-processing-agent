@@ -5,6 +5,7 @@ import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -16,11 +17,11 @@ import java.util.Map;
 public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     final static public Map<String,Class<? extends Model>> loadedModels = new Hashtable<>();
 
-    public static  Model factory(String name,List<TargetRequest> targetRequests, Map<String, Object> parameters) throws Exception{
+    public static  Model factory(String name, List<TargetRequest> targetRequests, Map<String, Object> parameters, Object learner) throws Exception{
         if(!loadedModels.containsKey(name)) {
             Class.forName("eu.linksmart.services.event.ceml.models."+name);
         }
-        return loadedModels.get(name).getConstructor(List.class,Map.class).newInstance(targetRequests,parameters);
+        return loadedModels.get(name).getConstructor(List.class,Map.class,Object.class).newInstance(targetRequests,parameters,learner);
         //throw new Exception("No valid models had been loaded");
    }
 
@@ -47,4 +48,6 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     List<TargetRequest> getTargets();
 
     void setTargets(List<TargetRequest> targets);
+
+
 }
