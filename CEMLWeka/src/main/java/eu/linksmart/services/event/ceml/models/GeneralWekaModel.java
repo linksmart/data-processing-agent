@@ -42,14 +42,14 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
    // public Evaluator evaluation;
     private transient Configurator conf = Configurator.getDefaultConfig();
     static transient private Logger loggerService = Utils.initLoggingConf(GeneralWekaModel.class);
-    public GeneralWekaModel(ArrayList<TargetRequest> targets,Map<String,Object> parameters) {
-        super(targets,parameters,new DoubleTumbleWindowEvaluator(targets));
+    public GeneralWekaModel(ArrayList<TargetRequest> targets,Map<String,Object> parameters,Object learner) {
+        super(targets,parameters,new DoubleTumbleWindowEvaluator(targets),learner);
     }
 
 
     private void initialize() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
 
-        lerner = (UpdateableClassifier) Class.forName(type).newInstance();
+        learner = (UpdateableClassifier) Class.forName(type).newInstance();
 
 
     }
@@ -62,7 +62,7 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
             descriptors =new DataStructure( descriptors);
             descriptors.build();
 
-            ((Classifier)lerner).buildClassifier(((DataStructure) descriptors).getInstances());
+            ((Classifier)learner).buildClassifier(((DataStructure) descriptors).getInstances());
 
             return this;
         }catch (TraceableException|UntraceableException e){
@@ -207,14 +207,14 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
         return instance;
     }
     public String report(){
-        return "\n (R) Model> name:"+name+" Type: "+nativeType.getCanonicalName()+ " learner id: "+System.identityHashCode(lerner);
+        return "\n (R) Model> name:"+name+" Type: "+nativeType.getCanonicalName()+ " learner id: "+System.identityHashCode(learner);
     }
 
     @Override
     public boolean learn(Map input) throws Exception {
-        loggerService.info("Evaluating "+nativeType.getCanonicalName()+ " learner object "+System.identityHashCode(lerner));
+        loggerService.info("Evaluating "+nativeType.getCanonicalName()+ " learner object "+System.identityHashCode(learner));
 
-        return learn(lerner, populateInstance(input,descriptors));
+        return learn(learner, populateInstance(input,descriptors));
 
     }
     static public int predict(Object lerner,Instance inst){
@@ -233,7 +233,7 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
     @Override
     public Prediction<Integer> predict(Map input) throws Exception {
 
-        int i=predict(lerner,populateInstance(input,descriptors));
+        int i=predict(learner,populateInstance(input,descriptors));
 
 
         return new PredictionInstance<>(i, input,this.getClass().getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
