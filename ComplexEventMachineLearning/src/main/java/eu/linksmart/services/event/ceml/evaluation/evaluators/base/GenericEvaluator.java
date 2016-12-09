@@ -1,16 +1,19 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.WindowEvaluator;
+import eu.linksmart.services.event.ceml.evaluation.metrics.Samples;
 import eu.linksmart.services.event.ceml.evaluation.metrics.base.EvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
+import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -22,17 +25,17 @@ import java.util.Map;
  * This class is takes care of evaluating with the help of different EvaluationMetrics.
  */
 public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
+    @JsonIgnore
     protected static Logger loggerService = Utils.initLoggingConf(WindowEvaluator.class);
+    @JsonIgnore
     protected Map<String,EvaluationMetricBase<Double>> evaluationAlgorithms = new HashMap<>();
+    @JsonIgnore
     protected List<TargetRequest> targets;
+    @JsonIgnore
     EvaluationMetricBase<Double> samples;
     public GenericEvaluator( List<TargetRequest> targets) {
         this.targets=targets;
-        try {
-            build();
-        } catch (Exception e) {
-            loggerService.error(e.getMessage(),e);
-        }
+
     }
 
 
@@ -80,7 +83,9 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
 
             samples = evaluationAlgorithms.get(Samples.class.getSimpleName());
             for(TargetRequest target:targets){
-                String algorithm = this.getClass().getCanonicalName()+"$"+target.getName();
+                String algorithm;
+
+                    algorithm = this.getClass().getCanonicalName()+"$"+target.getName();
 
                 evaluationAlgorithms.put(
                         target.getName(),
@@ -126,7 +131,14 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
             }
 
 
-            constructor = clazz.getConstructor(/*because is a child class of this*/this.getClass(),EvaluationMetric.ComparisonMethod.class, target.getClass());
+
+            try {
+                constructor = clazz.getConstructor(/*because is a child class of this*/this.getClass(),EvaluationMetric.ComparisonMethod.class,  target.getClass());
+
+            }catch (NoSuchMethodException e){
+                constructor = clazz.getConstructor(/*because is a child class of this*/this.getClass(),EvaluationMetric.ComparisonMethod.class, /*Try to extract the primitive type*/ (Class)target.getClass().getField("TYPE").get(null));
+
+            }
 
 
             return  constructor.newInstance(this,methodParameter,target);
@@ -135,23 +147,5 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
         }
         return null;
     }
-    public class Samples extends eu.linksmart.services.event.ceml.evaluation.metrics.Samples {
 
-        public Samples(ComparisonMethod method, double target) {
-            super(method, target);
-        }
-
-    }
-    public class SlideAfter extends eu.linksmart.services.event.ceml.evaluation.metrics.Samples {
-
-        public SlideAfter(ComparisonMethod method, double target) {
-            super(method, target);
-        }
-
-
-        @Override
-        public boolean isControlMetric() {
-            return true;
-        }
-    }
 }

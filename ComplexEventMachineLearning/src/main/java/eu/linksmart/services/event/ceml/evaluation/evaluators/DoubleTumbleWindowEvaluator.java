@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
@@ -26,12 +27,16 @@ import java.util.Map;
  */
 public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implements TumbleEvaluator<Integer>  {
 
-
+    @JsonIgnore
     protected static Logger loggerService = Utils.initLoggingConf(DoubleTumbleWindowEvaluator.class);
-
+    @JsonIgnore
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
+    @JsonIgnore
     private int learning = 0, learnt =0;
+    @JsonIgnore
     private ModelEvaluationMetric initialSamples;
+    @JsonIgnore
+    private List<String> classes;
 
     public List<String> getClasses() {
         return classes;
@@ -40,8 +45,6 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     public void setClasses(List<String> classes) {
         this.classes = classes;
     }
-
-    private List<String> classes;
     public DoubleTumbleWindowEvaluator(List<TargetRequest> targets) {
         this.targets =targets;
 
@@ -111,6 +114,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     }
 
 
+    @SuppressWarnings("unchecked")
     //@Override
     public DoubleTumbleWindowEvaluator build() throws UntraceableException, TraceableException {
         boolean isSlideAfter = false;

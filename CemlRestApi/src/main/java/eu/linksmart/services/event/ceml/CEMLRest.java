@@ -49,7 +49,7 @@ public class CEMLRest extends Component implements IncomingConnector{
      private Logger loggerService = Utils.initLoggingConf(CEML.class);
 
     private Map<String, CEMLRequest> requests = new Hashtable<>();
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = CEML.getMapper();
 
 
     public CEMLRest() {

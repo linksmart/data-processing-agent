@@ -32,7 +32,8 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     @JsonPropertyDescription("Algorithm use to build the model")
     @JsonProperty(value = "Type")
     protected String type;
-    @JsonProperty(value = "Evaluator")
+    //@JsonProperty(value = "Evaluator")
+    @JsonIgnore
     protected  Evaluator<Output> evaluator ;
 
     @JsonProperty(value = "Targets")

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.components.Feeder;
@@ -79,6 +80,8 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
         Module MLNdeserializermodule = new SimpleModule("DNNModel", Version.unknownVersion()).addDeserializer(MultiLayerNetwork.class, new NNDeserialier() );
         Module MNLserializermodule = new SimpleModule("SNNModel", Version.unknownVersion()).addSerializer(MultiLayerNetwork.class, new NNSerialier() );
 
