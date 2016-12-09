@@ -59,7 +59,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
             if (descriptor.isTarget())
                 targets.add(descriptor);
             else
-                targets.add(descriptor);
+                input.add(descriptor);
 
 
         }

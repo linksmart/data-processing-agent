@@ -1,6 +1,8 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.base.EvaluatorBase;
 
 import eu.linksmart.services.event.ceml.evaluation.metrics.base.EvaluationMetricBase;
@@ -30,6 +32,14 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
     private int learning = 0, learnt =0;
     private ModelEvaluationMetric initialSamples;
+
+    public List<String> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<String> classes) {
+        this.classes = classes;
+    }
 
     private List<String> classes;
     public DoubleTumbleWindowEvaluator(List<TargetRequest> targets) {
@@ -101,9 +111,8 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     }
 
 
-    @SuppressWarnings("unchecked")
     //@Override
-    public void build(Collection<String> namesClasses) throws Exception {
+    public DoubleTumbleWindowEvaluator build() throws UntraceableException, TraceableException {
         boolean isSlideAfter = false;
         for(int i=0; i <targets.size();i++) {
             if (targets.get(i) != null)
@@ -122,14 +131,18 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
 
 
         if (!isSlideAfter)
-            throw  new Exception("For creating sliding evaluator the SlideAfter must be defined");
+            throw  new UntraceableException("For creating sliding evaluator the SlideAfter must be defined");
 
         if(initialSamples== null)
             initialSamples = new InitialSamples(EvaluationMetric.ComparisonMethod.More,-1);
 
-        windowEvaluators[0] = new WindowEvaluator(namesClasses, targets);
-        windowEvaluators[1] = new WindowEvaluator(namesClasses,targets);
+        windowEvaluators[0] = new WindowEvaluator(classes, targets);
+        windowEvaluators[1] = new WindowEvaluator(classes,targets);
 
+        windowEvaluators[0].build();
+        windowEvaluators[1].build();
+
+        return this;
     }
     @Override
     public void reBuild(Evaluator evaluator) {
@@ -155,11 +168,6 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     }
 
 
-    @Override
-    public JsonSerializable build()  {
-        //TODO auto-generated
-        return null;
-    }
 
     @Override
     public void destroy() throws Exception {
