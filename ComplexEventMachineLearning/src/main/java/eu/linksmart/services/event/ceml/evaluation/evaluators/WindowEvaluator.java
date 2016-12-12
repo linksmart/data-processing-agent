@@ -13,6 +13,8 @@ import eu.linksmart.services.event.ceml.evaluation.metrics.base.ClassEvaluationM
 import eu.linksmart.services.event.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.*;
 
+import javax.management.modelmbean.ModelMBeanConstructorInfo;
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
@@ -143,6 +145,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
         }catch (Exception e){
             throw new UnknownUntraceableException(e.getMessage(),e);
         }
+
 
         super.build();
         
@@ -307,6 +310,12 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
         }
     }
 
+    /**
+     *
+     * Precision is a description of random errors, a measure of statistical variability.
+     * see https://en.wikipedia.org/wiki/Accuracy_and_precision
+     *
+     */
     public class Accuracy extends ModelEvaluationMetricSubBase {
         public Accuracy(ComparisonMethod method, double target) {
             super(method, target);
@@ -321,7 +330,13 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         }
     }
-
+    /**
+     * Alias of Accuracy
+     * */
+    public class ACC extends Accuracy {public ACC(ComparisonMethod method, double target) {super(method, target);}}
+    /*
+     *
+ */
      public class ClassPrecision extends ClassEvaluationMetricSubBase {
 
         public ClassPrecision(ComparisonMethod method, Double[] target) {
@@ -337,6 +352,14 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         }
     }
+
+    /**
+     *Accuracy has two definitions:
+     *  1. more commonly, it is a description of systematic errors, a measure of statistical bias;
+     *  2. alternatively, ISO defines accuracy as describing both types of observational error above (preferring the term trueness for the common definition of accuracy).
+     *  https://en.wikipedia.org/wiki/Accuracy_and_precision
+     *
+     */
     public class Precision extends ModelEvaluationMetricSubBase {
 
         public Precision(ComparisonMethod method, double target) {
@@ -352,6 +375,14 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         }
     }
+    /**
+     * Alias of Precision
+     * */
+    public class PPV extends Precision{public PPV(ComparisonMethod method, double target) {super(method, target);}}
+    /**
+     * Sensitivity (also called the true positive rate, the recall, or probability of detection[1] in some fields) measures the proportion of positives that are correctly identified as such (e.g., the percentage of sick people who are correctly identified as having the condition).
+     * see https://en.wikipedia.org/wiki/Sensitivity_and_specificity
+     */
     public class Sensitivity extends ModelEvaluationMetricSubBase {
 
         public Sensitivity(ComparisonMethod method, double target) {
@@ -367,7 +398,14 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         }
     }
-
+    /**
+     * Alias of Sensitivity
+     * */
+    public class TPR extends Sensitivity {public TPR(ComparisonMethod method, double target) {super(method, target);}}
+    /*
+     *
+     *
+*/
     public class ClassSensitivity extends ClassEvaluationMetricSubBase {
 
         public ClassSensitivity(ComparisonMethod method, Double[] target) {
@@ -383,6 +421,10 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         }
     }
+    /**
+     * Recall in information retrieval is the fraction of the documents that are relevant to the query that are successfully retrieved.
+     * see https://en.wikipedia.org/wiki/Precision_and_recall#Recall
+     */
     public class Recall extends Sensitivity {
 
         public Recall(ComparisonMethod method, double target) {
@@ -390,6 +432,10 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
         }
 
     }
+    /*
+     *
+     *
+*/
     public class ClassRecall extends ClassSensitivity {
 
         public ClassRecall(ComparisonMethod method, Double[] target) {
@@ -397,6 +443,10 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
         }
 
     }
+    /**
+     * Specificity (also called the true negative rate) measures the proportion of negatives that are correctly identified as such (e.g., the percentage of healthy people who are correctly identified as not having the condition).
+     * see https://en.wikipedia.org/wiki/Sensitivity_and_specificity
+     */
     public class Specificity extends ModelEvaluationMetricSubBase {
 
         public Specificity(ComparisonMethod method, double target) {
@@ -413,7 +463,17 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         }
     }
-
+    /**
+     * Alias of Specificity
+     * */
+    public class TNR extends Specificity {public TNR(ComparisonMethod method, double target) {super(method, target);}}
+    /**
+     * The positive and negative predictive values (PPV and NPV respectively) are the proportions of positive and negative results in statistics and diagnostic tests that are true positive and true negative results, respectively.
+     * The PPV and NPV describe the performance of a diagnostic test or other statistical measure
+     *
+     * https://en.wikipedia.org/wiki/Positive_and_negative_predictive_values
+     *
+     */
     public class NegativePredictiveValue extends ModelEvaluationMetricSubBase {
 
         public NegativePredictiveValue(ComparisonMethod method, double target) {
@@ -431,6 +491,17 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         }
     }
+
+    /**
+     * Alias of NegativePredictiveValue
+     * */
+    public class NPV extends NegativePredictiveValue {public NPV(ComparisonMethod method, double target) {super(method, target);}}
+    /**
+     * Recall in information retrieval is the fraction of the documents that are relevant to the query that are successfully retrieved.
+     *
+     * see https://en.wikipedia.org/wiki/Precision_and_recall#Recall
+     *
+     */
     public class FallOut extends ModelEvaluationMetricSubBase {
 
         public FallOut(ComparisonMethod method, double target) {
@@ -445,6 +516,15 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             return 0.0;
         }
     }
+    /**
+     * Alias of FallOut
+     * */
+    public class FPR extends FallOut {public FPR(ComparisonMethod method, double target) {super(method, target);}}
+
+    /**
+     * The false discovery rate (FDR) is one way of conceptualizing the rate of type I errors in null hypothesis testing when conducting multiple comparisons.
+     * see https://en.wikipedia.org/wiki/False_discovery_rate
+     */
     public class FalseDiscoveryRate extends ModelEvaluationMetricSubBase {
 
         public FalseDiscoveryRate(ComparisonMethod method, double target) {
@@ -459,6 +539,14 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             return 0.0;
         }
     }
+    /**
+     * Alias of FalseDiscoveryRate
+     * */
+    public class FDR extends FalseDiscoveryRate {public FDR(ComparisonMethod method, double target) {super(method, target);}}
+    /**
+     * In statistical hypothesis testing, a type I error is the incorrect rejection of a true null hypothesis (a "false positive"), while a type II error is incorrectly retaining a false null hypothesis (a "false negative").[1] More simply stated, a type I error is detecting an effect that is not present, while a type II error is failing to detect an effect that is present.
+     * see https://en.wikipedia.org/wiki/Type_I_and_type_II_errors#False_positive_and_false_negative_rates
+     */
     public class MissRate extends ModelEvaluationMetricSubBase {
 
         public MissRate(ComparisonMethod method, double target) {
@@ -473,6 +561,14 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             return 0.0;
         }
     }
+    /**
+     * Alias of MissRate
+     * */
+    public class FNR extends MissRate {public FNR(ComparisonMethod method, double target) {super(method, target);}}
+    /**
+     * In statistical hypothesis testing, a type I error is the incorrect rejection of a true null hypothesis (a "false positive"), while a type II error is incorrectly retaining a false null hypothesis (a "false negative").[1] More simply stated, a type I error is detecting an effect that is not present, while a type II error is failing to detect an effect that is present.
+     * see https://en.wikipedia.org/wiki/Type_I_and_type_II_errors#False_positive_and_false_negative_rates
+     */
     public class F1Score extends ModelEvaluationMetricSubBase {
 
         public F1Score(ComparisonMethod method, double target) {
@@ -487,7 +583,10 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             return 0.0;
         }
     }
-
+    /**
+     *
+     *
+     */
     public class ClassWeightedF1Score extends ClassEvaluationMetricSubBase {
 
         protected ClassPrecision precision;
@@ -515,10 +614,13 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
 
     }
-    // MatthewsCorrelationCoefficient
-    public class MCC extends ModelEvaluationMetricSubBase {
+    /**
+     *
+     *
+     */
+    public class MatthewsCorrelationCoefficient extends ModelEvaluationMetricSubBase {
 
-        public MCC(ComparisonMethod method, double target) {
+        public MatthewsCorrelationCoefficient(ComparisonMethod method, double target) {
             super(method, target);
         }
 
@@ -531,6 +633,21 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             return 0.0;
         }
     }
+    /**
+     *
+     *
+     */
+    public class MCC extends MatthewsCorrelationCoefficient {
+
+        public MCC(ComparisonMethod method, double target) {
+            super(method, target);
+        }
+    }
+
+    /**
+     *
+     *
+     */
     public class Informedness extends ModelEvaluationMetricSubBase {
 
         public Informedness(ComparisonMethod method, double target) {
@@ -558,6 +675,11 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         }
     }
+
+    /**
+     *
+     *
+     */
     public class Markedness extends ModelEvaluationMetricSubBase {
 
         public Markedness(ComparisonMethod method, double target) {
@@ -704,5 +826,23 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     }
 
 */
+public class Samples extends eu.linksmart.services.event.ceml.evaluation.metrics.Samples {
 
+    public Samples(ComparisonMethod method, double target) {
+        super(method, target);
+    }
+
+}
+    public class SlideAfter extends eu.linksmart.services.event.ceml.evaluation.metrics.Samples {
+
+        public SlideAfter(ComparisonMethod method, double target) {
+            super(method, target);
+        }
+
+
+        @Override
+        public boolean isControlMetric() {
+            return true;
+        }
+    }
 }
