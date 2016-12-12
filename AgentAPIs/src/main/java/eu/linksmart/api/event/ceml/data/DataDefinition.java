@@ -63,7 +63,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
 
 
         }
-        this.inputSize=targets.size();
+        this.inputSize=input.size();
         this.targetSize=targets.size();
 
         totalInputSize = inputSize + targetSize;
@@ -117,7 +117,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
     public int getTotalInputSize() {
         if(lambdaTypes)
             return totalInputSize;
-        return size();
+        return super.size();
     }
     @Override
     public int size(){
@@ -148,18 +148,18 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
 
     @Override
     public JsonSerializable build() throws TraceableException, UntraceableException {
-        if((inputSize==-1)&&(totalInputSize==-1)&&(targetSize==-1)) {
+        /*if((inputSize==-1)&&(totalInputSize==-1)&&(targetSize==-1)) {
 
-            for (DataDescriptor descriptor : this)
-                descriptor.build();
+
 
             this.inputSize=targets.size();
             this.targetSize=targets.size();
 
             totalInputSize = inputSize + targetSize;
-        } else
-            lambdaTypes=true;
-
+        }
+*/
+        for (DataDescriptor descriptor : this)
+            descriptor.build();
 
         return this;
     }
