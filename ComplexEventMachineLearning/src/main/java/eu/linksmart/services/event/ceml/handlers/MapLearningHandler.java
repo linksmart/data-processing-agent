@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.ceml.handlers;
 
+import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -46,17 +47,17 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                 synchronized (originalRequest) {
                     for (DataDescriptor descriptor : descriptors)
                         if (descriptor.isTarget()) {
-                            if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptors.getName()).getClass()))
+                            if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptor.getName()).getClass()))
                                 measuredTargets.add(eventMap.get(descriptor.getName()));
                             else
                                 loggerService.error("Type mismatch between the the expected output and received one");
-                        } else if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptors.getName()).getClass()))
+                        } else if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptor.getName()).getClass()))
                             withoutTarget.put(descriptor.getName(), eventMap.get(descriptor.getName()));
                         else
                             loggerService.error("Type mismatch between the the expected input and received one");
 
 
-                    List prediction = (List) model.predict(withoutTarget);
+                    Prediction prediction = model.predict(withoutTarget);
                     model.learn(eventMap);
 
                     model.getEvaluator().evaluate(prediction, measuredTargets);

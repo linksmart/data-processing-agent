@@ -64,7 +64,8 @@ public class DataDescriptorInstance implements DataDescriptor {
         if(name==null)
             throw new StatementException(this.getClass().getName(), this.getClass().getCanonicalName(),"The name is a mandatory field for the data descriptor!");
 
-        javaType =DescriptorTypes.getNativeType(type);
+        if(javaType==null)
+            javaType =DescriptorTypes.getNativeType(type);
 
         return this;
 
