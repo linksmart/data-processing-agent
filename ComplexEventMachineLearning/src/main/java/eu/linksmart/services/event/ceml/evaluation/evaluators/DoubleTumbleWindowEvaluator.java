@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
@@ -29,13 +30,13 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
 
     @JsonIgnore
     protected static Logger loggerService = Utils.initLoggingConf(DoubleTumbleWindowEvaluator.class);
-    @JsonIgnore
+    @JsonProperty("WindowEvaluators")
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
-    @JsonIgnore
+
     private int learning = 0, learnt =0;
-    @JsonIgnore
+
     private ModelEvaluationMetric initialSamples;
-    @JsonIgnore
+
     private List<String> classes;
 
     public List<String> getClasses() {
@@ -157,6 +158,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
         }
 
     }
+    @JsonIgnore
     @Override
     public Map<String, EvaluationMetric<Number>> getEvaluationAlgorithms() {
         return windowEvaluators[learnt].getEvaluationAlgorithms();

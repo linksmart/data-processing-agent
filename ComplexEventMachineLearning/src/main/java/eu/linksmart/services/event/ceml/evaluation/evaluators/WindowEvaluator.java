@@ -1,5 +1,8 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
@@ -21,18 +24,22 @@ import java.util.*;
  * Created by angel on 1/12/15.
  */
 public class WindowEvaluator extends GenericEvaluator<Integer> implements Evaluator<Integer>{
-
-    private transient long totalFalsePositives = 0;
-    private transient long totalFalseNegatives = 0;
-    private transient long totalTruePositives = 0;
-    private transient long totalTrueNegatives = 0;
+    @JsonProperty
+    private  long totalFalsePositives = 0;
+    @JsonProperty
+    private  long totalFalseNegatives = 0;
+    @JsonProperty
+    private  long totalTruePositives = 0;
+    @JsonProperty
+    private  long totalTrueNegatives = 0;
    // private long samples = 0;
 
-
-    private transient double[][] confusionMatrix ;
-    private transient List<String> classes;
-
-    private transient long[][] sequentialConfusionMatrix;
+    @JsonProperty
+    private  double[][] confusionMatrix ;
+    @JsonProperty
+    private  List<String> classes;
+    @JsonProperty
+    private  long[][] sequentialConfusionMatrix;
 
 
     public WindowEvaluator(Collection<String> namesClasses, List<TargetRequest> targets){
@@ -153,7 +160,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         return this;
     }
-
+    @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
     public abstract class ModelEvaluationMetricSubBase extends ModelEvaluationMetricBase implements ModelEvaluationAlgorithmExtended {
 
         public ModelEvaluationMetricSubBase(EvaluationMetric.ComparisonMethod method, double target){
@@ -631,6 +638,29 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
                 return ( currentValue= ((double) (totalTrueNegatives * totalTruePositives)-(totalFalsePositives * totalFalseNegatives)) / denominator);
 
             return 0.0;
+        }
+
+        @Override
+        public double getNormalizedResult() {
+            double normalizedVal = 0;
+            long normTarget = Math.abs(Math.round(target+1))/2;
+            long normCurrent = Math.abs(Math.round(currentValue+1))/2;
+
+            switch (this.method){
+                case Equal:
+                   normalizedVal = Math.abs(normCurrent-normTarget)==0?1.0:0.0;
+                    break;
+                case Less:
+                case LessEqual:
+                    normalizedVal = (((double)normTarget)/(double)normCurrent);
+                    break;
+                case More:
+                case MoreEqual:
+                    normalizedVal = (((double)normCurrent)/(double)normTarget);
+            }
+            if(normalizedVal>1.0)
+                normalizedVal =  1.0;
+            return normalizedVal;
         }
     }
     /**

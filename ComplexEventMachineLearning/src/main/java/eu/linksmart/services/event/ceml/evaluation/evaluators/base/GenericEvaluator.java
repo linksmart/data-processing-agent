@@ -27,11 +27,11 @@ import java.util.Map;
 public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
     @JsonIgnore
     protected static Logger loggerService = Utils.initLoggingConf(WindowEvaluator.class);
-    @JsonIgnore
+
     protected Map<String,EvaluationMetricBase<Double>> evaluationAlgorithms = new HashMap<>();
-    @JsonIgnore
+
     protected List<TargetRequest> targets;
-    @JsonIgnore
+
     EvaluationMetricBase<Double> samples;
     public GenericEvaluator( List<TargetRequest> targets) {
         this.targets=targets;

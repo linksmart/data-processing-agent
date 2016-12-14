@@ -24,16 +24,17 @@ import java.util.*;
 
 public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
-    @JsonIgnore
+    @JsonProperty("Descriptors")
     protected DataDescriptors descriptors;
-
+    @JsonProperty("Name")
     protected String name;
+    @JsonProperty("NativeType")
     protected Class<LearningObject> nativeType;
     @JsonPropertyDescription("Algorithm use to build the model")
     @JsonProperty(value = "Type")
     protected String type;
     //@JsonProperty(value = "Evaluator")
-    @JsonIgnore
+    @JsonProperty(value = "Evaluator")
     protected  Evaluator<Output> evaluator ;
 
     @JsonProperty(value = "Targets")

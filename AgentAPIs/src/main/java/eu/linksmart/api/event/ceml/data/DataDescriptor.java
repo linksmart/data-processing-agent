@@ -137,6 +137,7 @@ public interface DataDescriptor extends JsonSerializable {
      * set the isTarget property as: isTarget = not isTarget
      * */
     public void toggleTarget();
+    public boolean isAssignable(Class type);
     /**
      *
      * Enumeration of declarative types possible in for a DataDescriptor

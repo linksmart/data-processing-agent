@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.ceml.handlers;
 
+import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -47,20 +48,31 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                 synchronized (originalRequest) {
                     for (DataDescriptor descriptor : descriptors)
                         if (descriptor.isTarget()) {
-                            if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptor.getName()).getClass()))
-                                measuredTargets.add(eventMap.get(descriptor.getName()));
-                            else
+                            if (descriptor.isAssignable(eventMap.get(descriptor.getName()).getClass())) {
+                                if(model.isClassificator())
+                                    if (eventMap.get(descriptor.getName()) instanceof Number)
+                                        measuredTargets.add(eventMap.get(descriptor.getName()));
+                                    else if(descriptor instanceof ClassesDescriptor) {
+                                        ClassesDescriptor aux = (ClassesDescriptor)descriptor;
+                                        measuredTargets.add(aux.getIndexClass(eventMap.get(aux.getName())));
+                                    }
+                                else
+                                    measuredTargets.add(eventMap.get(descriptor.getName()));
+                            }else
                                 loggerService.error("Type mismatch between the the expected output and received one");
-                        } else if (descriptor.getNativeType().isAssignableFrom(eventMap.get(descriptor.getName()).getClass()))
+                        } else if (descriptor.isAssignable(eventMap.get(descriptor.getName()).getClass()))
                             withoutTarget.put(descriptor.getName(), eventMap.get(descriptor.getName()));
                         else
                             loggerService.error("Type mismatch between the the expected input and received one");
 
 
-                    Prediction prediction = model.predict(withoutTarget);
+                    originalRequest.setLastPrediction(model.predict(withoutTarget));
                     model.learn(eventMap);
+                    if(measuredTargets.size()==1)
+                        model.getEvaluator().evaluate(originalRequest.getLastPrediction().getPrediction(), measuredTargets.get(0));
+                    else
+                        model.getEvaluator().evaluate(originalRequest.getLastPrediction().getPrediction(), measuredTargets);
 
-                    model.getEvaluator().evaluate(prediction, measuredTargets);
                 }
                 if( model.getEvaluator().isDeployable())
                     originalRequest.deploy();

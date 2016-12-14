@@ -60,6 +60,11 @@ public class DataDescriptorInstance implements DataDescriptor {
     }
 
     @Override
+    public boolean isAssignable(Class type) {
+        return javaType.isAssignableFrom(type);
+    }
+
+    @Override
     public DataDescriptor build() throws UntraceableException, StatementException {
         if(name==null)
             throw new StatementException(this.getClass().getName(), this.getClass().getCanonicalName(),"The name is a mandatory field for the data descriptor!");

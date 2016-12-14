@@ -10,6 +10,8 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
+import eu.linksmart.services.event.intern.DynamicConst;
+
 import java.util.*;
 import java.io.IOException;
 import java.util.List;
@@ -75,6 +77,7 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
 
     @Override
     public PredictionInstance<Integer> predict(Map input) throws Exception {
+<<<<<<< HEAD
 
         Integer res = (Integer) ((PyroProxy)learner).call("predict", flatten(input));
 
@@ -97,6 +100,16 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
                 measurements.put((String)e.get("n"),(Double) ((Integer)e.get("v")).doubleValue());
         }
         return measurements;
+=======
+        System.out.println(CEML.getMapper().writeValueAsString(input));
+        setLastPrediction(new PredictionInstance<>(1,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values())));
+        return (PredictionInstance<Integer>) lastPrediction;
+    }
+
+    @Override
+    public boolean isClassificator() {
+        return true;
+>>>>>>> 0c1270f7fbe262f2f607e3d31dd60d8238331347
     }
 
     @Override
