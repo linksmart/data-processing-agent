@@ -56,7 +56,7 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
     }
 
     @Override
-    public boolean isClassificator() {
+    public boolean isClassifier() {
         return true;
     }
 
