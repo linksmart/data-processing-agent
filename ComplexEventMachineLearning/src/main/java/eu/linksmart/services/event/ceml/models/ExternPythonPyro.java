@@ -102,7 +102,7 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
     }
 
     @Override
-    public boolean isClassificator() {
+    public boolean isClassifier() {
         return true;
     }
 

@@ -1,23 +1,25 @@
 package eu.linksmart.services.event.ceml.handlers;
 
-import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
-import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
+import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
+ * Created by José Ángel Carvajal on 14.12.2016 a researcher of Fraunhofer FIT.
  */
-public  class MapLearningHandler extends BaseMapEventHandler {
+public class MapRetrainingHandler  extends BaseMapEventHandler {
 
     static protected Configurator conf = Configurator.getDefaultConfig();
     static protected Logger loggerService = Utils.initLoggingConf(MapLearningHandler.class);
@@ -26,7 +28,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     final protected Model model;
     final protected DataDescriptors descriptors;
 
-    public MapLearningHandler(Statement statement) {
+    public MapRetrainingHandler(Statement statement) {
         super(statement);
 
         this.statement = (LearningStatement) statement;
@@ -41,7 +43,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     protected void processMessage(Map eventMap) {
         if(eventMap!=null){
             try {
-                Map  withoutTarget= new HashMap<>();
+                List  withoutTarget= new ArrayList<>();
                 List measuredTargets = new ArrayList<>();
                 synchronized (originalRequest) {
                     for (DataDescriptor descriptor : descriptors)
@@ -54,12 +56,12 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                                         ClassesDescriptor aux = (ClassesDescriptor)descriptor;
                                         measuredTargets.add(aux.getIndexClass(eventMap.get(aux.getName())));
                                     }
-                                else
-                                    measuredTargets.add(eventMap.get(descriptor.getName()));
+                                    else
+                                        measuredTargets.add(eventMap.get(descriptor.getName()));
                             }else
                                 loggerService.error("Type mismatch between the the expected output and received one");
                         } else if (descriptor.isAssignable(eventMap.get(descriptor.getName()).getClass()))
-                            withoutTarget.put(descriptor.getName(), eventMap.get(descriptor.getName()));
+                            withoutTarget.add(eventMap.get(descriptor.getName()));
                         else
                             loggerService.error("Type mismatch between the the expected input and received one");
 
@@ -78,7 +80,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                     originalRequest.undeploy();
 
             } catch (Exception e) {
-               loggerService.error(e.getMessage(),e);
+                loggerService.error(e.getMessage(),e);
             }
             originalRequest.report();
         }
