@@ -281,11 +281,13 @@ public class CEMLManager implements CEMLRequest {
     @Override
     public void destroy() throws Exception{
 
-        rollbackStatements(deployStatements, deployStatements.size());
+        if(deployStatements!=null)
+            rollbackStatements(deployStatements, deployStatements.size());
 
         rollbackStatements(learningStatements,learningStatements.size());
 
-        rollbackStatements(auxiliaryStatements,auxiliaryStatements.size());
+        if(auxiliaryStatements!=null)
+            rollbackStatements(auxiliaryStatements,auxiliaryStatements.size());
 
         dropInCEPEngines();
 
