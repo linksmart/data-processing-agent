@@ -6,19 +6,17 @@ import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
-import eu.linksmart.api.event.exceptions.TraceableException;
-import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
-import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
 import eu.linksmart.services.event.intern.DynamicConst;
-
 import java.util.*;
 import java.io.IOException;
 import java.util.List;
+import eu.linksmart.services.event.intern.Utils;
 import net.razorvine.pyro.*;
+import org.slf4j.Logger;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
 
 /**
  * Created by Farshid Tavakolizadeh on 08.12.2016
@@ -26,9 +24,10 @@ import java.io.InputStreamReader;
  */
 
 
-public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
+public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
 
     private Process proc;
+    static private transient Logger loggerService = Utils.initLoggingConf(ExternPythonPyro.class.getClass());
 
     public ExternPythonPyro(List<TargetRequest> targets,Map<String,Object> parameters, Object learner) {
         super(targets,parameters,new DoubleTumbleWindowEvaluator(targets),learner);
@@ -36,8 +35,7 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
 
     @Override
     public ExternPythonPyro build() throws UntraceableException,TraceableException {
-//        CEML.getMapper().readValues()
-        learner = new PyroProxy();
+
         ((DoubleTumbleWindowEvaluator)evaluator).setClasses( ((ClassesDescriptor)descriptors.getTargetDescriptors().get(0)).getClasses());
 
         try {
@@ -58,11 +56,13 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
 //                throw new UnknownUntraceableException("Agent unavailable.");
 
             // build model
-            ((PyroProxy)learner).call("build", parameters.get("classifier"));
-            ((PyroProxy)learner).call("pre_train", parameters.get("trainingFiles"));
+            learner.call("build", parameters.get("classifier"));
+            learner.call("pre_train", parameters.get("trainingFiles"));
 
+        } catch (PyroException e) {
+            throw new InternalException(this.getName(), "PyroException", e);
         } catch (IOException e) {
-            throw new UnknownUntraceableException(e.getMessage(), e);
+            throw new UnknownException(this.getName(), "IOException", e);
         }
 
         super.build();
@@ -71,21 +71,20 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
 
     @Override
     public boolean learn(Map input) throws Exception {
-        ((PyroProxy)learner).call("learn", flatten(input));
+        learner.call("learn", flatten(input));
         return true;
     }
 
     @Override
     public PredictionInstance<Integer> predict(Map input) throws Exception {
-<<<<<<< HEAD
 
-        Integer res = (Integer) ((PyroProxy)learner).call("predict", flatten(input));
+        Integer res = (Integer) learner.call("predict", flatten(input));
 
         Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
         evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
 
-        return new PredictionInstance<>(res, input, this.getName() + ":" + this.getClass().getSimpleName(), evaluationMetrics);
-//        return new PredictionInstance<>();
+        setLastPrediction(new PredictionInstance<>(res,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values())));
+        return (PredictionInstance<Integer>) lastPrediction;
     }
 
 
@@ -100,22 +99,18 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
                 measurements.put((String)e.get("n"),(Double) ((Integer)e.get("v")).doubleValue());
         }
         return measurements;
-=======
-        System.out.println(CEML.getMapper().writeValueAsString(input));
-        setLastPrediction(new PredictionInstance<>(1,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values())));
-        return (PredictionInstance<Integer>) lastPrediction;
     }
 
     @Override
     public boolean isClassificator() {
         return true;
->>>>>>> 0c1270f7fbe262f2f607e3d31dd60d8238331347
     }
 
     @Override
     public void destroy() throws Exception {
-        ((PyroProxy)learner).close();
-        proc.destroy();
+        learner.close();
+        if(proc!=null)
+            proc.destroy();
         super.destroy();
     }
 }
