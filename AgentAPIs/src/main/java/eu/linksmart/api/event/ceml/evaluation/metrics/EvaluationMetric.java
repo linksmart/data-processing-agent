@@ -2,11 +2,14 @@ package eu.linksmart.api.event.ceml.evaluation.metrics;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import eu.linksmart.api.event.types.JsonSerializable;
 
 /**
  * Created by angel on 4/12/15.
  */
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public interface EvaluationMetric<T>  extends JsonSerializable {
 
     void setComparisonMethod(ComparisonMethod method);

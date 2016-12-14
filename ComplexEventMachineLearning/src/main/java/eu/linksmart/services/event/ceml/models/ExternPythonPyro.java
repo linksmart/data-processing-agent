@@ -51,7 +51,8 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
     @Override
     public PredictionInstance<Integer> predict(Map input) throws Exception {
         System.out.println(CEML.getMapper().writeValueAsString(input));
-        return new PredictionInstance<>(1,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
+        setLastPrediction(new PredictionInstance<>(1,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values())));
+        return (PredictionInstance<Integer>) lastPrediction;
     }
 
     @Override

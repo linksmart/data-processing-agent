@@ -1,5 +1,9 @@
 package eu.linksmart.services.event.ceml.evaluation.metrics.base;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.MetricDefinition;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationAlgorithmExtended;
@@ -14,15 +18,20 @@ import com.rits.cloning.Cloner;
 /**
  * Created by angel on 4/12/15.
  */
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public abstract class EvaluationMetricBase<T extends Object> implements EvaluationMetric<T> {
 
     protected ComparisonMethod method= ComparisonMethod.More;
-    protected static Logger loggerService = Utils.initLoggingConf(EvaluationMetricBase.class);
-
+    @JsonIgnore
+    protected transient static Logger loggerService = Utils.initLoggingConf(EvaluationMetricBase.class);
+    @JsonProperty("Name")
     protected String name;
+    @JsonProperty("Target")
     protected T target ;
+    @JsonProperty("CurrentValue")
     protected T currentValue;
-    protected Cloner cloner = new Cloner();
+    @JsonIgnore
+    protected transient Cloner cloner = new Cloner();
 
     static public EvaluationMetric instanceEvaluationAlgorithm(String canonicalName, String method, Object target)  {
 
@@ -148,6 +157,8 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
     public boolean isControlMetric() {
         return false;
     }
+
+
 
 
 }
