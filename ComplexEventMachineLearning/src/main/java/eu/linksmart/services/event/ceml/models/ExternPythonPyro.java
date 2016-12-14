@@ -11,6 +11,8 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.core.CEML;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
+import eu.linksmart.services.event.intern.DynamicConst;
+
 import java.util.*;
 
 import java.io.IOException;
@@ -49,7 +51,12 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,Object> {
     @Override
     public PredictionInstance<Integer> predict(Map input) throws Exception {
         System.out.println(CEML.getMapper().writeValueAsString(input));
-        return new PredictionInstance<>();
+        return new PredictionInstance<>(1,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
+    }
+
+    @Override
+    public boolean isClassificator() {
+        return true;
     }
 
     @Override

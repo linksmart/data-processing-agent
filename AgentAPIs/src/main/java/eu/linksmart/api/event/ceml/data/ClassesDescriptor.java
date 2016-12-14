@@ -81,6 +81,7 @@ public interface ClassesDescriptor extends DataDescriptor {
      * @return the class as string
      * */
     public <F >String  getClass(F selectionParameter) throws Exception;
+    public <F> Integer getIndexClass(F selectionParameter) throws Exception;
     /**
      * setts the selection class used to select a class to a string.
      * @param function is the selection function

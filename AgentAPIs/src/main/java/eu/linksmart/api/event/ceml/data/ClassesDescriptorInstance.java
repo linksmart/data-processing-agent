@@ -50,6 +50,25 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
         throw new Exception("Selection not possible the selection function wasn't set and the selection parameter cannot be casted to Integer");
 
     }
+    public <F> Integer getIndexClass(F selectionParameter) throws Exception {
+        if(selectionFunction!=null && selectionParameter.getClass().isAssignableFrom(functionInputType)){
+            return (selectionFunction.apply(selectionParameter));
+        }
+
+        if(selectionParameter.getClass().isAssignableFrom(Integer.class))
+            return ((Integer)selectionParameter);
+
+        if(selectionParameter.getClass().isAssignableFrom(String.class)) {
+            for (int i = 0; i < classes.size(); i++)
+                if (classes.get(i).equals(selectionParameter))
+                    return i;
+            return -1;
+        }
+
+
+        throw new Exception("Selection not possible the selection function wasn't set or the selection parameter cannot be casted");
+
+    }
 
     @Override
     public <F > void setSelectionFunction(Function<F, Integer> function, Class<F> type) {
@@ -81,7 +100,11 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
     }
 
 
+    @Override
+    public boolean isAssignable(Class type) {
 
+        return super.isAssignable(type) || String.class.isAssignableFrom(type);
+    }
 
     @Override
     public ClassesDescriptor build() throws StatementException, UntraceableException {

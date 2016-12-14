@@ -189,6 +189,11 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
     }
 
     @Override
+    public boolean isAssignable(Class type) {
+        return getNativeType().isAssignableFrom(type);
+    }
+
+    @Override
     public DescriptorTypes getType() {
         return type;
     }

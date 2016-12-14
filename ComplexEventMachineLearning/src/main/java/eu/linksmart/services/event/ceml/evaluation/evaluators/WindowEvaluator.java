@@ -632,6 +632,29 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
             return 0.0;
         }
+
+        @Override
+        public double getNormalizedResult() {
+            double normalizedVal = 0;
+            long normTarget = Math.abs(Math.round(target+1))/2;
+            long normCurrent = Math.abs(Math.round(currentValue+1))/2;
+
+            switch (this.method){
+                case Equal:
+                   normalizedVal = Math.abs(normCurrent-normTarget)==0?1.0:0.0;
+                    break;
+                case Less:
+                case LessEqual:
+                    normalizedVal = (((double)normTarget)/(double)normCurrent);
+                    break;
+                case More:
+                case MoreEqual:
+                    normalizedVal = (((double)normCurrent)/(double)normTarget);
+            }
+            if(normalizedVal>1.0)
+                normalizedVal =  1.0;
+            return normalizedVal;
+        }
     }
     /**
      *

@@ -49,5 +49,9 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
 
     void setTargets(List<TargetRequest> targets);
 
+    default boolean isClassificator() {return  false;}
+    default boolean isRegressor(){return  false;}
+    default boolean isClusterer(){return  false;}
+
 
 }
