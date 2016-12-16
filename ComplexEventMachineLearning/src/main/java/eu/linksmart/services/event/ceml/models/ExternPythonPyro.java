@@ -44,16 +44,30 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
                 String[] cmd = {"python", "-u", agentScript};
                 proc = Runtime.getRuntime().exec(cmd);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			    BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
                 String agentPyroURI = stdInput.readLine();
+
+                new Thread(() -> {
+                    String s = null;
+                    try {
+                        while ((s = stdInput.readLine()) != null) {
+                            loggerService.info("Py: {}", s);
+                        }
+                        // errors
+                        while ((s = stdError.readLine()) != null) {
+                            loggerService.error("Py: {}", s);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+
                 learner = new PyroProxy(new PyroURI(agentPyroURI));
             } else { // Lookup a running agent
                 NameServerProxy ns = NameServerProxy.locateNS(null);
                 learner = new PyroProxy(ns.lookup("python-learning-agent"));
                 ns.close();
             }
-
-//            if(((PyroProxy)learner).pyroMethods.size() + ((PyroProxy)learner).pyroOneway.size() == 0)
-//                throw new UnknownUntraceableException("Agent unavailable.");
 
             // build model
             learner.call("build", parameters.get("classifier"));
