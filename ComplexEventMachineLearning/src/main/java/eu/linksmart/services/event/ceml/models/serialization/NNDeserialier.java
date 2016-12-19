@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.ceml.models;
+package eu.linksmart.services.event.ceml.models.serialization;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
