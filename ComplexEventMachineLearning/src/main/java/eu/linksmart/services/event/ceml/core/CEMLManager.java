@@ -342,11 +342,11 @@ public class CEMLManager implements CEMLRequest {
                             throw new ErrorResponseException(response.getResponsesTail());
                         }else if (exception instanceof StatementException )
                             throw new StatementException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
-                        else   if ( exception instanceof InternalException )
+                        else if ( exception instanceof InternalException )
                             throw new InternalException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
                         else
                             throw new UnknownException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
-                    else if (exception instanceof UnknownUntraceableException)
+                    else
                         throw new UnknownUntraceableException(message, exception);
                 }else {
                     if (response != null){
