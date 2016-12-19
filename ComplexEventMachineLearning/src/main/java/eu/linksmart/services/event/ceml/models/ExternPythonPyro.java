@@ -4,19 +4,16 @@ package eu.linksmart.services.event.ceml.models;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
-import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
 import eu.linksmart.services.event.intern.DynamicConst;
+
+import java.io.*;
 import java.util.*;
-import java.io.IOException;
 import java.util.List;
-import eu.linksmart.services.event.intern.Utils;
 import net.razorvine.pyro.*;
-import org.slf4j.Logger;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Created by Farshid Tavakolizadeh on 08.12.2016
@@ -24,13 +21,13 @@ import java.io.InputStreamReader;
  */
 
 
-public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
+public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
 
     private Process proc;
-    static private transient Logger loggerService = Utils.initLoggingConf(ExternPythonPyro.class.getClass());
+    private File pyroAdapter;
 
-    public ExternPythonPyro(List<TargetRequest> targets,Map<String,Object> parameters, Object learner) {
-        super(targets,parameters,new DoubleTumbleWindowEvaluator(targets),learner);
+    public ExternPythonPyro(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
+        super(targets, parameters, learner);
     }
 
     @Override
@@ -39,9 +36,13 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
         ((DoubleTumbleWindowEvaluator)evaluator).setClasses( ((ClassesDescriptor)descriptors.getTargetDescriptors().get(0)).getClasses());
 
         try {
-            String agentScript = (String) parameters.get("agentScript");
-            if(agentScript!=null) { // Path to script passed as parameter
-                String[] cmd = {"python", "-u", agentScript};
+            String backendScript = (String) parameters.get("backendScript");
+
+            pyroAdapter = new File(System.getProperty("java.io.tmpdir")+UUID.randomUUID().toString()+".py");
+            FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource("pyroAdapter.py"), pyroAdapter);
+
+            if(backendScript!=null) { // Path to script passed as parameter
+                String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath(), backendScript};
                 proc = Runtime.getRuntime().exec(cmd);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			    BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
@@ -71,7 +72,7 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
 
             // build model
             learner.call("build", parameters.get("classifier"));
-            learner.call("pre_train", parameters.get("trainingFiles"));
+//            learner.call("pre_train", parameters.get("trainingFiles"));
 
         } catch (PyroException e) {
             throw new InternalException(this.getName(), "PyroException", e);
@@ -87,8 +88,8 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
     public void learn(Map input) throws UnknownException {
         try {
             learner.call("learn", flatten(input));
-        } catch (IOException e) {
-            throw new UnknownException(name,this.getClass().getCanonicalName(),e);
+        } catch (PyroException | IOException e) {
+            throw new UnknownException(this.getName(), "PyroException", e);
         }
     }
 
@@ -98,8 +99,8 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
         Integer res = null;
         try {
             res = (Integer) learner.call("predict", flatten(input));
-        } catch (IOException e) {
-            throw new UnknownException(name,this.getClass().getCanonicalName(),e);
+        } catch (PyroException | IOException e) {
+            throw new UnknownException(this.getName(), "PyroException", e);
         }
 
         Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
@@ -123,16 +124,13 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
         return measurements;
     }
 
-    @Override
-    public boolean isClassifier() {
-        return true;
-    }
 
     @Override
     public void destroy() throws Exception {
         learner.close();
         if(proc!=null)
             proc.destroy();
+        pyroAdapter.delete();
         super.destroy();
     }
 }
