@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.model.Model;
@@ -35,7 +36,7 @@ import java.util.*;
  */
 
 // TODO TBD
-public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>,List<Double>,List<MultiLayerNetwork>> {
+public class AutoregressiveNeuralNetworkModel extends RegressorModel<List<Double>,List<Double>,List<MultiLayerNetwork>> {
 
     static {
         Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
@@ -64,7 +65,11 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
     @JsonIgnore
     private int seasonalityPeriod;
 
-   // @Override
+    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets, Map<String, Object> parameters, Evaluator evaluator, Object learner) {
+        super(targets, parameters, evaluator, learner);
+    }
+
+    // @Override
 	/*
 	 * Cache for holding future points. his is not exactly future points. But
 	 * this is the training data for output. Acting` as the future values to be
@@ -97,14 +102,6 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
                 .backprop(true).build();
     }
 
-    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets,Map<String,Object> parameters, Object learner) {
-        super(targets,parameters,new RegressionEvaluator(targets),learner);
-
-      //  super(descriptors,AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
-
-
-
-    }
 
 
 
@@ -230,15 +227,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         return new PredictionInstance<>();
     }
 
-    @Override
-    public void setDescriptors(DataDescriptors descriptors) {
-        this.descriptors = descriptors;
-    }
 
-    @Override
-    public DataDescriptors getDescriptors() {
-        return this.descriptors;
-    }
 
 
     @Override
