@@ -211,10 +211,10 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
     }
 
     @Override
-    public boolean learn(Map input) throws Exception {
+    public void learn(Map input)  {
         loggerService.info("Evaluating "+nativeType.getCanonicalName()+ " learner object "+System.identityHashCode(learner));
 
-        return learn(learner, populateInstance(input,descriptors));
+         learn(learner, populateInstance(input,descriptors));
 
     }
     static public int predict(Object lerner,Instance inst){
@@ -231,7 +231,7 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
         }
     }
     @Override
-    public Prediction<Integer> predict(Map input) throws Exception {
+    public Prediction<Integer> predict(Map input)  {
 
         int i=predict(learner,populateInstance(input,descriptors));
 
