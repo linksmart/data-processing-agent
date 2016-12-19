@@ -36,13 +36,13 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
         ((DoubleTumbleWindowEvaluator)evaluator).setClasses( ((ClassesDescriptor)descriptors.getTargetDescriptors().get(0)).getClasses());
 
         try {
-            String backendScript = (String) parameters.get("backendScript");
+            Object backend = parameters.get("backend");
 
             pyroAdapter = new File(System.getProperty("java.io.tmpdir")+UUID.randomUUID().toString()+".py");
             FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource("pyroAdapter.py"), pyroAdapter);
 
-            if(backendScript!=null) { // Path to script passed as parameter
-                String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath(), backendScript};
+            if(backend!=null) { // Path to script passed as parameter
+                String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath()};
                 proc = Runtime.getRuntime().exec(cmd);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			    BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
@@ -70,9 +70,8 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
                 ns.close();
             }
 
-            // build model
+            learner.call("init", parameters.get("backend"));
             learner.call("build", parameters.get("classifier"));
-//            learner.call("pre_train", parameters.get("trainingFiles"));
 
         } catch (PyroException e) {
             throw new InternalException(this.getName(), "PyroException", e);
@@ -96,7 +95,7 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
     @Override
     public PredictionInstance<Integer> predict(Map input) throws UntraceableException, UnknownException {
 
-        Integer res = null;
+        Integer res;
         try {
             res = (Integer) learner.call("predict", flatten(input));
         } catch (PyroException | IOException e) {

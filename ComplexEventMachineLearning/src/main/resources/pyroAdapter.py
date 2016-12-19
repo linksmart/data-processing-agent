@@ -7,40 +7,32 @@ import sys
 import imp
 import os
 
-backendScript = ""
-
 class PyroAdapter(object):
+    def init(self, backend):
+        print("backend: %s" % backend)
+        # Add directory of backend script to resolve local modules with relative paths
+        backendDir = os.path.dirname(backend["script"])
+        sys.path.append(backendDir)
+
+        module = imp.load_source(backend["class"], backend["script"])
+        self.agent = getattr(module, backend["class"])()
 
     @Pyro4.expose
     def build(self, classifier):
-        print("backendScript: %s" % backendScript)
-        # Add directory of backend script to resolve local modules with relative paths
-        backendDir = os.path.dirname(backendScript)
-        sys.path.append(backendDir)
-
-        backend = imp.load_source("Agent", backendScript)
-        self.agent = backend.Agent()
         self.agent.build(classifier)
 
     @Pyro4.oneway
-    def learn(self, datapoint):
-        self.agent.learn(datapoint)
+    def learn(self, data):
+        self.agent.learn(data)
 
     @Pyro4.expose
-    def predict(self, datapoint):
-        return self.agent.predict(datapoint)
+    def predict(self, data):
+        return self.agent.predict(data)
 
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Missing arguments.")
-        sys.exit(2)
-
-    # Get the path to backend script
-    backendScript = sys.argv[1]
-    # Start Pyro
-    Pyro4.config.SERIALIZER = 'pickle'
-    daemon = Pyro4.Daemon()
-    uri = daemon.register(PyroAdapter)
-    print(uri)
-    daemon.requestLoop()
+# Start Pyro
+Pyro4.config.SERIALIZER = 'pickle'
+daemon = Pyro4.Daemon()
+uri = daemon.register(PyroAdapter)
+print(uri)
+daemon.requestLoop()
