@@ -23,6 +23,7 @@ import java.util.*;
  */
 public  class MapLearningHandler extends BaseMapEventHandler {
 
+    private static final String RETRAIN_EVERY = "RetrainEvery";
     static protected Configurator conf = Configurator.getDefaultConfig();
     static protected Logger loggerService = Utils.initLoggingConf(MapLearningHandler.class);
     final protected LearningStatement statement;
@@ -48,8 +49,8 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         model = originalRequest.getModel();
         descriptors = originalRequest.getDescriptors();
 
-        if(model.getParameters().containsKey("RetrainEvery")) {
-            this.retrainEvery = Integer.valueOf((String) model.getParameters().get("RetrainEvery"));
+        if(model.getParameters().containsKey(RETRAIN_EVERY)) {
+            this.retrainEvery = Integer.valueOf((String) model.getParameters().get(RETRAIN_EVERY));
             targets = new ArrayList<>();
             rawMaps= new ArrayList<>();
             inputs= new ArrayList<>();

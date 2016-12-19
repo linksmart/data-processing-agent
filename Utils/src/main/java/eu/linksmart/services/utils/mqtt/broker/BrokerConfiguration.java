@@ -185,7 +185,7 @@ public class BrokerConfiguration {
     static public MqttClient initClient(BrokerConfiguration brokerConf) throws MqttException {
         MqttClient mqttClient;
         if (brokerConf.filePersistence)
-            mqttClient = new MqttClient(Broker.getBrokerURL(brokerConf.getHostname(),brokerConf.getPort()),brokerConf.getId(),new MqttDefaultFilePersistence());
+            mqttClient = new MqttClient(Broker.getBrokerURL(brokerConf.getHostname(),brokerConf.getPort()),brokerConf.getId(),new MqttDefaultFilePersistence(System.getProperty("java.io.tmpdir")));
         else
             mqttClient = new MqttClient(Broker.getBrokerURL(brokerConf.getHostname(),brokerConf.getPort()),brokerConf.getId(),new MemoryPersistence());
 
