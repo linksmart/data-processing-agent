@@ -177,6 +177,7 @@ public class CEMLManager implements CEMLRequest {
             descriptors.build();
             phasesDone[1] = true;
 
+
             if(phasesDone[1]) {
                 if (auxiliaryStatements != null)
                     for (Statement statement : auxiliaryStatements) {

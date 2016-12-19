@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
         throw new Exception("Selection not possible the selection function wasn't set and the selection parameter cannot be casted to Integer");
 
     }
-    public <F> Integer getIndexClass(F selectionParameter) throws Exception {
+    public <F> Integer getIndexClass(F selectionParameter) throws TraceableException {
         if(selectionFunction!=null && selectionParameter.getClass().isAssignableFrom(functionInputType)){
             return (selectionFunction.apply(selectionParameter));
         }
@@ -66,7 +67,7 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
         }
 
 
-        throw new Exception("Selection not possible the selection function wasn't set or the selection parameter cannot be casted");
+        throw new StatementException(name,ClassesDescriptor.class.getCanonicalName(),"Selection not possible the selection function wasn't set or the selection parameter cannot be casted");
 
     }
 

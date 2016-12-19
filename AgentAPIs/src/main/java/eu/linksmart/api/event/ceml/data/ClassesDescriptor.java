@@ -2,6 +2,9 @@ package eu.linksmart.api.event.ceml.data;
 
 
 
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -81,7 +84,7 @@ public interface ClassesDescriptor extends DataDescriptor {
      * @return the class as string
      * */
     public <F >String  getClass(F selectionParameter) throws Exception;
-    public <F> Integer getIndexClass(F selectionParameter) throws Exception;
+    public <F> Integer getIndexClass(F selectionParameter) throws TraceableException, UntraceableException;
     /**
      * setts the selection class used to select a class to a string.
      * @param function is the selection function

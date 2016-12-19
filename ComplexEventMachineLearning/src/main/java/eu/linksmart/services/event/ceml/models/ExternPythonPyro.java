@@ -84,15 +84,23 @@ public class ExternPythonPyro extends ModelInstance<Map,Integer,PyroProxy> {
     }
 
     @Override
-    public boolean learn(Map input) throws Exception {
-        learner.call("learn", flatten(input));
-        return true;
+    public void learn(Map input) throws UnknownException {
+        try {
+            learner.call("learn", flatten(input));
+        } catch (IOException e) {
+            throw new UnknownException(name,this.getClass().getCanonicalName(),e);
+        }
     }
 
     @Override
-    public PredictionInstance<Integer> predict(Map input) throws Exception {
+    public PredictionInstance<Integer> predict(Map input) throws UntraceableException, UnknownException {
 
-        Integer res = (Integer) learner.call("predict", flatten(input));
+        Integer res = null;
+        try {
+            res = (Integer) learner.call("predict", flatten(input));
+        } catch (IOException e) {
+            throw new UnknownException(name,this.getClass().getCanonicalName(),e);
+        }
 
         Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
         evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());

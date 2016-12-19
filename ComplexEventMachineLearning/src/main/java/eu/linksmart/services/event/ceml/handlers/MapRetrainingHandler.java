@@ -27,6 +27,7 @@ public class MapRetrainingHandler  extends BaseMapEventHandler {
     final protected CEMLRequest originalRequest;
     final protected Model model;
     final protected DataDescriptors descriptors;
+    final protected int retrainEvery;
 
     public MapRetrainingHandler(Statement statement) {
         super(statement);
@@ -35,6 +36,10 @@ public class MapRetrainingHandler  extends BaseMapEventHandler {
         this.originalRequest =((LearningStatement)statement).getRequest();
         model = originalRequest.getModel();
         descriptors = originalRequest.getDescriptors();
+        if(model.getParameters().containsKey("RetrainEvery"))
+            this.retrainEvery = Integer.valueOf((String)model.getParameters().get("RetrainEvery"));
+        else
+            retrainEvery =1;
 
     }
 

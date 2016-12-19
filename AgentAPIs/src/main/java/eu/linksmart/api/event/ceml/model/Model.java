@@ -3,10 +3,13 @@ package eu.linksmart.api.event.ceml.model;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +29,22 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
    }
 
     public  Evaluator<Output> getEvaluator();
-    public boolean learn(Input input) throws Exception;
-    public Prediction<Output> predict(Input input) throws Exception;
+
+    public void learn(Input input) throws TraceableException, UntraceableException;
+    public Prediction<Output> predict(Input input) throws TraceableException, UntraceableException;
+
+
+    default public void batchLearn(List<Input> input) throws TraceableException, UntraceableException{
+        for (Input i : input)
+            learn(i);
+    }
+    default public List<Prediction<Output>> batchPredict(List<Input> input) throws TraceableException, UntraceableException{
+        List<Prediction<Output>> predictions = new ArrayList<>();
+        for (Input i : input)
+            predictions.add(predict(i));
+
+        return predictions;
+        }
     public void setDescriptors(DataDescriptors descriptors);
     public DataDescriptors getDescriptors();
     public Prediction<Output> getLastPrediction();

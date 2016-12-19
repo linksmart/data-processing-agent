@@ -148,12 +148,12 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
     }
 
     @Override
-    public boolean learn(List<Double> input) throws Exception {
+    public void learn(List<Double> input)  {
         List<Double> trainOutputCache ;
         // first fill the future buffer
         if (input.size() < (seasonalityPeriod * (ArSeasonalP+1))) {
             //input size is less than expected
-            return false;
+            return ;
         } else {
             trainOutputCache = input.subList(seasonalityPeriod * ArSeasonalP,seasonalityPeriod * (ArSeasonalP+1));
         }
@@ -186,7 +186,6 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         }
 
 
-        return true;
     }
 
     //This method is just to localize the supperesswarning annotation.
@@ -201,7 +200,7 @@ public class AutoregressiveNeuralNetworkModel extends ModelInstance<List<Double>
         return result;
     }
     @Override
-    public PredictionInstance<List<Double>> predict(List<Double> input) throws Exception {
+    public PredictionInstance<List<Double>> predict(List<Double> input){
         if (input.size()>=descriptors.getInputSize()) {
             List<Double> tempSeasonalCache = input.subList(0, seasonalityPeriod * ArSeasonalP);
             List<Double> tempRecentPointersCache = input.subList(0, ArP);

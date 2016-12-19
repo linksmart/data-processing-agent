@@ -17,8 +17,8 @@ import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.api.FileCemlAPI;
 import eu.linksmart.services.event.ceml.models.AutoregressiveNeuralNetworkModel;
-import eu.linksmart.services.event.ceml.models.NNSerialier;
-import eu.linksmart.services.event.ceml.models.NNDeserialier;
+import eu.linksmart.services.event.ceml.models.serialization.NNSerialier;
+import eu.linksmart.services.event.ceml.models.serialization.NNDeserialier;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -46,7 +46,6 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.slf4j.Logger;
-import weka.classifiers.UpdateableClassifier;
 
 /**
  * Created by angel on 13/11/15.
