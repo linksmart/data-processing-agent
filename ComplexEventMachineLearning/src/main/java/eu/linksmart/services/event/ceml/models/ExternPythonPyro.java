@@ -4,6 +4,7 @@ package eu.linksmart.services.event.ceml.models;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
+import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
@@ -12,6 +13,8 @@ import eu.linksmart.services.event.intern.DynamicConst;
 import java.io.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import net.razorvine.pyro.*;
 import org.apache.commons.io.FileUtils;
 
@@ -25,6 +28,7 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
 
     private Process proc;
     private File pyroAdapter;
+    static private int counter = 0;
 
     public ExternPythonPyro(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
         super(targets, parameters, learner);
@@ -73,10 +77,8 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
             learner.call("init", parameters.get("backend"));
             learner.call("build", parameters.get("classifier"));
 
-        } catch (PyroException e) {
-            throw new InternalException(this.getName(), "PyroException", e);
-        } catch (IOException e) {
-            throw new UnknownException(this.getName(), "IOException", e);
+        } catch (Exception e) {
+            throw new InternalException(this.getName(), "Pyro", e);
         }
 
         super.build();
@@ -87,26 +89,50 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
     public void learn(Map input) throws UnknownException {
         try {
             learner.call("learn", flatten(input));
-        } catch (PyroException | IOException e) {
-            throw new UnknownException(this.getName(), "PyroException", e);
+        } catch (Exception e) {
+            throw new UnknownException(this.getName(), "Pyro", e);
         }
     }
 
     @Override
     public PredictionInstance<Integer> predict(Map input) throws UntraceableException, UnknownException {
-
+        loggerService.info("COUNTER:"+Integer.toString(++counter));
         Integer res;
         try {
             res = (Integer) learner.call("predict", flatten(input));
-        } catch (PyroException | IOException e) {
-            throw new UnknownException(this.getName(), "PyroException", e);
+        } catch (Exception e) {
+            throw new UnknownException(this.getName(), "Pyro", e);
         }
 
         Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
         evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
-
         setLastPrediction(new PredictionInstance<>(res,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values())));
         return (PredictionInstance<Integer>) lastPrediction;
+    }
+
+    @Override
+    public void batchLearn(List<Map> input) throws TraceableException, UntraceableException{
+        List<Map> flattened = input.stream().map(this::flatten).collect(Collectors.toList());
+
+        try {
+            learner.call("learn", flattened);
+        } catch (Exception e) {
+            throw new UnknownException(this.getName(), "Pyro", e);
+        }
+    }
+
+    @Override
+    public List<Prediction<Integer>> batchPredict(List<Map> input) throws TraceableException, UntraceableException{
+        List<Map> flattened = input.stream().map(this::flatten).collect(Collectors.toList());
+
+        List<Prediction<Integer>> predictions = new ArrayList<>();
+        try {
+            predictions = (List<Prediction<Integer>>) learner.call("predict", flattened);
+        } catch (Exception e) {
+            throw new UnknownException(this.getName(), "Pyro", e);
+        }
+
+        return predictions;
     }
 
 
