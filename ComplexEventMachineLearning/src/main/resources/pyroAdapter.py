@@ -8,6 +8,7 @@ import imp
 import os
 
 class PyroAdapter(object):
+    @Pyro4.expose
     def init(self, backend):
         print("backend: %s" % backend)
         # Add directory of backend script to resolve local modules with relative paths
@@ -15,19 +16,23 @@ class PyroAdapter(object):
         sys.path.append(backendDir)
 
         module = imp.load_source(backend["class"], backend["script"])
-        self.agent = getattr(module, backend["class"])()
+        self.backend = getattr(module, backend["class"])()
 
     @Pyro4.expose
     def build(self, classifier):
-        self.agent.build(classifier)
+        return self.backend.build(classifier)
 
     @Pyro4.oneway
     def learn(self, data):
-        self.agent.learn(data)
+        self.backend.learn(data)
 
     @Pyro4.expose
     def predict(self, data):
-        return self.agent.predict(data)
+        return self.backend.predict(data)
+
+    @Pyro4.expose
+    def destroy(self):
+        self.backend.destroy()
 
 
 # Start Pyro

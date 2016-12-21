@@ -152,6 +152,7 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
 
     @Override
     public void destroy() throws Exception {
+        learner.call("destroy");
         learner.close();
         if(proc!=null)
             proc.destroy();
