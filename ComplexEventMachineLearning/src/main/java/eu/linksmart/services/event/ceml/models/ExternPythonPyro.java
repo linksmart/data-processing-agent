@@ -24,7 +24,7 @@ import org.apache.commons.io.FileUtils;
  */
 
 
-public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
+public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> {
 
     private Process proc;
     private File pyroAdapter;
@@ -86,20 +86,20 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
     }
 
     @Override
-    public void learn(Map input) throws UnknownException {
+    public void learn(Object input) throws UnknownException {
         try {
-            learner.call("learn", flatten(input));
+            learner.call("learn", input);
         } catch (Exception e) {
             throw new UnknownException(this.getName(), "Pyro", e);
         }
     }
 
     @Override
-    public PredictionInstance<Integer> predict(Map input) throws UntraceableException, UnknownException {
+    public PredictionInstance<Integer> predict(Object input) throws UntraceableException, UnknownException {
         loggerService.info("COUNTER:"+Integer.toString(++counter));
         Integer res;
         try {
-            res = (Integer) learner.call("predict", flatten(input));
+            res = (Integer) learner.call("predict", input);
         } catch (Exception e) {
             throw new UnknownException(this.getName(), "Pyro", e);
         }
@@ -111,44 +111,24 @@ public class ExternPythonPyro extends ClassifierModel<Map,Integer,PyroProxy> {
     }
 
     @Override
-    public void batchLearn(List<Map> input) throws TraceableException, UntraceableException{
-        List<Map> flattened = input.stream().map(this::flatten).collect(Collectors.toList());
-
+    public void batchLearn(List<Object> input) throws TraceableException, UntraceableException{
         try {
-            learner.call("learn", flattened);
+            learner.call("learn", input);
         } catch (Exception e) {
             throw new UnknownException(this.getName(), "Pyro", e);
         }
     }
 
     @Override
-    public List<Prediction<Integer>> batchPredict(List<Map> input) throws TraceableException, UntraceableException{
-        List<Map> flattened = input.stream().map(this::flatten).collect(Collectors.toList());
-
+    public List<Prediction<Integer>> batchPredict(List<Object> input) throws TraceableException, UntraceableException{
         List<Prediction<Integer>> predictions = new ArrayList<>();
         try {
-            predictions = (List<Prediction<Integer>>) learner.call("predict", flattened);
+            predictions = (List<Prediction<Integer>>) learner.call("predict", input);
         } catch (Exception e) {
             throw new UnknownException(this.getName(), "Pyro", e);
         }
-
         return predictions;
     }
-
-
-    private Map flatten(Map input){
-        ArrayDeque entries = (ArrayDeque<HashMap>) ((HashMap)input.get("measurements")).get("e");
-        HashMap<String, Double> measurements = new HashMap<>();
-        for(Iterator itr = entries.iterator();itr.hasNext();){
-            HashMap e = (HashMap) itr.next();
-            if(e.get("v") instanceof Double)
-                measurements.put((String)e.get("n"),(Double) e.get("v"));
-            else
-                measurements.put((String)e.get("n"),(Double) ((Integer)e.get("v")).doubleValue());
-        }
-        return measurements;
-    }
-
 
     @Override
     public void destroy() throws Exception {
