@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
 public class CEMLManager implements CEMLRequest {
+    private static final String ALWAYS_DEPLOY = "AlwaysDeploy";
     @JsonProperty(value = "Name")
     protected String name;
     @JsonProperty(value = "Descriptors")
@@ -59,6 +60,7 @@ public class CEMLManager implements CEMLRequest {
     private transient Logger loggerService = Utils.initLoggingConf(CEMLManager.class);
     @JsonIgnore
     private transient boolean built =false;
+    private boolean alwaysDeploy = false;
 
     @Override
     public Map<String, Object> getSettings() {
@@ -130,7 +132,7 @@ public class CEMLManager implements CEMLRequest {
 
     @Override
     public void undeploy() {
-        if(deployed) {
+        if(deployed&&!alwaysDeploy) {
             StatementFeeder.pauseStatements(deployStatements);
             deployed =false;
             loggerService.info("Request "+name+" had been removed from active deployment");
@@ -256,7 +258,7 @@ public class CEMLManager implements CEMLRequest {
                     responses.add(response);
                     if (!(phasesDone[9] = response.getOverallStatus() < 300))
                         break;
-                    if(!(settings.containsKey("AlwaysDeploy") && (boolean)settings.get("AlwaysDeploy")))
+                    if(!(alwaysDeploy=settings.containsKey(ALWAYS_DEPLOY) && (boolean)settings.get(ALWAYS_DEPLOY)))
                         StatementFeeder.pauseStatement(statement);
                     statementsCounter[5]++;
                 }
