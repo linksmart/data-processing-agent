@@ -164,7 +164,23 @@ import java.util.*;
     public String getName() {
         return this.getClass().getSimpleName();
     }
+    private long lastValue = 0, nMessages = 0, n=0;
+    private synchronized void logMessagePerSecond(){
+        nMessages++;
+        if(lastValue ==0)
+            lastValue = System.currentTimeMillis();
+        double aux =(  System.currentTimeMillis() - lastValue)/1000;
+        if( aux>=1.0) {
+            n++;
+            loggerService.info("Event send: "+nMessages +" msg,  " + nMessages/n*aux+" msg/s");
+            loggerService.info("Event evaluated: "+nMessages +" msg,  " + + epService.getEPRuntime().getNumEventsEvaluated()/n+" msg/s");
 
+            //nMessages =0;
+            lastValue = System.currentTimeMillis();
+        }
+
+
+    }
     @Override
     public boolean addEvent( EventEnvelope event,Class type) {
 
@@ -173,6 +189,7 @@ import java.util.*;
             try {
                 synchronized (ref) {
                     epService.getEPRuntime().getEventSender(fullTypeNameToAlias.get(type.getCanonicalName())).sendEvent(event);
+                    logMessagePerSecond();
                 }
                 if(SIMULATION_EXTERNAL_CLOCK)
                     setEngineTimeTo(event.getDate());
