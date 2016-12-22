@@ -33,11 +33,13 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     public void learn(Input input) throws TraceableException, UntraceableException;
     public Prediction<Output> predict(Input input) throws TraceableException, UntraceableException;
 
+    default public void train(Input input) throws TraceableException, UntraceableException{predict(input);}
 
     default public void batchLearn(List<Input> input) throws TraceableException, UntraceableException{
         for (Input i : input)
             learn(i);
     }
+    default public void batchTrain(List<Input> input) throws TraceableException, UntraceableException{batchLearn(input);}
     default public List<Prediction<Output>> batchPredict(List<Input> input) throws TraceableException, UntraceableException{
         List<Prediction<Output>> predictions = new ArrayList<>();
         for (Input i : input)
