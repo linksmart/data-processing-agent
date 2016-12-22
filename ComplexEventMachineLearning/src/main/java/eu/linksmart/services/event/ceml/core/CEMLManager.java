@@ -256,8 +256,8 @@ public class CEMLManager implements CEMLRequest {
                     responses.add(response);
                     if (!(phasesDone[9] = response.getOverallStatus() < 300))
                         break;
-
-                    StatementFeeder.pauseStatement(statement);
+                    if(!(settings.containsKey("AlwaysDeploy") && (boolean)settings.get("AlwaysDeploy")))
+                        StatementFeeder.pauseStatement(statement);
                     statementsCounter[5]++;
                 }
 
