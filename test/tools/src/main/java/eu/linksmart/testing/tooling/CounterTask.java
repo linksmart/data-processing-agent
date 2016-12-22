@@ -17,19 +17,24 @@ public class CounterTask extends TimerTask {
 
     volatile protected long i = 0,n =1, total;
     protected Logger loggerService = null;
-    volatile protected Map<String, Integer> counters = new ConcurrentHashMap<>();
+    volatile protected Map<String, Long> counters = new ConcurrentHashMap<>();
+    final private boolean topicCounter;
 
     public CounterTask() {
+        topicCounter = false;
     }
 
-    public CounterTask(Logger logger) {
+    public CounterTask(Logger logger, boolean topicCounter) {
         loggerService = logger;
+        this.topicCounter =topicCounter;
     }
 
     public  void newEventInTopic(String topic) {
-        if (!counters.containsKey(topic))
-            counters.put(topic, 0);
-        counters.put(topic, counters.get(topic) + 1);
+        if(topicCounter) {
+            if (!counters.containsKey(topic))
+                counters.put(topic, 0L);
+            counters.put(topic, counters.get(topic) + 1);
+        }
         i++;
     }
 
@@ -62,7 +67,8 @@ public class CounterTask extends TimerTask {
                 ", \"messages\": " + String.valueOf(messages) +
                 ", \"avg\": " + String.valueOf(avg) +
                 ", \"time\":\"" + Instant.now().toString() +"\""+
-                ", \"counters\":{ " + counterStr + " } }";
+                ((topicCounter)?", \"counters\":{ " + counterStr + " } " :"")+
+                "}";
         if (loggerService != null)
             loggerService.info(message);
         else
