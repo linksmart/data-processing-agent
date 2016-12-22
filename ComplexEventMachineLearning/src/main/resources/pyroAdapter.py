@@ -15,24 +15,36 @@ class PyroAdapter(object):
         backendDir = os.path.dirname(backend["script"])
         sys.path.append(backendDir)
 
-        module = imp.load_source(backend["class"], backend["script"])
-        self.backend = getattr(module, backend["class"])()
+        module = imp.load_source(backend["name"], backend["script"])
+        self.backend = getattr(module, backend["name"])()
 
     @Pyro4.expose
     def build(self, classifier):
         return self.backend.build(classifier)
 
     @Pyro4.oneway
-    def learn(self, data):
-        self.backend.learn(data)
+    def learn(self, datapoint):
+        self.backend.learn(datapoint)
 
     @Pyro4.expose
-    def predict(self, data):
-        return self.backend.predict(data)
+    def predict(self, datapoint):
+        return self.backend.predict(datapoint)
+
+    @Pyro4.oneway
+    def batchLearn(self, datapoints):
+        self.backend.batchLearn(datapoints)
+
+    @Pyro4.expose
+    def batchPredict(self, datapoints):
+        return self.backend.batchPredict(datapoints)
 
     @Pyro4.expose
     def destroy(self):
         self.backend.destroy()
+
+    # def export(self):
+    #
+    # def import(self, model):
 
 
 # Start Pyro

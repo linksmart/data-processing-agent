@@ -3,7 +3,6 @@ package eu.linksmart.services.event.ceml.models;
 
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
-import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.*;
@@ -14,6 +13,7 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import net.razorvine.pyro.*;
 import org.apache.commons.io.FileUtils;
@@ -35,7 +35,7 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     }
 
     @Override
-    public ExternPythonPyro build() throws UntraceableException,TraceableException {
+    public ExternPythonPyro build() throws TraceableException, UntraceableException {
 
         ((DoubleTumbleWindowEvaluator)evaluator).setClasses( ((ClassesDescriptor)descriptors.getTargetDescriptors().get(0)).getClasses());
 
@@ -56,11 +56,11 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
                     String s = null;
                     try {
                         while ((s = stdInput.readLine()) != null) {
-                            loggerService.info("Py: {}", s);
+                            loggerService.info("Proc: {}", s);
                         }
                         // errors
                         while ((s = stdError.readLine()) != null) {
-                            loggerService.error("Py: {}", s);
+                            loggerService.error("Proc: {}", s);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -86,46 +86,46 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     }
 
     @Override
-    public void learn(Object input) throws UnknownException {
+    public void learn(Object input) throws TraceableException, UntraceableException {
         try {
             learner.call("learn", input);
         } catch (Exception e) {
-            throw new UnknownException(this.getName(), "Pyro", e);
+            throw new InternalException(this.getName(), "Pyro", e);
         }
     }
 
     @Override
-    public Prediction<Integer> predict(Object input) throws UntraceableException, UnknownException {
-        loggerService.info("COUNTER:"+Integer.toString(++counter));
-        Integer res;
+    public Prediction<Integer> predict(Object input) throws TraceableException, UntraceableException {
+        loggerService.info("Total Events: "+Integer.toString(++counter));
         try {
-            res = (Integer) learner.call("predict", input);
+            return toPrediction(input, (Integer) learner.call("predict", input));
         } catch (Exception e) {
-            throw new UnknownException(this.getName(), "Pyro", e);
+            throw new InternalException(this.getName(), "Pyro", e);
         }
-
-
-        return  new PredictionInstance<>(res,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
     }
 
     @Override
     public void batchLearn(List<Object> input) throws TraceableException, UntraceableException{
         try {
-            learner.call("learn", input);
+            learner.call("batchLearn", input);
         } catch (Exception e) {
-            throw new UnknownException(this.getName(), "Pyro", e);
+            throw new InternalException(this.getName(), "Pyro", e);
         }
     }
 
     @Override
     public List<Prediction<Integer>> batchPredict(List<Object> input) throws TraceableException, UntraceableException{
-        List<Prediction<Integer>> predictions = new ArrayList<>();
+        counter += (int) parameters.get("RetrainEvery");
+        loggerService.info("Total Events: "+Integer.toString(counter));
         try {
-            predictions = (List<Prediction<Integer>>) learner.call("predict", input);
+            List<Integer> res = (List<Integer>) learner.call("batchPredict", input);
+            if(input.size() != res.size())
+                throw new InternalException(this.getName(), "Pyro", "Batch predictions are not the same size as inputs.");
+
+            return IntStream.range(0, input.size()).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
         } catch (Exception e) {
-            throw new UnknownException(this.getName(), "Pyro", e);
+            throw new InternalException(this.getName(), "Pyro", e);
         }
-        return predictions;
     }
 
     @Override
@@ -136,5 +136,10 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
             proc.destroy();
         pyroAdapter.delete();
         super.destroy();
+    }
+
+    // Convert integer prediction to Prediction<>
+    private Prediction<Integer> toPrediction(Object input, Integer response) {
+        return new PredictionInstance<>(response,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
     }
 }
