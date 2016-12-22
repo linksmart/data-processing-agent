@@ -95,7 +95,7 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     }
 
     @Override
-    public PredictionInstance<Integer> predict(Object input) throws UntraceableException, UnknownException {
+    public Prediction<Integer> predict(Object input) throws UntraceableException, UnknownException {
         loggerService.info("COUNTER:"+Integer.toString(++counter));
         Integer res;
         try {
@@ -104,10 +104,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
             throw new UnknownException(this.getName(), "Pyro", e);
         }
 
-        Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
-        evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
-        setLastPrediction(new PredictionInstance<>(res,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values())));
-        return (PredictionInstance<Integer>) lastPrediction;
+
+        return  new PredictionInstance<>(res,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
     }
 
     @Override
