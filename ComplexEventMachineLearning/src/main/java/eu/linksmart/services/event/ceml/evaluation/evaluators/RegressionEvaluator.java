@@ -81,7 +81,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
         public RMSE(ComparisonMethod method, Double target) {
-            super(method, target);
+            super(ComparisonMethod.Less, target);
             currentValue = 100.0;
         }
 
@@ -114,7 +114,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
         public MAE(ComparisonMethod method, Double target) {
-            super(method, target);
+            super(ComparisonMethod.Less, target);
             currentValue = 100.0;
         }
 
@@ -158,7 +158,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         int freeParamCount =((prev+prevSeasonal*24)*numHidden+ numHidden* HOURS_A_DAY)*DAYS_A_WEEK;
 
         public AICc(ComparisonMethod method, Double target) {
-            super(method, target);
+            super(ComparisonMethod.Less, target);
             avgResidualSquare = 0;
         }
 

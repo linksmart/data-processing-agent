@@ -13,9 +13,9 @@ public class Consumer implements MqttCallback{
 
     private final MessageValidator validator;
     private final ObjectMapper mapper;
-    private final MqttClient client;
+    private final MqttAsyncClient client;
     MqttConnectOptions options;
-    public Consumer(MqttClient client, int lotSize) {
+    public Consumer(MqttAsyncClient client, int lotSize) {
         this.client =client;
         validator = new MessageValidator(this.getClass(),"0", lotSize);
         mapper = new ObjectMapper();
@@ -40,7 +40,7 @@ public class Consumer implements MqttCallback{
                     System.err.println(" re-connection fails!");
                     Thread.sleep(100);
                 }else {
-                    client.subscribe("/#", 2);
+                    client.subscribe( "/federation1/#", 2);
                 }
             }catch (Exception e){
                 e.printStackTrace();

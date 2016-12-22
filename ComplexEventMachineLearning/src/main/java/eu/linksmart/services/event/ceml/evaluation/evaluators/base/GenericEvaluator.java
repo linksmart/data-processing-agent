@@ -115,7 +115,7 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
             Constructor<EvaluationMetric<T>> constructor = null;
 
 
-            EvaluationMetric.ComparisonMethod methodParameter = EvaluationMetric.ComparisonMethod.More;
+            EvaluationMetric.ComparisonMethod methodParameter = null;
             if("equal".equalsIgnoreCase(method.trim())){
                 methodParameter = EvaluationMetric.ComparisonMethod.Equal;
 

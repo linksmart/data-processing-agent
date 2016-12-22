@@ -7,6 +7,7 @@ import eu.linksmart.testing.tooling.Consumer;
 import eu.linksmart.testing.tooling.Producer;
 import eu.linksmart.testing.tooling.Publisher;
 import org.apache.commons.cli.*;
+import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -217,20 +218,32 @@ public class Application {
 
 
 
-        MqttClient client = null;
+        MqttAsyncClient client = null;
         if(validation) {
             try {
-                client = new MqttClient("tcp://"+broker+":1883", UUID.randomUUID().toString(),new MemoryPersistence());
+                client = new MqttAsyncClient("tcp://"+broker+":1883", "Consumer",new MemoryPersistence());
                 client.setCallback(new Consumer(client, lot));
                 MqttConnectOptions options = new MqttConnectOptions();
                 options.setCleanSession(false);
                 options.setMaxInflight(1000);
-                options.setAutomaticReconnect(true);
+                options.setAutomaticReconnect(false);
+                options.setMqttVersion(4);
                 client.connect(options);
 
                 while (!client.isConnected())
                     Thread.sleep(100);
-                client.subscribe("/#", 2);
+                String[] topics ={
+                        "/federation1/amiat/v2/observation/1/1",
+                        "/federation1/amiat/v2/observation/2/2",
+                        "/federation1/amiat/v2/observation/3/3",
+                        "/federation1/amiat/v2/observation/4/4",
+                        "/federation1/amiat/v2/observation/5/5",
+                        "/federation1/amiat/v2/observation/6/6",
+                        "/federation1/amiat/v2/observation/7/7",
+                        "/federation1/amiat/v2/observation/8/8",
+                        "/federation1/amiat/v2/observation/9/9"
+                };
+                client.subscribe( "/federation1/#", 2);
                 Thread.sleep(1000);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -245,7 +258,7 @@ public class Application {
             if(singlePublisher)
                 threads.add(new Thread(new Producer(i + sid, topic, broker, max, payload, lot, shareIndex, qos, sleeping,retain, publisher)));
             else if(paho)
-                threads.add(new Thread(new Producer(i + sid, topic, broker, max, payload, lot, shareIndex, qos, sleeping,retain, new PahoPublisher(broker,false))));
+                threads.add(new Thread(new Producer(i + sid, topic, broker, max, payload, lot, shareIndex, qos, sleeping,retain, new PahoPublisher(broker,false,i+sid))));
             else
                 threads.add(new Thread(new Producer(i + sid, topic, broker, max, payload, lot, shareIndex, qos, sleeping,retain, new StaticBrokerPublisher(false))));
 
@@ -268,9 +281,17 @@ public class Application {
         if(client!=null)
             try {
                 client.disconnect();
+                Thread.sleep(100);
                 client.close();
+
             } catch (MqttException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                try {
+                    client.close();
+                } catch (MqttException e1) {
+                    e1.printStackTrace();
+                }
             }
 
     }

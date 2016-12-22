@@ -73,7 +73,8 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
     public EvaluationMetricBase(ComparisonMethod method, T target){
 
         name = this.getClass().getSimpleName();
-        this.method = method;
+        if(method!=null)
+            this.method = method;
         this.target=cloner.deepClone(target);
 
     }

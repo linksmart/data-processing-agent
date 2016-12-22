@@ -34,7 +34,7 @@ public class TargetRequest implements MetricDefinition {
     private String name = "";
     @JsonPropertyDescription("Evaluation methodology to compare with threshold: more, less, more or equal, less or equal, equal")
     @JsonProperty(value = "Method")
-    private String method = "more";
+    private String method = "default";
 
     private Map<String,Object> lerner = null;
 

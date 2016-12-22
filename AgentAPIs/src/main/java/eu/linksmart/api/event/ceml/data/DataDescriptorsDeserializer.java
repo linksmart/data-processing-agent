@@ -42,8 +42,8 @@ public class DataDescriptorsDeserializer extends JsonDeserializer<DataDescriptor
 
             if(node.hasNonNull("Type"))
                 type= DataDescriptor.DescriptorTypes.valueOf(node.get("Type").textValue().toUpperCase());
-            else
-                throw new IOException("Type in DataDescriptors is a mandatory property!");
+           // else
+           //     throw new IOException("Type in DataDescriptors is a mandatory property!");
 
             return DataDescriptors.factory(name,input,target,type);
 
