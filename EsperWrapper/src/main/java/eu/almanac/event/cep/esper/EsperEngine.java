@@ -172,8 +172,8 @@ import java.util.*;
         double aux =(  System.currentTimeMillis() - lastValue)/1000;
         if( aux>=1.0) {
             n++;
-            loggerService.info("Event send: "+nMessages +" msg,  " + nMessages/n*aux+" msg/s");
-            loggerService.info("Event evaluated: "+nMessages +" msg,  " + + epService.getEPRuntime().getNumEventsEvaluated()/n+" msg/s");
+            loggerService.debug("Event send: " + nMessages + " msg,  " + nMessages / n * aux + " msg/s");
+            loggerService.debug("Event evaluated: "+epService.getEPRuntime().getNumEventsEvaluated() +" msg,  " + + epService.getEPRuntime().getNumEventsEvaluated()/n+" msg/s");
 
             //nMessages =0;
             lastValue = System.currentTimeMillis();
