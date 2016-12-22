@@ -50,7 +50,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         descriptors = originalRequest.getDescriptors();
 
         if(model.getParameters().containsKey(RETRAIN_EVERY)) {
-            this.retrainEvery = Integer.valueOf((String) model.getParameters().get(RETRAIN_EVERY));
+            this.retrainEvery = (int) model.getParameters().get(RETRAIN_EVERY);
             targets = new ArrayList<>();
             rawMaps= new ArrayList<>();
             inputs= new ArrayList<>();
