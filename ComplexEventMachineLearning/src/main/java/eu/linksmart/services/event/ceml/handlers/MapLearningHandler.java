@@ -139,7 +139,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     private void retrain() throws TraceableException, UntraceableException {
         List<Prediction> predictions =  model.batchPredict(inputs);
 
-        model.learn(rawMaps);
+        model.batchLearn(rawMaps);
 
         for(int i=0; i< predictions.size();i++)
             evaluate(predictions.get(i),targets.get(i));
