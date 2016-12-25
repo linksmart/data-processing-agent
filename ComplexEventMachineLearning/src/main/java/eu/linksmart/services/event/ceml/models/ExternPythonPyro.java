@@ -11,7 +11,6 @@ import eu.linksmart.services.event.intern.DynamicConst;
 
 import java.io.*;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,7 +27,7 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
 
     private Process proc;
     private File pyroAdapter;
-    static private int counter = 0;
+    private int counter = 0;
 
     public ExternPythonPyro(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
         super(targets, parameters, learner);
@@ -86,40 +85,44 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     }
 
     @Override
-    public void learn(Object input) throws TraceableException, UntraceableException {
+    public synchronized void learn(Object input) throws TraceableException, UntraceableException {
         try {
-            learner.call("learn", input);
+            learner.call_oneway("learn", input);
         } catch (Exception e) {
             throw new InternalException(this.getName(), "Pyro", e);
         }
     }
 
     @Override
-    public Prediction<Integer> predict(Object input) throws TraceableException, UntraceableException {
+    public synchronized Prediction<Integer> predict(Object input) throws TraceableException, UntraceableException {
         loggerService.info("Total Events: "+Integer.toString(++counter));
+
         try {
             return toPrediction(input, (Integer) learner.call("predict", input));
+
         } catch (Exception e) {
             throw new InternalException(this.getName(), "Pyro", e);
         }
     }
 
     @Override
-    public void batchLearn(List<Object> input) throws TraceableException, UntraceableException{
+    public synchronized void batchLearn(List<Object> input) throws TraceableException, UntraceableException{
         try {
-            learner.call("batchLearn", input);
+            learner.call_oneway("batchLearn", input);
         } catch (Exception e) {
             throw new InternalException(this.getName(), "Pyro", e);
         }
     }
 
     @Override
-    public List<Prediction<Integer>> batchPredict(List<Object> input) throws TraceableException, UntraceableException{
+    public synchronized List<Prediction<Integer>> batchPredict(List<Object> input) throws TraceableException, UntraceableException{
         counter += (int) parameters.get("RetrainEvery");
         loggerService.info("Total Events: "+Integer.toString(counter));
+
         try {
             List<Integer> res = (List<Integer>) learner.call("batchPredict", input);
-            if(input.size() != res.size())
+
+            if (input.size() != res.size())
                 throw new InternalException(this.getName(), "Pyro", "Batch predictions are not the same size as inputs.");
 
             return IntStream.range(0, input.size()).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
@@ -129,7 +132,7 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     }
 
     @Override
-    public void destroy() throws Exception {
+    public synchronized void destroy() throws Exception {
         learner.call("destroy");
         learner.close();
         if(proc!=null)
@@ -138,7 +141,7 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
         super.destroy();
     }
 
-    // Convert integer prediction to Prediction<>
+    // Convert integer prediction to Prediction<Integer>
     private Prediction<Integer> toPrediction(Object input, Integer response) {
         return new PredictionInstance<>(response,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
     }
