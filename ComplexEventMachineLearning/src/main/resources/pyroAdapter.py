@@ -22,7 +22,7 @@ class PyroAdapter(object):
     def build(self, classifier):
         return self.backend.build(classifier)
 
-    @Pyro4.oneway
+    @Pyro4.expose
     def learn(self, datapoint):
         self.backend.learn(datapoint)
 
@@ -30,7 +30,7 @@ class PyroAdapter(object):
     def predict(self, datapoint):
         return self.backend.predict(datapoint)
 
-    @Pyro4.oneway
+    @Pyro4.expose
     def batchLearn(self, datapoints):
         self.backend.batchLearn(datapoints)
 

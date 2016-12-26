@@ -28,6 +28,7 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     private Process proc;
     private File pyroAdapter;
     private int counter = 0;
+    private final String pyroAdapterFilename = "pyroAdapter.py";
 
     public ExternPythonPyro(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
         super(targets, parameters, learner);
@@ -41,8 +42,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
         try {
             Object backend = parameters.get("backend");
 
-            pyroAdapter = new File(System.getProperty("java.io.tmpdir")+UUID.randomUUID().toString()+".py");
-            FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource("pyroAdapter.py"), pyroAdapter);
+            pyroAdapter = new File(System.getProperty("java.io.tmpdir")+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
+            FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource(pyroAdapterFilename), pyroAdapter);
 
             if(backend!=null) { // Path to script passed as parameter
                 String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath()};
@@ -76,6 +77,9 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
             learner.call("init", parameters.get("backend"));
             learner.call("build", parameters.get("classifier"));
 
+        } catch (PyroException e) {
+            loggerService.error(e._pyroTraceback);
+            throw new InternalException(this.getName(), "Pyro", e);
         } catch (Exception e) {
             throw new InternalException(this.getName(), "Pyro", e);
         }
@@ -87,7 +91,10 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     @Override
     public synchronized void learn(Object input) throws TraceableException, UntraceableException {
         try {
-            learner.call_oneway("learn", input);
+            learner.call("learn", input);
+        } catch (PyroException e) {
+            loggerService.error(e._pyroTraceback);
+            throw new InternalException(this.getName(), "Pyro", e);
         } catch (Exception e) {
             throw new InternalException(this.getName(), "Pyro", e);
         }
@@ -99,7 +106,9 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
 
         try {
             return toPrediction(input, (Integer) learner.call("predict", input));
-
+        } catch (PyroException e) {
+            loggerService.error(e._pyroTraceback);
+            throw new InternalException(this.getName(), "Pyro", e);
         } catch (Exception e) {
             throw new InternalException(this.getName(), "Pyro", e);
         }
@@ -108,7 +117,10 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     @Override
     public synchronized void batchLearn(List<Object> input) throws TraceableException, UntraceableException{
         try {
-            learner.call_oneway("batchLearn", input);
+            learner.call("batchLearn", input);
+        } catch (PyroException e) {
+            loggerService.error(e._pyroTraceback);
+            throw new InternalException(this.getName(), "Pyro", e);
         } catch (Exception e) {
             throw new InternalException(this.getName(), "Pyro", e);
         }
@@ -126,6 +138,9 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
                 throw new InternalException(this.getName(), "Pyro", "Batch predictions are not the same size as inputs.");
 
             return IntStream.range(0, input.size()).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
+        } catch (PyroException e) {
+            loggerService.error(e._pyroTraceback);
+            throw new InternalException(this.getName(), "Pyro", e);
         } catch (Exception e) {
             throw new InternalException(this.getName(), "Pyro", e);
         }
