@@ -40,17 +40,29 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
         ((DoubleTumbleWindowEvaluator)evaluator).setClasses( ((ClassesDescriptor)descriptors.getTargetDescriptors().get(0)).getClasses());
 
         try {
-            Object backend = parameters.get("backend");
+            LinkedHashMap backend = (LinkedHashMap)parameters.get("backend");
 
-            pyroAdapter = new File(System.getProperty("java.io.tmpdir")+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
-            FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource(pyroAdapterFilename), pyroAdapter);
+            if(backend==null) {
+                // Lookup a running agent
+                loggerService.debug("Looking up a running agent...");
+                NameServerProxy ns = NameServerProxy.locateNS(null);
+                learner = new PyroProxy(ns.lookup("python-learning-agent"));
+                ns.close();
+            } else {
+                pyroAdapter = new File(System.getProperty("java.io.tmpdir")+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
+                FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource(pyroAdapterFilename), pyroAdapter);
+                loggerService.info("Saved script to {}", pyroAdapter.getAbsolutePath());
 
-            if(backend!=null) { // Path to script passed as parameter
-                String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath()};
+                // Path to script is passed as parameter
+                String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath(),
+                        "--bname="+(String)backend.get("name"),
+                        "--bpath="+(String)backend.get("path")};
                 proc = Runtime.getRuntime().exec(cmd);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			    BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
                 String agentPyroURI = stdInput.readLine();
+                if(!agentPyroURI.startsWith("PYRO"))
+                    throw new InternalException(this.getName(), "Pyro", "Expected PYRO:obj@host:port but got: "+agentPyroURI);
 
                 new Thread(() -> {
                     String s = null;
@@ -68,13 +80,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
                 }).start();
 
                 learner = new PyroProxy(new PyroURI(agentPyroURI));
-            } else { // Lookup a running agent
-                NameServerProxy ns = NameServerProxy.locateNS(null);
-                learner = new PyroProxy(ns.lookup("python-learning-agent"));
-                ns.close();
             }
 
-            learner.call("init", parameters.get("backend"));
             learner.call("build", parameters.get("classifier"));
 
         } catch (PyroException e) {
