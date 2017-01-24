@@ -3,7 +3,8 @@
  PyroAdapter exposes an external learning module via Pyro4
 """
 import Pyro4
-import sys, imp, os, getopt
+import sys, imp, os
+from optparse import OptionParser
 
 
 class PyroAdapter(object):
@@ -43,64 +44,55 @@ class PyroAdapter(object):
         self.backend.importModel(model)
 
 
-def startPyro(args):
+def startPyro(options):
     Pyro4.config.SERIALIZER = 'pickle'
-    daemon = Pyro4.Daemon()
+    daemon = Pyro4.Daemon(host=options.host, port=options.port)
     uri = daemon.register(PyroAdapter)
-    if (args["nameserver"]):
+    # e.g. uri: PYRO:obj_73fcc95930ed45caacba17be6bdbce74@localhost:43210
+    print(uri)  # NOTE: This is read by the parent process.
+
+    if options.nameserver:
         try:
             ns = Pyro4.locateNS()
-            ns.register("learning-agent", uri)
+            ns.register(options.rname, uri)
         except Exception as e:
             print("Exception: {}".format(e))
             raise SystemExit
 
-    # e.g. uri: PYRO:obj_73fcc95930ed45caacba17be6bdbce74@localhost
-    print(uri)  # NOTE: This is read by the parent process.
     daemon.requestLoop()
 
 
-def parseArgs(argv):
+def parseArgs():
     mandatoryArgs = ['bname', 'bpath']
-    parsed = {'bname': None, 'bpath': None, 'nameserver': False}
-
-    def help(exitcode):
-        print 'Usage: pyroAdapter.py --bname=<backend-name> --bpath=<backend-path> --ns'
-        sys.exit(exitcode)
-
-    try:
-        opts, args = getopt.getopt(argv, "h", ["bname=", "bpath=", "ns"])
-    except getopt.GetoptError:
-        help(2)
-    for opt, arg in opts:
-        if opt == '-h':
-            help(0)
-        elif opt == "--bname":
-            parsed["bname"] = arg
-        elif opt == "--bpath":
-            parsed["bpath"] = arg
-        elif opt == '--ns':
-            parsed["nameserver"] = True
-
+    parser = OptionParser()
+    parser.add_option("--bname", help="name of backend module")
+    parser.add_option("--bpath", help="path to backend module (python script)")
+    parser.add_option("--host", default="localhost", help="hostname to bind server on")
+    parser.add_option("--port", type="int", default=0, help="port to bind server on (0=random)")
+    parser.add_option("--ns", dest="nameserver", action="store_true", default=False, help="register the server into pyro nameserver")
+    parser.add_option("--rname", default="python-agent-0", help="name used for registration into pyro nameserver")
+    options, args = parser.parse_args()
     # check mangatory args
-    for k in parsed:
-        if k in mandatoryArgs and parsed[k] is None:
-            help(2)
+    for opt in mandatoryArgs:
+        if not getattr(options, opt):
+            print("Argument `{}` not given.".format(opt))
+            parser.print_help()
+            sys.exit(2)
 
-    return parsed
+    return options
 
 
-def main(args):
+def main(options):
     # Add directory of backend script to resolve local modules with relative paths
-    backendDir = os.path.dirname(args["bpath"])
+    backendDir = os.path.dirname(options.bpath)
     sys.path.append(backendDir)
 
-    module = imp.load_source(args["bname"], args["bpath"])
+    module = imp.load_source(options.bname, options.bpath)
     global backendModule
-    backendModule = getattr(module, args["bname"])()
+    backendModule = getattr(module, options.bname)()
 
-    startPyro(args)
+    startPyro(options)
 
 
 if __name__ == "__main__":
-    main(parseArgs(sys.argv[1:]))
+    main(parseArgs())

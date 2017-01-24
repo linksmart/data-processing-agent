@@ -40,13 +40,13 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
         ((DoubleTumbleWindowEvaluator)evaluator).setClasses( ((ClassesDescriptor)descriptors.getTargetDescriptors().get(0)).getClasses());
 
         try {
-            LinkedHashMap backend = (LinkedHashMap)parameters.get("backend");
+            LinkedHashMap backend = (LinkedHashMap)parameters.get("Backend");
 
-            if(backend==null) {
+            if((boolean)backend.get("Lookup")) {
                 // Lookup a running agent
-                loggerService.debug("Looking up a running agent...");
-                NameServerProxy ns = NameServerProxy.locateNS(null);
-                learner = new PyroProxy(ns.lookup("python-learning-agent"));
+                loggerService.info("Looking up '{}' in name server '{}'", backend.get("RegisteredName"), backend.get("NameServer"));
+                NameServerProxy ns = NameServerProxy.locateNS((String)backend.get("NameServer"));
+                learner = new PyroProxy(ns.lookup((String)backend.get("RegisteredName")));
                 ns.close();
             } else {
                 pyroAdapter = new File(System.getProperty("java.io.tmpdir")+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
@@ -55,8 +55,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
 
                 // Path to script is passed as parameter
                 String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath(),
-                        "--bname="+(String)backend.get("name"),
-                        "--bpath="+(String)backend.get("path")};
+                        "--bname="+(String)backend.get("ModuleName"),
+                        "--bpath="+(String)backend.get("ModulePath")};
                 proc = Runtime.getRuntime().exec(cmd);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			    BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
@@ -82,7 +82,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
                 learner = new PyroProxy(new PyroURI(agentPyroURI));
             }
 
-            learner.call("build", parameters.get("classifier"));
+            loggerService.info("Learner: {}:{} {}", learner.hostname, learner.port, learner.pyroHandshake);
+            learner.call("build", parameters.get("Classifier"));
 
         } catch (PyroException e) {
             loggerService.error(e._pyroTraceback);
