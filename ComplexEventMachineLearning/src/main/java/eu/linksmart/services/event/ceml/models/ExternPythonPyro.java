@@ -49,7 +49,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
                 learner = new PyroProxy(ns.lookup((String)backend.get("RegisteredName")));
                 ns.close();
             } else {
-                pyroAdapter = new File(System.getProperty("java.io.tmpdir")+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
+                pyroAdapter = new File(System.getProperty("java.io.tmpdir")+File.separator+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
+                pyroAdapter.deleteOnExit();
                 FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource(pyroAdapterFilename), pyroAdapter);
                 loggerService.info("Saved script to {}", pyroAdapter.getAbsolutePath());
 
@@ -160,7 +161,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
         learner.close();
         if(proc!=null)
             proc.destroy();
-        pyroAdapter.delete();
+        if(pyroAdapter.exists())
+            pyroAdapter.delete();
         super.destroy();
     }
 
