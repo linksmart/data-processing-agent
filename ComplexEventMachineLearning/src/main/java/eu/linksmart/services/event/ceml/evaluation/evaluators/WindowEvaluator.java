@@ -52,16 +52,16 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
         confusionMatrix[actual][predicted]++;
 
             for (int i = 0; i < classes.size(); i++) {
-                if (i == actual && actual.equals( predicted)) {
+                if (actual.equals(i) && actual.equals( predicted)) {
                     sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]++;
                     totalTruePositives++;
-                } else if (i != actual && i == predicted) {
+                } else if (!actual.equals(i) && predicted.equals(i)) {
                     sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()]++;
                     totalFalsePositives++;
-                } else if (i == actual && i != predicted) {
+                } else if (actual.equals(i) && !predicted.equals(i)) {
                     sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()]++;
                     totalFalseNegatives++;
-                } else if (i != actual && i != predicted) {
+                } else if (!actual.equals(i) && !predicted.equals(i)) {
                     sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()]++;
                     totalTrueNegatives++;
                 }
