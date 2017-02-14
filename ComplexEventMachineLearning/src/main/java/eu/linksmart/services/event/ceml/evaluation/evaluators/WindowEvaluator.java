@@ -633,9 +633,17 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
         @Override
         public Double calculate() {
-            double denominator = Math.sqrt((totalTruePositives + totalFalsePositives)*(totalTruePositives + totalFalseNegatives)*(totalTrueNegatives + totalFalsePositives)*(totalTrueNegatives + totalFalseNegatives));
+            if(classes.size()>2){
+                loggerService.error("Unable to calculate Matthews Correlation Coefficient (MCC) for multi-class evaluation.");
+                return -1.0;
+            }
+            long TP = sequentialConfusionMatrix[0][ClassificationEvaluationValue.truePositives.ordinal()];
+            long TN = sequentialConfusionMatrix[0][ClassificationEvaluationValue.trueNegatives.ordinal()];
+            long FP = sequentialConfusionMatrix[0][ClassificationEvaluationValue.falsePositives.ordinal()];
+            long FN = sequentialConfusionMatrix[0][ClassificationEvaluationValue.falseNegatives.ordinal()];
+            double denominator = Math.sqrt((TP + FP)*(TP + FN)*(TN + FP)*(TN + FN));
             if (denominator > 0)
-                return ( currentValue= ((double) (totalTrueNegatives * totalTruePositives)-(totalFalsePositives * totalFalseNegatives)) / denominator);
+                return ( currentValue= ((double) (TN * TP)-(FP * FN)) / denominator);
 
             return 0.0;
         }
