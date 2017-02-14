@@ -62,7 +62,7 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			    BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
                 String agentPyroURI = stdInput.readLine();
-                if(!agentPyroURI.startsWith("PYRO"))
+                if(agentPyroURI == null || !agentPyroURI.startsWith("PYRO"))
                     throw new InternalException(this.getName(), "Pyro", "Expected PYRO:obj@host:port but got: "+agentPyroURI);
 
                 new Thread(() -> {
