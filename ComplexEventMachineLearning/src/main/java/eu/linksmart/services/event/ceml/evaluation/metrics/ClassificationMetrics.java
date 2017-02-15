@@ -51,7 +51,7 @@ public interface ClassificationMetrics {
         public static double sensitivity(long[] confusionMatrix) {
             long denominator = (confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.falseNegatives.ordinal()]);
             if (denominator > 0)
-                return (  ((double) confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()]) / denominator);
+                return (  ((double) confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()]) / (double)denominator);
             return 0.0;
 
         }
@@ -60,11 +60,7 @@ public interface ClassificationMetrics {
      * see https://en.wikipedia.org/wiki/Precision_and_recall#Recall
      */
     public static double recall(long[] confusionMatrix) {
-        long denominator = (confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.falseNegatives.ordinal()]);
-        if (denominator > 0)
-            return (  ((double) confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()]) / denominator);
-        return 0.0;
-
+        return sensitivity(confusionMatrix);
     }
     
 
@@ -94,7 +90,7 @@ public interface ClassificationMetrics {
 
             long denominator = (confusionMatrix[ClassificationEvaluationValue.trueNegatives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.falseNegatives.ordinal()]);
             if (denominator > 0)
-                return ( ((double) confusionMatrix[ClassificationEvaluationValue.trueNegatives.ordinal()]));
+                return ( ((double) confusionMatrix[ClassificationEvaluationValue.trueNegatives.ordinal()])/(double)denominator);
             return 0.0;
 
         }
@@ -124,7 +120,7 @@ public interface ClassificationMetrics {
         public static double falseDiscoveryRate(long[] confusionMatrix) {
             Double denominator = (double)(confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()]);
             if (denominator > 0)
-                return ( 1.0 - confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()]);
+                return ( (double)confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()])/denominator;
             return 0.0;
         }
 
