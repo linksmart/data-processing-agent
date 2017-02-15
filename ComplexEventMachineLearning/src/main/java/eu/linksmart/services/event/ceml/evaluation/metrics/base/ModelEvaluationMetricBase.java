@@ -22,7 +22,7 @@ public abstract class ModelEvaluationMetricBase extends EvaluationMetricBase<Dou
     @Override
     public abstract Double calculate() ;
     @Override
-    public abstract Double calculate(int i) ;
+    public Double calculate(int i) { return calculate();}
 
 
 

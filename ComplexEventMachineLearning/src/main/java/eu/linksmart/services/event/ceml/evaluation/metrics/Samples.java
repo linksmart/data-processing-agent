@@ -12,10 +12,6 @@ public class Samples extends ModelEvaluationMetricBase {
             return currentValue++;
         }
 
-    @Override
-    public Double calculate(int i) {
-        return calculate();
-    }
 
     @Override
     public boolean isControlMetric() {
