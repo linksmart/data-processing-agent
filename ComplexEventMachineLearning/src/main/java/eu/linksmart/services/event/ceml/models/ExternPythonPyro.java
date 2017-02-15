@@ -60,10 +60,15 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
                         "--bpath="+(String)backend.get("ModulePath")};
                 proc = Runtime.getRuntime().exec(cmd);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-			    BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
                 String agentPyroURI = stdInput.readLine();
-                if(agentPyroURI == null || !agentPyroURI.startsWith("PYRO"))
-                    throw new InternalException(this.getName(), "Pyro", "Expected PYRO:obj@host:port but got: "+agentPyroURI);
+                if(agentPyroURI == null || !agentPyroURI.startsWith("PYRO")) {
+                    String s = null;
+                    while ((s = stdError.readLine()) != null) {
+                        loggerService.error("Proc: {}", s);
+                    }
+                    throw new InternalException(this.getName(), "Pyro", "Expected PYRO:obj@host:port but got: " + agentPyroURI);
+                }
 
                 new Thread(() -> {
                     String s = null;
@@ -111,7 +116,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
 
     @Override
     public synchronized Prediction<Integer> predict(Object input) throws TraceableException, UntraceableException {
-        loggerService.info("Total Events: "+Integer.toString(++counter));
+        loggerService.info("Total Events: "+Integer.toString(++counter)+
+                "\t"+((HashMap)((HashMap)parameters.get("Classifier")).get("production_layout")).get("type")+"<-"+((HashMap)input).get("type"));
 
         try {
             return toPrediction(input, (Integer) learner.call("predict", input));
