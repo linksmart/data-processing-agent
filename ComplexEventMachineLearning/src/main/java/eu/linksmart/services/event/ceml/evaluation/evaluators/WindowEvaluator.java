@@ -140,7 +140,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
         public Double calculate() {
             double acc = 0;
             for (int i = 0; i < classes.size(); i++)
-                acc = calculate(i);
+                acc += calculate(i);
 
             return acc / (double) classes.size();
 
