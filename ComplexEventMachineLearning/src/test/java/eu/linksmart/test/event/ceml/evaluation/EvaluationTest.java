@@ -5,12 +5,15 @@ import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
+import eu.linksmart.services.event.ceml.evaluation.evaluators.RegressionEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.WindowEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.metrics.ClassificationMetrics;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -109,7 +112,33 @@ public class EvaluationTest {
                 for (int k = 0; k < samples[i][j]; k++)
                     evaluator.evaluate(i, j);
     }
+
+    @Test
     public void regressionEvaluatorTest(){
+        RegressionEvaluator regressionEvaluator = new RegressionEvaluator(Arrays.asList(new TargetRequest(37, "RMSE", "less"), new TargetRequest(35, "MAE", "less")));
+        try {
+            regressionEvaluator.build();
+        } catch (TraceableException | UntraceableException e) {
+            e.printStackTrace();
+        }
+
+        regressionEvaluator.evaluate(
+                Arrays.asList(10,20,30,40,50,60),Arrays.asList(40,40,40,40,40,40)); //RMSE=19,49 , MAE=18
+        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == true", true, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
+        assertEquals("Testing regressionEvaluator.MAE.isReady() == true", true, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
+
+
+        regressionEvaluator.evaluate(
+                Arrays.asList(10,20,30,40,50,60),Arrays.asList(90,91,92,93,93,93)); //RMSE=44.07 , MAE=36
+
+        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == false", false, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
+        assertEquals("Testing regressionEvaluator.MAE.isReady() == false", false, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
+
+        regressionEvaluator.evaluate(
+                Arrays.asList(10,20,30,40,50,60),Arrays.asList(10,20,30,40,50,60)); //RMSE=35.98 , MAE=24
+
+        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == true", true, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
+        assertEquals("Testing regressionEvaluator.MAE.isReady() == true", true, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
 
     }
 }
