@@ -64,7 +64,7 @@ public class EvaluationTest {
 
         feedClassificationEvaluator(evaluator);
 
-        assertEquals("Testing WindowEvaluator with (Accuracy > 0.8 && SlideAfter > 26 ) == true", true, evaluator.isDeployable());
+        assertEquals("Testing WindowEvaluator with (Accuracy > 0.8 && SlideAfter > 26 ) == ", true, evaluator.isDeployable());
 
 
     }

@@ -10,6 +10,12 @@ import java.util.Map;
  * Created by angel on 4/12/15.
  */
 public class TargetRequest implements MetricDefinition {
+    public TargetRequest(double threshold, String name, String method) {
+        this.threshold = threshold;
+        this.name = name;
+        this.method = method;
+    }
+
     public Double getThreshold() {
         return threshold;
     }
@@ -18,7 +24,7 @@ public class TargetRequest implements MetricDefinition {
         return name;
     }
 
-    @JsonPropertyDescription("Value to be consider by the selected method as threshold for the current evaluation metrics to be achived")
+    @JsonPropertyDescription("Value to be consider by the selected method as threshold for the current evaluation metrics to be achieved")
     @JsonProperty(value = "Threshold")
     private double threshold = 0;
 
@@ -26,7 +32,7 @@ public class TargetRequest implements MetricDefinition {
         return thresholds;
     }
 
-    @JsonPropertyDescription("Value to be consider by the selected method as threshold for the current evaluation metrics to be achived")
+    @JsonPropertyDescription("Value to be consider by the selected method as threshold for the current evaluation metrics to be achieved")
     @JsonProperty(value = "Thresholds")
     private Double[] thresholds = null;
     @JsonPropertyDescription("Name of the metrics to use")
@@ -36,7 +42,6 @@ public class TargetRequest implements MetricDefinition {
     @JsonProperty(value = "Method")
     private String method = "default";
 
-    private Map<String,Object> lerner = null;
 
     public String getMethod() {
         return method;
