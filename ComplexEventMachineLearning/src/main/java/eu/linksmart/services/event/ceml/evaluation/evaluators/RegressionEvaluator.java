@@ -39,7 +39,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
     }
 
 
-    private void addTofixedsizeList(LinkedList<Map.Entry<Number, Number>> list, Map.Entry<Number, Number> entry){
+    private void addToFixedSizeList(LinkedList<Map.Entry<Number, Number>> list, Map.Entry<Number, Number> entry){
         if(list.size()== maxQueueSize){
             list.remove();//removes the first most element
         }
@@ -48,21 +48,21 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
 
     @Override
-    public double evaluate(Collection<Number> predicted, Collection<Number>  actual) {
+    public double evaluate(Collection<Number> predicted, Collection<Number>  actual) { // O(n*m) -> O(n^2)
         latestEntries.clear();
 
         Iterator<Number> iteratorPred = predicted.iterator();
-        for (Number actualEntry : actual) {
+        for (Number actualEntry : actual) { // O(n)
             Number predEntry = iteratorPred.next();
             Map.Entry<Number,Number> entry = new AbstractMap.SimpleEntry<>(predEntry, actualEntry);
             latestEntries.add(entry);
-            addTofixedsizeList(fixedSizeList, entry);
+            addToFixedSizeList(fixedSizeList, entry);
 
         }
 
         double accumulateMetric =0;
         int i=0;
-        for(EvaluationMetric algorithm: evaluationAlgorithms.values()) {
+        for(EvaluationMetric algorithm: evaluationAlgorithms.values()) { // O(n*m) -> O(n^2)
             if(algorithm instanceof ModelEvaluationMetric){
                 ((ModelEvaluationMetric) algorithm).calculate();
             }else{

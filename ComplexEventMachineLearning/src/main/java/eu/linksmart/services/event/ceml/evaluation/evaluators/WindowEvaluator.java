@@ -142,7 +142,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             for (int i = 0; i < classes.size(); i++)
                 acc += calculate(i);
 
-            return acc / (double) classes.size();
+            return currentValue = acc / (double) classes.size();
 
         }
     }
