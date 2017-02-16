@@ -113,7 +113,7 @@ public class  Utils {
                     PropertyConfigurator.configure(p);
                     in.close();
                     message = "Loading from configuration from jar default file";
-                } else if (isResource(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))) {
+                } else if (Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)!=null&&isResource(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile))) {
                     //loading from Utils class resource file
                     InputStream in = Utils.class.getClassLoader().getResourceAsStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile));
                     p.load(in);
@@ -188,6 +188,8 @@ public class  Utils {
     }
 
     public static boolean isFile(String filename){
+        if (filename==null)
+            return false;
         File f = new File(filename);
         return (f.exists() && !f.isDirectory());
     }
@@ -197,7 +199,8 @@ public class  Utils {
     }
 
     public static boolean isResource(String filename,Class clazz){
-
+        if (filename==null || clazz == null)
+            return false;
         return   clazz.getClassLoader().getResource(filename)!=null;
     }
 
