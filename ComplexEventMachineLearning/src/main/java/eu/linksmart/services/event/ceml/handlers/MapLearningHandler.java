@@ -14,7 +14,6 @@ import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
-import weka.core.pmml.jaxbbindings.TrainingInstances;
 
 import java.util.*;
 
