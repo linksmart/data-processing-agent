@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class LearningHandlerTest {
 
     @Test
-    public void listLearningHandling_DifferentGroundTruthAndTargetTest(){
+    public void listLearningHandling(){
 
         // simple test
         updateTestBase(2,1,1,0);
