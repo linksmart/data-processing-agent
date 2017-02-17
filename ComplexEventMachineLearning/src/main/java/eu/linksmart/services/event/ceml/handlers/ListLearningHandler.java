@@ -90,11 +90,12 @@ public  class ListLearningHandler extends BaseListEventHandler {
                         auxInput = (List) input.stream().map(m -> ((EventEnvelope) m).getValue()).collect(Collectors.toList());
                     else
                         auxInput = input;
-                    // it's possible that there has ben an error here. Not sure tho. The +1 in the second index is not clear, this must be clarify.
-                    List groundTruth = auxInput.subList(descriptors.getInputSize(), descriptors.getTargetSize() +1);
+                    // it's possible that there has ben an error here.
+                    List groundTruth = auxInput.subList(descriptors.getInputSize(), descriptors.getTargetSize() + descriptors.getInputSize());
                     List learningInput = auxInput.subList(0, descriptors.size());
+                    List predictionInput = auxInput.subList(0, descriptors.getInputSize());
 
-                    Prediction prediction = model.predict(learningInput);
+                    Prediction prediction = model.predict(predictionInput);
 
                     model.learn(learningInput);
 

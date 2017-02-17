@@ -84,8 +84,8 @@ public class EvaluationTest {
 
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Accuracy").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", false, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
-        assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == false", false, evaluator.isDeployable());
-        assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == false", false, evaluator.readyToSlide());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == ", false, evaluator.isDeployable());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == ", false, evaluator.readyToSlide());
         evaluator.evaluate(0, 0);
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Accuracy").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
@@ -123,22 +123,22 @@ public class EvaluationTest {
         }
 
         regressionEvaluator.evaluate(
-                Arrays.asList(10,20,30,40,50,60),Arrays.asList(40,40,40,40,40,40)); //RMSE=19,49 , MAE=18
-        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == true", true, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
-        assertEquals("Testing regressionEvaluator.MAE.isReady() == true", true, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
+                Arrays.asList(10.0,20.0,30.0,40.0,50.0,60.0),Arrays.asList(40.0,40.0,40.0,40.0,40.0,40.0)); //RMSE=19,49 , MAE=18
+        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == ", true, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
+        assertEquals("Testing regressionEvaluator.MAE.isReady() == ", true, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
 
 
         regressionEvaluator.evaluate(
-                Arrays.asList(10,20,30,40,50,60),Arrays.asList(90,91,92,93,93,93)); //RMSE=44.07 , MAE=36
+                Arrays.asList(10.0,20.0,30.0,40.0,50.0,60.0),Arrays.asList(90.0,91.0,92.0,93.0,93.0,93.0)); //RMSE=44.07 , MAE=36
 
-        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == false", false, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
-        assertEquals("Testing regressionEvaluator.MAE.isReady() == false", false, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
+        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == ", false, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
+        assertEquals("Testing regressionEvaluator.MAE.isReady() == ", false, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
 
         regressionEvaluator.evaluate(
-                Arrays.asList(10,20,30,40,50,60),Arrays.asList(10,20,30,40,50,60)); //RMSE=35.98 , MAE=24
+                Arrays.asList(10.0,20.0,30.0,40.0,50.0,60.0),Arrays.asList(10.0,20.0,30.0,40.0,50.0,60.0)); //RMSE=35.98 , MAE=24
 
-        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == true", true, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
-        assertEquals("Testing regressionEvaluator.MAE.isReady() == true", true, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
+        assertEquals("Testing RegressionEvaluator.RMSE.isReady() == ", true, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
+        assertEquals("Testing regressionEvaluator.MAE.isReady() == ", true, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
 
     }
 }
