@@ -10,6 +10,7 @@ import java.util.Map;
  * Created by angel on 4/12/15.
  */
 public class TargetRequest implements MetricDefinition {
+    public TargetRequest(){    }
     public TargetRequest(double threshold, String name, String method) {
         this.threshold = threshold;
         this.name = name;
