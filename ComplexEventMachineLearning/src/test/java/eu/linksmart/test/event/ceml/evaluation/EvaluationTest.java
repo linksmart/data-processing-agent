@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Created by José Ángel Carvajal on 15.02.2017 a researcher of Fraunhofer FIT.
@@ -60,6 +61,7 @@ public class EvaluationTest {
             evaluator.build();
         } catch (TraceableException | UntraceableException e) {
             e.printStackTrace();
+            fail();
         }
 
         feedClassificationEvaluator(evaluator);
@@ -78,6 +80,7 @@ public class EvaluationTest {
             evaluator.build();
         } catch (TraceableException | UntraceableException e) {
             e.printStackTrace();
+            fail();
         }
 
         feedClassificationEvaluator(evaluator);
@@ -120,6 +123,7 @@ public class EvaluationTest {
             regressionEvaluator.build();
         } catch (TraceableException | UntraceableException e) {
             e.printStackTrace();
+            fail();
         }
 
         regressionEvaluator.evaluate(

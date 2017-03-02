@@ -3,7 +3,6 @@ package eu.linksmart.services.utils.mqtt.subscription;
 
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.constants.Const;
-import eu.linksmart.services.utils.mqtt.types.CurrentStatus;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
@@ -32,15 +31,13 @@ public  class ForwardingListener implements MqttCallback {
     protected  Set<Topic> messageDelivererSet = new HashSet<>();
 
 
-    protected CurrentStatus status;
-
     //Start of code made for testing performance
     protected final boolean VALIDATION_MODE;
     private final Deserializer deserializer;
     private final MessageValidator validator;
     //End of code made for testing performance
 
-    public ForwardingListener(String listening, Observer mqttEventsListener, UUID originProtocol) {
+    /*public ForwardingListener(String listening, Observer mqttEventsListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
 
         /// Code for validation and test proposes
@@ -70,7 +67,7 @@ public  class ForwardingListener implements MqttCallback {
         }
 
         initObserver(listening, mqttEventsListener);
-    }
+    }*/
     public ForwardingListener( Observer connectionListener, UUID originProtocol) {
         this.originProtocol = originProtocol;
         this.connectionListener = connectionListener;
@@ -105,15 +102,13 @@ public  class ForwardingListener implements MqttCallback {
     }
     @SuppressWarnings("SuspiciousMethodCalls")
     public boolean removeObserver(String topic, Observer listener){
-        if(observables.containsKey(topic))
+        if(observables.containsKey(topic) && observables.get(topic).containsListener(listener))
             observables.get(topic).deleteObserver(listener);
         else
             return false;
         if(observables.get(topic).countObservers()==0)
             observables.remove(topic);
 
-        if(observables.isEmpty())
-            status = CurrentStatus.NotListening;
 
         synchronized (muxMessageDelivererSet) {
             messageDelivererSet = observables.keySet();
@@ -133,7 +128,6 @@ public  class ForwardingListener implements MqttCallback {
     @Override
     public void connectionLost(Throwable throwable) {
         LOG.warn("Connection lost: "+throwable.getMessage(),throwable);
-        status = CurrentStatus.Disconnected;
         connectionListener.update(null, this);
 
 
@@ -181,9 +175,6 @@ public  class ForwardingListener implements MqttCallback {
     }
 
 
-    public CurrentStatus getStatus(){
-        return status;
-    }
     /// for validation and evaluation propose
     private void toValidation(String topic, byte[] payload){
         if (VALIDATION_MODE)

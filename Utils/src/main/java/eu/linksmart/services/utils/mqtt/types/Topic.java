@@ -32,7 +32,9 @@ public class Topic {
         this.topic = topic;
         isWild = (topic.contains("#")||topic.contains("+"));
         splitTopic = topic.split("/");
-        String ptr= topic.replace("/","/").replace("+","[^/]+").replace("/#","(/.+|/)?+$");
+
+        //String ptr= topic.replace("/","/").replace("+","[^/]+").replace("/#","(/.+|/)?+$");
+        String ptr= topic.replace("/","/").replace("+","[^/]+").replace("#","(.+|/)?+$");
         wildTopic = Pattern.compile(ptr);
 
     }
@@ -73,13 +75,12 @@ public class Topic {
    }
 
     @Override
-    public boolean equals(Object topic){
-        if (!(topic instanceof Topic)&&!(topic instanceof String))
-            return false;
-        if(this == topic)
-            return true;
+    public boolean equals(Object topic) {
 
-        return cmp(topic.toString());
+        return !(
+                !(topic instanceof Topic) && !(topic instanceof String)) &&
+                (this == topic || cmp(topic.toString())
+        );
 
     }
 

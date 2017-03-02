@@ -317,9 +317,7 @@ public class BrokerService implements Observer, Broker {
 
     @Override
     public void update(Observable o, Object arg) {
-        ForwardingListener source = (ForwardingListener)arg;
-        switch (source.getStatus()){
-            case Disconnected:
+
                 loggerService.warn("Disconnection of the client with id: " + brokerConf.getId() + " and alias: " + brokerConf.getAlias() + " with conf: " + brokerConf.toString());
                 for(int i=0; i<brokerConf.getNoTries() && !mqttClient.isConnected();i++){
                     try {
@@ -338,8 +336,7 @@ public class BrokerService implements Observer, Broker {
                     }
                 }
 
-                break;
-        }
+
 
     }
 

@@ -27,18 +27,27 @@ public class Configurator extends  CompositeConfiguration {
 
         return def;
     }
-    static public boolean addConfFile(String filePath) {
-        return !ConfigurationConst.DEFAULT_CONFIGURATION_FILE.contains(filePath) && ConfigurationConst.DEFAULT_CONFIGURATION_FILE.add(filePath);
-    }
 
+    static public boolean addConfFile(String filePath) {
+        if( !fileExists(filePath))
+            return false;
+        if( !ConfigurationConst.DEFAULT_CONFIGURATION_FILE.contains(filePath) && ConfigurationConst.DEFAULT_CONFIGURATION_FILE.add(filePath) ) {
+            init();
+
+        }
+        return true;
+    }
+    public boolean addConfigurationFile(String filePath) {
+        if(!fileExists(filePath))
+            return false;
+        this.addConfiguration(new Configurator(filePath));
+       return true;
+    }
 
     static protected Configurator init(){
         Configurator configurator = new Configurator();
 
-
         ConfigurationConst.DEFAULT_CONFIGURATION_FILE.stream().filter(confFile -> !ConfigurationConst.DEFAULT_DIRECTORY_CONFIGURATION_FILE.equals(confFile)).filter(confFile -> confFile != null).forEach(confFile -> configurator.addConfiguration(new Configurator(confFile)));
-
-
 
         return configurator;
 
@@ -47,23 +56,16 @@ public class Configurator extends  CompositeConfiguration {
         this(ConfigurationConst.DEFAULT_DIRECTORY_CONFIGURATION_FILE);
 
     }
-    protected Configurator(String configurationFile) {
+    public Configurator(String configurationFile) {
         super();
         String filename= configurationFile,extension=null;
 
 
         if(!fileExists(filename)) {
-            filename ="etc/" +configurationFile;
-
-            if(!fileExists(filename)){
-                filename ="etc/linksmart/" +configurationFile;
-                if(!fileExists(filename)) {
-                    System.err.println("File named " + configurationFile + " was not found in '.', './etc/' and 'etc/linksmart/'");
-                    System.err.println("Trying to load configuration from environmental variables ");
-                    filename =null;
-                    addConfiguration(new EnvironmentConfiguration());
-                }
-            }
+            System.err.println("File named " + configurationFile + " was not found!'");
+            System.err.println("Trying to load configuration from environmental variables ");
+            filename =null;
+            addConfiguration(new EnvironmentConfiguration());
         }
         if(filename!=null){
             int i = filename.lastIndexOf('.');

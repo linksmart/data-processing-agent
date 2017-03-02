@@ -124,4 +124,9 @@ public class TopicMessageDeliverable implements Runnable{
             }
 
     }
+
+    public boolean containsListener(Observer listener) {
+
+        return observers.contains(listener);
+    }
 }
