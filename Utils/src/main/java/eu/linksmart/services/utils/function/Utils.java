@@ -20,12 +20,36 @@ import java.util.Properties;
 import java.util.TimeZone;
 
 /**
- * Created by José Ángel Carvajal on 07.08.2015 a researcher of Fraunhofer FIT.
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
  */
+/**
+ * Provide a set of commonly needed functions. The idea of this Utility class is to centralized all code is used everyplace but not belongs specially in any place.
+ *
+ * @author Jose Angel Carvajal Soto
+ * @since  1.0.0
+ *
+ * */
 public class  Utils {
     static private DateFormat dateFormat = getDateFormat();
-
     static private DateFormat isoDateFormat = new SimpleDateFormat(Const.TIME_ISO_FORMAT);
+    /**
+     * Provides the version of the software. The version is linked to the pom version.
+     * @return the pom version
+     * */
     public static synchronized String getVersion() {
         final Properties properties = new Properties();
         try {
@@ -36,6 +60,11 @@ public class  Utils {
         }
         return "";
     }
+    /**
+     * Provide a quick method to get a data DateFormat. The DateFormat is created using the default values of the conf file if any,
+     * otherwise use the hardcoded in the const.
+     * @return a default DateFormat
+     * */
     static public DateFormat getDateFormat(){
         DateFormat dateFormat;
         TimeZone tz = getTimeZone();
@@ -51,6 +80,11 @@ public class  Utils {
         return dateFormat;
 
     }
+    /**
+     * Provide a quick method to get a data TimeZone. The TimeZone is created using the default values of the conf file if any,
+     * otherwise use UTC timezone.
+     * @return a default TimeZone
+     * */
     static public TimeZone getTimeZone(){
         String tzs = Configurator.getDefaultConfig().getString(Const.TIME_TIMEZONE_CONF_PATH);
         if(tzs == null || tzs.equals(""))
@@ -58,26 +92,35 @@ public class  Utils {
 
         return TimeZone.getTimeZone(tzs);
     }
+    /**
+     * Provide a quick method to transform a Date as String. The String is constructed using the DateFormat obtained by getDateFormat()
+     * @param date to transform into a string
+     * @return a Date as String
+     * */
     static public String getTimestamp(Date date){
         return dateFormat.format(date);
     }
+    /**
+     * Provide a quick method to transform a Date into timestamp as String. The String is constructed using a DateFormat based on the standard iso 8601
+     * @param date to transform into a string
+     * @return a Date as String timestamp base in iso 8601
+     * */
     static public String getIsoTimestamp(Date date){
         return isoDateFormat.format(date);
     }
+    /**
+     * Provide a quick method to get a current time as String. The String is constructed using getTimestamp()
+     * @return current Date as a String timestamp
+     * */
     static public String getDateNowString(){
         return getDateFormat().format(new Date());
     }
     static boolean isLoggingConfLoaded =false;
-   /* static public Logger createMqttLogger(Class lass) throws MalformedURLException, MqttException {
-
-        return MqttLogger.getLogger(
-                lass.getName(),
-                new StaticBroker(
-                        Configurator.getDefaultConfig().getString(Const.LOG_OUT_BROKER_CONF_PATH),
-                        Configurator.getDefaultConfig().getString(Const.LOG_OUT_BROKER_PORT_CONF_PATH)
-                )
-        );
-    }*/
+    /**
+     * Provide a quick method to get the hash value of a string as a string. The function is using SH-256 to hash
+     * @param string to hash
+     * @return the hexadecimal value as string
+     * */
     public static String hashIt( String string){
         if(string == null)
             return "";
@@ -88,8 +131,14 @@ public class  Utils {
             e.printStackTrace();
             return "";
         }
-        return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
+        return new BigInteger(1,SHA256.digest((string).getBytes())).toString(16);
     }
+    // TODO: No Unit test. Not sure how
+    /**
+     * Provide a default method and unique method to get the logging service regardless of the implementation. Additionally, for the reloading of the logging  configuration
+     * @param lass is the class which want to load the logging service
+     * @return the logging service
+     * */
     public static Logger initLoggingConf(Class lass){
         Logger loggerService = null;
         try {
@@ -137,23 +186,31 @@ public class  Utils {
 
         }
 
-
-/*
-        if (Configurator.getDefaultConfig().getBoolean(Const.LOG_ONLINE_ENABLED_CONF_PATH)) {
-            try {
-                //loggerService.addLoggers(Utils.createMqttLogger(lass));
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(), e);
-            }
-        }*/
         loggerService.info("Logging configuration file had been initialized");
         return loggerService;
 
     }
+    // TODO: No Unit test
+    /**
+     * Provide a quick method to force the reloading of the logging service infrastructure using initLoggingConf(Utils.class)
+     * */
     public static void initLoggingConf(){
         initLoggingConf(Utils.class);
 
     }
+
+    // TODO: No Unit test
+    /**
+     * Provide a quick method to construct a SSLSocketFactory which is a TCP socket using TLS/SSL
+     * @param caCrtFile location of the CA certificate
+     * @param crtFile location of the client certificate
+     * @param keyFile location of the key file
+     * @param caPassword password to access the CA certificate file
+     * @param crtPassword password to access the client certificate file
+     * @param keyPassword password to access the key file
+     * @return the SSLSocketFactory to create secure sockets with the provided certificates infrastructure
+     * @exception java.lang.Exception in case of something wrong happens
+     * */
     static public SSLSocketFactory getSocketFactory (final String caCrtFile, final String crtFile, final String keyFile, final String caPassword, final String crtPassword, final String keyPassword) throws Exception
     {
 
@@ -182,28 +239,50 @@ public class  Utils {
 
         return context.getSocketFactory();
     }
+    /**
+     * Provide a quick method to find out if file exists (in the filesystem or as JAR resource)
+     * @param filename the name of the file to check
+     * @return true if the file exists
+     * */
     public static boolean fileExists(String filename){
 
         return isFile(filename)||isResource(filename);
     }
-
+    /**
+     * Provide a quick method to find out if file exists in the file system
+     * @param filename the name of the file to check
+     * @return true if the file exists
+     * */
     public static boolean isFile(String filename){
         if (filename==null)
             return false;
         File f = new File(filename);
         return (f.exists() && !f.isDirectory());
     }
+    /**
+     * Provide a quick method to find out if file exists in the current JAR
+     * @param filename the name of the file to check
+     * @return true if the file exists
+     * */
     public static boolean isResource(String filename){
 
         return   Utils.class.getClassLoader().getResource(filename)!=null;
     }
-
-    public static boolean isResource(String filename,Class clazz){
-        if (filename==null || clazz == null)
-            return false;
-        return   clazz.getClassLoader().getResource(filename)!=null;
+    /**
+     * Provide a quick method to find out if file exists in the JAR of the class loader of the Class clazz
+     * @param filename the name of the file to check
+     * @param clazz JAR where the file should be located
+     * @return true if the file exists
+     * */
+    public static boolean isResource(String filename,Class clazz) {
+        return !(filename == null || clazz == null) && clazz.getClassLoader().getResource(filename) != null;
     }
-
+    /**
+     * Provide a quick method to construct a property object out of a file name
+     * @param source the name and location of the property file
+     * @return the property object if the file exist
+     * @exception IOException if the source file do not exist
+     * */
     public static Properties createPropertyFiles(String source) throws IOException{
         Properties properties = new Properties();
         if(isFile(source))
