@@ -24,7 +24,7 @@ public class ModelDeserializer extends JsonDeserializer<Model> {
     private static final MapType mapType =TypeFactory.defaultInstance().constructMapType(Map.class, String.class,Object.class);
     protected static final Map<String,JavaType> learners = new Hashtable<>();
 
-    static public void registermodule(Module module){
+    static public void registerModule(Module module){
         mapper.registerModule(module);
     }
     static public void setLearnerType(String name, JavaType type){

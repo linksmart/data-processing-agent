@@ -16,7 +16,7 @@
     <dependencies>
 		<dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>iot.learning.impl</artifactId>
+            <artifactId>MqttApplication</artifactId>
         </dependency>
 
         <dependency>
@@ -24,6 +24,10 @@
             <artifactId>SiddhiWrapper</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>ceml</artifactId>
+        </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>configuration.agent.learning.agent</artifactId>

@@ -133,13 +133,11 @@
         <module>DataProcessingCore</module>
         <module>IoTDataProcessingAgent</module>
         <module>RestFeeder</module>
-        <module>IoTRESTDataProcessingAgent</module>
-		<module>ComplexEventMachineLearning</module>
-        <module>CemlRestApi</module>
+		<module>cemlComponents</module>
         <module>IoTLearningAgent</module>
-        <module>IoTRestLearningAgent</module>
         <module>distributions</module>
         <module>test</module>
+        <module>applications</module>
 
     </modules>
     <dependencyManagement>
@@ -198,6 +196,18 @@
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
                 <artifactId>configuration.utils</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>MqttApplication</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>RestApplication</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
             <!--  LS GC  Dependencies -->

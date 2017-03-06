@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>iot.data.processing.impl</artifactId>
+            <artifactId>MqttApplication</artifactId>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
