@@ -16,7 +16,12 @@
     <dependencies>
 		<dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>iot.learning.impl</artifactId>
+            <artifactId>MqttApplication</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>ceml</artifactId>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>
