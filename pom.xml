@@ -131,10 +131,8 @@
         <module>DataPayload</module>
         <module>SiddhiWrapper</module>
         <module>DataProcessingCore</module>
-        <module>IoTDataProcessingAgent</module>
         <module>RestFeeder</module>
 		<module>cemlComponents</module>
-        <module>IoTLearningAgent</module>
         <module>distributions</module>
         <module>test</module>
         <module>applications</module>
