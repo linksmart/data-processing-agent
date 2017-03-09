@@ -6,6 +6,7 @@ import eu.linksmart.services.event.feeder.*;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;
+import eu.linksmart.services.event.intern.Utils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
@@ -36,10 +38,20 @@ public class Application {
         if(args.length>0)
             confFile= args[0];
 
-
+        System.setProperty("spring.config.name",confFile);
         Boolean hasStarted = DataProcessingCore.start(confFile);
-        if(hasStarted)
-            SpringApplication.run(Application.class, args);
+        if(hasStarted) {
+            SpringApplication springApp =  new SpringApplication(Application.class);
+            try {
+                springApp.setDefaultProperties(Utils.createPropertyFiles(confFile));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            springApp.run(args);
+
+
+        }
 
     }
     @RequestMapping("/")
