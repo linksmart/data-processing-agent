@@ -39,10 +39,15 @@
             <version>2.4.0</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
+      <!--  <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-nn</artifactId>
             <version>RELEASE</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>utils</artifactId>
         </dependency>
     </dependencies>
 

@@ -7,7 +7,6 @@ import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import eu.linksmart.testing.tooling.CounterTask;
-import org.apache.commons.math3.analysis.function.Cos;
 
 import java.util.List;
 import java.util.Timer;

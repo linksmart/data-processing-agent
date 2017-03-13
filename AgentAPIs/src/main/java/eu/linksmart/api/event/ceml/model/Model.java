@@ -7,7 +7,6 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
-import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

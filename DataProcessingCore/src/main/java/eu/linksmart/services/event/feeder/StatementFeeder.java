@@ -372,9 +372,9 @@ public class StatementFeeder implements Feeder<Statement> {
     }
     public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
         if(DynamicConst.getId().equals(id))
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+id);
+            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"/"+id);
         else if(id!=null)
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+id+DynamicConst.getId());
+            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+id+"/"+DynamicConst.getId());
 
         return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+DynamicConst.getId());
     }
