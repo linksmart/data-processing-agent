@@ -9,10 +9,7 @@ import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
 import io.swagger.annotations.ApiModelProperty;
 
-
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import eu.linksmart.services.utils.function.Utils;
 import java.util.*;
 import java.util.stream.Collectors;
 /**
@@ -112,22 +109,11 @@ public class StatementInstance implements Statement {
         this.statement = statement;
         this.scope = scope;
     }
-    public static String hashIt( String string){
-        if(string == null)
-            return "";
-        MessageDigest SHA256 = null;
-        try {
-            SHA256 = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return "";
-        }
-        return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
-    }
+
 
     public String getID() {
         if(id==null||id.equals(""))
-            id = hashIt(name + statement);
+            id = Utils.hashIt(name + statement);
         return id;
     }
 
