@@ -15,7 +15,8 @@
     <dependencies>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>iot.data.processing.rest.impl</artifactId>
+            <artifactId>RestApplication</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
 
         <dependency>
