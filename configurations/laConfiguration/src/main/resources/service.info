@@ -1,0 +1,4 @@
+linksmart.service.info.distribution.name = LinkSmart (R) IoT Learning Agent
+linksmart.service.info.distribution.description = A complex analytic service that offers Machine Learning and other complex analytics as a service
+linksmart.service.info.distribution.license = Apache License version 2.0
+linksmart.service.info.distribution.url =  http://www.apache.org/licenses/LICENSE-2.0

@@ -1,10 +1,10 @@
 package eu.linksmart.services;
 
-import eu.linksmart.services.event.ceml.CEMLRest;
-import eu.linksmart.services.event.feeder.RestConnector;
 import eu.linksmart.services.event.core.DataProcessingCore;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;
+import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import org.springframework.boot.SpringApplication;
@@ -28,23 +28,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 @Configuration
 @PropertySource("conf.cfg")
-@Import(value = {RestConnector.class,  CEMLRest.class})
 @EnableAutoConfiguration
 @ConfigurationProperties
 @SpringBootApplication
 @RestController
 @EnableSwagger2
 public class Application {
+    static Properties info = null;
 
     public static void main(String[] args) {
 
         String confFile = Const.DEFAULT_CONFIGURATION_FILE;
+        try {
+            info = Utils.createPropertyFiles("service.info");
+        } catch (IOException e) {
+            Utils.initLoggingConf(Application.class).error(e.getMessage(),e);
+        }
 
         if(args.length>0)
             confFile= args[0];
@@ -58,6 +64,7 @@ public class Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            springApp.addInitializers();
             springApp.run(args);
 
 
@@ -69,7 +76,7 @@ public class Application {
 
         Map<String, Object> map = new Hashtable<>();
         Map<String, ArrayList<ComponentInfo>> aux = new Hashtable<>();
-        map.put("Distribution","DataFusionRestManager");
+        map.put("Distribution", info.getProperty("linksmart.service.info.distribution.name"));
         AnalyzerComponent.loadedComponents.values().stream().filter(components -> !components.isEmpty()).forEach(components -> {
             ComponentInfo component = components.values().iterator().next();
             for (String implementationOf : component.getImplementationOf()) {
@@ -92,7 +99,7 @@ public class Application {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("IoT REST Learning Agent")
+                .groupName(info.getProperty("linksmart.service.info.distribution.name"))
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())
@@ -101,13 +108,12 @@ public class Application {
     }
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("IoT REST Learning Agent")
-                .description("IoT Agent for Stream Learning and Processing")
+                .title(info.getProperty("linksmart.service.info.distribution.name"))
+                .description(info.getProperty("linksmart.service.info.distribution.description"))
                 //.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
-                .contact("José Ángel Carvajal Soto")
-                .license("Apache License Version 2.0")
-               // .licenseUrl("https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE")
-                .version("2.0")
+                .license(info.getProperty("linksmart.service.info.distribution.license"))
+                .licenseUrl("linksmart.service.info.distribution.url")
+                .version(info.getProperty(Utils.getVersion()))
                 .build();
     }
 }

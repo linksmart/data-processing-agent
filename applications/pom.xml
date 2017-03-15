@@ -13,8 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>MqttApplication</module>
-        <module>IoTRESTDataProcessingAgent</module>
-        <module>IoTRestLearningAgent</module>
+        <module>RestApplication</module>
     </modules>
 
 </project>
