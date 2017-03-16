@@ -1,8 +1,6 @@
 package eu.linksmart.services.event.handler;
 
 
-import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
@@ -47,7 +45,7 @@ import java.util.stream.Collectors;
 
                 publisher = new HTTPPublisher(query);
             }
-            query.setLastOutput(new Observation());
+            query.setLastOutput(enveloper.pack(Double.NaN,new Date(),DynamicConst.getId(),query.getID(),"BootstrapMessage"));
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
