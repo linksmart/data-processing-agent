@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.handler;
 
 
+import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.event.intern.Const;
@@ -46,6 +47,7 @@ import java.util.stream.Collectors;
 
                 publisher = new HTTPPublisher(query);
             }
+            query.setLastOutput(new Observation());
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
@@ -58,56 +60,52 @@ import java.util.stream.Collectors;
     protected void processMessage(Map eventMap){
 
             if (eventMap.size() == 1) {
+                query.setLastOutput(enveloper.pack(
+                        eventMap.get(eventMap.keySet().toArray()[0]),
+                        new Date(), DynamicConst.getId(),
+                        query.getID(),
+                        eventMap.keySet().toArray()[0].toString()
+                ));
                 // if the eventMap is only one then is sent as one event
                 try {
-                    publisher.publish(
-                            serializer.serialize(
-                                    enveloper.pack(
-                                            eventMap.get(eventMap.keySet().toArray()[0]),
-                                            new Date(), DynamicConst.getId(),
-                                            query.getID(),
-                                            eventMap.keySet().toArray()[0].toString()
-                                    )
-                            )
-                    );
+                    publisher.publish(serializer.serialize( query.getLastOutput()));
 
                 } catch (Exception eEntity) {
                     loggerService.error(eEntity.getMessage(), eEntity);
                 }
             }else {
+                query.setLastOutput(
+                        enveloper.pack(
+                                eventMap,
+                                new Date(),
+                                DynamicConst.getId(),
+                                query.getID(),
+                                "Map"
+                        )
+                );
+
                 // if the eventMap has several events in it
                 if(conf.getBoolean(Const.AGGREGATE_EVENTS_CONF)) {
                     // if the aggregation option is on; the whole map is send as it is
                     try {
-                        publisher.publish(
-                                serializer.serialize(
-                                        enveloper.pack(
-                                                eventMap,
-                                                new Date(),
-                                                DynamicConst.getId(),
-                                                query.getID(),
-                                                "Map"
-                                        )
-                                )
-                        );
+                        publisher.publish(serializer.serialize(query.getLastOutput()));
                     } catch (Exception e) {
                         loggerService.error(e.getMessage(), e);
                     }
                 }else {
+                    query.setLastOutput(
+                            enveloper.pack(
+                                    eventMap,
+                                    new Date(),
+                                    DynamicConst.getId(),
+                                    query.getID(),
+                                    "Map"
+                            )
+                    );
                     // if the aggregation option is off; each value of the map is send as an independent event
                     eventMap.keySet().forEach(key -> {
                                 try {
-                                    publisher.publish(
-                                            serializer.serialize(
-                                                    enveloper.pack(
-                                                            eventMap,
-                                                            new Date(),
-                                                            DynamicConst.getId(),
-                                                            query.getID(),
-                                                            key.toString()
-                                                    )
-                                            )
-                                    );
+                                    publisher.publish(serializer.serialize(query.getLastOutput()));
                                 } catch (Exception ex) {
                                     loggerService.error(ex.getMessage(), ex);
                                 }

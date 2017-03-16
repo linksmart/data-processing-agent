@@ -238,6 +238,19 @@ public interface Statement extends JsonSerializable {
      * @param active true the outputs are REST endpoints, false the outputs are topics
      * */
     public void isRESTOutput(boolean active);
+    /***
+     * Returns the last compound event result of this statement
+     *
+     * @return the result of last processing made in this statement. In case of there is none then null
+     * */
+    public EventEnvelope getLastOutput();
+    /***
+     * Set the last compound event result of this statement
+     *
+     * @param lastOutput the result of last processing made in this statement. In case of there is none then null
+     * */
+    public void setLastOutput(EventEnvelope lastOutput);
+
 
     /***
      * Represent the possible States of a Statement can be in runtime.

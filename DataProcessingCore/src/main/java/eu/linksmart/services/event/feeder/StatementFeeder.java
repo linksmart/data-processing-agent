@@ -2,6 +2,7 @@ package eu.linksmart.services.event.feeder;
 
 
 import eu.linksmart.api.event.exceptions.*;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
@@ -441,7 +442,35 @@ public class StatementFeeder implements Feeder<Statement> {
                     loggerService.error(e.getMessage(), e);
                     result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
                 }
+        }
 
+
+        if (result.getResources().size()==0 && result.getResponses().isEmpty()) {
+            result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + id));
+        }else if (result.getResources().size()!=0 )
+            result.addResponse(StatementFeeder.createSuccessMapMessage(id, "Statement", id, 200, "OK", "GET Statement ID: " + id + " result found in  'Resources' "));
+
+        return result;
+    }
+    public static MultiResourceResponses<EventEnvelope> getStatementLastOutput(String id) {
+
+        MultiResourceResponses<EventEnvelope> result = new MultiResourceResponses<>();
+
+        if (CEPEngine.instancedEngines.size() == 0) {
+            result.addResponse(createErrorMapMessage(id, "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
+        }else {
+
+            for (CEPEngine dfw : CEPEngine.instancedEngines.values())
+                try {
+                    Map<String, Statement> aux = dfw.getStatements();
+                    if (!aux.isEmpty() && aux.containsKey(id)) {
+                        result.addResources(dfw.getName(), aux.get(id).getLastOutput());
+                    }
+
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(), e);
+                    result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
+                }
         }
 
 

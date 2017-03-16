@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
 import io.swagger.annotations.ApiModelProperty;
@@ -97,9 +98,21 @@ public class StatementInstance implements Statement {
     protected String id = "";
 
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
-    @Deprecated
     @JsonProperty("isRestOutput")
     private boolean restOutput;
+
+    public EventEnvelope getLastOutput() {
+        return lastOutput;
+    }
+
+    public void setLastOutput(EventEnvelope lastOutput) {
+        this.lastOutput = lastOutput;
+    }
+
+    @ApiModelProperty(notes = "The last compound event result of this statement")
+    @Deprecated
+    @JsonProperty("lastOutput")
+    private EventEnvelope lastOutput ;
 
     public StatementInstance() {
     }

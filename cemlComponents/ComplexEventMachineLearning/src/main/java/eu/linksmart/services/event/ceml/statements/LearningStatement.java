@@ -5,6 +5,7 @@ import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.ceml.handlers.ListLearningHandler;
 import eu.linksmart.services.event.ceml.handlers.MapLearningHandler;
 import eu.linksmart.services.event.ceml.core.CEMLManager;
@@ -26,6 +27,12 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
     public void setRequest(CEMLRequest request) {
         manager =request;
     }
+    @JsonIgnore
+    @Override
+    public EventEnvelope getLastOutput() {
+        return null;
+    }
+
 
     @Override
     public JsonSerializable build() throws TraceableException, UntraceableException{

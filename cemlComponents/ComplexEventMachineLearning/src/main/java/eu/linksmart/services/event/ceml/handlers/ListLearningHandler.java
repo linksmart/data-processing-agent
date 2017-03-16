@@ -62,6 +62,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
         if(input!=null&&input.size()>=descriptors.size()+descriptors.getTargetSize()){
             try {
                 synchronized (originalRequest) {
+
                     List auxInput;
                     if (input.get(0) instanceof EventEnvelope)
                         auxInput = (List) input.stream().map(m -> ((EventEnvelope) m).getValue()).collect(Collectors.toList());

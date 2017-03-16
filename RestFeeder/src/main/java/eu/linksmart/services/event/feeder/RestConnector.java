@@ -79,6 +79,20 @@ public class RestConnector extends Component implements IncomingConnector {
         return prepareHTTPResponse(StatementFeeder.getStatement(id));
 
     }
+    @ApiOperation(value = "getStatementLastOutput", nickname = "getStatementLastOutput")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "Statement's ID", required = true, dataType = "string", paramType = "path")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = MultiResourceResponses.class),
+            @ApiResponse(code = 404, message = "Not Found: The given ID doesn't exists", response = MultiResourceResponses.class),
+            @ApiResponse(code = 500, message = "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors", response = MultiResourceResponses.class),
+            @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
+    @RequestMapping(value = "/statement/{id}/output", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getStatementLastOutput(@PathVariable("id") String id) {
+        return finalHTTPCreationResponse(StatementFeeder.getStatementLastOutput(id),null);
+
+    }
     @ApiOperation(value = "addStatement", nickname = "addStatement")
     @ApiImplicitParams({
            // @ApiImplicitParam(name = "ID", value = "Statement's ID (Default auto-generated)", required = false, dataType = "string", paramType = "body")//,
@@ -355,7 +369,9 @@ public class RestConnector extends Component implements IncomingConnector {
             result.addResponse(createErrorMapMessage(DynamicConst.getId(),"Agent",500,"Intern Server Error",e.getMessage()));
         }
         // creating HTTP response
-
+        return finalHTTPCreationResponse(result,uri);
+    }
+    public static ResponseEntity<String> finalHTTPCreationResponse(MultiResourceResponses result,URI uri){
         if (result.getResponses().size() == 1 ) {
             if (uri != null)
                 return ResponseEntity.status(HttpStatus.valueOf(result.getOverallStatus())).location(uri).contentType(MediaType.APPLICATION_JSON).body(toJsonString(result));
