@@ -16,7 +16,6 @@
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>RestApplication</artifactId>
-            <version>${ls.se.agents.version}</version>
         </dependency>
 
         <dependency>

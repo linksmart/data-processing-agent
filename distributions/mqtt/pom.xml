@@ -17,32 +17,6 @@
         <module>IoTDataProcessingAgent</module>
         <module>IoTLearningAgent</module>
     </modules>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>eu.linksmart.services.events</groupId>
-                <artifactId>iot.learning.impl</artifactId>
-                <version>${ls.se.agents.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>eu.linksmart.services.events</groupId>
-                        <artifactId>SiddhiWrapper</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
-            <dependency>
-                <groupId>eu.linksmart.services.events</groupId>
-                <artifactId>iot.data.processing.impl</artifactId>
-                <version>${ls.se.agents.version}</version>
-                <exclusions>
-                    <exclusion>
-                            <groupId>eu.linksmart.services.events</groupId>
-                            <artifactId>SiddhiWrapper</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
 </project>

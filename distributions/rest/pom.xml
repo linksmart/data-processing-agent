@@ -12,33 +12,7 @@
     <artifactId>rest.reactor</artifactId>
 
     <packaging>pom</packaging>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>eu.linksmart.services.events</groupId>
-                <artifactId>iot.data.processing.rest.impl</artifactId>
-                <version>${ls.se.agents.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>eu.linksmart.services.events</groupId>
-                        <artifactId>SiddhiWrapper</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
-            <dependency>
-                <groupId>eu.linksmart.services.events</groupId>
-                <artifactId>iot.learning.rest.impl</artifactId>
-                <version>${ls.se.agents.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>eu.linksmart.services.events</groupId>
-                        <artifactId>SiddhiWrapper</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <modules>
         <module>IoTDataProcessingAgent</module>
         <module>IoTLearningAgent</module>
