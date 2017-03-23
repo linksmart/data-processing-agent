@@ -14,7 +14,7 @@
     <dependencies>
        <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>iot.learning.rest.impl</artifactId>
+            <artifactId>RestApplication</artifactId>
         </dependency>
 
         <dependency>
