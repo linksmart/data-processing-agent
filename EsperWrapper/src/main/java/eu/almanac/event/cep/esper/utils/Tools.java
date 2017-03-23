@@ -5,8 +5,8 @@ import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.types.EventEnvelope;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateUtils;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
@@ -237,7 +237,7 @@ public class Tools {
         for (int i=0; i< noEvents; i++) {
 
             engine.addEvent(  eventEnvelope, eventEnvelope.getClass());
-            eventEnvelope.setDate(DateUtils.addHours(eventEnvelope.getDate(),1));
+            eventEnvelope.setDate(DateUtils.addHours(eventEnvelope.getDate(), 1));
         }
         return true;
 
@@ -359,7 +359,7 @@ public class Tools {
         if(eventss!=null && eventss.length>0) {
             if (eventss.length > 1) {
                 for (int i = 1; i < eventss.length; i++)
-                    result = (EventEnvelope[]) ArrayUtils.addAll(result, eventss[i]);
+                    result =  ArrayUtils.addAll(result, eventss[i]);
             }
             else result = eventss[0];
         }
