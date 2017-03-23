@@ -81,15 +81,21 @@ public class DataProcessingCore {
         }
     }
     private static void initConf(String args){
-        if(args != null) {
+        if(args != null)
             Configurator.addConfFile(args);
+        else if(Utils.fileExists(Const.APPLICATION_CONFIGURATION_FILE))
+            Configurator.addConfFile(Const.APPLICATION_CONFIGURATION_FILE);
 
-        }else
-            Configurator.addConfFile(Const.DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
 
         loggerService = Utils.initLoggingConf(DataProcessingCore.class);
+        if(args != null) {
+            loggerService.info("Loading configuration form file " + args);
 
+        }else if(Utils.fileExists(Const.APPLICATION_CONFIGURATION_FILE)) {
+            loggerService.info("Loading configuration form file " + Const.APPLICATION_CONFIGURATION_FILE);
+        }else
+            loggerService.info("No configuration conf.cfg file in the class path or as argument at start. Only the defaults values are used");
         String idPath= conf.getString(Const.ID_CONF_PATH);
         if("*".equals(idPath))
             DynamicConst.setIsSet(true);
@@ -133,19 +139,22 @@ public class DataProcessingCore {
         // loading of feeders
         //IncomingConnector mqtt = null;
         try {
+
             Class.forName(EventFeeder.class.getCanonicalName());
             Class.forName(StatementFeeder.class.getCanonicalName());
             Class.forName(BootstrappingBean.class.getCanonicalName());
             mqtt = MqttIncomingConnectorService.getReference(DynamicConst.getWill(),DynamicConst.getWillTopic());
 
+            if(conf.getList(Const.PERSISTENT_DATA_FILE) != null ) {
+                FileConnector fileFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
-            FileConnector fileFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
+                fileFeeder.loadFiles();
+            }
+            if(conf.getList(Const.PERSISTENT_DATA_DIRECTORY) != null ) {
+                FileConnector directoryFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_DIRECTORY).toArray(new String[conf.getList(Const.PERSISTENT_DATA_DIRECTORY).size()]));
 
-            fileFeeder.loadFiles();
-
-            FileConnector directoryFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_DIRECTORY).toArray(new String[conf.getList(Const.PERSISTENT_DATA_DIRECTORY).size()]));
-
-            directoryFeeder.loadFiles();
+                directoryFeeder.loadFiles();
+            }
 
             if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))
                 mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));

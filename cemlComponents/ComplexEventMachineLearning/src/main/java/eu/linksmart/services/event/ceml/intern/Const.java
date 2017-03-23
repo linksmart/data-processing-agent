@@ -10,6 +10,6 @@ public interface Const extends eu.linksmart.services.utils.constants.Const {
     public static final String CEML_MQTT_INPUT_TOPIC =   "ceml.api.mqtt.topic.input";
     public static final String CEML_MQTT_ERROR_TOPIC =   "ceml.api.mqtt.topic.error";
     public static final String CEML_MQTT_BROKER_HOST =   "ceml.api.mqtt.broker";
-    public static final String CEML_DEFAULT_CONFIGURATION_FILE = "conf.cfg";
+    public static final String CEML_DEFAULT_CONFIGURATION_FILE = "__def__conf__.cfg";
     public static final String CEML_INIT_BOOTSTRAPPING = "ceml.init.bootstrapping";
 }

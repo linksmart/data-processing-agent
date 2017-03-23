@@ -34,7 +34,7 @@ import java.util.Properties;
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 @Configuration
-@PropertySource("conf.cfg")
+@PropertySource("__def__conf__.cfg")
 @EnableAutoConfiguration
 @ConfigurationProperties
 @SpringBootApplication
@@ -53,13 +53,23 @@ public class Application {
         }
 
         if(args.length>0)
-            confFile= args[0];
+            confFile = args[0];
+        else
+            confFile = Const.APPLICATION_CONFIGURATION_FILE;
         System.setProperty("spring.config.name",confFile);
         Boolean hasStarted = DataProcessingCore.start(confFile);
         if(hasStarted) {
             SpringApplication springApp =  new SpringApplication(Application.class);
             try {
-                springApp.setDefaultProperties(Utils.createPropertyFiles(confFile));
+
+                if(Utils.isFile(confFile)) {
+
+                    Properties properties = Utils.createPropertyFiles(confFile);
+
+                    if (properties.containsKey("server.port"))
+                        springApp.setDefaultProperties(properties);
+                }
+                else  springApp.setDefaultProperties(Utils.createPropertyFiles( Const.DEFAULT_CONFIGURATION_FILE));
                 
             } catch (IOException e) {
                 e.printStackTrace();

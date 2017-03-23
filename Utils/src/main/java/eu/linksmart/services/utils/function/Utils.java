@@ -286,8 +286,8 @@ public class  Utils {
     public static Properties createPropertyFiles(String source) throws IOException{
         Properties properties = new Properties();
         if(isFile(source))
-            properties.load(new FileInputStream(Configurator.getDefaultConfig().getString(Const.LoggingDefaultLoggingFile)));
-        else
+            properties.load(new FileInputStream(source));
+        else if(isResource(source))
             properties.load(Utils.class.getClassLoader().getResourceAsStream(source));
 
         return properties;

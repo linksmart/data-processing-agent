@@ -31,7 +31,9 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, Feed
 
     public static final String CEP_ENGINES_PATH = "cep.init.engines";
 
-    public static final String DEFAULT_CONFIGURATION_FILE = "conf.cfg";
+    public static final String DEFAULT_CONFIGURATION_FILE = "__def__conf__.cfg";
+
+    public static final String APPLICATION_CONFIGURATION_FILE = "conf.cfg";
     public static final String ID_CONF_PATH = "agent.id";
 
    // public static final String FeederPayloadTopic ="feeder.payload.type.topic";

@@ -3,7 +3,6 @@ package eu.linksmart.services.utils.mqtt.broker;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.constants.Const;
 import eu.linksmart.services.utils.function.Utils;
-import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
