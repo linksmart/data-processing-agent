@@ -1,0 +1,32 @@
+version: '2'
+services:
+  mqtt-broker:
+    build:
+      context: .
+      dockerfile: Dockerfile-mqtt-broker
+  dpa:
+    build:
+      context: ../../gpl-artifacts/distributions/rest/IoTDataProcessingAgent/
+      dockerfile: Dockerfile
+    volumes:
+      - ./dpa-config:/config:ro
+    depends_on:
+      - mqtt-broker
+    links:
+      - mqtt-broker
+    # wish list behavior
+    # environment:
+      # - "JAVA_OPTS=-Dconnection.broker.mqtt.hostname=mqtt-broker"
+      # - "CONNECTION_BROKER_MQTT_HOSTNAME=mqtt-broker"
+  dpa-tester:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mqtt-broker
+    links:
+      - mqtt-broker
+    environment:
+      - DPA_ROOT_URL=http://dpa:8319
+      - MQTT_HOST=mqtt-broker
+      - MQTT_PORT=1883
