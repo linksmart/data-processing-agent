@@ -41,7 +41,7 @@ $ mosquitto_sub -t '#' -v
 
 ### Locally
 
-Perquisites:
+Prerequisites:
 
 * DPA Rest Application
 * MQTT Broker
@@ -55,7 +55,7 @@ You can configure MQTT broker and DPA information with following environment var
 | MQTT_PORT     | 1883                  |
 
 NodeJS packages needs to be installed via `npm install`
-Run `npm test` or `npm start` (it runs Mocka programmatically, it can be used for debugging test as the main thread)
+Run `npm test` or `npm start` (it runs Mocha programmatically, it can be used for debugging test as the main thread)
 
 ### In container
 
@@ -63,15 +63,7 @@ Run `npm test` or `npm start` (it runs Mocka programmatically, it can be used fo
  docker-compose up
 ```
 
-
-
-```
-cp gpl-artifacts/distributions/rest/IoTDataProcessingAgent/target/iot.data.processing.rest.agent-1.4.0-SNAPSHOT.jar ~/projects/dpa-integration-test/dpa/
-```
-
-
-
 ## TODO
 
-* Use more lightweight image for `mqtt-broker` (like alpine)
+* Use more lightweight base image for `mqtt-broker` (like alpine)
 * Move `dpa` build step and `docker-compose` into a proper CI pipeline definition with a CI system
