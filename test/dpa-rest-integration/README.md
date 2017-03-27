@@ -65,5 +65,5 @@ Run `npm test` or `npm start` (it runs Mocha programmatically, it can be used fo
 
 ## TODO
 
-* Use more lightweight base image for `mqtt-broker` (like alpine)
+* ~~Use more lightweight base image for `mqtt-broker` (like alpine)~~
 * Move `dpa` build step and `docker-compose` into a proper CI pipeline definition with a CI system

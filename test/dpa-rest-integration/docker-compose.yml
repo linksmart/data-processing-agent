@@ -1,9 +1,7 @@
 version: '2'
 services:
   mqtt-broker:
-    build:
-      context: .
-      dockerfile: Dockerfile-mqtt-broker
+    image: eclipse-mosquitto
   dpa:
     build:
       context: ../../gpl-artifacts/distributions/rest/IoTDataProcessingAgent/

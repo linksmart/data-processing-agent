@@ -8,7 +8,7 @@ var agent = supertest
 var mqttBroker = {
     host: process.env.MQTT_HOST || 'localhost',
     port: process.env.MQTT_PORT || 1883
-}
+};
 
 describe('The REST Service', function () {
 
@@ -76,13 +76,13 @@ describe('CEPEngine', function () {
 
         var client = mqtt.connect(mqttBroker);
 
-        counter = 0
+        var counter = 0;
         client.on('message', function (topic, message) {
             ds = JSON.parse(message).ResultValue;
             messagesReceived[topic.split('/')[2]].push(ds);
             counter++;
             if (counter === numberOfMessages) {
-                client.end()
+                client.end();
                 expect(messagesPublished).to.deep.equal(messagesReceived);
                 done();
             }
@@ -102,20 +102,21 @@ describe('CEPEngine', function () {
         function publisher() {
             var counter = 0;
             var i = setInterval(function () {
-                var t = +new Date;
+                var t = +new Date,
+                    ds;
 
-                if ((Math.floor(Math.random() * 2) == 0)) {
-                    var ds = {
+                if ((Math.floor(Math.random() * 2) === 0)) {
+                    ds = {
                         bn: 'dev1',
                         bt: t
-                    }
+                    };
                     messagesPublished[statement1.id].push(ds);
                     client.publish('/testing/generator/dev1', JSON.stringify(ds));
                 } else {
-                    var ds = {
+                    ds = {
                         bn: 'dev2',
                         bt: t
-                    }
+                    };
                     messagesPublished[statement2.id].push(ds);
                     client.publish('/testing/generator/dev2', JSON.stringify(ds));
                 }
