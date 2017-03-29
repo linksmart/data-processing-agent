@@ -49,3 +49,6 @@ distributions/mqtt/IoTDataProcessingAgent/target
 distributions/mqtt/IoTLearningAgent/target
 distributions/rest/IoTDataProcessingAgent/target
 distributions/rest/IoTLearningAgent/target
+*/target/
+*.log
+*.jar
