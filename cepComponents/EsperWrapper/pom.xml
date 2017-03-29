@@ -35,6 +35,11 @@
             <artifactId>payload</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>cepTooling</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
 
 
     </dependencies>

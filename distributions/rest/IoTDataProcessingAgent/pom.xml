@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>
-            <artifactId>configuration.agent.learning.agent</artifactId>
+            <artifactId>configuration.agent.data.processing</artifactId>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>

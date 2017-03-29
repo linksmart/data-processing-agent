@@ -60,9 +60,9 @@
     </dependencyManagement>
     <modules>
         <module>configurations</module>
-        <module>EsperWrapper</module>
+        <module>cemlComponents</module>
+        <module>cepComponents</module>
         <module>distributions</module>
-        <module>CEMLWeka</module>
     </modules>
     <licenses>
         <license>

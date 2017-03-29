@@ -49,6 +49,7 @@
                 <configuration>
                     <archive>
                         <manifest>
+                            <addClasspath>true</addClasspath>
                             <mainClass>${start-class}</mainClass>
                         </manifest>
                     </archive>

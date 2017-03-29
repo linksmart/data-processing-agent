@@ -1,10 +1,10 @@
-package eu.almanac.event.cep.esper;
+package eu.linksmart.services.event.cep.engines;
 
 import com.espertech.esper.client.*;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.client.time.CurrentTimeSpanEvent;
-import eu.almanac.event.cep.intern.Const;
 import eu.almanac.event.datafusion.utils.generic.Component;
+import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.UnknownException;
@@ -14,13 +14,17 @@ import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.api.event.components.ComplexEventHandler;
 import eu.linksmart.api.event.components.ComplexEventSyncHandler;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.event.cep.engines.intern.Const;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+
+import static eu.linksmart.service.event.cep.tooling.Tools.ObservationFactory;
 
 /**
  * Created by Caravajal on 06.10.2014.
@@ -368,7 +372,48 @@ import java.util.*;
     }
 
 
+    static public long getTimeNow(){
+        return EsperEngine.getEngine().getEngineCurrentDate().getTime();
+    }
 
+    static public Date getDateNow(){
+        return EsperEngine.getEngine().getEngineCurrentDate();
+    }
+    static public boolean insertMultipleEvents(long noEvents,Object event){
+        EsperEngine engine =EsperEngine.getEngine();
+        EventEnvelope eventEnvelope;
+        if(! (event instanceof EventEnvelope) )
+            eventEnvelope = ObservationFactory(event, event.getClass().getCanonicalName(), UUID.randomUUID().toString(), engine.getName(), engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
+        else
+            eventEnvelope = (EventEnvelope) event;
+        for (int i=0; i< noEvents; i++) {
+
+            engine.addEvent(  eventEnvelope, eventEnvelope.getClass());
+            eventEnvelope.setDate(DateUtils.addHours(eventEnvelope.getDate(), 1));
+        }
+        return true;
+
+    }
+    static public EventEnvelope[] creatMultipleEvents(long noEvents,Object event){
+        EventEnvelope eventEnvelope;
+        EsperEngine engine =EsperEngine.getEngine();
+        EventEnvelope[] result = new Observation[(int)noEvents];
+        if(! (event instanceof EventEnvelope) )
+            eventEnvelope = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
+        else
+            eventEnvelope = (EventEnvelope) event;
+
+        result[0] = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),DateUtils.addHours(eventEnvelope.getDate(), 1).getTime());
+
+        for (int i=1; i< noEvents; i++) {
+
+            //engine.addEvent("", eventEnvelope, eventEnvelope.getClass());
+            result[i] = ObservationFactory(event,event.getClass().getCanonicalName(),UUID.randomUUID().toString(),engine.getName(),DateUtils.addHours(result[i-1].getDate(), 1).getTime());
+
+        }
+        return result;
+
+    }
 
 
 

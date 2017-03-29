@@ -1,4 +1,4 @@
-package eu.almanac.event.cep.intern;
+package eu.linksmart.services.event.cep.engines.intern;
 
 /**
  * Created by angel on 12/11/15.
