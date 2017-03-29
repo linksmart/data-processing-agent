@@ -128,15 +128,13 @@
         <module>Utils</module>
         <module>AgentAPIs</module>
         <module>configurations</module>
-        <module>DataPayload</module>
-        <module>SiddhiWrapper</module>
+        <module>cepComponents</module>
         <module>DataProcessingCore</module>
         <module>RestFeeder</module>
 		<module>cemlComponents</module>
         <module>distributions</module>
         <module>test</module>
         <module>applications</module>
-
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -444,7 +442,7 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>${build.helper.maven.plugin.version}</version>
-                    <executions>
+                   <!-- <executions>
                         <execution>
                             <id>attach-artifacts</id>
                             <phase>package</phase>
@@ -461,7 +459,7 @@
                                 </artifacts>
                             </configuration>
                         </execution>
-                    </executions>
+                    </executions>-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

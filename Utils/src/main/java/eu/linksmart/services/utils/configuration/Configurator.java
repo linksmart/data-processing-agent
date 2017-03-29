@@ -47,9 +47,10 @@ public class Configurator extends CombinedConfiguration {
     public synchronized boolean addConfigurationFile(String filePath) {
         if(!fileExists(filePath))
             return false;
-        if(!loadedFiles.contains(filePath))
+        if(!loadedFiles.contains(filePath)) {
             this.addConfiguration(new Configurator(filePath));
-
+            loadedFiles.add(filePath);
+        }
        return true;
     }
 
@@ -65,7 +66,7 @@ public class Configurator extends CombinedConfiguration {
         this(ConfigurationConst.DEFAULT_DIRECTORY_CONFIGURATION_FILE);
 
     }
-    private HashSet<String> loadedFiles = new HashSet<>();
+    private List<String> loadedFiles = new ArrayList<>();
 
 
     public Configurator(String configurationFile) {
@@ -87,7 +88,7 @@ public class Configurator extends CombinedConfiguration {
                     switch (extension) {
                         case "properties":
                         case "cfg":
-                            addConfiguration(factoryBuilder(filename).getConfiguration());
+                            addConfiguration(factoryBuilder(filename).getConfiguration(),filename);
                             break;
                         case "xml":
                             try {
@@ -133,9 +134,9 @@ public class Configurator extends CombinedConfiguration {
         return new FileBasedConfigurationBuilder<>(confType)
                         .configure(new Parameters().properties()
                                 .setFileName(filename)
-                                .setThrowExceptionOnMissing(true)
+                                .setThrowExceptionOnMissing(false)
                                 .setListDelimiterHandler(new DefaultListDelimiterHandler(ConfigurationConst.ListDelimiter))
-                                .setIncludesAllowed(false)
+                                .setIncludesAllowed(true)
 
                         );
 
@@ -152,13 +153,13 @@ public class Configurator extends CombinedConfiguration {
 
         return (FileBasedConfigurationBuilder<PropertiesConfiguration>) factoryBuilder(filename, PropertiesConfiguration.class);
     }
-    private <T> T getProperty(String key, Class<T> propertyClass){
+    synchronized private <T> Object getProperty(String key, Class<T> propertyClass){
 
         if (this.containsKey(key)) {
             if (super.getProperty(key) instanceof Object[]) {
                 Object[] aux = (Object[])super.getProperty(key);
 
-                return (T) aux[aux.length>0?aux.length-1:0];
+                return aux[aux.length>0?aux.length-1:0];
 
             }else if (super.getProperty(key) instanceof ArrayList ) {
 
@@ -166,16 +167,16 @@ public class Configurator extends CombinedConfiguration {
 
                 if(List.class.isAssignableFrom(propertyClass)){
                     if(!aux.isEmpty() && !List.class.isAssignableFrom(aux.iterator().next().getClass()))
-                        return (T)super.getList(key);
+                        return super.getList(key);
 
                 }
 
-                return (T) aux.get(aux.size()>0?aux.size()-1:0);
+                return aux.get(aux.size()>0?aux.size()-1:0);
 
             }
             if(List.class.isAssignableFrom(propertyClass) && !(super.getProperty(key) instanceof List)) {
 
-                return (T)super.getList(key);
+                return super.getList(key);
             }
             return super.get(propertyClass,key);
 
@@ -183,66 +184,96 @@ public class Configurator extends CombinedConfiguration {
 
         return null;
     }
-
+    synchronized private int mostRecentConf(String key){
+        for(int i= super.getConfigurationNameList().size()-1; i>=0; i--){
+            if(super.getConfiguration(i).containsKey(key))
+                return i;
+        }
+        return -1; // not found; return default conf
+    }
 
     @Override
     public boolean getBoolean(String key) {
-        return getProperty(key,Boolean.class);
+        int i = mostRecentConf(key);
+
+        return i > -1 ? this.getConfiguration(i).getBoolean(key) : null;
     }
 
     @Override
     public byte getByte(String key) {
-        return getProperty(key, Byte.class);
+        int i = mostRecentConf(key);
+
+        return i > -1 ? this.getConfiguration(i).getByte(key) : null;
     }
 
     @Override
     public double getDouble(String key) {
-        return getProperty(key, Double.class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getDouble(key) : null;
     }
 
     @Override
     public float getFloat(String key) {
-        return getProperty(key, Float.class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getFloat(key) :null;
     }
 
     @Override
     public int getInt(String key) {
-        return getProperty(key, Integer.class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getInt(key) : null;
     }
 
     @Override
     public long getLong(String key) {
-        return getProperty(key, Long.class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getLong(key) : null;
     }
 
     @Override
     public short getShort(String key) {
-        return  getProperty(key, Short.class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getShort(key) : null;
     }
 
     @Override
     public BigDecimal getBigDecimal(String key) {
-        return getProperty(key, BigDecimal.class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getBigDecimal(key) : null;
     }
 
     @Override
     public BigInteger getBigInteger(String key) {
-        return getProperty(key, BigInteger.class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getBigInteger(key):null;
     }
 
     @Override
     public String getString(String key) {
-        return getProperty(key, String.class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getString(key):null;
     }
 
     @Override
     public String[] getStringArray(String key) {
-        return getProperty(key, String[].class);
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getStringArray(key) :null;
     }
 
     @Override
-    public List<Object> getList(String key) {
-        return getProperty(key, ArrayList.class);
+    public  List<Object> getList(String key) {
+        int i = mostRecentConf(key);
+
+        return i>-1?this.getConfiguration(i).getList(key):null;
     }
 
 

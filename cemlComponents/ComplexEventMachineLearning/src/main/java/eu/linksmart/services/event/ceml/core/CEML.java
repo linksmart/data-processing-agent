@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.api.FileCemlAPI;

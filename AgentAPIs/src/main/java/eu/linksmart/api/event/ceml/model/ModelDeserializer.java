@@ -35,6 +35,9 @@ public class ModelDeserializer extends JsonDeserializer<Model> {
     public Model deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String name =  node.get("Name").textValue();
+        if(!loadClass("eu.linksmart.services.event.ceml.models."+name) && !loadClass(name))
+            throw new IOException("Loaded class: "+name+" or "+"eu.linksmart.services.event.ceml.models."+name+ " do not exist!");
+
 
         List<TargetRequest> targetRequests;
         Map<String,Object> parameters = new Hashtable<>();
@@ -58,5 +61,13 @@ public class ModelDeserializer extends JsonDeserializer<Model> {
         } catch (Exception e) {
             throw new IOException(e);
         }
+    }
+    private boolean loadClass(String className){
+        try {
+            Class.forName(className);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
 }

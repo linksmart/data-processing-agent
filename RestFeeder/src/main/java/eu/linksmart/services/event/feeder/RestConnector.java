@@ -119,7 +119,7 @@ public class RestConnector extends Component implements IncomingConnector {
            // @ApiResponse(code = 500, message = "General Error: Unknown Source Intern Server Error", response = MultiResourceResponses.class),
             //@ApiResponse(code = 500, message = "General Error: Unknown Status", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addStatement(
             @RequestBody StatementInstance statement
     ) {
@@ -234,7 +234,7 @@ public class RestConnector extends Component implements IncomingConnector {
            // @ApiResponse(code = 500, message = "General Error: Unknown Source Intern Server Error", response = MultiResourceResponses.class),
            // @ApiResponse(code = 500, message = "General Error: Unknown Status", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/{cepEngine}/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/{cepEngine}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addStatementIntoCep(
             @RequestBody StatementInstance statement,
             @PathVariable("cepEngine") String cepEngine

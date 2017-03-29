@@ -8,10 +8,9 @@ import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.UUID;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -50,7 +49,7 @@ public class MqttPackageTest {
         assertEquals(0, tmp.countObservers());
     }
     @Test
-    public void forwardingListenerTest(){
+    public void forwardingListenerSimpleTest(){
         TestConnectionObserver connectionObserver = new TestConnectionObserver();
         ForwardingListener forwardingListener = new ForwardingListener(connectionObserver,UUID.randomUUID());
         connectionObserver.forwardingListener = forwardingListener;
@@ -66,6 +65,80 @@ public class MqttPackageTest {
         forwardingListener.messageArrived(topic, new org.eclipse.paho.client.mqttv3.MqttMessage(message));
         forwardingListener.messageArrived(topic2, new org.eclipse.paho.client.mqttv3.MqttMessage(message));
 
+        forwardingListener.connectionLost(new Exception(topic));
+
+
+
+        for (int i=0;!testObserver.received && !testObserver2.received; i++) {
+            if(i>10){
+                fail();
+                return;
+            }else {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    fail();
+                }
+            }
+        }
+        assertEquals(false,  forwardingListener.removeObserver(topic2, testObserver));
+        assertEquals(false,  forwardingListener.removeObserver(topic,testObserver2));
+
+        assertEquals(false, forwardingListener.getListeningTopics().isEmpty());
+
+        assertEquals(true,  forwardingListener.removeObserver(topic, testObserver));
+        assertEquals(true,  forwardingListener.removeObserver(topic2,testObserver2));
+        assertEquals(true, forwardingListener.getListeningTopics().isEmpty());
+
+
+    }
+    private void silentSleep(int sleepTime){
+        try {
+        Thread.sleep(sleepTime);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }}
+    @Test
+    public void forwardingListenerHevyLoadTest(){
+        TestConnectionObserver connectionObserver = new TestConnectionObserver();
+        ForwardingListener forwardingListener = new ForwardingListener(connectionObserver,UUID.randomUUID());
+        connectionObserver.forwardingListener = forwardingListener;
+        TestObserver testObserver = new TestObserver(topic), testObserver2 = new TestObserver(topic2);
+
+        assertEquals(true, forwardingListener.getListeningTopics().isEmpty());
+
+        forwardingListener.addObserver(topic,testObserver);
+
+        forwardingListener.addObserver(topic2,testObserver2);
+
+        assertEquals(false, forwardingListener.getListeningTopics().isEmpty());
+
+        final Boolean[] finished = {false, false};
+        final Integer[] messages = {0, 0};
+        new Thread(() -> {
+            silentSleep(500);
+            Instant before= Instant.now();
+            do {
+                forwardingListener.messageArrived(topic, new org.eclipse.paho.client.mqttv3.MqttMessage(message));
+                messages[0]++;
+            }while (Math.abs(Duration.between( before, Instant.now()).toMillis())<1000 );
+            finished[0]= true;
+
+        }).run();
+        new Thread(() -> {
+            silentSleep(500);
+            Instant before= Instant.now();
+            do {
+                forwardingListener.messageArrived(topic2, new org.eclipse.paho.client.mqttv3.MqttMessage(message));
+                messages[1]++;
+            }while (Math.abs(Duration.between(before, Instant.now()).toMillis())<1000 );
+            finished[1]= true;
+
+        }).run();
+
+        do{ silentSleep(1000);}while (!finished[0] && !finished[1]);
+        System.out.println("Messages 'sent' th[0]: "+ messages[0]+" th[1]: "+messages[1]+" total: "+ (messages[0]+messages[1]));
         forwardingListener.connectionLost(new Exception(topic));
 
 
@@ -129,6 +202,7 @@ public class MqttPackageTest {
 
         @Override
         public void update(String topic, MqttMessage orgMessage) {
+            assertEquals(this.topic, topic);
             assertEquals(true, received = Arrays.deepEquals(ArrayUtils.toObject(orgMessage.getPayload()), ArrayUtils.toObject(message)));
 
         }

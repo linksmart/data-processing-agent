@@ -17,6 +17,7 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
 import org.slf4j.Logger;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -120,17 +121,20 @@ public class DataProcessingCore {
     }
 
     private static void initForceLoading() {
-        if(conf.containsKey(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING))
-            conf.getList(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING).forEach(cls -> {
+        if(conf.containsKey(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)) {
+            String[] modules = conf.getStringArray(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING);
+            loggerService.info("Loading following extensions "+ Arrays.toString(modules));
+            Arrays.stream(modules).forEach(cls -> {
                 try {
-                    if(!"".equals(cls)) {
-                        Class c = Class.forName(cls.toString());
-                        loggerService.info("Loading extension: " + c.getSimpleName());
+                    if (!"".equals(cls)) {
+                        Class c = Class.forName(cls);
+                        loggerService.info("Extension: " + c.getSimpleName() + " loaded");
                     }
                 } catch (ClassNotFoundException e) {
-                    loggerService.error(e.getMessage(),e);
+                    loggerService.error(e.getMessage(), e);
                 }
             });
+        }
     }
 
 

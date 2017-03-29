@@ -17,7 +17,6 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
