@@ -45,6 +45,7 @@ fabric.properties
 CEMLEWeka/target/
 EsperWrapper/target/
 distributions/target
+*/target/*
 distributions/mqtt/IoTDataProcessingAgent/target
 distributions/mqtt/IoTLearningAgent/target
 distributions/rest/IoTDataProcessingAgent/target

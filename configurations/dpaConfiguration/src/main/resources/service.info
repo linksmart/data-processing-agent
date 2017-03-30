@@ -1,4 +1,4 @@
-linksmart.service.info,distribution.name = LinkSmart (R) IoT Data-Processing Agent
+linksmart.service.info.distribution.name = LinkSmart (R) IoT Data-Processing Agent
 linksmart.service.info.distribution.description = A data processing service that offers CEP as a service
 linksmart.service.info.distribution.license = GNU General Public License version 3.0
 linksmart.service.info.distribution.url =  https://www.gnu.org/licenses/gpl.txt
