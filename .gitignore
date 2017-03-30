@@ -30,6 +30,7 @@
 
 # IntelliJ
 /out/
+.idea
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -42,14 +43,9 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
-CEMLEWeka/target/
-EsperWrapper/target/
-distributions/target
-*/target/*
-distributions/mqtt/IoTDataProcessingAgent/target
-distributions/mqtt/IoTLearningAgent/target
-distributions/rest/IoTDataProcessingAgent/target
-distributions/rest/IoTLearningAgent/target
+target/
 */target/
+*/*/target/
+*/*/*/target/
 *.log
 *.jar
