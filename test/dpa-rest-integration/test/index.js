@@ -182,7 +182,7 @@ describe('CEPEngine', function () {
 
 function statementInserter(no, statement) {
     return function (done) {
-        agent.post('/statement/add')
+        agent.post('/statement/')
             .expect(201)
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
