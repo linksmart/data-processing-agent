@@ -58,4 +58,11 @@
             <artifactId>utils</artifactId>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>wso2</id>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
 </project>
