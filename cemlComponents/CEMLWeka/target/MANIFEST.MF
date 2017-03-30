@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Version: 1.4.0-SNAPSHOT
-Built-By: Caravajal
-Implementation-Vendor-Id: eu.linksmart.services.events.gpl
-Created-By: IntelliJ IDEA
-Build-Jdk: 1.8.0_77
-Specification-Version: 1.4.0-SNAPSHOT
-
