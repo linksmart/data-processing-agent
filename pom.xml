@@ -125,7 +125,7 @@
         <maven>${maven.version}</maven>
     </prerequisites>
 	<modules>
-        <module>utils</module>
+        <module>Utils</module>
         <module>AgentAPIs</module>
         <module>configurations</module>
         <module>cepComponents</module>
