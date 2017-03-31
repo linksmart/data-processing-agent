@@ -40,7 +40,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
         this.topics.addAll( topics);
 
         /// Code for validation and test proposes
-        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE)) {
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE)) {
             deserializer = new DefaultDeserializer();
             validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE));
         }else{
@@ -52,7 +52,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
         topics.add(topic);
 
         /// Code for validation and test proposes
-        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(eu.linksmart.services.utils.constants.Const.VALIDATION_OBSERVERS   )) {
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_OBSERVERS   )) {
             deserializer = new DefaultDeserializer();
             validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE));
         }else{

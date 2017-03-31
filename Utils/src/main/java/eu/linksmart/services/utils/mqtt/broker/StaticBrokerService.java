@@ -23,7 +23,7 @@ public class StaticBrokerService extends BrokerService implements Broker {
 
         BrokerConfiguration bConf = new BrokerConfiguration(alias);
         loggerService.info("Searching for proper broker...");
-        boolean optimizeConnections =(Configurator.getDefaultConfig().containsKey(BrokerServiceConst.MULTI_CONNECTION) && !Configurator.getDefaultConfig().getBoolean(BrokerServiceConst.MULTI_CONNECTION) || !Configurator.getDefaultConfig().containsKey(BrokerServiceConst.MULTI_CONNECTION));
+        boolean optimizeConnections =(Configurator.getDefaultConfig().containsKeyAnywhere(BrokerServiceConst.MULTI_CONNECTION) && !Configurator.getDefaultConfig().getBoolean(BrokerServiceConst.MULTI_CONNECTION) || !Configurator.getDefaultConfig().containsKeyAnywhere(BrokerServiceConst.MULTI_CONNECTION));
         if (!Broker.isBrokerURL(bConf.getURL()))
             throw new MalformedURLException(bConf.getURL() + " is not an broker URL");
         if (brokerServices.containsKey(bConf.toString()) && optimizeConnections) {

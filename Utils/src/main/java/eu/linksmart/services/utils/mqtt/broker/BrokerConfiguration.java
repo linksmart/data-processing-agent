@@ -101,7 +101,9 @@ public class BrokerConfiguration {
                 mqttOptions.setUserName(brokerConf.user);
                 mqttOptions.setPassword(brokerConf.password.toCharArray());
             }
-            mqttOptions.setWill(brokerConf.willTopic, brokerConf.will.getBytes(),2,true);
+            if(brokerConf.will!=null&& brokerConf.willTopic!=null)
+                mqttOptions.setWill(brokerConf.willTopic, brokerConf.will.getBytes(),2,false);
+
 
           //  mqttOptions.setServerURIs();
           //  mqttOptions.setSSLProperties();
@@ -143,12 +145,12 @@ public class BrokerConfiguration {
             brokerConf.version =  MqttVersion.valueOf(getString(BrokerServiceConst.MQTT_VERSION, aux));
             brokerConf.automaticReconnect = getBoolean(BrokerServiceConst.AUTOMATIC_RECONNECT,aux);
             brokerConf.cleanSession = getBoolean(BrokerServiceConst.CLEAN_SESSION,aux);
-            if(conf.containsKey(BrokerServiceConst.USER + aux)&& conf.containsKey(BrokerServiceConst.USER )) {
+            if(conf.containsKeyAnywhere(BrokerServiceConst.USER + aux)&& conf.containsKeyAnywhere(BrokerServiceConst.USER )) {
                 brokerConf.user = getString(BrokerServiceConst.USER, aux);
                 brokerConf.password = getString(BrokerServiceConst.PASSWORD, aux);
             }
 
-            if ((conf.containsKey(Const.CERTIFICATE_BASE_SECURITY) ||  conf.containsKey(Const.CERTIFICATE_BASE_SECURITY + aux))&& getBoolean(Const.CERTIFICATE_BASE_SECURITY, aux)) {
+            if ((conf.containsKeyAnywhere(Const.CERTIFICATE_BASE_SECURITY) ||  conf.containsKeyAnywhere(Const.CERTIFICATE_BASE_SECURITY + aux))&& getBoolean(Const.CERTIFICATE_BASE_SECURITY, aux)) {
                 brokerConf.secConf = brokerConf.getInitSecurityConfiguration();
                 brokerConf.secConf.CApath = getString(Const.CA_CERTIFICATE_PATH, aux);
                 brokerConf.secConf.clientCertificatePath = getString(Const.CERTIFICATE_FILE_PATH, aux);
@@ -164,19 +166,19 @@ public class BrokerConfiguration {
         }
     }
     static private String getString(String key, String postFix){
-        if(conf.containsKey(key + postFix))
+        if(conf.containsKeyAnywhere(key + postFix))
             return conf.getString(key + postFix);
 
         return conf.getString(key);
     }
     static private boolean getBoolean(String key, String postFix){
-        if(conf.containsKey(key + postFix))
+        if(conf.containsKeyAnywhere(key + postFix))
             return conf.getBoolean(key + postFix);
 
         return conf.getBoolean(key);
     }
     static private int getInt(String key, String postFix){
-        if(conf.containsKey(key + postFix))
+        if(conf.containsKeyAnywhere(key + postFix))
             return conf.getInt(key + postFix);
 
         return conf.getInt(key);

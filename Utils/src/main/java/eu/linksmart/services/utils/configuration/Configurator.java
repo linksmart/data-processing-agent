@@ -67,6 +67,7 @@ public class Configurator extends CombinedConfiguration {
 
     }
     private List<String> loadedFiles = new ArrayList<>();
+    private boolean enableEnvironmentalVariables =false;
 
 
     public Configurator(String configurationFile) {
@@ -130,6 +131,19 @@ public class Configurator extends CombinedConfiguration {
             return null;
         }
     }
+    public void enableEnvironmentalVariables(){
+        if(!enableEnvironmentalVariables){
+            this.addConfiguration(new EnvironmentConfiguration(), EnvironmentConfiguration.class.getCanonicalName());
+            this.loadedFiles.add(EnvironmentConfiguration.class.getCanonicalName());
+        }
+        enableEnvironmentalVariables = true;
+    }
+
+    public boolean isEnvironmentalVariablesEnabled(){
+        return enableEnvironmentalVariables;
+    }
+
+
     static public  FileBasedConfigurationBuilder<? extends FileBasedConfiguration> factoryBuilder(String filename, Class<? extends FileBasedConfiguration> confType){
         return new FileBasedConfigurationBuilder<>(confType)
                         .configure(new Parameters().properties()
@@ -274,6 +288,10 @@ public class Configurator extends CombinedConfiguration {
         int i = mostRecentConf(key);
 
         return i>-1?this.getConfiguration(i).getList(key):null;
+    }
+    public boolean containsKeyAnywhere(String key){
+
+        return mostRecentConf(key)>-1;
     }
 
 

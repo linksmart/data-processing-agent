@@ -86,7 +86,8 @@ public class DataProcessingCore {
             Configurator.addConfFile(args);
         else if(Utils.fileExists(Const.APPLICATION_CONFIGURATION_FILE))
             Configurator.addConfFile(Const.APPLICATION_CONFIGURATION_FILE);
-
+        if(System.getenv().containsKey(Const.ENVIRONMENTAL_VARIABLES_ENABLED))
+            Configurator.getDefaultConfig().enableEnvironmentalVariables();
         conf = Configurator.getDefaultConfig();
 
         loggerService = Utils.initLoggingConf(DataProcessingCore.class);
@@ -97,6 +98,8 @@ public class DataProcessingCore {
             loggerService.info("Loading configuration form file " + Const.APPLICATION_CONFIGURATION_FILE);
         }else
             loggerService.info("No configuration conf.cfg file in the class path or as argument at start. Only the defaults values are used");
+        if(conf.isEnvironmentalVariablesEnabled())
+            return;loggerService.info("The environmental variables are loaded!");
         String idPath= conf.getString(Const.ID_CONF_PATH);
         if("*".equals(idPath))
             DynamicConst.setIsSet(true);
@@ -121,7 +124,7 @@ public class DataProcessingCore {
     }
 
     private static void initForceLoading() {
-        if(conf.containsKey(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)) {
+        if(conf.containsKeyAnywhere(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)) {
             String[] modules = conf.getStringArray(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING);
             loggerService.info("Loading following extensions "+ Arrays.toString(modules));
             Arrays.stream(modules).forEach(cls -> {
@@ -147,6 +150,8 @@ public class DataProcessingCore {
             Class.forName(EventFeeder.class.getCanonicalName());
             Class.forName(StatementFeeder.class.getCanonicalName());
             Class.forName(BootstrappingBean.class.getCanonicalName());
+            DynamicConst.setWillTopic(conf.getString(Const.WILL_TOPIC));
+            DynamicConst.setWill(conf.getString(Const.WILL_MESSAGE));
             mqtt = MqttIncomingConnectorService.getReference(DynamicConst.getWill(),DynamicConst.getWillTopic());
 
             if(conf.getList(Const.PERSISTENT_DATA_FILE) != null ) {

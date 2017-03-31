@@ -73,7 +73,7 @@ public  class ForwardingListener implements MqttCallback {
         this.connectionListener = connectionListener;
 
         /// Code for validation and test proposes
-        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_FORWARDING)) {
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(Const.VALIDATION_FORWARDING)) {
             deserializer = new DefaultDeserializer();
             validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
         }else{

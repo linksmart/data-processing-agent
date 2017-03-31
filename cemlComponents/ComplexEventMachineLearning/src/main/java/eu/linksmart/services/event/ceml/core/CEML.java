@@ -84,7 +84,7 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
                 .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
 
 
-        if(conf.containsKey(Const.CEML_INIT_BOOTSTRAPPING))
+        if(conf.containsKeyAnywhere(Const.CEML_INIT_BOOTSTRAPPING))
             (new FileCemlAPI(conf.getString(Const.CEML_INIT_BOOTSTRAPPING))).loadFiles();
         try {
             Class.forName(MqttCemlAPI.class.getCanonicalName());

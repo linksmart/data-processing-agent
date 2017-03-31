@@ -39,7 +39,7 @@ public class TopicMessageDeliverable implements Runnable{
         this.topic=topic;
 
         /// Code for validation and test proposes
-        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKey(Const.VALIDATION_DELIVERER)) {
+        if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(Const.VALIDATION_DELIVERER)) {
             deserializer = new DefaultDeserializer();
             validator = new MessageValidator(this.getClass(),topic,Configurator.getDefaultConfig().getLong(Const.VALIDATION_LOT_SIZE));
         }else{

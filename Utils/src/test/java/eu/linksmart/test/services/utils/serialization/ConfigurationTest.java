@@ -52,46 +52,61 @@ public class ConfigurationTest {
         Configurator configurator = new Configurator(confFile2);
 
         // check if the prop of file 1 is in file 2
-        assertEquals(false, Configurator.getDefaultConfig().containsKey("my.test.property"));
+        assertEquals(false, Configurator.getDefaultConfig().containsKeyAnywhere("my.test.property"));
         // check if the shared prop is in file 2
-        assertEquals(true, configurator.containsKey("my.test.shared.property"));
+        assertEquals(true, configurator.containsKeyAnywhere("my.test.shared.property"));
         // check if the shared prop is the one in file 2
         assertEquals(strCmp2, configurator.getString("my.test.shared.property"));
 
         Configurator.getDefaultConfig().addConfigurationFile(confFile1);
 
         // check if the prop of file 1 is in file 1
-        assertEquals(true, Configurator.getDefaultConfig().containsKey("my.test.property"));
+        assertEquals(true, Configurator.getDefaultConfig().containsKeyAnywhere("my.test.property"));
         // check (again) if the prop of file 1 is in file 2
-        assertEquals(false, configurator.containsKey("my.test.property"));
+        assertEquals(false, configurator.containsKeyAnywhere("my.test.property"));
         // check if the prop of file 2 is in file 2
-        assertEquals(true, configurator.containsKey("my.test.property2"));
+        assertEquals(true, configurator.containsKeyAnywhere("my.test.property2"));
 
         // check if the shared prop is in file 1
-        assertEquals(true, Configurator.getDefaultConfig().containsKey("my.test.shared.property"));
+        assertEquals(true, Configurator.getDefaultConfig().containsKeyAnywhere("my.test.shared.property"));
         // check if the shared prop is the one in file 1
         assertEquals(strCmp1, Configurator.getDefaultConfig().getString("my.test.shared.property"));
 
         // check (again) if the shared prop is in file 2
-        assertEquals(true, configurator.containsKey("my.test.shared.property"));
+        assertEquals(true, configurator.containsKeyAnywhere("my.test.shared.property"));
         // check (again) if the shared prop is the one in file 2
         assertEquals(strCmp2, configurator.getString("my.test.shared.property"));
 
         configurator.addConfigurationFile(confFile1);
         // check if the prop of file 1 had being added to the ones of file 2
-        assertEquals(true, configurator.containsKey("my.test.property"));
+        assertEquals(true, configurator.containsKeyAnywhere("my.test.property"));
 
         // check (again) if the shared prop is in file 2
-        assertEquals(true, Configurator.getDefaultConfig().containsKey("my.test.shared.property"));
+        assertEquals(true, Configurator.getDefaultConfig().containsKeyAnywhere("my.test.shared.property"));
         // check if the shared prop of file 1 had overwrite the one of file 2
         assertEquals(strCmp1, Configurator.getDefaultConfig().getString("my.test.shared.property"));
 
         // check if fake properties return errors
-        assertEquals(false, configurator.containsKey("fake"));
+        assertEquals(false, configurator.containsKeyAnywhere("fake"));
         // check if fake properties return errors
         assertEquals(null, configurator.getString("fake"));
         // check if fake files return errors
         assertEquals(false, Configurator.addConfFile("fake"));
+
+        // testing with environmental variables
+
+        // check if fake properties return errors
+        assertEquals(false, configurator.containsKeyAnywhere("JAVA_HOME"));
+        // enable the environmental variables
+        configurator.enableEnvironmentalVariables();
+        // Loading JAVA_HOME content from env var for testing
+        String sy = System.getenv("JAVA_HOME");
+        // checking if JAVA_HOME exist
+        assertEquals(true, configurator.containsKeyAnywhere("JAVA_HOME"));
+        // compering loaded value with the one loaded by conf
+        assertEquals(sy, configurator.getString("JAVA_HOME"));
+        // ensure that the conf files are still loaded
+        assertEquals(true, Configurator.getDefaultConfig().containsKeyAnywhere("my.test.shared.property"));
 
         // release resources
         Configurator.getDefaultConfig().clear();

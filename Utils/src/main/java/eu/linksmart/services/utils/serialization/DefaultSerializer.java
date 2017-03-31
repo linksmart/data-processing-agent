@@ -22,7 +22,7 @@ public class DefaultSerializer implements Serializer{
     public DefaultSerializer() {
 
         parser.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        if(conf !=null && conf.containsKey(Const.TIME_EPOCH_CONF_PATH))
+        if(conf !=null && conf.containsKeyAnywhere(Const.TIME_EPOCH_CONF_PATH))
             parser.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, conf.getBoolean(Const.TIME_EPOCH_CONF_PATH));
         parser.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
         parser.setDateFormat(Utils.getDateFormat());

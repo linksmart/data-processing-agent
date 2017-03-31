@@ -50,4 +50,5 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, Feed
     public static final String WILL_MESSAGE = "api.statements.mqtt.message.base.will";
     public static final String MONITOR_TOPICS = "connector.monitoring.mqtt.events.report.topics";
     public static final String MONITOR_EVENTS = "connector.monitoring.mqtt.events.report.everySeconds";
+    public static final String ENVIRONMENTAL_VARIABLES_ENABLED = "env.var.enabled";
 }
