@@ -8,10 +8,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - ./docker-conf:/config:ro
-    extra_hosts:
-       - "broker:129.26.162.113"
+    environment:
+      - "JAVA_OPTS=-Dconnection.broker.mqtt.hostname=magna"
+#    extra_hosts:
+ #      - "broker:129.26.162.113"
  #   depends_on:
  #     - mqtt-broker
  #   links:

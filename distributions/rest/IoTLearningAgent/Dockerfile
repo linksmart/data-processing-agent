@@ -8,6 +8,6 @@ ADD target/*.jar agent.jar
 RUN ln -s /config/conf.cfg ./conf.cfg
 
 VOLUME /config
-ENTRYPOINT ["java", "-cp","./*", "org.springframework.boot.loader.PropertiesLauncher"]
+ENTRYPOINT ["java", "-cp","./dependencies/*:./*", "org.springframework.boot.loader.PropertiesLauncher"]
 
 #  docker run -v <<//D/workspaces/IoTAgents/gpl-artifacts/distributions/rest/IoTLearningAgent/docker-conf/>>:/config --add-host=broker:<<ip>> la-rest
