@@ -118,7 +118,7 @@ public class DefaultMQTTPublisher implements Publisher {
         }
     }
     private String makeTopic(String string){
-        return string+id;
+        return string;
     }
     @Override
     public synchronized boolean publish(byte[] payload) {
