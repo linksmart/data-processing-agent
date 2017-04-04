@@ -13,13 +13,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -81,7 +84,7 @@ public class Application {
         }
 
     }
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status() {
 
         Map<String, Object> map = new Hashtable<>();
@@ -121,6 +124,7 @@ public class Application {
                 .title(info.getProperty("linksmart.service.info.distribution.name"))
                 .description(info.getProperty("linksmart.service.info.distribution.description"))
                 //.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
+                .contact(new Contact(info.getProperty("linksmart.service.info.distribution.contact.name"),info.getProperty("linksmart.service.info.distribution.contact.url"),info.getProperty("linksmart.service.info.distribution.contact.email")))
                 .license(info.getProperty("linksmart.service.info.distribution.license"))
                 .licenseUrl("linksmart.service.info.distribution.url")
                 .version(info.getProperty(Utils.getVersion()))
