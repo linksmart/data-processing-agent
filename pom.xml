@@ -59,7 +59,6 @@
         </dependencies>
     </dependencyManagement>
     <modules>
-        <module>configurations</module>
         <module>cemlComponents</module>
         <module>cepComponents</module>
         <module>distributions</module>
