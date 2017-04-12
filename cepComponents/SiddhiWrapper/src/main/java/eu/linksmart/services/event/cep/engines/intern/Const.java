@@ -5,5 +5,5 @@ package eu.linksmart.services.event.cep.engines.intern;
  */
 public interface Const extends eu.linksmart.services.utils.constants.Const {
     public static final String STATEMENT_INOUT_BASE_TOPIC_CONF_PATH ="STATEMENT_INOUT_BASE_TOPIC";
-    public static final String DEFAULT_CONFIGURATION_FILE = "conf.cfg";
+    public static final String DEFAULT_CONFIGURATION_FILE = "__def__conf__.cfg";
 }

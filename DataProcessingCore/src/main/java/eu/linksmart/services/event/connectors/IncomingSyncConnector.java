@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by José Ángel Carvajal on 05.12.2016 a researcher of Fraunhofer FIT.
  */
-public abstract class IncommingSyncConnector implements IncomingConnector {
+public abstract class IncomingSyncConnector implements IncomingConnector {
    // protected Map<String,Map<String, Map<String, List<Observer>>>> protocolHostTopicToObserver = new ConcurrentHashMap<>();
 
     static final private String ALL = "ALL";

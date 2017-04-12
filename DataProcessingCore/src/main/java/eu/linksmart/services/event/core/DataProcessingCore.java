@@ -7,6 +7,7 @@ import eu.linksmart.services.event.connectors.FileConnector;
 import eu.linksmart.services.event.connectors.Observers.EventMqttObserver;
 import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
 import eu.linksmart.services.event.feeder.EventFeeder;
+import eu.linksmart.services.event.connectors.RestInit;
 import eu.linksmart.services.event.feeder.StatementFeeder;
 import eu.linksmart.api.event.types.impl.BootstrappingBean;
 import eu.linksmart.services.event.intern.DynamicConst;
@@ -176,6 +177,9 @@ public class DataProcessingCore {
                 }
             });
 
+
+          if (conf.containsKeyAnywhere(Const.ENABLE_REST_API)&&  conf.getBoolean(Const.ENABLE_REST_API))
+                    RestInit.init(conf);
 
 
         } catch (Exception e) {

@@ -7,16 +7,16 @@ import eu.linksmart.services.utils.mqtt.broker.BrokerServiceConst;
  * Created by José Ángel Carvajal on 06.08.2015 a researcher of Fraunhofer FIT.
  */
 public interface Const extends   BrokerServiceConst,LoggerServiceConst {
-    public static String TIME_FORMAT_CONF_PATH = "general.time.timestamp.format";
-    public static String TIME_TIMEZONE_CONF_PATH = "general.time.zone";
-    public static String TIME_EPOCH_CONF_PATH = "general.time.epoch";
-    public static final String TIME_ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" ;
+    public static String TIME_FORMAT_CONF_PATH = "general_time_timestamp_format";
+    public static String TIME_TIMEZONE_CONF_PATH = "general_time_zone";
+    public static String TIME_EPOCH_CONF_PATH = "general_time_epoch";
+    public static final String TIME_ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss_SSS'Z'" ;
 
-    public static final  String CONFIGURATION_CLASS_FILE = "eu.linksmart.services.Application";
+    public static final  String CONFIGURATION_CLASS_FILE = "eu_linksmart_services_Application";
 
-    public static String VALIDATION_LOT_SIZE = "test.validation.lot.size";
-    public static String VALIDATION_FORWARDING = "test.validation.message.forwarding.enabled";
-    public static String VALIDATION_OBSERVERS = "test.validation.mqtt.observers.enabled";
+    public static String VALIDATION_LOT_SIZE = "test_validation_lot_size";
+    public static String VALIDATION_FORWARDING = "test_validation_message_forwarding_enabled";
+    public static String VALIDATION_OBSERVERS = "test_validation_mqtt_observers_enabled";
 
-    public static String VALIDATION_DELIVERER = "test.validation.message.deliverer";
+    public static String VALIDATION_DELIVERER = "test_validation_message_deliverer";
 }

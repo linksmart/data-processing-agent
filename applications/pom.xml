@@ -12,8 +12,7 @@
     <artifactId>applications</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>MqttApplication</module>
-        <module>RestApplication</module>
+        <module>ServiceLauncher</module>
     </modules>
 
 </project>

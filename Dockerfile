@@ -1,21 +1,17 @@
-FROM java:8-jdk
-
-RUN mkdir -p /usr/src/myapp /config
-WORKDIR /usr/src/myapp
-
-RUN wget -q -O "LeanringAgent.jar" "https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=releases&g=eu.linksmart.services.events.gpl.distributions.rest&a=iot.learning.rest.agent&v=LATEST"
-
-WORKDIR /config
+FROM java:openjdk-8-jre
+MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
 
-RUN wget -q -O "conf.cfg" "https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=releases&g=eu.linksmart.services.events.gpl.distributions.rest&a=iot.learning.rest.agent&v=LATEST&c=configuration&e=cfg"
+WORKDIR /usr/src/app
+ADD distributions/IoTAgent/target/*.jar agent.jar
 
-WORKDIR /usr/src/myapp
+ENV env_var_enabled=true
+ENV agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
+ENV cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
 
 RUN ln -s /config/conf.cfg ./conf.cfg
 
 VOLUME /config
+ENTRYPOINT ["java", "-cp","./*", "org.springframework.boot.loader.PropertiesLauncher"]
 EXPOSE 8319
-
-CMD ["java", "-jar", "LeanringAgent.jar"]
-
+#  docker run -v <<//D/workspaces/IoTAgents/gpl-artifacts/distributions/rest/IoTDataProcessingAgent/docker-conf/>>:/config --add-host=broker:<<ip>> <<la-rest>>

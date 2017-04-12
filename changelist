@@ -3,21 +3,24 @@
         * Adding Raspberry PI nd4j distribution
         * Upgrade paho clients to 1.1.0
         * Adding configuration setting for mqtt:
-                messaging.client.mqtt.version (for selecting mqtt protocol version)
-                messaging.client.mqtt.maxInFlightMessages (maximum message in process to be sent in the client side)
-                messaging.client.mqtt.automaticReconnect (set paho to reconnect automatically instead to do it by the BrokerService client code)
-                messaging.client.mqtt.session.clean.enabled (enabling or disabling clean sessions )
-                messaging.client.mqtt.enableRetainPolicy (allowing retain policy)
-                messaging.client.mqtt.security.user (allowing to set user)
-                messaging.client.mqtt.security.password (allowing to set password)
-                api.statements.mqtt.topic.base.will (allowing to set a testament topic if the connection is lost)
-                api.statements.mqtt.message.base.will (allowing to set a testament message if the connection is lost)
-                connection.brokers.service.connection.multiple (enable to open a connection per soft-client [experimental feature])
+                messaging_client_mqtt_version (for selecting mqtt protocol version)
+                messaging_client_mqtt_maxInFlightMessages (maximum message in process to be sent in the client side)
+                messaging_client_mqtt_automaticReconnect (set paho to reconnect automatically instead to do it by the BrokerService client code)
+                messaging_client_mqtt_session_clean_enabled (enabling or disabling clean sessions )
+                messaging_client_mqtt_enableRetainPolicy (allowing retain policy)
+                messaging_client_mqtt_security_user (allowing to set user)
+                messaging_client_mqtt_security_password (allowing to set password)
+                api_statements_mqtt_topic_base_will (allowing to set a testament topic if the connection is lost)
+                api_statements_mqtt_message_base_will (allowing to set a testament message if the connection is lost)
+                connection_brokers_service_connection_multiple (enable to open a connection per soft-client [experimental feature])
         * Now the AutoRegressiveNeuralNetwork can be serialized and deserialized
         * All Classification evaluation Evaluation Algorithms have a short version name.
         * Now the Agent accepts Object type in the data descriptor
         * Introduction of the Pyro Integration layer for Python
         * Monitoring stats info about the amount of messages arrived
+        * Allow environmental variables for configuration
+            *All variables now change the names from '.' to '_' to avoid issues with Unix Environmental Variables
+        * Create a single configuration distribution for all types of agents
     DEV:
         * Creating evaluation tools artifacts
         * Inserting evaluation code. This can be enable by conf

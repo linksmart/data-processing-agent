@@ -3,29 +3,44 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>eu.linksmart.services.events.distributions.rest</groupId>
-        <artifactId>rest.reactor</artifactId>
+        <groupId>eu.linksmart.services.events.distributions</groupId>
+        <artifactId>parent.reactor</artifactId>
         <version>1.4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>iot.learning.rest.agent</artifactId>
-    <name>IoT Learning REST agent </name>
+    <artifactId>iot.learning.universal.agent</artifactId>
+    <name>LinkSmart® Apache IoT Agent</name>
     <packaging>jar</packaging>
     <dependencies>
        <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>RestApplication</artifactId>
+            <artifactId>ServiceLouncher</artifactId>
+       </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>ceml</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>ceml.rest.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>configuration.agent.learning.agent</artifactId>
+        </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>SiddhiWrapper</artifactId>
         </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>PythonModelsIntergrator</artifactId>
+        </dependency>
+
 
 
     </dependencies>
     <build>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -42,6 +57,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <!-- nothing here -->
             </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

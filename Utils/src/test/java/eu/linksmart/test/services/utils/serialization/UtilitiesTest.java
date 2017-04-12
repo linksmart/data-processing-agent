@@ -29,7 +29,7 @@ public class UtilitiesTest {
         assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",Utils.hashIt(""));
         assertEquals(true, Utils.isResource("testConf1.cfg"));
         try {
-            assertEquals(true, Utils.createPropertyFiles("testConf1.cfg").containsKey("my.test.property"));
+            assertEquals(true, Utils.createPropertyFiles("testConf1.cfg").containsKey("my_test_property"));
         } catch (IOException e) {
             e.printStackTrace();
             fail();

@@ -4,7 +4,7 @@ services:
     image: eclipse-mosquitto
   dpa:
     build:
-      context: ../../gpl-artifacts/distributions/rest/IoTDataProcessingAgent/
+      context: ../../gpl-artifacts/
       dockerfile: Dockerfile
     volumes:
       - ./dpa-config:/config:ro

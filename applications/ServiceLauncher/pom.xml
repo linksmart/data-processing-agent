@@ -9,19 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MqttApplication</artifactId>
+    <artifactId>ServiceLouncher</artifactId>
 
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>data.procesing.core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+
         </dependency>
 
+
+
     </dependencies>
-    <!--  test-->
-    <packaging>jar</packaging>
+
+
 </project>

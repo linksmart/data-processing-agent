@@ -14,8 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>mqtt</module>
-        <module>rest</module>
+        <module>IoTAgent</module>
     </modules>
 
 </project>

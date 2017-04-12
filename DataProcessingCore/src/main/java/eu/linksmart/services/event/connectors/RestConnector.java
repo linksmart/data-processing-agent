@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.feeder;
+package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.IncomingConnector;
@@ -6,6 +6,8 @@ import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.impl.StatementInstance;
+import eu.linksmart.services.event.feeder.EventFeeder;
+import eu.linksmart.services.event.feeder.StatementFeeder;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
@@ -19,21 +21,16 @@ import eu.linksmart.services.utils.serialization.Serializer;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.web.servlet.HandlerMapping;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.http.HttpServletRequest;
 

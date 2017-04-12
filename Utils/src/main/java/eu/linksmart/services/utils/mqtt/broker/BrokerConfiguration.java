@@ -126,7 +126,7 @@ public class BrokerConfiguration {
     }
     static protected BrokerConfiguration loadConfiguration(String alias, BrokerConfiguration brokerConf){
         try {
-            String aux = "".equals(alias)|| alias==null ? "":"." + alias;
+            String aux = "".equals(alias)|| alias==null ? "":"_" + alias;
 
 
             brokerConf.hostname = getString(Const.DEFAULT_HOSTNAME, aux);

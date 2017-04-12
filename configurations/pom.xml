@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>utilsConfigurations</module>
-        <module>dpaConfiguration</module>
         <module>laConfiguration</module>
     </modules>
 

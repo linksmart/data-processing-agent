@@ -130,7 +130,6 @@
         <module>configurations</module>
         <module>cepComponents</module>
         <module>DataProcessingCore</module>
-        <module>RestFeeder</module>
 		<module>cemlComponents</module>
         <module>distributions</module>
         <module>test</module>
@@ -145,7 +144,11 @@
                 <version>${ls.se.agents.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>ServiceLouncher</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
                 <artifactId>payload</artifactId>
@@ -216,6 +219,18 @@
             <dependency>
                 <groupId>eu.linksmart.services.events.testing</groupId>
                 <artifactId>tools</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
+            <!-- models -->
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>PythonModelsIntergrator</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
 

@@ -1,7 +1,0 @@
-linksmart.service.info.distribution.name = LinkSmart (R) IoT Data-Processing Agent
-linksmart.service.info.distribution.description = A data processing service that offers CEP as a service
-linksmart.service.info.distribution.license = Apache License version 2.0
-linksmart.service.info.distribution.url =  http://www.apache.org/licenses/LICENSE-2.0
-linksmart.service.info.distribution.contact.name = Jose Angel Carvajal Soto
-linksmart.service.info.distribution.contact.url = https://fit.fraunhofer.de
-linksmart.service.info.distribution.contact.email = carvaja@fit.fhg.de

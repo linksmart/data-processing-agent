@@ -1,17 +1,18 @@
-package eu.linksmart.services;
+package eu.linksmart.services.event.connectors;
 
-import eu.linksmart.services.event.core.DataProcessingCore;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
+ * Created by José Ángel Carvajal on 10.04.2017 a researcher of Fraunhofer FIT.
  */
 @Configuration
 @PropertySource("__def__conf__.cfg")
@@ -43,45 +44,23 @@ import java.util.Properties;
 @SpringBootApplication
 @RestController
 @EnableSwagger2
-public class Application {
+public class RestInit {
     static Properties info = null;
+    public static void init(Configurator conf) {
 
-    public static void main(String[] args) {
-
-        String confFile = Const.DEFAULT_CONFIGURATION_FILE;
         try {
             info = Utils.createPropertyFiles("service.info");
         } catch (IOException e) {
-            Utils.initLoggingConf(Application.class).error(e.getMessage(),e);
+            Utils.initLoggingConf(RestInit.class).error(e.getMessage(), e);
         }
 
-        if(args.length>0)
-            confFile = args[0];
-        else
-            confFile = Const.APPLICATION_CONFIGURATION_FILE;
-        System.setProperty("spring.config.name",confFile);
-        Boolean hasStarted = DataProcessingCore.start(confFile);
-        if(hasStarted) {
-            SpringApplication springApp =  new SpringApplication(Application.class);
-            try {
+        SpringApplication springApp = new SpringApplication(RestInit.class);
 
-                if(Utils.isFile(confFile)) {
+        springApp.setDefaultProperties(toProperties(conf));
 
-                    Properties properties = Utils.createPropertyFiles(confFile);
+        springApp.addInitializers();
+        springApp.run();
 
-                    if (properties.containsKey("server.port"))
-                        springApp.setDefaultProperties(properties);
-                }
-                else  springApp.setDefaultProperties(Utils.createPropertyFiles( Const.DEFAULT_CONFIGURATION_FILE));
-                
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            springApp.addInitializers();
-            springApp.run(args);
-
-
-        }
 
     }
     @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -123,11 +102,22 @@ public class Application {
         return new ApiInfoBuilder()
                 .title(info.getProperty("linksmart.service.info.distribution.name"))
                 .description(info.getProperty("linksmart.service.info.distribution.description"))
-                //.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
+                        //.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
                 .contact(new Contact(info.getProperty("linksmart.service.info.distribution.contact.name"),info.getProperty("linksmart.service.info.distribution.contact.url"),info.getProperty("linksmart.service.info.distribution.contact.email")))
                 .license(info.getProperty("linksmart.service.info.distribution.license"))
                 .licenseUrl("linksmart.service.info.distribution.url")
                 .version(info.getProperty(Utils.getVersion()))
                 .build();
+    }
+    static private Properties toProperties(Configurator configurator){
+        Properties properties = new Properties();
+        if(configurator.containsKeyAnywhere(Const.SPRING_MANAGED_FEATURES)) {
+            String [] keys = configurator.getStringArray(Const.SPRING_MANAGED_FEATURES);
+            for (String key :keys) {
+                if (configurator.containsKeyAnywhere(key))
+                    properties.put(key, configurator.getString(key));
+            }
+        }
+        return properties;
     }
 }

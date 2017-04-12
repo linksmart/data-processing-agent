@@ -2,27 +2,21 @@ package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.InternalException;
-import eu.linksmart.services.event.connectors.Observers.EventMqttObserver;
 import eu.linksmart.services.event.connectors.Observers.IncomingMqttObserver;
-import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
-import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.mqtt.broker.Broker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
-import eu.linksmart.services.utils.mqtt.broker.StaticBrokerService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
 /**
  * Created by José Ángel Carvajal on 01.09.2016 a researcher of Fraunhofer FIT.
  */
-public class MqttIncomingConnectorService extends  IncommingSyncConnector implements IncomingConnector {
+public class MqttIncomingConnectorService extends IncomingSyncConnector implements IncomingConnector {
 
     static protected MqttIncomingConnectorService me = null;
 
