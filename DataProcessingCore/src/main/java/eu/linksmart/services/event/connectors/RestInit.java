@@ -63,7 +63,7 @@ public class RestInit {
 
 
     }
-    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status() {
 
         Map<String, Object> map = new Hashtable<>();

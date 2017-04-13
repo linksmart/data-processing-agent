@@ -12,10 +12,8 @@ services:
       - mqtt-broker
     links:
       - mqtt-broker
-    # wish list behavior
-    # environment:
-      # - "JAVA_OPTS=-Dconnection.broker.mqtt.hostname=mqtt-broker"
-      # - "CONNECTION_BROKER_MQTT_HOSTNAME=mqtt-broker"
+    environment:
+      - connection_broker_mqtt_hostname=mqtt-broker
   dpa-tester:
     build:
       context: .
