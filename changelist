@@ -1,4 +1,4 @@
- - 1.4.0 RELEASE:
+13.04.2017 - 1.4.0 RELEASE:
     Features:
         * Adding Raspberry PI nd4j distribution
         * Upgrade paho clients to 1.1.0
@@ -16,11 +16,12 @@
         * Now the AutoRegressiveNeuralNetwork can be serialized and deserialized
         * All Classification evaluation Evaluation Algorithms have a short version name.
         * Now the Agent accepts Object type in the data descriptor
-        * Introduction of the Pyro Integration layer for Python
+        * PythonIntegration fully functional
         * Monitoring stats info about the amount of messages arrived
         * Allow environmental variables for configuration
             *All variables now change the names from '.' to '_' to avoid issues with Unix Environmental Variables
         * Create a single configuration distribution for all types of agents
+        * Move the POST 'statement/add' to 'statement/' in the REST API to make it more REST
     DEV:
         * Creating evaluation tools artifacts
         * Inserting evaluation code. This can be enable by conf
@@ -29,10 +30,19 @@
         * Adding testing tooling
         * The default configurations now are separate artifacts that must be loaded in maven
         * Create different base class for different type of model (Classifier or Regressor)
+        * Default configuration file now is __def__conf__.cfg and its an internal file that should not be replaced
+        * now the models are added in the distribution and not in the CEML building process
+        * Move Tools for CEPs in a general location so every CEP can use it
+        * Added Integration test for DPA
+        * added several important unit test (ConfigurationTest, MQTTPackagesTest, SerializationTest, UtilitiesTest, EvaluatorsTest, LearningHandlerTest)
+        * Refactor the dependency such all are in the parent poms
     FIXs:
         * When the connection is lost now resubscribed. The fix is irrelevant if the messaging.client.mqtt.automaticReconnect is enabled.
         * The classifier evaluator is fixed, before was not working since version 1.1.1
         * The Nominal Data Descriptor is working properly again
+        * LS-103 & LS-107 - now the /add is no more part of the PUT statement API. And the pub topic do not concatenate twice the ID
+        * Fixed some metrics that they were not being calculated correctly
+        * now the HASH are SHA-256 in HEX and not in decimal
 15.11.2016 - 1.3.3 RELEASE:
     Features:
         * The swagger Data-Processing API is introduced

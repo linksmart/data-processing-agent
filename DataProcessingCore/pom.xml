@@ -6,7 +6,7 @@
     <parent>
         <groupId>eu.linksmart.services.events</groupId>
         <artifactId>parent</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.4.0</version>
     </parent>
     <artifactId>data.procesing.core</artifactId>
 
@@ -33,6 +33,10 @@
         </dependency>
 
         <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>cepTooling</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
@@ -40,22 +44,15 @@
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
-            <version>3.2.4</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/fluent-hc -->
+        <!-- HTTP client -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
-            <version>4.5.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>cepTooling</artifactId>
-            <version>${ls.se.agents.version}</version>
-        </dependency>
-
+        <!-- Spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -68,7 +65,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <!-- Import dependency management from Spring Boot -->
@@ -77,12 +73,7 @@
             <type>pom</type>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
+        <!-- Swagger dependencies -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -93,10 +84,19 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <scope>compile</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+
+
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
+        </dependency>
+
+        <!-- Testing dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

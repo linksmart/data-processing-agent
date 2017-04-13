@@ -4,7 +4,7 @@
 	<groupId>eu.linksmart.services.events</groupId>
 	<artifactId>parent</artifactId>
 
-	<version>1.4.0-SNAPSHOT</version>
+	<version>1.4.0</version>
 
 	<packaging>pom</packaging>
 
@@ -42,7 +42,7 @@
     </licenses>
     <properties>
         <!-- main version -->
-        <ls.se.agents.version>1.4.0-SNAPSHOT</ls.se.agents.version>
+        <ls.se.agents.version>1.4.0</ls.se.agents.version>
         <!-- LS GC version
         <linksmart.gc.version>0.3.0-SNAPSHOT</linksmart.gc.version>-->
 
@@ -59,12 +59,24 @@
         <apache.commons.beanutils.version>1.9.2</apache.commons.beanutils.version>
         <apache.commons.lang.version>3.1</apache.commons.lang.version>
         <google.gson.version>2.6.2</google.gson.version>
+        <google.guava.version>19.0</google.guava.version>
+        <org.json.version>20160212</org.json.version>
 
-
+        <wso2.siddhi.version>3.0.2</wso2.siddhi.version>
+        <antlr.version>4.5.3</antlr.version>
         <apache.commons.io.version>2.4</apache.commons.io.version>
-
+        <lmax.disruptor.version>3.3.4</lmax.disruptor.version>
+        <apache.sis.version>0.6</apache.sis.version>
+        <apache.commons.math3.version>3.0</apache.commons.math3.version>
+        <mockito.version>1.9.5</mockito.version>
+        <hibernate.version>1.0.1.Final</hibernate.version>
+        <apache.commons.configuration2.version>2.1.1</apache.commons.configuration2.version>
         <slf4j.version>1.7.21</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
+        <cglib.version>3.2.4</cglib.version>
+        <apache.fluent.hc.version>4.5.2</apache.fluent.hc.version>
+        <springfox.version>2.4.0</springfox.version>
+        <javax.servelet.version>2.5</javax.servelet.version>
 
         <!-- test dependencies versions -->
         <java.junit.version>4.12</java.junit.version>
@@ -209,7 +221,13 @@
                 <artifactId>RestApplication</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
-            <!--  LS GC  Dependencies -->
+
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>cepTooling</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
                 <artifactId>utils</artifactId>
@@ -274,6 +292,11 @@
                 <version>${google.gson.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+            </dependency>
             <!-- Eclipse -->
             <dependency>
                 <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
@@ -303,11 +326,23 @@
                 <version>${apache.commons.io.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>${apache.commons.configuration2.version}</version>
+            </dependency>
+
+            <!-- HTTP client -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>fluent-hc</artifactId>
+                <version>${apache.fluent.hc.version}</version>
+            </dependency>
             <!-- JSON objects -->
             <dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
-                <version>20160212</version>
+                <version>${org.json.version}</version>
             </dependency>
 
             <!-- Spring -->
@@ -363,7 +398,11 @@
                 <type>pom</type>
                 <scope>runtime</scope>
             </dependency>
-
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
 
 
             <!-- logging -->
@@ -395,23 +434,78 @@
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
-                <version>2.4.0</version>
+                <version>${springfox.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
-                <version>2.4.0</version>
+                <version>${springfox.version}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
-                <version>2.5</version>
+                <version>${javax.servelet.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib-nodep</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
+
+            <!-- WSO2 dependencies -->
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-core</artifactId>
+                <version>${wso2.siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-query-api</artifactId>
+                <version>${wso2.siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-query-compiler</artifactId>
+                <version>${wso2.siddhi.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-runtime</artifactId>
+                <version>${antlr.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${lmax.disruptor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sis.core</groupId>
+                <artifactId>sis-metadata</artifactId>
+                <version>${apache.sis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.javax.persistence</groupId>
+                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <!-- Maybe is not needed and the code it using it can be refactored -->
+            <dependency>
+                <groupId>uk.com.robust-it</groupId>
+                <artifactId>cloning</artifactId>
+                <version>1.9.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-math3</artifactId>
+                <version>${apache.commons.math3.version}</version>
+            </dependency>
+
             <!-- Configuration  -->
-
-
             <!-- Test Dependencies -->
             <dependency>
                 <groupId>junit</groupId>
@@ -419,7 +513,12 @@
                 <version>${java.junit.version}</version>
                 <scope>test</scope>
             </dependency>
-
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -427,7 +526,7 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!-- for compile code with dependencies -->
+                <!-- for compile code with dependencies
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
@@ -440,7 +539,7 @@
                             <Export-Package>!*</Export-Package>
                         </instructions>
                     </configuration>
-                </plugin>
+                </plugin> -->
                 <!-- for compile bundles with dependencies -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -547,18 +646,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>${maven.bundle.plugin.version}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>!*</Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
+
             <!-- build sources  -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -609,7 +697,6 @@
             <id>WSO2 Repo</id>
             <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
         </repository>
-
 
     <repository>
         <id>central</id>
