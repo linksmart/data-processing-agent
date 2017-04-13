@@ -10,6 +10,7 @@ RUN mvn clean install
 WORKDIR distributions/IoTAgent/target/
 
 ENV env_var_enabled=true
+ENV cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
 
 VOLUME /config
 VOLUME /dependencies

@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 ADD distributions/IoTAgent/target/*.jar agent.jar
 
 ENV env_var_enabled=true
-ENV agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
+ENV cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
 
 
 VOLUME /config
