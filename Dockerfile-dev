@@ -7,13 +7,30 @@ RUN mvn clean install
 WORKDIR gpl-artifacts
 RUN mvn clean install
 
-WORKDIR distributions/rest/IoTLearningAgent/target/
+WORKDIR distributions/IoTAgent/target/
 
-ENV CLASSPATH .:./lib/ceml-1.4.0-SNAPSHOT.jar
-
-ENTRYPOINT ["java", "-jar", "iot.learning.rest.agent-1.4.0-SNAPSHOT.jar"]
-
-RUN ln -s /config/conf.cfg ./conf.cfg
+ENV env_var_enabled=true
 
 VOLUME /config
+VOLUME /dependencies
+ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
+
 EXPOSE 8319
+# NOTES:
+#	RUN:
+#  		docker run [options] <<image-name>> [command]
+#   OPTIONS:
+# 		Define volume for configuration file:
+#			-v <</path/on/host/machine/conf>>:/config
+# 		Define volume for configuration file:
+#			-v <</path/on/host/machine/dep>>:/dependencies
+# 		Disable/enable REST API:
+#			-e api_rest_enabled=<false/true>
+#		Define default broker
+#			-e connection_broker_mqtt_hostname=<hostname>
+#		Expose REST:
+#			-p "8319:8319"
+#   COMMAND:
+#       Custom configuration file (volume should be defined):
+#           /config/config.cfg
+#
