@@ -51,10 +51,13 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
     public double evaluate(Collection<Number> predicted, Collection<Number>  actual) { // O(n*m) -> O(n^2)
         latestEntries.clear();
 
-        Iterator<Number> iteratorPred = predicted.iterator();
+        Iterator<Number> iteratorPredicted = predicted.iterator();
         for (Number actualEntry : actual) { // O(n)
-            Number predEntry = iteratorPred.next();
-            Map.Entry<Number,Number> entry = new AbstractMap.SimpleEntry<>(predEntry, actualEntry);
+            Number predictedEntry = iteratorPredicted.next();
+            if(actualEntry.equals(Double.NaN) || predictedEntry.equals(Double.NaN))
+                continue;
+
+            Map.Entry<Number,Number> entry = new AbstractMap.SimpleEntry<>(predictedEntry, actualEntry);
             latestEntries.add(entry);
             addToFixedSizeList(fixedSizeList, entry);
 
@@ -87,6 +90,9 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
         @Override
         public Double calculate() {
+            if(!(latestEntries.size() >0))
+                return currentValue;
+
             double squaredRMSE = currentValue*currentValue;
             double squaredSum = 0.0;
             for(Map.Entry entry:latestEntries){
@@ -120,6 +126,9 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
         @Override
         public Double calculate() {
+            if(!(latestEntries.size() >0))
+                return currentValue;
+
             double absErrorSum = 0.0;
             for(Map.Entry entry:latestEntries){
                 Double predicted = (Double) entry.getKey();
@@ -164,6 +173,9 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
         @Override
         public Double calculate() {
+            if(!(latestEntries.size() >0))
+                return currentValue;
+
             for(Map.Entry entry:latestEntries){
                 Double predicted = (Double) entry.getKey();
                 Double actual = (Double) entry.getValue();

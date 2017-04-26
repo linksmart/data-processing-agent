@@ -25,17 +25,22 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
 
     static MqttCemlAPI me;
     protected StaticBroker brokerService;
-    private static Configurator conf = Configurator.getDefaultConfig();
-    static private Logger loggerService = Utils.initLoggingConf(MqttCemlAPI.class);
+    private static Configurator conf ;
+    static private Logger loggerService ;
     static {
         try {
+            loggerService = Utils.initLoggingConf(MqttCemlAPI.class);
             me= new MqttCemlAPI();
-        } catch (MalformedURLException | ClassNotFoundException | MqttException e) {
-            loggerService.error(e.getMessage(),e);
+            conf = Configurator.getDefaultConfig();
+        } catch (Exception e) {
+            if(loggerService!=null)
+                loggerService.error(e.getMessage(),e);
+            else
+                e.printStackTrace();
         }
     }
 
-    static public MqttCemlAPI getMeDafault(){
+    static public MqttCemlAPI getMeDefault(){
         return me;
     }
     public static void reportError(StaticBroker brokerService,String message){

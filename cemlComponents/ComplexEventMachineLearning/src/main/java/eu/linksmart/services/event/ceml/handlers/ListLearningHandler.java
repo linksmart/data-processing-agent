@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.ceml.handlers;
 
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.handler.base.BaseListEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -119,7 +120,8 @@ public  class ListLearningHandler extends BaseListEventHandler {
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
             }
-            originalRequest.report();
+            if(originalRequest.getSettings().containsKey(CEMLManager.REPORTING_ENABLED) && (boolean) originalRequest.getSettings().get(CEMLManager.REPORTING_ENABLED))
+                originalRequest.report();
         }
     }
     static public void processMessage(List input, DataDescriptors  descriptors,Model model, CEMLRequest originalRequest) {

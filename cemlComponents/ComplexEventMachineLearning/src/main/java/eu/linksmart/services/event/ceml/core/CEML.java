@@ -300,7 +300,7 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
     }
     static void report(String id, String message){
         if(conf.getBoolean(Const.CEML_GenerateReports))
-            MqttCemlAPI.getMeDafault().reportFeedback(id,message);
+            MqttCemlAPI.getMeDefault().reportFeedback(id,message);
     }
     static private Map<String,Number> lastKnown = new Hashtable<>();
     static public Number filter(String filterName,Double measurement) {

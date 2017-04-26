@@ -31,7 +31,12 @@ import java.util.stream.Collectors;
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
 public class CEMLManager implements CEMLRequest {
-    private static final String ALWAYS_DEPLOY = "AlwaysDeploy";
+    // available settings for Settings MAP
+    // AlwaysDeploy = true -> deploys a model no matter if is ready or not
+    // IgnoreBuildFailures -> skips the error handling in building process
+    // p <= BuildTillPhase -> builds till phase equal or less than this number. All phases above are ignored
+    // ReportingEnabled -> enables/disables the periodic reports while learning
+    public static final String ALWAYS_DEPLOY = "AlwaysDeploy", IGNORE_BUILD_FAILURES = "IgnoreBuildFailures", BUILD_TILL_PHASE = "BuildTillPhase", REPORTING_ENABLED = "ReportingEnabled";
     @JsonProperty(value = "Name")
     protected String name;
     @JsonProperty(value = "Descriptors")
@@ -166,7 +171,17 @@ public class CEMLManager implements CEMLRequest {
         Exception exception =null;
         List<MultiResourceResponses<Statement>> responses = new LinkedList<>();
 
-        // preRequisites, descriptorBuilt, statementAuxiliaryBuilt, statementLearningBuilt, statementDeploymentBuilt, modelBuilt, requestInserted, learningStatementDeploy, auxiliaryStatementDeploy, deploymentStatementDeploy;
+
+        // control of phase building
+        int buildTill = phasesDone.length;
+        if (settings.containsKey(BUILD_TILL_PHASE) && settings.get(BUILD_TILL_PHASE) instanceof String || settings.get(BUILD_TILL_PHASE) != null)
+            try {
+                 buildTill = Integer.valueOf(settings.get(BUILD_TILL_PHASE).toString());
+            }catch (Exception e){
+                loggerService.error("Phase given was not number!",e);
+            }
+
+
 
         try {
 
@@ -178,7 +193,7 @@ public class CEMLManager implements CEMLRequest {
             phasesDone[1] = true;
 
 
-            if(phasesDone[1]) {
+            if(phasesDone[1] && 2 <= buildTill ) {
                 if (auxiliaryStatements != null)
                     for (Statement statement : auxiliaryStatements) {
                         statement.setCEHandler("");
@@ -190,7 +205,7 @@ public class CEMLManager implements CEMLRequest {
                     }
                 phasesDone[2] =  (auxiliaryStatements == null || (auxiliaryStatements.size() == statementsCounter[0]));
 
-                if (learningStatements != null)
+                if (learningStatements != null && 3 <= buildTill)
                     for (LearningStatement statement : learningStatements) {
                         statement.setRequest(this);
                         statement.setName("LearningStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
@@ -201,7 +216,7 @@ public class CEMLManager implements CEMLRequest {
                     }
                 phasesDone[3]=(learningStatements != null && learningStatements.size() == statementsCounter[1]);
 
-                if (deployStatements != null)
+                if (deployStatements != null && 4 <= buildTill)
                     for (Statement statement : deployStatements) {
                         statement.setName("DeploymentStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
                         statement.setId("DS[" + String.valueOf(statementsCounter[0]) + "]:" + name );
@@ -213,19 +228,19 @@ public class CEMLManager implements CEMLRequest {
                 phasesDone[4] = (deployStatements == null || (deployStatements.size() == statementsCounter[2]));
             }
 
-            if(phasesDone[4]) {
+            if(phasesDone[4] && 5 <= buildTill) {
                 model.setDescriptors(descriptors);
                 model.setName(name);
                 model.build();
                 phasesDone[5] = true;
             }
 
-            if(phasesDone[5]) {
+            if(phasesDone[5] && 6 <= buildTill) {
                 insertInCEPEngines();
                 phasesDone[6] = true;
             }
 
-            if (phasesDone[6] && auxiliaryStatements != null && !auxiliaryStatements.isEmpty()) {
+            if (phasesDone[6] && auxiliaryStatements != null && !auxiliaryStatements.isEmpty() && 7 <= buildTill) {
                 MultiResourceResponses<Statement> response;
                 for (Statement statement : auxiliaryStatements) {
                     response = StatementFeeder.feedStatement(statement);
@@ -238,7 +253,7 @@ public class CEMLManager implements CEMLRequest {
             } else
                 phasesDone[7] = phasesDone[6];
 
-            if (phasesDone[7] && learningStatements != null && !learningStatements.isEmpty()) {
+            if (phasesDone[7] && learningStatements != null && !learningStatements.isEmpty() && 8 <= buildTill) {
                 MultiResourceResponses<Statement> response;
                 for (Statement statement : learningStatements) {
                     response = StatementFeeder.feedStatement(statement);
@@ -249,7 +264,7 @@ public class CEMLManager implements CEMLRequest {
                     //throw new Exception(CEML.getMapper().writeValueAsString(responses));
                 }
             }
-            if (phasesDone[8] && deployStatements != null && !deployStatements.isEmpty()) {
+            if (phasesDone[8] && deployStatements != null && (!deployStatements.isEmpty()) && 9 <= buildTill) {
                 MultiResourceResponses<Statement> response;
                 for (Statement statement : deployStatements) {
                     response = StatementFeeder.feedStatement(statement);
@@ -268,7 +283,11 @@ public class CEMLManager implements CEMLRequest {
         }catch (Exception e){
             exception =e;
         }
-        errorHandling(phasesDone,phasesNames,statementsCounter,exception, !responses.isEmpty()? responses.get(responses.size()-1): null);
+        for (int i=0; i<phasesDone.length; i++)
+            phasesDone[i] = phasesDone[i] || i > buildTill;
+
+        if(!settings.containsKey(IGNORE_BUILD_FAILURES))
+            errorHandling(phasesDone,phasesNames,statementsCounter,exception, !responses.isEmpty()? responses.get(responses.size()-1): null);
 
         built=true;
         return this;

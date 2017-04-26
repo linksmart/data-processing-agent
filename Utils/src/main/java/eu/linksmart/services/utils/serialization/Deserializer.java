@@ -31,6 +31,8 @@ import java.io.IOException;
  *
  * */
 public interface Deserializer {
+    static final Deserializer defaultDeserializer = new DefaultDeserializer();
+
     /**
      * The class takes a text representation of an object, probably json, and parse and construct an java object from it.
      *
@@ -67,7 +69,7 @@ public interface Deserializer {
      * */
     <T> T deserialize(byte[] bytes, Class<T> tClass) throws IOException, NotImplementedException;
 
-    <I,C extends I> boolean defineClassToInterface(Class<I> tInterface,Class<C> tClass );
+    <I,C extends I> boolean defineClassToInterface(Class<I> tInterface,Class<C>... tClass );
     /**
      * Endorse the Deserializer to release resources if is needed.
      * */

@@ -70,8 +70,8 @@ public class AutoregressiveNeuralNetworkModel extends RegressorModel<List<Double
     @JsonIgnore
     private int seasonalityPeriod;
 
-    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets, Map<String, Object> parameters, Evaluator evaluator, Object learner) {
-        super(targets, parameters, evaluator, learner);
+    public AutoregressiveNeuralNetworkModel(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
+        super(targets, parameters, learner);
     }
 
     // @Override
