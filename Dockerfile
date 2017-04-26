@@ -1,9 +1,19 @@
-FROM java:openjdk-8-jre
+FROM maven:3-jdk-8
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
 
+COPY . /usr/src/app/
 WORKDIR /usr/src/app
-ADD distributions/IoTAgent/target/*.jar agent.jar
+
+RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git
+WORKDIR data-processing-agent
+RUN mvn install
+
+RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git
+WORKDIR gpl-artifacts
+RUN mvn install
+
+WORKDIR distributions/IoTAgent/target/
 
 ENV env_var_enabled=true
 ENV cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
