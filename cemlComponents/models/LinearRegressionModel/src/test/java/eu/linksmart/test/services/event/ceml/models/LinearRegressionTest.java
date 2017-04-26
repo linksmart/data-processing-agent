@@ -5,8 +5,6 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.models.LinearRegressionModel;
 import eu.linksmart.services.event.ceml.models.RegressorModel;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.junit.Test;
 

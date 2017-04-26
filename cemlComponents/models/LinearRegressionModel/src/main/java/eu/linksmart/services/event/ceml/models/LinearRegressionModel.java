@@ -1,6 +1,5 @@
 package eu.linksmart.services.event.ceml.models;
 
-import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.model.Model;
@@ -8,9 +7,6 @@ import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.api.event.types.JsonSerializable;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 import java.util.*;

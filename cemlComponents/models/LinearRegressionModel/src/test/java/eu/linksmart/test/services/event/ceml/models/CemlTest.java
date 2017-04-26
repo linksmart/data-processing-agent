@@ -1,34 +1,17 @@
 package eu.linksmart.test.services.event.ceml.models;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import eu.linksmart.api.event.ceml.LearningStatement;
-import eu.linksmart.api.event.ceml.data.*;
-import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
-import eu.linksmart.api.event.ceml.model.Model;
-import eu.linksmart.api.event.ceml.model.ModelDeserializer;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.ceml.core.CEML;
 import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.ceml.handlers.ListLearningHandler;
-import eu.linksmart.services.event.ceml.models.LinearRegressionModel;
-import eu.linksmart.services.event.ceml.models.RegressorModel;
-import javafx.print.Collation;
-import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -39,7 +22,7 @@ import static org.junit.Assert.fail;
  * Created by José Ángel Carvajal on 20.04.2017 a researcher of Fraunhofer FIT.
  */
 public class CemlTest {
-    String requestStr = "{\n" +
+    private static final String requestStr = "{\n" +
             "  \"Name\":\"test\",\n" +
             "  \"Descriptors\":\n" +
             "  {\n" +
@@ -81,6 +64,7 @@ public class CemlTest {
         CEMLManager request;
 
         try {
+            System.out.println("Expecting unimportant exception!");
             request = mapper.readValue(requestStr, CEMLManager.class);
 
         } catch (IOException e) {
