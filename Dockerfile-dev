@@ -16,7 +16,7 @@ WORKDIR distributions/IoTAgent/target/
 ENV env_var_enabled=true
 
 # force the REST API port to the default one
-ENV server_port = 8319
+ENV server_port=8319
 
 # mounting configuration and extra dependencies volumes
 VOLUME /config
