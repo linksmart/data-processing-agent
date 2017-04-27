@@ -1,20 +1,37 @@
 FROM maven:3-jdk-8-alpine
 
-COPY . /usr/src/app/
-WORKDIR /usr/src/app
+# the folder where the apache code is located
+VOLUME /apache-artifacts
+# the folder where the LGPL code is located
+VOLUME /gpl-artifacts
 
+# building apache artifacts
+WORKDIR /apache-artifacts
 RUN mvn clean install
+
+# building LGPG artifacts
 WORKDIR gpl-artifacts
 RUN mvn clean install
 
+# moving to the jar location
 WORKDIR distributions/IoTAgent/target/
 
+# enabling environmental variables configuration
 ENV env_var_enabled=true
+
+# force the REST API port to the default one
+ENV server_port = 8319
+
+# selecting the ESPER as CEP engine
 ENV cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
 
+# mounting configuration and extra dependencies volumes
 VOLUME /config
 VOLUME /dependencies
+
+# starting the agent
 ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
+
 
 EXPOSE 8319
 # NOTES:

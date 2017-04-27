@@ -1,26 +1,36 @@
-FROM maven:3-jdk-8
+FROM maven:3-jdk-8-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
+# installing git
+RUN apk add --no-cache git
 
-COPY . /usr/src/app/
-WORKDIR /usr/src/app
-
+# cloning and building apache code
 RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git
 WORKDIR data-processing-agent
 RUN mvn install
 
-RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git
+# cloning and building LGPL code
+RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/iot-data-processing-agent/gpl-artifacts.git
 WORKDIR gpl-artifacts
 RUN mvn install
 
+# moving to the jar location
 WORKDIR distributions/IoTAgent/target/
 
+# enabling environmental variables configuration
 ENV env_var_enabled=true
+
+# force the REST API port to the default one
+ENV server_port = 8319
+
+# selecting the ESPER as CEP engine
 ENV cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
 
-
+# mounting configuration and extra dependencies volumes
 VOLUME /config
 VOLUME /dependencies
+
+# starting the agent
 ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
 
 EXPOSE 8319
