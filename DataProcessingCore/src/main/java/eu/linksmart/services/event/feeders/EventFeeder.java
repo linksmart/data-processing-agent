@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.feeder;
+package eu.linksmart.services.event.feeders;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.CEPEngine;
@@ -15,11 +15,11 @@ import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.types.Topic;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by José Ángel Carvajal on 05.09.2016 a researcher of Fraunhofer FIT.
@@ -164,30 +164,32 @@ public class EventFeeder implements Feeder<EventEnvelope> {
 
     }
     protected void LoadTypesIntoEngines() throws  InstantiationException {
-        List topics =conf.getList(Const.EVENT_IN_TOPIC_CONF_PATH);
-        List classes =conf.getList(Const.FeederPayloadClass);
-        List aliases =conf.getList(Const.FeederPayloadAlias);
 
-        if(classes.size()!=aliases.size()&&aliases.size()!=topics.size())
+        Map<String,Pair<String,String>> aliasTopicClass= new HashMap<>();
+
+        Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
+                .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
+                .forEach(alias -> aliasTopicClass.put(alias, new ImmutablePair<>(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), conf.getString(Const.FeederPayloadClass + "_" + alias))));
+
+        if(aliasTopicClass.isEmpty())
             throw new InstantiationException(
-                    "The configuration parameters of "
-                            +Const.FeederPayloadAlias+" "
-                            +Const.FeederPayloadClass+" "
-                            +Const.EVENT_IN_TOPIC_CONF_PATH+" do not match"
+                    "The configuration parameters of incoming events "
+                            +Const.FeederPayloadAlias+" do not have proper topic or class configurations for properties: "
+                            +Const.FeederPayloadClass+"_<alias> "+Const.EVENT_IN_TOPIC_CONF_PATH+"_<alias> "
             );
-        for (CEPEngine dfw: CEPEngine.instancedEngines.values()) {
-            for(int i=0; i<classes.size();i++) {
-                try {
-                    Class aClass = Class.forName(classes.get(i).toString());
-                    topicToClass.put(new Topic(topics.get(i).toString()),aClass);
-                    aliasToClass.put(aliases.get(i).toString(), aClass);
-                    classToAlias.put(aClass.getCanonicalName(),aliases.get(i).toString());
-                   // dfw.addEventType(aliases.get(i).toString(), aClass );
-                } catch (ClassNotFoundException e) {
-                    loggerService.error(e.getMessage(), e);
-                }
-            }
 
-        }
+        CEPEngine.instancedEngines.values().stream().forEach(engine->aliasTopicClass.forEach((alias,topicClass)-> {
+                    try {
+                        Class aClass = Class.forName(topicClass.getRight());
+                        topicToClass.put(new Topic(topicClass.getLeft()),aClass);
+                        aliasToClass.put(alias, aClass);
+                        classToAlias.put(aClass.getCanonicalName(),alias);
+                        engine.addEventType(alias,aClass);
+                    } catch (ClassNotFoundException e) {
+                        loggerService.error(e.getMessage(), e);
+                    }
+                })
+
+        );
     }
 }

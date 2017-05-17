@@ -129,35 +129,35 @@ public class BrokerConfiguration {
             String aux = "".equals(alias)|| alias==null ? "":"_" + alias;
 
 
-            brokerConf.hostname = getString(Const.DEFAULT_HOSTNAME, aux);
-            brokerConf.port = getInt(Const.DEFAULT_PORT, aux);
-            brokerConf.securePort = getInt(Const.DEFAULT_PORT_SECURE, aux);
-            brokerConf.filePersistence = getBoolean(Const.DEFAULT_CONNECTION_PERSISTENCY, aux);
-            brokerConf.pubQoS = getInt(Const.DEFAULT_PUBLISH_QOS, aux);
-            brokerConf.subQoS = getInt(Const.DEFAULT_SUBSCRIPTION_QoS, aux);
-            brokerConf.retainPolicy = getBoolean(Const.DEFAULT_RETAIN_POLICY, aux);
-            brokerConf.noTries = getInt(Const.RECONNECTION_TRY, aux);
-            brokerConf.reconnectWaitingTime = getInt(Const.RECONNECTION_MQTT_RETRY_TIME,  aux);
-            brokerConf.pubQoS = getInt(Const.DEFAULT_PUBLISH_QOS, aux);
-            brokerConf.timeOut = getInt(BrokerServiceConst.CONNECTION_MQTT_CONNECTION_TIMEOUT, aux);
-            brokerConf.keepAlive = getInt(BrokerServiceConst.CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT, aux);
-            brokerConf.maxInFlightMessages = getInt(BrokerServiceConst.MAX_IN_FLIGHT, aux);
-            brokerConf.version =  MqttVersion.valueOf(getString(BrokerServiceConst.MQTT_VERSION, aux));
-            brokerConf.automaticReconnect = getBoolean(BrokerServiceConst.AUTOMATIC_RECONNECT,aux);
-            brokerConf.cleanSession = getBoolean(BrokerServiceConst.CLEAN_SESSION,aux);
+            brokerConf.hostname = getString(Const.DEFAULT_HOSTNAME, aux,brokerConf.hostname);
+            brokerConf.port = getInt(Const.DEFAULT_PORT, aux, brokerConf.port);
+            brokerConf.securePort = getInt(Const.DEFAULT_PORT_SECURE, aux, brokerConf.securePort);
+            brokerConf.filePersistence = getBoolean(Const.DEFAULT_CONNECTION_PERSISTENCY, aux, brokerConf.filePersistence);
+            brokerConf.pubQoS = getInt(Const.DEFAULT_PUBLISH_QOS, aux,  brokerConf.pubQoS);
+            brokerConf.subQoS = getInt(Const.DEFAULT_SUBSCRIPTION_QoS, aux, brokerConf.subQoS);
+            brokerConf.retainPolicy = getBoolean(Const.DEFAULT_RETAIN_POLICY, aux,  brokerConf.retainPolicy);
+            brokerConf.noTries = getInt(Const.RECONNECTION_TRY, aux, brokerConf.noTries);
+            brokerConf.reconnectWaitingTime = getInt(Const.RECONNECTION_MQTT_RETRY_TIME,  aux,  brokerConf.reconnectWaitingTime);
+            brokerConf.pubQoS = getInt(Const.DEFAULT_PUBLISH_QOS, aux,  brokerConf.pubQoS);
+            brokerConf.timeOut = getInt(BrokerServiceConst.CONNECTION_MQTT_CONNECTION_TIMEOUT, aux,  brokerConf.timeOut);
+            brokerConf.keepAlive = getInt(BrokerServiceConst.CONNECTION_MQTT_KEEP_ALIVE_TIMEOUT, aux, brokerConf.keepAlive);
+            brokerConf.maxInFlightMessages = getInt(BrokerServiceConst.MAX_IN_FLIGHT, aux,  brokerConf.maxInFlightMessages);
+            brokerConf.version =  MqttVersion.valueOf(getString(BrokerServiceConst.MQTT_VERSION, aux,  MqttVersion.DEFAULT.toString()));
+            brokerConf.automaticReconnect = getBoolean(BrokerServiceConst.AUTOMATIC_RECONNECT,aux,  brokerConf.automaticReconnect);
+            brokerConf.cleanSession = getBoolean(BrokerServiceConst.CLEAN_SESSION,aux,  brokerConf.cleanSession);
             if(conf.containsKeyAnywhere(BrokerServiceConst.USER + aux)&& conf.containsKeyAnywhere(BrokerServiceConst.USER )) {
-                brokerConf.user = getString(BrokerServiceConst.USER, aux);
-                brokerConf.password = getString(BrokerServiceConst.PASSWORD, aux);
+                brokerConf.user = getString(BrokerServiceConst.USER, aux,  brokerConf.user);
+                brokerConf.password = getString(BrokerServiceConst.PASSWORD, aux,  brokerConf.password);
             }
 
-            if ((conf.containsKeyAnywhere(Const.CERTIFICATE_BASE_SECURITY) ||  conf.containsKeyAnywhere(Const.CERTIFICATE_BASE_SECURITY + aux))&& getBoolean(Const.CERTIFICATE_BASE_SECURITY, aux)) {
+            if ((conf.containsKeyAnywhere(Const.CERTIFICATE_BASE_SECURITY) ||  conf.containsKeyAnywhere(Const.CERTIFICATE_BASE_SECURITY + aux))&& getBoolean(Const.CERTIFICATE_BASE_SECURITY, aux,  brokerConf.secConf != null)) {
                 brokerConf.secConf = brokerConf.getInitSecurityConfiguration();
-                brokerConf.secConf.CApath = getString(Const.CA_CERTIFICATE_PATH, aux);
-                brokerConf.secConf.clientCertificatePath = getString(Const.CERTIFICATE_FILE_PATH, aux);
-                brokerConf.secConf.keyPath = getString(Const.KEY_FILE_PATH, aux);
-                brokerConf.secConf.CAPassword = getString(Const.CA_CERTIFICATE_PASSWORD, aux);
-                brokerConf.secConf.clientCertificatePassword = getString(Const.CERTIFICATE_PASSWORD, aux);
-                brokerConf.secConf.keyPassword = getString(Const.KEY_PASSWORD, aux);
+                brokerConf.secConf.CApath = getString(Const.CA_CERTIFICATE_PATH, aux,  brokerConf.secConf.CApath);
+                brokerConf.secConf.clientCertificatePath = getString(Const.CERTIFICATE_FILE_PATH, aux,  brokerConf.secConf.clientCertificatePath);
+                brokerConf.secConf.keyPath = getString(Const.KEY_FILE_PATH, aux,  brokerConf.secConf.keyPath);
+                brokerConf.secConf.CAPassword = getString(Const.CA_CERTIFICATE_PASSWORD, aux,  brokerConf.secConf.CAPassword);
+                brokerConf.secConf.clientCertificatePassword = getString(Const.CERTIFICATE_PASSWORD, aux,  brokerConf.secConf.clientCertificatePassword);
+                brokerConf.secConf.keyPassword = getString(Const.KEY_PASSWORD, aux,  brokerConf.secConf.keyPassword);
             }
 
             return brokerConf;
@@ -165,23 +165,27 @@ public class BrokerConfiguration {
             throw new UnknownError(e.getMessage());
         }
     }
-    static private String getString(String key, String postFix){
+    static private String getString(String key, String postFix, String Default){
         if(conf.containsKeyAnywhere(key + postFix))
             return conf.getString(key + postFix);
+        if(conf.containsKeyAnywhere(key))
+            return conf.getString(key);
 
-        return conf.getString(key);
+        return Default;
     }
-    static private boolean getBoolean(String key, String postFix){
+    static private boolean getBoolean(String key, String postFix, boolean Default){
         if(conf.containsKeyAnywhere(key + postFix))
             return conf.getBoolean(key + postFix);
-
-        return conf.getBoolean(key);
+        if(conf.containsKeyAnywhere(key))
+            return conf.getBoolean(key);
+        return Default;
     }
-    static private int getInt(String key, String postFix){
+    static private int getInt(String key, String postFix, int Default){
         if(conf.containsKeyAnywhere(key + postFix))
             return conf.getInt(key + postFix);
-
-        return conf.getInt(key);
+        if(conf.containsKeyAnywhere(key))
+            return conf.getInt(key);
+        return Default;
     }
     static public MqttClient initClient(BrokerConfiguration brokerConf) throws MqttException {
         MqttClient mqttClient;
@@ -543,7 +547,7 @@ public class BrokerConfiguration {
 
     }
     public enum  MqttVersion{
-        DEFAULT, V3,V3_1,V3_1_1;
+        DEFAULT, V3,V3_1,V3_1_1
 
 
     }

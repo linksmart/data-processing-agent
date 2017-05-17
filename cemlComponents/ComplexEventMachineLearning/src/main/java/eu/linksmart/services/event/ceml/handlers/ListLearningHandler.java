@@ -91,7 +91,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
                         auxInput = (List) input.stream().map(m -> ((EventEnvelope) m).getValue()).collect(Collectors.toList());
                     else
                         auxInput = input;
-                    // it's possible that there has ben an error here.
+                    // it's possible that there has been an error here.
                     List groundTruth = auxInput.subList(descriptors.getInputSize(), descriptors.getTargetSize() + descriptors.getInputSize());
                     List learningInput = auxInput.subList(0, descriptors.size());
                     List predictionInput = auxInput.subList(0, descriptors.getInputSize());
@@ -120,8 +120,8 @@ public  class ListLearningHandler extends BaseListEventHandler {
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
             }
-            if(originalRequest.getSettings().containsKey(CEMLManager.REPORTING_ENABLED) && (boolean) originalRequest.getSettings().get(CEMLManager.REPORTING_ENABLED))
-                originalRequest.report();
+
+            originalRequest.report();
         }
     }
     static public void processMessage(List input, DataDescriptors  descriptors,Model model, CEMLRequest originalRequest) {

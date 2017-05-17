@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.feeder;
+package eu.linksmart.services.event.feeders;
 
 
 import eu.linksmart.api.event.exceptions.*;
@@ -16,7 +16,6 @@ import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import org.slf4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.util.*;

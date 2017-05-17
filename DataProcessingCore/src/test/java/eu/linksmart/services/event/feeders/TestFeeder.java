@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.feeder;
+package eu.linksmart.services.event.feeders;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Datastream;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
@@ -30,7 +30,7 @@ public class TestFeeder implements Feeder, Runnable {
 
     @Override
     public void run() {
-        System.out.println("start simulation feeder");
+        System.out.println("start simulation feeders");
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {

@@ -146,6 +146,7 @@
         <module>distributions</module>
         <module>test</module>
         <module>applications</module>
+        <module>connectors</module>
     </modules>
     <dependencyManagement>
         <dependencies>

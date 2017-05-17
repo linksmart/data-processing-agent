@@ -9,7 +9,6 @@ import java.util.Properties;
  */
 
 public class Application {
-    static Properties info = null;
 
 
     public static void main(String[] args) {

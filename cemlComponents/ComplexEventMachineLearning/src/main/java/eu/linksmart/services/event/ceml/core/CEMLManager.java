@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.services.event.feeder.StatementFeeder;
+import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -145,7 +145,8 @@ public class CEMLManager implements CEMLRequest {
     @Override
     public void report() {
         try {
-            CEML.report(name,CEML.getMapper().writeValueAsString(this));
+            if(settings.containsKey(CEMLManager.REPORTING_ENABLED) && (boolean) settings.get(CEMLManager.REPORTING_ENABLED))
+                CEML.report(name,CEML.getMapper().writeValueAsString(this));
 
         }catch (JsonProcessingException e) {
             loggerService.error(e.getMessage(),e);

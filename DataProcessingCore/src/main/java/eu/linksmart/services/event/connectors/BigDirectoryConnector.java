@@ -1,9 +1,6 @@
 package eu.linksmart.services.event.connectors;
 
-import eu.linksmart.api.event.exceptions.TraceableException;
-import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.feeder.EventFeeder;
-import eu.linksmart.services.utils.function.Utils;
+import eu.linksmart.services.event.feeders.EventFeeder;
 
 import java.io.*;
 import java.util.Arrays;

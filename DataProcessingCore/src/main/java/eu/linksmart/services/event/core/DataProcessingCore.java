@@ -6,9 +6,9 @@ import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 import eu.linksmart.services.event.connectors.FileConnector;
 import eu.linksmart.services.event.connectors.Observers.EventMqttObserver;
 import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
-import eu.linksmart.services.event.feeder.EventFeeder;
+import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.connectors.RestInit;
-import eu.linksmart.services.event.feeder.StatementFeeder;
+import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.api.event.types.impl.BootstrappingBean;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
@@ -169,13 +169,17 @@ public class DataProcessingCore {
             if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))
                 mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
             //
-            conf.getList(Const.EVENT_IN_TOPIC_CONF_PATH).stream().forEach(i->{
-                try {
-                    mqtt.addAddListener(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH), i.toString(), new EventMqttObserver(i.toString()));
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(),e);
-                }
-            });
+
+            Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
+                    .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
+                    .forEach(alias -> Arrays.asList(conf.getStringArray(Const.EVENTS_IN_BROKER_CONF_PATH)).forEach(broker->{
+                        try {
+                            mqtt.addAddListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
+                        } catch (Exception e) {
+                            loggerService.error(e.getMessage(),e);
+                        }
+                    }));
+
 
 
           if (conf.containsKeyAnywhere(Const.ENABLE_REST_API)&&  conf.getBoolean(Const.ENABLE_REST_API))
@@ -218,10 +222,10 @@ public class DataProcessingCore {
             }
 
         }
-        intoCEPTypes();
+       // intoCEPTypes();
 
     }
-    protected static void intoCEPTypes() {
+    /*protected static void intoCEPTypes() {
 
         List classes =conf.getList(Const.FeederPayloadClass);
         List aliases =conf.getList(Const.FeederPayloadAlias);
@@ -242,5 +246,5 @@ public class DataProcessingCore {
             }
 
         }
-    }
+    }*/
 }

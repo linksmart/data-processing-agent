@@ -21,6 +21,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +41,12 @@ import java.util.Map;
 public interface Feeder <T> extends AnalyzerComponent {
     static public Map<String,Feeder> feeders = new Hashtable<>();
 
+    static public  Feeder factory(String feederName) throws Exception {
+        if (!feeders.containsKey(feederName)) {
+            Class.forName("eu.linksmart.services.event.feeders." + feederName).getConstructor().newInstance();
+        }
+        return feeders.get(feederName);
+    }
     public void feed(String topicURI, String payload)throws TraceableException, UntraceableException;
     public void feed(String topicURI, T payload)throws TraceableException, UntraceableException;
 

@@ -1,7 +1,7 @@
 package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
-import eu.linksmart.services.event.feeder.BootstrappingBeanFeeder;
+import eu.linksmart.services.event.feeders.BootstrappingBeanFeeder;
 import eu.linksmart.services.event.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;

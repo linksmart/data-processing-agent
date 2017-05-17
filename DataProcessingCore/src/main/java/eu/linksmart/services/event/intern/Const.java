@@ -3,14 +3,13 @@ package eu.linksmart.services.event.intern;
 
 
 
-import eu.linksmart.services.event.feeder.FeederConst;
 import eu.linksmart.services.event.handler.HandlerConst;
 
 
 /**
  * Created by José Ángel Carvajal on 06.08.2015 a researcher of Fraunhofer FIT.
  */
-public interface Const extends eu.linksmart.services.utils.constants.Const, FeederConst, HandlerConst {
+public interface Const extends eu.linksmart.services.utils.constants.Const, eu.linksmart.services.event.feeders.Const, HandlerConst {
 
 
     public static final String STATEMENT_INOUT_BROKER_CONF_PATH ="api_statements_mqtt_broker";
@@ -21,7 +20,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, Feed
     public static final String STATEMENT_IN_TOPIC_UPDATE_CONF_PATH ="api_statements_mqtt_topic_base_update";
     public static final String STATEMENT_OUT_TOPIC_ERROR_CONF_PATH ="api_statements_mqtt_topic_base_errors";
 
-    public static final String EVENT_IN_TOPIC_CONF_PATH = "api_events_mqtt_topics_incoming";
+    public static final String EVENT_IN_TOPIC_CONF_PATH = "api_events_mqtt_topic_incoming";
     public static final String EVENTS_IN_BROKER_CONF_PATH ="api_events_mqtt_broker_incoming";
 
     public static final String LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH = "core_monitoring_heartbeat_every_milliseconds";
@@ -36,8 +35,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, Feed
     public static final String APPLICATION_CONFIGURATION_FILE = "conf.cfg";
     public static final String ID_CONF_PATH = "agent_id";
 
-   // public static final String FeederPayloadTopic ="feeder_payload_type_topic";
-    public static final String FeederPayloadClass ="connector_observers_payload_type_classes";
+    public static final String FeederPayloadClass ="connector_observers_payload_type_class";
     public static final String FeederPayloadAlias ="connector_observers_type_aliases";
 
 

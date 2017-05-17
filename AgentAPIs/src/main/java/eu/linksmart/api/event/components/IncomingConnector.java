@@ -25,9 +25,9 @@ import java.util.Observer;
 /**
  * This interface indicates that the implementation of it is a IncomingConnector of the agent.
  * A IncomingConnector is the service that receives the payload from an specific protocol,
- * and sends the payload to the corresponding feeder for further processing.
+ * and sends the payload to the corresponding feeders for further processing.
  * The connectors are the services provide the connection to a protocol that gives access to the API provided by a Feeder.
- * There should be at least one feeder per connection/access made by a protocol.
+ * There should be at least one feeders per connection/access made by a protocol.
  *
  * @author Jose Angel Carvajal Soto
  * @since 1.3.1

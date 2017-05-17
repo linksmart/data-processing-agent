@@ -2,7 +2,7 @@ package eu.linksmart.services.event.connectors.Observers;
 
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.feeder.EventFeeder;
+import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
@@ -10,7 +10,6 @@ import eu.linksmart.testing.tooling.CounterTask;
 
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 /**
