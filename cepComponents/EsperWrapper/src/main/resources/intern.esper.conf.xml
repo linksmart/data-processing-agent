@@ -7,6 +7,7 @@
     <engine-settings>
         <defaults>
             <expression udf-cache="false"/>
+            <metrics-reporting enabled="true" engine-interval="1000" statement-interval="1000" threading="true"/>
         </defaults>
     </engine-settings>
 </esper-configuration>
