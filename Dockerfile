@@ -2,20 +2,9 @@ FROM maven:3-jdk-8-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
 # installing git
-RUN apk add --no-cache git
+RUN apk add --no-cache wget
 
-# cloning and building apache code
-RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git
-WORKDIR data-processing-agent
-RUN mvn install
-
-# cloning and building LGPL code
-RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/iot-data-processing-agent/gpl-artifacts.git
-WORKDIR gpl-artifacts
-RUN mvn install
-
-# moving to the jar location
-WORKDIR distributions/IoTAgent/target/
+RUN wget -o agent.jar https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=public&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST
 
 # enabling environmental variables configuration
 ENV env_var_enabled=true
