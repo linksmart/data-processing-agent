@@ -6,6 +6,7 @@ import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
+import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,10 +30,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by José Ángel Carvajal on 10.04.2017 a researcher of Fraunhofer FIT.
@@ -46,6 +44,7 @@ import java.util.Properties;
 @EnableSwagger2
 public class RestInit {
     static Properties info = null;
+    protected transient static Logger loggerService = Utils.initLoggingConf(RestInit.class);
     public static void init(Configurator conf) {
 
         try {
@@ -54,7 +53,33 @@ public class RestInit {
             Utils.initLoggingConf(RestInit.class).error(e.getMessage(), e);
         }
 
-        SpringApplication springApp = new SpringApplication(RestInit.class);
+        Class[] clas = null;
+            if(conf.containsKeyAnywhere(Const.REST_API_EXTENSION)) {
+                String[] modules = conf.getStringArray(Const.REST_API_EXTENSION);
+                clas= new Class[modules.length+1];
+
+                for(int i=0; i<modules.length;i++){
+                    try {
+                        if (!"".equals(modules[i])) {
+                            Class c = Class.forName(modules[i]);
+                            loggerService.info("Extension: " + c.getSimpleName() + " loaded");
+                            clas[i] = c;
+                            i++;
+                        }
+                    } catch (ClassNotFoundException e) {
+                        loggerService.error(e.getMessage(), e);
+                    }
+                }
+
+
+            }
+        SpringApplication springApp;
+        if(clas!=null) {
+            clas[clas.length - 1] = RestInit.class;
+            springApp = new SpringApplication(clas);
+        }
+        else
+            springApp = new SpringApplication(RestInit.class);
 
         springApp.setDefaultProperties(toProperties(conf));
 

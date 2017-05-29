@@ -52,4 +52,5 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     public static final String ENABLE_REST_API = "api_rest_enabled";
     public static final String SPRING_MANAGED_FEATURES = "spring_managed_configuration_features";
 
+    public static final String REST_API_EXTENSION = "rest_api_extensions";
 }
