@@ -1,5 +1,6 @@
-FROM java:openjdk-8-jre-alpine
+FROM maven:3-jdk-8-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
+
 
 # installing git
 RUN apk add --no-cache git

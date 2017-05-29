@@ -54,7 +54,6 @@ import java.util.stream.Collectors;
 
     }
 
-
     protected void processMessage(Map eventMap){
 
             if (eventMap.size() == 1) {
