@@ -1,6 +1,7 @@
 FROM maven:3-jdk-8-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
+ENV CHANGED_AT = 2017-05-29T17:20
 
 # installing git
 RUN apk add --no-cache git
