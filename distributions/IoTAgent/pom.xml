@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>iot.learning.universal.agent</artifactId>
-    <name>LinkSmart® GPL IoT Agent</name>
+    <name>LinkSmart® LGPL IoT Agent</name>
     <packaging>jar</packaging>
     <dependencies>
        <dependency>
@@ -34,13 +34,12 @@
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>SiddhiWrapper</artifactId>
+            <artifactId>PythonModelsIntergrator</artifactId>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>PythonModelsIntergrator</artifactId>
+            <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
         </dependency>
-
 
 
     </dependencies>
