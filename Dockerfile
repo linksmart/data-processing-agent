@@ -1,7 +1,7 @@
 FROM maven:3-jdk-8-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
-ENV CHANGED_AT = 2017-05-29T17:20
+ENV CHANGED_AT = 2017-06-14T10:00
 
 WORKDIR /home
 
@@ -34,7 +34,7 @@ ENV server_port=8319
 ENV cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
 
 # to start the LA (optional)
-ENV agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML,eu.linksmart.services.event.ceml.CEMLRest
+ENV agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
 
 # mounting configuration and extra dependencies volumes
 VOLUME /config
