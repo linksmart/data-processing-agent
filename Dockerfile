@@ -9,7 +9,7 @@ WORKDIR /home
 #RUN apk add --no-cache wget
 
 #ADD https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=public&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST/ /home/
-#RUN wget -o agent.jar https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=public&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST
+#RUN wget -o agent.jar https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=snapshots&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST
 
 # installing git
 RUN apk add --no-cache git
