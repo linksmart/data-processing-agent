@@ -163,7 +163,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
         }
 
     }
-    protected void LoadTypesIntoEngines() throws  InstantiationException {
+   protected void LoadTypesIntoEngines() throws  InstantiationException {
 
         Map<String,Pair<String,String>> aliasTopicClass= new HashMap<>();
 
@@ -184,7 +184,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
                         topicToClass.put(new Topic(topicClass.getLeft()),aClass);
                         aliasToClass.put(alias, aClass);
                         classToAlias.put(aClass.getCanonicalName(),alias);
-                        engine.addEventType(alias,aClass);
+
                     } catch (ClassNotFoundException e) {
                         loggerService.error(e.getMessage(), e);
                     }

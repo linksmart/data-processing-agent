@@ -116,9 +116,6 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
 
     @Override
     public synchronized Prediction<Integer> predict(Object input) throws TraceableException, UntraceableException {
-        loggerService.info("Total Events: "+Integer.toString(++counter)+
-                "\t"+((HashMap)((HashMap)parameters.get("Classifier")).get("production_layout")).get("type")+"<-"+((HashMap)input).get("type"));
-
         try {
             return toPrediction(input, (Integer) learner.call("predict", input));
         } catch (PyroException e) {
@@ -144,7 +141,6 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
     @Override
     public synchronized List<Prediction<Integer>> batchPredict(List<Object> input) throws TraceableException, UntraceableException{
         counter += (int) parameters.get("RetrainEvery");
-        loggerService.info("Total Events: "+Integer.toString(counter));
 
         try {
             List<Integer> res = (List<Integer>) learner.call("batchPredict", input);

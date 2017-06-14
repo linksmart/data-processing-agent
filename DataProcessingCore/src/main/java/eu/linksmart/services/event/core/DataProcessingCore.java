@@ -16,10 +16,12 @@ import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.utils.mqtt.types.Topic;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by J. Angel Caravajal on 06.10.2014.
@@ -222,29 +224,37 @@ public class DataProcessingCore {
             }
 
         }
-       // intoCEPTypes();
+        intoCEPTypes();
 
     }
-    /*protected static void intoCEPTypes() {
+    protected static void intoCEPTypes() {
+        Map<String,Pair<String,String>> aliasTopicClass= new HashMap<>();
 
-        List classes =conf.getList(Const.FeederPayloadClass);
-        List aliases =conf.getList(Const.FeederPayloadAlias);
+        Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
+                .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
+                .forEach(alias -> aliasTopicClass.put(alias, new ImmutablePair<>(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), conf.getString(Const.FeederPayloadClass + "_" + alias))));
 
-        if(classes.size()!=aliases.size())
-            loggerService.error("The configuration parameters of "
-                    +Const.FeederPayloadAlias+" "
-                    +Const.FeederPayloadClass+" do not match");
-
-        for (CEPEngine dfw: CEPEngine.instancedEngines.values()) {
-            for(int i=0; i<classes.size();i++) {
-                try {
-                    Class aClass = Class.forName(classes.get(i).toString());
-                    dfw.addEventType(aliases.get(i).toString(), aClass );
-                } catch (ClassNotFoundException e) {
-                    loggerService.error(e.getMessage(), e);
-                }
+        if(aliasTopicClass.isEmpty())
+            try {
+                throw new InstantiationException(
+                        "The configuration parameters of incoming events "
+                                +Const.FeederPayloadAlias+" do not have proper topic or class configurations for properties: "
+                                +Const.FeederPayloadClass+"_<alias> "+Const.EVENT_IN_TOPIC_CONF_PATH+"_<alias> "
+                );
+            } catch (InstantiationException e) {
+                loggerService.error(e.getMessage(),e);
             }
 
-        }
-    }*/
+        CEPEngine.instancedEngines.values().stream().forEach(engine->aliasTopicClass.forEach((alias,topicClass)-> {
+                    try {
+                        Class aClass = Class.forName(topicClass.getRight());
+
+                        engine.addEventType(alias,aClass);
+                    } catch (ClassNotFoundException e) {
+                        loggerService.error(e.getMessage(), e);
+                    }
+                })
+
+        );
+    }
 }
