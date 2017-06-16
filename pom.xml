@@ -67,7 +67,7 @@
         <apache.commons.io.version>2.4</apache.commons.io.version>
         <lmax.disruptor.version>3.3.4</lmax.disruptor.version>
         <apache.sis.version>0.6</apache.sis.version>
-        <apache.commons.math3.version>3.0</apache.commons.math3.version>
+        <apache.commons.math3.version>3.6.1</apache.commons.math3.version>
         <mockito.version>1.9.5</mockito.version>
         <hibernate.version>1.0.1.Final</hibernate.version>
         <apache.commons.configuration2.version>2.1.1</apache.commons.configuration2.version>

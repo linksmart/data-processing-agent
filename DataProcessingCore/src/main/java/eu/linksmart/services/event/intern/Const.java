@@ -25,8 +25,8 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
 
     public static final String LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH = "core_monitoring_heartbeat_every_milliseconds";
 
-    public static final String PERSISTENT_DATA_FILE = "cep_init_bootstrapping_file";
-    public static final String PERSISTENT_DATA_DIRECTORY = "cep_init_bootstrapping_file";
+    public static final String PERSISTENT_DATA_FILE = "cep_init_bootstrapping_files";
+    public static final String PERSISTENT_DATA_DIRECTORY = "cep_init_bootstrapping_directories";
 
     public static final String CEP_ENGINES_PATH = "cep_init_engines";
 

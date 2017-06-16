@@ -1,4 +1,4 @@
-package eu.linksmart.service.event.cep.tooling;
+package eu.linksmart.services.event.cep.tooling;
 
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;

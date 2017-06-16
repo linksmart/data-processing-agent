@@ -132,7 +132,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     public abstract class ModelEvaluationMetricSubBase extends ModelEvaluationMetricBase {
 
         public ModelEvaluationMetricSubBase(EvaluationMetric.ComparisonMethod method, double target) {
-            super(ComparisonMethod.More, target);
+            super(method, target);
 
         }
 

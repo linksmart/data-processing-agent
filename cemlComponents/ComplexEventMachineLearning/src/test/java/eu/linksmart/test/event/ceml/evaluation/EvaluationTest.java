@@ -2,6 +2,7 @@ package eu.linksmart.test.event.ceml.evaluation;
 
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
@@ -11,8 +12,11 @@ import eu.linksmart.services.event.ceml.evaluation.metrics.ClassificationMetrics
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -25,7 +29,7 @@ public class EvaluationTest {
         long[] confusionMatrix = {5,17,2,3}; // https://en.wikipedia.org/wiki/Confusion_matrix#Table_of_confusion
         // {TP, TN, FP, FN}
         assertEquals("Testing Accuracy with confusion matrix [[TP, FN],[FP, TN]] -> ACC([[5, 3], [2, 17]])*100 == ",81L,Math.round(ClassificationMetrics.accuracy(confusionMatrix)*100));
-        assertEquals("Testing Accuracy with confusion matrix [[TP, FN],[FP, TN]] -> F1([[5, 3], [2, 17]])*100 == ",67L,Math.round(ClassificationMetrics.f1Score(confusionMatrix)*100));
+        assertEquals("Testing F1Score with confusion matrix [[TP, FN],[FP, TN]] -> F1([[5, 3], [2, 17]])*100 == ",67L,Math.round(ClassificationMetrics.f1Score(confusionMatrix)*100));
 
         assertEquals("Testing FallOut with confusion matrix [[TP, FN],[FP, TN]] -> FPR([[5, 3], [2, 17]])*100 == ",11L,Math.round(ClassificationMetrics.fallOut(confusionMatrix)*100));
         assertEquals("Testing matthewsCorrelationCoefficient with confusion matrix [[TP, FN],[FP, TN]] -> FDR([[5, 3], [2, 17]])*100 ==",29L,Math.round(ClassificationMetrics.falseDiscoveryRate(confusionMatrix)*100));
@@ -71,7 +75,19 @@ public class EvaluationTest {
     @Test
     public void doubleWindowEvaluatorTest() {
 
-        DoubleTumbleWindowEvaluator evaluator = new DoubleTumbleWindowEvaluator(Arrays.asList(new TargetRequest(0.8, "Accuracy", "More"), new TargetRequest(27, "SlideAfter", "More")));
+        DoubleTumbleWindowEvaluator evaluator = new DoubleTumbleWindowEvaluator(Arrays.asList(
+                new TargetRequest(0.8, "Accuracy", "More"),
+                new TargetRequest(0.65, "Precision", "More"),
+                new TargetRequest(0.85, "Specificity", "More"),
+                new TargetRequest(0.85, "NegativePredictiveValue", "More"),
+                new TargetRequest(0.10, "FallOut", "More"),
+                new TargetRequest(0.34, "FalseDiscoveryRate", "Less"),
+                new TargetRequest(0.33, "MissRate", "Less"),
+                new TargetRequest(0.65, "F1Score", "More"),
+                new TargetRequest(0.51, "MatthewsCorrelationCoefficient", "More"),
+                new TargetRequest(0.52, "Informedness", "More"),
+                new TargetRequest(0.51, "Markedness", "More"),
+                new TargetRequest(27, "SlideAfter", "More")));
         evaluator.setClasses(Arrays.asList("Cat", "Dog", "Rabbit"));
         try {
             evaluator.build();
@@ -83,11 +99,30 @@ public class EvaluationTest {
         feedClassificationEvaluator(evaluator);
 
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Accuracy").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Precision").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Specificity").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("NegativePredictiveValue").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", false, evaluator.getEvaluationAlgorithms().get("FalseDiscoveryRate").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", false, evaluator.getEvaluationAlgorithms().get("MissRate").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("F1Score").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("MatthewsCorrelationCoefficient").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Informedness").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Markedness").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", false, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == ", false, evaluator.isDeployable());
         assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == ", false, evaluator.readyToSlide());
         evaluator.evaluate(0, 0);
+        testValuesOfMetrics(evaluator);
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Accuracy").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Precision").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Specificity").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("NegativePredictiveValue").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("FalseDiscoveryRate").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("MissRate").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("F1Score").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("MatthewsCorrelationCoefficient").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Informedness").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Markedness").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == ", true, evaluator.isDeployable());
         assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == ", false, evaluator.readyToSlide());
@@ -95,11 +130,30 @@ public class EvaluationTest {
 
         feedClassificationEvaluator(evaluator);
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Accuracy").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Precision").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Specificity").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("NegativePredictiveValue").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("FalseDiscoveryRate").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("MissRate").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("F1Score").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("MatthewsCorrelationCoefficient").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Informedness").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Markedness").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == false", true, evaluator.isDeployable());
         assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == false", false, evaluator.readyToSlide());
         evaluator.evaluate(0, 0);
+        testValuesOfMetrics(evaluator);
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Accuracy").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Precision").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Specificity").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("NegativePredictiveValue").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("FalseDiscoveryRate").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("MissRate").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("F1Score").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("MatthewsCorrelationCoefficient").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Informedness").isReady());
+        assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Markedness").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == ", true, evaluator.isDeployable());
         assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == ", false, evaluator.readyToSlide());
@@ -109,8 +163,15 @@ public class EvaluationTest {
         int [][] samples = {{5,3,0},{2,3,1},{0,2,11}};
         for (int i = 0; i < samples.length; i++)
             for (int j = 0; j < samples[i].length; j++)
-                for (int k = 0; k < samples[i][j]; k++)
+                for (int k = 0; k < samples[i][j]; k++) {
                     evaluator.evaluate(i, j);
+                    testValuesOfMetrics(evaluator);
+                }
+    }
+    private void testValuesOfMetrics(Evaluator evaluator){
+        for (EvaluationMetric<Number> metric : (Collection<EvaluationMetric<Number>>)evaluator.getEvaluationAlgorithms().values()){
+            assertNotEquals(0,metric.getResult());
+        }
     }
 
     @Test

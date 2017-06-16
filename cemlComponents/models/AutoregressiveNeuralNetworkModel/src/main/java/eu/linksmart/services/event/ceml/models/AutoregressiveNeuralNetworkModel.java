@@ -185,6 +185,8 @@ public class AutoregressiveNeuralNetworkModel extends RegressorModel<List<Double
 
             // iterator.reset();
             nnet.fit(dataSet);
+            org.apache.commons.math3.util.Pair<Integer,Integer> test = new org.apache.commons.math3.util.Pair(1,1);
+
         }
 
 

@@ -120,8 +120,19 @@ public class DataProcessingCore {
         loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + DynamicConst.getId());
 
         initCEPEngines();
+        intoCEPTypes();
         initForceLoading();
         boolean success = initFeeders();
+        if(conf.getList(Const.PERSISTENT_DATA_FILE) != null ) {
+            FileConnector fileFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
+
+            fileFeeder.loadFiles();
+        }
+        if(conf.getList(Const.PERSISTENT_DATA_DIRECTORY) != null ) {
+            FileConnector directoryFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_DIRECTORY).toArray(new String[conf.getList(Const.PERSISTENT_DATA_DIRECTORY).size()]));
+
+            directoryFeeder.loadFiles();
+        }
 
         return success;
     }
@@ -157,16 +168,6 @@ public class DataProcessingCore {
             DynamicConst.setWill(conf.getString(Const.WILL_MESSAGE));
             mqtt = MqttIncomingConnectorService.getReference(DynamicConst.getWill(),DynamicConst.getWillTopic());
 
-            if(conf.getList(Const.PERSISTENT_DATA_FILE) != null ) {
-                FileConnector fileFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
-
-                fileFeeder.loadFiles();
-            }
-            if(conf.getList(Const.PERSISTENT_DATA_DIRECTORY) != null ) {
-                FileConnector directoryFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_DIRECTORY).toArray(new String[conf.getList(Const.PERSISTENT_DATA_DIRECTORY).size()]));
-
-                directoryFeeder.loadFiles();
-            }
 
             if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))
                 mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
@@ -224,7 +225,6 @@ public class DataProcessingCore {
             }
 
         }
-        intoCEPTypes();
 
     }
     protected static void intoCEPTypes() {
