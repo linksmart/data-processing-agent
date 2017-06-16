@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-import static eu.linksmart.service.event.cep.tooling.Tools.ObservationFactory;
+import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
 
 /**
  * Created by Caravajal on 06.10.2014.
