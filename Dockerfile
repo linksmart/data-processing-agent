@@ -1,28 +1,14 @@
-FROM maven:3-jdk-8-alpine
+FROM java:8-jre-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
 ENV CHANGED_AT = 2017-06-14T10:00
 
 WORKDIR /home
 
-# installing git
-#RUN apk add --no-cache wget
+# installing dependencies
+RUN apk add --no-cache wget
 
-#ADD https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=public&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST/ /home/
-#RUN wget -o agent.jar https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=snapshots&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST
-
-# installing git
-RUN apk add --no-cache git
-
-
-# cloning and building apache code
-RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git
-WORKDIR data-processing-agent
-RUN mvn install
-
-RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/iot-data-processing-agent/gpl-artifacts.git
-WORKDIR gpl-artifacts
-RUN mvn install
+ONBUILD RUN wget "https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=snapshots&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST" -O agent.jar
 
 # enabling environmental variables configuration
 ENV env_var_enabled=true
@@ -39,8 +25,6 @@ ENV agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
 # mounting configuration and extra dependencies volumes
 VOLUME /config
 VOLUME /dependencies
-
-WORKDIR distributions/IoTAgent/target/
 
 # starting the agent
 ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
