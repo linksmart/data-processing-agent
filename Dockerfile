@@ -8,6 +8,7 @@ WORKDIR /home
 # installing dependencies
 RUN apk add --no-cache wget
 
+RUN wget "https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=snapshots&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST" -O agent.jar
 ONBUILD RUN wget "https://linksmart.eu/repo/service/local/artifact/maven/redirect?r=snapshots&g=eu.linksmart.services.events.gpl.distributions&a=iot.learning.universal.agent&v=LATEST" -O agent.jar
 
 # enabling environmental variables configuration
