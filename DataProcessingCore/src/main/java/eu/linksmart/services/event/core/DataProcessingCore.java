@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.core;
 
+import eu.linksmart.services.event.connectors.BigFileConnector;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
 
@@ -24,7 +25,7 @@ import org.slf4j.Logger;
 import java.util.*;
 
 /**
- * Created by J. Angel Caravajal on 06.10.2014.
+ * Created by J. Angel Carvajal on 06.10.2014.
  *
  */
 public class DataProcessingCore {
@@ -123,18 +124,23 @@ public class DataProcessingCore {
         intoCEPTypes();
         initForceLoading();
         boolean success = initFeeders();
+        bootstrapping();
+
+        return success;
+    }
+
+    private static void bootstrapping() {
         if(conf.getList(Const.PERSISTENT_DATA_FILE) != null ) {
             FileConnector fileFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
             fileFeeder.loadFiles();
         }
-        if(conf.getList(Const.PERSISTENT_DATA_DIRECTORY) != null ) {
-            FileConnector directoryFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_DIRECTORY).toArray(new String[conf.getList(Const.PERSISTENT_DATA_DIRECTORY).size()]));
+        if(conf.getList(Const.PERSISTENT_EVENTS_FILE) != null ) {
+            BigFileConnector fileFeeder = new BigFileConnector((String[]) conf.getList(Const.PERSISTENT_EVENTS_FILE).toArray(new String[conf.getList(Const.PERSISTENT_EVENTS_FILE).size()]));
 
-            directoryFeeder.loadFiles();
+            fileFeeder.loadFiles();
         }
 
-        return success;
     }
 
     private static void initForceLoading() {

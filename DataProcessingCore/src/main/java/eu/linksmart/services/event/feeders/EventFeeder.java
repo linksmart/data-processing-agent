@@ -72,6 +72,22 @@ public class EventFeeder implements Feeder<EventEnvelope> {
 
         me.addEvent(eventEnvelope,topic);
     }
+    public void feed( EventEnvelope event) throws TraceableException, UntraceableException{
+        try {
+
+            if(event!=null) {
+                for (CEPEngine i : CEPEngine.instancedEngines.values())
+                    i.addEvent(event, event.getClass());
+            }else
+                throw new UntraceableException("Error by feeding event: The event sent cannot be mapped to any loaded type");
+        }catch(TraceableException|UntraceableException e) {
+            loggerService.error(e.getMessage(), e);
+            throw e;
+        }catch(Exception e) {
+            loggerService.error(e.getMessage(), e);
+            throw new UnknownUntraceableException(e.getMessage(),e);
+        }
+    }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
         try {
             Object event=null;

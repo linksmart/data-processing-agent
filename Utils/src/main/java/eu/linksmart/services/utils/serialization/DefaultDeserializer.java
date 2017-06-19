@@ -3,12 +3,14 @@ package eu.linksmart.services.utils.serialization;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.services.utils.function.Utils;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 
 /**
