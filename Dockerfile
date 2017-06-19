@@ -1,7 +1,7 @@
 FROM java:8-jre-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
-ENV CHANGED_AT = 2017-06-14T10:00
+ENV CHANGED_AT = 2017-06-16T14:00
 
 WORKDIR /home
 
