@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.core;
 
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.connectors.BigFileConnector;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 
@@ -33,6 +34,7 @@ public class DataProcessingCore {
  //   protected static List<Feeder> feeders = new ArrayList<>();
 
     protected static MqttIncomingConnectorService mqtt =null;
+    private static Map<String,Pair<String,String>> aliasTopicClass= new HashMap<>();
     private DataProcessingCore() {
     }
 
@@ -135,10 +137,21 @@ public class DataProcessingCore {
 
             fileFeeder.loadFiles();
         }
-        if(conf.getList(Const.PERSISTENT_EVENTS_FILE) != null ) {
-            BigFileConnector fileFeeder = new BigFileConnector((String[]) conf.getList(Const.PERSISTENT_EVENTS_FILE).toArray(new String[conf.getList(Const.PERSISTENT_EVENTS_FILE).size()]));
+        if( conf.getStringArray(Const.FeederPayloadAlias) != null) {
+            for (String alias: conf.getStringArray(Const.FeederPayloadAlias)) {
 
-            fileFeeder.loadFiles();
+                //if(conf.getList(Const.PERSISTENT_EVENTS_FILE+"_"+alias) != null )
+                BigFileConnector fileFeeder = null;
+                try {
+                    if ( conf.getStringArray(Const.PERSISTENT_EVENTS_FILE + "_" + alias) != null) {
+                        fileFeeder = new BigFileConnector((Class<? extends EventEnvelope>) Class.forName(aliasTopicClass.get(alias).getRight()), (String[]) conf.getList(Const.PERSISTENT_EVENTS_FILE+"_"+alias).toArray(new String[conf.getList(Const.PERSISTENT_EVENTS_FILE+"_"+alias).size()]));
+                        fileFeeder.loadFiles();
+                    }
+                } catch (ClassNotFoundException e) {
+                    loggerService.error(e.getMessage(), e);
+                }
+
+            }
         }
 
     }
@@ -234,7 +247,6 @@ public class DataProcessingCore {
 
     }
     protected static void intoCEPTypes() {
-        Map<String,Pair<String,String>> aliasTopicClass= new HashMap<>();
 
         Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
                 .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))

@@ -33,11 +33,14 @@ import java.util.Map;
 public class BigFileConnector extends Component implements IncomingConnector {
     static protected Logger loggerService = Utils.initLoggingConf(FileConnector.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
+    final Class<? extends EventEnvelope> type;
     protected List<String> filePaths = new ArrayList<>();
     protected DefaultDeserializer deserializer = new DefaultDeserializer();
 
-    public BigFileConnector(String... filePaths){
+    public BigFileConnector(Class<? extends EventEnvelope> type, String... filePaths) throws ClassNotFoundException {
         super(FileConnector.class.getSimpleName(), "Feeder that inserts statements and Events at loading time", Feeder.class.getSimpleName());
+
+            this.type = type;
 
         for(String f: filePaths)
             if(f!=null&&!f.equals(""))
@@ -87,14 +90,14 @@ public class BigFileConnector extends Component implements IncomingConnector {
     protected void loadStream(InputStream inputStream) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         String strLine;
-        Observation eventList;
+        EventEnvelope eventList;
 
         //Read File Line By Line
         while ((strLine = br.readLine()) != null)   {
 
             try {
 
-                eventList = deserializer.parse(strLine, Observation.class);
+                eventList = deserializer.parse(strLine, type);
                 EventFeeder.getFeeder().feed(eventList);
 
             } catch ( Exception e) {
