@@ -146,7 +146,7 @@ public class CEMLManager implements CEMLRequest {
     public void report() {
         try {
             if(settings.containsKey(CEMLManager.REPORTING_ENABLED) && (boolean) settings.get(CEMLManager.REPORTING_ENABLED))
-                CEML.report(name,CEML.getMapper().writeValueAsString(this));
+                CEML.report(name,CEML.getMapper().writeValueAsString(lastPrediction));
 
         }catch (JsonProcessingException e) {
             loggerService.error(e.getMessage(),e);
