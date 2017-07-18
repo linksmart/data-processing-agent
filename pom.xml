@@ -31,7 +31,11 @@
                 <artifactId>wrapper.esper</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>eu.linksmart.services.events.gpl</groupId>
+                <artifactId>ogc.parser.loader</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
             <dependency>
                 <groupId>eu.linksmart.services.events.gpl</groupId>
                 <artifactId>configuration.agent.data.processing</artifactId>

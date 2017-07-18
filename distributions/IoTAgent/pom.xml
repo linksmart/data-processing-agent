@@ -40,6 +40,10 @@
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
         </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events.gpl</groupId>
+            <artifactId>ogc.parser.loader</artifactId>
+        </dependency>
 
 
     </dependencies>
