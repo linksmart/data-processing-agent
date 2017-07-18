@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.*;
 
 public class Observation extends eu.linksmart.services.payloads.ogc.sensorthing.Observation {
 
-
+    private String datastreamReference ;
 
     @JsonPropertyDescription("TBD.")
     @JsonProperty(value = "Datastream@iot.navigationLink")
@@ -32,6 +32,14 @@ public class Observation extends eu.linksmart.services.payloads.ogc.sensorthing.
     public void setFeatureOfInterestNavigationLink(String value) {   }
 
 
+    @Override
+    public Object getAttributeId() {
+        return datastreamReference;
+    }
 
+    @Override
+    public void setAttributeId(Object id) {
+        datastreamReference = id.toString();
 
+    }
 }

@@ -17,10 +17,10 @@
  */
 package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,68 +30,99 @@ import java.util.Set;
  *
  *
  */
+//@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "object.id")
 public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.Datastream
 {
     @JsonPropertyDescription("The detailed description of the sensor or system. The content is open to accommodate changes to SensorML or to support other description languages.")
     @JsonProperty(value = "observationType")
     protected String observationType;
-    @JsonProperty(value = "observationType")
-    @JsonPropertyDescription("TBD")
 
-	@JsonBackReference(value = "events")
-	protected Set<Observation> observations;
+
+
+    /*
+       // @JsonProperty(value = "observationType")
+        @JsonPropertyDescription("TBD")
+    */
+    @JsonIgnore
+	protected List<Observation> observations;
+    @JsonGetter("observations") // <--- this is intentional
+    public List<Observation> getObservations() {
+        return observations;
+    }
+    @JsonSetter("observations")
+    public void SetObservations(List<Observation> observation) {
+        if(observations== null)
+            observations=new ArrayList<>();
+        observations = (observation);
+    }
     @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Observations@iot.navigationLink")
+    @JsonGetter(value = "Observations@iot.navigationLink")
     public String getObservationsNavigationLink() {
         return "Datastream("+id+")/Observations";
     }
-    @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Observations@iot.navigationLink")
-    public void setObservationsNavigationLink(String value) {   }
+    @JsonSetter(value = "Observations@iot.navigationLink")
+    public void setObservationsNavigationLink(String value) {
 
-
+    }
 
     @JsonProperty(value = "observedProperty")
 	protected ObservedProperty observedProperty;
     @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "ObservedProperty@iot.navigationLink")
+    @JsonGetter(value = "ObservedProperty@iot.navigationLink")
     public String getObservedPropertNavigationLink() {
         return "Datastream("+id+")/ObservedProperty";
     }
     @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "ObservedProperty@iot.navigationLink")
+    @JsonSetter(value = "ObservedProperty@iot.navigationLink")
     public void setObservedPropertyNavigationLink(String value) {   }
+    @JsonGetter(value = "sensor")
+    public Sensor getSensor() {
+        return sensor;
+    }
+    @JsonSetter(value = "sensor")
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+        if(this.sensor.getDatastreams() == null) {
+            this.sensor.datastreams = new ArrayList<>();
+            this.sensor.datastreams.add(this);
+        } else if (!this.sensor.datastreams.contains(this)) {
+            this.sensor.datastreams.add(this);
+        }
 
-    @JsonProperty(value = "sensor")
+
+    }
+
+    @JsonIgnore
     protected Sensor sensor;
     @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Sensor@iot.navigationLink")
+    @JsonGetter(value = "Sensor@iot.navigationLink")
     public String getSensorNavigationLink() {
         return "Datastream("+id+")/Sensor";
     }
     @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Sensor@iot.navigationLink")
+    @JsonSetter(value = "Sensor@iot.navigationLink")
     public void setSensorNavigationLink(String value) {   }
 
-    @JsonProperty(value = "thing")
+    // @JsonGetter("observations") // <--- this is intentional
     public Thing getThing() {
         return thing;
     }
 
-    @JsonProperty(value = "thing")
+    @JsonSetter(value = "thing")
     public void setThing(Thing thing) {
         this.thing = thing;
     }
 
-    @JsonProperty(value = "thing")
+    @JsonIgnore
     protected Thing thing;
-    @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Thing@iot.navigationLink")
+   // @JsonPropertyDescription("TBD.")
+    @JsonGetter(value = "Thing@iot.navigationLink")
     public String getThingNavigationLink() {
         return "Datastream("+id+")/Thing";
     }
-    @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Thing@iot.navigationLink")
+    //@JsonPropertyDescription("TBD.")
+    @JsonSetter(value = "Thing@iot.navigationLink")
     public void setThingNavigationLink(String value) {   }
 
 	/**
@@ -102,11 +133,11 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	 *
 	 * @return the live reference to the inner {@link java.util.Set} {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation}.
 	 */
-	@JsonProperty(value = "events")
-	public Set<Observation> getObservations()
+	//@JsonProperty(value = "events")
+	/*public Set<Observation> getObservations()
 	{
 		return observations;
-	}
+	}*/
 
 	/**
 	 * Updates the {@link java.util.Set} {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation}  gbelonging to this
@@ -116,12 +147,12 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	 * @param observations
 	 *            the events to set.
 	 */
-	@JsonProperty(value = "events")
+/*	@JsonProperty(value = "events")
 	public void setObservations(Set<Observation> observations)
 	{
 		this.observations = observations;
 	}
-
+*/
 	/**
 	 * Adds a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} to the set of events belonging to
 	 * this {@link eu.linksmart.services.payloads.ogc.sensorthing.linked.Datastream} instance.
@@ -129,14 +160,18 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	 * @param observation
 	 *            The observation to add.
 	 */
-	public void addObservation(Observation observation)
-	{
-		// check not null
-		if ((this.observations != null) && (observation != null))
-			// add the observation
-			this.observations.add(observation);
-	}
+	public void addObservation(Observation observation) {
+        // check not null
+        if (observation != null){
+            if ((this.observations == null))
+                this.observations = new ArrayList<>();
 
+            if(!this.observations.contains(observation))
+                // add the observation
+                this.observations.add(observation);
+
+        }
+    }
 	/**
 	 * Removes a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} from the set of events
 	 * belonging to this {@link eu.linksmart.services.payloads.ogc.sensorthing.linked.Datastream} instance.

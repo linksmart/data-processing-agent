@@ -2,20 +2,23 @@ package eu.linksmart.services.payloads.ogc.sensorthing.base;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
  * Created by José Ángel Carvajal on 01.04.2016 a researcher of Fraunhofer FIT.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
+//@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@iot.id")
 public  abstract class CommonControlInfo {
     /**
      * id is the system-generated identifier of an entity.
      * id is unique among the entities of the same entity type in a SensorThings service
      */
 
-    @JsonIgnore
+    @JsonProperty("@iot.id")
     protected Object id;
   //  /** selfLink is the absolute URL of an entity that is unique among all other entities. */
   //  @JsonPropertyDescription("id is the system-generated identifier of an entity.")
@@ -59,6 +62,21 @@ public  abstract class CommonControlInfo {
                 baseURL+=strings[i];
 
              baseURL+="/";
+
+
+
+        }
+        if(strings[strings.length-1].contains(")")){
+            String[] parts=strings[strings.length-1].split("\\(");
+            for (String part : parts){
+                if(part.contains(")")) {
+                    String tmp = part.split("\\)")[0];
+                    if(StringUtils.isNumeric(tmp)){
+                        id = Long.valueOf(tmp);
+                    }else
+                        id =tmp;
+                }
+            }
         }
     }
 

@@ -5,9 +5,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.JsonSerializable;
+import eu.linksmart.api.event.types.SerializationFactory;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfo;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateSerializer;
+import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
+import eu.linksmart.services.utils.function.Utils;
 
 import java.util.Date;
 import java.time.Period;
@@ -18,7 +25,7 @@ import java.time.Period;
  */
 
 //@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="objectID", scope = Observation.class)
-public class Observation extends CommonControlInfo {
+public abstract class Observation extends CommonControlInfo  implements EventEnvelope{
 
 /*
     @JsonPropertyDescription("TBD.")
@@ -109,6 +116,55 @@ public class Observation extends CommonControlInfo {
     }
 
 
+    @Override
+    public void topicDataConstructor(String topic) {
+        // nothing
+    }
+
+    @Override
+    public Date getDate() {
+        return phenomenonTime;
+    }
+
+    @Override
+    public String getIsoTimestamp() {
+        return Utils.getIsoTimestamp(phenomenonTime);
+    }
+
+    @Override
+    public abstract Object getAttributeId() ;
 
 
+    @Override
+    public Object getValue() {
+        return result;
+    }
+
+    @Override
+    public void setDate(Date time) {
+        phenomenonTime = time;
+    }
+
+    @Override
+    public abstract void setAttributeId(Object id) ;
+
+    @Override
+    public void setValue(Object value) {
+        result = value;
+    }
+
+    @Override
+    public SerializationFactory getSerializationFacotry() {
+        return new DefaultSerializationFactory();
+    }
+
+    @Override
+    public JsonSerializable build() throws TraceableException, UntraceableException {
+        return this;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+
+    }
 }

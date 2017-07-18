@@ -109,4 +109,6 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      * */
     @JsonIgnore
     public void setValue(ValueType value);
+    @JsonIgnore
+    public SerializationFactory getSerializationFacotry();
 }

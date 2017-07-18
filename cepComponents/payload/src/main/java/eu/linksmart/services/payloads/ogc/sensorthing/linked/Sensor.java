@@ -17,12 +17,11 @@
  */
 package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -39,13 +38,29 @@ public class Sensor extends eu.linksmart.services.payloads.ogc.sensorthing.Senso
 {
 
 
+    @JsonGetter("datastreams")
+    public List<Datastream> getDatastreams() {
+        return datastreams;
+    }
+    @JsonSetter("datastreams")
+    public void setDatastreams(List<Datastream> datastreams) {
+        if(datastreams!=null) {
+            datastreams.forEach(d->d.setSensor(this));
+            this.datastreams = datastreams;
+        }
+
+    }
+
     /**
      * A thing can have zero-to-many datastreams. A datastream entity can only
      * link to a thing as a collection of events or properties.
      */
-    @JsonBackReference(value = "datastreams")
+    /*@JsonBackReference(value = "datastreams")
     @JsonDeserialize(as=HashSet.class)
     protected Set<Datastream> datastreams;
+*/
+    @JsonIgnore
+    List<Datastream> datastreams;
 
 
     /**navigationLink is the relative URL that retrieves content of related entities. */
@@ -55,7 +70,7 @@ public class Sensor extends eu.linksmart.services.payloads.ogc.sensorthing.Senso
         return "Sensor("+id+")/Datastreams";
     }
 
-    @JsonPropertyDescription("TBD.")
+   // @JsonPropertyDescription("TBD.")
     @JsonProperty(value = "Datastreams@iot.navigationLink")
     public void setDatastreamsNavigationLink(String value) {   }
 }

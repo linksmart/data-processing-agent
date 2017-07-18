@@ -59,7 +59,11 @@ public class UtilsLinked {
         observation.setResultTime(DatatypeConverter.parseDateTime("2014-12-31T11:59:59.00+08:00").getTime());
         observation.setResult(70.4);
         observation.setFeatureOfInterest(constructFeatureOfInterest());
-
+        observation.getFeatureOfInterest().setId(2);
+        observation.setDatastream(constructDatastream(false));
+        observation.getDatastream().setId(3);
+        observation.getDatastream().addObservation(observation);
+        observation.getDatastream();
 
         return observation;
 

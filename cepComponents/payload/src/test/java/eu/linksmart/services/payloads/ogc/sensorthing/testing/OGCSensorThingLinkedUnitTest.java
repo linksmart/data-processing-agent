@@ -5,6 +5,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.testing;
  */
 
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -83,63 +84,70 @@ public class OGCSensorThingLinkedUnitTest {
 
     String observationChildJSON =
                     "{\n" +
-                       // "\t\"objectID\": 1,"+
                         " \"@iot.id\": 1,\n" +
-                            //" \"@iot.selfLink\": \"0\",\n" +
+                        " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/Observation(1)\",\n" +
                         " \"phenomenonTime\": \"2014-12-31T11:59:59.00+08:00\",\n" +
                         " \"resultTime\": \"2014-12-31T11:59:59.00+08:00\",\n" +
                         " \"result\": 70.4,\n" +
-                        "\"featureOfInterest\": {" +
-                            "\"@iot.id\":1," +
-                            "\t\"events\": [1],"+
-                          //  "\"@iot.selfLink\":\"0\"," +
-                            "\"description\":\"This is a weather station.\"," +
-                            "\"encodingType\":\"application/vnd.geo+json\"," +
-                            "\"feature\":{" +
-                                "\"type\": \"Point\"," +
-                                "\"coordinates\":[-114.06,51.05]" +
-                            "}" +
-                        "}"+
-                       /* "\"datastream\": "+
+                        " \"FeatureOfInterest@iot.navigationLink\": \"Observation(1)/FeatureOfInterest\",\n" +
+                        " \"Datastream@iot.navigationLink\": \"Observation(1)/Sensor\",\n" +
+                        "\"featureOfInterest\": {\n" +
+                            "\"@iot.id\": 2,\n" +
+                            "\"@iot.selfLink\":\"http://linksmart.eu/v1.0/FeaturesOfInterest(2)\",\n" +
+                            "\"description\":\"This is a weather station.\",\n" +
+                            "\"encodingType\":\"application/vnd.geo+json\",\n" +
+                            "\"feature\":{\n" +
+                                "\"type\": \"Point\",\n" +
+                                "\"coordinates\":[-114.06,51.05]\n" +
+                            "}\n" +
+                        "},\n"+
+                        "\"datastream\": "+
                             "{\n" +
-                            " \"@iot.id\": 1,\n" +
-                            " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/Datastreams(1)\",\n" +
-                            " \"Thing@iot.navigationLink\": \"Datastreams(1)/Thing\",\n" +
-                            " \"Sensor@iot.navigationLink\": \"Datastreams(1)/Sensor\",\n" +
-                            " \"ObservedProperty@iot.navigationLink\": \"Datastreams(1)/ObservedProperty\",\n" +
-                            " \"Observations@iot.navigationLink\": \"Datastreams(1)/Observations\",\n" +
+                            " \"@iot.id\": 3,\n" +
+                            " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/Datastreams(3)\",\n" +
+                            " \"Thing@iot.navigationLink\": \"Datastreams(3)/Thing\",\n" +
+                            " \"Sensor@iot.navigationLink\": \"Datastreams(3)/Sensor\",\n" +
+                            " \"ObservedProperty@iot.navigationLink\": \"Datastreams(3)/ObservedProperty\",\n" +
+                            " \"Observations@iot.navigationLink\": \"Datastreams(3)/Observations\",\n" +
                             " \"description\": \"This is a datastream measuring the temperature in an oven.\",\n" +
                             " \"unitOfMeasurement\": {\n" +
-                            " \"name\": \"degree Celsius\",\n" +
-                            " \"symbol\": \"°C\",\n" +
-                            " \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\"\n" +
+                                " \"name\": \"degree Celsius\",\n" +
+                                " \"symbol\": \"°C\",\n" +
+                                " \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\"\n" +
+                                " },\n" +
+                                " \"observationType\": \"http://www.opengis.net/def/observationType/OGCOM/2.0/OM_Measurement\",\n" +
+                                " \"observedArea\": {\n" +
+                                " \"type\": \"Polygon\",\n" +
+                                " \"coordinates\": [[[100,0],[101,0],[101,1],[100,1],[100,0]]]\n" +
                             " },\n" +
-                            " \"observationType\": \"http://www.opengis.net/def/observationType/OGCOM/2.0/OM_Measurement\",\n" +
-                            " \"observedArea\": {\n" +
-                            " \"type\": \"Polygon\",\n" +
-                            " \"coordinates\": [[[100,0],[101,0],[101,1],[100,1],[100,0]]]\n" +
-                            " },\n" +
+                            "\"sensor\":{\n" +
+                                " \"@iot.id\": 1,\n" +
+                                " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/Sensors(1)\",\n" +
+                                " \"Datastreams@iot.navigationLink\": \"Sensors(1)/Datastreams\",\n" +
+                                " \"description\": \"TMP36 - Analog Temperature sensor\",\n" +
+                                " \"encodingType\": \"application/pdf\",\n" +
+                                " \"metadata\": \"http://example.org/TMP35_36_37.pdf\"\n" +
+                            "},\n"+
                             " \"phenomenonTime\": \"2014-03-01T13:00:00Z/2015-05-11T15:30:00Z\",\n" +
-                            " \"resultTime\": \"2014-03-01T13:00:00Z/2015-05-11T15:30:00Z\",\n" +
-
-                            "\"thing\": "+
+                           " \"resultTime\": \"2014-03-01T13:00:00Z/2015-05-11T15:30:00Z\"\n" +
+                           /* "\"thing\": "+
                                 "{\n" +
                                 " \"@iot.id\": 1,\n" +
                                 " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/Things(1)\",\n" +
-                                " \"Locations@iot.navigationLink\": \"Things(1)/Locations\",\n" +
-                                " \"Datastreams@iot.navigationLink\": \"Things(1)/Datastreams\",\n" +
-                                " \"HistoricalLocations@iot.navigationLink\": \"Things(1)/HistoricalLocations\",\n" +
+                               // " \"Locations@iot.navigationLink\": \"Things(1)/Locations\",\n" +
+                                //" \"Datastreams@iot.navigationLink\": \"Things(1)/Datastreams\",\n" +
+                                //" \"HistoricalLocations@iot.navigationLink\": \"Things(1)/HistoricalLocations\",\n" +
                                 " \"description\": \"This thing is an oven.\",\n" +
                                 " \"properties\": {\n" +
                                 " \"owner\": \"John Doe\",\n" +
                                 " \"color\": \"Silver\",\n" +
-                                "\"locations\": "+
+                                *//*"\"locations\": "+
                                     "[" +
                                         "{\n" +
                                         " \"@iot.id\": 1,\n" +
                                         " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/Locations(1)\",\n" +
                                         " \"Things@iot.navigationLink\": \"Locations(1)/Things\",\n" +
-                                        " \"HistoricalLocations@iot.navigationLink\": \"Locations(1)/HistoricalLocations\",\n" +
+                                        //" \"HistoricalLocations@iot.navigationLink\": \"Locations(1)/HistoricalLocations\",\n" +
                                         " \"encodingType\": \"application/vnd.geo+json\",\n" +
                                         " \"location\": {\n" +
                                         " \"type\": \"Point\",\n" +
@@ -147,8 +155,8 @@ public class OGCSensorThingLinkedUnitTest {
                                         " }\n" +
                                         "}"+
                                     "]"+
-                                " },\n" +
-                                "\"historicalLocations\":"+
+                                " },\n" +*//*
+                               *//* "\"historicalLocations\":"+
                                 "["+
                                     " {\n" +
                                     " \"@iot.id\": 1,\n" +
@@ -158,11 +166,11 @@ public class OGCSensorThingLinkedUnitTest {
                                     " \"time\": \"2015-01-25T12:00:00-07:00\"\n" +
                                     " }"+
                                 "]"+
-                            "}"+
-                        "}"+*/
+                            "}"+*/
+                        "}"+
                     "}";
 
-   // @Test
+    @Test
     public void TestParsingObservation() {
 
       //  UtilsLinked.testParsing(observationJSON, Observation.class, UtilsLinked.constructObservation(false));

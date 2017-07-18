@@ -26,8 +26,8 @@ public class ObservedProperty extends CommonControlInfoDescription {
      *
      * @return the uri The phenomenon URI as a {@link String}
      */
-    @JsonProperty(value = "URI")
-    @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
+   // @JsonProperty(value = "URI")
+  //  @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
     public String getDefinition()
     {
         return definition;
@@ -40,19 +40,19 @@ public class ObservedProperty extends CommonControlInfoDescription {
      * @param uri
      *            the uri to set.
      */
-    @JsonProperty(value = "URI")
-    @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
+    //@JsonProperty(value = "URI")
+   // @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
     public void setDefinition(String uri)
     {
         this.definition = uri;
     }
-    @JsonProperty(value = "name")
-    @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
+   // @JsonProperty(value = "name")
+   // @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
     public String getName() {
         return name;
     }
-    @JsonProperty(value = "name")
-    @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
+   // @JsonProperty(value = "name")
+   // @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
     public void setName(String name) {
         this.name = name;
     }

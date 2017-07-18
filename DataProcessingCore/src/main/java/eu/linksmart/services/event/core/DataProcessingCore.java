@@ -147,7 +147,7 @@ public class DataProcessingCore {
                         fileFeeder = new BigFileConnector((Class<? extends EventEnvelope>) Class.forName(aliasTopicClass.get(alias).getRight()), (String[]) conf.getList(Const.PERSISTENT_EVENTS_FILE+"_"+alias).toArray(new String[conf.getList(Const.PERSISTENT_EVENTS_FILE+"_"+alias).size()]));
                         fileFeeder.loadFiles();
                     }
-                } catch (ClassNotFoundException e) {
+                } catch (Exception e) {
                     loggerService.error(e.getMessage(), e);
                 }
 

@@ -17,7 +17,7 @@ import java.util.Arrays;
  * Created by José Ángel Carvajal on 01.09.2016 a researcher of Fraunhofer FIT.
  */
 public class DefaultDeserializer implements Deserializer{
-    private ObjectMapper mapper = new ObjectMapper();
+    protected ObjectMapper mapper = new ObjectMapper();
     public DefaultDeserializer(){
         mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
 

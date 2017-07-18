@@ -11,7 +11,7 @@
 
     <artifactId>utils</artifactId>
     <name>Several Utils</name>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
 
 
     <dependencies>

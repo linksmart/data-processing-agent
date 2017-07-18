@@ -37,7 +37,7 @@ public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Loc
 
 	/* {see=http://blog.opendatalab.de/hack/2013/07/16/geojson-jackson/} */
 
-    @JsonPropertyDescription("TBD.")
+   /* @JsonPropertyDescription("TBD.")
     @JsonProperty(value = "Things@iot.navigationLink")
     public String getThingsNavigationLink() {
         return "Location("+id+")/Things";
@@ -58,7 +58,7 @@ public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Loc
 
     @JsonBackReference(value = "things")
     protected Set<Thing> Things = null;
-
+*/
 
     /**
      * The Location entity locates the Thing. Multiple Things MAY be
@@ -71,8 +71,8 @@ public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Loc
      * different spaces (e.g., one encodingType in Geometrical space and
      * one encodingType in Topological space).
      **/
-    @JsonBackReference(value = "historicalLocations")
-    protected Set<HistoricalLocation> historicalLocations;
+  //  @JsonBackReference(value = "historicalLocations")
+   // protected Set<HistoricalLocation> historicalLocations;
     /**navigationLink is the relative URL that retrieves content of related entities. */
 
 

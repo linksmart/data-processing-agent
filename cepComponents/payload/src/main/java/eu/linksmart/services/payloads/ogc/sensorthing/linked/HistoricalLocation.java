@@ -13,7 +13,7 @@ import java.util.List;
  * Created by José Ángel Carvajal on 01.04.2016 a researcher of Fraunhofer FIT.
  */
 public class HistoricalLocation extends eu.linksmart.services.payloads.ogc.sensorthing.HistoricalLocation {
-
+/*
 
     @JsonPropertyDescription("TBD.")
     @JsonProperty(value = "Thing@iot.navigationLink")
@@ -42,13 +42,11 @@ public class HistoricalLocation extends eu.linksmart.services.payloads.ogc.senso
     @JsonPropertyDescription("TBD.")
     @JsonProperty(value = "Locations@iot.navigationLink")
     public void setLocationsNavigationLink(String value) {   }
-
-    @JsonProperty(value = "locations")
+*/
     public List<Location> getLocations() {
         return locations;
     }
 
-    @JsonProperty(value = "locations")
     public void setLocations(List<Location> locations) {
         this.locations = locations;
     }

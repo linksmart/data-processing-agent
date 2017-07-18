@@ -17,8 +17,10 @@
  */
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncoding;
 
 
@@ -97,12 +99,13 @@ public class Sensor extends CCIEncoding
 
     /**navigationLink is the relative URL that retrieves content of related entities. */
     @JsonPropertyDescription("navigationLink is the relative Datastreams that retrieves content of related entities.")
-    @JsonProperty(value = "Datastreams@iot.navigationLink")
+    @JsonGetter(value = "Datastreams@iot.navigationLink")
     public String getDatastreamsNavigationLink() {
         return "Sensor("+id+")/Datastreams";
     }
 
     @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Datastreams@iot.navigationLink")
+    @JsonSetter(value = "Datastreams@iot.navigationLink")
     public void setDatastreamsNavigationLink(String value) {   }
+
 }

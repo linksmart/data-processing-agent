@@ -5,6 +5,8 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
+import eu.linksmart.api.event.types.SerializationFactory;
+import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -86,6 +88,12 @@ public class Event<IDType, ValueType> implements EventEnvelope<IDType,ValueType 
     public void setValue(ValueType value) {
         this.value=value;
     }
+
+    @Override
+    public SerializationFactory getSerializationFacotry() {
+        return new DefaultSerializationFactory();
+    }
+
     @Override
     public String toString(){
         return getIsoTimestamp();

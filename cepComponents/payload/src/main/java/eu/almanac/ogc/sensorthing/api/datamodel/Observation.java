@@ -23,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.SerializationFactory;
+import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
 import eu.linksmart.services.utils.function.Utils;
 
 import java.util.Date;
@@ -317,6 +319,12 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
         resultValue =value;
 
     }
+
+    @Override
+    public SerializationFactory getSerializationFacotry() {
+        return new DefaultSerializationFactory();
+    }
+
     public static Observation factory(Object event, String resultType, String StreamID, String sensorID) {
        return factory(event,resultType,sensorID,sensorID,(new Date()).getTime());
 
