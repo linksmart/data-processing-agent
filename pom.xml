@@ -10,6 +10,9 @@
 
     <url>https://linksmart.eu/redmine/projects/iot-data-processing-agent/</url>
 
+
+
+
 	<name>LS Services: IoT agents</name>
 	<description>Implementation of the IoT agents framework</description>
     <developers>
@@ -27,15 +30,10 @@
         </developer>
     </developers>
 
-
-
-
     <organization>
         <name>Fraunhofer FIT Institute</name>
         <url>http://www.fit.fraunhofer.de</url>
     </organization>
-
-
 
     <licenses>
         <license>
