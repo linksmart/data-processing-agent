@@ -135,9 +135,6 @@ public class UtilsLinked {
 
     }
 
-
-
-
     public static Location constructLocation(boolean childObjects) {
         Location location = new Location();
         location.setId(1);
