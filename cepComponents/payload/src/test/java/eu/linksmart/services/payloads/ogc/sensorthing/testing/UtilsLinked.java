@@ -147,8 +147,6 @@ public class UtilsLinked {
 
     }
 
-
-
     public static Thing constructThing(boolean childObjects) {
         Thing thing = new Thing();
         thing.setId(1);
@@ -158,9 +156,7 @@ public class UtilsLinked {
         if(childObjects){
             //todo
         }
-
         return thing;
-
 
     }
 
