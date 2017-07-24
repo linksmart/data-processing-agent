@@ -17,10 +17,11 @@
  */
 package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,35 +31,14 @@ import java.util.Set;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@iot.id", scope = Location.class)
 public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Location
 {
 
+    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    protected List<HistoricalLocation> historicalLocations;
 
-
-	/* {see=http://blog.opendatalab.de/hack/2013/07/16/geojson-jackson/} */
-
-   /* @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Things@iot.navigationLink")
-    public String getThingsNavigationLink() {
-        return "Location("+id+")/Things";
-    }
-    @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "Things@iot.navigationLink")
-    public void setThingsNavigationLink(String value) {   }
-
-
-    @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "HistoricalLocations@iot.navigationLink")
-    public String getHistoricalLocationsNavigationLink() {
-        return "Location("+id+")/HistoricalLocations";
-    }
-    @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "HistoricalLocations@iot.navigationLink")
-    public void setHistoricalLocationsNavigationLink(String value) {   }
-
-    @JsonBackReference(value = "things")
-    protected Set<Thing> Things = null;
-*/
 
     /**
      * The Location entity locates the Thing. Multiple Things MAY be
@@ -75,6 +55,65 @@ public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Loc
    // protected Set<HistoricalLocation> historicalLocations;
     /**navigationLink is the relative URL that retrieves content of related entities. */
 
+    @JsonIgnore
+    protected List<Thing> things;
+
+    public void addThing(Thing thing){
+        if(thing.locations == null)
+            thing.locations = new ArrayList<>();
+        if(!thing.locations.contains(this))
+            thing.addLocation(this);
+        this.things.add(thing);
+    }
+
+    @JsonGetter("historicalLocations")
+    public List<HistoricalLocation> getHistoricalLocations() {
+        return historicalLocations;
+    }
 
 
+    /**
+     * Sets the list of locations in which this Thing has been registered.
+     * Replaces any existing list.
+     *
+     * @param historicalLocations
+     *            the locations to set
+     */
+
+    @JsonSetter("historicalLocations")
+    public void setHistoricalLocations(List<HistoricalLocation> historicalLocations) {
+        if(historicalLocations!=null) {
+            historicalLocations.forEach(d->d.addLocation(this));
+            this.historicalLocations = historicalLocations;
+        }
+
+    }
+    public void addHistoricalLocation(HistoricalLocation historicalLocation) {
+
+        if(historicalLocation.locations == null)
+            historicalLocation.locations = new ArrayList<>();
+
+        if(!historicalLocation.locations.contains(this))
+            historicalLocation.locations.add(this);
+        if(this.historicalLocations == null)
+            this.historicalLocations = new ArrayList<>();
+
+        if(!this.historicalLocations.contains(historicalLocation))
+            this.historicalLocations.add(historicalLocation);
+    }
+    @JsonGetter(value = "HistoricalLocations@iot.navigationLink")
+    public String getHistoricalLocationsNavigationLink() {
+        return "Location("+id+")/HistoricalLocations";
+    }
+    @JsonPropertyDescription("TBD.")
+    @JsonSetter(value = "HistoricalLocations@iot.navigationLink")
+    public void setHistoricalLocationsNavigationLink(String value) {   }
+
+    @JsonGetter(value = "Things@iot.navigationLink")
+    public String getThingNavigationLink() {
+        return "Location("+id+")/Things";
+    }
+    //@JsonPropertyDescription("TBD.")
+    @JsonSetter(value = "Things@iot.navigationLink")
+    public void setThingNavigationLink(String value) {   }
 }

@@ -2,6 +2,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.base;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.Thing;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -126,4 +127,5 @@ public  abstract class CommonControlInfo {
             return "ID: "+id;
         return this.getClass().getCanonicalName();
     }
+
 }

@@ -63,7 +63,10 @@ public class UtilsLinked {
         observation.setDatastream(constructDatastream(false));
         observation.getDatastream().setId(3);
         observation.getDatastream().addObservation(observation);
-        observation.getDatastream();
+        observation.getDatastream().setSensor(constructSensor(false));
+        observation.getDatastream().setThing(constructThing(false));
+        observation.getDatastream().getThing().addLocation(constructLocation(false));
+        observation.getDatastream().getThing().addHistoricalLocation(constructHistoricalLocation(false));
 
         return observation;
 

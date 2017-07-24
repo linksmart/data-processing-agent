@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 //@JsonIgnoreProperties({"@iot.id, @iot.selfLink"})
 //@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "object.id" )
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Observation.class)
 public class Observation extends eu.linksmart.services.payloads.ogc.sensorthing.Observation {
 
     @JsonGetter("featureOfInterest")

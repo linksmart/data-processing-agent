@@ -34,6 +34,7 @@ import java.util.Set;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id" , scope = Sensor.class)
 public class Sensor extends eu.linksmart.services.payloads.ogc.sensorthing.Sensor
 {
 
@@ -67,7 +68,7 @@ public class Sensor extends eu.linksmart.services.payloads.ogc.sensorthing.Senso
     @JsonPropertyDescription("navigationLink is the relative Datastreams that retrieves content of related entities.")
     @JsonProperty(value = "Datastreams@iot.navigationLink")
     public String getDatastreamsNavigationLink() {
-        return "Sensor("+id+")/Datastreams";
+        return "ObservedProperty("+id+")/Datastreams";
     }
 
    // @JsonPropertyDescription("TBD.")

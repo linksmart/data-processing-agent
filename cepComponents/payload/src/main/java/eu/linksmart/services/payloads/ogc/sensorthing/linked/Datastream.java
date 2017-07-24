@@ -31,7 +31,7 @@ import java.util.Set;
  *
  */
 //@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "object.id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Datastream.class)
 public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.Datastream
 {
     @JsonPropertyDescription("The detailed description of the sensor or system. The content is open to accommodate changes to SensorML or to support other description languages.")
@@ -112,6 +112,11 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
     @JsonSetter(value = "thing")
     public void setThing(Thing thing) {
         this.thing = thing;
+        if(this.thing.datastreams == null )
+            this.thing.datastreams = new ArrayList<>();
+
+        if( !this.thing.datastreams.contains(this))
+            this.thing.datastreams.add(this);
     }
 
     @JsonIgnore

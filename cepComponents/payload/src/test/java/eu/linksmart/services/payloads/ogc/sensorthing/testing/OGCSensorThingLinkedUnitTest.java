@@ -129,34 +129,34 @@ public class OGCSensorThingLinkedUnitTest {
                                 " \"metadata\": \"http://example.org/TMP35_36_37.pdf\"\n" +
                             "},\n"+
                             " \"phenomenonTime\": \"2014-03-01T13:00:00Z/2015-05-11T15:30:00Z\",\n" +
-                           " \"resultTime\": \"2014-03-01T13:00:00Z/2015-05-11T15:30:00Z\"\n" +
-                           /* "\"thing\": "+
-                                "{\n" +
-                                " \"@iot.id\": 1,\n" +
+                           " \"resultTime\": \"2014-03-01T13:00:00Z/2015-05-11T15:30:00Z\",\n" +
+                           "\"thing\": "+
+                                 "{\n" +
+                              " \"@iot.id\": 1,\n" +
                                 " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/Things(1)\",\n" +
-                               // " \"Locations@iot.navigationLink\": \"Things(1)/Locations\",\n" +
-                                //" \"Datastreams@iot.navigationLink\": \"Things(1)/Datastreams\",\n" +
-                                //" \"HistoricalLocations@iot.navigationLink\": \"Things(1)/HistoricalLocations\",\n" +
+                                " \"Locations@iot.navigationLink\": \"Things(1)/Locations\",\n" +
+                                " \"Datastreams@iot.navigationLink\": \"Things(1)/Datastreams\",\n" +
+                                " \"HistoricalLocations@iot.navigationLink\": \"Things(1)/HistoricalLocations\",\n" +
                                 " \"description\": \"This thing is an oven.\",\n" +
                                 " \"properties\": {\n" +
-                                " \"owner\": \"John Doe\",\n" +
-                                " \"color\": \"Silver\",\n" +
-                                *//*"\"locations\": "+
+                                    " \"owner\": \"John Doe\",\n" +
+                                    " \"color\": \"Silver\"" +
+                                "},\n" +
+                                "\"locations\": "+
                                     "[" +
                                         "{\n" +
                                         " \"@iot.id\": 1,\n" +
                                         " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/Locations(1)\",\n" +
                                         " \"Things@iot.navigationLink\": \"Locations(1)/Things\",\n" +
-                                        //" \"HistoricalLocations@iot.navigationLink\": \"Locations(1)/HistoricalLocations\",\n" +
+                                        " \"HistoricalLocations@iot.navigationLink\": \"Locations(1)/HistoricalLocations\",\n" +
                                         " \"encodingType\": \"application/vnd.geo+json\",\n" +
                                         " \"location\": {\n" +
                                         " \"type\": \"Point\",\n" +
                                         " \"coordinates\": [-114.06,51.05]\n" +
                                         " }\n" +
                                         "}"+
-                                    "]"+
-                                " },\n" +*//*
-                               *//* "\"historicalLocations\":"+
+                                    "],"+
+                                "\"historicalLocations\":"+
                                 "["+
                                     " {\n" +
                                     " \"@iot.id\": 1,\n" +
@@ -166,7 +166,8 @@ public class OGCSensorThingLinkedUnitTest {
                                     " \"time\": \"2015-01-25T12:00:00-07:00\"\n" +
                                     " }"+
                                 "]"+
-                            "}"+*/
+                            " }\n" +
+                            "}"+
                         "}"+
                     "}";
 
