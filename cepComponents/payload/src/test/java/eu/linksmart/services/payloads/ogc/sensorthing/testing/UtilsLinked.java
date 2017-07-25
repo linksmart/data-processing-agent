@@ -1,5 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.testing;
 
+import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import org.geojson.LngLatAlt;
@@ -23,8 +24,8 @@ public class UtilsLinked {
 
 
 
-    public static FeatureOfInterest constructFeatureOfInterest() {
-        FeatureOfInterest featureOfInterest = new FeatureOfInterest();
+    public static FeatureOfInterestImpl constructFeatureOfInterest() {
+        FeatureOfInterestImpl featureOfInterest = new FeatureOfInterestImpl();
         featureOfInterest.setId(1);
         featureOfInterest.setDescription("This is a weather station.");
         featureOfInterest.setEncodingType("application/vnd.geo+json");
@@ -51,8 +52,8 @@ public class UtilsLinked {
     }
 
 
-    public static Observation constructObservation() {
-        Observation observation = new Observation();
+    public static ObservationImpl constructObservation() {
+        ObservationImpl observation = new ObservationImpl();
         observation.setId(1);
 
         observation.setPhenomenonTime(DatatypeConverter.parseDateTime("2014-12-31T11:59:59.00+08:00").getTime());
@@ -64,6 +65,7 @@ public class UtilsLinked {
         observation.getDatastream().setId(3);
         observation.getDatastream().addObservation(observation);
         observation.getDatastream().setSensor(constructSensor(false));
+        observation.getDatastream().setObservedProperty(constructObservedProperty(false));
         observation.getDatastream().setThing(constructThing(false));
         observation.getDatastream().getThing().addLocation(constructLocation(false));
         observation.getDatastream().getThing().addHistoricalLocation(constructHistoricalLocation(false));
@@ -92,7 +94,7 @@ public class UtilsLinked {
 
 
     public static Datastream constructDatastream(boolean childObjects) {
-        Datastream datastream = new Datastream();
+        Datastream datastream = new DatastreamImpl();
         datastream.setId(1);
         datastream.setDescription("This is a datastream measuring the temperature in an oven.");
         Map<String,Object> f = new LinkedHashMap<>();

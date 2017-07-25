@@ -1,19 +1,19 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.base;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.Thing;
+import eu.linksmart.services.payloads.ogc.sensorthing.CommonControlInfo;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.UUID;
 
 /**
  * Created by José Ángel Carvajal on 01.04.2016 a researcher of Fraunhofer FIT.
+ *
+ * This abstract class describe de basic values that all classes of OGC SensorThing 1.0 must contain.
+ * Therefore, all classes must inherit from this class or from a derivation of this class.
  */
 //@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@iot.id")
-public  abstract class CommonControlInfo {
+public abstract class CommonControlInfoImpl implements CommonControlInfo {
     /**
      * id is the system-generated identifier of an entity.
      * id is unique among the entities of the same entity type in a SensorThings service
@@ -32,12 +32,13 @@ public  abstract class CommonControlInfo {
     /**
      * Empty constructor
      */
-    public CommonControlInfo()
+    public CommonControlInfoImpl()
     {
         if(id== null || id.equals(""))
             id = UUID.randomUUID().toString();
     }
     /** selfLink is the absolute URL of an entity that is unique among all other entities. */
+    @Override
     @JsonPropertyDescription("id is the system-generated identifier of an entity.")
     @JsonProperty(value = "@iot.selfLink")
     public String getSelfLink() {
@@ -45,6 +46,7 @@ public  abstract class CommonControlInfo {
         return generateSelfLink();
     }
     /** selfLink is the absolute URL of an entity that is unique among all other entities. */
+    @Override
     @JsonPropertyDescription("id is the system-generated identifier of an entity.")
     @JsonProperty(value = "@iot.selfLink")
     public void setSelfLink(String selfLink) {
@@ -86,6 +88,7 @@ public  abstract class CommonControlInfo {
      *
      * @return the id
      */
+    @Override
     @JsonPropertyDescription("id is the system-generated identifier of an entity.")
    // @JsonProperty(value = "@iot.id")
     public Object getId()
@@ -99,6 +102,7 @@ public  abstract class CommonControlInfo {
      * @param id
      *            the id to set
      */
+    @Override
     @JsonPropertyDescription("id is the system-generated identifier of an entity.")
     @JsonSetter(value = "@iot.id")
     public void setId(Object id)
@@ -118,7 +122,7 @@ public  abstract class CommonControlInfo {
     }
     @Override
     public boolean equals(Object obj) {
-        return obj == this || obj instanceof CommonControlInfo && ((CommonControlInfo) obj).id.equals(id);
+        return obj == this || obj instanceof CommonControlInfoImpl && ((CommonControlInfoImpl) obj).id.equals(id);
     }
 
     @Override

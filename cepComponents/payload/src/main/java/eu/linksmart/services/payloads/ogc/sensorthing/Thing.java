@@ -20,7 +20,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescription;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
 
 
 import java.util.HashMap;
@@ -39,7 +39,7 @@ import java.util.Map;
  * @author <a href="mailto:carvajal@fit.fhg.de">Angel Carvajal</a>
  *
  */
-public class Thing extends CommonControlInfoDescription
+public class Thing extends CommonControlInfoDescriptionImpl
 {
 
 

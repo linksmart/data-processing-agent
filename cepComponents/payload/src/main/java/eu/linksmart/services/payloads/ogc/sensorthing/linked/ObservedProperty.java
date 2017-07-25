@@ -1,6 +1,7 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
+import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 
 import javax.persistence.OneToMany;
 import java.util.List;

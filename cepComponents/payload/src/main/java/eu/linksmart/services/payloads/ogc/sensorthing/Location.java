@@ -19,7 +19,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncoding;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncodingImpl;
 import org.geojson.GeoJsonObject;
 
 import java.util.Arrays;
@@ -31,7 +31,7 @@ import java.util.Arrays;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-public class Location extends CCIEncoding
+public class Location extends CCIEncodingImpl
 {
 
 

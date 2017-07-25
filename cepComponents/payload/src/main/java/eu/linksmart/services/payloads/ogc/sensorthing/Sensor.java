@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncoding;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncodingImpl;
 
 
 /**
@@ -33,7 +33,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncoding;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-public class Sensor extends CCIEncoding
+public class Sensor extends CCIEncodingImpl
 {
 
     /**

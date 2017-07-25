@@ -37,7 +37,7 @@ public class OGCSensorThingLinkedUnitTest {
   // @Test
     public void TestParsingFeatureOfInterest() {
 
-        Utils.testParsing(featureOfInterestJSON, FeatureOfInterest.class, UtilsLinked.constructFeatureOfInterest());
+        Utils.testParsing(featureOfInterestJSON, FeatureOfInterestImpl.class, UtilsLinked.constructFeatureOfInterest());
 
     }
     /**
@@ -128,6 +128,17 @@ public class OGCSensorThingLinkedUnitTest {
                                 " \"encodingType\": \"application/pdf\",\n" +
                                 " \"metadata\": \"http://example.org/TMP35_36_37.pdf\"\n" +
                             "},\n"+
+                            "\"observedProperty\":{\n" +
+                            " \"@iot.id\": 1,\n" +
+                            " \"@iot.selfLink\": \"http://linksmart.eu/v1.0/ObservedProperties(1)\",\n" +
+                            " \"Datastreams@iot.navigationLink\": \"ObservedProperties(1)/Datastreams\",\n" +
+                            " \"description\": \"The dewpoint temperature is the temperature to which the air must " +
+                            "be cooled, at constant pressure, for dew to form. As the grass and other objects " +
+                            "near the ground cool to the dewpoint, some of the water vapor in the atmosphere " +
+                            "condenses into liquid water on the objects.\",\n" +
+                            " \"name\": \"DewPoint Temperature\",\n" +
+                            " \"definition\": \"http://dbpedia.org/page/Dew_point\"\n" +
+                            "},"+
                             " \"phenomenonTime\": \"2014-03-01T13:00:00Z/2015-05-11T15:30:00Z\",\n" +
                            " \"resultTime\": \"2014-03-01T13:00:00Z/2015-05-11T15:30:00Z\",\n" +
                            "\"thing\": "+
@@ -175,7 +186,7 @@ public class OGCSensorThingLinkedUnitTest {
     public void TestParsingObservation() {
 
       //  UtilsLinked.testParsing(observationJSON, Observation.class, UtilsLinked.constructObservation(false));
-        Utils.testParsing(observationChildJSON, Observation.class, UtilsLinked.constructObservation());
+        Utils.testParsing(observationChildJSON, eu.linksmart.services.payloads.ogc.sensorthing.Observation.class, UtilsLinked.constructObservation());
 
     }
     String observedPropertyJSON =
@@ -199,7 +210,7 @@ public class OGCSensorThingLinkedUnitTest {
     public void TestParsingObservedProperty() {
 
         //UtilsLinked.testParsing(observedPropertyJSON, ObservedProperty.class, UtilsLinked.constructObservedProperty(false));
-        Utils.testParsing(observedPropertyChildJSON, Observation.class, UtilsLinked.constructObservedProperty(true));
+        Utils.testParsing(observedPropertyChildJSON, ObservationImpl.class, UtilsLinked.constructObservedProperty(true));
 
     }
     String datastreamJSON =

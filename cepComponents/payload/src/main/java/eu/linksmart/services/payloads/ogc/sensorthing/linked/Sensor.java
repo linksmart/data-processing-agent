@@ -19,6 +19,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 
 import java.util.HashSet;
 import java.util.List;

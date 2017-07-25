@@ -1,10 +1,17 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.testing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.payloads.ogc.sensorthing.CommonControlInfo;
+import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
+import eu.linksmart.services.payloads.ogc.sensorthing.Sensor;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
-import eu.linksmart.services.payloads.ogc.sensorthing.referenced.*;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
 import org.geojson.Polygon;
@@ -24,6 +31,10 @@ import static org.junit.Assert.assertEquals;
 public class Utils {
     public static Object parse(String toParse, Class theClass) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new SimpleModule("Observation", Version.unknownVersion()).addAbstractTypeMapping(eu.linksmart.services.payloads.ogc.sensorthing.Observation.class, ObservationImpl.class));
+       // mapper.registerModule(new SimpleModule("EventEnvelope", Version.unknownVersion()).addAbstractTypeMapping(EventEnvelope.class, ObservationImpl.class));
+        mapper.registerModule(new SimpleModule("CommonControlInfo", Version.unknownVersion()).addAbstractTypeMapping(CommonControlInfo.class, CommonControlInfoImpl.class));
+
         try {
             Object object= mapper.readValue(toParse, theClass);
             return object;
@@ -37,6 +48,10 @@ public class Utils {
     public static void testParsing(String json, Class theClass, Object toTest) {
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new SimpleModule("Observation", Version.unknownVersion()).addAbstractTypeMapping(eu.linksmart.services.payloads.ogc.sensorthing.Observation.class, ObservationImpl.class));
+        mapper.registerModule(new SimpleModule("EventEnvelope", Version.unknownVersion()).addAbstractTypeMapping(EventEnvelope.class, ObservationImpl.class));
+        mapper.registerModule(new SimpleModule("CommonControlInfo", Version.unknownVersion()).addAbstractTypeMapping(CommonControlInfo.class, CommonControlInfoImpl.class));
+        //mapper.registerModule(new SimpleModule("Observation", Version.unknownVersion()).addAbstractTypeMapping(Observation.class, ObservationImpl.class));
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         Object foi1 = toTest;
         String strFoi1 = "1";
@@ -65,8 +80,8 @@ public class Utils {
 
 
 
-    public static FeatureOfInterest constructFeatureOfInterest(boolean childObjects) {
-        FeatureOfInterest featureOfInterest = new FeatureOfInterest();
+    public static eu.linksmart.services.payloads.ogc.sensorthing.FeatureOfInterest constructFeatureOfInterest(boolean childObjects) {
+        eu.linksmart.services.payloads.ogc.sensorthing.FeatureOfInterest featureOfInterest = new FeatureOfInterestImpl();
         featureOfInterest.setId(1);
         featureOfInterest.setDescription("This is a weather station.");
         featureOfInterest.setEncodingType("application/vnd.geo+json");
@@ -93,8 +108,8 @@ public class Utils {
     }
 
 
-    public static Observation constructObservation(boolean childObjects) {
-        Observation observation = new Observation();
+    public static eu.linksmart.services.payloads.ogc.sensorthing.Observation constructObservation(boolean childObjects) {
+        eu.linksmart.services.payloads.ogc.sensorthing.Observation observation = new ObservationImpl();
         observation.setId(1);
 
         observation.setPhenomenonTime(DatatypeConverter.parseDateTime("2014-12-31T11:59:59.00+08:00").getTime());
@@ -126,7 +141,7 @@ public class Utils {
 
 
     public static Datastream constructDatastream(boolean childObjects) {
-        Datastream datastream = new Datastream();
+        Datastream datastream = new DatastreamImpl();
         datastream.setId(1);
         datastream.setDescription("This is a datastream measuring the temperature in an oven.");
         Map<String,Object> f = new LinkedHashMap<>();

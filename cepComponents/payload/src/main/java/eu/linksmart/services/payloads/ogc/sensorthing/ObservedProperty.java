@@ -2,13 +2,13 @@ package eu.linksmart.services.payloads.ogc.sensorthing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescription;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
 
 
 /**
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  */
-public class ObservedProperty extends CommonControlInfoDescription {
+public class ObservedProperty extends CommonControlInfoDescriptionImpl {
 
     @JsonProperty(value = "name")
     protected String name;

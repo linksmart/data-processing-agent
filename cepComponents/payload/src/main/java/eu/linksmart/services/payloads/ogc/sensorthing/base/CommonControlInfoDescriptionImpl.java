@@ -2,11 +2,12 @@ package eu.linksmart.services.payloads.ogc.sensorthing.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import eu.linksmart.services.payloads.ogc.sensorthing.CommonControlInfoDescription;
 
 /**
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  */
-public abstract class CommonControlInfoDescription extends CommonControlInfo {
+public abstract class CommonControlInfoDescriptionImpl extends CommonControlInfoImpl implements CommonControlInfoDescription {
 
     /**
      * This is the description of the thing entity. The content is open to
@@ -17,17 +18,17 @@ public abstract class CommonControlInfoDescription extends CommonControlInfo {
     @JsonProperty(value = "description")
     protected String description;
 
-    public CommonControlInfoDescription(String description) {
+    public CommonControlInfoDescriptionImpl(String description) {
         this.description = description;
     }
-    public CommonControlInfoDescription() {
+    public CommonControlInfoDescriptionImpl() {
         this.description = null;
     }
     @Override
     public String toString(){
         if(id!=null)
             return "ID: "+id+"; Description: "+description;
-        return CommonControlInfo.class.getCanonicalName();
+        return CommonControlInfoImpl.class.getCanonicalName();
     }
 
     /**
@@ -35,6 +36,7 @@ public abstract class CommonControlInfoDescription extends CommonControlInfo {
      *
      * @return the description
      */
+    @Override
     @JsonPropertyDescription("This is the description of the thing entity. The content is open to accommodate changes to SensorML and to support other description languages.")
     @JsonProperty(value = "description")
     public String getDescription()
@@ -48,6 +50,7 @@ public abstract class CommonControlInfoDescription extends CommonControlInfo {
      * @param description
      *            the description to set as a {@link String}
      */
+    @Override
     @JsonPropertyDescription("This is the description of the thing entity. The content is open to accommodate changes to SensorML and to support other description languages.")
     @JsonProperty(value = "description")
     public void setDescription(String description)

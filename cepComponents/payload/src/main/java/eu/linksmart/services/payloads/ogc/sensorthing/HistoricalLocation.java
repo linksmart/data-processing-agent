@@ -2,7 +2,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfo;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
 
 
 import java.util.Date;
@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * Created by José Ángel Carvajal on 01.04.2016 a researcher of Fraunhofer FIT.
  */
-public class HistoricalLocation extends CommonControlInfo {
+public class HistoricalLocation extends CommonControlInfoImpl {
 
 
     /**

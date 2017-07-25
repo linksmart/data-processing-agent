@@ -18,10 +18,20 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
+import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
+import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateDeserializer;
+import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateSerializer;
+import org.geojson.Polygon;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * <strong>Definition:</strong> A datastream groups a collection of events
@@ -32,8 +42,7 @@ import java.util.Set;
  */
 //@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Datastream.class)
-public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.Datastream
-{
+public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements Datastream {
     @JsonPropertyDescription("The detailed description of the sensor or system. The content is open to accommodate changes to SensorML or to support other description languages.")
     @JsonProperty(value = "observationType")
     protected String observationType;
@@ -46,21 +55,25 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
     */
     @JsonIgnore
 	protected List<Observation> observations;
+    @Override
     @JsonGetter("observations") // <--- this is intentional
     public List<Observation> getObservations() {
         return observations;
     }
+    @Override
     @JsonSetter("observations")
     public void SetObservations(List<Observation> observation) {
         if(observations== null)
             observations=new ArrayList<>();
         observations = (observation);
     }
+    @Override
     @JsonPropertyDescription("TBD.")
     @JsonGetter(value = "Observations@iot.navigationLink")
     public String getObservationsNavigationLink() {
         return "Datastream("+id+")/Observations";
     }
+    @Override
     @JsonSetter(value = "Observations@iot.navigationLink")
     public void setObservationsNavigationLink(String value) {
 
@@ -68,18 +81,22 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 
     @JsonProperty(value = "observedProperty")
 	protected ObservedProperty observedProperty;
+    @Override
     @JsonPropertyDescription("TBD.")
     @JsonGetter(value = "ObservedProperty@iot.navigationLink")
     public String getObservedPropertNavigationLink() {
         return "Datastream("+id+")/ObservedProperty";
     }
+    @Override
     @JsonPropertyDescription("TBD.")
     @JsonSetter(value = "ObservedProperty@iot.navigationLink")
     public void setObservedPropertyNavigationLink(String value) {   }
+    @Override
     @JsonGetter(value = "sensor")
     public Sensor getSensor() {
         return sensor;
     }
+    @Override
     @JsonSetter(value = "sensor")
     public void setSensor(Sensor sensor) {
         this.sensor = sensor;
@@ -95,20 +112,24 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 
     @JsonIgnore
     protected Sensor sensor;
+    @Override
     @JsonPropertyDescription("TBD.")
     @JsonGetter(value = "Sensor@iot.navigationLink")
     public String getSensorNavigationLink() {
         return "Datastream("+id+")/Sensor";
     }
+    @Override
     @JsonPropertyDescription("TBD.")
     @JsonSetter(value = "Sensor@iot.navigationLink")
     public void setSensorNavigationLink(String value) {   }
 
     // @JsonGetter("observations") // <--- this is intentional
+    @Override
     public Thing getThing() {
         return thing;
     }
 
+    @Override
     @JsonSetter(value = "thing")
     public void setThing(Thing thing) {
         this.thing = thing;
@@ -122,11 +143,13 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
     @JsonIgnore
     protected Thing thing;
    // @JsonPropertyDescription("TBD.")
+    @Override
     @JsonGetter(value = "Thing@iot.navigationLink")
     public String getThingNavigationLink() {
         return "Datastream("+id+")/Thing";
     }
     //@JsonPropertyDescription("TBD.")
+    @Override
     @JsonSetter(value = "Thing@iot.navigationLink")
     public void setThingNavigationLink(String value) {   }
 
@@ -160,12 +183,13 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 */
 	/**
 	 * Adds a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} to the set of events belonging to
-	 * this {@link eu.linksmart.services.payloads.ogc.sensorthing.linked.Datastream} instance.
+	 * this {@link Datastream} instance.
 	 *
 	 * @param observation
 	 *            The observation to add.
 	 */
-	public void addObservation(Observation observation) {
+	@Override
+    public void addObservation(Observation observation) {
         // check not null
         if (observation != null){
             if ((this.observations == null))
@@ -178,14 +202,15 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
         }
     }
 	/**
-	 * Removes a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} from the set of events
-	 * belonging to this {@link eu.linksmart.services.payloads.ogc.sensorthing.linked.Datastream} instance.
+	 * Removes a single {@link Observation} from the set of events
+	 * belonging to this {@link Datastream} instance.
 	 *
 	 * @param observation
 	 *            The observation to remove.
 	 * @return true if removal was successful, false otherwise
 	 */
-	public boolean removeObservation(Observation observation)
+	@Override
+    public boolean removeObservation(Observation observation)
 	{
 		// the removal flag
 		boolean removed = false;
@@ -205,7 +230,8 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	 *
 	 * @return the observedProperty
 	 */
-	public ObservedProperty getObservedProperty()
+	@Override
+    public ObservedProperty getObservedProperty()
 	{
 		return observedProperty;
 	}
@@ -213,14 +239,151 @@ public class Datastream extends eu.linksmart.services.payloads.ogc.sensorthing.D
 	/**
 	 * Sets the {@link eu.almanac.ogc.sensorthing.api.datamodel.ObservedProperty} instance describing the property to
 	 * which events belonging to this data stream belong.
-	 * 
+	 *
 	 * @param observedProperty
 	 *            the observedProperty to set
 	 */
-	public void setObservedProperty(ObservedProperty observedProperty)
+	@Override
+    public void setObservedProperty(ObservedProperty observedProperty)
 	{
 		this.observedProperty = observedProperty;
 	}
+
+    @Override
+    @JsonProperty(value = "observationType")
+    @JsonPropertyDescription("TBD")
+    public String getObservationType() {
+        return observationType;
+    }
+    @Override
+    @JsonProperty(value = "observationType")
+    @JsonPropertyDescription("TBD.")
+    public void setObservationType(String observationType) {
+        this.observationType = observationType;
+    }
+
+
+
+    @JsonPropertyDescription("TBD.")
+    @JsonProperty(value = "unitOfMeasurement")
+    @JsonDeserialize(as=HashMap.class)
+    protected Map<String,Object> unitOfMeasurement;
+    @Override
+    @JsonProperty(value = "unitOfMeasurement")
+    @JsonPropertyDescription("TBD")
+    public Map<String,Object>  getUnitOfMeasurement() {
+        return unitOfMeasurement;
+    }
+    @Override
+    @JsonProperty(value = "unitOfMeasurement")
+    @JsonPropertyDescription("TBD.")
+    public void setUnitOfMeasurement(Map<String, Object> unitOfMeasurement) { this.unitOfMeasurement = unitOfMeasurement; }
+
+
+    /**
+     * The time instant or period of when the Observation happens.
+     Note: Many resource-constrained sensing devices do not have a clock.
+     As a result, a client may omit phenonmenonTime when POST new Observations,
+     even though phenonmenonTime is a mandatory property. When a SensorThings service
+     receives a POST Observations without phenonmenonTime, the service SHALL
+     assign the current server time to the value of the phenomenonTime.
+     * */
+    @JsonPropertyDescription("The time instant or period of when the Observation happens.")
+    @JsonProperty(value = "phenomenonTime")
+    @JsonDeserialize(using = IntervalDateDeserializer.class)
+    @JsonSerialize(using = IntervalDateSerializer.class)
+    protected Interval phenomenonTime;
+    @Override
+    @JsonProperty(value = "phenomenonTime")
+    @JsonPropertyDescription("TBD")
+    public Interval getPhenomenonTime() {
+        return phenomenonTime;
+    }
+    @Override
+    @JsonProperty(value = "phenomenonTime")
+    @JsonPropertyDescription("TBD.")
+    public void setPhenomenonTime(Interval phenomenonTime) {
+        this.phenomenonTime = phenomenonTime;
+    }
+
+    @JsonPropertyDescription("TBD.")
+    @JsonProperty(value = "resultTime")
+    @JsonDeserialize(using = IntervalDateDeserializer.class)
+    @JsonSerialize(using = IntervalDateSerializer.class)
+    protected Interval resultTime;
+    @Override
+    @JsonProperty(value = "resultTime")
+    @JsonPropertyDescription("TBD")
+    public Interval getResultTime() {
+        return resultTime;
+    }
+    @Override
+    @JsonProperty(value = "resultTime")
+    @JsonPropertyDescription("TBD.")
+    public void setResultTime(Interval resultTime) {
+        this.resultTime = resultTime;
+    }
+
+    @JsonPropertyDescription("TBD.")
+    @JsonProperty(value = "observedArea")
+    //@JsonDeserialize(using = GeoJsonObjectDeserializer.class)
+    //@JsonSerialize(using = GeoJsonObjectSerializer.class)
+    //@JsonDeserialize(as=Polygon.class)
+    // FIX: the only form to fit with the standard in the document is this or with a map
+    protected Polygon observedArea;
+    @Override
+    @JsonProperty(value = "observedArea")
+    @JsonPropertyDescription("TBD")
+    public Polygon  getObservedArea() {
+        return observedArea;
+    }
+    @Override
+    @JsonProperty(value = "observedArea")
+    @JsonPropertyDescription("TBD.")
+    public void setObservedArea(Polygon observedArea) { this.observedArea = observedArea; }
+
+
+    /**
+     * Empty constructor, respects the bean instantiation pattern
+     */
+    public DatastreamImpl()
+    {
+        // perform common initialization tasks
+        this.initCommon();
+    }
+
+
+
+    /**
+     * Common initialization tasks
+     */
+    protected void initCommon()
+    {
+        // initialize inner sets
+    }
+
+
+    /**
+     * Provides the {@link eu.almanac.ogc.sensorthing.api.datamodel.Thing} instance to which the datastream belongs.
+     *
+     * @return the thing
+     */
+	/*public Thing getThing()
+	{
+		return thing;
+	}*/
+
+    /**
+     * Sets the {@link eu.almanac.ogc.sensorthing.api.datamodel.Thing} instance to which the datastream must belong.
+     *
+     * @param thing
+     *            the thing to set
+     */
+//	public void setThing(Thing thing)
+    {
+        //this.thing = thing;
+    }
+
 
 
 }

@@ -1,172 +1,149 @@
-/*
- * OGC SensorThings API - Data Model
- * 
- * Copyright (c) 2015 Dario Bonino
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
- */
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescription;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
-import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateDeserializer;
-import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateSerializer;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservedProperty;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.Sensor;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.Thing;
 import org.geojson.Polygon;
 
-
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
- * <strong>Definition:</strong> A datastream groups a collection of events
- * that are related in some way. The one constraint is that the events in
- * a datastream must measure the same observed property (i.e., one phenomenon).
- *
- *
+ * Created by José Ángel Carvajal on 25.07.2017 a researcher of Fraunhofer FIT.
  */
-public class Datastream extends CommonControlInfoDescription
-{
-    @JsonPropertyDescription("The detailed description of the sensor or system. The content is open to accommodate changes to SensorML or to support other description languages.")
-    @JsonProperty(value = "observationType")
-    protected String observationType;
-    @JsonProperty(value = "observationType")
-    @JsonPropertyDescription("TBD")
-    public String getObservationType() {
-        return observationType;
-    }
-    @JsonProperty(value = "observationType")
-    @JsonPropertyDescription("TBD.")
-    public void setObservationType(String observationType) {
-        this.observationType = observationType;
-    }
+@JsonDeserialize(as = DatastreamImpl.class)
+@JsonSerialize(as = DatastreamImpl.class)
+public interface Datastream extends CommonControlInfoDescription {
+    @JsonGetter("observations") // <--- this is intentional
+    List<Observation> getObservations();
 
-
+    @JsonSetter("observations")
+    void SetObservations(List<Observation> observation);
 
     @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "unitOfMeasurement")
-    @JsonDeserialize(as=HashMap.class)
-    protected Map<String,Object> unitOfMeasurement;
-    @JsonProperty(value = "unitOfMeasurement")
-    @JsonPropertyDescription("TBD")
-    public Map<String,Object>  getUnitOfMeasurement() {
-        return unitOfMeasurement;
-    }
-    @JsonProperty(value = "unitOfMeasurement")
-    @JsonPropertyDescription("TBD.")
-    public void setUnitOfMeasurement(Map<String,Object>  unitOfMeasurement) { this.unitOfMeasurement = unitOfMeasurement; }
+    @JsonGetter(value = "Observations@iot.navigationLink")
+    String getObservationsNavigationLink();
 
+    @JsonSetter(value = "Observations@iot.navigationLink")
+    void setObservationsNavigationLink(String value);
+
+    @JsonPropertyDescription("TBD.")
+    @JsonGetter(value = "ObservedProperty@iot.navigationLink")
+    String getObservedPropertNavigationLink();
+
+    @JsonPropertyDescription("TBD.")
+    @JsonSetter(value = "ObservedProperty@iot.navigationLink")
+    void setObservedPropertyNavigationLink(String value);
+
+    @JsonGetter(value = "sensor")
+    Sensor getSensor();
+
+    @JsonSetter(value = "sensor")
+    void setSensor(Sensor sensor);
+
+    @JsonPropertyDescription("TBD.")
+    @JsonGetter(value = "Sensor@iot.navigationLink")
+    String getSensorNavigationLink();
+
+    @JsonPropertyDescription("TBD.")
+    @JsonSetter(value = "Sensor@iot.navigationLink")
+    void setSensorNavigationLink(String value);
+
+    // @JsonGetter("observations") // <--- this is intentional
+    Thing getThing();
+
+    @JsonSetter(value = "thing")
+    void setThing(Thing thing);
+
+    // @JsonPropertyDescription("TBD.")
+     @JsonGetter(value = "Thing@iot.navigationLink")
+     String getThingNavigationLink();
+
+    //@JsonPropertyDescription("TBD.")
+    @JsonSetter(value = "Thing@iot.navigationLink")
+    void setThingNavigationLink(String value);
 
     /**
-     * The time instant or period of when the Observation happens.
-     Note: Many resource-constrained sensing devices do not have a clock.
-     As a result, a client may omit phenonmenonTime when POST new Observations,
-     even though phenonmenonTime is a mandatory property. When a SensorThings service
-     receives a POST Observations without phenonmenonTime, the service SHALL
-     assign the current server time to the value of the phenomenonTime.
-     * */
-    @JsonPropertyDescription("The time instant or period of when the Observation happens.")
-    @JsonProperty(value = "phenomenonTime")
-    @JsonDeserialize(using = IntervalDateDeserializer.class)
-    @JsonSerialize(using = IntervalDateSerializer.class)
-    protected Interval phenomenonTime;
+     * Adds a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} to the set of events belonging to
+     * this {@link Datastream} instance.
+     *
+     * @param observation
+     *            The observation to add.
+     */
+    void addObservation(Observation observation);
+
+    /**
+     * Removes a single {@link Observation} from the set of events
+     * belonging to this {@link Datastream} instance.
+     *
+     * @param observation
+     *            The observation to remove.
+     * @return true if removal was successful, false otherwise
+     */
+    boolean removeObservation(Observation observation);
+
+    /**
+     * Provides the {@link eu.almanac.ogc.sensorthing.api.datamodel.ObservedProperty} instance describing the property to
+     * which events belonging to this data stream belong.
+     *
+     * @return the observedProperty
+     */
+    ObservedProperty getObservedProperty();
+
+    /**
+     * Sets the {@link eu.almanac.ogc.sensorthing.api.datamodel.ObservedProperty} instance describing the property to
+     * which events belonging to this data stream belong.
+     *
+     * @param observedProperty
+     *            the observedProperty to set
+     */
+    void setObservedProperty(ObservedProperty observedProperty);
+
+    @JsonProperty(value = "observationType")
+    @JsonPropertyDescription("TBD")
+    String getObservationType();
+
+    @JsonProperty(value = "observationType")
+    @JsonPropertyDescription("TBD.")
+    void setObservationType(String observationType);
+
+    @JsonProperty(value = "unitOfMeasurement")
+    @JsonPropertyDescription("TBD")
+    Map<String,Object> getUnitOfMeasurement();
+
+    @JsonProperty(value = "unitOfMeasurement")
+    @JsonPropertyDescription("TBD.")
+    void setUnitOfMeasurement(Map<String, Object> unitOfMeasurement);
+
     @JsonProperty(value = "phenomenonTime")
     @JsonPropertyDescription("TBD")
-    public Interval getPhenomenonTime() {
-        return phenomenonTime;
-    }
+    Interval getPhenomenonTime();
+
     @JsonProperty(value = "phenomenonTime")
     @JsonPropertyDescription("TBD.")
-    public void setPhenomenonTime(Interval phenomenonTime) {
-        this.phenomenonTime = phenomenonTime;
-    }
+    void setPhenomenonTime(Interval phenomenonTime);
 
-    @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "resultTime")
-    @JsonDeserialize(using = IntervalDateDeserializer.class)
-    @JsonSerialize(using = IntervalDateSerializer.class)
-    protected Interval resultTime;
     @JsonProperty(value = "resultTime")
     @JsonPropertyDescription("TBD")
-    public Interval getResultTime() {
-        return resultTime;
-    }
+    Interval getResultTime();
+
     @JsonProperty(value = "resultTime")
     @JsonPropertyDescription("TBD.")
-    public void setResultTime(Interval resultTime) {
-        this.resultTime = resultTime;
-    }
+    void setResultTime(Interval resultTime);
 
-    @JsonPropertyDescription("TBD.")
-    @JsonProperty(value = "observedArea")
-    //@JsonDeserialize(using = GeoJsonObjectDeserializer.class)
-    //@JsonSerialize(using = GeoJsonObjectSerializer.class)
-    //@JsonDeserialize(as=Polygon.class)
-    // FIX: the only form to fit with the standard in the document is this or with a map
-    protected Polygon observedArea;
     @JsonProperty(value = "observedArea")
     @JsonPropertyDescription("TBD")
-    public Polygon  getObservedArea() {
-        return observedArea;
-    }
+    Polygon getObservedArea();
+
     @JsonProperty(value = "observedArea")
     @JsonPropertyDescription("TBD.")
-    public void setObservedArea(Polygon  observedArea) { this.observedArea = observedArea; }
-
-
-	/**
-	 * Empty constructor, respects the bean instantiation pattern
-	 */
-	public Datastream()
-	{
-		// perform common initialization tasks
-		this.initCommon();
-	}
-
-
-
-	/**
-	 * Common initialization tasks
-	 */
-	protected void initCommon()
-	{
-		// initialize inner sets
-	}
-
-
-	/**
-	 * Provides the {@link eu.almanac.ogc.sensorthing.api.datamodel.Thing} instance to which the datastream belongs.
-	 *
-	 * @return the thing
-	 */
-	/*public Thing getThing()
-	{
-		return thing;
-	}*/
-
-	/**
-	 * Sets the {@link eu.almanac.ogc.sensorthing.api.datamodel.Thing} instance to which the datastream must belong.
-	 *
-	 * @param thing
-	 *            the thing to set
-	 */
-//	public void setThing(Thing thing)
-	{
-		//this.thing = thing;
-	}
-
-
-
+    void setObservedArea(Polygon observedArea);
 }
