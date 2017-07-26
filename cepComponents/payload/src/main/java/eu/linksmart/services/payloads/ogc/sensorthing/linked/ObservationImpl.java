@@ -12,20 +12,107 @@ import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
 import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
 import eu.linksmart.services.utils.function.Utils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Period;
 import java.util.Date;
-
-
+import java.util.List;
+/*
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ */
 /**
+ * Implementation of {@link Observation} interface
+ * @author Jose Angel Carvajal Soto
+ * @since  1.5.0
+ *
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  */
 
-//@JsonIgnoreProperties({"@iot.id, @iot.selfLink"})
-//@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Observation.class)
 public class ObservationImpl extends CommonControlInfoImpl implements Observation, EventEnvelope {
 
+    @JsonIgnore
+    private List<Pair<String, String>> parameters=null;
+    @JsonIgnore
+    protected FeatureOfInterest featureOfInterest;
+    @JsonIgnore
+    protected Datastream datastream = null;
+    @JsonIgnore
+    protected Date phenomenonTime;
+    @JsonIgnore
+    protected Date resultTime;
+    @JsonIgnore
+    protected Object result;
+    @JsonIgnore
+    protected Period validTime;
+
+    /*
+    * First the implementation of the Observation Interface.
+    * Getters and setters of the intrinsic properties.
+   */
+    @Override
+    public Date getPhenomenonTime() {
+        return phenomenonTime;
+    }
+    @Override
+    public void setPhenomenonTime(Date phenomenonTime) {
+        this.phenomenonTime = phenomenonTime;
+    }
+
+
+    @Override
+    public Date getResultTime() {
+        return resultTime;
+    }
+    @Override
+    public void setResultTime(Date resultTime) {
+        this.resultTime = resultTime;
+    }
+
+    @Override
+    public Object getResult() {
+        return result;
+    }
+    @Override
+    public void setResult(Object result) {
+        this.result = result;
+    }
+
+
+    @Override
+    public Period getValidTime() {
+        return validTime;
+    }
+    @Override
+    public void setValidTime(Period validTime) {
+        this.validTime = validTime;
+    }
+
+    @Override
+    public List<Pair<String, String>> getParameters() {
+        return this.parameters;
+    }
+
+    @Override
+    public void setParameters(List<Pair<String, String>> parameters) {
+        this.parameters=parameters;
+    }
+
+    // Getters and setters of the relational properties.
     @Override
     public FeatureOfInterest getFeatureOfInterest() {
         return featureOfInterest;
@@ -36,12 +123,6 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         this.featureOfInterest.addObservations(this);
     }
 
-    @JsonIgnore
-    protected FeatureOfInterest featureOfInterest;
-
-
-    @JsonIgnore
-    protected Datastream datastream = null;
     @Override
     public Datastream getDatastream() {
         return datastream;
@@ -51,19 +132,7 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         this.datastream = datastream;
         this.datastream.addObservation(this);
     }
-
-    @Override
-    public Object getAttributeId() {
-        return datastream.getId();
-    }
-
-    @Override
-    public void setAttributeId(Object id) {
-        datastream.setId(id);
-
-    }
-
-
+    // Getters and setters of the navigational links .
     @Override
     public String getDatastreamNavigationLink() {
         return "Observation("+id+")/Datastream";
@@ -78,55 +147,25 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     public void setDatastreamNavigationLink(String str) {
 
     }
-
     @Override
     public void setFeatureOfInterestNavigationLink(String str) {
     }
 
-    @JsonIgnore
-    protected Date phenomenonTime;
+
+    /*
+    * The implementation of the EventEnvelop Interface.
+    */
     @Override
-    public Date getPhenomenonTime() {
-        return phenomenonTime;
-    }
-    @Override
-    public void setPhenomenonTime(Date phenomenonTime) {
-        this.phenomenonTime = phenomenonTime;
+    public Object getAttributeId() {
+        return datastream.getId();
     }
 
-    @JsonIgnore
-    protected Date resultTime;
     @Override
-    public Date getResultTime() {
-        return resultTime;
-    }
-    @Override
-    public void setResultTime(Date resultTime) {
-        this.resultTime = resultTime;
+    public void setAttributeId(Object id) {
+        datastream.setId(id);
+
     }
 
-    @JsonIgnore
-    protected Object result;
-    @Override
-    public Object getResult() {
-        return result;
-    }
-    @Override
-    public void setResult(Object result) {
-        this.result = result;
-    }
-
-
-    @JsonIgnore
-    protected Period validTime;
-    @Override
-    public Period getValidTime() {
-        return validTime;
-    }
-    @Override
-    public void setValidTime(Period validTime) {
-        this.validTime = validTime;
-    }
 
     @Override
     public void topicDataConstructor(String topic) {

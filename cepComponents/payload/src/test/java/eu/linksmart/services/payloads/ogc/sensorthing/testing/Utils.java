@@ -1,5 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.testing;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,12 +19,10 @@ import org.geojson.Polygon;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by José Ángel Carvajal on 06.04.2016 a researcher of Fraunhofer FIT.
@@ -34,7 +33,7 @@ public class Utils {
         mapper.registerModule(new SimpleModule("Observation", Version.unknownVersion()).addAbstractTypeMapping(eu.linksmart.services.payloads.ogc.sensorthing.Observation.class, ObservationImpl.class));
        // mapper.registerModule(new SimpleModule("EventEnvelope", Version.unknownVersion()).addAbstractTypeMapping(EventEnvelope.class, ObservationImpl.class));
         mapper.registerModule(new SimpleModule("CommonControlInfo", Version.unknownVersion()).addAbstractTypeMapping(CommonControlInfo.class, CommonControlInfoImpl.class));
-
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         try {
             Object object= mapper.readValue(toParse, theClass);
             return object;
@@ -48,15 +47,15 @@ public class Utils {
     public static void testParsing(String json, Class theClass, Object toTest) {
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new SimpleModule("Observation", Version.unknownVersion()).addAbstractTypeMapping(eu.linksmart.services.payloads.ogc.sensorthing.Observation.class, ObservationImpl.class));
-        mapper.registerModule(new SimpleModule("EventEnvelope", Version.unknownVersion()).addAbstractTypeMapping(EventEnvelope.class, ObservationImpl.class));
-        mapper.registerModule(new SimpleModule("CommonControlInfo", Version.unknownVersion()).addAbstractTypeMapping(CommonControlInfo.class, CommonControlInfoImpl.class));
+        //mapper.registerModule(new SimpleModule("Observation", Version.unknownVersion()).addAbstractTypeMapping(eu.linksmart.services.payloads.ogc.sensorthing.Observation.class, ObservationImpl.class));
+        //mapper.registerModule(new SimpleModule("EventEnvelope", Version.unknownVersion()).addAbstractTypeMapping(EventEnvelope.class, ObservationImpl.class));
+        //mapper.registerModule(new SimpleModule("CommonControlInfo", Version.unknownVersion()).addAbstractTypeMapping(CommonControlInfo.class, CommonControlInfoImpl.class));
         //mapper.registerModule(new SimpleModule("Observation", Version.unknownVersion()).addAbstractTypeMapping(Observation.class, ObservationImpl.class));
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        Object foi1 = toTest;
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String strFoi1 = "1";
         try {
-            strFoi1 = mapper.writeValueAsString(foi1);
+            strFoi1 = mapper.writeValueAsString(toTest);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -68,14 +67,22 @@ public class Utils {
             e.printStackTrace();
         }
 
+        Map o1=null, o2=null;
+        o1 = (Map) parse(strFoi1, Hashtable.class);
+        o2 = (Map) parse(strFoi2, Hashtable.class);
+
+        boolean strTest = strFoi1.equals(strFoi2);
         System.out.println("-------------------------------------");
-        System.out.println("Testing:" + theClass.getSimpleName());
+        System.out.println("Testing from "+ (strTest? "Json String vs Serialized Object:":"Json Map object vs Serialized Map Object")+" of class " + theClass.getSimpleName());
         System.out.println("Expecting:");
         System.out.println(strFoi1);
         System.out.println("Received:");
         System.out.println(strFoi2);
         System.out.println("-------------------------------------");
-        assertEquals(strFoi1, strFoi2);
+        if( !strTest)
+            assertTrue(o1!=null && o1.equals(o2));
+        else
+            assertEquals(strFoi1,strFoi2);
     }
 
 

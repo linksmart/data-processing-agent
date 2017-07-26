@@ -4,6 +4,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.testing;
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  */
 
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import org.junit.Test;
 
@@ -186,7 +187,7 @@ public class OGCSensorThingLinkedUnitTest {
     public void TestParsingObservation() {
 
       //  UtilsLinked.testParsing(observationJSON, Observation.class, UtilsLinked.constructObservation(false));
-        Utils.testParsing(observationChildJSON, eu.linksmart.services.payloads.ogc.sensorthing.Observation.class, UtilsLinked.constructObservation());
+        Utils.testParsing(observationChildJSON, Observation.class, UtilsLinked.constructObservation());
 
     }
     String observedPropertyJSON =

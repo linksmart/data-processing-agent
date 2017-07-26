@@ -10,9 +10,38 @@ import eu.linksmart.services.payloads.ogc.sensorthing.linked.FeatureOfInterestIm
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 
 import java.util.List;
-
+/*
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ */
 /**
+ * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
+ *
+ * An Observation results in a value being assigned to a phenomenon.
+ * The phenomenon is a property of a feature, the latter being the FeatureOfInterest of the Observation [OGC and ISO 19156:2011].
+ * In the context of the Internet of Things, many Observations’ FeatureOfInterest can be the Location of the Thing.
+ * For example, the FeatureOfInterest of a wifi-connect thermostat can be the Location of the thermostat (i.e., the living room where the thermostat is located in).
+ * In the case of remote sensing, the FeatureOfInterest can be the geographical area or volume that is being sensed.
+ * @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#32" </a>
+ *
+ * @author Jose Angel Carvajal Soto
+ * @since  1.5.0
+ *
  * Created by José Ángel Carvajal on 25.07.2017 a researcher of Fraunhofer FIT.
+ *
  */
 
 @JsonDeserialize(as = FeatureOfInterestImpl.class)
