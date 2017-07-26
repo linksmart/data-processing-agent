@@ -5,6 +5,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.testing;
  */
 
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
+import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import org.junit.Test;
 

@@ -132,25 +132,6 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         this.datastream = datastream;
         this.datastream.addObservation(this);
     }
-    // Getters and setters of the navigational links .
-    @Override
-    public String getDatastreamNavigationLink() {
-        return "Observation("+id+")/Datastream";
-    }
-
-    @Override
-    public String getFeatureOfInterestNavigationLink() {
-        return "Observation("+id+")/FeatureOfInterest";
-    }
-
-    @Override
-    public void setDatastreamNavigationLink(String str) {
-
-    }
-    @Override
-    public void setFeatureOfInterestNavigationLink(String str) {
-    }
-
 
     /*
     * The implementation of the EventEnvelop Interface.

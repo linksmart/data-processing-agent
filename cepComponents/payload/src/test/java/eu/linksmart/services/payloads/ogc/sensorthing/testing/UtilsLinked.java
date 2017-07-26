@@ -1,6 +1,8 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.testing;
 
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
+import eu.linksmart.services.payloads.ogc.sensorthing.ObservedProperty;
+import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import org.geojson.LngLatAlt;
@@ -77,7 +79,7 @@ public class UtilsLinked {
 
     public static ObservedProperty constructObservedProperty(boolean childObjects) {
 
-        ObservedProperty observedProperty = new ObservedProperty();
+        ObservedProperty observedProperty = new ObservedPropertyImpl();
         observedProperty.setId(1);
         observedProperty.setDescription("The dewpoint temperature is the temperature to which the air must " +
                 "be cooled, at constant pressure, for dew to form. As the grass and other objects " +
@@ -153,7 +155,7 @@ public class UtilsLinked {
     }
 
     public static Thing constructThing(boolean childObjects) {
-        Thing thing = new Thing();
+        Thing thing = new ThingImpl();
         thing.setId(1);
         thing.setDescription("This thing is an oven.");
         thing.addProperty("owner", "John Doe");

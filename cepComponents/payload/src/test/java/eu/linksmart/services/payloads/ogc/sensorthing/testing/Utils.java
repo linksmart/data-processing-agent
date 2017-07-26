@@ -7,12 +7,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.services.payloads.ogc.sensorthing.CommonControlInfo;
-import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
+import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.Sensor;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.HistoricalLocation;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.Location;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
 import org.geojson.Polygon;
@@ -131,7 +132,7 @@ public class Utils {
 
     public static ObservedProperty constructObservedProperty(boolean childObjects) {
 
-        ObservedProperty observedProperty = new ObservedProperty();
+        ObservedProperty observedProperty = new ObservedPropertyImpl();
         observedProperty.setId(1);
         observedProperty.setDescription("The dewpoint temperature is the temperature to which the air must " +
                 "be cooled, at constant pressure, for dew to form. As the grass and other objects " +
@@ -214,7 +215,7 @@ public class Utils {
 
 
     public static Thing constructThing(boolean childObjects) {
-        Thing thing = new Thing();
+        Thing thing = new ThingImpl();
         thing.setId(1);
         thing.setDescription("This thing is an oven.");
         thing.addProperty("owner", "John Doe");

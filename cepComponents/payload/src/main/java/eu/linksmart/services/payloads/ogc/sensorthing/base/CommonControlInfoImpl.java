@@ -112,7 +112,7 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
     }
     private String generateSelfLink(){
 
-        return baseURL+this.getClass().getSimpleName()+"("+id+")";
+        return baseURL+this.getClass().getSimpleName().replace("Impl","")+"("+id+")";
 
 
     }

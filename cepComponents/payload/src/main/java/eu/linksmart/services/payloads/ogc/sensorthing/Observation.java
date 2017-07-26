@@ -9,6 +9,8 @@ import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateSerializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
+import eu.linksmart.services.payloads.ogc.sensorthing.links.DatastreamNavigationLink;
+import eu.linksmart.services.payloads.ogc.sensorthing.links.FeatureOfInterestNavigationLink;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Period;
@@ -47,7 +49,7 @@ import java.util.List;
 
 @JsonDeserialize(as = ObservationImpl.class)
 @JsonSerialize(as = ObservationImpl.class)
-public interface Observation extends EventEnvelope, CommonControlInfo{
+public interface Observation extends EventEnvelope, CommonControlInfo, FeatureOfInterestNavigationLink,DatastreamNavigationLink {
 
     /**
      * Gets the phenomenon time as a Date.
@@ -178,7 +180,7 @@ public interface Observation extends EventEnvelope, CommonControlInfo{
     @JsonPropertyDescription("An Observation observes on one-and-only-one FeatureOfInterest. One FeatureOfInterest could be observed by zero-to-many Observations.")
     void setFeatureOfInterest(FeatureOfInterest featureOfInterest);
     /**
-     * Gets the related FeatureOfInterest of this observation.
+     * Gets the related Datastream of this observation.
      *
      * {@link Datastream} A Datastream can have zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.
      *
@@ -189,7 +191,7 @@ public interface Observation extends EventEnvelope, CommonControlInfo{
     @JsonPropertyDescription("A Datastream can have zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
     Datastream getDatastream();
     /**
-     * Sets the related FeatureOfInterest of this observation.
+     * Sets the related Datastream of this observation.
      *
      * {@link Datastream} A Datastream can have zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.
      *
@@ -200,38 +202,7 @@ public interface Observation extends EventEnvelope, CommonControlInfo{
     @JsonPropertyDescription("A Datastream can have zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
     void setDatastream(Datastream datastream);
 
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Datastream.
-     *
-     * @return  a string that represents the relative or absolute URL that retrieves content of the Datastream
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Datastream.")
-    @JsonGetter(value = "Datastream@iot.navigationLink")
-    String getDatastreamNavigationLink();
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the FeatureOfInterest.
-     *
-     * @return  a string that represents the relative or absolute URL that retrieves content of the FeatureOfInterest
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the FeatureOfInterest.")
-    @JsonGetter(value = "FeatureOfInterest@iot.navigationLink")
-    String getFeatureOfInterestNavigationLink();
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Datastream.
-     *
-     * @param  str a string that represents the relative or absolute URL that retrieves content of the Datastream
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Datastream.")
-    @JsonSetter(value = "Datastream@iot.navigationLink")
-    void setDatastreamNavigationLink(String str);
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the FeatureOfInterest.
-     *
-     * @param  str a string that represents the relative or absolute URL that retrieves content of the FeatureOfInterest
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the FeatureOfInterest.")
-    @JsonSetter(value = "FeatureOfInterest@iot.navigationLink")
-    void setFeatureOfInterestNavigationLink(String str);
+
 
 
     /*

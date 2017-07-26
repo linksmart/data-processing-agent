@@ -1,13 +1,12 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.FeatureOfInterestImpl;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
+import eu.linksmart.services.payloads.ogc.sensorthing.links.ObservationsNavigationLink;
 
 import java.util.List;
 /*
@@ -48,7 +47,7 @@ import java.util.List;
 
 @JsonDeserialize(as = FeatureOfInterestImpl.class)
 @JsonSerialize(as = FeatureOfInterestImpl.class)
-public interface FeatureOfInterest extends CCIEncoding{
+public interface FeatureOfInterest extends CCIEncoding, ObservationsNavigationLink {
     /**
      * Provides the list of events about this {@link FeatureOfInterestImpl}
      * instance. The returned set is Live reference to the internal data
@@ -62,7 +61,7 @@ public interface FeatureOfInterest extends CCIEncoding{
     List<Observation> getObservations();
 
     /**
-     * Sets the list of Observations about this {@link FeatureOfInterestImpl}.
+     * Sets the list of Observations about this
      * Removes any list previously existing.
      *
      * @param observations the events to set
@@ -72,7 +71,7 @@ public interface FeatureOfInterest extends CCIEncoding{
     void setObservations(List<Observation> observations);
 
     /**
-     * adds to the list of Observations about this {@link FeatureOfInterestImpl}.
+     * adds to the list of Observations about this
      * It ignore if the same observation already existed.
      *
      * @param observation the events to set
@@ -80,19 +79,23 @@ public interface FeatureOfInterest extends CCIEncoding{
     void addObservations(Observation observation);
 
     /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Observations.
+     * Gets the feature as a Object.
+     * The feature is the detailed description of the feature. The data type is defined by encodingType.
      *
-     * @return  a string that represents the relative or absolute URL that retrieves content of the Observations
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Observations.")
-    @JsonProperty(value = "Observations@iot.navigationLink")
-    String getObservationsNavigationLink();
-
+     * @return the feature time as Object.
+     *
+     * */
     @JsonGetter(value = "feature")
-    @JsonPropertyDescription("Gets the feature. The feature is the detailed description of the feature. The data type is defined by encodingType.")
+    @JsonPropertyDescription(" The feature is the detailed description of the feature. The data type is defined by encodingType.")
     Object getFeature();
-
+    /**
+     * Sets the feature time with the given value.
+     * The feature is the detailed description of the feature. The data type is defined by encodingType.
+     *
+     * @param  name sets to the given value.
+     *
+     * */
     @JsonSetter(value = "feature")
-    @JsonPropertyDescription("Setts the feature. The feature is the detailed description of the feature. The data type is defined by encodingType.")
+    @JsonPropertyDescription("The feature is the detailed description of the feature. The data type is defined by encodingType.")
     void setFeature(Object name);
 }

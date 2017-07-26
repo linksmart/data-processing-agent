@@ -19,6 +19,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +60,9 @@ public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Loc
     protected List<Thing> things;
 
     public void addThing(Thing thing){
-        if(thing.locations == null)
-            thing.locations = new ArrayList<>();
-        if(!thing.locations.contains(this))
+        if(thing.getLocations() == null)
+            thing.setLocations(new ArrayList<>());
+        if(!thing.getLocations().contains(this))
             thing.addLocation(this);
         this.things.add(thing);
     }

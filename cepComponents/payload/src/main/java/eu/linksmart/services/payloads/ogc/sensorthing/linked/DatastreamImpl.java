@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
+import eu.linksmart.services.payloads.ogc.sensorthing.ObservedProperty;
+import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateDeserializer;
@@ -32,7 +34,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/*
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ */
 /**
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  * Implementation of {@link Datastream} interface
@@ -176,11 +194,11 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
     @Override
     public void setThing(Thing thing) {
         this.thing = thing;
-        if (this.thing.datastreams == null)
-            this.thing.datastreams = new ArrayList<>();
+        if (this.thing.getDatastreams() == null)
+            this.thing.setDatastreams( new ArrayList<>());
 
-        if (!this.thing.datastreams.contains(this))
-            this.thing.datastreams.add(this);
+        if (!this.thing.getDatastreams().contains(this))
+            this.thing.getDatastreams().add(this);
     }
 
 
@@ -198,33 +216,6 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
     }
 
 
-
-
-    @Override
-    public String getObservationsNavigationLink() {
-        return "Datastream("+id+")/Observations";
-    }
-    @Override
-    public void setObservationsNavigationLink(String value) {}
-    @Override
-    public String getObservedPropertNavigationLink() {
-        return "Datastream("+id+")/ObservedProperty";
-    }
-    @Override
-    public void setObservedPropertyNavigationLink(String value) {   }
-    @Override
-    public String getSensorNavigationLink() {
-        return "Datastream("+id+")/Sensor";
-    }
-    @Override
-    public void setSensorNavigationLink(String value) {   }
-    @Override
-    public String getThingNavigationLink() {
-        return "Datastream("+id+")/Thing";
-    }
-    //@JsonPropertyDescription("TBD.")
-    @Override
-    public void setThingNavigationLink(String value) {   }
 
 
 

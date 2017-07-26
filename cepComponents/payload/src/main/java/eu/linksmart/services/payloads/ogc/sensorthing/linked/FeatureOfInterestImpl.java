@@ -67,10 +67,6 @@ public class FeatureOfInterestImpl extends CCIEncodingImpl implements FeatureOfI
     }
 
 
-    @Override
-    public String getObservationsNavigationLink() {
-        return "FeatureOfInterest("+id+")/Observations";
-    }
 
 
     @JsonIgnore

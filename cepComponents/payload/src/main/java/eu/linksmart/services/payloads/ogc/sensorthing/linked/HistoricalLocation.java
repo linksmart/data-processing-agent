@@ -3,6 +3,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateSerializer;
 
@@ -50,10 +51,10 @@ public class HistoricalLocation extends eu.linksmart.services.payloads.ogc.senso
     protected List<Thing> things;
 
     public void addThing(Thing thing){
-        if(thing.historicalLocations==null)
-            thing.historicalLocations = new ArrayList<>();
+        if(thing.getHistoricalLocations()==null)
+            thing.setHistoricalLocations( new ArrayList<>());
 
-        if(!thing.historicalLocations.contains(this))
+        if(!thing.getHistoricalLocations().contains(this))
             thing.addHistoricalLocation(this);
         this.things.add(thing);
     }

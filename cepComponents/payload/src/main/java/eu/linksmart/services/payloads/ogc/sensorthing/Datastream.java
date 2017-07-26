@@ -1,7 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -9,10 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateSerializer;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservedProperty;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.Sensor;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.Thing;
+import eu.linksmart.services.payloads.ogc.sensorthing.links.ObservationsNavigationLink;
+import eu.linksmart.services.payloads.ogc.sensorthing.links.ObservedPropertyNavigationLink;
+import eu.linksmart.services.payloads.ogc.sensorthing.links.SensorNavigationLink;
+import eu.linksmart.services.payloads.ogc.sensorthing.links.ThingNavigationLink;
 import org.geojson.Polygon;
 
 import java.util.List;
@@ -50,7 +51,7 @@ import java.util.Map;
 
 @JsonDeserialize(as = DatastreamImpl.class)
 @JsonSerialize(as = DatastreamImpl.class)
-public interface Datastream extends CommonControlInfoDescription {
+public interface Datastream extends CommonControlInfoDescription, ObservationsNavigationLink,SensorNavigationLink, ObservedPropertyNavigationLink, ThingNavigationLink {
 
 
     /**
@@ -261,68 +262,7 @@ public interface Datastream extends CommonControlInfoDescription {
     @JsonPropertyDescription("A Thing has zero-to-many Datastreams. A Datastream entity SHALL only link to a Thing as a collection of Observations.")
     @JsonSetter(value = "thing")
     void setThing(Thing thing);
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Observations.
-     *
-     * @return  a string that represents the relative or absolute URL that retrieves content of the Observations
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Observations.")
-    @JsonGetter(value = "Observations@iot.navigationLink")
-    String getObservationsNavigationLink();
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Observations.
-     *
-     * @param  value a string that represents the relative or absolute URL that retrieves content of the Observations
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Observations.")
-    @JsonSetter(value = "Observations@iot.navigationLink")
-    void setObservationsNavigationLink(String value);
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the ObservedProperty.
-     *
-     * @return  a string that represents the relative or absolute URL that retrieves content of the ObservedProperty
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the ObservedProperty.")
-    @JsonGetter(value = "ObservedProperty@iot.navigationLink")
-    String getObservedPropertNavigationLink();
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the ObservedProperty.
-     *
-     * @param  value a string that represents the relative or absolute URL that retrieves content of the ObservedProperty
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the ObservedProperty.")
-    @JsonSetter(value = "ObservedProperty@iot.navigationLink")
-    void setObservedPropertyNavigationLink(String value);
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Sensor.
-     *
-     * @return  a string that represents the relative or absolute URL that retrieves content of the Sensor
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Sensor.")
-    @JsonGetter(value = "Sensor@iot.navigationLink")
-    String getSensorNavigationLink();
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Sensor.
-     *
-     * @param  value a string that represents the relative or absolute URL that retrieves content of the Sensor
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Sensor.")
-    @JsonSetter(value = "Sensor@iot.navigationLink")
-    void setSensorNavigationLink(String value);
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Thing.
-     *
-     * @return  a string that represents the relative or absolute URL that retrieves content of the Thing
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Thing.")
-    @JsonGetter(value = "Thing@iot.navigationLink")
-    String getThingNavigationLink();
-    /**
-     * navigationLink is the relative or absolute URL that retrieves content of the Thing.
-     *
-     * @param  value a string that represents the relative or absolute URL that retrieves content of the Thing
-     */
-    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Thing.")
-    @JsonSetter(value = "Thing@iot.navigationLink")
-    void setThingNavigationLink(String value);
+
+
+
 }

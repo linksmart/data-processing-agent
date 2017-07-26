@@ -7,8 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
  * Created by José Ángel Carvajal on 25.07.2017 a researcher of Fraunhofer FIT.
  */
 public interface CommonControlInfoDescription extends CommonControlInfo {
-    @Override
-    String toString();
+
 
     /**
      * Returns the description of this Thing instance, as a {@link String}
