@@ -30,11 +30,13 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  *
- * An Observation results in a value being assigned to a phenomenon.
- * The phenomenon is a property of a feature, the latter being the FeatureOfInterest of the Observation [OGC and ISO 19156:2011].
- * In the context of the Internet of Things, many Observations’ FeatureOfInterest can be the Location of the Thing.
- * For example, the FeatureOfInterest of a wifi-connect thermostat can be the Location of the thermostat (i.e., the living room where the thermostat is located in).
- * In the case of remote sensing, the FeatureOfInterest can be the geographical area or volume that is being sensed.
+ * In OGC SensorThing 1.0:
+     * An Observation results in a value being assigned to a phenomenon.
+     * The phenomenon is a property of a feature, the latter being the FeatureOfInterest of the Observation [OGC and ISO 19156:2011].
+     * In the context of the Internet of Things, many Observations’ FeatureOfInterest can be the Location of the Thing.
+     * For example, the FeatureOfInterest of a wifi-connect thermostat can be the Location of the thermostat (i.e., the living room where the thermostat is located in).
+     * In the case of remote sensing, the FeatureOfInterest can be the geographical area or volume that is being sensed.
+ *
  * @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#32" </a>
  *
  * @author Jose Angel Carvajal Soto

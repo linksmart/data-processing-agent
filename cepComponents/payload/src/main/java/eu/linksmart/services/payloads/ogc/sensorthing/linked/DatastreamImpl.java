@@ -41,9 +41,75 @@ import java.util.Map;
 public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements Datastream {
     @JsonIgnore
     protected String observationType;
-
     @JsonIgnore
 	protected List<Observation> observations;
+    @JsonIgnore
+    protected ObservedProperty observedProperty;
+    @JsonIgnore
+    protected Sensor sensor;
+    @JsonIgnore
+    protected Thing thing;
+    @JsonIgnore
+    protected Map<String,Object> unitOfMeasurement;
+    @JsonIgnore
+    protected Interval phenomenonTime;
+    @JsonIgnore
+    protected Interval resultTime;
+    @JsonIgnore
+    public Interval getResultTime() {
+        return resultTime;
+    }
+    @JsonIgnore
+    protected Polygon observedArea;
+
+    public DatastreamImpl()
+    {
+        // perform common initialization tasks
+        this.initCommon();
+    }
+
+    @Override
+    public String getObservationType() {
+        return observationType;
+    }
+    @Override
+
+    public void setObservationType(String observationType) {
+        this.observationType = observationType;
+    }
+
+
+    @Override
+    public Map<String,Object>  getUnitOfMeasurement() {
+        return unitOfMeasurement;
+    }
+    @Override
+    public void setUnitOfMeasurement(Map<String, Object> unitOfMeasurement) { this.unitOfMeasurement = unitOfMeasurement; }
+
+
+    @Override
+    public Interval getPhenomenonTime() {
+        return phenomenonTime;
+    }
+    @Override
+    public void setPhenomenonTime(Interval phenomenonTime) {
+        this.phenomenonTime = phenomenonTime;
+    }
+
+
+    @Override
+    public void setResultTime(Interval resultTime) {
+        this.resultTime = resultTime;
+    }
+
+    @Override
+    public Polygon  getObservedArea() {
+        return observedArea;
+    }
+    @Override
+    public void setObservedArea(Polygon observedArea) { this.observedArea = observedArea; }
+
+
     @Override
     public List<Observation> getObservations() {
         return observations;
@@ -55,22 +121,35 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
         observations = (observation);
     }
     @Override
-    public String getObservationsNavigationLink() {
-        return "Datastream("+id+")/Observations";
-    }
-    @Override
-    public void setObservationsNavigationLink(String value) {
+    public void addObservation(Observation observation) {
+        // check not null
+        if (observation != null){
+            if ((this.observations == null))
+                this.observations = new ArrayList<>();
 
+            if(!this.observations.contains(observation))
+                // add the observation
+                this.observations.add(observation);
+
+        }
     }
 
-    @JsonIgnore
-	protected ObservedProperty observedProperty;
+
     @Override
-    public String getObservedPropertNavigationLink() {
-        return "Datastream("+id+")/ObservedProperty";
+    public boolean removeObservation(Observation observation)
+    {
+        // the removal flag
+        boolean removed = false;
+
+        // check if the locations set is not null
+        if (this.observations != null)
+            // remove the location
+            removed = this.observations.remove(observation);
+
+        // return the removal result
+        return removed;
     }
-    @Override
-    public void setObservedPropertyNavigationLink(String value) {   }
+
     @Override
     public Sensor getSensor() {
         return sensor;
@@ -88,16 +167,7 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
 
     }
 
-    @JsonIgnore
-    protected Sensor sensor;
-    @Override
-    public String getSensorNavigationLink() {
-        return "Datastream("+id+")/Sensor";
-    }
-    @Override
-    public void setSensorNavigationLink(String value) {   }
 
-    // @JsonGetter("observations") // <--- this is intentional
     @Override
     public Thing getThing() {
         return thing;
@@ -106,16 +176,48 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
     @Override
     public void setThing(Thing thing) {
         this.thing = thing;
-        if(this.thing.datastreams == null )
+        if (this.thing.datastreams == null)
             this.thing.datastreams = new ArrayList<>();
 
-        if( !this.thing.datastreams.contains(this))
+        if (!this.thing.datastreams.contains(this))
             this.thing.datastreams.add(this);
     }
 
-    @JsonIgnore
-    protected Thing thing;
-   // @JsonPropertyDescription("TBD.")
+
+    @Override
+    public ObservedProperty getObservedProperty()
+    {
+        return observedProperty;
+    }
+
+
+    @Override
+    public void setObservedProperty(ObservedProperty observedProperty)
+    {
+        this.observedProperty = observedProperty;
+    }
+
+
+
+
+    @Override
+    public String getObservationsNavigationLink() {
+        return "Datastream("+id+")/Observations";
+    }
+    @Override
+    public void setObservationsNavigationLink(String value) {}
+    @Override
+    public String getObservedPropertNavigationLink() {
+        return "Datastream("+id+")/ObservedProperty";
+    }
+    @Override
+    public void setObservedPropertyNavigationLink(String value) {   }
+    @Override
+    public String getSensorNavigationLink() {
+        return "Datastream("+id+")/Sensor";
+    }
+    @Override
+    public void setSensorNavigationLink(String value) {   }
     @Override
     public String getThingNavigationLink() {
         return "Datastream("+id+")/Thing";
@@ -123,112 +225,6 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
     //@JsonPropertyDescription("TBD.")
     @Override
     public void setThingNavigationLink(String value) {   }
-
-	@Override
-    public void addObservation(Observation observation) {
-        // check not null
-        if (observation != null){
-            if ((this.observations == null))
-                this.observations = new ArrayList<>();
-
-            if(!this.observations.contains(observation))
-                // add the observation
-                this.observations.add(observation);
-
-        }
-    }
-
-
-	@Override
-    public boolean removeObservation(Observation observation)
-	{
-		// the removal flag
-		boolean removed = false;
-
-		// check if the locations set is not null
-		if (this.observations != null)
-			// remove the location
-			removed = this.observations.remove(observation);
-
-		// return the removal result
-		return removed;
-	}
-
-
-	@Override
-    public ObservedProperty getObservedProperty()
-	{
-		return observedProperty;
-	}
-
-
-	@Override
-    public void setObservedProperty(ObservedProperty observedProperty)
-	{
-		this.observedProperty = observedProperty;
-	}
-
-    @Override
-    public String getObservationType() {
-        return observationType;
-    }
-    @Override
-
-    public void setObservationType(String observationType) {
-        this.observationType = observationType;
-    }
-
-
-
-    protected Map<String,Object> unitOfMeasurement;
-    @Override
-
-    public Map<String,Object>  getUnitOfMeasurement() {
-        return unitOfMeasurement;
-    }
-    @Override
-
-    public void setUnitOfMeasurement(Map<String, Object> unitOfMeasurement) { this.unitOfMeasurement = unitOfMeasurement; }
-
-
-
-    protected Interval phenomenonTime;
-    @Override
-    public Interval getPhenomenonTime() {
-        return phenomenonTime;
-    }
-    @Override
-    public void setPhenomenonTime(Interval phenomenonTime) {
-        this.phenomenonTime = phenomenonTime;
-    }
-
-    protected Interval resultTime;
-    @Override
-
-    public Interval getResultTime() {
-        return resultTime;
-    }
-    @Override
-    public void setResultTime(Interval resultTime) {
-        this.resultTime = resultTime;
-    }
-
-    // TODO: FIX: the only form to fit with the standard in the document is this or with a map
-    protected Polygon observedArea;
-    @Override
-    public Polygon  getObservedArea() {
-        return observedArea;
-    }
-    @Override
-    public void setObservedArea(Polygon observedArea) { this.observedArea = observedArea; }
-
-
-    public DatastreamImpl()
-    {
-        // perform common initialization tasks
-        this.initCommon();
-    }
-
 
 
 

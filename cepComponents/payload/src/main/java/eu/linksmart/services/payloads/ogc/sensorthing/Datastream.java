@@ -17,64 +17,44 @@ import org.geojson.Polygon;
 
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by José Ángel Carvajal on 25.07.2017 a researcher of Fraunhofer FIT.
+/*
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
  */
+/**
+ *
+ * In OGC SensorThing 1.0:
+ *      A Datastream groups a collection of Observations measuring the same ObservedProperty and produced by the same Sensor.
+ *
+ *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#28" </a>
+ *
+ * @author Jose Angel Carvajal Soto
+ * @since  1.5.0
+ *
+ * Created by José Ángel Carvajal on 25.07.2017 a researcher of Fraunhofer FIT.
+ *
+ */
+
 @JsonDeserialize(as = DatastreamImpl.class)
 @JsonSerialize(as = DatastreamImpl.class)
 public interface Datastream extends CommonControlInfoDescription {
-    @JsonGetter("observations")
-    List<Observation> getObservations();
 
-    @JsonSetter("observations")
-    void SetObservations(List<Observation> observation);
-
-    @JsonPropertyDescription("TBD.")
-    @JsonGetter(value = "Observations@iot.navigationLink")
-    String getObservationsNavigationLink();
-
-    @JsonSetter(value = "Observations@iot.navigationLink")
-    void setObservationsNavigationLink(String value);
-
-    @JsonPropertyDescription("TBD.")
-    @JsonGetter(value = "ObservedProperty@iot.navigationLink")
-    String getObservedPropertNavigationLink();
-
-    @JsonPropertyDescription("TBD.")
-    @JsonSetter(value = "ObservedProperty@iot.navigationLink")
-    void setObservedPropertyNavigationLink(String value);
-
-    @JsonGetter(value = "sensor")
-    Sensor getSensor();
-
-    @JsonSetter(value = "sensor")
-    void setSensor(Sensor sensor);
-
-    @JsonPropertyDescription("TBD.")
-    @JsonGetter(value = "Sensor@iot.navigationLink")
-    String getSensorNavigationLink();
-
-    @JsonPropertyDescription("TBD.")
-    @JsonSetter(value = "Sensor@iot.navigationLink")
-    void setSensorNavigationLink(String value);
-
-    // @JsonGetter("observations") // <--- this is intentional
-    Thing getThing();
-
-    @JsonSetter(value = "thing")
-    void setThing(Thing thing);
-
-    // @JsonPropertyDescription("TBD.")
-     @JsonGetter(value = "Thing@iot.navigationLink")
-     String getThingNavigationLink();
-
-    //@JsonPropertyDescription("TBD.")
-    @JsonSetter(value = "Thing@iot.navigationLink")
-    void setThingNavigationLink(String value);
 
     /**
-     * Adds a single {@link eu.almanac.ogc.sensorthing.api.datamodel.Observation} to the set of events belonging to
+     * Adds a single {@link Observation} to the set of events belonging to
      * this {@link Datastream} instance.
      *
      * @param observation
@@ -93,65 +73,256 @@ public interface Datastream extends CommonControlInfoDescription {
     boolean removeObservation(Observation observation);
 
     /**
-     * Provides the {@link eu.almanac.ogc.sensorthing.api.datamodel.ObservedProperty} instance describing the property to
+     * Provides the {@link ObservedProperty} instance describing the property to
      * which events belonging to this data stream belong.
      *
      * @return the observedProperty
      */
+    @JsonPropertyDescription("TBD")
     @JsonGetter("observedProperty")
     ObservedProperty getObservedProperty();
 
     /**
-     * Sets the {@link eu.almanac.ogc.sensorthing.api.datamodel.ObservedProperty} instance describing the property to
+     * Sets the {@link ObservedProperty} instance describing the property to
      * which events belonging to this data stream belong.
      *
      * @param observedProperty
      *            the observedProperty to set
      */
+    @JsonPropertyDescription("The Observations of a Datastream SHALL observe the same ObservedProperty. The Observations of different Datastreams MAY observe the same ObservedProperty.")
     @JsonSetter("observedProperty")
     void setObservedProperty(ObservedProperty observedProperty);
-
+    /**
+     * Gets the observation type time as a String.
+     * The type of Observation (with unique result type), which is used by the service to encode observations.
+     *
+     * @return the observation type time as String.
+     *
+     * */
+    @JsonPropertyDescription("The type of Observation (with unique result type), which is used by the service to encode observations.")
     @JsonGetter(value = "observationType")
-    @JsonPropertyDescription("TBD")
     String getObservationType();
 
+    /**
+     * Sets the observation type with the given String.
+     * The type of Observation (with unique result type), which is used by the service to encode observations.
+     *
+     * @param  observationType sets the observation type.
+     *
+     * */
+    @JsonPropertyDescription("The type of Observation (with unique result type), which is used by the service to encode observations.")
     @JsonSetter(value = "observationType")
-    @JsonPropertyDescription("TBD.")
     void setObservationType(String observationType);
-
+    /**
+     * Gets the unit of measurement time as a Map Key -> Value
+     * A JSON Object containing three key-value pairs. The name property presents the full name of the unitOfMeasurement; the symbol property shows the textual form of the unit symbol; and the definition contains the URI defining the unitOfMeasurement.
+     *
+     * @return the unit of measurement as Map.
+     *
+     * */
+    @JsonPropertyDescription("A JSON Object containing three key-value pairs. The name property presents the full name of the unitOfMeasurement; the symbol property shows the textual form of the unit symbol; and the definition contains the URI defining the unitOfMeasurement.")
     @JsonGetter(value = "unitOfMeasurement")
-    @JsonPropertyDescription("TBD")
     Map<String,Object> getUnitOfMeasurement();
 
+    /**
+     * Sets the unit of measurement with the given Map of Key -> Value.
+     * A JSON Object containing three key-value pairs. The name property presents the full name of the unitOfMeasurement; the symbol property shows the textual form of the unit symbol; and the definition contains the URI defining the unitOfMeasurement.
+     *
+     * @param  unitOfMeasurement sets the Map.
+     *
+     * */
+    @JsonPropertyDescription("A JSON Object containing three key-value pairs. The name property presents the full name of the unitOfMeasurement; the symbol property shows the textual form of the unit symbol; and the definition contains the URI defining the unitOfMeasurement.")
     @JsonSetter(value = "unitOfMeasurement")
-    @JsonPropertyDescription("TBD.")
     void setUnitOfMeasurement(Map<String, Object> unitOfMeasurement);
-
+    /**
+     * Gets the phenomenon time as a Interval.
+     * The temporal interval of the phenomenon times of all observations belonging to this Datastream.
+     *
+     * @return the phenomenon time as Interval.
+     *
+     * */
+    @JsonPropertyDescription("The temporal interval of the phenomenon times of all observations belonging to this Datastream.")
     @JsonGetter(value = "phenomenonTime")
     @JsonSerialize(using = IntervalDateSerializer.class)
-    @JsonPropertyDescription("TBD")
     Interval getPhenomenonTime();
 
+    /**
+     * Sets the phenomenon time with the given Interval.
+     * The temporal interval of the phenomenon times of all observations belonging to this Datastream.
+     *
+     * @param  phenomenonTime sets the phenomenon time Interval.
+     *
+     * */
+    @JsonPropertyDescription("The temporal interval of the phenomenon times of all observations belonging to this Datastream.")
     @JsonSetter(value = "phenomenonTime")
     @JsonDeserialize(using = IntervalDateDeserializer.class)
-    @JsonPropertyDescription("TBD.")
     void setPhenomenonTime(Interval phenomenonTime);
-
+    /**
+     * Gets the result time as a Interval.
+     * The temporal interval of the result times of all observations belonging to this Datastream.
+     *
+     * @return the phenomenon time as Interval.
+     *
+     * */
+    @JsonPropertyDescription("The temporal interval of the result times of all observations belonging to this Datastream.")
     @JsonGetter(value = "resultTime")
     @JsonSerialize(using = IntervalDateSerializer.class)
-    @JsonPropertyDescription("TBD")
     Interval getResultTime();
 
+    /**
+     * Sets the result time with the given Interval.
+     *  The temporal interval of the result times of all observations belonging to this Datastream.
+     *
+     * @param  resultTime sets the phenomenon time.
+     *
+     * */
+    @JsonPropertyDescription("The temporal interval of the result times of all observations belonging to this Datastream.")
     @JsonSetter(value = "resultTime")
     @JsonDeserialize(using = IntervalDateDeserializer.class)
-    @JsonPropertyDescription("TBD.")
     void setResultTime(Interval resultTime);
-
+    /**
+     * Gets the observed area as a Polygon {@link Polygon}.
+     * The spatial bounding box of the spatial extent of all FeaturesOfInterest that belong to the Observations associated with this Datastream.
+     *
+     * @return the observed area as Polygon.
+     *
+     * */
+    @JsonPropertyDescription("The spatial bounding box of the spatial extent of all FeaturesOfInterest that belong to the Observations associated with this Datastream.")
     @JsonGetter(value = "observedArea")
-    @JsonPropertyDescription("TBD")
     Polygon getObservedArea();
 
+    /**
+     * Sets the observed area as a Polygon {@link Polygon}.
+     * The spatial bounding box of the spatial extent of all FeaturesOfInterest that belong to the Observations associated with this Datastream.
+     *
+     * @param  observedArea sets theobserved area.
+     *
+     * */
+    @JsonPropertyDescription("The spatial bounding box of the spatial extent of all FeaturesOfInterest that belong to the Observations associated with this Datastream.")
     @JsonSetter(value = "observedArea")
-    @JsonPropertyDescription("TBD.")
     void setObservedArea(Polygon observedArea);
+    /**
+     * Gets the observations as a List of observations {@link Observation}.
+     * A Datastream has zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.
+     *
+     * @return the observations as a List of observations
+     *
+     * */
+    @JsonPropertyDescription("A Datastream has zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
+    @JsonGetter("observations")
+    List<Observation> getObservations();
+    /**
+     * Sets the observations as a List of observations {@link Observation}.
+     *A Datastream has zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.
+     *
+     * @param  observation sets the observations.
+     *
+     * */
+    @JsonPropertyDescription("A Datastream has zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
+    @JsonSetter("observations")
+    void SetObservations(List<Observation> observation);
+    /**
+     * Gets the sensor as a Sensor {@link Sensor}.
+     * The Observations in a Datastream are performed by one-and-only-one Sensor. One Sensor MAY produce zero-to-many Observations in different Datastreams.
+     *
+     * @return the sensor as a Sensor.
+     *
+     * */
+    @JsonPropertyDescription("The Observations in a Datastream are performed by one-and-only-one Sensor. One Sensor MAY produce zero-to-many Observations in different Datastreams.")
+    @JsonGetter(value = "sensor")
+    Sensor getSensor();
+    /**
+     * Sets the sensor as a Sensor {@link Sensor}.
+     * The Observations in a Datastream are performed by one-and-only-one Sensor. One Sensor MAY produce zero-to-many Observations in different Datastreams.
+     *
+     * @param  sensor the sensor to set as a Sensor.
+     *
+     * */
+    @JsonPropertyDescription("The Observations in a Datastream are performed by one-and-only-one Sensor. One Sensor MAY produce zero-to-many Observations in different Datastreams.")
+    @JsonSetter(value = "sensor")
+    void setSensor(Sensor sensor);
+    /**
+     * Gets the thing as a Thing {@link Thing}.
+     * A Thing has zero-to-many Datastreams. A Datastream entity SHALL only link to a Thing as a collection of Observations.
+     *
+     * @return the thing.
+     *
+     * */
+    @JsonPropertyDescription("A Thing has zero-to-many Datastreams. A Datastream entity SHALL only link to a Thing as a collection of Observations.")
+    @JsonGetter("thing")
+    Thing getThing();
+    /**
+     *  Sets the sensor as a Thing {@link Thing}.
+     * A Thing has zero-to-many Datastreams. A Datastream entity SHALL only link to a Thing as a collection of Observations.
+     *
+     * @param  thing sets the thing.
+     *
+     * */
+    @JsonPropertyDescription("A Thing has zero-to-many Datastreams. A Datastream entity SHALL only link to a Thing as a collection of Observations.")
+    @JsonSetter(value = "thing")
+    void setThing(Thing thing);
+    /**
+     * navigationLink is the relative or absolute URL that retrieves content of the Observations.
+     *
+     * @return  a string that represents the relative or absolute URL that retrieves content of the Observations
+     */
+    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Observations.")
+    @JsonGetter(value = "Observations@iot.navigationLink")
+    String getObservationsNavigationLink();
+    /**
+     * navigationLink is the relative or absolute URL that retrieves content of the Observations.
+     *
+     * @param  value a string that represents the relative or absolute URL that retrieves content of the Observations
+     */
+    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Observations.")
+    @JsonSetter(value = "Observations@iot.navigationLink")
+    void setObservationsNavigationLink(String value);
+    /**
+     * navigationLink is the relative or absolute URL that retrieves content of the ObservedProperty.
+     *
+     * @return  a string that represents the relative or absolute URL that retrieves content of the ObservedProperty
+     */
+    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the ObservedProperty.")
+    @JsonGetter(value = "ObservedProperty@iot.navigationLink")
+    String getObservedPropertNavigationLink();
+    /**
+     * navigationLink is the relative or absolute URL that retrieves content of the ObservedProperty.
+     *
+     * @param  value a string that represents the relative or absolute URL that retrieves content of the ObservedProperty
+     */
+    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the ObservedProperty.")
+    @JsonSetter(value = "ObservedProperty@iot.navigationLink")
+    void setObservedPropertyNavigationLink(String value);
+    /**
+     * navigationLink is the relative or absolute URL that retrieves content of the Sensor.
+     *
+     * @return  a string that represents the relative or absolute URL that retrieves content of the Sensor
+     */
+    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Sensor.")
+    @JsonGetter(value = "Sensor@iot.navigationLink")
+    String getSensorNavigationLink();
+    /**
+     * navigationLink is the relative or absolute URL that retrieves content of the Sensor.
+     *
+     * @param  value a string that represents the relative or absolute URL that retrieves content of the Sensor
+     */
+    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Sensor.")
+    @JsonSetter(value = "Sensor@iot.navigationLink")
+    void setSensorNavigationLink(String value);
+    /**
+     * navigationLink is the relative or absolute URL that retrieves content of the Thing.
+     *
+     * @return  a string that represents the relative or absolute URL that retrieves content of the Thing
+     */
+    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Thing.")
+    @JsonGetter(value = "Thing@iot.navigationLink")
+    String getThingNavigationLink();
+    /**
+     * navigationLink is the relative or absolute URL that retrieves content of the Thing.
+     *
+     * @param  value a string that represents the relative or absolute URL that retrieves content of the Thing
+     */
+    @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Thing.")
+    @JsonSetter(value = "Thing@iot.navigationLink")
+    void setThingNavigationLink(String value);
 }

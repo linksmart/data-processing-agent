@@ -33,7 +33,7 @@ import java.util.List;
  */
 /**
  *
- * In OGC SensorThing:
+ * In OGC SensorThing 1.0:
  *      An Observation is the act of measuring or otherwise determining the value of a property [OGC 10-004r3 and ISO 19156:2011]
  *
  *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#31" </a>
