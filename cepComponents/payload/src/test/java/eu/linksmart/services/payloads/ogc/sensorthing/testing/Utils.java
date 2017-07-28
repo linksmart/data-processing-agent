@@ -13,7 +13,6 @@ import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.HistoricalLocation;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.Location;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
 import org.geojson.Polygon;
@@ -199,7 +198,7 @@ public class Utils {
 
 
     public static Location constructLocation(boolean childObjects) {
-        Location location = new Location();
+        Location location = new LocationImpl();
         location.setId(1);
         location.setLocation(new Point(-114.06,51.05));
         location.setEncodingType("application/vnd.geo+json");

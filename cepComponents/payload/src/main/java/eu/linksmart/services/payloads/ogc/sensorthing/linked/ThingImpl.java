@@ -4,6 +4,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
+import eu.linksmart.services.payloads.ogc.sensorthing.Location;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
@@ -176,10 +177,10 @@ public class ThingImpl extends CommonControlInfoDescriptionImpl implements Thing
 	}
 	@Override
 	public void addLocation(Location locations) {
-		if(locations.things==null)
-			locations.things= new ArrayList<>();
-		if(!locations.things.contains(this))
-			locations.things.add(this);
+		if(locations.getThings()==null)
+			locations.setThings(new ArrayList<>());
+		if(!locations.getThings().contains(this))
+			locations.getThings().add(this);
 		if(this.locations==null)
 			this.locations= new ArrayList<>();
 		if(!this.locations.contains(locations))

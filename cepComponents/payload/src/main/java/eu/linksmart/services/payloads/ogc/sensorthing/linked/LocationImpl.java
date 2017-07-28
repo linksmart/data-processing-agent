@@ -19,9 +19,13 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import eu.linksmart.services.payloads.ogc.sensorthing.Location;
 import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncodingImpl;
+import org.geojson.GeoJsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -33,55 +37,39 @@ import java.util.Set;
  *
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@iot.id", scope = Location.class)
-public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Location
-{
+public class LocationImpl extends CCIEncodingImpl implements Location {
 
-    @JsonIgnore
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected List<HistoricalLocation> historicalLocations;
 
+    public List<Thing> getThings() {
+        return things;
+    }
 
-    /**
-     * The Location entity locates the Thing. Multiple Things MAY be
-     * located at the same Location. A Thing MAY not have a
-     * Location. A Thing SHOULD have only one Location.
-     * However, in some complex use cases, a Thing MAY have more
-     * than one Location representations. In such case, the Thing MAY
-     * have more than one Locations. These Locations SHALL have
-     * different encodingTypes and the encodingTypes SHOULD be in
-     * different spaces (e.g., one encodingType in Geometrical space and
-     * one encodingType in Topological space).
-     **/
-  //  @JsonBackReference(value = "historicalLocations")
-   // protected Set<HistoricalLocation> historicalLocations;
-    /**navigationLink is the relative URL that retrieves content of related entities. */
+    public void setThings(List<Thing> things) {
+        this.things = things;
+    }
+
 
     @JsonIgnore
     protected List<Thing> things;
 
+    @Override
     public void addThing(Thing thing){
         if(thing.getLocations() == null)
             thing.setLocations(new ArrayList<>());
         if(!thing.getLocations().contains(this))
             thing.addLocation(this);
-        this.things.add(thing);
+        if(!things.contains(thing))
+            this.things.add(thing);
     }
 
-    @JsonGetter("historicalLocations")
+    @Override
     public List<HistoricalLocation> getHistoricalLocations() {
         return historicalLocations;
     }
 
 
-    /**
-     * Sets the list of locations in which this Thing has been registered.
-     * Replaces any existing list.
-     *
-     * @param historicalLocations
-     *            the locations to set
-     */
-
-    @JsonSetter("historicalLocations")
+    @Override
     public void setHistoricalLocations(List<HistoricalLocation> historicalLocations) {
         if(historicalLocations!=null) {
             historicalLocations.forEach(d->d.addLocation(this));
@@ -89,6 +77,7 @@ public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Loc
         }
 
     }
+    @Override
     public void addHistoricalLocation(HistoricalLocation historicalLocation) {
 
         if(historicalLocation.locations == null)
@@ -102,19 +91,68 @@ public class Location extends eu.linksmart.services.payloads.ogc.sensorthing.Loc
         if(!this.historicalLocations.contains(historicalLocation))
             this.historicalLocations.add(historicalLocation);
     }
-    @JsonGetter(value = "HistoricalLocations@iot.navigationLink")
-    public String getHistoricalLocationsNavigationLink() {
-        return "Location("+id+")/HistoricalLocations";
-    }
-    @JsonPropertyDescription("TBD.")
-    @JsonSetter(value = "HistoricalLocations@iot.navigationLink")
-    public void setHistoricalLocationsNavigationLink(String value) {   }
 
-    @JsonGetter(value = "Things@iot.navigationLink")
-    public String getThingNavigationLink() {
-        return "Location("+id+")/Things";
+    @JsonIgnore
+    protected GeoJsonObject location;
+	/* {see=http://blog.opendatalab.de/hack/2013/07/16/geojson-jackson/} */
+
+    /**
+     * Empty constructor, respects the bean instantiation pattern.
+     */
+    public LocationImpl()
+    {
+        this("",null);
     }
-    //@JsonPropertyDescription("TBD.")
-    @JsonSetter(value = "Things@iot.navigationLink")
-    public void setThingNavigationLink(String value) {   }
+
+    /**
+     * Builds a new location object, referred to a specific time instant
+     * (expressed as a {@link java.util.Date} instance) and having the given location (as
+     * a {@link org.geojson.GeoJsonObject}).
+     *
+     * @param location
+     *            The location of the location identified by this instance.
+     */
+    public LocationImpl(GeoJsonObject location)
+    {
+        this("",location);
+    }
+    /**
+     * Builds a new location object, referred to a specific time instant
+     * (expressed as a {@link java.util.Date} instance) and having the given location (as
+     * a {@link org.geojson.GeoJsonObject}).
+     *
+     * @param location
+     *            The location of the location identified by this instance.
+     */
+    public LocationImpl(String description,GeoJsonObject location)
+    {
+        this.description = description;
+        this.location = location;
+    }
+
+    public GeoJsonObject getLocation()
+    {
+        return location;
+    }
+
+    @Override
+    public void setLocation(GeoJsonObject location)
+    {
+        this.location = location;
+    }
+
+    @Override
+    public String toString(){
+        if(location!=null)
+            return "ID: "+id+"; Description: "+description+"; "+"Location: "+ Arrays.toString(location.getBbox());
+        return super.toString();
+    }
+    @Override
+    public int hashCode(){
+        return location.hashCode();
+    }
+    @Override
+    public boolean equals(Object obj) {
+        return obj == this || obj instanceof Location && Arrays.equals(((LocationImpl) obj).location.getBbox(),location.getBbox());
+    }
 }

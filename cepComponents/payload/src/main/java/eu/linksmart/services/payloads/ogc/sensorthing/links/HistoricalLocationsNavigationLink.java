@@ -16,7 +16,7 @@ public interface HistoricalLocationsNavigationLink extends CommonControlInfo{
      */
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the FeatureOfInterest.")
     @JsonSetter(value = "HistoricalLocations@iot.navigationLink")
-    default void setFeatureOfInterestNavigationLink(String str){}
+    default void setHistoricalLocationsNavigationLink(String str){}
     /**
      * navigationLink is the relative or absolute URL that retrieves content of the FeatureOfInterest.
      *
@@ -24,5 +24,5 @@ public interface HistoricalLocationsNavigationLink extends CommonControlInfo{
      */
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the HistoricalLocations.")
     @JsonSetter(value = "HistoricalLocations@iot.navigationLink")
-    default String setHistoricalLocationsNavigationLink(){return NavigationLink.getSelfLink(this.getClass().getSimpleName(),getId().toString(), "HistoricalLocations");}
+    default String getHistoricalLocationsNavigationLink(){return NavigationLink.getSelfLink(this.getClass().getSimpleName(),getId().toString(), "HistoricalLocations");}
 }

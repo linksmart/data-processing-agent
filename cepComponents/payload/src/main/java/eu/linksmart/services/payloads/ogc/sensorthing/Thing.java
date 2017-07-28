@@ -1,13 +1,11 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.HistoricalLocation;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.Location;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ThingImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.DatastreamsNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.HistoricalLocationsNavigationLink;
