@@ -1,7 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -11,12 +10,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 public interface CommonControlInfo {
     /** selfLink is the absolute URL of an entity that is unique among all other entities. */
     @JsonPropertyDescription("id is the system-generated identifier of an entity.")
-    @JsonProperty(value = "@iot.selfLink")
+    @JsonGetter(value = "@iot.selfLink")
     String getSelfLink();
 
     /** selfLink is the absolute URL of an entity that is unique among all other entities. */
     @JsonPropertyDescription("id is the system-generated identifier of an entity.")
-    @JsonProperty(value = "@iot.selfLink")
+    @JsonSetter(value = "@iot.selfLink")
     void setSelfLink(String selfLink);
 
     /**

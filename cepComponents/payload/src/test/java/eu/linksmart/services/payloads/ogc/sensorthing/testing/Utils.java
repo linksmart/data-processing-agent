@@ -12,7 +12,6 @@ import eu.linksmart.services.payloads.ogc.sensorthing.Sensor;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.HistoricalLocation;
 import org.geojson.LngLatAlt;
 import org.geojson.Point;
 import org.geojson.Polygon;
@@ -103,7 +102,7 @@ public class Utils {
 
 
     public static Sensor constructSensor(boolean childObjects) {
-        Sensor sensor = new Sensor();
+        Sensor sensor = new SensorImpl();
         sensor.setId(1);
 
         sensor.setDescription("TMP36 - Analog Temperature sensor");
@@ -183,7 +182,7 @@ public class Utils {
     }
 
     public static HistoricalLocation constructHistoricalLocation(boolean childObjects) {
-        HistoricalLocation historicalLocation = new HistoricalLocation();
+        HistoricalLocation historicalLocation = new HistoricalLocationImpl();
         historicalLocation.setId(1);
         historicalLocation.setTime(DatatypeConverter.parseDateTime("2015-01-25T12:00:00-07:00").getTime());
         if(childObjects){

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.HistoricalLocation;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.LocationImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.HistoricalLocationsNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.ThingsNavigationLink;
@@ -50,6 +49,12 @@ import java.util.List;
 @JsonDeserialize(as = LocationImpl.class)
 @JsonSerialize(as = LocationImpl.class)
 public interface Location extends CCIEncoding, HistoricalLocationsNavigationLink, ThingsNavigationLink {
+    /**
+     * adds one thing in the list of thing of this locations.
+     * Ignore if repeated.
+     *
+     * @param thing a Thing in this location
+     */
     void addThing(Thing thing);
     /**
      * gets the list of locations in which this Thing has been registered.
@@ -73,7 +78,7 @@ public interface Location extends CCIEncoding, HistoricalLocationsNavigationLink
     @JsonSetter("historicalLocations")
     void setHistoricalLocations(List<HistoricalLocation> historicalLocations);
     /**
-     * adds on location to the list of locations in which this Thing has been registered.
+     * adds one historical locations to the list of historical locations in which this Location has been registered.
      * Ignore if repeated.
      *
      * @param historicalLocation a location

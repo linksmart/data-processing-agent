@@ -9,7 +9,6 @@ import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateSerializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.Sensor;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.ObservationsNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.ObservedPropertyNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.SensorNavigationLink;

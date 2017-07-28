@@ -3,10 +3,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
-import eu.linksmart.services.payloads.ogc.sensorthing.Location;
-import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
-import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
+import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
 import jdk.nashorn.internal.objects.annotations.Setter;
 
@@ -137,11 +134,12 @@ public class ThingImpl extends CommonControlInfoDescriptionImpl implements Thing
 	@Override
 	public void addHistoricalLocation(HistoricalLocation historicalLocation) {
 
-		if(historicalLocation.things == null)
-			historicalLocation.things = new ArrayList<>();
+		if(historicalLocation.getThings() == null)
+			historicalLocation.setThings(new ArrayList<>());
 
-		if(!historicalLocation.things.contains(this))
-			historicalLocation.things.add(this);
+		if(!historicalLocation.getThings().contains(this))
+			historicalLocation.getThings().add(this);
+
 		if(this.historicalLocations==null)
 			this.historicalLocations= new ArrayList<>();
 		if(!this.historicalLocations.contains(historicalLocation))

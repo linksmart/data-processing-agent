@@ -19,6 +19,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import eu.linksmart.services.payloads.ogc.sensorthing.HistoricalLocation;
 import eu.linksmart.services.payloads.ogc.sensorthing.Location;
 import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncodingImpl;
@@ -80,11 +81,11 @@ public class LocationImpl extends CCIEncodingImpl implements Location {
     @Override
     public void addHistoricalLocation(HistoricalLocation historicalLocation) {
 
-        if(historicalLocation.locations == null)
-            historicalLocation.locations = new ArrayList<>();
+        if(historicalLocation.getLocations() == null)
+            historicalLocation.setLocations(new ArrayList<>());
 
-        if(!historicalLocation.locations.contains(this))
-            historicalLocation.locations.add(this);
+        if(!historicalLocation.getLocations().contains(this))
+            historicalLocation.getLocations().add(this);
         if(this.historicalLocations == null)
             this.historicalLocations = new ArrayList<>();
 

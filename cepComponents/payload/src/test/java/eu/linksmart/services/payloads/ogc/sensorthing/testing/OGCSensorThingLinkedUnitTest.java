@@ -4,9 +4,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.testing;
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  */
 
-import eu.linksmart.services.payloads.ogc.sensorthing.Location;
-import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
-import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
+import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import org.junit.Test;
 

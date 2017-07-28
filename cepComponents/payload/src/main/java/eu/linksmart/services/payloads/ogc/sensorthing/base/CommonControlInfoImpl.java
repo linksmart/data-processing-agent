@@ -19,7 +19,7 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
      * id is unique among the entities of the same entity type in a SensorThings service
      */
 
-    @JsonProperty("@iot.id")
+    @JsonProperty(value = "@iot.id")
     protected Object id;
   //  /** selfLink is the absolute URL of an entity that is unique among all other entities. */
   //  @JsonPropertyDescription("id is the system-generated identifier of an entity.")
@@ -27,7 +27,7 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
   //  protected String selfLink;
 
     @JsonIgnore
-    protected String baseURL = "http://linksmart.eu/v1.0/";
+    private String baseURL = "http://linksmart.eu/v1.0/";
 
     /**
      * Empty constructor
@@ -39,16 +39,12 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
     }
     /** selfLink is the absolute URL of an entity that is unique among all other entities. */
     @Override
-    @JsonPropertyDescription("id is the system-generated identifier of an entity.")
-    @JsonProperty(value = "@iot.selfLink")
     public String getSelfLink() {
 
         return generateSelfLink();
     }
     /** selfLink is the absolute URL of an entity that is unique among all other entities. */
     @Override
-    @JsonPropertyDescription("id is the system-generated identifier of an entity.")
-    @JsonProperty(value = "@iot.selfLink")
     public void setSelfLink(String selfLink) {
 
         String[] strings= selfLink.split("//");
@@ -83,28 +79,14 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
         }
     }
 
-    /**
-     * Provides back the ID of the specific model entry instance, as a String
-     *
-     * @return the id
-     */
+
     @Override
-    @JsonPropertyDescription("id is the system-generated identifier of an entity.")
-   // @JsonProperty(value = "@iot.id")
     public Object getId()
     {
         return id;
     }
 
-    /**
-     * Sets the ID of the specific model entry instance, as a String
-     *
-     * @param id
-     *            the id to set
-     */
     @Override
-    @JsonPropertyDescription("id is the system-generated identifier of an entity.")
-    @JsonSetter(value = "@iot.id")
     public void setId(Object id)
     {
         this.id = id;

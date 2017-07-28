@@ -3,35 +3,37 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.linksmart.services.payloads.ogc.sensorthing.HistoricalLocation;
 import eu.linksmart.services.payloads.ogc.sensorthing.Location;
 import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
+import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateSerializer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 01.04.2016 a researcher of Fraunhofer FIT.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = HistoricalLocation.class)
-public class HistoricalLocation extends eu.linksmart.services.payloads.ogc.sensorthing.HistoricalLocation {
-
-
-
-    /**
-     * A Location can have zero-to-many Locations. One HistoricalLocation SHALL have one or many Locations.
-     * */
+public class HistoricalLocationImpl extends CommonControlInfoImpl implements HistoricalLocation {
 
 
     @JsonIgnore
     List<Location> locations;
-    @JsonGetter("locations")
+    @JsonIgnore
+    protected List<Thing> things;
+    @JsonIgnore
+    protected Date time;
+
+    @Override
     public List<Location> getLocations() {
         return locations;
     }
 
-    @JsonSetter("locations")
+    @Override
     public void setLocations(List<Location> locations) {
         if(locations!=null) {
             locations.forEach(d->d.addHistoricalLocation(this));
@@ -39,6 +41,7 @@ public class HistoricalLocation extends eu.linksmart.services.payloads.ogc.senso
         }
 
     }
+    @Override
     public void addLocation(Location locations) {
         if(locations.getHistoricalLocations()==null)
             locations.setHistoricalLocations( new ArrayList<>());
@@ -48,30 +51,34 @@ public class HistoricalLocation extends eu.linksmart.services.payloads.ogc.senso
             this.locations.add(locations);
     }
 
-    @JsonIgnore
-    protected List<Thing> things;
 
+    @Override
     public void addThing(Thing thing){
         if(thing.getHistoricalLocations()==null)
             thing.setHistoricalLocations( new ArrayList<>());
 
         if(!thing.getHistoricalLocations().contains(this))
             thing.addHistoricalLocation(this);
-        this.things.add(thing);
+        if(!things.contains(thing))
+            this.things.add(thing);
     }
-    @JsonGetter(value = "Locations@iot.navigationLink")
-    public String getLocationsNavigationLink() {
-        return "HistoricalLocation("+id+")/Locations";
-    }
-    @JsonPropertyDescription("TBD.")
-    @JsonSetter(value = "Locations@iot.navigationLink")
-    public void setLocationsNavigationLink(String value) {   }
 
-    @JsonGetter(value = "Thing@iot.navigationLink")
-    public String getThingNavigationLink() {
-        return "HistoricalLocation("+id+")/Things";
+
+
+    @Override
+    public Date getTime() {
+        return time;
     }
-    //@JsonPropertyDescription("TBD.")
-    @JsonSetter(value = "Thing@iot.navigationLink")
-    public void setThingNavigationLink(String value) {   }
+
+    @Override
+    public void setTime(Date time) {
+        this.time = time;
+    }
+    public List<Thing> getThings() {
+        return things;
+    }
+
+    public void setThings(List<Thing> things) {
+        this.things = things;
+    }
 }

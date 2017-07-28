@@ -1,6 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
@@ -15,7 +15,7 @@ public interface CommonControlInfoDescription extends CommonControlInfo {
      * @return the description
      */
     @JsonPropertyDescription("This is the description of the thing entity. The content is open to accommodate changes to SensorML and to support other description languages.")
-    @JsonProperty(value = "description")
+    @JsonGetter(value = "description")
     String getDescription();
 
     /**
@@ -25,6 +25,6 @@ public interface CommonControlInfoDescription extends CommonControlInfo {
      *            the description to set as a {@link String}
      */
     @JsonPropertyDescription("This is the description of the thing entity. The content is open to accommodate changes to SensorML and to support other description languages.")
-    @JsonProperty(value = "description")
+    @JsonGetter(value = "description")
     void setDescription(String description);
 }

@@ -1,9 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.testing;
 
-import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
-import eu.linksmart.services.payloads.ogc.sensorthing.Location;
-import eu.linksmart.services.payloads.ogc.sensorthing.ObservedProperty;
-import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
+import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import org.geojson.LngLatAlt;
@@ -17,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by José Ángel Carvajal on 06.04.2016 a researcher of Fraunhofer FIT.
@@ -43,7 +39,7 @@ public class UtilsLinked {
 
 
     public static Sensor constructSensor(boolean childObjects) {
-        Sensor sensor = new Sensor();
+        Sensor sensor = new SensorImpl();
         sensor.setId(1);
 
         sensor.setDescription("TMP36 - Analog Temperature sensor");
@@ -132,7 +128,7 @@ public class UtilsLinked {
     }
 
     public static HistoricalLocation constructHistoricalLocation(boolean childObjects) {
-        HistoricalLocation historicalLocation = new HistoricalLocation();
+        HistoricalLocation historicalLocation = new HistoricalLocationImpl();
         historicalLocation.setId(1);
         historicalLocation.setTime(DatatypeConverter.parseDateTime("2015-01-25T12:00:00-07:00").getTime());
         if(childObjects){

@@ -20,10 +20,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
-import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
-import eu.linksmart.services.payloads.ogc.sensorthing.ObservedProperty;
-import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
+import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.IntervalDateDeserializer;
@@ -176,10 +173,10 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
     public void setSensor(Sensor sensor) {
         this.sensor = sensor;
         if(this.sensor.getDatastreams() == null) {
-            this.sensor.datastreams = new ArrayList<>();
-            this.sensor.datastreams.add(this);
-        } else if (!this.sensor.datastreams.contains(this)) {
-            this.sensor.datastreams.add(this);
+            this.sensor.setDatastreams( new ArrayList<>());
+            this.sensor.getDatastreams().add(this);
+        } else if (!this.sensor.getDatastreams().contains(this)) {
+            this.sensor.getDatastreams().add(this);
         }
 
 

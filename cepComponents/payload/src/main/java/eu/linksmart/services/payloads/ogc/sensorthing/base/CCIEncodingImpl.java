@@ -1,5 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.services.payloads.ogc.sensorthing.CCIEncoding;
@@ -24,18 +25,13 @@ public abstract class CCIEncodingImpl extends CommonControlInfoDescriptionImpl i
         this.encodingType = null;
     }
 
-    @JsonPropertyDescription("The detailed description of the sensor or system. The content is open to accommodate changes to SensorML or to support other description languages.")
-    @JsonProperty(value = "encodingType")
+    @JsonIgnore
     private String encodingType;
     @Override
-    @JsonProperty(value = "encodingType")
-    @JsonPropertyDescription("TBD")
     public String getEncodingType() {
         return encodingType;
     }
     @Override
-    @JsonProperty(value = "encodingType")
-    @JsonPropertyDescription("TBD.")
     public void setEncodingType(String encodingType) {
         this.encodingType = encodingType;
     }

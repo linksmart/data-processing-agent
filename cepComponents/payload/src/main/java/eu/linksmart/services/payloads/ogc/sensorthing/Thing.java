@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.HistoricalLocation;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ThingImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.DatastreamsNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.HistoricalLocationsNavigationLink;
