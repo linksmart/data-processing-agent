@@ -81,13 +81,18 @@ public class DefaultMQTTPublisher implements Publisher {
 
     private void initOutputs(){
         if(outputs==null ||outputs.isEmpty()){
-            String aux= Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
-            if(aux == null)
-                aux = "LS/LA/"+agentID+"/OGC/1.0/Datastreams/";
-            else
-                aux.replace("<id>",agentID);
-            outputs = Arrays.asList(aux + id+"/");
+
+            outputs = Arrays.asList(defaultOutput(agentID) + id+"/");
         }
+    }
+    static public String defaultOutput(String agentID){
+        String aux= Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
+        if(aux == null)
+            aux = "LS/LA/"+agentID+"/OGC/1.0/Datastreams/";
+        else
+            aux=aux.replace("<id>",agentID);
+        return aux;
+
     }
 
     private void initScopes() throws StatementException, MalformedURLException, RemoteException {

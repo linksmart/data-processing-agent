@@ -1,5 +1,6 @@
 package eu.linksmart.services.utils.function;
 
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.constants.Const;
 import org.apache.log4j.PropertyConfigurator;
@@ -14,6 +15,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -79,6 +81,14 @@ public class  Utils {
 
         return dateFormat;
 
+    }
+    static public Date formISO8601(String str) throws IOException {
+        ISO8601DateFormat df = new ISO8601DateFormat();
+        try {
+            return df.parse(str);
+        } catch (ParseException e) {
+            throw new IOException("Unable to parse the given string to ISO8601");
+        }
     }
     /**
      * Provide a quick method to get a data TimeZone. The TimeZone is created using the default values of the conf file if any,

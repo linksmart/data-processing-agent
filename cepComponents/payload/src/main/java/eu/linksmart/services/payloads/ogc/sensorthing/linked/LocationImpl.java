@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import eu.linksmart.services.payloads.ogc.sensorthing.HistoricalLocation;
 import eu.linksmart.services.payloads.ogc.sensorthing.Location;
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.Thing;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncodingImpl;
 import org.geojson.GeoJsonObject;
@@ -37,7 +38,7 @@ import java.util.Set;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@iot.id", scope = Location.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Location.class)
 public class LocationImpl extends CCIEncodingImpl implements Location {
 
     protected List<HistoricalLocation> historicalLocations;

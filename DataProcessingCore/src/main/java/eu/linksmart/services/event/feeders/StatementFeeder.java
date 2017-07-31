@@ -4,6 +4,7 @@ package eu.linksmart.services.event.feeders;
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.core.RegistrationService;
+import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
@@ -376,7 +377,7 @@ public class StatementFeeder implements Feeder<Statement> {
         if(DynamicConst.getId().equals(id))
             return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"/"+id);
         else if(id!=null)
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.EVENT_OUT_TOPIC_CONF_PATH)+id+"/"+DynamicConst.getId());
+            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, DefaultMQTTPublisher.defaultOutput(DynamicConst.getId())+id);
 
         return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+DynamicConst.getId());
     }

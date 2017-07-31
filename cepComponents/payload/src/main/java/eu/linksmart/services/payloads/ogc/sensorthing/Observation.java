@@ -6,12 +6,17 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sun.xml.internal.ws.config.metro.dev.FeatureReader;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.JsonSerializable;
+import eu.linksmart.api.event.types.SerializationFactory;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateSerializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.DatastreamNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.FeatureOfInterestNavigationLink;
+import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
 import eu.linksmart.services.utils.function.Utils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -253,6 +258,64 @@ public interface Observation extends EventEnvelope, CommonControlInfo, FeatureOf
         return ob;
     }
 
+    @Override
+    default void topicDataConstructor(String topic) {
+        // nothing
+    }
+
+    @Override
+    default Date getDate() {
+        return getPhenomenonTime();
+    }
+
+    @Override
+    default String getIsoTimestamp() {
+        return Utils.getIsoTimestamp(getPhenomenonTime());
+    }
+
+    @Override
+    default Object getAttributeId() {
+        if(getDatastream()!=null)
+            return getDatastream().getId();
+        else
+            return null;
+    }
+
+    @Override
+    default Object getValue() {
+        return getResult();
+    }
+
+    @Override
+    default void setDate(Date time) {
+        setPhenomenonTime(time);
+    }
+
+
+    @Override
+    default void setAttributeId(Object id) {
+        if(getDatastream()!=null)
+            getDatastream().setId(id);
+    }
+
+    @Override
+    default void setValue(Object value) {
+        setResult(value);
+    }
+    @Override
+    default SerializationFactory getSerializationFactory() {
+        return new DefaultSerializationFactory();
+    }
+
+    @Override
+    default JsonSerializable build() throws TraceableException, UntraceableException {
+        return this;
+    }
+
+    @Override
+    default void destroy() throws Exception {
+
+    }
 
 
     /*

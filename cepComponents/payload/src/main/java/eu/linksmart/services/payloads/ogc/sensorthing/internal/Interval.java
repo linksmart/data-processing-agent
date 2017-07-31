@@ -1,9 +1,16 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.internal;
 
 import com.fasterxml.jackson.databind.util.StdDateFormat;
+import eu.linksmart.services.utils.function.Utils;
+import org.apache.sis.io.IO;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
 /**
@@ -40,9 +47,14 @@ public class Interval {
         if(strings.length== 0 || strings.length> 2) {
             throw new IOException("Expecting start and end of a interval");
         }
-        inter.setStart(DatatypeConverter.parseDateTime(strings[0]).getTime());
+
+
+
+        inter.setStart(Utils.formISO8601(strings[0]));
+
         if(strings.length==2)
-            inter.setEnd(DatatypeConverter.parseDateTime(strings[1]).getTime());
+            inter.setEnd(Utils.formISO8601(strings[0]));
         return inter;
     }
+
 }

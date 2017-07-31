@@ -1,8 +1,9 @@
 package eu.linksmart.services.event.feeders;
 
-import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -89,9 +90,11 @@ public class EventFeeder implements Feeder<EventEnvelope> {
         }
     }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
+        if(topic.contains(DefaultMQTTPublisher.defaultOutput(DynamicConst.getId()))) // if it is my topic the event should be ignore the message
+            return;
+
         try {
             Object event=null;
-
             if(!compiledTopicClass.containsKey(topic)) {
 
                 if(topicToClass.isEmpty())
