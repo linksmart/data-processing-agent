@@ -173,6 +173,7 @@ public interface Thing extends CommonControlInfoDescription, DatastreamsNavigati
      * @param location
      */
     void addLocation(Location location);
-    
 
+
+    void removeDatastream(Object id);
 }

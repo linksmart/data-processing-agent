@@ -1,6 +1,8 @@
 package eu.linksmart.services.utils.serialization;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +27,7 @@ public class DefaultSerializer implements Serializer{
         if(conf !=null && conf.containsKeyAnywhere(Const.TIME_EPOCH_CONF_PATH))
             parser.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, conf.getBoolean(Const.TIME_EPOCH_CONF_PATH));
         parser.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
+        parser.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         parser.setDateFormat(Utils.getDateFormat());
         parser.setTimeZone(Utils.getTimeZone());
     }

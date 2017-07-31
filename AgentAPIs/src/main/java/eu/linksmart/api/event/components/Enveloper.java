@@ -48,7 +48,7 @@ public interface Enveloper {
      * @return an implementation instance of an EventEnvelop.
      *
      * */
-    public <IDType, ValueType> EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description);
+    public <IDType, ValueType> EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description, String name);
 
     /**
      * Endorse the Enveloper to release resources if is needed.

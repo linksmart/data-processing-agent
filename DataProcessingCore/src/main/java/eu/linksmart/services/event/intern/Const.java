@@ -23,7 +23,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     public static final String EVENT_IN_TOPIC_CONF_PATH = "api_events_mqtt_topic_incoming";
     public static final String EVENTS_IN_BROKER_CONF_PATH ="api_events_mqtt_broker_incoming";
 
-    public static final String LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH = "core_monitoring_heartbeat_every_milliseconds";
+    public static final String LOG_HEARTBEAT_TIME_CONF_PATH = "core_monitoring_heartbeat_every_milliseconds";
 
     public static final String PERSISTENT_DATA_FILE = "cep_init_bootstrapping_files";
 
@@ -55,4 +55,6 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     public static final String SPRING_MANAGED_FEATURES = "spring_managed_configuration_features";
 
     public static final String REST_API_EXTENSION = "rest_api_extensions";
+    String AGENT_DESCRIPTION = "agent_description";
+    String REGISTRATION_TOPIC = "registration_topic";
 }

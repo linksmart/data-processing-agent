@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 
                 publisher = new HTTPPublisher(query);
             }
-            query.setLastOutput(enveloper.pack(Double.NaN,new Date(),DynamicConst.getId(),query.getID(),"BootstrapMessage"));
+            query.setLastOutput(enveloper.pack(Double.NaN,new Date(),DynamicConst.getId(),query.getID(),"BootstrapMessage",query.getName()));
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
@@ -61,7 +61,8 @@ import java.util.stream.Collectors;
                         eventMap.get(eventMap.keySet().toArray()[0]),
                         new Date(), DynamicConst.getId(),
                         query.getID(),
-                        eventMap.keySet().toArray()[0].toString()
+                        eventMap.keySet().toArray()[0].toString(),
+                        query.getName()
                 ));
                 // if the eventMap is only one then is sent as one event
                 try {
@@ -77,7 +78,8 @@ import java.util.stream.Collectors;
                                 new Date(),
                                 DynamicConst.getId(),
                                 query.getID(),
-                                "Map"
+                                "Map",
+                                query.getName()
                         )
                 );
 
@@ -96,7 +98,8 @@ import java.util.stream.Collectors;
                                     new Date(),
                                     DynamicConst.getId(),
                                     query.getID(),
-                                    "Map"
+                                    "Map",
+                                    query.getName()
                             )
                     );
                     // if the aggregation option is off; each value of the map is send as an independent event

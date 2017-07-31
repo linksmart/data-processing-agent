@@ -321,7 +321,7 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
     }
 
     @Override
-    public SerializationFactory getSerializationFacotry() {
+    public SerializationFactory getSerializationFactory() {
         return new DefaultSerializationFactory();
     }
 

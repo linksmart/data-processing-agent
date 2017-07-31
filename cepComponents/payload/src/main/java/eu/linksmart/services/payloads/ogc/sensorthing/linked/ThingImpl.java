@@ -185,4 +185,10 @@ public class ThingImpl extends CommonControlInfoDescriptionImpl implements Thing
 			this.locations.add(locations);
 	}
 
+	@Override
+	public void removeDatastream(Object id) {
+		datastreams.remove(datastreams.stream().filter(d->d.getId().equals(id)).findAny().orElse(null));
+
+	}
+
 }

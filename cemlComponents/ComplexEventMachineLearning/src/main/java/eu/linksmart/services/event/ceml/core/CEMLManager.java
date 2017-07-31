@@ -198,6 +198,7 @@ public class CEMLManager implements CEMLRequest {
                 if (auxiliaryStatements != null)
                     for (Statement statement : auxiliaryStatements) {
                         statement.setCEHandler("");
+                        statement.toRegister(false);
                         statement.setName("AuxiliaryStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
                         statement.setId("AS[" + String.valueOf(statementsCounter[0]) + "]:" + name);
                         statement.setStatement(statement.getStatement().replace("<id>",name));

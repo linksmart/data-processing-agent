@@ -54,6 +54,7 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
             throw new UnknownUntraceableException(e.getMessage(),e);
         }
 
+        toRegister(false);
         return this;
 
     }

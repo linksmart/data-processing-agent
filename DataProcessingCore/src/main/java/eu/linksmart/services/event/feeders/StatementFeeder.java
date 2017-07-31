@@ -3,6 +3,7 @@ package eu.linksmart.services.event.feeders;
 
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.event.core.RegistrationService;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
@@ -214,9 +215,10 @@ public class StatementFeeder implements Feeder<Statement> {
                         result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 400, "Bad Request", "The remove statement with id "+result.getHeadResource().getID()+" does not exist"));
                     else
                         result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 500, "Internal Server Error", dfw.getName()+": Oops we have a problem"));
+                }else {
+                    loggerService.info("Statement " + result.getHeadResource().getID() + " was successful");
+                    result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getID(), 201, "Created", "Statement " + result.getHeadResource().getID() + " was successful"));
                 }
-                loggerService.info("Statement " + result.getHeadResource().getID() + " was successful");
-                result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getID(), 201, "Created", "Statement " + result.getHeadResource().getID() + " was successful"));
             } else {
 
                 if (result.getResponses().isEmpty() && org.getStateLifecycle() != null && !org.getStateLifecycle().equals(result.getHeadResource().getStateLifecycle())) {
@@ -287,7 +289,7 @@ public class StatementFeeder implements Feeder<Statement> {
             return addNewStatement(result.getHeadResource(), id,cepEngine,result);
         return result;
     }
-    public static MultiResourceResponses<Statement>  addNewStatement(/*@NotNull*/ Statement statement, String orgID, String cepEngine,MultiResourceResponses<Statement> result){
+    public static MultiResourceResponses<Statement>  addNewStatement(/*@NotNull*/ Statement statement, String orgID, String cepEngine,MultiResourceResponses<Statement> result ){
         GeneralRequestResponse error;
         if(result==null){
             result = new MultiResourceResponses<>();

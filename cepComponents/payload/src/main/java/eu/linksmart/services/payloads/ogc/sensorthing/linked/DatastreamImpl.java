@@ -77,6 +77,7 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
     @JsonIgnore
     protected Polygon observedArea;
 
+
     public DatastreamImpl()
     {
         // perform common initialization tasks
@@ -129,8 +130,9 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
     public List<Observation> getObservations() {
         return observations;
     }
+
     @Override
-    public void SetObservations(List<Observation> observation) {
+    public void setObservations(List<Observation> observation) {
         if(observations== null)
             observations=new ArrayList<>();
         observations = (observation);

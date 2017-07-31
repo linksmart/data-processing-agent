@@ -229,6 +229,18 @@ public interface Statement extends JsonSerializable {
     /***
      *
      *
+     * @param registrable if the statement should or should not be register outside agent
+     * */
+    void toRegister(boolean registrable);
+    /***
+     *
+     *
+     * @return if the statement should be register outside agent
+     * */
+    boolean isRegistrable();
+    /***
+     *
+     *
      * @return if the output of the statement are REST endpoints instead of MQTT topics
      * */
     public boolean isRESTOutput();

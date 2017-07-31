@@ -83,9 +83,10 @@ public class DefaultMQTTPublisher implements Publisher {
         if(outputs==null ||outputs.isEmpty()){
             String aux= Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
             if(aux == null)
-                aux = "/outgoing/";
-
-            outputs = Arrays.asList(aux + id+"/"+agentID);
+                aux = "LS/LA/"+agentID+"/OGC/1.0/Datastreams/";
+            else
+                aux.replace("<id>",agentID);
+            outputs = Arrays.asList(aux + id+"/");
         }
     }
 

@@ -220,7 +220,7 @@ public interface Datastream extends CommonControlInfoDescription, ObservationsNa
      * */
     @JsonPropertyDescription("A Datastream has zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
     @JsonSetter("observations")
-    void SetObservations(List<Observation> observation);
+    void setObservations(List<Observation> observation);
     /**
      * Gets the sensor as a Sensor {@link Sensor}.
      * The Observations in a Datastream are performed by one-and-only-one Sensor. One Sensor MAY produce zero-to-many Observations in different Datastreams.

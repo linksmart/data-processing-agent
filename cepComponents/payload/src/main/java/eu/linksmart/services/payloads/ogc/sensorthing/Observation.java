@@ -5,17 +5,21 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.sun.xml.internal.ws.config.metro.dev.FeatureReader;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateSerializer;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.DatastreamNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.FeatureOfInterestNavigationLink;
+import eu.linksmart.services.utils.function.Utils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 /*
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
  *
@@ -201,7 +205,53 @@ public interface Observation extends EventEnvelope, CommonControlInfo, FeatureOf
     @JsonSetter("datastream")
     @JsonPropertyDescription("A Datastream can have zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
     void setDatastream(Datastream datastream);
+    static Observation factory(Object event, String resultType, String StreamID, String sensorID, String name) {
+        return factory(event,resultType,sensorID,sensorID,(new Date()).getTime(), name);
 
+    }
+    static Observation factory(Object event, String resultType, String StreamID, String sensorID, long time, String name) {
+        // Construct Sensor and Thing with the the Agent id.
+        Sensor sen = new SensorImpl();
+        sen.setId(sensorID);
+
+        Thing th = new ThingImpl();
+        th.setId(sensorID);
+
+        // construct the a Datastream with the Statement Id
+        Datastream ds = new DatastreamImpl();
+        ds.setId(StreamID);
+        ds.setSensor(sen);
+
+        // add related objects
+        ds.setSensor(sen);
+        ds.setThing(th);
+
+        // construct feature of interest with Id made by the hash of the name of the statement
+        FeatureOfInterest fi = new FeatureOfInterestImpl();
+        fi.setId(Utils.hashIt(name));
+        fi.setDescription(resultType);
+
+
+
+        // construct Observation with random ID
+        Observation ob = new ObservationImpl();
+        ob.setId(UUID.randomUUID());
+        ob.setDatastream(ds);
+        ob.setPhenomenonTime(new Date());
+        ob.setFeatureOfInterest(fi);
+        ob.setDatastream(ds);
+        ob.setResult(event);
+        ob.setFeatureOfInterest(null);
+        ob.setDate(new Date(time));
+        // add related objects
+        fi.addObservations(ob);
+
+        ArrayList<Observation> obs = (new ArrayList<>());
+        obs.add(ob);
+        ds.setObservations(obs);
+
+        return ob;
+    }
 
 
 

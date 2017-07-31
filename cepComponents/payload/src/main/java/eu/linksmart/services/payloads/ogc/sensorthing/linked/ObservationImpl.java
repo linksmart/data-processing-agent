@@ -119,8 +119,10 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     }
     @Override
     public void setFeatureOfInterest(FeatureOfInterest featureOfInterest) {
-        this.featureOfInterest = featureOfInterest;
-        this.featureOfInterest.addObservations(this);
+        if(featureOfInterest!=null) {
+            this.featureOfInterest = featureOfInterest;
+            this.featureOfInterest.addObservations(this);
+        }
     }
 
     @Override
@@ -182,7 +184,7 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     }
 
     @Override
-    public SerializationFactory getSerializationFacotry() {
+    public SerializationFactory getSerializationFactory() {
         return new DefaultSerializationFactory();
     }
 

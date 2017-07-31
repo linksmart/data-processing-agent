@@ -23,6 +23,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 import eu.linksmart.services.payloads.ogc.sensorthing.Sensor;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CCIEncodingImpl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,7 +65,7 @@ public class SensorImpl extends CCIEncodingImpl implements Sensor {
      * languages.
      */
     @JsonIgnore
-    protected String metadata;
+    protected Object metadata;
 
 
 
@@ -105,7 +106,7 @@ public class SensorImpl extends CCIEncodingImpl implements Sensor {
      *         languages.
      */
     @Override
-    public String getMetadata()
+    public Object getMetadata()
     {
         return metadata;
     }
@@ -119,9 +120,18 @@ public class SensorImpl extends CCIEncodingImpl implements Sensor {
      *            changes to SensorML or to support other description languages.
      */
     @Override
-    public void setMetadata(String metadata)
+    public void setMetadata(Object metadata)
     {
         this.metadata = metadata;
+    }
+
+    @Override
+    public void addDatastream(Datastream datastream) {
+        if(datastreams== null)
+            datastreams = new ArrayList<>();
+        if(!datastreams.contains(datastream)){
+            datastreams.add(datastream);
+        }
     }
 
 

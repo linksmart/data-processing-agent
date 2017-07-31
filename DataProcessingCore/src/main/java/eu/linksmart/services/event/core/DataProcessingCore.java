@@ -12,13 +12,13 @@ import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.connectors.RestInit;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.api.event.types.impl.BootstrappingBean;
+import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -68,12 +68,12 @@ public class DataProcessingCore {
         while (active){
 
             active = mqtt.isUp();
-
+            RegistrationService.getReference().startTimer();
             if(active) {
                 loggerService.info("The Agent with ID "+DynamicConst.getId()+" is alive");
                 int hb = 5000;
                 try {
-                     hb=conf.getInt(Const.LOG_DEBUG_HEARTBEAT_TIME_CONF_PATH);
+                     hb=conf.getInt(Const.LOG_HEARTBEAT_TIME_CONF_PATH);
 
                 } catch (Exception ignored) {
 
@@ -127,8 +127,18 @@ public class DataProcessingCore {
         initForceLoading();
         boolean success = initFeeders();
         bootstrapping();
-
+        registrationSetUp();
         return success;
+    }
+
+    private static void registrationSetUp() {
+        RegistrationService.getReference().setPublisher(
+                new DefaultMQTTPublisher(
+                        DynamicConst.getId(),
+                        DynamicConst.getId(),
+                        new String[]{conf.getString(Const.REGISTRATION_TOPIC)},
+                        new String[]{"control"}
+                        ));
     }
 
     private static void bootstrapping() {

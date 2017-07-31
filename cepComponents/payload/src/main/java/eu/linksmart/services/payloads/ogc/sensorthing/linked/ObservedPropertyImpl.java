@@ -43,8 +43,6 @@ public class ObservedPropertyImpl extends CommonControlInfoDescriptionImpl imple
     private List<Datastream> datastreams;
     @JsonIgnore
     private String definition;
-    @JsonIgnore
-    protected String name;
 
     @Override
     public List<Datastream> getDatastreams() {
@@ -69,14 +67,6 @@ public class ObservedPropertyImpl extends CommonControlInfoDescriptionImpl imple
     public void setDefinition(String uri)
     {
         this.definition = uri;
-    }
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 
 }

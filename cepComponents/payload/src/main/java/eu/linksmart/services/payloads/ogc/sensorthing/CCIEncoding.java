@@ -16,4 +16,5 @@ public interface CCIEncoding extends  CommonControlInfoDescription{
     @JsonPropertyDescription("TBD.")
     @JsonSetter(value = "encodingType")
     void setEncodingType(String encodingType);
+
 }

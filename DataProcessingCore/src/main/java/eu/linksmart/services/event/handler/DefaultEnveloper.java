@@ -1,8 +1,8 @@
 package eu.linksmart.services.event.handler;
 
-import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.Enveloper;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 
 import java.util.Date;
 
@@ -12,13 +12,13 @@ import java.util.Date;
 public class DefaultEnveloper implements Enveloper  {
 
     @Override
-    public <IDType , ValueType > EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description) {
+    public <IDType , ValueType > EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description, String name) {
         if (payload instanceof EventEnvelope) {
             return (EventEnvelope) payload;
 
         }else {
 
-            return Observation.factory(payload, description, idProperty.toString(), id.toString());
+            return Observation.factory(payload, description, idProperty.toString(), id.toString(), name);
         }
     }
 

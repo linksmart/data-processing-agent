@@ -26,20 +26,23 @@ public class Interval {
         this.end = end;
     }
 
-    protected Date start;
-    protected Date end;
+    protected Date start = new Date();
+    protected Date end=null;
     private static StdDateFormat formatter = new StdDateFormat();
     public String format(){
+        if(end==null)
+            return formatter.format(start);
         return formatter.format(start)+"/"+formatter.format(end);
     }
     public static Interval parse(String interval) throws IOException {
         Interval inter = new Interval();
         String[] strings = interval.split("/");
-        if(strings.length!= 2) {
+        if(strings.length== 0 || strings.length> 2) {
             throw new IOException("Expecting start and end of a interval");
         }
         inter.setStart(DatatypeConverter.parseDateTime(strings[0]).getTime());
-        inter.setEnd(DatatypeConverter.parseDateTime(strings[0]).getTime());
+        if(strings.length==2)
+            inter.setEnd(DatatypeConverter.parseDateTime(strings[1]).getTime());
         return inter;
     }
 }

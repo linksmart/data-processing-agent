@@ -1,33 +1,21 @@
 package eu.linksmart.services.event.connectors;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.deser.std.MapEntryDeserializer;
-import com.fasterxml.jackson.databind.type.MapType;
 import eu.almanac.event.datafusion.utils.generic.Component;
-import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.components.IncomingConnector;
-import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.services.event.feeders.BootstrappingBeanFeeder;
 import eu.linksmart.services.event.feeders.EventFeeder;
-import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 19.06.2017 a researcher of Fraunhofer FIT.
@@ -37,17 +25,17 @@ public class BigFileConnector extends Component implements IncomingConnector {
     static protected Configurator conf =  Configurator.getDefaultConfig();
     final Class<? extends EventEnvelope> type;
     protected List<String> filePaths = new ArrayList<>();
-    final protected Deserializer deserializer ;
+    protected Deserializer deserializer ;
 
     public BigFileConnector(Class<? extends EventEnvelope> type, String... filePaths) throws UntraceableException, TraceableException {
         super(FileConnector.class.getSimpleName(), "Feeder that inserts statements and Events at loading time", Feeder.class.getSimpleName());
 
         this.type = type;
         try {
-            this.deserializer = type.newInstance().getSerializationFacotry().getDeserializer();
+            this.deserializer = type.newInstance().getSerializationFactory().getDeserializer();
         } catch (InstantiationException | IllegalAccessException e) {
-            loggerService.error(e.getMessage(),e);
-            throw new InternalException(DynamicConst.getId(),type.getCanonicalName(),e.getMessage());
+            loggerService.warn("The type "+type.getCanonicalName()+" doesn't provide a SerializationFactory. Therefore, a generic one had been started!");
+            this.deserializer = new DefaultDeserializer();
         }
         for(String f: filePaths)
             if(f!=null&&!f.equals(""))

@@ -100,6 +100,7 @@ public class StatementInstance implements Statement {
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
     @JsonProperty("isRestOutput")
     private boolean restOutput;
+    private boolean toRegister = true;
 
     public EventEnvelope getLastOutput() {
         return lastOutput;
@@ -289,6 +290,16 @@ public class StatementInstance implements Statement {
 
     public void setTargetAgents(List<String> targetAgents) {
         this.targetAgents = targetAgents;
+    }
+
+    @Override
+    public void toRegister(boolean registrable) {
+        toRegister=registrable;
+    }
+
+    @Override
+    public boolean isRegistrable() {
+        return toRegister;
     }
 
     @Override

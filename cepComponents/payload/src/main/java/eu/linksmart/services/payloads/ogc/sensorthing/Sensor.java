@@ -76,7 +76,7 @@ public interface Sensor extends CCIEncoding, DatastreamsNavigationLink{
      */
     @JsonGetter(value = "metadata")
     @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
-    String getMetadata();
+    Object getMetadata();
 
     /**
      * Sets the metadata describing this {@link Sensor} instance.
@@ -88,5 +88,8 @@ public interface Sensor extends CCIEncoding, DatastreamsNavigationLink{
      */
     @JsonSetter(value = "metadata")
     @JsonPropertyDescription("The detailed description of the Sensor or system. The metadata type is defined by encodingType.")
-    void setMetadata(String metadata);
+    void setMetadata(Object metadata);
+
+    void addDatastream(Datastream datastream);
+
 }

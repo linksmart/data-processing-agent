@@ -19,6 +19,18 @@ public abstract class CommonControlInfoDescriptionImpl extends CommonControlInfo
     @JsonIgnore
     protected String description;
 
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @JsonIgnore
+    protected String name;
+
     public CommonControlInfoDescriptionImpl(String description) {
         this.description = description;
     }

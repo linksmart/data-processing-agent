@@ -65,25 +65,7 @@ public interface ObservedProperty extends CommonControlInfoDescription, Datastre
     @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
     @JsonSetter("definition")
     void setDefinition(String uri);
-    /**
-     * Gets the name of the observed property.
-     * A property provides a label for ObservedProperty entity, commonly a descriptive name.
-     *
-     * @return the descriptive name as string
-     */
-    @JsonPropertyDescription("A property provides a label for ObservedProperty entity, commonly a descriptive name.")
-    @JsonGetter(value = "name")
-    String getName();
 
-    /**
-     * Sets the name of the observed property.
-     * A property provides a label for ObservedProperty entity, commonly a descriptive name.
-     *
-     * @param name descriptive name as string
-     */
-    @JsonPropertyDescription("The URI of the observedProperty/phenomenon.")
-    @JsonSetter(value = "name")
-    void setName(String name);
     /**
      * Gets the related Datastreams of this Observed property .
      *

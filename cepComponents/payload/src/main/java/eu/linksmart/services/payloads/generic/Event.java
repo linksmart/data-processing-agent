@@ -90,7 +90,7 @@ public class Event<IDType, ValueType> implements EventEnvelope<IDType,ValueType 
     }
 
     @Override
-    public SerializationFactory getSerializationFacotry() {
+    public SerializationFactory getSerializationFactory() {
         return new DefaultSerializationFactory();
     }
 
