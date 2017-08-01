@@ -6,6 +6,7 @@ import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.handler.DefaultEnveloper;
+import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
@@ -38,20 +39,35 @@ public class RegistrationService {
     private Thing thing = new ThingImpl();
     private Logger loggerService = Utils.initLoggingConf(RegistrationService.class);
     private Timer timer;
+    private boolean changed=true;
     private static RegistrationService registrationService = new RegistrationService();
 
-    public RegistrationService() {
+    private RegistrationService() {
         timer = new Timer();
+        constructBaseThing();
+        try {
+            publisher = new DefaultMQTTPublisher(
+                    DynamicConst.getId(),
+                    DynamicConst.getId(),
+                    new String[]{conf.getString(Const.REGISTRATION_TOPIC).replace("<id>",DynamicConst.getId())},
+                    new String[]{"control"},
+                    serializer.toString(thing),
+                    conf.getString(Const.REGISTRATION_TOPIC_WILL).replace("<id>",DynamicConst.getId())
+                    );
+        } catch (IOException e) {
+            loggerService.error(e.getMessage(),e);
+        }
+
 
     }
 
 
     static public RegistrationService getReference(){
 
+        if(registrationService==null)
+            registrationService = new RegistrationService();
+
         return registrationService;
-    }
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
     }
 
     public void registerStatement(Statement statement){
@@ -76,14 +92,17 @@ public class RegistrationService {
 
         thing.setDatastreams(new ArrayList<>());
 
-        StatementFeeder.getStatements().getResources().values().stream().filter(Statement::isRegistrable).forEach(this::addDatastream);
 
-        try {
-            publisher.publish(serializer.serialize(thing));
-        } catch (IOException e) {
-           loggerService.error(e.getMessage(),e);
+        StatementFeeder.getStatements().getResources().values().stream().filter(Statement::isRegistrable).forEach(this::addDatastream);
+        if(changed) {
+            try {
+                publisher.publish(serializer.serialize(thing));
+            } catch (IOException e) {
+                loggerService.error(e.getMessage(), e);
+            }
+            loggerService.info("Registration info sent!");
+            changed =false;
         }
-        loggerService.info("Registration info sent!");
 
     }
     private void constructBaseThing(){
@@ -93,6 +112,9 @@ public class RegistrationService {
         thing.setLocations(null);
     }
     private void addDatastream( Statement result){
+        if(thing.getDatastreams()!=null && thing.getDatastreams().stream().anyMatch(d->d.getId().equals(result.getID())))
+            return;
+        changed = true;
         Datastream datastream = new DatastreamImpl();
         Sensor sensor = new SensorImpl();
         sensor.setId(result.getID());

@@ -22,6 +22,8 @@ public class StaticBrokerService extends BrokerService implements Broker {
     static public StaticBrokerService getBrokerService(UUID uuid, String alias, String will, String willTopic) throws MalformedURLException, MqttException {
 
         BrokerConfiguration bConf = new BrokerConfiguration(alias);
+        bConf.setWill(will);
+        bConf.setWillTopic(willTopic);
         loggerService.info("Searching for proper broker...");
         boolean optimizeConnections =(Configurator.getDefaultConfig().containsKeyAnywhere(BrokerServiceConst.MULTI_CONNECTION) && !Configurator.getDefaultConfig().getBoolean(BrokerServiceConst.MULTI_CONNECTION) || !Configurator.getDefaultConfig().containsKeyAnywhere(BrokerServiceConst.MULTI_CONNECTION));
         if (!Broker.isBrokerURL(bConf.getURL()))

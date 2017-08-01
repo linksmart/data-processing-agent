@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.core;
 
+import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.connectors.BigFileConnector;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
@@ -127,18 +128,9 @@ public class DataProcessingCore {
         initForceLoading();
         boolean success = initFeeders();
         bootstrapping();
-        registrationSetUp();
+        // force the loading of the RegistrationService
+        RegistrationService.getReference();
         return success;
-    }
-
-    private static void registrationSetUp() {
-        RegistrationService.getReference().setPublisher(
-                new DefaultMQTTPublisher(
-                        DynamicConst.getId(),
-                        DynamicConst.getId(),
-                        new String[]{conf.getString(Const.REGISTRATION_TOPIC)},
-                        new String[]{"control"}
-                        ));
     }
 
     private static void bootstrapping() {

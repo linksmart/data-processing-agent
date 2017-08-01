@@ -24,6 +24,8 @@ public class DefaultMQTTPublisher implements Publisher {
     private List<String> scopes;
     private String id;
     private String agentID;
+
+    private String will=null;
     private Map<String, StaticBroker> brokers = new Hashtable<>();
     private transient Logger loggerService = Utils.initLoggingConf(this.getClass());
     private transient Configurator conf = Configurator.getDefaultConfig();
@@ -31,6 +33,8 @@ public class DefaultMQTTPublisher implements Publisher {
      * Location are the brokers unknown with an alias by the Handlers
      * */
     public final static Set<String> knownInstances= new HashSet<>();
+    private String willTopic;
+
     public static boolean addKnownLocations(String statement) throws StatementException {
         // todo need to define how we add new locations into the Agent configuration
        throw new NotImplementedException();
@@ -51,24 +55,25 @@ public class DefaultMQTTPublisher implements Publisher {
 
     }
     public DefaultMQTTPublisher(Statement statement, String agentID) {
-        outputs = statement.getOutput()!=null ? Arrays.asList(statement.getOutput()) : new ArrayList<>();
-        scopes =  statement.getScope()!=null  ? Arrays.asList(statement.getScope())  : new ArrayList<>();
-        id = statement.getID();
-        this.agentID =agentID;
 
-        try {
-            initScopes();
-            initOutputs();
-        } catch (MalformedURLException | RemoteException | StatementException e) {
-            loggerService.error(e.getMessage(), e.getCause());
-        }
+        init(id,agentID,statement.getOutput(),statement.getScope(),null, null);
 
     }
     public DefaultMQTTPublisher(String id, String agentID,String[] outputs, String[] scopes){
+        init(id,agentID,outputs,scopes,null,null);
+
+    }
+    public DefaultMQTTPublisher(String id, String agentID,String[] outputs, String[] scopes,String will, String willTopic){
+        init(id,agentID,outputs,scopes,will, willTopic);
+
+    }
+    private void init(String id, String agentID,String[] outputs, String[] scopes, String will, String willTopic){
         this.outputs =  Arrays.asList(outputs);
         this.scopes =  Arrays.asList(scopes);
         this.id = id;
         this.agentID =agentID;
+        this.will = will;
+        this.willTopic = willTopic;
 
         try {
             initScopes();
@@ -76,7 +81,6 @@ public class DefaultMQTTPublisher implements Publisher {
         } catch (MalformedURLException | RemoteException | StatementException e) {
             loggerService.error(e.getMessage(), e.getCause());
         }
-
     }
 
     private void initOutputs(){
@@ -116,7 +120,7 @@ public class DefaultMQTTPublisher implements Publisher {
                 if (!knownInstances.contains(scope.toLowerCase()))
                     throw new StatementException( id,"Statement", "The selected scope (" + scopes.get(0) + ") is unknown");
 
-                brokers.put(scope, new StaticBroker(scope,"Publisher with id: "+id+" of agent: "+ agentID + " is dead","will/"));
+                brokers.put(scope, new StaticBroker(scope,will,willTopic));
             }
 
         } catch (MqttException e) {
@@ -197,4 +201,6 @@ public class DefaultMQTTPublisher implements Publisher {
             }
         });
     }
+
+
 }

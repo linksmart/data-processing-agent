@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Created by José Ángel Carvajal on 23.09.2016 a researcher of Fraunhofer FIT.
  */
 public class BrokerConfiguration {
-    // id of the broker
+    // id of the configuration
     protected String id = UUID.randomUUID().toString();
     // alias (human readable) name of the broker
     protected String alias = "local";
@@ -54,9 +54,9 @@ public class BrokerConfiguration {
     // define if the broker must remember the connection state
     private boolean cleanSession = false;
     // will (testament) of the client left in the broker in case the connection to it is completely lost
-    protected String will = "adios from client id "+id+" aka "+alias;
+    protected String will = null;
     // topic of the will (see above)
-    protected String willTopic = "adios";
+    protected String willTopic = null;
     // user for connecting to the broker
     private String user = null;
     // password of the user (above) for connecting to the broker
@@ -373,6 +373,8 @@ public class BrokerConfiguration {
              //   "\"alias\":\""+alias+"\"," +
                 "\"hostname\":\""+hostname+"\"," +
                 "\"securePort\":\""+securePort+"\"," +
+                "\"will\":\""+will +"\","+
+                "\"willTopic\":\""+willTopic +"\","+
                 "\"port\":\""+port+"\"," +
                 "\"filePersistence\":\""+filePersistence+"\"," +
                 "\"subQoS\":\""+subQoS+"\"," +
