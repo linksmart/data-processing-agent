@@ -6,7 +6,7 @@
     <parent>
         <groupId>eu.linksmart.services.events.gpl</groupId>
         <artifactId>cepComponents</artifactId>
-        <version>1.5.0</version>
+        <version>1.6.0-SNAPSHOT</version>
     </parent>
     <artifactId>wrapper.esper</artifactId>
     <description>Esper Engine Wrapper - EsperWrapper implements the DataFusionWrapper for Esper CEP Engine </description>
