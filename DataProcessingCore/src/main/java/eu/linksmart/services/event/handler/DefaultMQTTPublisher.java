@@ -54,6 +54,12 @@ public class DefaultMQTTPublisher implements Publisher {
         knownInstances.addAll(alias.stream().map(Object::toString).collect(Collectors.toList()));
 
     }
+
+    public DefaultMQTTPublisher(Statement statement, String agentID,String will, String willTopic) {
+
+        init(id,agentID,statement.getOutput(),statement.getScope(),will, willTopic);
+
+    }
     public DefaultMQTTPublisher(Statement statement, String agentID) {
 
         init(id,agentID,statement.getOutput(),statement.getScope(),null, null);
@@ -68,7 +74,7 @@ public class DefaultMQTTPublisher implements Publisher {
 
     }
     private void init(String id, String agentID,String[] outputs, String[] scopes, String will, String willTopic){
-        this.outputs =  Arrays.asList(outputs);
+        this.outputs = outputs!=null? Arrays.asList(outputs):null;
         this.scopes =  Arrays.asList(scopes);
         this.id = id;
         this.agentID =agentID;

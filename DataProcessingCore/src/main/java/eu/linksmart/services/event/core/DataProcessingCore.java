@@ -98,7 +98,7 @@ public class DataProcessingCore {
         conf = Configurator.getDefaultConfig();
 
         DynamicConst.setWill(RegistrationService.getReference().getThingString());
-        DynamicConst.setWillTopic(conf.getString(Const.REGISTRATION_TOPIC).replace("<id>",DynamicConst.getId()));
+        DynamicConst.setWillTopic(conf.getString(Const.REGISTRATION_TOPIC_WILL).replace("<id>",DynamicConst.getId()));
         loggerService = Utils.initLoggingConf(DataProcessingCore.class);
         if(args != null) {
             loggerService.info("Loading configuration form file " + args);

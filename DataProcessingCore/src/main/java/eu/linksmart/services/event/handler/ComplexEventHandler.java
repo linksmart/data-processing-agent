@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
             serializer = new DefaultSerializer();
             enveloper = new DefaultEnveloper();
             if(!query.isRESTOutput()) {
-                publisher = new DefaultMQTTPublisher(query,DynamicConst.getId());
+                publisher = new DefaultMQTTPublisher(query,DynamicConst.getId(),DynamicConst.getWill(),DynamicConst.getWillTopic());
                 loggerService.info("The Agent(ID:" + DynamicConst.getId() + ") generating events for statement ID "+query.getID()+" in the broker " + query.getScope(0) + "  URL: " + (new BrokerConfiguration(query.getID()).getURL()));
                 loggerService.info("The Agent(ID:"+DynamicConst.getId()+") generating event in the topic(s): " + publisher.getOutputs().stream().collect(Collectors.joining(",")));
             }else {

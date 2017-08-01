@@ -1,3 +1,18 @@
+01.08.2017 - 1.5.0 RELEASE:
+    Features:
+        * Now events from files can be loaded one by one
+        * add the possibility to use different types of payloads of the event files
+        * Full implementation of OGC SensorThings
+        * Now the agent send registration messages to the broker
+    DEV:
+        * The service now has docker files and a docker compose to start with a broker.
+    FIX:
+        * CEML REST API start again
+        * The all learning metrics were 'More' metric
+        * the Core order had bing change CEPengine->Types->Feeders->Extensions->Bootstrapping
+        * add apache common math to fix issuse in AutoregssiveANN
+        * Fix package of name of Tools form service to services
+
 13.04.2017 - 1.4.0 RELEASE:
     Features:
         * Adding Raspberry PI nd4j distribution
