@@ -3,6 +3,7 @@ package eu.linksmart.services.event.connectors;
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.services.event.connectors.Observers.IncomingMqttObserver;
+import eu.linksmart.services.event.intern.DynamicConst;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
@@ -20,23 +21,22 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
 
     static protected MqttIncomingConnectorService me = null;
 
-       static public MqttIncomingConnectorService getReference(String will, String willTopic) throws MalformedURLException, MqttException {
+       static public MqttIncomingConnectorService getReference() throws MalformedURLException, MqttException {
         if(me == null)
-            me= new MqttIncomingConnectorService(will, willTopic);
+            me= new MqttIncomingConnectorService();
         return me;
     }
     protected transient Logger loggerService = Utils.initLoggingConf(this.getClass());
     protected transient Configurator conf =  Configurator.getDefaultConfig();
     protected List<StaticBroker> brokers = new ArrayList<>();
-    final protected String will, willTopic;
 
-    protected MqttIncomingConnectorService(String will, String willTopic) throws MalformedURLException, MqttException {
-        this.will =will;
-        this.willTopic =willTopic;
+
+    protected MqttIncomingConnectorService() throws MalformedURLException, MqttException {
+
     }
     public void addAddListener(String alias, String topic, IncomingMqttObserver listener) throws InternalException{
         try {
-            StaticBroker broker = new StaticBroker(alias, will,willTopic);
+            StaticBroker broker = new StaticBroker(alias, DynamicConst.getWill(),DynamicConst.getWillTopic());
             listener.setBrokerService(broker);
             broker.addListener(topic, listener);
             brokers.add(broker);

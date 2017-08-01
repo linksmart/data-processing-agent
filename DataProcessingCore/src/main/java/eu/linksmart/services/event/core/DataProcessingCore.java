@@ -97,6 +97,8 @@ public class DataProcessingCore {
             Configurator.getDefaultConfig().enableEnvironmentalVariables();
         conf = Configurator.getDefaultConfig();
 
+        DynamicConst.setWill(RegistrationService.getReference().getThingString());
+        DynamicConst.setWillTopic(conf.getString(Const.REGISTRATION_TOPIC).replace("<id>",DynamicConst.getId()));
         loggerService = Utils.initLoggingConf(DataProcessingCore.class);
         if(args != null) {
             loggerService.info("Loading configuration form file " + args);
@@ -112,8 +114,6 @@ public class DataProcessingCore {
             DynamicConst.setIsSet(true);
         else
             DynamicConst.setId(conf.getString(Const.ID_CONF_PATH));
-        DynamicConst.setWill(conf.getString(Const.WILL_MESSAGE).replace("<id>",DynamicConst.getId()));
-        DynamicConst.setWillTopic(conf.getString(Const.WILL_TOPIC)+"/"+DynamicConst.getId()+"/");
     }
 
     protected static synchronized boolean init(String args){
@@ -185,9 +185,7 @@ public class DataProcessingCore {
             Class.forName(EventFeeder.class.getCanonicalName());
             Class.forName(StatementFeeder.class.getCanonicalName());
             Class.forName(BootstrappingBean.class.getCanonicalName());
-            DynamicConst.setWillTopic(conf.getString(Const.WILL_TOPIC));
-            DynamicConst.setWill(conf.getString(Const.WILL_MESSAGE));
-            mqtt = MqttIncomingConnectorService.getReference(DynamicConst.getWill(),DynamicConst.getWillTopic());
+            mqtt = MqttIncomingConnectorService.getReference();
 
 
             if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))

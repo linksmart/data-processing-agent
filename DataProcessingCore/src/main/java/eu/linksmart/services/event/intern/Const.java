@@ -57,5 +57,5 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     public static final String REST_API_EXTENSION = "rest_api_extensions";
     String AGENT_DESCRIPTION = "agent_description";
     String REGISTRATION_TOPIC = "registration_topic";
-    String REGISTRATION_TOPIC_WILL = "registration_topic_will";
+    String REGISTRATION_TOPIC_WILL = "topic_will";
 }

@@ -36,6 +36,8 @@ public class RegistrationService {
     private Publisher publisher;
     private Serializer serializer= new DefaultSerializer();
     private Configurator conf = Configurator.getDefaultConfig();
+
+
     private Thing thing = new ThingImpl();
     private Logger loggerService = Utils.initLoggingConf(RegistrationService.class);
     private Timer timer;
@@ -45,18 +47,7 @@ public class RegistrationService {
     private RegistrationService() {
         timer = new Timer();
         constructBaseThing();
-        try {
-            publisher = new DefaultMQTTPublisher(
-                    DynamicConst.getId(),
-                    DynamicConst.getId(),
-                    new String[]{conf.getString(Const.REGISTRATION_TOPIC).replace("<id>",DynamicConst.getId())},
-                    new String[]{"control"},
-                    serializer.toString(thing),
-                    conf.getString(Const.REGISTRATION_TOPIC_WILL).replace("<id>",DynamicConst.getId())
-                    );
-        } catch (IOException e) {
-            loggerService.error(e.getMessage(),e);
-        }
+
 
 
     }
@@ -132,13 +123,23 @@ public class RegistrationService {
 
     }
 
-    public void startTimer(){
+    public void startTimer() {
+
+        publisher = new DefaultMQTTPublisher(
+                DynamicConst.getId(),
+                DynamicConst.getId(),
+                new String[]{conf.getString(Const.REGISTRATION_TOPIC).replace("<id>", DynamicConst.getId())+thing.getId()},
+                new String[]{"control"},
+                DynamicConst.getWill(),
+                DynamicConst.getWillTopic()
+
+        );
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 updateRegistration();
             }
-        },0, conf.getInt(Const.LOG_HEARTBEAT_TIME_CONF_PATH));
+        }, 0, conf.getInt(Const.LOG_HEARTBEAT_TIME_CONF_PATH));
 
     }
 
@@ -146,7 +147,17 @@ public class RegistrationService {
         timer.cancel();
 
     }
-
+    public Thing getThing() {
+        return thing;
+    }
+    public String getThingString() {
+        try {
+            return serializer.toString(thing);
+        } catch (IOException e) {
+            loggerService.error(e.getMessage(),e);
+        }
+        return null;
+    }
 
 
 
