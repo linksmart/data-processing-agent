@@ -2,6 +2,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.testing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.referenced.*;
 import org.geojson.LngLatAlt;
@@ -36,6 +37,7 @@ public class Utils {
     public static void testParsing(String json, Class theClass, Object toTest) {
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         Object foi1 = toTest;
         String strFoi1 = "1";
         try {

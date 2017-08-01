@@ -63,7 +63,10 @@ public class UtilsLinked {
         observation.setDatastream(constructDatastream(false));
         observation.getDatastream().setId(3);
         observation.getDatastream().addObservation(observation);
-        observation.getDatastream();
+        observation.getDatastream().setSensor(constructSensor(false));
+        observation.getDatastream().setThing(constructThing(false));
+        observation.getDatastream().getThing().addLocation(constructLocation(false));
+        observation.getDatastream().getThing().addHistoricalLocation(constructHistoricalLocation(false));
 
         return observation;
 
@@ -132,12 +135,7 @@ public class UtilsLinked {
         }
         return historicalLocation;
 
-
     }
-
-
-
-
     public static Location constructLocation(boolean childObjects) {
         Location location = new Location();
         location.setId(1);
@@ -152,8 +150,6 @@ public class UtilsLinked {
 
     }
 
-
-
     public static Thing constructThing(boolean childObjects) {
         Thing thing = new Thing();
         thing.setId(1);
@@ -163,9 +159,7 @@ public class UtilsLinked {
         if(childObjects){
             //todo
         }
-
         return thing;
-
 
     }
 
