@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by José Ángel Carvajal on 01.09.2016 a researcher of Fraunhofer FIT.
@@ -37,7 +38,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     //End of code made for testing performance
 
     public IncomingMqttObserver(List<String> topics)  {
-        this.topics.addAll( topics);
+        this.topics.addAll( topics.stream().map(s -> s.replace("<id>",DynamicConst.getId())).collect(Collectors.toList()));
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE)) {
@@ -49,7 +50,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
         }
     }
     public IncomingMqttObserver(String topic)  {
-        topics.add(topic);
+        topics.add(topic.replace("<id>",DynamicConst.getId()));
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_OBSERVERS   )) {

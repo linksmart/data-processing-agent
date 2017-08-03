@@ -38,7 +38,7 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
         try {
             StaticBroker broker = new StaticBroker(alias, DynamicConst.getWill(),DynamicConst.getWillTopic());
             listener.setBrokerService(broker);
-            broker.addListener(topic, listener);
+            broker.addListener(topic.replace("<id>",DynamicConst.getId()), listener);
             brokers.add(broker);
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);

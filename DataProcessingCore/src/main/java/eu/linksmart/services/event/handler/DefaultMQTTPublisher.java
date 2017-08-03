@@ -57,7 +57,7 @@ public class DefaultMQTTPublisher implements Publisher {
 
     public DefaultMQTTPublisher(Statement statement, String agentID,String will, String willTopic) {
 
-        init(id,agentID,statement.getOutput(),statement.getScope(),will, willTopic);
+        init(statement.getID(),agentID,statement.getOutput(),statement.getScope(),will, willTopic);
 
     }
     public DefaultMQTTPublisher(Statement statement, String agentID) {
