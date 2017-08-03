@@ -20,7 +20,7 @@ public class EventMqttObserver extends IncomingMqttObserver {
     public EventMqttObserver(List<String> topics) {
         super(topics);
         loggerService.info("The Agent(ID:"+ DynamicConst.getId()+") with incoming events broker alias: "+conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH)+"  URL: " + (new BrokerConfiguration(conf.getString(Const.EVENTS_IN_BROKER_CONF_PATH)).getURL()));
-        loggerService.info("The Agent(ID:"+DynamicConst.getId()+") waiting for events from the topic(s): " + topics.stream().collect(Collectors.joining(",")));
+        loggerService.info("The Agent(ID:"+DynamicConst.getId()+") waiting for events from the topic(s): " + topics.stream().map(s -> s.replace("<id>",DynamicConst.getId())).collect(Collectors.joining(",")));
 
         if(conf.containsKeyAnywhere(Const.MONITOR_EVENTS))
             (new Timer()).schedule(eventReporter= new CounterTask(loggerService,conf.containsKeyAnywhere(Const.MONITOR_TOPICS) && conf.getBoolean(Const.MONITOR_TOPICS)), 0, conf.getInt(Const.MONITOR_EVENTS) *1000);

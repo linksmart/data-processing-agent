@@ -108,12 +108,14 @@ public class DataProcessingCore {
         }else
             loggerService.info("No configuration conf.cfg file in the class path or as argument at start. Only the defaults values are used");
         if(conf.isEnvironmentalVariablesEnabled())
-            return;loggerService.info("The environmental variables are loaded!");
+            loggerService.info("The environmental variables are loaded!");
         String idPath= conf.getString(Const.ID_CONF_PATH);
         if("*".equals(idPath))
             DynamicConst.setIsSet(true);
         else
             DynamicConst.setId(conf.getString(Const.ID_CONF_PATH));
+
+        conf.setProperty(Const.ID_CONF_PATH,DynamicConst.getId());
     }
 
     protected static synchronized boolean init(String args){

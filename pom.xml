@@ -50,8 +50,8 @@
     <properties>
         <!-- main version -->
         <ls.se.agents.version>1.6.0-SNAPSHOT</ls.se.agents.version>
-        <!-- LS GC version
-        <linksmart.gc.version>0.3.0-SNAPSHOT</linksmart.gc.version>-->
+        <!-- LS version -->
+        <linksmart.version>0.0.0-ALPHA</linksmart.version>
 
         <!-- dependencies versions -->
         <jackson.core.version>2.7.1</jackson.core.version>

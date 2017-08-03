@@ -185,6 +185,7 @@ public class BrokerService implements Observer, Broker {
         if(!mqttClient.isConnected())
             _connect();
 
+        topic = topic.replace("<id>",conf.getString("agent_id"));
         // create the topic and the publish suppose to solve the:
         // 106ed26f-74f8-4048-9035-cb9146e35c7c:67c62857-af3c-4aa0-9f28-3f4db6baf811: Timed out as no activity, keepAlive=60,000 lastOutboundActivity=1,446,124,817,035 lastInboundActivity=1,446,124,826,676 time=1,446,124,936,865 lastPing=1,446,124,784,576
         mqttClient.getTopic(topic).publish(payload,qos,retained);
@@ -310,7 +311,7 @@ public class BrokerService implements Observer, Broker {
     }
 
     private synchronized void subscribeAll() throws MqttException {
-
+        loggerService.info( "(re)subscribing to: "+ topics.stream().collect(Collectors.joining(",")));
         mqttClient.subscribe(topics.toArray(new String[topics.size()]), ArrayUtils.toPrimitive(qoss.toArray(new Integer[qoss.size()])));
 
     }
