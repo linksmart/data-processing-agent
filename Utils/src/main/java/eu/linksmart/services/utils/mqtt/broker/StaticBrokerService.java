@@ -121,10 +121,10 @@ public class StaticBrokerService extends BrokerService implements Broker {
 
     }
     protected static void remove( StaticBrokerService staticBrokerService) throws Exception {
-        if(brokerServices.get(staticBrokerService.getBrokerURL()) != staticBrokerService)
+        if(brokerServices.get(staticBrokerService.brokerConf.toString()) != staticBrokerService)
             throw new Exception("The BrokerService "+
-                    String.valueOf((Object)staticBrokerService.hashCode())+" is not the same as "+
-                    String.valueOf((Object) brokerServices.get(staticBrokerService.getBrokerURL()).hashCode())+ ". Therefore is not able to remove from the service pool"
+                    String.valueOf((Object)staticBrokerService.brokerConf.toString().hashCode())+" is not the same as "+
+                    String.valueOf((Object) brokerServices.get(staticBrokerService.brokerConf.toString()).hashCode())+ ". Therefore is not able to remove from the service pool"
         );
 
         brokerServices.remove(staticBrokerService.getBrokerURL());
