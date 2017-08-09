@@ -42,37 +42,39 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      * Some cases the some extra data of the event may be extracted from the topic/path of the event.
      * In this case, the topic/path can be provided so the underlying implementation extracts the needed data.
      *
+     * @param topic used to construct some properties of the event envelope
+     *
      * */
     @JsonIgnore
-    public void topicDataConstructor(String topic);
+    void topicDataConstructor(String topic);
     /**
      * returns the time of the event as date. The time semantic could be anything (e.g. time when the event happens).
      *
      * @return time as date
      * */
     @JsonIgnore
-    public Date getDate();
+    Date getDate();
     /**
      * returns date as string in an ISO 8601
      *
      * @return date as string
      * */
     @JsonIgnore
-    public String getIsoTimestamp();
+    String getIsoTimestamp();
     /**
      * returns the id as IDType (the semantic depends on the implementation)
      *
      * @return id  as IDType
      * */
     @JsonIgnore
-    public IDType getId();
+    IDType getId();
     /**
      * returns the id of the attribute as IDType (the semantic depends on the implementation)
      *
      * @return id of the attribute as IDType
      * */
     @JsonIgnore
-    public IDType getAttributeId();
+    IDType getAttributeId();
 
     /**
      * returns the value/measurement
@@ -80,35 +82,35 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      * @return value as ValueType
      * */
     @JsonIgnore
-    public ValueType getValue();
+    ValueType getValue();
     /**
      * setts the time of the event as date. The time semantic could be anything (e.g. time when the event happens).
      *
      * @param time is the time as date
      * */
     @JsonIgnore
-    public void setDate(Date time);
+    void setDate(Date time);
     /**
      * setts the id (the semantic depends on the implementation)
      *
      * @param id is the id as IDType
      * */
     @JsonIgnore
-    public void  setId(IDType id);
+    void  setId(IDType id);
     /**
      * setts the id of the attribute (the semantic depends on the implementation)
      *
      * @param id is the id of the attribute as IDType
      * */
     @JsonIgnore
-    public void setAttributeId(IDType id);
+    void setAttributeId(IDType id);
     /**
      * setts the value/measurement
      *
      * @param value is the value/measurement to be setted
      * */
     @JsonIgnore
-    public void setValue(ValueType value);
+    void setValue(ValueType value);
     @JsonIgnore
-    public SerializationFactory getSerializationFactory();
+    SerializationFactory getSerializationFactory();
 }

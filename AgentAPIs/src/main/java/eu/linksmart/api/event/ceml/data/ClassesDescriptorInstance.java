@@ -3,9 +3,7 @@ package eu.linksmart.api.event.ceml.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import eu.linksmart.api.event.exceptions.StatementException;
-import eu.linksmart.api.event.exceptions.TraceableException;
-import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.*;
 
 import java.util.ArrayList;
 
@@ -40,18 +38,23 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
         this.selectionFunction = (Function<Object, Integer>)selectionFunction;
 
     }*/
-    public <F> String getClass(F selectionParameter) throws Exception {
-        if(selectionFunction!=null && selectionParameter.getClass().isAssignableFrom(functionInputType)){
-            return classes.get(selectionFunction.apply(selectionParameter));
+    public <F> String getClass(F selectionParameter) throws TraceableException, UntraceableException {
+        try {
+
+            if(selectionFunction!=null && selectionParameter.getClass().isAssignableFrom(functionInputType)){
+                return classes.get(selectionFunction.apply(selectionParameter));
+            }
+
+            if(selectionParameter.getClass().isAssignableFrom(Integer.class))
+                return classes.get((Integer)selectionParameter);
+        }catch (Exception e){
+            throw new UnknownUntraceableException(e);
         }
-
-        if(selectionParameter.getClass().isAssignableFrom(Integer.class))
-            return classes.get((Integer)selectionParameter);
-
-        throw new Exception("Selection not possible the selection function wasn't set and the selection parameter cannot be casted to Integer");
+        throw new UntraceableException("Selection not possible the selection function wasn't set and the selection parameter cannot be casted to Integer");
 
     }
-    public <F> Integer getIndexClass(F selectionParameter) throws TraceableException {
+    public <F> Integer getIndexClass(F selectionParameter) throws TraceableException, UnknownUntraceableException {
+        try {
         if(selectionFunction!=null && selectionParameter.getClass().isAssignableFrom(functionInputType)){
             return (selectionFunction.apply(selectionParameter));
         }
@@ -65,7 +68,9 @@ public class ClassesDescriptorInstance extends DataDescriptorInstance implements
                     return i;
             return -1;
         }
-
+        }catch (Exception e){
+            throw new UnknownUntraceableException(e);
+        }
 
         throw new StatementException(name,ClassesDescriptor.class.getCanonicalName(),"Selection not possible the selection function wasn't set or the selection parameter cannot be casted");
 

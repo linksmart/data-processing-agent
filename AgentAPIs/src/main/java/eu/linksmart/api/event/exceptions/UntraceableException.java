@@ -38,6 +38,7 @@ public class UntraceableException extends Exception {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     * @param message the detail message.
      * @see java.lang.Exception
      * */
     public UntraceableException(String message) {
@@ -45,6 +46,8 @@ public class UntraceableException extends Exception {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     * @param message the detail message.
+     * @param cause the cause.  (A {@code null} value is permitted, and indicates that the cause is nonexistent or unknown.)
      * @see java.lang.Exception
      * */
     public UntraceableException(String message, Throwable cause) {
@@ -52,6 +55,7 @@ public class UntraceableException extends Exception {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     * @param cause the cause.  (A {@code null} value is permitted, and indicates that the cause is nonexistent or unknown.)
      * @see java.lang.Exception
      * */
     public UntraceableException(Throwable cause) {
@@ -59,6 +63,10 @@ public class UntraceableException extends Exception {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     * @param message the detail message.
+     * @param cause the cause.  (A {@code null} value is permitted, and indicates that the cause is nonexistent or unknown.)
+     * @param enableSuppression whether or not suppression is enabled or disabled
+     * @param writableStackTrace whether or not the stack trace should be writable
      * @see java.lang.Exception
      * */
     public UntraceableException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {

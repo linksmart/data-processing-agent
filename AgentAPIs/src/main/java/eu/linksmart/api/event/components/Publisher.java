@@ -36,6 +36,8 @@ public interface Publisher {
      *
      * @param payload bytes to be propagated
      *
+     * @return if the event has been published
+     *
      * */
     boolean publish(byte[] payload);
     /**
@@ -45,6 +47,8 @@ public interface Publisher {
      * @param output the path where the message will be propagated.
      * @param scope the service which receives the given output.
      *
+     * @return if the event has been published
+     *
      * */
     boolean publish(byte[] payload, String output, String scope);
     /**
@@ -52,6 +56,8 @@ public interface Publisher {
      *
      * @param payload bytes to be propagated
      * @param output the path where the message will be propagated.
+     *
+     * @return if the event has been published
      *
      * */
     boolean publish(byte[] payload, String output);
@@ -61,41 +67,41 @@ public interface Publisher {
      *
      * @return list of already loaded outputs
      * */
-    public List<String> getOutputs() ;
+    List<String> getOutputs() ;
     /**
      * sets the outputs of the Publisher.
      *
      * @param outputs is the list of the predefined outputs
      *
      * */
-    public void setOutputs(List<String> outputs) ;
+     void setOutputs(List<String> outputs) ;
     /**
      * returns the pre-configured scopes of the Publisher.
      *
      * @return list of already loaded scopes
      * */
-    public List<String> getScopes() ;
+     List<String> getScopes() ;
     /**
      * sets the scopes of the Publisher.
      *
      * @param scopes is the list of the predefined scopes
      *
      * */
-    public void setScopes(List<String> scopes);
+     void setScopes(List<String> scopes);
     /**
      * returns the pre-configured id of the Publisher.
      * The id provides the additional ID (e.g. Statement ID) where the Publisher will propagate the payload
      *
      * @return id as string
      * */
-    public String getId();
+     String getId();
     /**
      * sets the pre-configured id of the Publisher.
      * The id provides the additional ID (e.g. Statement ID) where the Publisher will propagate the payload
      *
      * @param  id as string
      * */
-    public void setId(String id) ;
+     void setId(String id) ;
     /**
      * Endorse the Deserializer to release resources if is needed.
      * */

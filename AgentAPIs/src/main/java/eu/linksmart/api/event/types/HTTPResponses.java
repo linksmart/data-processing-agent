@@ -30,8 +30,9 @@ package eu.linksmart.api.event.types;
 public interface HTTPResponses<ResourceObject> extends Responses<ResourceObject> {
 
     /**
-     *
+     * return the combined status of the responses
+     * @return the code of the combined status of the responses
      * */
-    public int getOverallStatus();
+    int getOverallStatus();
 
 }

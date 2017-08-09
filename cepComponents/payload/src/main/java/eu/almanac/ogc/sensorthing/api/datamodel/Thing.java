@@ -192,7 +192,7 @@ public class Thing extends OGCSensorThingsAPIDataModelEntry
 	 * Adds one location to the list of Locations in which this Thing has been
 	 * registered.
 	 * 
-	 * @param location
+	 * @param location the location to add
 	 */
 	public void addLocation(Location location)
 	{

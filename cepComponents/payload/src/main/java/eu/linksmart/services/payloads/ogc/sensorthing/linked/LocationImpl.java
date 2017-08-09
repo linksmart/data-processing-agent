@@ -125,6 +125,7 @@ public class LocationImpl extends CCIEncodingImpl implements Location {
      *
      * @param location
      *            The location of the location identified by this instance.
+     * @param description human readable description of this location
      */
     public LocationImpl(String description,GeoJsonObject location)
     {

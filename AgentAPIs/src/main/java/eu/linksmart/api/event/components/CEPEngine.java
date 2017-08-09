@@ -45,14 +45,14 @@ public interface CEPEngine extends AnalyzerComponent {
      * All CEP engines that implement this interface must add themselves into this Map.
      *
      * */
-    static final public Map<String,CEPEngine> instancedEngines= new Hashtable<>();
+    Map<String,CEPEngine> instancedEngines= new Hashtable<>();
 	/**
 	 * Return the name of the CEP which implement the interface
 	 * 
 	 * @return Name of the CEP engine wrapped
 	 * 
 	 * */
-	public String getName();
+	String getName();
 	/**
 	 * Add send and event to the CEP engine
      *
@@ -60,8 +60,10 @@ public interface CEPEngine extends AnalyzerComponent {
 	 * @param type the native type of the event.
      *
 	 * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
+	 * @throws UntraceableException  if any error that cannot be trace occurs {@link UntraceableException}
+	 * @throws TraceableException  if any error that can be trace occurs {@link TraceableException}
 	 * */
-	public boolean addEvent( EventEnvelope event, Class type) throws TraceableException, UntraceableException;
+	boolean addEvent( EventEnvelope event, Class type) throws TraceableException, UntraceableException;
 	/**
 	 * Configure a particular type in the engine.
 	 * 
@@ -73,18 +75,20 @@ public interface CEPEngine extends AnalyzerComponent {
 	 * @param eventTypes are the types of the inner values of the event
 	 * 
 	 * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
+	 * @throws StatementException the exception was produce by the statement processed in the CEP engine and it can be traced {@link StatementException}
 	 * */
 	@Deprecated
-	public boolean addEventType(String nameType, String[] eventSchema, Class[] eventTypes)throws StatementException;
+	boolean addEventType(String nameType, String[] eventSchema, Class[] eventTypes)throws StatementException;
     /**
      * Configure a particular type in the engine.
      *
      * @param nameType are the alias name of type added in the engine (canonical name is recommended)
      * @param type the java type to be added
+	 * @param <T> the native type of the configured event type.
      *
      * @return <code>true</code> if the event was added to the CEP engine. <code>false</code> otherwise.
      * */
-	public <T> boolean addEventType(String nameType,  Class<T> type);
+	<T> boolean addEventType(String nameType,  Class<T> type);
 
 	/**
 	 * Add a statement to the CEP engine which would be later handler with a handler.<p>
@@ -103,12 +107,14 @@ public interface CEPEngine extends AnalyzerComponent {
      * the developer.
      *
 	 * */
-	public boolean addStatement( Statement statement) throws StatementException, UnknownException, InternalException;
+	boolean addStatement( Statement statement) throws StatementException, UnknownException, InternalException;
 
     /**
      * Removes an statement form the CEP engine.
      *
      * @param id of the statement to be removed.
+	 *
+	 * @return if the statement with the id had been removed by this operation request
      *
      * @exception eu.linksmart.api.event.exceptions.StatementException is thrown if any of the statement
      * properties don't complaint with the underlying implementation of the CEP engine. E.g. if the syntax of the property
@@ -116,37 +122,40 @@ public interface CEPEngine extends AnalyzerComponent {
      * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
      * the developer.
      * */
-    public boolean removeStatement( String id)  throws UnknownException, StatementException;
+    boolean removeStatement( String id)  throws UnknownException, StatementException;
     /**
      * Pauses an statement form the CEP engine.
      *
      * @param id of the statement to be pause.
      *
+	 * @return if the statement with the id had been paused by this operation request
      * @exception eu.linksmart.api.event.exceptions.StatementException is thrown if any of the statement
      * properties don't complaint with the underlying implementation of the CEP engine. E.g. if the syntax of the property
      * @exception eu.linksmart.api.event.exceptions.UnknownException is thrown when an exception happens but the reason of
      * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
      * the developer.
      * */
-	public boolean pauseStatement( String id) throws UnknownException, StatementException;
+	boolean pauseStatement( String id) throws UnknownException, StatementException;
     /**
      * Starts an statement form the CEP engine.
      *
      * @param id of the statement to be started.
      *
+	 * @return if the statement with the id had been started by this operation request
+	 *
      * @exception eu.linksmart.api.event.exceptions.StatementException is thrown if any of the statement
      * properties don't complaint with the underlying implementation of the CEP engine. E.g. if the syntax of the property
      * @exception eu.linksmart.api.event.exceptions.UnknownException is thrown when an exception happens but the reason of
      * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
      * the developer.
      * */
-	public boolean startStatement( String id) throws UnknownException, StatementException;
+	boolean startStatement( String id) throws UnknownException, StatementException;
     /***
      *
      * Terminate the Wrapper, releasing any resource us by it.
      *
      * */
-    public void destroy();
+    void destroy();
 
     /**
      *
@@ -156,7 +165,7 @@ public interface CEPEngine extends AnalyzerComponent {
      * @return the Map of all statement. The key is the id of the statement.
      *
      * */
-    public Map<String,Statement> getStatements();
+    Map<String,Statement> getStatements();
 
 	/**
 	 * Return the advanced features of the DataFusionManager if the implementation support it.
@@ -166,7 +175,7 @@ public interface CEPEngine extends AnalyzerComponent {
      *
      * @see eu.linksmart.api.event.components.CEPEngineAdvanced
      */
-	public CEPEngineAdvanced getAdvancedFeatures();
+	CEPEngineAdvanced getAdvancedFeatures();
 
 
 }

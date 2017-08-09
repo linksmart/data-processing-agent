@@ -34,7 +34,7 @@ import java.util.Map;
  * In OGC SensorThing 1.0:
  *      The OGC SensorThings API follows the ITU-T definition, i.e., with regard to the Internet of Things, a thing is an object of the physical world (physical things) or the information world (virtual things) that is capable of being identified and integrated into communication networks [ITU-T Y.2060].
  *
- *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#25" </a>
+ *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#25"> OGC Sensor Things Part I: Thing Definition  </a>
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.5.0
@@ -59,7 +59,7 @@ public interface Thing extends CommonControlInfoDescription, DatastreamsNavigati
      * Sets the properties of the Thing
      * The properties of a thing is a Map containing user-annotated properties as key-value pairs.
      *
-     * @param properties as a map of String->Object
+     * @param properties as a map of String/Object
      *
      */
     @JsonSetter(value = "properties")
@@ -68,8 +68,8 @@ public interface Thing extends CommonControlInfoDescription, DatastreamsNavigati
     /**
      * Add a single properties to the map of properties using the key and the value
      *
-     * @param key
-     * @param property
+     * @param key the value that address the property
+     * @param property the value to be added by the address of the key
      *
      */
     void addProperty(String key, Object property);
@@ -131,7 +131,7 @@ public interface Thing extends CommonControlInfoDescription, DatastreamsNavigati
      * Adds one historical location to the list of historicalLocations in which this Thing has been
      * registered.
      *
-     * @param historicalLocation
+     * @param historicalLocation an historical location to add in this thing
      */
     void addHistoricalLocation(HistoricalLocation historicalLocation);
 
@@ -170,7 +170,7 @@ public interface Thing extends CommonControlInfoDescription, DatastreamsNavigati
      * Adds one location to the list of Locations in which this Thing has been
      * registered.
      *
-     * @param location
+     * @param location a location where this thing is located
      */
     void addLocation(Location location);
 

@@ -1,5 +1,7 @@
 package eu.linksmart.api.event.ceml.data;
 
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
 
 import java.util.Date;
@@ -69,7 +71,7 @@ public interface DataDescriptors extends List<DataDescriptor>,DataDescriptor, Js
      * @see eu.linksmart.api.event.ceml.data.DataDescriptor.DescriptorTypes
      *
      * */
-    public static DataDescriptors factory(String name,int inputSize,int targetSize, DescriptorTypes type){
+    static DataDescriptors factory(String name,int inputSize,int targetSize, DescriptorTypes type){
         return new DataDefinition(name,inputSize,targetSize, type);
     }
     /**
@@ -84,49 +86,53 @@ public interface DataDescriptors extends List<DataDescriptor>,DataDescriptor, Js
      * @see eu.linksmart.api.event.ceml.data.DataDescriptor.DescriptorTypes
      *
      * */
-    public static DataDescriptors factory(DataDescriptor... definitions){
+    static DataDescriptors factory(DataDescriptor... definitions){
         return new DataDefinition(definitions);
     }
 
     /**
      * @return the DataDescriptor(s) that describe the Target
      * */
-    public List<DataDescriptor> getTargetDescriptors();
+    List<DataDescriptor> getTargetDescriptors();
     /**
      * @return the DataDescriptor(s) that describe the Input
      * */
-    public List<DataDescriptor> getInputDescriptors();
+    List<DataDescriptor> getInputDescriptors();
     /**
      * Provide DataDescription located i-esm position of the Targets.
      *
      * @param i is the index of the selected DataDescriptor
+     * @throws UntraceableException  if any error that cannot be trace occurs {@link UntraceableException}
+     * @throws TraceableException  if any error that can be trace occurs {@link TraceableException}
      *
      * @return the DataDescriptor of index i that describe the Target
      * */
-    public DataDescriptor getTargetDescriptor(int i) throws Exception;
+    DataDescriptor getTargetDescriptor(int i) throws TraceableException, UntraceableException;
     /**
      * Provide DataDescription located i-esm position of the Input.
      *
      * @param i is the index of the selected DataDescriptor
      *
      * @return the DataDescriptor of index i that describe the Input
+     * @throws UntraceableException  if any error that cannot be trace occurs {@link UntraceableException}
+     * @throws TraceableException  if any error that can be trace occurs {@link TraceableException}
      * */
-    public DataDescriptor getInputDescriptor(int i) throws Exception;
+    DataDescriptor getInputDescriptor(int i) throws TraceableException, UntraceableException  ;
     /**
      * @return the amount of DataDescriptor(s) that describe the Target and Input
      * */
-    public int getTotalInputSize();
+    int getTotalInputSize();
     /**
      * @return the amount of DataDescriptor(s) that describe the Input
      * */
-    public int getInputSize();
+    int getInputSize();
     /**
      * @return the amount of DataDescriptor(s) that describe the Target
      * */
-    public int getTargetSize();
+    int getTargetSize();
     /**
      * @return if this DataDescriptors is a lambda DataDescriptor.
      * */
-    public boolean isLambdaTypeDefinition();
+    boolean isLambdaTypeDefinition();
 
 }

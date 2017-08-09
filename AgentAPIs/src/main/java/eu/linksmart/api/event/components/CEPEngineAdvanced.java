@@ -38,12 +38,13 @@ public interface CEPEngineAdvanced extends CEPEngine {
      * Insert an object into the CEP engine
      * @param name (or alias) of the object will be referenced inside the engine.
      * @param variable the object to be inserted.
+     * @param <T> native type of the object to insert in the Engine
      *
      *
      * @exception UnsupportedOperationException is thrown if this operation is not supported by the engine.
      *
      * */
-    public <T>void insertObject(String name,T variable) throws UnsupportedOperationException;
+    <T>void insertObject(String name,T variable) throws UnsupportedOperationException;
     /**
      * Add additional package used in the engine
      * @param canonicalNameClassOrPkg String representing a class or a package path containing classes (e.g. my.package.*).
@@ -53,7 +54,7 @@ public interface CEPEngineAdvanced extends CEPEngine {
      * @exception eu.linksmart.api.event.exceptions.InternalException is thrown if an known exception happens, but the source of
      * the exception is not related to the input itself. In other words, exceptions which are known and expected by the developer.
      * */
-    public boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws InternalException;
+    boolean loadAdditionalPackages( String canonicalNameClassOrPkg) throws InternalException;
     /**
      * Set the internal clock of the engine
      *
@@ -64,17 +65,19 @@ public interface CEPEngineAdvanced extends CEPEngine {
      * @exception eu.linksmart.api.event.exceptions.InternalException is thrown if an known exception happens, but the source of
      * the exception is not related to the input itself. In other words, exceptions which are known and expected by the developer.
      * */
-    public boolean setEngineTimeTo( Date date)throws InternalException;
+    boolean setEngineTimeTo( Date date)throws InternalException;
     /**
      * Provides the  internal time of the engine. The time of the engine and the real time may differ.
      *
      * @return <code>Date</code> with the internal time of the engine.
      *
      * */
-    public Date getEngineCurrentDate();
+    Date getEngineCurrentDate();
 
     /**
      * Remove, destroy, drops an inserted object by insertObject function.
+     *
+     * @param name name of the object to be remove in the CEP engine
      *
      * @return <code>true</code> if the object existed and was removed. <code>false</code> otherwise.
      *

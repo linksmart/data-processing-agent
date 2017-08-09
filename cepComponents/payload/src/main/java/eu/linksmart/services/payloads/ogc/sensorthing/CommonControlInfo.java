@@ -8,12 +8,18 @@ import com.fasterxml.jackson.annotation.JsonSetter;
  * Created by José Ángel Carvajal on 25.07.2017 a researcher of Fraunhofer FIT.
  */
 public interface CommonControlInfo {
-    /** selfLink is the absolute URL of an entity that is unique among all other entities. */
+    /**
+     *  selfLink is the absolute URL of an entity that is unique among all other entities.
+     *  @return the @iot.selfLink value
+     *  */
     @JsonPropertyDescription("id is the system-generated identifier of an entity.")
     @JsonGetter(value = "@iot.selfLink")
     String getSelfLink();
 
-    /** selfLink is the absolute URL of an entity that is unique among all other entities. */
+    /**
+     *  selfLink is the absolute URL of an entity that is unique among all other entities.
+     *  @param selfLink the use to extract the information for the internal @iot.selfLink
+     * */
     @JsonPropertyDescription("id is the system-generated identifier of an entity.")
     @JsonSetter(value = "@iot.selfLink")
     void setSelfLink(String selfLink);
