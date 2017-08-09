@@ -1,5 +1,8 @@
 package eu.linksmart.api.event.ceml.data;
 
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
 
 import java.util.Date;
@@ -48,12 +51,18 @@ public interface DataDescriptor extends JsonSerializable {
      *
      * @return a instance of a lambda DataDescriptor implemented by DataDescriptorInstance.
      *
+     * @throws UnknownUntraceableException  if any unknown error occurs {@link UnknownUntraceableException}
+     *
      * @see eu.linksmart.api.event.ceml.data.DataDescriptorInstance
      * @see eu.linksmart.api.event.ceml.data.DataDescriptor.DescriptorTypes
      *
      * */
-    public static DataDescriptor factory(DataDescriptors.DescriptorTypes type, String name, boolean isTarget) throws Exception {
-      return factory(type,name,null,null,null,isTarget);
+    static DataDescriptor factory(DataDescriptors.DescriptorTypes type, String name, boolean isTarget) throws UnknownUntraceableException {
+        try {
+            return factory(type,name,null,null,null,isTarget);
+        } catch (Exception e) {
+            throw new UnknownUntraceableException(e);
+        }
     }
     /**
      * Creates an DataDescriptor of the reference implementation of a DataDescriptorInstance
@@ -64,14 +73,18 @@ public interface DataDescriptor extends JsonSerializable {
      * @param inputClassType Native Java class that the model will be provided.
      * @param selectionFunction In case of set of classes, a selection function can be provided.
      * @param isTarget if <code>true</code> set the description as Target, Input otherwise.
+     * @param <T> is the native type of the label.
      *
      * @return a instance of a DataDescriptor implemented by DataDescriptorInstance.
+     *
+     * @throws UntraceableException  if any error that cannot be trace occurs {@link UntraceableException}
+     * @throws TraceableException  if any error that can be trace occurs {@link TraceableException}
      *
      * @see eu.linksmart.api.event.ceml.data.DataDescriptorInstance
      * @see eu.linksmart.api.event.ceml.data.DataDescriptor.DescriptorTypes
      *
      * */
-    public static <T> DataDescriptor factory(DataDescriptors.DescriptorTypes type, String name, List<String> classes, Class<T> inputClassType, Function<T, Integer> selectionFunction, boolean isTarget) throws Exception {
+    static <T> DataDescriptor factory(DataDescriptors.DescriptorTypes type, String name, List<String> classes, Class<T> inputClassType, Function<T, Integer> selectionFunction, boolean isTarget) throws TraceableException, UntraceableException {
         DataDescriptor result;
         switch (type){
             case NOMINAL_CLASSES:
@@ -106,21 +119,24 @@ public interface DataDescriptor extends JsonSerializable {
      *
      * @return a instance of a DataDescriptor implemented by DataDescriptorInstance.
      *
+     * @throws UntraceableException  if any error that cannot be trace occurs {@link UntraceableException}
+     * @throws TraceableException  if any error that can be trace occurs {@link TraceableException}
+     *
      * @see eu.linksmart.api.event.ceml.data.DataDescriptorInstance
      * @see eu.linksmart.api.event.ceml.data.DataDescriptor.DescriptorTypes
      *
      * */
-    public static DataDescriptor factory(DataDescriptors.DescriptorTypes type, String name,List<String> classes, boolean isTarget) throws Exception {
+    static DataDescriptor factory(DataDescriptors.DescriptorTypes type, String name,List<String> classes, boolean isTarget) throws TraceableException, UntraceableException  {
         return factory(type,name,classes,null,null,isTarget);
     }
     /**
      * @return native value of the described data
      * */
-    public Class getNativeType();
+    Class getNativeType();
     /**
      * @return name of the described data
      * */
-    public String getName();
+    String getName();
     /**
      * @return if the data is part of the Target, otherwise is Input
      * */
@@ -132,18 +148,18 @@ public interface DataDescriptor extends JsonSerializable {
     /**
      * @return declarative type of the described data
      * */
-    public DataDescriptors.DescriptorTypes getType();
+    DataDescriptors.DescriptorTypes getType();
     /**
      * set the isTarget property as: isTarget = not isTarget
      * */
-    public void toggleTarget();
-    public boolean isAssignable(Class type);
+    void toggleTarget();
+    boolean isAssignable(Class type);
     /**
      *
      * Enumeration of declarative types possible in for a DataDescriptor
      *
      * */
-    public enum DescriptorTypes{
+    enum DescriptorTypes{
         /**
          * If the descriptor is a description of classes, java native translation is ClassesDescriptor
          * @see eu.linksmart.api.event.ceml.data.ClassesDescriptor

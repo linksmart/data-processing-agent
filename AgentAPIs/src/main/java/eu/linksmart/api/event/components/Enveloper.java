@@ -44,11 +44,15 @@ public interface Enveloper {
      * @param id to be set in the envelop
      * @param idProperty to be set in the envelop
      * @param description an label describing the payload
+     * @param name readable name of the Event
+     * @param <IDType> native type of the id
+     * @param <ValueType> native type of the event object
+     *
      *
      * @return an implementation instance of an EventEnvelop.
      *
      * */
-    public <IDType, ValueType> EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description, String name);
+     <IDType, ValueType> EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description, String name);
 
     /**
      * Endorse the Enveloper to release resources if is needed.

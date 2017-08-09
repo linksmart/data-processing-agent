@@ -72,12 +72,20 @@ public class SensorImpl extends CCIEncodingImpl implements Sensor {
 
     /**
      * Empty class constructor, respects the bean instantiation pattern
+     * @param description human readable description of this sensor
+     * @param metadata any extra data added to this sensor
      */
     public SensorImpl(String description, String metadata) {
         super(description);
         this.metadata = metadata;
     }
 
+    /**
+     * Empty class constructor, respects the bean instantiation pattern
+     * @param description human readable description of this sensor
+     * @param metadata any extra data added to this sensor
+     * @param encoding how the data send by this sensor is encoded
+     */
     public SensorImpl(String description, String encoding, String metadata) {
         super(description, encoding);
         this.metadata = metadata;

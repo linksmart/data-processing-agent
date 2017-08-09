@@ -34,7 +34,7 @@ import java.util.List;
  * In OGC SensorThing 1.0:
  *     A Thing’s HistoricalLocation entity set provides the times of the current (i.e., last known) and previous locations of the Thing.
  *
- *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#27" </a>
+ *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#27">OGC Sensor Things Part I: Historical Location Definition  </a>
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.5.0
@@ -70,7 +70,7 @@ public interface HistoricalLocation extends CommonControlInfo, ThingNavigationLi
      * Adds one location to the list of Locations in which this Thing has been
      * registered.
      *
-     * @param location
+     * @param location to add in the locations
      */
     void addLocation(Location location);
     /**

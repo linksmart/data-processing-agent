@@ -33,7 +33,7 @@ import java.util.List;
  * In OGC SensorThing 1.0:
  *     An ObservedProperty specifies the phenomenon of an Observation.
  *
- *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#30" </a>
+ *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#30"> OGC Sensor Things Part I: Observed Property Definition  </a>
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.5.0

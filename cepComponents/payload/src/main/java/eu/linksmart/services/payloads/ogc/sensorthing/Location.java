@@ -38,7 +38,7 @@ import java.util.List;
  *
  *     However, the ultimate location of interest of a Thing is not always the location of the Thing (e.g., in the case of remote sensing). In those use cases, the content of a Thing’s Location is different from the content of theFeatureOfInterestof the Thing’s Observations. Section 7.1.4 of [OGC 10-004r3 and ISO 19156:2011] provides a detailed explanation of observation location.
  *
- *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#26" </a>
+ *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#26">OGC Sensor Things Part I: Location Definition  </a>
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.5.0

@@ -39,7 +39,7 @@ import java.util.Map;
  * In OGC SensorThing 1.0:
  *      A Datastream groups a collection of Observations measuring the same ObservedProperty and produced by the same Sensor.
  *
- *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#28" </a>
+ *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#28"> OGC Sensor Things Part I: Datastream Definition </a>
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.5.0
@@ -114,7 +114,7 @@ public interface Datastream extends CommonControlInfoDescription, ObservationsNa
     @JsonSetter(value = "observationType")
     void setObservationType(String observationType);
     /**
-     * Gets the unit of measurement time as a Map Key -> Value
+     * Gets the unit of measurement time as a Map Key / Value
      * A JSON Object containing three key-value pairs. The name property presents the full name of the unitOfMeasurement; the symbol property shows the textual form of the unit symbol; and the definition contains the URI defining the unitOfMeasurement.
      *
      * @return the unit of measurement as Map.
@@ -125,7 +125,7 @@ public interface Datastream extends CommonControlInfoDescription, ObservationsNa
     Map<String,Object> getUnitOfMeasurement();
 
     /**
-     * Sets the unit of measurement with the given Map of Key -> Value.
+     * Sets the unit of measurement with the given Map of Key / Value.
      * A JSON Object containing three key-value pairs. The name property presents the full name of the unitOfMeasurement; the symbol property shows the textual form of the unit symbol; and the definition contains the URI defining the unitOfMeasurement.
      *
      * @param  unitOfMeasurement sets the Map.

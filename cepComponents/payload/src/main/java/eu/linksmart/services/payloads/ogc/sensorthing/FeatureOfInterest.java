@@ -36,7 +36,7 @@ import java.util.List;
      * For example, the FeatureOfInterest of a wifi-connect thermostat can be the Location of the thermostat (i.e., the living room where the thermostat is located in).
      * In the case of remote sensing, the FeatureOfInterest can be the geographical area or volume that is being sensed.
  *
- * @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#32" </a>
+ * @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#32">OGC Sensor Things Part I: Feature of Interest Definition  </a>
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.5.0

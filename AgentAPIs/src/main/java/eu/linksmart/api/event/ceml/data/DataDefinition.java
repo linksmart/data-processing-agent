@@ -97,7 +97,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
     }*/
 
     @Override
-    public DataDescriptor getTargetDescriptor(int i) throws Exception {
+    public DataDescriptor getTargetDescriptor(int i) throws TraceableException, UntraceableException  {
         if(targets!=null)
             return targets.get(i);
 
@@ -105,7 +105,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
     }
 
     @Override
-    public DataDescriptor getInputDescriptor(int i) throws Exception {
+    public DataDescriptor getInputDescriptor(int i) throws TraceableException, UntraceableException {
         if(input!=null)
             return input.get(i);
 

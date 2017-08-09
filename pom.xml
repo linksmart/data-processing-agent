@@ -102,7 +102,7 @@
         <maven.javadoc.version>2.10.4</maven.javadoc.version>
         <surefire-report.version>2.19.1</surefire-report.version>
         <wagon-webdav-version>2.10</wagon-webdav-version>
-        <swagger.version>1.6.0-SNAPSHOT0</swagger.version>
+        <swagger.version>1.5.10</swagger.version>
 
 
         <!-- configuration settings  -->

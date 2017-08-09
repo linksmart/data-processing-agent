@@ -32,7 +32,7 @@ import java.util.List;
  * In OGC SensorThing 1.0:
  *       Sensor is an instrument that observes a property or phenomenon with the goal of producing an estimate of the value of the property[3].
  *
- *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#29" </a>
+ *  @see   <a href="http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#29"> OGC Sensor Things Part I: Sensor Definition  </a>
  *
  * @author Jose Angel Carvajal Soto
  * @since  1.5.0

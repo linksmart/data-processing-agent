@@ -31,6 +31,11 @@ public class StatementException extends TraceableException {
 
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     *
+     * @param errorProducerType The id is a method to trace back the source of the error to a specific instance (if possible) or part.
+     * @param errorProducerId The type indicates what kind of source the id (errorProducerId) points out.
+     * @param message the detail message.
+     *
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
     public StatementException(String errorProducerId, String errorProducerType, String message) {
@@ -38,6 +43,12 @@ public class StatementException extends TraceableException {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     *
+     * @param errorProducerType The id is a method to trace back the source of the error to a specific instance (if possible) or part.
+     * @param errorProducerId The type indicates what kind of source the id (errorProducerId) points out.
+     * @param message the detail message.
+     * @param cause the cause.  (A {@code null} value is permitted, and indicates that the cause is nonexistent or unknown.)
+     *
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
     public StatementException(String errorProducerId, String errorProducerType, String message, Throwable cause) {
@@ -45,6 +56,10 @@ public class StatementException extends TraceableException {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     *
+     * @param errorProducerType The id is a method to trace back the source of the error to a specific instance (if possible) or part.
+     * @param errorProducerId The type indicates what kind of source the id (errorProducerId) points out.
+     * @param cause the cause.  (A {@code null} value is permitted, and indicates that the cause is nonexistent or unknown.)
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
     public StatementException(String errorProducerId, String errorProducerType, Throwable cause) {
@@ -52,6 +67,13 @@ public class StatementException extends TraceableException {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     *
+     * @param errorProducerType The id is a method to trace back the source of the error to a specific instance (if possible) or part.
+     * @param errorProducerId The type indicates what kind of source the id (errorProducerId) points out.
+     * @param message the detail message.
+     * @param cause the cause.  (A {@code null} value is permitted, and indicates that the cause is nonexistent or unknown.)
+     * @param enableSuppression whether or not suppression is enabled or disabled
+     * @param writableStackTrace whether or not the stack trace should be writable
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
     public StatementException(String errorProducerId, String errorProducerType, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {

@@ -32,7 +32,7 @@ import java.util.List;
  * In the context of the Internet of Things, many Observations’ FeatureOfInterest can be the Location of the Thing.
  * For example, the FeatureOfInterest of a wifi-connect thermostat can be the Location of the thermostat (i.e., the living room where the thermostat is located in).
  * In the case of remote sensing, the FeatureOfInterest can be the geographical area or volume that is being sensed.
- * @link http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#32
+ *
  */
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = FeatureOfInterest.class)

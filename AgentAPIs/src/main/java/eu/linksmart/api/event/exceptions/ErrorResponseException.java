@@ -44,6 +44,9 @@ public class ErrorResponseException extends TraceableException {
     final GeneralRequestResponse requestResponse;
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     *
+     * @param requestResponse the request that produced the error
+     *
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
     public ErrorResponseException(GeneralRequestResponse requestResponse) {
@@ -52,6 +55,10 @@ public class ErrorResponseException extends TraceableException {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     *
+     * @param requestResponse the request that produced the error
+     * @param cause the cause.  (A {@code null} value is permitted, and indicates that the cause is nonexistent or unknown.)
+     *
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
     public ErrorResponseException(GeneralRequestResponse requestResponse, Throwable cause) {
@@ -60,6 +67,11 @@ public class ErrorResponseException extends TraceableException {
     }
     /**
      * super class constructor with errorProducerId and errorProducerType parameters
+     *
+     * @param requestResponse the request that produced the error
+     * @param cause the cause.  (A {@code null} value is permitted, and indicates that the cause is nonexistent or unknown.)
+     * @param enableSuppression whether or not suppression is enabled or disabled
+     * @param writableStackTrace whether or not the stack trace should be writable
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
     public ErrorResponseException(GeneralRequestResponse requestResponse, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
