@@ -112,6 +112,8 @@ public class SensorImpl extends CCIEncodingImpl implements Sensor {
      *         description of the sensor or system. The content is open to
      *         accommodate changes to SensorML or to support other description
      *         languages.
+     *
+     *
      */
     @Override
     public Object getMetadata()
