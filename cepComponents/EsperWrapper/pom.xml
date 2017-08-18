@@ -23,21 +23,25 @@
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>api.agents</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
 
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>utils</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
 
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>payload</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
 
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>cepTooling</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
 
 

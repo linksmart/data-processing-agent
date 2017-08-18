@@ -15,45 +15,44 @@
        <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>ServiceLouncher</artifactId>
+           <version>${ls.se.agents.version}</version>
        </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>ceml</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>ceml.rest.api</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>configuration.agent.learning.agent</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>
             <artifactId>wrapper.esper</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>PythonModelsIntergrator</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
+            <version>${ls.se.agents.version}</version>
         </dependency>
 
 
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
