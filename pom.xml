@@ -21,6 +21,11 @@
         <start-class>eu.linksmart.services.Application</start-class>
         <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
         <spring.boot.version>1.3.3.RELEASE</spring.boot.version>
+        <java.version>1.8</java.version>
+        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
+        <site.plugin.version>3.5.1</site.plugin.version>
+        <maven.source.version>2.2.1</maven.source.version>
+        <wagon-webdav-version>2.10</wagon-webdav-version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -115,8 +120,59 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <!-- build sources  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- site plugin and webdav dependency for deployment of site onto Nexus repository -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${site.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-webdav-jackrabbit</artifactId>
+                        <version>${wagon-webdav-version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+
+        </plugins>
     </build>
     <repositories>
         <repository>
