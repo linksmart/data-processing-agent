@@ -47,7 +47,11 @@ import java.util.TimeZone;
  * */
 public class  Utils {
     static private DateFormat dateFormat = getDateFormat();
-    static private DateFormat isoDateFormat = new SimpleDateFormat(Const.TIME_ISO_FORMAT);
+    static private DateFormat
+            isoFormatMSTZ = new SimpleDateFormat(Const.TIME_ISO_FORMAT_MS_TZ),
+            isoFormatWMSTZ = new SimpleDateFormat(Const.TIME_ISO_FORMAT_WMS_TZ),
+            isoFormatMSWTZ = new SimpleDateFormat(Const.TIME_ISO_FORMAT_MS_WTZ),
+            isoFormatWMSWTZ = new SimpleDateFormat(Const.TIME_ISO_FORMAT_WMS_WTZ);
     /**
      * Provides the version of the software. The version is linked to the pom version.
      * @return the pom version
@@ -72,7 +76,7 @@ public class  Utils {
         TimeZone tz = getTimeZone();
         if(Configurator.getDefaultConfig().getString(Const.TIME_FORMAT_CONF_PATH) == null)
 
-            dateFormat= new SimpleDateFormat(Const.TIME_ISO_FORMAT);
+            dateFormat= new SimpleDateFormat(Const.TIME_ISO_FORMAT_MS_TZ);
 
         else
              dateFormat =new SimpleDateFormat(Configurator.getDefaultConfig().getString(Const.TIME_FORMAT_CONF_PATH) );
@@ -83,11 +87,28 @@ public class  Utils {
 
     }
     static public Date formISO8601(String str) throws IOException {
-        ISO8601DateFormat df = new ISO8601DateFormat();
         try {
-            return df.parse(str);
-        } catch (ParseException e) {
-            throw new IOException("Unable to parse the given string to ISO8601");
+            // doesn't uses T
+            if (str.contains(" "))
+                str.replace(" ", "T");
+            // has Timezone
+            if(str.contains("+")||str.contains("-")) {
+                // uses ':' in timezone
+                if (str.substring(str.length() - 5).contains(":")) {
+                    str = str.substring(0, str.length() - 5) + str.substring(str.length() - 5).replace(":", "");
+                }
+                if(str.contains("."))
+                    return isoFormatMSTZ.parse(str);
+                else
+                    return isoFormatWMSTZ.parse(str);
+            }else {
+                if(str.contains("."))
+                    return isoFormatMSWTZ.parse(str);
+                else
+                    return isoFormatWMSWTZ.parse(str);
+            }
+        }catch (Exception e){
+            throw new IOException(e);
         }
     }
     /**
@@ -116,7 +137,7 @@ public class  Utils {
      * @return a Date as String timestamp base in iso 8601
      * */
     static public String getIsoTimestamp(Date date){
-        return isoDateFormat.format(date);
+        return isoFormatMSTZ.format(date);
     }
     /**
      * Provide a quick method to get a current time as String. The String is constructed using getTimestamp()

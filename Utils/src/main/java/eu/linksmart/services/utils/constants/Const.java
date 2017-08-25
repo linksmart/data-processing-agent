@@ -10,7 +10,10 @@ public interface Const extends   BrokerServiceConst,LoggerServiceConst {
     public static String TIME_FORMAT_CONF_PATH = "general_time_timestamp_format";
     public static String TIME_TIMEZONE_CONF_PATH = "general_time_zone";
     public static String TIME_EPOCH_CONF_PATH = "general_time_epoch";
-    public static final String TIME_ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss_SSS'Z'" ;
+    public static final String TIME_ISO_FORMAT_MS_TZ = "yyyy-MM-dd'T'HH:mm:ss.SSZ" ;
+    public static final String TIME_ISO_FORMAT_WMS_TZ = "yyyy-MM-dd'T'HH:mm:ssZ" ;
+    public static final String TIME_ISO_FORMAT_MS_WTZ = "yyyy-MM-dd'T'HH:mm:ss.SS'Z'" ;
+    public static final String TIME_ISO_FORMAT_WMS_WTZ = "yyyy-MM-dd'T'HH:mm:ss'Z'" ;
 
     public static final  String CONFIGURATION_CLASS_FILE = "eu_linksmart_services_Application";
 
