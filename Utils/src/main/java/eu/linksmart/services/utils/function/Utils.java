@@ -92,10 +92,10 @@ public class  Utils {
             if (str.contains(" "))
                 str.replace(" ", "T");
             // has Timezone
-            if(str.contains("+")||str.contains("-")) {
+            if(!str.contains("Z")) {
                 // uses ':' in timezone
-                if (str.substring(str.length() - 5).contains(":")) {
-                    str = str.substring(0, str.length() - 5) + str.substring(str.length() - 5).replace(":", "");
+                if (str.substring(str.length() - 6).contains(":")) {
+                    str = str.substring(0, str.length() - 6) + str.substring(str.length() - 6).replace(":", "");
                 }
                 if(str.contains("."))
                     return isoFormatMSTZ.parse(str);
