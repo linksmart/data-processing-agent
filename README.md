@@ -46,13 +46,11 @@ apt-get install maven
 For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven/)
 
 ## Run DPA
-Use -conf flag to set the config file path. If not set, `./conf/historical-datastore.json` will be used.
 ```
 java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
 ```
 
 ## Run LA
-Use -conf flag to set the config file path. If not set, `./conf/historical-datastore.json` will be used.
 ```
 export env_var_enabled=true
 export agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
