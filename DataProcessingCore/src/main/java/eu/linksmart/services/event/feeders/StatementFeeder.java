@@ -367,19 +367,19 @@ public class StatementFeeder implements Feeder<Statement> {
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy,String producerType,int codeNo, String codeTxt,String message){
         if(DynamicConst.getId().equals(generatedBy))
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+conf.getString(Const.STATEMENT_OUT_TOPIC_ERROR_CONF_PATH)+generatedBy);
+            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+conf.getString(Const.STATEMENT_OUT_TOPIC_ERROR_CONF_PATH)+generatedBy+"/");
         else if(generatedBy!=null)
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+generatedBy+DynamicConst.getId());
+            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+generatedBy+DynamicConst.getId()+"/");
 
-        return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+conf.getString(Const.STATEMENT_OUT_TOPIC_ERROR_CONF_PATH)+DynamicConst.getId());
+        return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+conf.getString(Const.STATEMENT_OUT_TOPIC_ERROR_CONF_PATH)+DynamicConst.getId()+"/");
     }
     public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
         if(DynamicConst.getId().equals(id))
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"/"+id);
+            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"/"+id+"/");
         else if(id!=null)
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, DefaultMQTTPublisher.defaultOutput(DynamicConst.getId())+id);
+            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, DefaultMQTTPublisher.defaultOutput(DynamicConst.getId())+id+"/");
 
-        return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+DynamicConst.getId());
+        return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+DynamicConst.getId()+"/");
     }
 
 

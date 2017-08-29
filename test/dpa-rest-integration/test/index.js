@@ -23,7 +23,10 @@ describe('The REST Service', function () {
     });
 });
 
+var flag=false;
 describe('CEPEngine', function () {
+    
+
 
     var statement1 = {}, statement2 = {};
 
@@ -78,8 +81,8 @@ describe('CEPEngine', function () {
 
         var counter = 0;
         client.on('message', function (topic, message) {
-            ds = JSON.parse(message).ResultValue;
-            messagesReceived[topic.split('/')[2]].push(ds);
+            ds = JSON.parse(message).result;
+            messagesReceived[topic.split('/')[topic.split('/').length-2]].push(ds);
             counter++;
             if (counter === numberOfMessages) {
                 client.end();
@@ -91,9 +94,13 @@ describe('CEPEngine', function () {
 
         client.on('connect', function () {
             client.subscribe([
-                '/outgoing/' + statement1.id + '/' + statement1.agentID + statement1.id,
-                '/outgoing/' + statement2.id + '/' + statement2.agentID + statement2.id]);
-            // there is a bug for statement1.topic!!! Do not rely on that!
+               // '/outgoing/' + statement1.id + '/' + statement1.agentID + statement1.id,
+               // '/outgoing/' + statement2.id + '/' + statement2.agentID + statement2.id
+			    statement1.topic,
+                statement2.topic
+                //"LS/LA/+/OGC/1.0/Datastreams/#"
+                
+				]);
 
             publisher();
         });
@@ -160,7 +167,9 @@ describe('CEPEngine', function () {
 
         client.on('connect', function () {
             client.subscribe(
-                '/outgoing/' + statement1.id + '/' + statement1.agentID + statement1.id);
+                // '/outgoing/' + statement1.id + '/' + statement1.agentID + statement1.id
+				statement1.topic
+				);
             // there is a bug for statement1.topic!!! Do not rely on that!
 
             // publish a message for statement 1
@@ -192,11 +201,12 @@ function statementInserter(no, statement) {
             })
             .end((err, res) => {
                 if (err) return done(err);
-                // console.log(res.body);
                 expect(res).to.have.deep.property('body.responses[0].messageType', 'SUCCESS');
                 statement['id'] = Object.keys(res.body.resources)[0];
                 statement['topic'] = res.body.responses[0].topic;
                 statement['agentID'] = res.body.responses[0].agentID;
+               // console.log(statement['id']);
+               // console.log(statement['topic']);
                 done();
             });
     }
