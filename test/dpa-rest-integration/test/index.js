@@ -96,8 +96,8 @@ describe('CEPEngine', function () {
             client.subscribe([
                // '/outgoing/' + statement1.id + '/' + statement1.agentID + statement1.id,
                // '/outgoing/' + statement2.id + '/' + statement2.agentID + statement2.id
-			    statement1.topic,
-                statement2.topic
+			    statement1.topic+"/",
+                statement2.topic+"/"
                 //"LS/LA/+/OGC/1.0/Datastreams/#"
                 
 				]);
