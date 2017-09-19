@@ -27,8 +27,25 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.WildcardType;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Tag;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.ApiKeyVehicle;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import static springfox.documentation.schema.AlternateTypeRules.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -111,7 +128,6 @@ public class RestInit {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-
     }
     @Bean
     public Docket api() {
@@ -127,11 +143,11 @@ public class RestInit {
         return new ApiInfoBuilder()
                 .title(info.getProperty("linksmart.service.info.distribution.name"))
                 .description(info.getProperty("linksmart.service.info.distribution.description"))
+                .version(Utils.getVersion())
                         //.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
                 .contact(new Contact(info.getProperty("linksmart.service.info.distribution.contact.name"),info.getProperty("linksmart.service.info.distribution.contact.url"),info.getProperty("linksmart.service.info.distribution.contact.email")))
                 .license(info.getProperty("linksmart.service.info.distribution.license"))
-                .licenseUrl("linksmart.service.info.distribution.url")
-                .version(info.getProperty(Utils.getVersion()))
+                .licenseUrl(info.getProperty("linksmart.service.info.distribution.url"))
                 .build();
     }
     static private Properties toProperties(Configurator configurator){
