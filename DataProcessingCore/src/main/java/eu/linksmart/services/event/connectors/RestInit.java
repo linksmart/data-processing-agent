@@ -3,6 +3,7 @@ package eu.linksmart.services.event.connectors;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;
 import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
@@ -123,7 +124,7 @@ public class RestInit {
 
         map.put("LoadedComponents",aux);
         try {
-            return new ResponseEntity<>((new DefaultSerializer()).toString(map), HttpStatus.OK);
+            return new ResponseEntity<>((SharedSettings.getSerializer()).toString(map), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

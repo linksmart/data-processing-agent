@@ -1,5 +1,10 @@
 package eu.linksmart.services.event.intern;
 
+import eu.linksmart.services.utils.serialization.DefaultDeserializer;
+import eu.linksmart.services.utils.serialization.DefaultSerializer;
+import eu.linksmart.services.utils.serialization.Deserializer;
+import eu.linksmart.services.utils.serialization.Serializer;
+
 import java.util.UUID;
 
 /**
@@ -12,7 +17,8 @@ public class SharedSettings implements Const {
 
     protected static String will = null;
     protected static String willTopic = null;
-
+    protected static Serializer serializer = new DefaultSerializer();
+    protected static Deserializer deserializer = new DefaultDeserializer();
     protected static boolean isSet = false;
 
     public static String getWillTopic() {
@@ -49,6 +55,19 @@ public class SharedSettings implements Const {
     }
 
 
+    public static Serializer getSerializer() {
+        return serializer;
+    }
 
+    public static void setSerializer(Serializer serializer) {
+        SharedSettings.serializer = serializer;
+    }
 
+    public static Deserializer getDeserializer() {
+        return deserializer;
+    }
+
+    public static void setDeserializer(Deserializer deserializer) {
+        SharedSettings.deserializer = deserializer;
+    }
 }

@@ -37,7 +37,6 @@ public class EventFeeder implements Feeder<EventEnvelope> {
     protected Map<String,String> classToAlias= new Hashtable<String, String>();
     protected Logger loggerService = Utils.initLoggingConf(this.getClass());
 
-    protected Deserializer deserializer = new DefaultDeserializer();
     private Map<String, Class> compiledTopicClass = new Hashtable<>(), aliasToClass =new Hashtable<>();
 
     protected EventFeeder() {
@@ -57,7 +56,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
     }
     public void feed(String rawEvent) {
         try {
-            Map<String,String> rawMap = deserializer.parse(rawEvent,Map.class);
+            Map<String,String> rawMap = SharedSettings.getDeserializer().parse(rawEvent,Map.class);
             for(Map.Entry<String,String> entry: rawMap.entrySet())
                 me.feed(entry.getKey(), entry.getValue());
         } catch (Exception e) {
@@ -98,17 +97,17 @@ public class EventFeeder implements Feeder<EventEnvelope> {
             if(!compiledTopicClass.containsKey(topic)) {
 
                 if(topicToClass.isEmpty())
-                    event = deserializer.deserialize(rawEvent, Observation.class);
+                    event = SharedSettings.getDeserializer().deserialize(rawEvent, Observation.class);
                 else
                     for (Topic t : topicToClass.keySet()) {
                         if (t.equals(topic)) {
-                            event = deserializer.deserialize(rawEvent, topicToClass.get(t));
+                            event = SharedSettings.getDeserializer().deserialize(rawEvent, topicToClass.get(t));
                             compiledTopicClass.put(topic, topicToClass.get(t));
                             break;
                         }
                     }
             }else{
-                event = deserializer.deserialize(rawEvent, compiledTopicClass.get(topic));
+                event = SharedSettings.getDeserializer().deserialize(rawEvent, compiledTopicClass.get(topic));
             }
 
             if(event instanceof EventEnvelope) {
@@ -135,21 +134,19 @@ public class EventFeeder implements Feeder<EventEnvelope> {
     protected EventEnvelope parseEvent(String topic, String rawEvent) throws TraceableException , UntraceableException{
         Object event = null;
         try {
-            if (deserializer == null)
-                deserializer = new DefaultDeserializer();
             if (!compiledTopicClass.containsKey(topic)) {
                 if (topicToClass.isEmpty())
-                    event = deserializer.parse(rawEvent, Observation.class);
+                    event = SharedSettings.getDeserializer().parse(rawEvent, Observation.class);
                 else
                     for (Topic t : topicToClass.keySet()) {
                         if (t.equals(topic)) {
-                            event = deserializer.parse(rawEvent, topicToClass.get(t));
+                            event = SharedSettings.getDeserializer().parse(rawEvent, topicToClass.get(t));
                             compiledTopicClass.put(topic, topicToClass.get(t));
                             break;
                         }
                     }
             } else {
-                event = deserializer.parse(rawEvent, compiledTopicClass.get(topic));
+                event = SharedSettings.getDeserializer().parse(rawEvent, compiledTopicClass.get(topic));
             }
             if(!(event instanceof EventEnvelope))
                 throw new StatementException(topic,"Event","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");

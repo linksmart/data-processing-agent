@@ -53,4 +53,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String AGENT_DESCRIPTION = "agent_description";
     String REGISTRATION_TOPIC = "registration_topic";
     String REGISTRATION_TOPIC_WILL = "topic_will";
+
+    String SERIALIZER_PROVIDER = "serialization_serializer_provider";
+    String DESERIALIZER_PROVIDER = "serialization_deserializer_provider";
 }

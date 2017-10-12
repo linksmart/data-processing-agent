@@ -29,10 +29,9 @@ public class StatementFeeder implements Feeder<Statement> {
     protected static Logger loggerService = Utils.initLoggingConf(StatementFeeder.class);
     protected static Configurator conf =  Configurator.getDefaultConfig();
 
-    protected static Deserializer deserializer =new DefaultDeserializer();
 
     static {
-        deserializer.defineClassToInterface(Statement.class,StatementInstance.class);
+        SharedSettings.getDeserializer().defineClassToInterface(Statement.class,StatementInstance.class);
         Feeder.feeders.put(StatementFeeder.class.getCanonicalName(),new StatementFeeder());
     }
 
@@ -187,7 +186,7 @@ public class StatementFeeder implements Feeder<Statement> {
         MultiResourceResponses<Statement> result = createReturnStructure();
 
         try {
-            statement = deserializer.parse(statementString, Statement.class);
+            statement = SharedSettings.getDeserializer().parse(statementString, Statement.class);
         } catch (IOException e) {
             loggerService.error(e.getMessage(), e);
             result.getResponses().add(createErrorMapMessage(

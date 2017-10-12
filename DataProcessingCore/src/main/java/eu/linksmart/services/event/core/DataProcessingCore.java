@@ -18,6 +18,7 @@ import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.utils.serialization.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -124,6 +125,7 @@ public class DataProcessingCore {
         loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + SharedSettings.getId());
 
         initCEPEngines();
+        initSharedSettings();
         intoCEPTypes();
         initForceLoading();
         boolean success = initFeeders();
@@ -131,6 +133,30 @@ public class DataProcessingCore {
         // force the loading of the RegistrationService
         RegistrationService.getReference();
         return success;
+    }
+
+    private static void initSharedSettings() {
+        try {
+            if (conf.containsKeyAnywhere(Const.SERIALIZER_PROVIDER))
+                // in case the serialization provider is given, exists, and known we load it; else we load default.
+                if (conf.getString(Const.SERIALIZER_PROVIDER).equals("JWS")) {
+                    SharedSettings.setSerializer(new JWSSerializer(new DefaultSerializer()));
+
+                    loggerService.info("Loading JWS serializer");
+                } else
+                    loggerService.info("Loading default serializer"); // default serialized is not replaced
+            if (conf.containsKeyAnywhere(Const.DESERIALIZER_PROVIDER))
+                if (conf.getString(Const.DESERIALIZER_PROVIDER).equals("JWS")) {
+                    SharedSettings.setDeserializer(new JWSDeserializer(Base64.getEncoder().encodeToString(((JWSSerializer) SharedSettings.getSerializer()).getPublicKey().getEncoded())));
+
+                    loggerService.info("Loading JWS deserializer");
+                } else
+                    loggerService.info("Loading default deserializer");// default serialized is not replaced
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+            loggerService.info("Loading default (de)serializers");// default serialized is not replaced
+        }
+
     }
 
     private static void bootstrapping() {

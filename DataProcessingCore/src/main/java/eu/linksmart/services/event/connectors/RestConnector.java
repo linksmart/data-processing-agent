@@ -44,7 +44,6 @@ public class RestConnector extends Component implements IncomingConnector {
     protected static Logger loggerService = Utils.initLoggingConf(RestConnector.class);
     protected Configurator conf = Configurator.getDefaultConfig();
 
-    protected static Serializer parser =new DefaultSerializer();
 
     public RestConnector() {
         super(RestConnector.class.getSimpleName(), "REST API for insert Statements into the CEP Engines", Feeder.class.getSimpleName());
@@ -397,7 +396,7 @@ public class RestConnector extends Component implements IncomingConnector {
     public static String toJsonString(Object message){
 
         try {
-            return parser.toString(message);
+            return SharedSettings.getSerializer().toString(message);
         } catch (IOException e) {
             loggerService.error(e.getMessage(),e);
             return "{\"Error\":\"500\",\"Error Text\":\"Internal Server Error\",\"Message\":\""+e.getMessage()+"\"}";

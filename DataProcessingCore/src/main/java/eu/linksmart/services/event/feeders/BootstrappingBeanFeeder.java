@@ -2,6 +2,7 @@ package eu.linksmart.services.event.feeders;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.types.impl.StatementInstance;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.TraceableException;
@@ -21,13 +22,12 @@ import java.io.IOException;
  */
 public class BootstrappingBeanFeeder implements Feeder<BootstrappingBean> {
 
-    protected static Deserializer deserializer = new DefaultDeserializer();
     static protected Logger loggerService = Utils.initLoggingConf(BootstrappingBeanFeeder.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
     static {
         Feeder.feeders.put(BootstrappingBean.class.getCanonicalName(),new BootstrappingBeanFeeder());
-        deserializer.defineClassToInterface(EventEnvelope.class, Observation.class);
-        deserializer.defineClassToInterface(Statement.class, StatementInstance.class);
+        SharedSettings.getDeserializer().defineClassToInterface(EventEnvelope.class, Observation.class);
+        SharedSettings.getDeserializer().defineClassToInterface(Statement.class, StatementInstance.class);
     }
     static public void feed(String rawData) {
         //bootstrappingBean bootstrappingBean= gson.fromJson(rawData, bootstrappingBean.class);
@@ -35,7 +35,7 @@ public class BootstrappingBeanFeeder implements Feeder<BootstrappingBean> {
         BootstrappingBean bootstrappingBean = null;
         try {
             // "[{\"name\":\"aggregatedConsumption\",\"statement\":\"select Event.factory(begin.bn, String.valueOf(begin.last.v), power.sumof(i=>cast(i.last.v,double)), cast(fin.last.t, long) - cast(begin.last.t,long) ) from pattern[ every begin=SenML(last.n='WS0024' and cast(last.v,int)!=0)-> ( (power=SenML(last.n='WSS0017')) until (fin=SenML(last.n='WS0024' and cast(last.v,int)=0))) ]\"}]"
-            bootstrappingBean = deserializer.parse(rawData, BootstrappingBean.class);
+            bootstrappingBean = SharedSettings.getDeserializer().parse(rawData, BootstrappingBean.class);
         } catch (IOException e) {
             loggerService.error(e.getMessage(), e);
         }

@@ -33,7 +33,6 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
 
     //Start of code made for testing performance
     protected final boolean VALIDATION_MODE;
-    private final Deserializer deserializer;
     private final MessageValidator validator;
     //End of code made for testing performance
 
@@ -42,10 +41,9 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE)) {
-            deserializer = new DefaultDeserializer();
+
             validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE));
         }else{
-            deserializer = null;
             validator = null;
         }
     }
@@ -54,10 +52,8 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_OBSERVERS   )) {
-            deserializer = new DefaultDeserializer();
             validator = new MessageValidator(this.getClass(),"0",Configurator.getDefaultConfig().getLong(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE));
         }else{
-            deserializer = null;
             validator = null;
         }
     }
@@ -135,7 +131,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     private void toValidation(String topic, byte[] payload){
         if (VALIDATION_MODE)
             try {
-                validator.addMessage(topic,(int)deserializer.deserialize(payload, Hashtable.class).get("ResultValue"));
+                validator.addMessage(topic,(int)SharedSettings.getDeserializer().deserialize(payload, Hashtable.class).get("ResultValue"));
             } catch (IOException e) {
                 e.printStackTrace();
             }

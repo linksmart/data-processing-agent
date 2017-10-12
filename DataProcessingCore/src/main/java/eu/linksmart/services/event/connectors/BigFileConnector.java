@@ -7,6 +7,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.feeders.EventFeeder;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
@@ -25,18 +26,12 @@ public class BigFileConnector extends Component implements IncomingConnector {
     static protected Configurator conf =  Configurator.getDefaultConfig();
     final Class<? extends EventEnvelope> type;
     protected List<String> filePaths = new ArrayList<>();
-    protected Deserializer deserializer ;
 
     public BigFileConnector(Class<? extends EventEnvelope> type, String... filePaths) throws UntraceableException, TraceableException {
         super(FileConnector.class.getSimpleName(), "Feeder that inserts statements and Events at loading time", Feeder.class.getSimpleName());
 
         this.type = type;
-        try {
-            this.deserializer = type.newInstance().getSerializationFactory().getDeserializer();
-        } catch (InstantiationException | IllegalAccessException e) {
-            loggerService.warn("The type "+type.getCanonicalName()+" doesn't provide a SerializationFactory. Therefore, a generic one had been started!");
-            this.deserializer = new DefaultDeserializer();
-        }
+
         for(String f: filePaths)
             if(f!=null&&!f.equals(""))
                 this.filePaths.add(f);
@@ -92,7 +87,7 @@ public class BigFileConnector extends Component implements IncomingConnector {
 
             try {
 
-                eventList = deserializer.parse(strLine, type);
+                eventList = SharedSettings.getDeserializer().parse(strLine, type);
                 EventFeeder.getFeeder().feed(eventList);
 
             } catch ( Exception e) {

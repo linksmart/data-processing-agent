@@ -26,7 +26,6 @@ import java.util.*;
 public class RegistrationService {
 
     private Publisher publisher;
-    private Serializer serializer= new DefaultSerializer();
     private Configurator conf = Configurator.getDefaultConfig();
 
 
@@ -82,7 +81,7 @@ public class RegistrationService {
 
         if(changed) {
             try {
-                publisher.publish(serializer.serialize(thing));
+                publisher.publish(SharedSettings.getSerializer().serialize(thing));
             } catch (IOException e) {
                 loggerService.error(e.getMessage(), e);
             }
@@ -160,7 +159,7 @@ public class RegistrationService {
     }
     public String getThingString() {
         try {
-            return serializer.toString(thing);
+            return SharedSettings.getSerializer().toString(thing);
         } catch (IOException e) {
             loggerService.error(e.getMessage(),e);
         }

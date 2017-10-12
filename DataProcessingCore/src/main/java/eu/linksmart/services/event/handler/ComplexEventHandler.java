@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
     protected Publisher publisher;
     protected Enveloper enveloper;
-    protected Serializer serializer;
 
 
     private Configurator conf =  Configurator.getDefaultConfig();
@@ -35,7 +34,6 @@ import java.util.stream.Collectors;
 
         this.query=query;
         try {
-            serializer = new DefaultSerializer();
             enveloper = new DefaultEnveloper();
             if(!query.isRESTOutput()) {
                 publisher = new DefaultMQTTPublisher(query, SharedSettings.getId(), SharedSettings.getWill(), SharedSettings.getWillTopic());
@@ -66,7 +64,7 @@ import java.util.stream.Collectors;
                 ));
                 // if the eventMap is only one then is sent as one event
                 try {
-                    publisher.publish(serializer.serialize( query.getLastOutput()));
+                    publisher.publish(SharedSettings.getSerializer().serialize( query.getLastOutput()));
 
                 } catch (Exception eEntity) {
                     loggerService.error(eEntity.getMessage(), eEntity);
@@ -87,7 +85,7 @@ import java.util.stream.Collectors;
                 if(conf.getBoolean(Const.AGGREGATE_EVENTS_CONF)) {
                     // if the aggregation option is on; the whole map is send as it is
                     try {
-                        publisher.publish(serializer.serialize(query.getLastOutput()));
+                        publisher.publish(SharedSettings.getSerializer().serialize(query.getLastOutput()));
                     } catch (Exception e) {
                         loggerService.error(e.getMessage(), e);
                     }
@@ -105,7 +103,7 @@ import java.util.stream.Collectors;
                     // if the aggregation option is off; each value of the map is send as an independent event
                     eventMap.keySet().forEach(key -> {
                                 try {
-                                    publisher.publish(serializer.serialize(query.getLastOutput()));
+                                    publisher.publish(SharedSettings.getSerializer().serialize(query.getLastOutput()));
                                 } catch (Exception ex) {
                                     loggerService.error(ex.getMessage(), ex);
                                 }
@@ -124,7 +122,6 @@ import java.util.stream.Collectors;
 
         publisher.close();
         enveloper.close();
-        serializer.close();
     }
     @Override
     public Enveloper getEnveloper() {
