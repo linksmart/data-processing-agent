@@ -8,7 +8,7 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.feeders.StatementFeeder;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;
@@ -348,14 +348,14 @@ public class RestConnector extends Component implements IncomingConnector {
 
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
-                result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 500, "Intern Server Error", e.getMessage()));
+                result.addResponse(createErrorMapMessage(SharedSettings.getId(), "Agent", 500, "Intern Server Error", e.getMessage()));
             }
 
         }
 
         // returning error in case neither an error was produced nor success. This case theoretical cannot happen, if it does there is a program error.
         if(result.getResponses().isEmpty()) {
-            result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 500, "Intern Server Error", "Unknown status"));
+            result.addResponse(createErrorMapMessage(SharedSettings.getId(), "Agent", 500, "Intern Server Error", "Unknown status"));
             loggerService.error("Impossible state reached");
         }
         // preparing location header
@@ -365,7 +365,7 @@ public class RestConnector extends Component implements IncomingConnector {
                 uri = new URI("/statement/"+statement.getID());
         } catch (URISyntaxException e) {
             loggerService.error(e.getMessage(),e);
-            result.addResponse(createErrorMapMessage(DynamicConst.getId(),"Agent",500,"Intern Server Error",e.getMessage()));
+            result.addResponse(createErrorMapMessage(SharedSettings.getId(),"Agent",500,"Intern Server Error",e.getMessage()));
         }
         // creating HTTP response
         return finalHTTPCreationResponse(result,uri);
@@ -389,10 +389,10 @@ public class RestConnector extends Component implements IncomingConnector {
     }
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy,String producerType,int codeNo, String codeTxt,String message){
-        return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, "");
+        return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),null,producerType,message,codeNo, "");
     }
     public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
-        return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, "");
+        return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),processedBy,producerType,message,codeNo, "");
     }
     public static String toJsonString(Object message){
 

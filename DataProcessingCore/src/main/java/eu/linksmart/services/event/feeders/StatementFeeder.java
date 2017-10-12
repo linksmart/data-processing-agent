@@ -3,10 +3,9 @@ package eu.linksmart.services.event.feeders;
 
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.services.event.core.RegistrationService;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
@@ -156,22 +155,22 @@ public class StatementFeeder implements Feeder<Statement> {
                         break;
                 }
                 if(res)
-                    response.addResponse(new GeneralRequestResponse("Internal Server Error", DynamicConst.getId(),hash, "Agent", "Unexpected error in statement with id " + hash + " in engine " + dfw.getName(), 500));
+                    response.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(),hash, "Agent", "Unexpected error in statement with id " + hash + " in engine " + dfw.getName(), 500));
 
             } catch (StatementException e) {
                 loggerService.error(e.getMessage(), e);
-                response.addResponse(new GeneralRequestResponse("Bad Request", DynamicConst.getId(),hash, "Agent", e.getMessage(), 400));
+                response.addResponse(new GeneralRequestResponse("Bad Request", SharedSettings.getId(),hash, "Agent", e.getMessage(), 400));
 
             } catch (Exception e) {
                 loggerService.error(e.getMessage(), e);
-                response.addResponse(new GeneralRequestResponse("Internal Server Error", DynamicConst.getId(), null, "Agent", e.getMessage(), 500));
+                response.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(), null, "Agent", e.getMessage(), 500));
 
                 success = false;
             }
             if (success) {
                 loggerService.info("Statement " + hash + " was successful");
 
-                response.addResponse(new GeneralRequestResponse("OK", DynamicConst.getId(), null, "Agent", "Statement  with id "+ hash+ " in engine "+dfw.getName()+" was processed successfully", 200));
+                response.addResponse(new GeneralRequestResponse("OK", SharedSettings.getId(), null, "Agent", "Statement  with id "+ hash+ " in engine "+dfw.getName()+" was processed successfully", 200));
             }
 
         }
@@ -256,7 +255,7 @@ public class StatementFeeder implements Feeder<Statement> {
                     result.addResponse(createSuccessMapMessage(result.getHeadResource().getID(), "Statement", result.getHeadResource().getID(), 200, "OK", "Statement " + result.getHeadResource().getID() + " was successful"));
                 }
                 if (result.getResponses().isEmpty() && org.getTargetAgents() != null && !org.getTargetAgents().equals(result.getHeadResource().getTargetAgents()) && !result.getHeadResource().getTargetAgents().isEmpty()) {
-                    if (result.getHeadResource().getTargetAgents().contains(DynamicConst.getId())) {
+                    if (result.getHeadResource().getTargetAgents().contains(SharedSettings.getId())) {
                         // the statement addresses me as processing agent
                          dfw.getStatements().get(id).setTargetAgents(result.getHeadResource().getTargetAgents());
                     } else {
@@ -366,20 +365,20 @@ public class StatementFeeder implements Feeder<Statement> {
     }
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy,String producerType,int codeNo, String codeTxt,String message){
-        if(DynamicConst.getId().equals(generatedBy))
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+conf.getString(Const.STATEMENT_OUT_TOPIC_ERROR_CONF_PATH)+generatedBy+"/");
+        if(SharedSettings.getId().equals(generatedBy))
+            return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+conf.getString(Const.STATEMENT_OUT_TOPIC_ERROR_CONF_PATH)+generatedBy+"/");
         else if(generatedBy!=null)
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+generatedBy+DynamicConst.getId()+"/");
+            return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+generatedBy+ SharedSettings.getId()+"/");
 
-        return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+conf.getString(Const.STATEMENT_OUT_TOPIC_ERROR_CONF_PATH)+DynamicConst.getId()+"/");
+        return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+conf.getString(Const.STATEMENT_OUT_TOPIC_ERROR_CONF_PATH)+ SharedSettings.getId()+"/");
     }
     public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
-        if(DynamicConst.getId().equals(id))
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"/"+id+"/");
+        if(SharedSettings.getId().equals(id))
+            return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"/"+id+"/");
         else if(id!=null)
-            return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),processedBy,producerType,message,codeNo, DefaultMQTTPublisher.defaultOutput(DynamicConst.getId())+id+"/");
+            return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),processedBy,producerType,message,codeNo, DefaultMQTTPublisher.defaultOutput(SharedSettings.getId())+id+"/");
 
-        return new GeneralRequestResponse(codeTxt,DynamicConst.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+DynamicConst.getId()+"/");
+        return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+ SharedSettings.getId()+"/");
     }
 
 
@@ -489,7 +488,7 @@ public class StatementFeeder implements Feeder<Statement> {
         Map<String,Statement> resource= new Hashtable<>();
 
         if (CEPEngine.instancedEngines.size() == 0) {
-            result.addResponse(createErrorMapMessage(DynamicConst.getId(), "Agent", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
+            result.addResponse(createErrorMapMessage(SharedSettings.getId(), "Agent", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
         }else {
 
             for (CEPEngine dfw : CEPEngine.instancedEngines.values())
@@ -505,7 +504,7 @@ public class StatementFeeder implements Feeder<Statement> {
         }
 
         result.setResources(resource);
-        result.addResponse(StatementFeeder.createSuccessMapMessage("Agent", DynamicConst.getId(), "", 200, "OK", "Resources found are in 'Resources' section"));
+        result.addResponse(StatementFeeder.createSuccessMapMessage("Agent", SharedSettings.getId(), "", 200, "OK", "Resources found are in 'Resources' section"));
 
         return result;
     }

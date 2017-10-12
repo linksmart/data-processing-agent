@@ -1,6 +1,5 @@
 package eu.linksmart.services.event.core;
 
-import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.connectors.BigFileConnector;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
@@ -13,8 +12,7 @@ import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.connectors.RestInit;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.api.event.types.impl.BootstrappingBean;
-import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
@@ -71,7 +69,7 @@ public class DataProcessingCore {
             active = mqtt.isUp();
             RegistrationService.getReference().startTimer();
             if(active) {
-                loggerService.info("The Agent with ID "+DynamicConst.getId()+" is alive");
+                loggerService.info("The Agent with ID "+ SharedSettings.getId()+" is alive");
                 int hb = 5000;
                 try {
                      hb=conf.getInt(Const.LOG_HEARTBEAT_TIME_CONF_PATH);
@@ -97,8 +95,8 @@ public class DataProcessingCore {
             Configurator.getDefaultConfig().enableEnvironmentalVariables();
         conf = Configurator.getDefaultConfig();
 
-        DynamicConst.setWill(RegistrationService.getReference().getThingString());
-        DynamicConst.setWillTopic(conf.getString(Const.REGISTRATION_TOPIC_WILL).replace("<id>",DynamicConst.getId()));
+        SharedSettings.setWill(RegistrationService.getReference().getThingString());
+        SharedSettings.setWillTopic(conf.getString(Const.REGISTRATION_TOPIC_WILL).replace("<id>", SharedSettings.getId()));
         loggerService = Utils.initLoggingConf(DataProcessingCore.class);
         if(args != null) {
             loggerService.info("Loading configuration form file " + args);
@@ -111,11 +109,11 @@ public class DataProcessingCore {
             loggerService.info("The environmental variables are loaded!");
         String idPath= conf.getString(Const.ID_CONF_PATH);
         if("*".equals(idPath))
-            DynamicConst.setIsSet(true);
+            SharedSettings.setIsSet(true);
         else
-            DynamicConst.setId(conf.getString(Const.ID_CONF_PATH));
+            SharedSettings.setId(conf.getString(Const.ID_CONF_PATH));
 
-        conf.setProperty(Const.ID_CONF_PATH,DynamicConst.getId());
+        conf.setProperty(Const.ID_CONF_PATH, SharedSettings.getId());
     }
 
     protected static synchronized boolean init(String args){
@@ -123,7 +121,7 @@ public class DataProcessingCore {
         initConf(args);
 
 
-        loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + DynamicConst.getId());
+        loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + SharedSettings.getId());
 
         initCEPEngines();
         intoCEPTypes();

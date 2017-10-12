@@ -1,31 +1,24 @@
 package eu.linksmart.services.event.core;
 
-import eu.linksmart.api.event.components.Enveloper;
 import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.feeders.StatementFeeder;
-import eu.linksmart.services.event.handler.DefaultEnveloper;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservedPropertyImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.SensorImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ThingImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
-import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.services.utils.serialization.Serializer;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by José Ángel Carvajal on 28.07.2017 a researcher of Fraunhofer FIT.
@@ -113,7 +106,7 @@ public class RegistrationService {
     }
 
     private void constructBaseThing(){
-        thing.setId(DynamicConst.getId());
+        thing.setId(SharedSettings.getId());
         thing.setDescription(conf.getString(Const.AGENT_DESCRIPTION));
         thing.setHistoricalLocations(null);
         thing.setLocations(null);
@@ -141,12 +134,12 @@ public class RegistrationService {
     public void startTimer() {
 
         publisher = new DefaultMQTTPublisher(
-                DynamicConst.getId(),
-                DynamicConst.getId(),
-                new String[]{conf.getString(Const.REGISTRATION_TOPIC).replace("<id>", DynamicConst.getId())+thing.getId()},
+                SharedSettings.getId(),
+                SharedSettings.getId(),
+                new String[]{conf.getString(Const.REGISTRATION_TOPIC).replace("<id>", SharedSettings.getId())+thing.getId()},
                 new String[]{"control"},
-                DynamicConst.getWill(),
-                DynamicConst.getWillTopic()
+                SharedSettings.getWill(),
+                SharedSettings.getWillTopic()
 
         );
         timer.schedule(new TimerTask() {

@@ -3,7 +3,7 @@ package eu.linksmart.services.event.handler;
 
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.components.ComplexEventPropagationHandler;
 import eu.linksmart.api.event.components.Enveloper;
 import eu.linksmart.api.event.components.Publisher;
@@ -38,14 +38,14 @@ import java.util.stream.Collectors;
             serializer = new DefaultSerializer();
             enveloper = new DefaultEnveloper();
             if(!query.isRESTOutput()) {
-                publisher = new DefaultMQTTPublisher(query,DynamicConst.getId(),DynamicConst.getWill(),DynamicConst.getWillTopic());
-                loggerService.info("The Agent(ID:" + DynamicConst.getId() + ") generating events for statement ID "+query.getID()+" in the broker " + query.getScope(0) + "  URL: " + (new BrokerConfiguration(query.getID()).getURL()));
-                loggerService.info("The Agent(ID:"+DynamicConst.getId()+") generating event in the topic(s): " + publisher.getOutputs().stream().collect(Collectors.joining(",")));
+                publisher = new DefaultMQTTPublisher(query, SharedSettings.getId(), SharedSettings.getWill(), SharedSettings.getWillTopic());
+                loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") generating events for statement ID "+query.getID()+" in the broker " + query.getScope(0) + "  URL: " + (new BrokerConfiguration(query.getID()).getURL()));
+                loggerService.info("The Agent(ID:"+ SharedSettings.getId()+") generating event in the topic(s): " + publisher.getOutputs().stream().collect(Collectors.joining(",")));
             }else {
 
                 publisher = new HTTPPublisher(query);
             }
-            query.setLastOutput(enveloper.pack(Double.NaN,new Date(),DynamicConst.getId(),query.getID(),"BootstrapMessage",query.getName()));
+            query.setLastOutput(enveloper.pack(Double.NaN,new Date(), SharedSettings.getId(),query.getID(),"BootstrapMessage",query.getName()));
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
             if (eventMap.size() == 1) {
                 query.setLastOutput(enveloper.pack(
                         eventMap.get(eventMap.keySet().toArray()[0]),
-                        new Date(), DynamicConst.getId(),
+                        new Date(), SharedSettings.getId(),
                         query.getID(),
                         eventMap.keySet().toArray()[0].toString(),
                         query.getName()
@@ -76,7 +76,7 @@ import java.util.stream.Collectors;
                         enveloper.pack(
                                 eventMap,
                                 new Date(),
-                                DynamicConst.getId(),
+                                SharedSettings.getId(),
                                 query.getID(),
                                 "Map",
                                 query.getName()
@@ -96,7 +96,7 @@ import java.util.stream.Collectors;
                             enveloper.pack(
                                     eventMap,
                                     new Date(),
-                                    DynamicConst.getId(),
+                                    SharedSettings.getId(),
                                     query.getID(),
                                     "Map",
                                     query.getName()

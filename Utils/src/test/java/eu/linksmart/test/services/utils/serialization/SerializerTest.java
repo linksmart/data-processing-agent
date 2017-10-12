@@ -1,16 +1,17 @@
 package eu.linksmart.test.services.utils.serialization;
 
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
-import eu.linksmart.services.utils.serialization.DefaultSerializer;
-import eu.linksmart.services.utils.serialization.Deserializer;
-import eu.linksmart.services.utils.serialization.Serializer;
+import eu.linksmart.services.utils.serialization.*;
 
 import org.junit.Test;
+import sun.security.pkcs.PKCS8Key;
+import sun.security.rsa.RSAPrivateKeyImpl;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -59,6 +60,32 @@ public class SerializerTest {
         assertEquals("expecting int ",1,map.get("int"));
         assertEquals("expecting float ",1.0,map.get("float"));
         assertEquals("expecting vector of 4 elements",4, ((List)map.get("vec")).size());
+
+    }
+    @Test
+    public void JWSSerializationTest() {
+        try {
+
+            Map<String,String> original = new Hashtable(), parsed;
+            original.put("test","ok");
+
+            JWSSerializer serializer = new JWSSerializer(new DefaultSerializer());
+            Deserializer deserializer = new JWSDeserializer(Base64.getEncoder().encodeToString(serializer.getPublicKey().getEncoded()));
+
+            String serialized = serializer.toString(original);
+            parsed = deserializer.parse(serialized,Map.class);
+
+           // assertEquals("The String after serialization is the same as before deserialization", simpleStrTest, serializer.toString(mapS));
+
+            assertEquals("Serialization status is ","ok", parsed.get("test"));
+            serializer.close();
+            deserializer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+            return;
+        }
+
 
     }
 }

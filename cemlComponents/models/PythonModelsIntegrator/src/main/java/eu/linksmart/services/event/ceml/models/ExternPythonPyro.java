@@ -7,7 +7,7 @@ import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 
 import java.io.*;
 import java.util.*;
@@ -170,6 +170,6 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
 
     // Convert integer prediction to Prediction<Integer>
     private Prediction<Integer> toPrediction(Object input, Integer response) {
-        return new PredictionInstance<>(response,input, DynamicConst.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
+        return new PredictionInstance<>(response,input, SharedSettings.getId()+":"+this.getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
     }
 }

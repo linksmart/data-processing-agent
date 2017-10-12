@@ -4,7 +4,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
@@ -38,7 +38,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     //End of code made for testing performance
 
     public IncomingMqttObserver(List<String> topics)  {
-        this.topics.addAll( topics.stream().map(s -> s.replace("<id>",DynamicConst.getId())).collect(Collectors.toList()));
+        this.topics.addAll( topics.stream().map(s -> s.replace("<id>", SharedSettings.getId())).collect(Collectors.toList()));
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE)) {
@@ -50,7 +50,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
         }
     }
     public IncomingMqttObserver(String topic)  {
-        topics.add(topic.replace("<id>",DynamicConst.getId()));
+        topics.add(topic.replace("<id>", SharedSettings.getId()));
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_OBSERVERS   )) {
@@ -105,7 +105,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     }
     protected void publishFeedback(TraceableException e){
         try {
-            brokerService.publish(buildTopic(DynamicConst.getId(),e.getErrorProducerType(),"error",e.getErrorProducerId()), e.getMessage());
+            brokerService.publish(buildTopic(SharedSettings.getId(),e.getErrorProducerType(),"error",e.getErrorProducerId()), e.getMessage());
         } catch (Exception ex) {
 
             loggerService.error(e.getMessage(), e);
@@ -114,7 +114,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     }
     protected void publishFeedback(UntraceableException e){
         try {
-            brokerService.publish(buildTopic(DynamicConst.getId(),"error", e.getMessage()), e.getMessage());
+            brokerService.publish(buildTopic(SharedSettings.getId(),"error", e.getMessage()), e.getMessage());
         } catch (Exception ex) {
 
             loggerService.error(e.getMessage(), e);

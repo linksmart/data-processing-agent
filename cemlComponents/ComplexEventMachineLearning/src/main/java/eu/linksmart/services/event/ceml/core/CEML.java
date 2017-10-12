@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.api.FileCemlAPI;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
@@ -93,7 +93,7 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         }
         Feeder.feeders.put(CEML.class.getCanonicalName(), new CEML());
         // bootstrap requests
-        loggerService.info("The CEML has started in the Agent with ID "+DynamicConst.getId());
+        loggerService.info("The CEML has started in the Agent with ID "+ SharedSettings.getId());
     }
     public static MultiResourceResponses<CEMLRequest> feedLearningRequest(CEMLRequest request){
         MultiResourceResponses<CEMLRequest> responses = new MultiResourceResponses<>();
@@ -107,22 +107,22 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         }catch (StatementException e) {
             loggerService.error(e.getMessage(),e);
             responses = new MultiResourceResponses<>();
-            responses.addResponse(new GeneralRequestResponse("Bad Request", DynamicConst.getId(),e.getErrorProducerId(),e.getErrorProducerType(), e.getMessage(), 400));
+            responses.addResponse(new GeneralRequestResponse("Bad Request", SharedSettings.getId(),e.getErrorProducerId(),e.getErrorProducerType(), e.getMessage(), 400));
             return responses;
         }catch (TraceableException e) {
             loggerService.error(e.getMessage(),e);
             responses = new MultiResourceResponses<>();
-            responses.addResponse(new GeneralRequestResponse("Internal Server Error", DynamicConst.getId(),e.getErrorProducerId(),e.getErrorProducerType(), e.getMessage(), 500));
+            responses.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(),e.getErrorProducerId(),e.getErrorProducerType(), e.getMessage(), 500));
             return responses;
         }catch (Exception e) {
             loggerService.error(e.getMessage(),e);
             responses = new MultiResourceResponses<>();
-            responses.addResponse(new GeneralRequestResponse("Internal Server Error", DynamicConst.getId(),null,"Agent", e.getMessage(), 500));
+            responses.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(),null,"Agent", e.getMessage(), 500));
             return responses;
         }
 
         responses.addResources(request.getName(),request);
-        responses.addResponse(new GeneralRequestResponse("Created",DynamicConst.getId(),request.getName(), "Learning Request", "Created",201 ));
+        responses.addResponse(new GeneralRequestResponse("Created", SharedSettings.getId(),request.getName(), "Learning Request", "Created",201 ));
         return responses;
 
 
@@ -143,13 +143,13 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         } catch (IOException e){
             loggerService.error(e.getMessage(), e);
             result = new MultiResourceResponses<>();
-            result.addResponse(new GeneralRequestResponse("Bad Request",DynamicConst.getId(),name, "Learning Request","Error 400 Bad Request: Error while parsing request  " + e.getMessage(),400 ));
+            result.addResponse(new GeneralRequestResponse("Bad Request", SharedSettings.getId(),name, "Learning Request","Error 400 Bad Request: Error while parsing request  " + e.getMessage(),400 ));
 
         }
         catch (Exception e){
             loggerService.error(e.getMessage(), e);
             result = new MultiResourceResponses<>();
-            result.addResponse(new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
+            result.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
 
         }
 
@@ -166,12 +166,12 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
                 responses= new MultiResourceResponses<>();
                 responses.addResources(request.getName(),request);
                 loggerService.error(e.getMessage(), e);
-                responses.addResponse(new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),request.getName(), "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
+                responses.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(),request.getName(), "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
 
             }
         else{
             responses= new MultiResourceResponses<>();
-            responses.addResponse(new GeneralRequestResponse("Bad Request",DynamicConst.getId(),request.getName(), "Agent","The request does not have a the mandatory property name!",500 ));
+            responses.addResponse(new GeneralRequestResponse("Bad Request", SharedSettings.getId(),request.getName(), "Agent","The request does not have a the mandatory property name!",500 ));
 
         }
 
@@ -191,10 +191,10 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
                         request =requests.get(name);
                         requests.remove(name);
                         request.destroy();
-                        result.addResponse(new GeneralRequestResponse("OK", DynamicConst.getId(), name, "Learning Request", "Success 200 OK: request with name " + name + " was deleted", 200));
+                        result.addResponse(new GeneralRequestResponse("OK", SharedSettings.getId(), name, "Learning Request", "Success 200 OK: request with name " + name + " was deleted", 200));
                         result.addResources(name,request);
                     }else {
-                        result.addResponse(new GeneralRequestResponse("Bad Request", DynamicConst.getId(), name, "Learning Request", "Error 400 Bad Request: request with name " + name + " does not exists", 400));
+                        result.addResponse(new GeneralRequestResponse("Bad Request", SharedSettings.getId(), name, "Learning Request", "Error 400 Bad Request: request with name " + name + " does not exists", 400));
                     }
 
 
@@ -202,7 +202,7 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
         }catch (Exception e){
             loggerService.error(e.getMessage(), e);
-            result.addResponse(new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
+            result.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
 
         }
 
@@ -252,19 +252,19 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
                         result.addResources(name, requests.get(name));
                 }
             else
-                result.addResponse( new GeneralRequestResponse("Not Found",DynamicConst.getId(),name, "Learning Request","Error 404 Not Found: Request with name " + name,404 ));
+                result.addResponse( new GeneralRequestResponse("Not Found", SharedSettings.getId(),name, "Learning Request","Error 404 Not Found: Request with name " + name,404 ));
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            result.addResponse( new GeneralRequestResponse("Internal Server Error",DynamicConst.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
+            result.addResponse( new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(),name, "Learning Request","Error 500 Intern Error: Error while executing method " + e.getMessage(),500 ));
 
 
         }
-        result.addResponse( new GeneralRequestResponse("OK",DynamicConst.getId(),name, "Learning Request", "OK",200 ));
+        result.addResponse( new GeneralRequestResponse("OK", SharedSettings.getId(),name, "Learning Request", "OK",200 ));
         return result;
     }
     static public Observation LastPrediction(String request){
-        return Observation.factory(requests.get(request).getLastPrediction(),"Prediction",request,DynamicConst.getId());
+        return Observation.factory(requests.get(request).getLastPrediction(),"Prediction",request, SharedSettings.getId());
     }
     static public Observation PredictUsing(String request,Object input){
         try {
@@ -289,13 +289,13 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
             requests.get(request).setLastPrediction(prediction);
             if(orgInput==null)
-                return Observation.factory(prediction,"Prediction",request,DynamicConst.getId());
+                return Observation.factory(prediction,"Prediction",request, SharedSettings.getId());
             else {
-                return Observation.factory(prediction,"Prediction",request,DynamicConst.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
+                return Observation.factory(prediction,"Prediction",request, SharedSettings.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
             }
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
-            return Observation.factory(e.getMessage(),"Error",request,DynamicConst.getId());
+            return Observation.factory(e.getMessage(),"Error",request, SharedSettings.getId());
         }
     }
     static void report(String id, String message){

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.feeders.StatementFeeder;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
@@ -465,13 +465,13 @@ public class CEMLManager implements CEMLRequest {
 
            setLastPrediction(prediction);
             if(orgInput==null)
-                return Observation.factory(prediction,"Prediction",name, DynamicConst.getId());
+                return Observation.factory(prediction,"Prediction",name, SharedSettings.getId());
             else {
-                return Observation.factory(prediction,"Prediction",name,DynamicConst.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
+                return Observation.factory(prediction,"Prediction",name, SharedSettings.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
             }
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
-            return Observation.factory(e.getMessage(),"Error",name,DynamicConst.getId());
+            return Observation.factory(e.getMessage(),"Error",name, SharedSettings.getId());
         }
     }
 }

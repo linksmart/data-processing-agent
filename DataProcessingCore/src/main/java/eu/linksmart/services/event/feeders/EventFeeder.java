@@ -2,7 +2,7 @@ package eu.linksmart.services.event.feeders;
 
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.api.event.components.Feeder;
@@ -90,7 +90,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
         }
     }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
-        if(topic.contains(DefaultMQTTPublisher.defaultOutput(DynamicConst.getId()))) // if it is my topic the event should be ignore the message
+        if(topic.contains(DefaultMQTTPublisher.defaultOutput(SharedSettings.getId()))) // if it is my topic the event should be ignore the message
             return;
 
         try {
@@ -120,7 +120,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
             if(event!=null)
                 throw new StatementException(event.getClass().getCanonicalName(),"Event","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
             else
-                throw new StatementException(DynamicConst.getId(),"Agent","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+                throw new StatementException(SharedSettings.getId(),"Agent","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
 
 
         }catch(TraceableException|UntraceableException e) {

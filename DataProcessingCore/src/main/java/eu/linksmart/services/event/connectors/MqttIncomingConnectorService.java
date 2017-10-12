@@ -3,7 +3,7 @@ package eu.linksmart.services.event.connectors;
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.services.event.connectors.Observers.IncomingMqttObserver;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
@@ -36,9 +36,9 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
     }
     public void addAddListener(String alias, String topic, IncomingMqttObserver listener) throws InternalException{
         try {
-            StaticBroker broker = new StaticBroker(alias, DynamicConst.getWill(),DynamicConst.getWillTopic());
+            StaticBroker broker = new StaticBroker(alias, SharedSettings.getWill(), SharedSettings.getWillTopic());
             listener.setBrokerService(broker);
-            broker.addListener(topic.replace("<id>",DynamicConst.getId()), listener);
+            broker.addListener(topic.replace("<id>", SharedSettings.getId()), listener);
             brokers.add(broker);
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);

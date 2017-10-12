@@ -122,6 +122,8 @@
         <nd4jpi.version>0.6.1-pi</nd4jpi.version>
         <nd4jcust.version>${nd4j.version}</nd4jcust.version>
         <canova.version>0.0.0.17</canova.version>
+        <!-- Java JSON Web Token (added in composition first) -->
+        <jjwt.version>3.2.0</jjwt.version>
     </properties>
    <!-- <profiles>
         <profile>
@@ -531,7 +533,13 @@
                 <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- JWT (added first in composition)  -->
 
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Created by José Ángel Carvajal on 22.06.2016 a researcher of Fraunhofer FIT.
  */
-public class DynamicConst implements Const {
+public class SharedSettings implements Const {
 
 
     protected static String id = UUID.randomUUID().toString();
@@ -20,7 +20,7 @@ public class DynamicConst implements Const {
     }
 
     public static void setWillTopic(String willTopic) {
-        DynamicConst.willTopic = willTopic;
+        SharedSettings.willTopic = willTopic;
     }
 
     public static String getWill() {
@@ -28,19 +28,19 @@ public class DynamicConst implements Const {
     }
 
     public static void setWill(String will) {
-        DynamicConst.will = will;
+        SharedSettings.will = will;
     }
 
-    private DynamicConst() {
+    private SharedSettings() {
     }
 
     public static void setIsSet(boolean isSet) {
-        DynamicConst.isSet = isSet;
+        SharedSettings.isSet = isSet;
     }
 
     public static void setId(String id) {
         isSet =true;
-        DynamicConst.id = id;
+        SharedSettings.id = id;
     }
 
 

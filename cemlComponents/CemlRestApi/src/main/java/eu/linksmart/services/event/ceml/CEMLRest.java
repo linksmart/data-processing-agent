@@ -1,24 +1,15 @@
 package eu.linksmart.services.event.ceml;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.components.IncomingConnector;
-import eu.linksmart.services.event.intern.DynamicConst;
-import eu.linksmart.api.event.ceml.data.*;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 
 import eu.linksmart.services.event.ceml.core.CEML;
 
-import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
-import eu.linksmart.api.event.ceml.LearningStatement;
-import eu.linksmart.api.event.ceml.model.Model;
-import eu.linksmart.api.event.ceml.model.ModelDeserializer;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
-import eu.linksmart.api.event.types.Statement;
 
 import eu.linksmart.services.utils.function.Utils;
 import org.slf4j.Logger;
@@ -160,7 +151,7 @@ public class CEMLRest extends Component implements IncomingConnector{
 
         // returning error in case neither an error was produced nor success. This case theoretical cannot happen, if it does there is a program error.
         if(result.getResponses().isEmpty()) {
-            result.addResponse(new GeneralRequestResponse("Error",DynamicConst.getId(),statementID, "Agent", "Intern Server Error", 500, "Unknown status"));
+            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, "Unknown status"));
             loggerService.error("Impossible state reached");
         }
         // preparing location header
@@ -171,7 +162,7 @@ public class CEMLRest extends Component implements IncomingConnector{
         } catch (URISyntaxException e) {
             loggerService.error(e.getMessage(),e);
 
-            result.addResponse(new GeneralRequestResponse("Error",DynamicConst.getId(),statementID, "Agent", "Intern Server Error", 500, e.getMessage()));
+            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, e.getMessage()));
         }
         // creating HTTP response
 

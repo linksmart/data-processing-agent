@@ -9,7 +9,7 @@ import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 import eu.linksmart.services.event.connectors.Observers.IncomingMqttObserver;
-import eu.linksmart.services.event.intern.DynamicConst;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
@@ -64,7 +64,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     protected MqttCemlAPI() throws MalformedURLException, MqttException, ClassNotFoundException {
         super(MqttCemlAPI.class.getSimpleName(), "Provides a MQTT light API to the CEML logic", "MqttCemlAPI");
         Class.forName(CEML.class.getCanonicalName());
-        brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST), DynamicConst.getWill(),DynamicConst.getWillTopic());
+        brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST), SharedSettings.getWill(), SharedSettings.getWillTopic());
         initAddRequest();
         initGetRequest();
         initRemoveRequest();
