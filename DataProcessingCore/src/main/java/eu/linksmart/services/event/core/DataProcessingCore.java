@@ -18,7 +18,6 @@ import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.utils.serialization.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -68,7 +67,7 @@ public class DataProcessingCore {
         while (active){
 
             active = mqtt.isUp();
-            RegistrationService.getReference().startTimer();
+            ThingsRegistrationService.getReference().startTimer();
             if(active) {
                 loggerService.info("The Agent with ID "+ SharedSettings.getId()+" is alive");
                 int hb = 5000;
@@ -96,8 +95,8 @@ public class DataProcessingCore {
             Configurator.getDefaultConfig().enableEnvironmentalVariables();
         conf = Configurator.getDefaultConfig();
 
-        SharedSettings.setWill(RegistrationService.getReference().getThingString());
-        SharedSettings.setWillTopic(conf.getString(Const.REGISTRATION_TOPIC_WILL).replace("<id>", SharedSettings.getId()));
+        SharedSettings.setWill(ThingsRegistrationService.getReference().getThingString());
+        SharedSettings.setWillTopic(conf.getString(Const.OGC_REGISTRATION_TOPIC_WILL).replace("<id>", SharedSettings.getId()));
         loggerService = Utils.initLoggingConf(DataProcessingCore.class);
         if(args != null) {
             loggerService.info("Loading configuration form file " + args);
@@ -125,39 +124,18 @@ public class DataProcessingCore {
         loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + SharedSettings.getId());
 
         initCEPEngines();
-        initSharedSettings();
         intoCEPTypes();
         initForceLoading();
         boolean success = initFeeders();
         bootstrapping();
         // force the loading of the RegistrationService
-        RegistrationService.getReference();
+        ThingsRegistrationService.getReference();
+
+        new ServiceRegistratorService();
+
         return success;
     }
 
-    private static void initSharedSettings() {
-        try {
-            if (conf.containsKeyAnywhere(Const.SERIALIZER_PROVIDER))
-                // in case the serialization provider is given, exists, and known we load it; else we load default.
-                if (conf.getString(Const.SERIALIZER_PROVIDER).equals("JWS")) {
-                    SharedSettings.setSerializer(new JWSSerializer(new DefaultSerializer()));
-
-                    loggerService.info("Loading JWS serializer");
-                } else
-                    loggerService.info("Loading default serializer"); // default serialized is not replaced
-            if (conf.containsKeyAnywhere(Const.DESERIALIZER_PROVIDER))
-                if (conf.getString(Const.DESERIALIZER_PROVIDER).equals("JWS")) {
-                    SharedSettings.setDeserializer(new JWSDeserializer(Base64.getEncoder().encodeToString(((JWSSerializer) SharedSettings.getSerializer()).getPublicKey().getEncoded())));
-
-                    loggerService.info("Loading JWS deserializer");
-                } else
-                    loggerService.info("Loading default deserializer");// default serialized is not replaced
-        }catch (Exception e){
-            loggerService.error(e.getMessage(),e);
-            loggerService.info("Loading default (de)serializers");// default serialized is not replaced
-        }
-
-    }
 
     private static void bootstrapping() {
         if(conf.getList(Const.PERSISTENT_DATA_FILE) != null ) {
@@ -215,14 +193,15 @@ public class DataProcessingCore {
 
 
             if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))
-                mqtt.addAddListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
+                mqtt.addListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
             //
 
             Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
                     .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
                     .forEach(alias -> Arrays.asList(conf.getStringArray(Const.EVENTS_IN_BROKER_CONF_PATH)).forEach(broker->{
                         try {
-                            mqtt.addAddListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
+                            if(! SharedSettings.existSharedObject(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias))
+                                mqtt.addListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
                         } catch (Exception e) {
                             loggerService.error(e.getMessage(),e);
                         }

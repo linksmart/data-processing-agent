@@ -40,6 +40,10 @@ import java.util.stream.Collectors;
  *
  * */
 public class StatementInstance implements Statement {
+    /**
+     * Define which handler will be instantiate in the CEP engine when no Handler was specifically defined.
+     * */
+    public static String DEFAULT_HANDLER = "eu.linksmart.services.event.handler.ComplexEventHandler";
 
 
     @JsonProperty("name")
@@ -67,7 +71,7 @@ public class StatementInstance implements Statement {
     @ApiModelProperty(notes = "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean")
     @Deprecated
     @JsonProperty("CEHandler")
-    protected String CEHandler= "eu.linksmart.services.event.handler.ComplexEventHandler";
+    protected String CEHandler= DEFAULT_HANDLER;
 
     @ApiModelProperty(notes = "Statement's Lifecycle.")
     @Deprecated

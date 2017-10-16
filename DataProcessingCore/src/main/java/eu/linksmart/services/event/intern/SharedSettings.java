@@ -1,11 +1,11 @@
 package eu.linksmart.services.event.intern;
 
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
-import eu.linksmart.services.utils.serialization.DefaultSerializer;
-import eu.linksmart.services.utils.serialization.Deserializer;
-import eu.linksmart.services.utils.serialization.Serializer;
+import eu.linksmart.services.utils.serialization.*;
 
+import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by José Ángel Carvajal on 22.06.2016 a researcher of Fraunhofer FIT.
@@ -19,6 +19,20 @@ public class SharedSettings implements Const {
     protected static String willTopic = null;
     protected static Serializer serializer = new DefaultSerializer();
     protected static Deserializer deserializer = new DefaultDeserializer();
+
+    protected static JWSSerializer jwsserializer;
+    protected static JWSDeserializer jwsdeserializer;
+    protected static ConcurrentMap<String, Object> extensionSharedObjects = new ConcurrentHashMap<>();
+    static  {
+        try {
+            jwsserializer = new JWSSerializer(serializer);
+
+            jwsdeserializer = new JWSDeserializer(jwsserializer.getPublicKeyInBase64String(), deserializer);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     protected static boolean isSet = false;
 
     public static String getWillTopic() {
@@ -69,5 +83,19 @@ public class SharedSettings implements Const {
 
     public static void setDeserializer(Deserializer deserializer) {
         SharedSettings.deserializer = deserializer;
+    }
+
+
+    public static void addSharedObject(String key, Object object){
+        extensionSharedObjects.put(key,object);
+
+    }
+
+    public static Object getSharedObject(String key){
+        return extensionSharedObjects.get(key);
+    }
+
+    public static boolean existSharedObject(String key) {
+        return extensionSharedObjects.containsKey(key);
     }
 }

@@ -74,7 +74,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     protected void initAddRequest()  {
 
         try {
-            MqttIncomingConnectorService.getReference().addAddListener(
+            MqttIncomingConnectorService.getReference().addListener(
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "add/",
                     new IncomingMqttObserver(   conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "add/") {
@@ -102,7 +102,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     protected void initRemoveRequest()  {
 
         try {
-            MqttIncomingConnectorService.getReference().addAddListener(
+            MqttIncomingConnectorService.getReference().addListener(
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
                   //  conf.getString(Const.CEML_MQTT_BROKER_PORT),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "remove/+",
@@ -138,7 +138,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     protected void initGetRequest()  {
 
         try {
-            MqttIncomingConnectorService.getReference().addAddListener(
+            MqttIncomingConnectorService.getReference().addListener(
                     conf.getString(Const.CEML_MQTT_BROKER_HOST),
                    // conf.getString(Const.CEML_MQTT_BROKER_PORT),
                     conf.getString(Const.CEML_MQTT_INPUT_TOPIC) + "get/+",

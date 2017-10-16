@@ -10,6 +10,7 @@ import java.util.Date;
  * Created by José Ángel Carvajal on 23.08.2016 a researcher of Fraunhofer FIT.
  */
 public class DefaultEnveloper implements Enveloper  {
+    public static String DEFAULT_ENVELOPER="eu.linksmart.services.event.handler.DefaultEnveloper";
 
     @Override
     public <IDType , ValueType > EventEnvelope pack(ValueType payload, Date date, IDType id, IDType idProperty, String description, String name) {

@@ -8,11 +8,11 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.ECKey;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.IOException;
 import java.security.*;
 import java.security.interfaces.ECPrivateKey;
+import java.util.Base64;
 import java.util.UUID;
 
 /**
@@ -192,6 +192,9 @@ public class JWSSerializer implements Serializer {
 
     public PublicKey getPublicKey() {
         return publicKey;
+    }
+    public String getPublicKeyInBase64String(){
+        return Base64.getEncoder().encodeToString(publicKey.getEncoded());
     }
 
     @Override

@@ -19,10 +19,10 @@
         <version>4.14</version>
     </dependency>
 </dependencies>
+<packaging>jar</packaging>
+    <!--  <build>
+ <plugins>
 
-    <build>
-        <plugins>
-            <!-- any other plugins -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
@@ -40,5 +40,5 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 </project>

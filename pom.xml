@@ -155,6 +155,7 @@
         <module>distributions</module>
         <module>test</module>
         <module>applications</module>
+        <module>LinkSmartSDK</module>
         <!-- <module>connectors</module> -->
     </modules>
     <dependencyManagement>
@@ -174,6 +175,12 @@
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
                 <artifactId>payload</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>LinkSmartSDK</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
             <dependency>

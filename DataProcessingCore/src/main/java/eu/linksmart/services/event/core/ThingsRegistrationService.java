@@ -13,8 +13,6 @@ import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.SensorImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ThingImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.serialization.DefaultSerializer;
-import eu.linksmart.services.utils.serialization.Serializer;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -23,7 +21,7 @@ import java.util.*;
 /**
  * Created by José Ángel Carvajal on 28.07.2017 a researcher of Fraunhofer FIT.
  */
-public class RegistrationService {
+public class ThingsRegistrationService {
 
     private Publisher publisher;
     private Configurator conf = Configurator.getDefaultConfig();
@@ -32,12 +30,12 @@ public class RegistrationService {
     private Thing thing = new ThingImpl();
     private Map<String,Datastream> datastreamMap = new Hashtable<>();
 
-    private Logger loggerService = Utils.initLoggingConf(RegistrationService.class);
+    private Logger loggerService = Utils.initLoggingConf(ThingsRegistrationService.class);
     private Timer timer;
     private boolean changed=true;
-    private static RegistrationService registrationService = new RegistrationService();
+    private static ThingsRegistrationService registrationService = new ThingsRegistrationService();
 
-    private RegistrationService() {
+    private ThingsRegistrationService() {
         timer = new Timer();
         constructBaseThing();
 
@@ -46,10 +44,10 @@ public class RegistrationService {
     }
 
 
-    static public RegistrationService getReference(){
+    static public ThingsRegistrationService getReference(){
 
         if(registrationService==null)
-            registrationService = new RegistrationService();
+            registrationService = new ThingsRegistrationService();
 
         return registrationService;
     }
@@ -135,7 +133,7 @@ public class RegistrationService {
         publisher = new DefaultMQTTPublisher(
                 SharedSettings.getId(),
                 SharedSettings.getId(),
-                new String[]{conf.getString(Const.REGISTRATION_TOPIC).replace("<id>", SharedSettings.getId())+thing.getId()},
+                new String[]{conf.getString(Const.OGC_REGISTRATION_TOPIC).replace("<id>", SharedSettings.getId())+thing.getId()},
                 new String[]{"control"},
                 SharedSettings.getWill(),
                 SharedSettings.getWillTopic()

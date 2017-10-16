@@ -10,7 +10,7 @@ import java.util.*;
  * Created by José Ángel Carvajal on 07.08.2015 a researcher of Fraunhofer FIT.
  */
 public class StaticBrokerService extends BrokerService implements Broker {
-    static Map<String, StaticBrokerService> brokerServices = new Hashtable<>();
+    public static Map<String, StaticBrokerService> brokerServices = new Hashtable<>();
 
     protected static Map<UUID,BrokerConfiguration> clients = new Hashtable<>();
 

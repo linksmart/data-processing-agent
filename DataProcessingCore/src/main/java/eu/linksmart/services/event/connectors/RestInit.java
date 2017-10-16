@@ -63,40 +63,56 @@ import java.util.*;
 public class RestInit {
     static Properties info = null;
     protected transient static Logger loggerService = Utils.initLoggingConf(RestInit.class);
+    private static Configurator conf;
+    private static boolean la = false;
+    private static boolean gpl = false;
     public static void init(Configurator conf) {
+        RestInit.conf = conf;
+
 
         try {
             info = Utils.createPropertyFiles("service.info");
         } catch (IOException e) {
             Utils.initLoggingConf(RestInit.class).error(e.getMessage(), e);
         }
+        if (conf.containsKeyAnywhere(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING))
+            Arrays.asList(conf.getStringArray(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)).forEach(s -> {
+                        if (s.toLowerCase().contains("ceml"))
+                            la = true;
+                    }
+            );
+        if (conf.containsKeyAnywhere(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING))
+            Arrays.asList(conf.getStringArray(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)).forEach(s -> {
+                        if (s.toLowerCase().contains("esper"))
+                            gpl = true;
+                    }
+            );
 
         Class[] clas = null;
-            if(conf.containsKeyAnywhere(Const.REST_API_EXTENSION)) {
-                String[] modules = conf.getStringArray(Const.REST_API_EXTENSION);
-                clas= new Class[modules.length+1];
+        if (conf.containsKeyAnywhere(Const.REST_API_EXTENSION)) {
+            String[] modules = conf.getStringArray(Const.REST_API_EXTENSION);
+            clas = new Class[modules.length + 1];
 
-                for(int i=0; i<modules.length;i++){
-                    try {
-                        if (!"".equals(modules[i])) {
-                            Class c = Class.forName(modules[i]);
-                            loggerService.info("Extension: " + c.getSimpleName() + " loaded");
-                            clas[i] = c;
-                            i++;
-                        }
-                    } catch (ClassNotFoundException e) {
-                        loggerService.error(e.getMessage(), e);
+            for (int i = 0; i < modules.length; i++) {
+                try {
+                    if (!"".equals(modules[i])) {
+                        Class c = Class.forName(modules[i]);
+                        loggerService.info("Extension: " + c.getSimpleName() + " loaded");
+                        clas[i] = c;
+                        i++;
                     }
+                } catch (ClassNotFoundException e) {
+                    loggerService.error(e.getMessage(), e);
                 }
-
-
             }
+
+
+        }
         SpringApplication springApp;
-        if(clas!=null) {
+        if (clas != null) {
             clas[clas.length - 1] = RestInit.class;
             springApp = new SpringApplication(clas);
-        }
-        else
+        } else
             springApp = new SpringApplication(RestInit.class);
 
         springApp.setDefaultProperties(toProperties(conf));
@@ -111,7 +127,7 @@ public class RestInit {
 
         Map<String, Object> map = new Hashtable<>();
         Map<String, ArrayList<ComponentInfo>> aux = new Hashtable<>();
-        map.put("Distribution", info.getProperty("linksmart.service.info.distribution.name"));
+        map.put("Distribution", info.getProperty((la)?"linksmart.service.info.distribution.name.la":"linksmart.service.info.distribution.name.dpa"));
         AnalyzerComponent.loadedComponents.values().stream().filter(components -> !components.isEmpty()).forEach(components -> {
             ComponentInfo component = components.values().iterator().next();
             for (String implementationOf : component.getImplementationOf()) {
@@ -133,7 +149,7 @@ public class RestInit {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName(info.getProperty("linksmart.service.info.distribution.name"))
+                .groupName(info.getProperty((la)?"linksmart.service.info.distribution.name.la":"linksmart.service.info.distribution.name.dpa"))
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())
@@ -142,13 +158,13 @@ public class RestInit {
     }
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title(info.getProperty("linksmart.service.info.distribution.name"))
+                .title(info.getProperty((la)?"linksmart.service.info.distribution.name.la":"linksmart.service.info.distribution.name.dpa"))
                 .description(info.getProperty("linksmart.service.info.distribution.description"))
                 .version(Utils.getVersion())
                         //.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
-                .contact(new Contact(info.getProperty("linksmart.service.info.distribution.contact.name"),info.getProperty("linksmart.service.info.distribution.contact.url"),info.getProperty("linksmart.service.info.distribution.contact.email")))
-                .license(info.getProperty("linksmart.service.info.distribution.license"))
-                .licenseUrl(info.getProperty("linksmart.service.info.distribution.url"))
+                .contact(new Contact(info.getProperty((la)?"linksmart.service.info.distribution.name.la":"linksmart.service.info.distribution.name.dpa"),info.getProperty("linksmart.service.info.distribution.contact.url"),info.getProperty("linksmart.service.info.distribution.contact.email")))
+                .license(info.getProperty((!gpl)?"linksmart.service.info.distribution.license":"linksmart.service.info.distribution.license.gpl"))
+                .licenseUrl(info.getProperty((!gpl)?"linksmart.service.info.distribution.url":"linksmart.service.info.distribution.url.gpl"))
                 .build();
     }
     static private Properties toProperties(Configurator configurator){

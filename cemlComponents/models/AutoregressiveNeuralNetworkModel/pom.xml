@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
-
+<packaging>jar</packaging>
 <dependencies>
     <dependency>
         <groupId>org.deeplearning4j</groupId>

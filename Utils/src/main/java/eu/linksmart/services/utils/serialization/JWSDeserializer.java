@@ -62,17 +62,17 @@ public class JWSDeserializer implements Deserializer {
                 if (algorithmName.substring(0, 2).equals("RS") || algorithmName.substring(0, 1).equals("PS"))
                     verifiers.putIfAbsent(
                             keyName,
-                            new RSASSAVerifier(new RSAPublicKeyImpl(Base64.getDecoder().decode(keys.get(myInstance))))
+                            new RSASSAVerifier(new RSAPublicKeyImpl(Base64.getDecoder().decode(keys.get(keyName))))
                     );
                 else if (algorithmName.substring(0, 2).equals("EC"))
                     verifiers.putIfAbsent(
                             keyName,
-                            new ECDSAVerifier(ECKey.parse(keys.get(myInstance)))
+                            new ECDSAVerifier(ECKey.parse(keys.get(keyName)))
                     );
                 else if (algorithmName.substring(0, 2).equals("HS"))
                     verifiers.putIfAbsent(
                             keyName,
-                            new MACVerifier(keys.get(myInstance))
+                            new MACVerifier(keys.get(keyName))
                     );
                 else
                     throw new IOException("Unknown signing algorithm");
@@ -92,18 +92,32 @@ public class JWSDeserializer implements Deserializer {
     }
     public <T> T parse(String string, Class<T> tClass, String source) throws IOException {
         try {
-            //return jwtParser.setSigningKey(keys.get(myInstance)).parseClaimsJws(string).getBody().get();
-            JWSObject jwsObject =  JWSObject.parse(string);
 
-            if(!jwsObject.verify(getVerifier(source,jwsObject.getHeader().getAlgorithm().getName())))
-                throw new IOException("Message cannot be beatified!");
-
-            return deserializer.parse(jwsObject.getPayload().toString(),tClass);
+            return deserializer.parse(parse(string,source),tClass);
         } catch (Exception e) {
             throw new IOException(e);
         }
     }
+    public String parse(String string, String source) throws IOException {
+        try {
+            return new String(unpack(string.getBytes(), source));
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+    public byte[] unpack(byte[] string, String source) throws IOException {
+        try {
+            //return jwtParser.setSigningKey(keys.get(myInstance)).parseClaimsJws(string).getBody().get();
+            JWSObject jwsObject =  JWSObject.parse(new String(string));
 
+            if(!jwsObject.verify(getVerifier(source,jwsObject.getHeader().getAlgorithm().getName())))
+                throw new IOException("Message cannot be beatified!");
+
+            return jwsObject.getPayload().toBytes();
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
     public <T> T deserialize(byte[] bytes, Class<T> tClass, String source) throws IOException {
         return this.parse(new String(bytes), tClass, source);
     }

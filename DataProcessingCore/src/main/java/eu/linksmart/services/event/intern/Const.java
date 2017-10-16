@@ -51,9 +51,11 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
 
     String REST_API_EXTENSION = "rest_api_extensions";
     String AGENT_DESCRIPTION = "agent_description";
-    String REGISTRATION_TOPIC = "registration_topic";
-    String REGISTRATION_TOPIC_WILL = "topic_will";
+    String OGC_REGISTRATION_TOPIC = "ogc_registration_topic";
+    String OGC_REGISTRATION_TOPIC_WILL = "ogc_topic_will";
 
-    String SERIALIZER_PROVIDER = "serialization_serializer_provider";
-    String DESERIALIZER_PROVIDER = "serialization_deserializer_provider";
+    String LINKSMART_SERVICE_CATALOG_ENDPOINT = "linksmart_service_catalog_endpoint";
+    String LINKSMART_BROKER = "linksmart_broker";
+    String LINKSMART_SERVICE_WILL_TOPIC = "linksmart_service_will_topic";
+    String LINKSMART_REGISTRATION_TOPIC = "linksmart_service_registration_topic";
 }
