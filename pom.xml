@@ -8,7 +8,7 @@
 
 	<packaging>pom</packaging>
 
-    <url>https://linksmart.eu/redmine/projects/iot-data-processing-agent/</url>
+    <url>https://code.linksmart.eu/projects/LA/</url>
 
 
 
@@ -773,8 +773,8 @@
 	</distributionManagement>
 
     <ciManagement>
-        <system>Jenkins</system>
-        <url>http://greatfool.fit.fraunhofer.de:8080</url>
+        <system>Pipelines</system>
+        <url>https://pipelines.linksmart.eu</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -784,13 +784,12 @@
     </ciManagement>
     <issueManagement>
         <system>Jira</system>
-        <url>https://jira.fit.fraunhofer.de/</url>
+        <url>https://boards.linksmart.eu</url>
     </issueManagement>
     <scm>
-        <connection>scm:git:https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git</connection>
-        <developerConnection>scm:git:https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git</developerConnection>
-        <url>scm:git:https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git</url>
-
+        <connection>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</connection>
+        <developerConnection>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</developerConnection>
+        <url>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</url>
     </scm>
 
     <!-- maven Site related configuration -->

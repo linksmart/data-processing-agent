@@ -1,4 +1,22 @@
-  - 1.5.1 RELEASE:
+17.10.2017 - 1.6.0 RELEASE:
+    Features:
+        * add JWS (JSON Web Sing) into the agent
+        * the agent sends the registration information via MQTT
+        * the JWS extension retries automatically the public key of the agents
+        * now ISO8601 parsing utils now accepts different variants of ISO8601 timestamps
+    DEV:
+        * Some changes for automatic integration testing made by the CI server
+        * add maven release plugin to manage release process
+    FIX:
+        * version of the agent is properly display in Open API JSON files
+09.08.2017 - 1.5.1 RELEASE:
+    DEV:
+        * Improvements in the building process for automatic building by pipelines (CI server)
+    FIX:
+        * Javadoc is now fixed
+        * Fixed some issues with the Utils StaticBroker
+
+04.08.2017 - 1.5.1 RELEASE:
     Features:
         * RawEvents now are added
         * the properties of the JSON are not Case Sensitive anymore
