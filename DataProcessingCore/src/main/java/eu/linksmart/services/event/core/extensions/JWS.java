@@ -23,17 +23,17 @@ import java.util.HashMap;
 public class JWS {
 
     static private Configurator conf = Configurator.getDefaultConfig();
-    static private Logger loggingService = Utils.initLoggingConf(JwsObserver.class);
-    static final public String serializerName = "JWSSerializer", deserializerName = "JWSDeserializer", publicKey = "publicKey";
-    public static String publicKeys = "publicKeys";
+    static private Logger loggingService = Utils.initLoggingConf(JWS.class);
+    private static String publicKey;
+    private static JWSDeserializer deserializer;
+    private static JWSSerializer serializer;
+
 
     static  {
         try {
-            JWSSerializer serializer = new JWSSerializer(SharedSettings.getSerializer());
-            SharedSettings.addSharedObject(serializerName,serializer);
-            SharedSettings.addSharedObject(publicKey,serializer.getPublicKeyInBase64String());
-            SharedSettings.addSharedObject(deserializerName, new JWSDeserializer(serializer.getPublicKeyInBase64String(),SharedSettings.getDeserializer()));
-            SharedSettings.addSharedObject(publicKeys, new HashMap<String, String>());
+            serializer = new JWSSerializer(SharedSettings.getSerializer());
+            publicKey = serializer.getPublicKeyInBase64String();
+            deserializer = new JWSDeserializer(serializer.getPublicKeyInBase64String(),SharedSettings.getDeserializer());
 
 
 
@@ -53,9 +53,21 @@ public class JWS {
             KeyRetriever.getDefaultRetriever();
 
             ServiceRegistratorService.meta.put("key",serializer.getPublicKeyInBase64String());
-
+            loggingService.info("JWS extension loaded");
         } catch (Exception e) {
             loggingService.error(e.getMessage(),e);
         }
+    }
+
+    public static String getPublicKey() {
+        return publicKey;
+    }
+
+    public static JWSDeserializer getDeserializer() {
+        return deserializer;
+    }
+
+    public static JWSSerializer getSerializer() {
+        return serializer;
     }
 }

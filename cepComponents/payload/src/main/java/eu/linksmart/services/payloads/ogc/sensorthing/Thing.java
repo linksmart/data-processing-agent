@@ -1,6 +1,7 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -104,6 +105,22 @@ public interface Thing extends CommonControlInfoDescription, DatastreamsNavigati
      *            The {@link Datastream} instance to add.
      */
     void addDatastreams(Datastream datastream);
+
+    /**
+     * Not part of the standard. Provide the Datastream with the given ID if exist
+     *
+     * @return the {@link Datastream}  with given ID if exists, null otherwise
+     */
+    @JsonIgnore
+    Datastream getDatastream(Object id);
+
+    /**
+     * Not part of the standard. True if the given Datastream ID if exist
+     *
+     * @return <code>true</code>  if given Datastream ID exists, <code>false</code> otherwise
+     */
+    @JsonIgnore
+    boolean containsDatastreams(Object id);
 
     /**
      * Provides the list of locations in which this Thing has been registered.

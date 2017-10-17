@@ -12,6 +12,6 @@ import eu.linksmart.services.utils.serialization.Serializer;
 public class JwsHandler extends ComplexEventHandler {
     public JwsHandler(Statement query) throws StatementException, Exception {
         super(query);
-        serializer = (Serializer) SharedSettings.getSharedObject(JWS.serializerName);
+        serializer = JWS.getSerializer();
     }
 }

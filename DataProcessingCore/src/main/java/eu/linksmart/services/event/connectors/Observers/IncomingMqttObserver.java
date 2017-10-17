@@ -3,6 +3,7 @@ package eu.linksmart.services.event.connectors.Observers;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
+import eu.linksmart.services.event.core.ThingsRegistrationService;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
@@ -10,13 +11,13 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.subscription.MqttMessageObserver;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
-import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.testing.tooling.MessageValidator;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +35,9 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     //Start of code made for testing performance
     protected final boolean VALIDATION_MODE;
     private final MessageValidator validator;
+
+    private final ConcurrentMap<String,Boolean> myKnownTopics = new ConcurrentHashMap();
+
     //End of code made for testing performance
 
     public IncomingMqttObserver(List<String> topics)  {
@@ -84,8 +88,10 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
                 loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
 
         }
-
-        mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
+        // check if message is mine (true) or not (false)
+        myKnownTopics.putIfAbsent(topic,topic.contains(ThingsRegistrationService.getReference().getThing().getId().toString()));
+        if(!myKnownTopics.get(topic))
+            mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
 
         if(VALIDATION_MODE) toValidation(mqttMessage.getTopic(),  mqttMessage.getPayload());
     }

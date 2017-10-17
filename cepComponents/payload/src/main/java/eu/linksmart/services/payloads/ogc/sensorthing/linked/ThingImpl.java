@@ -8,6 +8,8 @@ import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDesc
 import jdk.nashorn.internal.objects.annotations.Setter;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /*
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
@@ -71,6 +73,8 @@ public class ThingImpl extends CommonControlInfoDescriptionImpl implements Thing
 	@JsonIgnore
 	protected List<Datastream> datastreams = null;
 	@JsonIgnore
+	protected ConcurrentMap<Object,Datastream> datastreamsByKey = new ConcurrentHashMap<>();
+	@JsonIgnore
 	protected Map<String,Object> properties;
 
 	@Override
@@ -98,14 +102,26 @@ public class ThingImpl extends CommonControlInfoDescriptionImpl implements Thing
 		if(datastreams!=null) {
 			datastreams.forEach(d->d.setThing(this));
 			this.datastreams = datastreams;
+			datastreams.forEach(d-> datastreamsByKey.put(d.getId(),d));
 		}
 
 	}
 	@Override
 	public void addDatastreams(Datastream datastream) {
 		datastream.setThing(this);
-		if(!datastreams.contains(datastream))
+		if(!datastreams.contains(datastream) && !datastreamsByKey.containsKey(datastream.getId())) {
 			datastreams.add(datastream);
+			datastreamsByKey.put(datastream.getId(),datastream);
+		}
+	}
+	@Override
+	public Datastream getDatastream(Object id) {
+		return datastreamsByKey.getOrDefault(id,null);
+	}
+
+	@Override
+	public boolean containsDatastreams(Object id) {
+		return datastreamsByKey.containsKey(id);
 	}
 
 	@Override
@@ -187,7 +203,12 @@ public class ThingImpl extends CommonControlInfoDescriptionImpl implements Thing
 
 	@Override
 	public void removeDatastream(Object id) {
-		datastreams.remove(datastreams.stream().filter(d->d.getId().equals(id)).findAny().orElse(null));
+		if(datastreamsByKey.containsKey(id))
+			return;
+
+		Datastream datastream = datastreamsByKey.get(id);
+		datastreams.remove(datastream);
+		datastreamsByKey.remove(id);
 
 	}
 
