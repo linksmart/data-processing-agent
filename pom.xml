@@ -4,7 +4,7 @@
 	<groupId>eu.linksmart.services.events</groupId>
 	<artifactId>parent</artifactId>
 
-	<version>1.6.0</version>
+	<version>1.6.1-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -49,7 +49,7 @@
     </licenses>
     <properties>
         <!-- main version -->
-        <ls.se.agents.version>1.6.0</ls.se.agents.version>
+        <ls.se.agents.version>1.6.1-SNAPSHOT</ls.se.agents.version>
         <!-- LS version -->
         <linksmart.version>0.0.0-ALPHA</linksmart.version>
 
@@ -790,7 +790,7 @@
         <connection>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</connection>
         <developerConnection>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</developerConnection>
         <url>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</url>
-      <tag>v1.6.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <!-- maven Site related configuration -->
