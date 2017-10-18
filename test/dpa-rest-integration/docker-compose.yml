@@ -3,14 +3,14 @@ services:
   mqtt-broker:
     image: eclipse-mosquitto
   dpa:
-    image: docker.linksmart.eu/la/agent:dpa-snapshot
+    image: docker.linksmart.eu/agent:dpa-snapshot
     depends_on:
       - mqtt-broker
     environment:
       - connection_broker_mqtt_hostname=mqtt-broker
       - api_events_mqtt_topic_incoming_SenML=/testing/#
   dpa-tester:
-    image: docker.linksmart.eu/la/dpa-simple-tester:latest
+    image: docker.linksmart.eu/agent/dpa-simple-tester:latest
     depends_on:
       - mqtt-broker
     environment:
