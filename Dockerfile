@@ -1,21 +1,8 @@
-FROM maven:3-jdk-8-alpine
+FROM java:8-jre-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
-ARG branch=master
-ARG GPL=false
-
-ENV CHANGED_AT = 2017-05-29T17:20
-
-# installing git
-RUN apk add --no-cache git
-
-# cloning and building apache code
-RUN git clone https://linksmart.eu/redmine/linksmart-opensource/linksmart-services/data-processing-agent.git
-WORKDIR data-processing-agent
-RUN mvn install
-
-# moving to the jar location
-WORKDIR distributions/IoTAgent/target/
+ARG engine
+ARG extensions
 
 # enabling environmental variables configuration
 ENV env_var_enabled=true
@@ -23,29 +10,21 @@ ENV env_var_enabled=true
 # force the REST API port to the default one
 ENV server_port=8319
 
+# selecting the ESPER as CEP engine
+ENV cep_init_engines=${engine}
+
+# to start the LA (optional)
+ENV agent_init_extensions=${extensions}
+
+
 # mounting configuration and extra dependencies volumes
 VOLUME /config
 VOLUME /dependencies
 
+
+# mounting configuration and extra dependencies volumes
+ADD distributions/IoTAgent/target/*.jar .
+ONBUILD ADD distributions/IoTAgent/target/*.jar .
+
 # starting the agent
 ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
-
-EXPOSE 8319
-# NOTES:
-#	RUN:
-#  		docker run [options] <<image-name>> [command]
-#   OPTIONS:
-# 		Define volume for configuration file:
-#			-v <</path/on/host/machine/conf>>:/config
-# 		Define volume for configuration file:
-#			-v <</path/on/host/machine/dep>>:/dependencies
-# 		Disable/enable REST API:
-#			-e api_rest_enabled=<false/true>
-#		Define default broker
-#			-e connection_broker_mqtt_hostname=<hostname>
-#		Expose REST:
-#			-p "8319:8319"
-#   COMMAND:
-#       Custom configuration file (volume should be defined):
-#           /config/config.cfg
-#
