@@ -23,8 +23,8 @@ VOLUME /dependencies
 
 
 # mounting configuration and extra dependencies volumes
-ADD distributions/IoTAgent/target/*.jar .
-ONBUILD ADD distributions/IoTAgent/target/*.jar .
+ADD distributions/IoTAgent/target/*.jar ./
+#ONBUILD ADD distributions/IoTAgent/target/*.jar .
 
 # starting the agent
 ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
