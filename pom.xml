@@ -7,10 +7,73 @@
     <groupId>eu.linksmart.services.events.gpl</groupId>
     <version>1.6.0-SNAPSHOT</version>
     <artifactId>reactor</artifactId>
-    <name>LGPL reactor</name>
+    <name>IoT Agent LGPL reactor</name>
 
     <packaging>pom</packaging>
 
+    <description>Implementation of the IoT agents framework</description>
+    <developers>
+        <developer>
+            <id>jacarvajal</id>
+            <email>jose.angel.angel.carvajal&lt;at&gt;fit.fraunhofer.de</email>
+            <name>Jose Angel Carvajal Soto</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
+    </developers>
+
+
+
+
+
+    <organization>
+        <name>Fraunhofer FIT Institute</name>
+        <url>http://www.fit.fraunhofer.de</url>
+    </organization>
+    <distributionManagement>
+
+        <repository>
+            <id>releases</id>
+            <name>Releases</name>
+            <url>https://linksmart.eu/repo/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Snapshots</name>
+            <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>agents</id>
+            <name>linksmart-service-agents-repository</name>
+            <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
+        </site>
+    </distributionManagement>
+    <ciManagement>
+        <system>Pipelines</system>
+        <url>https://pipelines.linksmart.eu</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <address>angel.carvajal@fit.fraunhofer.de</address>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://boards.linksmart.eu</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</connection>
+        <developerConnection>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</developerConnection>
+        <url>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</url>
+        <tag>HEAD</tag>
+    </scm>
     <properties>
         <esper.version>5.5.0</esper.version>
         <weka.version>3.7.13</weka.version>
@@ -26,6 +89,10 @@
         <site.plugin.version>3.5.1</site.plugin.version>
         <maven.source.version>2.2.1</maven.source.version>
         <wagon-webdav-version>2.10</wagon-webdav-version>
+        <project-info-reports.version>2.9</project-info-reports.version>
+        <maven.javadoc.version>2.10.4</maven.javadoc.version>
+        <surefire-report.version>2.19.1</surefire-report.version>
+
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -130,6 +197,19 @@
                         <target>${java.version}</target>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${project-info-reports.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -207,26 +287,93 @@
         </repository>
 
     </repositories>
-    <distributionManagement>
-
-        <repository>
-            <id>releases</id>
-            <name>Releases</name>
-            <url>https://linksmart.eu/repo/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>Snapshots</name>
-            <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-        <site>
-            <id>agents</id>
-            <name>linksmart-service-agents-repository</name>
-            <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
-        </site>
-    </distributionManagement>
-
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${project-info-reports.version}</version>
+                <inherited>true</inherited>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>true</inherited>
+                        <reports>
+                            <report>index</report>
+                            <report>summary</report>
+                            <report>scm</report>
+                            <report>cim</report>
+                            <report>issue-tracking</report>
+                            <report>project-team</report>
+                            <report>mailing-list</report>
+                            <report>license</report>
+                            <report>modules</report>
+                            <report>distribution-management</report>
+                            <report>plugin-management</report>
+                            <report>plugins</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <!-- generate dependency reports only for the main pom -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${project-info-reports.version}</version>
+                <inherited>false</inherited>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>dependency-info</report>
+                            <report>dependency-management</report>
+                            <report>dependency-convergence</report>
+                        </reports>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <remoteRepositories>
+                                <repository>
+                                    <id>linksmart-repo</id>
+                                    <name>LinkSmart - Nexus Managed Snapshot Repository</name>
+                                    <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+                                    <releases>
+                                        <enabled>true</enabled>
+                                        <updatePolicy>never</updatePolicy>
+                                    </releases>
+                                    <snapshots>
+                                        <enabled>true</enabled>
+                                        <updatePolicy>daily</updatePolicy>
+                                    </snapshots>
+                                    <site>
+                                        <id>agents</id>
+                                        <name>linksmart-service-agents-repository</name>
+                                        <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
+                                    </site>
+                                </repository>
+                            </remoteRepositories>
+                        </configuration>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${surefire-report.version}</version>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.version}</version>
+                <configuration>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
     <licenses>
         <license>
             <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
