@@ -23,7 +23,7 @@ VOLUME /dependencies
 
 
 # mounting configuration and extra dependencies volumes
-ADD https://linksmart.eu/repo/service/local/artifact/maven/content?r=snapshots&g=eu.linksmart.services.events.distributions&a=iot.learning.universal.agent&v=LATEST ./
+ADD distributions/IoTAgent/target/*.jar ./
 #ONBUILD ADD distributions/IoTAgent/target/*.jar .
 
 # starting the agent
