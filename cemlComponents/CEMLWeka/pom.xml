@@ -22,12 +22,10 @@
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>ceml</artifactId>
-            <version>${ls.se.agents.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>data.procesing.core</artifactId>
-            <version>${ls.se.agents.version}</version>
         </dependency>
 
         <dependency>
