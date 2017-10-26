@@ -4,6 +4,7 @@ package eu.linksmart.services.utils.serialization;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
+import java.util.List;
 /**
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
  *
@@ -70,6 +71,9 @@ public interface Deserializer {
     <T> T deserialize(byte[] bytes, Class<T> tClass) throws IOException, NotImplementedException;
 
     <I,C extends I> boolean defineClassToInterface(Class<I> tInterface,Class<C>... tClass );
+    <T> List<T> parseArrayOf(String objectString, Class<T> tClass)  throws IOException, NotImplementedException;
+    <T> List<T> deserializeArrayOf(byte[] bytes,  Class<T> tClass) throws IOException, NotImplementedException;
+    void addModule(IOModule module);
     /**
      * Endorse the Deserializer to release resources if is needed.
      * */

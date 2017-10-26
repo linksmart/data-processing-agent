@@ -12,6 +12,7 @@ import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import sun.security.ec.ECPublicKeyImpl;
 import sun.security.rsa.RSAPublicKeyImpl;
 
@@ -21,6 +22,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.PublicKey;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -128,6 +130,22 @@ public class JWSDeserializer implements Deserializer {
 
         return deserializer.defineClassToInterface(tInterface,tClass);
     }
+
+    @Override
+    public <T> List<T> parseArrayOf(String objectString, Class<T> tClass) throws IOException, NotImplementedException {
+        return deserializer.parseArrayOf(objectString,tClass);
+    }
+
+    @Override
+    public <T> List<T> deserializeArrayOf(byte[] bytes, Class<T> tClass) throws IOException, NotImplementedException {
+        return deserializer.deserializeArrayOf(bytes,tClass);
+    }
+
+    @Override
+    public void addModule(IOModule module) {
+        deserializer.addModule(module);
+    }
+
     public boolean defineClassToInterface(String source, String key) {
 
         return keys.putIfAbsent(source,key)!=null;

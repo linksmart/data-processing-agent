@@ -53,6 +53,9 @@ public interface Serializer {
      * @exception java.io.IOException if the object cannot be serialized
      * */
     public<T> String toString(T object) throws IOException;
+
+    void addModule(IOModule module);
+
     /**
      * Endorse the Deserializer to release resources if is needed.
      * */

@@ -190,6 +190,11 @@ public class JWSSerializer implements Serializer {
         }
     }
 
+    @Override
+    public void addModule(IOModule module) {
+        serializer.addModule(module);
+    }
+
     public PublicKey getPublicKey() {
         return publicKey;
     }

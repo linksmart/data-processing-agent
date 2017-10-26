@@ -34,6 +34,10 @@ import eu.linksmart.services.event.ceml.api.MqttCemlAPI;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.event.ceml.intern.Const;
+import eu.linksmart.services.utils.serialization.DefaultModule;
+import eu.linksmart.services.utils.serialization.Deserializer;
+import eu.linksmart.services.utils.serialization.IOModule;
+import eu.linksmart.services.utils.serialization.Serializer;
 import org.apache.commons.math3.filter.*;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
@@ -52,15 +56,11 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
     static private Map<String, CEMLRequest> requests = new Hashtable<>();
 
-    static private ObjectMapper mapper = new ObjectMapper();
     private static Map<String, KalmanFilter> filters = new Hashtable<>();
 
     private CEML() {
     }
 
-    public static ObjectMapper getMapper() {
-        return mapper;
-    }
 
 
 
@@ -71,17 +71,27 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         conf = Configurator.getDefaultConfig();
 
 
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
-
-        mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer()))
-                .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
-                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class))
-                .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
-                //.registerModule(new SimpleModule("AutoregressiveNeuralNetwork", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
-                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()));
+        IOModule module = new DefaultModule("Descriptors", Version.unknownVersion());
+        module.addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer());
+        SharedSettings.getSerializer().addModule(module);
+        SharedSettings.getDeserializer().addModule(module);
+        module = new DefaultModule("Statements", Version.unknownVersion());
+        module.addAbstractTypeMapping(Statement.class, StatementInstance.class);
+        SharedSettings.getSerializer().addModule(module);
+        SharedSettings.getDeserializer().addModule(module);
+        module = new DefaultModule("LearningStatements", Version.unknownVersion());
+        module.addAbstractTypeMapping(LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
+        SharedSettings.getSerializer().addModule(module);
+        SharedSettings.getDeserializer().addModule(module);
+        module = new DefaultModule("Model", Version.unknownVersion());
+        module.addDeserializer(Model.class, new ModelDeserializer());
+        SharedSettings.getSerializer().addModule(module);
+        SharedSettings.getDeserializer().addModule(module);
+        module = new DefaultModule("DataDescriptor", Version.unknownVersion());
+        module.addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer());
+        SharedSettings.getSerializer().addModule(module);
+        SharedSettings.getDeserializer().addModule(module);
 
 
         if(conf.containsKeyAnywhere(Const.CEML_INIT_BOOTSTRAPPING))
@@ -136,7 +146,7 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
                 case "":
                 default:
-                    request = mapper.readValue(body,CEMLManager.class);
+                    request = SharedSettings.getDeserializer().parse(body,CEMLManager.class);
                     request.setName(name);
                     result = create(request);
             }

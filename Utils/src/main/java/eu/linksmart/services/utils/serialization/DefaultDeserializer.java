@@ -4,15 +4,20 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.services.utils.function.Utils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 01.09.2016 a researcher of Fraunhofer FIT.
@@ -46,6 +51,21 @@ public class DefaultDeserializer implements Deserializer{
             mapper.registerModule(new SimpleModule(tInterface.getName(), Version.unknownVersion()).addAbstractTypeMapping(tInterface, t))
         );
         return true;
+    }
+
+    @Override
+    public <T> List<T> parseArrayOf(String objectString, Class<T> tClass) throws IOException, NotImplementedException {
+        return mapper.readValue(objectString,new TypeReference<List<T>>() {} );
+    }
+
+    @Override
+    public <T> List<T> deserializeArrayOf(byte[] bytes,  Class<T> tClass) throws IOException, NotImplementedException {
+        return mapper.readValue(bytes,new TypeReference<List<T>>() {} );
+    }
+
+    @Override
+    public void addModule(IOModule module) {
+        mapper.registerModule((Module) module);
     }
 
     @Override

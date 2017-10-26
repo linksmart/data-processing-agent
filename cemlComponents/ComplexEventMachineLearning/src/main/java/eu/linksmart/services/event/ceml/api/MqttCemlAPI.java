@@ -81,10 +81,10 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                         @Override
                         protected void mangeEvent(String topic, byte[] payload) {
                             try {
-                                CEMLRequest request = CEML.getMapper().readValue(payload, CEMLManager.class);
+                                CEMLRequest request = SharedSettings.getDeserializer().deserialize(payload, CEMLManager.class);
 
                                 MultiResourceResponses<CEMLRequest> response = CEML.create(request);
-                                reportFeedback(brokerService,response.getHeadResource().getName(),CEML.getMapper().writeValueAsString(response));
+                                reportFeedback(brokerService,response.getHeadResource().getName(),SharedSettings.getSerializer().toString(response));
 
                             } catch (Exception e) {
                                 loggerService.error(e.getMessage(),e);
@@ -155,7 +155,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                                     else if ("get".equals(parts[i]))
                                         break;
                                 if (id!=null)
-                                    reportFeedback(brokerService,id,CEML.getMapper().writeValueAsString(CEML.get(id, "")));
+                                    reportFeedback(brokerService,id,SharedSettings.getSerializer().toString(CEML.get(id, "")));
                                 else
                                     reportError(brokerService,"An get request was received but no ID found in the topic");
 

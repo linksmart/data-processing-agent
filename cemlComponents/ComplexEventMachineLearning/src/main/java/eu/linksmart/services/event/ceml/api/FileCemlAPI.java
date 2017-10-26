@@ -6,6 +6,8 @@ import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.services.event.ceml.core.CEML;
 import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.connectors.FileConnector;
+import eu.linksmart.services.event.intern.SharedSettings;
+import sun.security.provider.SHA;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class FileCemlAPI extends FileConnector {
     protected void loadStream(String inputStream){
         try {
             loggerService.info("Bootstrapping CEML request...");
-            List<CEMLRequest> requests = CEML.getMapper().readValue(inputStream,new TypeReference< ArrayList<CEMLManager>>() {} );
+            List<CEMLRequest> requests = SharedSettings.getDeserializer().parseArrayOf(inputStream,CEMLRequest.class);
             ArrayList<GeneralRequestResponse> responses = new ArrayList<>();
             requests.stream().forEach(i->responses.addAll(CEML.create(i).getResponses()));
             responses.stream().filter(i->i.getStatus()>299).forEach(i->loggerService.error(i.getHeadline()+": "+i.getMessage()));

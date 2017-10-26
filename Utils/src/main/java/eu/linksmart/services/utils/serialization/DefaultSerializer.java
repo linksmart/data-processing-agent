@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import eu.linksmart.services.utils.constants.Const;
@@ -50,7 +51,10 @@ public class DefaultSerializer implements Serializer{
             throw new IOException(e.getMessage(),e);
         }
     }
-
+    @Override
+    public void addModule(IOModule module) {
+        parser.registerModule((Module) module);
+    }
     @Override
     public void close() {
 

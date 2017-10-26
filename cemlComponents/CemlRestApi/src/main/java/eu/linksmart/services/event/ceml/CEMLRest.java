@@ -36,7 +36,6 @@ public class CEMLRest extends Component implements IncomingConnector{
      private Logger loggerService = Utils.initLoggingConf(CEML.class);
 
     private Map<String, CEMLRequest> requests = new Hashtable<>();
-    private ObjectMapper mapper = CEML.getMapper();
 
 
     public CEMLRest() {
@@ -185,7 +184,7 @@ public class CEMLRest extends Component implements IncomingConnector{
     public  String toJsonString(Object message){
 
         try {
-            return mapper.writeValueAsString(message);
+            return SharedSettings.getSerializer().toString(message);
         } catch (IOException e) {
             loggerService.error(e.getMessage(),e);
             return "{\"Error\":\"500\",\"Error Text\":\"Internal Server Error\",\"Message\":\""+e.getMessage()+"\"}";
