@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import eu.linksmart.services.utils.serialization.DeserializerMode;
 import org.apache.commons.codec.binary.Base64;
 import org.deeplearning4j.nn.api.Updater;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -23,7 +24,7 @@ import java.util.Map;
 /**
  * Created by devasya on 29.11.2016.
  */
-public class NNDeserialier extends JsonDeserializer<MultiLayerNetwork> {
+public class NNDeserialier extends DeserializerMode<MultiLayerNetwork> {
     @Override
     public MultiLayerNetwork deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readValue(jsonParser, JsonNode.class);

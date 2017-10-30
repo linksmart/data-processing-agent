@@ -34,10 +34,6 @@ import eu.linksmart.services.event.ceml.api.MqttCemlAPI;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.event.ceml.intern.Const;
-import eu.linksmart.services.utils.serialization.DefaultModule;
-import eu.linksmart.services.utils.serialization.Deserializer;
-import eu.linksmart.services.utils.serialization.IOModule;
-import eu.linksmart.services.utils.serialization.Serializer;
 import org.apache.commons.math3.filter.*;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
@@ -71,27 +67,17 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         conf = Configurator.getDefaultConfig();
 
 
+        SharedSettings.getSerializer().addModule("Descriptors",DataDescriptors.class,new DataDescriptorSerializer());
+        SharedSettings.getDeserializer().addModule("Descriptors",DataDescriptors.class,new DataDescriptorsDeserializer());
 
-        IOModule module = new DefaultModule("Descriptors", Version.unknownVersion());
-        module.addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer());
-        SharedSettings.getSerializer().addModule(module);
-        SharedSettings.getDeserializer().addModule(module);
-        module = new DefaultModule("Statements", Version.unknownVersion());
-        module.addAbstractTypeMapping(Statement.class, StatementInstance.class);
-        SharedSettings.getSerializer().addModule(module);
-        SharedSettings.getDeserializer().addModule(module);
-        module = new DefaultModule("LearningStatements", Version.unknownVersion());
-        module.addAbstractTypeMapping(LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
-        SharedSettings.getSerializer().addModule(module);
-        SharedSettings.getDeserializer().addModule(module);
-        module = new DefaultModule("Model", Version.unknownVersion());
-        module.addDeserializer(Model.class, new ModelDeserializer());
-        SharedSettings.getSerializer().addModule(module);
-        SharedSettings.getDeserializer().addModule(module);
-        module = new DefaultModule("DataDescriptor", Version.unknownVersion());
-        module.addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer());
-        SharedSettings.getSerializer().addModule(module);
-        SharedSettings.getDeserializer().addModule(module);
+        SharedSettings.getSerializer().addModule("Statements",Statement.class,StatementInstance.class);
+        SharedSettings.getDeserializer().addModule("Statements",Statement.class,StatementInstance.class);
+
+        SharedSettings.getDeserializer().addModule("Model",Model.class, new ModelDeserializer());
+
+        SharedSettings.getSerializer().addModule("LearningStatements",LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
+        SharedSettings.getDeserializer().addModule("LearningStatements",LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
+
 
 
         if(conf.containsKeyAnywhere(Const.CEML_INIT_BOOTSTRAPPING))

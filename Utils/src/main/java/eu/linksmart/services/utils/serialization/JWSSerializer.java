@@ -191,9 +191,15 @@ public class JWSSerializer implements Serializer {
     }
 
     @Override
-    public void addModule(IOModule module) {
-        serializer.addModule(module);
+    public <T> void addModule(String name, Class<T> tClass, SerializerMode<T> serializerMode) {
+        serializer.addModule(name, tClass, serializerMode);
     }
+
+    @Override
+    public <I, C extends I> void addModule(String name, Class<I> tInterface, Class<C> tClass) {
+        serializer.addModule(name, tInterface, tClass);
+    }
+
 
     public PublicKey getPublicKey() {
         return publicKey;

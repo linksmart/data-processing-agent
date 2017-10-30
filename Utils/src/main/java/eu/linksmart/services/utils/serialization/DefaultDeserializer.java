@@ -14,6 +14,7 @@ import eu.linksmart.services.utils.function.Utils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,12 +65,25 @@ public class DefaultDeserializer implements Deserializer{
     }
 
     @Override
-    public void addModule(IOModule module) {
-        mapper.registerModule((Module) module);
+    public <T> void addModule(String name, Class<T> tClass, DeserializerMode<T> deserializerMode) {
+
+        mapper.registerModule(new SimpleModule(name, Version.unknownVersion()).addDeserializer(tClass, deserializerMode));
     }
+    @Override
+    public <I,C extends I> void addModule(String name, Class<I> tInterface, Class<C> tClass) {
+        mapper.registerModule(new SimpleModule(name, Version.unknownVersion()).addAbstractTypeMapping(tInterface,tClass));
+
+    }
+
+
 
     @Override
     public void close() {
 
+    }
+
+    @Override
+    public Object getParser() {
+        return mapper;
     }
 }

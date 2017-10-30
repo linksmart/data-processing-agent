@@ -14,12 +14,9 @@ import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.ceml.core.CEML;
 import eu.linksmart.services.event.ceml.models.serialization.NNDeserialier;
 import eu.linksmart.services.event.ceml.models.serialization.NNSerialier;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.utils.serialization.DefaultModule;
-import eu.linksmart.services.utils.serialization.IOModule;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -42,18 +39,13 @@ public class AutoregressiveNeuralNetworkModel extends RegressorModel<List<Double
 
     static {
         Model.loadedModels.put(AutoregressiveNeuralNetworkModel.class.getSimpleName(),AutoregressiveNeuralNetworkModel.class);
-        IOModule MLNdeserializermodule = new DefaultModule("DNNModel", Version.unknownVersion());
-        MLNdeserializermodule.addDeserializer(MultiLayerNetwork.class, new NNDeserialier() );
-        IOModule MNLserializermodule = new DefaultModule("SNNModel", Version.unknownVersion());
-        MNLserializermodule.addSerializer(MultiLayerNetwork.class, new NNSerialier() );
-        SharedSettings.getSerializer().addModule( MLNdeserializermodule);
-        SharedSettings.getDeserializer().addModule( MLNdeserializermodule);
+        SimpleModule MLNdeserializermodule = new SimpleModule("DNNModel", Version.unknownVersion()).addDeserializer(MultiLayerNetwork.class, new NNDeserialier() );
+        SharedSettings.getSerializer().addModule( "SNNModel",MultiLayerNetwork.class, new NNSerialier());
+        SharedSettings.getDeserializer().addModule( "DNNModel",MultiLayerNetwork.class, new NNDeserialier());
 
-        SharedSettings.getSerializer().addModule( MNLserializermodule);
-        SharedSettings.getDeserializer().addModule( MNLserializermodule);
 
         ModelDeserializer.setLearnerType(AutoregressiveNeuralNetworkModel.class.getSimpleName(), TypeFactory.defaultInstance().constructCollectionType(List.class, MultiLayerNetwork.class));
-        ModelDeserializer.registerModule((Module) MLNdeserializermodule);
+        ModelDeserializer.registerModule(MLNdeserializermodule);
 
     }
 

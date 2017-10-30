@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import eu.linksmart.services.utils.serialization.DeserializerMode;
 import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
-public class DataDescriptorDeserializer extends JsonDeserializer<DataDescriptor> {
+public class DataDescriptorDeserializer extends DeserializerMode<DataDescriptor> {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final CollectionType collectionType =
             TypeFactory

@@ -73,9 +73,16 @@ public interface Deserializer {
     <I,C extends I> boolean defineClassToInterface(Class<I> tInterface,Class<C>... tClass );
     <T> List<T> parseArrayOf(String objectString, Class<T> tClass)  throws IOException, NotImplementedException;
     <T> List<T> deserializeArrayOf(byte[] bytes,  Class<T> tClass) throws IOException, NotImplementedException;
-    void addModule(IOModule module);
+
+
+    <T> void addModule(String name, Class<T> tClass, DeserializerMode<T> deserializerMode);
+
+    <I,C extends I> void addModule(String name, Class<I> tInterface, Class<C> tClass);
+
     /**
      * Endorse the Deserializer to release resources if is needed.
      * */
     void close();
+
+    Object getParser();
 }

@@ -1,13 +1,20 @@
 package eu.linksmart.test.services.event.ceml.models;
 
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
+import eu.linksmart.api.event.ceml.model.Model;
+import eu.linksmart.api.event.ceml.model.ModelDeserializer;
+import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.core.CEML;
 import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.ceml.handlers.ListLearningHandler;
+import eu.linksmart.services.event.ceml.models.LinearRegressionModel;
+import eu.linksmart.services.event.intern.SharedSettings;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -60,12 +67,22 @@ public class CemlTest {
 
     @Test
     public void testCEML() {
-        ObjectMapper mapper = CEML.getMapper();
         CEMLManager request;
+        ObjectMapper mapper;
+        try {
+            Class.forName(CEML.class.getCanonicalName());
+            Class.forName(LinearRegressionModel.class.getCanonicalName());
+
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         try {
+            SharedSettings.getDeserializer().getParser();
             System.out.println("Expecting unimportant exception!");
-            request = mapper.readValue(requestStr, CEMLManager.class);
+           // SharedSettings.getDeserializer().defineClassToInterface(Model.class, LinearRegressionModel.class);
+            request = SharedSettings.getDeserializer().parse(requestStr, CEMLManager.class);
 
         } catch (IOException e) {
             e.printStackTrace();

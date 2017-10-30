@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import eu.linksmart.services.utils.serialization.SerializerMode;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -20,7 +21,7 @@ import java.util.Map;
 /**
  * Created by devasya on 29.11.2016.
  */
-public class NNSerialier extends JsonSerializer<MultiLayerNetwork> {
+public class NNSerialier extends SerializerMode<MultiLayerNetwork> {
 
     @Override
     public void serialize(MultiLayerNetwork nnet, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {

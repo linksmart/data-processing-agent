@@ -4,13 +4,15 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import eu.linksmart.services.utils.serialization.DeserializerMode;
+import eu.linksmart.services.utils.serialization.SerializerMode;
 
 import java.io.IOException;
 
 /**
  * Created by José Ángel Carvajal on 26.07.2016 a researcher of Fraunhofer FIT.
  */
-public class DataDescriptorSerializer extends JsonSerializer<DataDescriptors> {
+public class DataDescriptorSerializer extends SerializerMode<DataDescriptors> {
     @Override
     public void serialize(DataDescriptors value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
         if(value.isLambdaTypeDefinition()){

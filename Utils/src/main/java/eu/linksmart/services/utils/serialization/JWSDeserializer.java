@@ -142,9 +142,15 @@ public class JWSDeserializer implements Deserializer {
     }
 
     @Override
-    public void addModule(IOModule module) {
-        deserializer.addModule(module);
+    public <T> void addModule(String name, Class<T> tClass, DeserializerMode<T> deserializerMode) {
+        deserializer.addModule(name, tClass, deserializerMode);
     }
+
+    @Override
+    public <I, C extends I> void addModule(String name, Class<I> tInterface, Class<C> tClass) {
+        deserializer.addModule(name, tInterface, tClass);
+    }
+
 
     public boolean defineClassToInterface(String source, String key) {
 
@@ -155,5 +161,10 @@ public class JWSDeserializer implements Deserializer {
     @Override
     public void close() {
 
+    }
+
+    @Override
+    public Object getParser() {
+        return deserializer.getParser();
     }
 }

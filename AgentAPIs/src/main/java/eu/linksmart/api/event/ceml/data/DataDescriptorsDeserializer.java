@@ -2,6 +2,7 @@ package eu.linksmart.api.event.ceml.data;
 
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
+import eu.linksmart.services.utils.serialization.DeserializerMode;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -9,7 +10,7 @@ import java.util.UUID;
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
-public class DataDescriptorsDeserializer extends JsonDeserializer<DataDescriptors> {
+public class DataDescriptorsDeserializer extends DeserializerMode<DataDescriptors> {
 
     @Override
     public DataDescriptors deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {

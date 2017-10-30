@@ -54,7 +54,9 @@ public interface Serializer {
      * */
     public<T> String toString(T object) throws IOException;
 
-    void addModule(IOModule module);
+    <T> void addModule(String name, Class<T> tClass, SerializerMode<T> serializerMode);
+
+    <I,C extends I> void addModule(String name, Class<I> tInterface, Class<C> tClass);
 
     /**
      * Endorse the Deserializer to release resources if is needed.

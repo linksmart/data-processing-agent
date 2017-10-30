@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.services.utils.serialization.DeserializerMode;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -17,7 +18,7 @@ import java.util.Map;
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
-public class ModelDeserializer extends JsonDeserializer<Model> {
+public class ModelDeserializer extends DeserializerMode<Model> {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final CollectionType collectionType =TypeFactory.defaultInstance().constructCollectionType(List.class, TargetRequest.class);
     //private static final CollectionType learnersListType =TypeFactory.defaultInstance().constructCollectionType(List.class,MultiLayerNetwork.class);

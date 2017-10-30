@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.services.utils.constants.Const;
 import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.configuration.Configurator;
@@ -52,8 +54,14 @@ public class DefaultSerializer implements Serializer{
         }
     }
     @Override
-    public void addModule(IOModule module) {
-        parser.registerModule((Module) module);
+    public <T> void addModule(String name, Class<T> tClass, SerializerMode<T> serializerMode) {
+
+        parser.registerModule(new SimpleModule(name, Version.unknownVersion()).addSerializer(tClass, serializerMode));
+    }
+    @Override
+    public <I,C extends I> void addModule(String name, Class<I> tInterface, Class<C> tClass) {
+        parser.registerModule(new SimpleModule(name, Version.unknownVersion()).addAbstractTypeMapping(tInterface,tClass));
+
     }
     @Override
     public void close() {
