@@ -31,7 +31,7 @@ import java.util.List;
  * @see eu.linksmart.api.event.types.JsonSerializable
  *
  * */
-public interface Statement extends JsonSerializable {
+public interface Statement extends JsonSerializable, PersistentRequest {
     /***
      * Name of the statement
      *
@@ -106,12 +106,7 @@ public interface Statement extends JsonSerializable {
      * @return  true if there is Scope has being defined, false otherwise
      * */
     public boolean haveScope();
-    /***
-     * Returns the hash ID of the statement. By default this is the SHA256 of the statement.
-     *
-     * @return  The ID as string.
-     * */
-    public String getID();
+
     /***
      * Return the handler selected to process the result of the complex event, @Default ComplexEventHandlerImpl.
      * Note: The value "" or null is a valid response, this value represent silent events, events that just happen inside the CEP engine.
@@ -214,12 +209,7 @@ public interface Statement extends JsonSerializable {
      * @param response the response as an object (the type an semantic depends on the statement).
      * */
     public void setSynchronousResponse(Object response) ;
-    /***
-     * setts the hash ID of the statement. By default this is the SHA256 of the statement.
-     *
-     * @param id as string.
-     * */
-    public void setId(String id);
+
     /***
      * setts the IDs of the selected agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
      *

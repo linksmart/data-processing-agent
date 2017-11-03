@@ -1,10 +1,12 @@
 package eu.linksmart.services.utils.serialization;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 /**
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
  *
@@ -71,9 +73,10 @@ public interface Deserializer {
     <T> T deserialize(byte[] bytes, Class<T> tClass) throws IOException, NotImplementedException;
 
     <I,C extends I> boolean defineClassToInterface(Class<I> tInterface,Class<C>... tClass );
-    <T> List<T> parseArrayOf(String objectString, Class<T> tClass)  throws IOException, NotImplementedException;
-    <T> List<T> deserializeArrayOf(byte[] bytes,  Class<T> tClass) throws IOException, NotImplementedException;
 
+    Object parsePacked(String objectString, TypeReference type)  throws IOException, NotImplementedException;
+
+    Object deserializePacked(byte[] bytes, TypeReference type)  throws IOException, NotImplementedException;
 
     <T> void addModule(String name, Class<T> tClass, DeserializerMode<T> deserializerMode);
 

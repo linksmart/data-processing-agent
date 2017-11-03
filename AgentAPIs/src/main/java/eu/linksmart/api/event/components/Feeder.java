@@ -50,4 +50,5 @@ public interface Feeder <T> extends AnalyzerComponent {
     public void feed(String topicURI, String payload)throws TraceableException, UntraceableException;
     public void feed(String topicURI, T payload)throws TraceableException, UntraceableException;
 
+
 }

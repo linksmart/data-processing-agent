@@ -3,9 +3,8 @@ package eu.linksmart.api.event.ceml;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
-import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.TraceableException;
-import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.PersistentRequest;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
 
@@ -73,7 +72,7 @@ import java.util.Map;
  * @see eu.linksmart.api.event.ceml.LearningStatement
  * @see eu.linksmart.api.event.ceml.prediction.Prediction
  */
-public interface CEMLRequest  extends JsonSerializable {
+public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
     /***
      * Setts/inserts/starts the deployment statements and objects in to the CEPEngine.
      *
@@ -141,21 +140,21 @@ public interface CEMLRequest  extends JsonSerializable {
      * @return a collection of LearningStatements.
      * @see eu.linksmart.api.event.ceml.LearningStatement
      * */
-    public Collection<LearningStatement> getLearningStreamStatements();
+    public Collection<LearningStatement> getLearningStream();
     /***
      * Set of statements/rules that define how the model will be used with the data the data. The results of the streams produce by this statements must match with the Descriptors (for predicting).
      *
      * @return a collection of Statements.
      * @see eu.linksmart.api.event.types.Statement
      * */
-    public Collection<Statement> getDeploymentStreamStatements();
+    public Collection<Statement> getDeploymentStream();
     /***
      * Set of middle steps may be used by the DeploymentStreams or LearningStreams. No handler is given to this statements.
      *
      * @return a collection of Statements.
      * @see eu.linksmart.api.event.types.Statement
      * */
-    public Collection<Statement> getAuxiliaryStreamStatements();
+    public Collection<Statement> getAuxiliaryStream();
     /***
      * Reruns any selected statement per ID Statement defined either as AuxiliaryStatements, LearningStreams, or DeploymentStreams.
      *

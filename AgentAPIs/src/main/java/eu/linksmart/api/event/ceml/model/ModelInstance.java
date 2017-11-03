@@ -73,6 +73,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     //final protected String modelName;
 
     public ModelInstance(List<TargetRequest> targets,Map<String,Object> parameters, Evaluator evaluator, Object learner){
+        this.name = this.getClass().getSimpleName();
         this.targets = targets;
         this.parameters =parameters;
         this.evaluator = evaluator;

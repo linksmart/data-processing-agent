@@ -1,17 +1,16 @@
 package eu.linksmart.services.event.feeders;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.api.event.types.impl.StatementInstance;
+import eu.linksmart.services.event.core.StatementInstance;
+import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.api.event.types.impl.BootstrappingBean;
+import eu.linksmart.services.event.core.BootstrappingBean;
 import eu.linksmart.services.event.intern.Utils;
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;
 
@@ -62,7 +61,14 @@ public class BootstrappingBeanFeeder implements Feeder<BootstrappingBean> {
         if (bootstrappingBean != null) {
             if (bootstrappingBean.getStatements() != null && !bootstrappingBean.getStatements().isEmpty()) {
                 for (Statement stm : bootstrappingBean.getStatements()) {
-                    StatementFeeder.addNewStatement(stm, null, null, null);
+                    if (    !StatementFeeder.addNewStatement(stm, null, null, null).containsSuccess() &&
+                             stm.isEssential()){
+                        loggerService.error("Fail loading statement "+stm.getId()+" in persistence process and the programmatic exit is set");
+                        System.exit(-1);
+                    }
+
+
+
                 }
             }
           /*  if(bootstrappingBean.getLearningRequests()!=null){

@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.services.utils.function.Utils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -19,6 +16,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 01.09.2016 a researcher of Fraunhofer FIT.
@@ -27,7 +25,7 @@ public class DefaultDeserializer implements Deserializer{
     protected ObjectMapper mapper = new ObjectMapper();
     public DefaultDeserializer(){
         mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
-
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         //mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -55,18 +53,17 @@ public class DefaultDeserializer implements Deserializer{
     }
 
     @Override
-    public <T> List<T> parseArrayOf(String objectString, Class<T> tClass) throws IOException, NotImplementedException {
-        return mapper.readValue(objectString,new TypeReference<List<T>>() {} );
+    public Object parsePacked(String objectString, TypeReference type) throws IOException, NotImplementedException {
+        return mapper.readValue(objectString,type );
     }
 
     @Override
-    public <T> List<T> deserializeArrayOf(byte[] bytes,  Class<T> tClass) throws IOException, NotImplementedException {
-        return mapper.readValue(bytes,new TypeReference<List<T>>() {} );
+    public Object deserializePacked(byte[] bytes, TypeReference type) throws IOException, NotImplementedException {
+        return mapper.readValue(bytes,type );
     }
 
     @Override
     public <T> void addModule(String name, Class<T> tClass, DeserializerMode<T> deserializerMode) {
-
         mapper.registerModule(new SimpleModule(name, Version.unknownVersion()).addDeserializer(tClass, deserializerMode));
     }
     @Override

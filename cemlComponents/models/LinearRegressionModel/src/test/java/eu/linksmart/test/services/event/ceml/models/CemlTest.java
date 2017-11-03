@@ -1,12 +1,7 @@
 package eu.linksmart.test.services.event.ceml.models;
 
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
-import eu.linksmart.api.event.ceml.model.Model;
-import eu.linksmart.api.event.ceml.model.ModelDeserializer;
-import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
@@ -96,7 +91,7 @@ public class CemlTest {
             fail();
         }
 
-        ListLearningHandler handler = new ListLearningHandler(request.getLearningStreamStatements().iterator().next());
+        ListLearningHandler handler = new ListLearningHandler(request.getLearningStream().iterator().next());
 
         assertTrue(request.getModel().getClass().getSimpleName().equals("LinearRegressionModel"));
         try {

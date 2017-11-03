@@ -11,7 +11,6 @@ import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import eu.linksmart.services.utils.serialization.Serializer;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.configuration.Configurator;
 
 import java.util.*;
@@ -39,13 +38,13 @@ import java.util.stream.Collectors;
             serializer = SharedSettings.getSerializer();
             if(!query.isRESTOutput()) {
                 publisher = new DefaultMQTTPublisher(query, SharedSettings.getId(), SharedSettings.getWill(), SharedSettings.getWillTopic());
-                loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") generating events for statement ID "+query.getID()+" in the broker " + query.getScope(0) + "  URL: " + (new BrokerConfiguration(query.getID()).getURL()));
+                loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") generating events for statement ID "+query.getId()+" in the broker " + query.getScope(0) + "  URL: " + (new BrokerConfiguration(query.getId()).getURL()));
                 loggerService.info("The Agent(ID:"+ SharedSettings.getId()+") generating event in the topic(s): " + publisher.getOutputs().stream().collect(Collectors.joining(",")));
             }else {
 
                 publisher = new HTTPPublisher(query);
             }
-            query.setLastOutput(enveloper.pack(Double.NaN,new Date(), SharedSettings.getId(),query.getID(),"BootstrapMessage",query.getName()));
+            query.setLastOutput(enveloper.pack(Double.NaN,new Date(), SharedSettings.getId(),query.getId(),"BootstrapMessage",query.getName()));
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
@@ -60,7 +59,7 @@ import java.util.stream.Collectors;
                 query.setLastOutput(enveloper.pack(
                         eventMap.get(eventMap.keySet().toArray()[0]),
                         new Date(), SharedSettings.getId(),
-                        query.getID(),
+                        query.getId(),
                         eventMap.keySet().toArray()[0].toString(),
                         query.getName()
                 ));
@@ -77,7 +76,7 @@ import java.util.stream.Collectors;
                                 eventMap,
                                 new Date(),
                                 SharedSettings.getId(),
-                                query.getID(),
+                                query.getId(),
                                 "Map",
                                 query.getName()
                         )
@@ -97,7 +96,7 @@ import java.util.stream.Collectors;
                                     eventMap,
                                     new Date(),
                                     SharedSettings.getId(),
-                                    query.getID(),
+                                    query.getId(),
                                     "Map",
                                     query.getName()
                             )

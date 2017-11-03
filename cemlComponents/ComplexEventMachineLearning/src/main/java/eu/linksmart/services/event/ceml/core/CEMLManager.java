@@ -1,9 +1,11 @@
 package eu.linksmart.services.event.ceml.core;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.event.core.PersistentRequestInstance;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public class CEMLManager implements CEMLRequest {
+public class CEMLManager extends PersistentRequestInstance implements CEMLRequest {
     // available settings for Settings MAP
     // AlwaysDeploy = true -> deploys a model no matter if is ready or not
     // IgnoreBuildFailures -> skips the error handling in building process
@@ -45,7 +47,7 @@ public class CEMLManager implements CEMLRequest {
     @JsonProperty(value = "Model")
     protected Model model;
     @JsonProperty(value = "AuxiliaryStreams")
-    protected List<Statement> auxiliaryStatements;
+    protected List<Statement> auxiliaryStreams;
     @JsonProperty(value = "LearningStreams")
     protected List<LearningStatement> learningStatements;
     @JsonProperty(value = "DeploymentStreams")
@@ -103,18 +105,33 @@ public class CEMLManager implements CEMLRequest {
     }
 
     @Override
-    public Collection<LearningStatement> getLearningStreamStatements() {
+    public Collection<LearningStatement> getLearningStream() {
         return learningStatements;
     }
 
+    public void setLearningStream(List<LearningStatement> learningStatements) {
+        this.learningStatements = learningStatements;
+    }
     @Override
-    public Collection< Statement> getDeploymentStreamStatements() {
+    public Collection< Statement> getDeploymentStream() {
         return deployStatements;
     }
 
+
+    public void setDeploymentStream(List<Statement> deployStatements) {
+        this.deployStatements = deployStatements;
+    }
+
+    @JsonGetter(value = "AuxiliaryStreams")
     @Override
-    public Collection< Statement> getAuxiliaryStreamStatements() {
-        return auxiliaryStatements;
+    public Collection< Statement> getAuxiliaryStream() {
+        return auxiliaryStreams;
+    }
+
+
+    @JsonSetter(value = "AuxiliaryStreams")
+    public void setAuxiliaryStreams(List<Statement> auxiliaryStreams) {
+        this.auxiliaryStreams = auxiliaryStreams;
     }
 
     @Override
@@ -195,8 +212,8 @@ public class CEMLManager implements CEMLRequest {
 
 
             if(phasesDone[1] && 2 <= buildTill ) {
-                if (auxiliaryStatements != null)
-                    for (Statement statement : auxiliaryStatements) {
+                if (auxiliaryStreams != null)
+                    for (Statement statement : auxiliaryStreams) {
                         statement.setCEHandler("");
                         statement.toRegister(false);
                         statement.setName("AuxiliaryStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
@@ -205,7 +222,7 @@ public class CEMLManager implements CEMLRequest {
                         statement.build();
                         statementsCounter[0]++;
                     }
-                phasesDone[2] =  (auxiliaryStatements == null || (auxiliaryStatements.size() == statementsCounter[0]));
+                phasesDone[2] =  (auxiliaryStreams == null || (auxiliaryStreams.size() == statementsCounter[0]));
 
                 if (learningStatements != null && 3 <= buildTill)
                     for (LearningStatement statement : learningStatements) {
@@ -232,7 +249,7 @@ public class CEMLManager implements CEMLRequest {
 
             if(phasesDone[4] && 5 <= buildTill) {
                 model.setDescriptors(descriptors);
-                model.setName(name);
+              //  model.setName(name);
                 model.build();
                 phasesDone[5] = true;
             }
@@ -242,9 +259,9 @@ public class CEMLManager implements CEMLRequest {
                 phasesDone[6] = true;
             }
 
-            if (phasesDone[6] && auxiliaryStatements != null && !auxiliaryStatements.isEmpty() && 7 <= buildTill) {
+            if (phasesDone[6] && auxiliaryStreams != null && !auxiliaryStreams.isEmpty() && 7 <= buildTill) {
                 MultiResourceResponses<Statement> response;
-                for (Statement statement : auxiliaryStatements) {
+                for (Statement statement : auxiliaryStreams) {
                     response = StatementFeeder.feedStatement(statement);
                     responses.add(response);
                     if (!(phasesDone[7] = response.getOverallStatus() < 300))
@@ -308,8 +325,8 @@ public class CEMLManager implements CEMLRequest {
 
         rollbackStatements(learningStatements,learningStatements.size());
 
-        if(auxiliaryStatements!=null)
-            rollbackStatements(auxiliaryStatements,auxiliaryStatements.size());
+        if(auxiliaryStreams !=null)
+            rollbackStatements(auxiliaryStreams, auxiliaryStreams.size());
 
         dropInCEPEngines();
 
@@ -392,8 +409,8 @@ public class CEMLManager implements CEMLRequest {
             }
         }
         if(fromPhase>6){
-            if(auxiliaryStatements!=null && !auxiliaryStatements.isEmpty())
-                rollbackStatements(auxiliaryStatements,buildStatements[3]);
+            if(auxiliaryStreams !=null && !auxiliaryStreams.isEmpty())
+                rollbackStatements(auxiliaryStreams,buildStatements[3]);
         }
 
         if(fromPhase>5){
@@ -413,7 +430,7 @@ public class CEMLManager implements CEMLRequest {
             }
         }catch (Exception e){
             if(aux!=null)
-                throw new Exception("Error while rolling back statement named "+aux.getName()+ " with ID "+aux.getID()+"; the agent may had being left in an unstable state");
+                throw new Exception("Error while rolling back statement named "+aux.getName()+ " with ID "+aux.getId()+"; the agent may had being left in an unstable state");
             else
                 throw new Exception("Error while rolling back statements; the agent may had being left in an unstable state");
         }

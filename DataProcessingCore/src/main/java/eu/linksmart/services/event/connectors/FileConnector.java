@@ -2,6 +2,7 @@ package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.services.event.feeders.BootstrappingBeanFeeder;
+import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.Utils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;
@@ -10,10 +11,7 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +35,7 @@ public class FileConnector extends Component implements IncomingConnector {
         filePaths.forEach(this::loadFile);
 
     }
-    protected void loadFile(String filePath){
+    protected void loadFile(String filePath)  {
 
         InputStream inputStream = null;
         try {
@@ -52,8 +50,8 @@ public class FileConnector extends Component implements IncomingConnector {
                 loggerService.info("Loading resource "+ filePath);
                 ClassLoader classloader = Thread.currentThread().getContextClassLoader();
                 inputStream = classloader.getResourceAsStream(filePath);
-                if(inputStream.markSupported())
-                    found =true;
+
+                found =inputStream != null && inputStream.markSupported();
             }
             if(!found)
                 loggerService.warn("There is no bootstrapping file ");
@@ -62,6 +60,11 @@ public class FileConnector extends Component implements IncomingConnector {
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
+            if(conf.containsKeyAnywhere(Const.PERSISTENT_ENABLED) && conf.getBoolean(Const.PERSISTENT_ENABLED) &&
+                    conf.containsKeyAnywhere(Const.FAIL_IF_PERSISTENCE_FAILS) && conf.getBoolean(Const.FAIL_IF_PERSISTENCE_FAILS)) {
+                loggerService.error("Fail in persistence process and the programmatic exit is set");
+                System.exit(-1);
+            }
         } finally {
             try {
                 assert inputStream != null;
@@ -74,6 +77,7 @@ public class FileConnector extends Component implements IncomingConnector {
     protected void loadStream(String inputStream) throws IOException {
         BootstrappingBeanFeeder.feed(inputStream);
     }
+
 
 
 

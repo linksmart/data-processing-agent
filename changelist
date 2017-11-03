@@ -1,3 +1,10 @@
+ - 1.7.0 RELEASE:
+    Features:
+        * Persistence and Essentiality features had been added
+    DEV:
+        * Several changes to improve CI
+    FIX:
+        * Now (De)Serializers are centralized
 17.10.2017 - 1.6.0 RELEASE:
     Features:
         * add JWS (JSON Web Sing) into the agent

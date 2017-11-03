@@ -1,17 +1,14 @@
 package eu.linksmart.services.event.core;
 
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.services.event.connectors.BigFileConnector;
-import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
+import eu.linksmart.api.event.types.PersistentRequest;
+import eu.linksmart.services.event.connectors.*;
 
 
-import eu.linksmart.services.event.connectors.FileConnector;
 import eu.linksmart.services.event.connectors.Observers.EventMqttObserver;
 import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
 import eu.linksmart.services.event.feeders.EventFeeder;
-import eu.linksmart.services.event.connectors.RestInit;
 import eu.linksmart.services.event.feeders.StatementFeeder;
-import eu.linksmart.api.event.types.impl.BootstrappingBean;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.Utils;
 import eu.linksmart.api.event.components.CEPEngine;
@@ -56,6 +53,7 @@ public class DataProcessingCore {
     public static boolean start(String args){
         if(!started) {
             Boolean ret = init(args);
+            ThingsRegistrationService.getReference().startTimer();
             new Thread(() -> statusLoop()).start();
             return ret;
         }
@@ -67,7 +65,6 @@ public class DataProcessingCore {
         while (active){
 
             active = mqtt.isUp();
-            ThingsRegistrationService.getReference().startTimer();
             if(active) {
                 loggerService.info("The Agent with ID "+ SharedSettings.getId()+" is alive");
                 int hb = 5000;
@@ -109,11 +106,18 @@ public class DataProcessingCore {
             loggerService.info("The environmental variables are loaded!");
         String idPath= conf.getString(Const.ID_CONF_PATH);
         if("*".equals(idPath))
-            SharedSettings.setIsSet(true);
+            if( conf.containsKeyAnywhere(Const.PERSISTENT_ENABLED) && conf.getBoolean(Const.PERSISTENT_ENABLED)){
+                loggerService.error("A persistent agent must have a persistent id (defined in the property "+Const.ID_CONF_PATH+" either in the configuration file or as environmental variable)");
+                System.exit(-1);
+            }else
+                SharedSettings.setIsSet(true);
         else
             SharedSettings.setId(conf.getString(Const.ID_CONF_PATH));
 
+
         conf.setProperty(Const.ID_CONF_PATH, SharedSettings.getId());
+        // set if this is my first start
+        SharedSettings.isIsFirstLoad(!Utils.isFile(PersistentRequestInstance.getPersistentFile()));
     }
 
     protected static synchronized boolean init(String args){
@@ -121,7 +125,7 @@ public class DataProcessingCore {
         initConf(args);
 
 
-        loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is starting with ID: " + SharedSettings.getId());
+        loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is "+(SharedSettings.isFirstLoad()?"":"re")+"starting with ID: " + SharedSettings.getId());
 
         initCEPEngines();
         intoCEPTypes();
@@ -138,10 +142,18 @@ public class DataProcessingCore {
 
 
     private static void bootstrapping() {
-        if(conf.getList(Const.PERSISTENT_DATA_FILE) != null ) {
+        if(conf.getList(Const.PERSISTENT_DATA_FILE) != null && SharedSettings.isFirstLoad()) {
             FileConnector fileFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
 
             fileFeeder.loadFiles();
+        }
+        if(conf.containsKeyAnywhere(Const.PERSISTENT_ENABLED)&& conf.getBoolean(Const.PERSISTENT_ENABLED) && !SharedSettings.isFirstLoad()) {
+            PersistenceService fileFeeder = new  PersistenceService(PersistentRequestInstance.getPersistentFile());
+
+            fileFeeder.loadFiles();
+            List requests = fileFeeder.getRequests(StatementInstance.class.getCanonicalName());
+            if(requests!= null && !requests.isEmpty())
+                StatementFeeder.feedStatements(requests);
         }
         if( conf.getStringArray(Const.FeederPayloadAlias) != null) {
             for (String alias: conf.getStringArray(Const.FeederPayloadAlias)) {

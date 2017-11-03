@@ -1,7 +1,6 @@
-package eu.linksmart.api.event.types.impl;
+package eu.linksmart.services.event.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
 

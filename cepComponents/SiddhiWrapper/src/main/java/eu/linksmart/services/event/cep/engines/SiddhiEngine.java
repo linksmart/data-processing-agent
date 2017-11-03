@@ -159,16 +159,16 @@ public class SiddhiEngine extends Component implements CEPEngine {
     public synchronized boolean  addStatement(Statement query) throws StatementException {
 
         if(query.getInput() != null && query.getInput().length!=0) {
-            throw new StatementException( query.getID(), "Statement", "Input non default type not yet available");
-        }else if(!hashStatement.containsKey(query.getID())){
-            hashStatement.put(query.getID(), query);
-            hashExecutionPlanRuntime.put(query.getID(),siddhiManager.createExecutionPlanRuntime(typeNameSiddhiDeffinition.get(DEFAULT_TYPE)+query.getStatement()));
-            ExecutionPlanRuntime executionPlanRuntime = hashExecutionPlanRuntime.get(query.getID());
+            throw new StatementException( query.getId(), "Statement", "Input non default type not yet available");
+        }else if(!hashStatement.containsKey(query.getId())){
+            hashStatement.put(query.getId(), query);
+            hashExecutionPlanRuntime.put(query.getId(),siddhiManager.createExecutionPlanRuntime(typeNameSiddhiDeffinition.get(DEFAULT_TYPE)+query.getStatement()));
+            ExecutionPlanRuntime executionPlanRuntime = hashExecutionPlanRuntime.get(query.getId());
 
             try {
                 executionPlanRuntime.addCallback(query.getName(), new SiddhiCEPHandler(query));
             } catch (Exception e) {
-                throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+query.getID(),e.getMessage(),e);
+                throw new StatementException(STATEMENT_INOUT_BASE_TOPIC+query.getId(),e.getMessage(),e);
             }
 
             hashInputHandler.put(query.getName(), executionPlanRuntime.getInputHandler("Observation"));

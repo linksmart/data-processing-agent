@@ -1,5 +1,6 @@
 package eu.linksmart.services.utils.serialization;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.ECDSAVerifier;
@@ -126,19 +127,17 @@ public class JWSDeserializer implements Deserializer {
     @SafeVarargs
     @Override
     public final <I, C extends I> boolean defineClassToInterface(Class<I> tInterface, Class<C>... tClass) {
-
-
         return deserializer.defineClassToInterface(tInterface,tClass);
     }
 
     @Override
-    public <T> List<T> parseArrayOf(String objectString, Class<T> tClass) throws IOException, NotImplementedException {
-        return deserializer.parseArrayOf(objectString,tClass);
+    public Object parsePacked(String objectString, TypeReference type) throws IOException, NotImplementedException {
+        return deserializer.parsePacked(objectString, type);
     }
 
     @Override
-    public <T> List<T> deserializeArrayOf(byte[] bytes, Class<T> tClass) throws IOException, NotImplementedException {
-        return deserializer.deserializeArrayOf(bytes,tClass);
+    public Object deserializePacked(byte[] bytes, TypeReference type) throws IOException, NotImplementedException {
+        return deserializer.deserializePacked(bytes,type);
     }
 
     @Override

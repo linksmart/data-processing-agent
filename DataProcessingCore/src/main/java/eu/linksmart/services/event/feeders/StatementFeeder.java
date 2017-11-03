@@ -9,13 +9,11 @@ import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.api.event.types.impl.StatementInstance;
+import eu.linksmart.services.event.core.StatementInstance;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
-import eu.linksmart.services.utils.serialization.Deserializer;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -78,8 +76,8 @@ public class StatementFeeder implements Feeder<Statement> {
     }
     static public   MultiResourceResponses<Statement> pauseStatement(Statement statement){
 
-        MultiResourceResponses<Statement> response = pauseStatement(statement.getID());
-        response.addResources(statement.getID(),statement);
+        MultiResourceResponses<Statement> response = pauseStatement(statement.getId());
+        response.addResources(statement.getId(),statement);
 
 
         return response;
@@ -104,10 +102,10 @@ public class StatementFeeder implements Feeder<Statement> {
         MultiResourceResponses<Statement> response ;
 
 
-        response=removeStatement(statement.getID());
+        response=removeStatement(statement.getId());
 
 
-        response.addResources(statement.getID(),statement);
+        response.addResources(statement.getId(),statement);
         return response;
     }
     static public  MultiResourceResponses<Statement> removeStatement(String hash){
@@ -126,8 +124,8 @@ public class StatementFeeder implements Feeder<Statement> {
     }
     static public  MultiResourceResponses<Statement> startStatement(Statement statement) {
 
-        MultiResourceResponses<Statement> response =startStatement(statement.getID());
-        response.addResources(statement.getID(),statement);
+        MultiResourceResponses<Statement> response =startStatement(statement.getId());
+        response.addResources(statement.getId(),statement);
         return response;
     }
     static public  MultiResourceResponses<Statement> startStatement(String hash){
@@ -196,40 +194,40 @@ public class StatementFeeder implements Feeder<Statement> {
         }
 
         Map<String, Object> resource = new HashMap<>();
-        resource.put(statement.getID(),statement);
-        result.getResources().put(statement.getID(),statement);
+        resource.put(statement.getId(),statement);
+        result.getResources().put(statement.getId(),statement);
 
         return result;
 
     }
     public static void processRequestInWrapper(CEPEngine dfw,MultiResourceResponses<Statement> result, Statement org){
 
-        String id= result.getHeadResource().getID();
+        String id= result.getHeadResource().getId();
         try {
             if (org==null) {
                 if (!dfw.addStatement(result.getHeadResource())) {
-                    if(dfw.getStatements().containsKey(result.getHeadResource().getID()))
-                        result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 304, "Not modified", "This exact statement already exists in this agent"));
+                    if(dfw.getStatements().containsKey(result.getHeadResource().getId()))
+                        result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 304, "Not modified", "This exact statement already exists in this agent"));
                     else if (result.getHeadResource().getStateLifecycle() == Statement.StatementLifecycle.REMOVE)
-                        result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 400, "Bad Request", "The remove statement with id "+result.getHeadResource().getID()+" does not exist"));
+                        result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 400, "Bad Request", "The remove statement with id "+result.getHeadResource().getId()+" does not exist"));
                     else
-                        result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 500, "Internal Server Error", dfw.getName()+": Oops we have a problem"));
+                        result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 500, "Internal Server Error", dfw.getName()+": Oops we have a problem"));
                 }else {
-                    loggerService.info("Statement " + result.getHeadResource().getID() + " was successful");
-                    result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getID(), 201, "Created", "Statement " + result.getHeadResource().getID() + " was successful"));
+                    loggerService.info("Statement " + result.getHeadResource().getId() + " was successful");
+                    result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getId(), 201, "Created", "Statement " + result.getHeadResource().getId() + " was successful"));
                 }
             } else {
 
                 if (result.getResponses().isEmpty() && org.getStateLifecycle() != null && !org.getStateLifecycle().equals(result.getHeadResource().getStateLifecycle())) {
                     switch (result.getHeadResource().getStateLifecycle()) {
                         case RUN:
-                            dfw.startStatement(result.getHeadResource().getID());
+                            dfw.startStatement(result.getHeadResource().getId());
                             break;
                         case PAUSE:
-                            dfw.pauseStatement(result.getHeadResource().getID());
+                            dfw.pauseStatement(result.getHeadResource().getId());
                             break;
                         case REMOVE:
-                            dfw.removeStatement(result.getHeadResource().getID());
+                            dfw.removeStatement(result.getHeadResource().getId());
                             break;
 
                     }
@@ -240,8 +238,8 @@ public class StatementFeeder implements Feeder<Statement> {
                 }
                 if (result.getResponses().isEmpty() && org.getSource() != null && !org.getSource().equals(result.getHeadResource().getSource())) {
                     // TODO: update the source property
-                    loggerService.error("Statement " + result.getHeadResource().getID() + " try to change an outdated statement property");
-                    result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 500, "Internal Server Error", "The source property is not available in this agent version"));
+                    loggerService.error("Statement " + result.getHeadResource().getId() + " try to change an outdated statement property");
+                    result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 500, "Internal Server Error", "The source property is not available in this agent version"));
 
                 }
                 if (result.getResponses().isEmpty() && result.getHeadResource().getName() != null && !"".equals(result.getHeadResource().getName()) && !org.getName().equals(result.getHeadResource().getName())) {
@@ -250,8 +248,8 @@ public class StatementFeeder implements Feeder<Statement> {
                 }
                 if (result.getResponses().isEmpty()) {
                     // if there is any other change in other property is irrelevant, so is consider successful.
-                    loggerService.info("Statement " + result.getHeadResource().getID() + " was successful");
-                    result.addResponse(createSuccessMapMessage(result.getHeadResource().getID(), "Statement", result.getHeadResource().getID(), 200, "OK", "Statement " + result.getHeadResource().getID() + " was successful"));
+                    loggerService.info("Statement " + result.getHeadResource().getId() + " was successful");
+                    result.addResponse(createSuccessMapMessage(result.getHeadResource().getId(), "Statement", result.getHeadResource().getId(), 200, "OK", "Statement " + result.getHeadResource().getId() + " was successful"));
                 }
                 if (result.getResponses().isEmpty() && org.getTargetAgents() != null && !org.getTargetAgents().equals(result.getHeadResource().getTargetAgents()) && !result.getHeadResource().getTargetAgents().isEmpty()) {
                     if (result.getHeadResource().getTargetAgents().contains(SharedSettings.getId())) {
@@ -259,8 +257,8 @@ public class StatementFeeder implements Feeder<Statement> {
                          dfw.getStatements().get(id).setTargetAgents(result.getHeadResource().getTargetAgents());
                     } else {
                         // the statement doesn't address me as processing agent
-                        loggerService.warn("Statement " + result.getHeadResource().getID() + " was not modified because I was not addressed in the request.");
-                        result.addResponse(createErrorMapMessage(result.getHeadResource().getID(), "Statement", 100, "Not Modified", "The resource is located at the server but the request do not address me as processing agent of the request. If this request was intent to be an implicit DELETE request, this message should be read as Bad Request 400"));
+                        loggerService.warn("Statement " + result.getHeadResource().getId() + " was not modified because I was not addressed in the request.");
+                        result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 100, "Not Modified", "The resource is located at the server but the request do not address me as processing agent of the request. If this request was intent to be an implicit DELETE request, this message should be read as Bad Request 400"));
                     }
                 }
 
@@ -292,16 +290,16 @@ public class StatementFeeder implements Feeder<Statement> {
         GeneralRequestResponse error;
         if(result==null){
             result = new MultiResourceResponses<>();
-            result.addResources(statement.getID(),statement);
+            result.addResources(statement.getId(),statement);
 
         }else {
 
             if(result.getResources().isEmpty())
-                result.addResources(statement.getID(),statement);
+                result.addResources(statement.getId(),statement);
 
         }
 
-        String id= statement.getID();
+        String id= statement.getId();
         Set<String> workingCEPsList;
 
         boolean update =orgID!=null && CEPEngine.instancedEngines.values().stream().anyMatch(e->e.getStatements().containsKey(orgID));

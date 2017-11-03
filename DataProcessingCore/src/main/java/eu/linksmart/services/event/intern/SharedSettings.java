@@ -13,10 +13,9 @@ import java.util.concurrent.ConcurrentMap;
 public class SharedSettings implements Const {
 
 
-    protected static String id = UUID.randomUUID().toString();
+    protected static String id = UUID.randomUUID().toString(), will = null, willTopic = null;
 
-    protected static String will = null;
-    protected static String willTopic = null;
+    protected static boolean isFirstLoad = true;
     protected static Serializer serializer = new DefaultSerializer();
     protected static Deserializer deserializer = new DefaultDeserializer();
 
@@ -91,11 +90,18 @@ public class SharedSettings implements Const {
 
     }
 
+    public static boolean isFirstLoad() {
+        return isFirstLoad;
+    }
     public static Object getSharedObject(String key){
         return extensionSharedObjects.get(key);
     }
 
     public static boolean existSharedObject(String key) {
         return extensionSharedObjects.containsKey(key);
+    }
+
+    public static void isIsFirstLoad(boolean isFirstLoad) {
+        SharedSettings.isFirstLoad = isFirstLoad;
     }
 }

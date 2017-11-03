@@ -14,6 +14,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.api.FileCemlAPI;
+import eu.linksmart.services.event.connectors.PersistenceService;
+import eu.linksmart.services.event.core.PersistentRequestInstance;
+import eu.linksmart.services.event.core.StatementInstance;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -29,7 +32,6 @@ import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.components.AnalyzerComponent;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
-import eu.linksmart.api.event.types.impl.StatementInstance;
 import eu.linksmart.services.event.ceml.api.MqttCemlAPI;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
@@ -54,18 +56,11 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
     private static Map<String, KalmanFilter> filters = new Hashtable<>();
 
-    private CEML() {
-    }
-
-
-
-
     static {
 
         // Add configuration file of the local package
         Configurator.addConfFile(Const.CEML_DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
-
 
         SharedSettings.getSerializer().addModule("Descriptors",DataDescriptors.class,new DataDescriptorSerializer());
         SharedSettings.getDeserializer().addModule("Descriptors",DataDescriptors.class,new DataDescriptorsDeserializer());
@@ -79,9 +74,18 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         SharedSettings.getDeserializer().addModule("LearningStatements",LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
 
 
+        SharedSettings.getDeserializer().addModule("DataDescriptor",DataDescriptor.class,new DataDescriptorDeserializer());
 
-        if(conf.containsKeyAnywhere(Const.CEML_INIT_BOOTSTRAPPING))
+        if(conf.containsKeyAnywhere(Const.CEML_INIT_BOOTSTRAPPING)&& SharedSettings.isFirstLoad())
             (new FileCemlAPI(conf.getString(Const.CEML_INIT_BOOTSTRAPPING))).loadFiles();
+        if(conf.containsKeyAnywhere(Const.PERSISTENT_ENABLED)&& conf.getBoolean(Const.PERSISTENT_ENABLED) && !SharedSettings.isFirstLoad()) {
+            PersistenceService fileFeeder = new PersistenceService(PersistentRequestInstance.getPersistentFile());
+
+            fileFeeder.loadFiles();
+            List<CEMLManager> requests = new ArrayList<>(fileFeeder.getRequests(CEMLManager.class.getCanonicalName()));
+            if(!requests.isEmpty())
+                requests.forEach(CEML::create);
+        }
         try {
             Class.forName(MqttCemlAPI.class.getCanonicalName());
         }catch (Exception e){
@@ -91,6 +95,9 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         // bootstrap requests
         loggerService.info("The CEML has started in the Agent with ID "+ SharedSettings.getId());
     }
+
+    private CEML(){}
+    
     public static MultiResourceResponses<CEMLRequest> feedLearningRequest(CEMLRequest request){
         MultiResourceResponses<CEMLRequest> responses = new MultiResourceResponses<>();
         try {
@@ -224,19 +231,19 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
                         break;
                     case "learning":
-                        requests.get(name).getLearningStreamStatements().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
+                        requests.get(name).getLearningStream().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
 
                         break;
                     case "model":
                         result.addResources(requests.get(name).getModel().getClass().getSimpleName(), requests.get(name).getModel());
                         break;
                     case "deployment":
-                        requests.get(name).getDeploymentStreamStatements().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
+                        requests.get(name).getDeploymentStream().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
 
                         break;
 
                     case "auxiliary":
-                        requests.get(name).getAuxiliaryStreamStatements().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
+                        requests.get(name).getAuxiliaryStream().forEach(s->result.addResources(((Object) s.hashCode()).toString(), s));
 
                         break;
                     case "prediction":

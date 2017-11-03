@@ -5,7 +5,7 @@ import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.api.event.types.impl.StatementInstance;
+import eu.linksmart.services.event.core.StatementInstance;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
@@ -16,8 +16,6 @@ import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.serialization.DefaultSerializer;
-import eu.linksmart.services.utils.serialization.Serializer;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 
@@ -121,8 +119,8 @@ public class RestConnector extends Component implements IncomingConnector {
     ) {
         //return prepareHTTPResponse(StatementFeeder.addNewStatement(statementString, "DP_"+ UUID.randomUUID().toString().replace("-","_"),null));
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
-        result.addResources(statement.getID(),statement);
-        return prepareHTTPResponse(StatementFeeder.addNewStatement((Statement)statement, statement.getID(),null,result));
+        result.addResources(statement.getId(),statement);
+        return prepareHTTPResponse(StatementFeeder.addNewStatement((Statement)statement, statement.getId(),null,result));
 
     }
 
@@ -161,8 +159,8 @@ public class RestConnector extends Component implements IncomingConnector {
     ) {
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
 
-        result.addResources(statement.getID(),statement);
-        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getID(),null,result));
+        result.addResources(statement.getId(),statement);
+        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getId(),null,result));
 
     }
     @ApiOperation(value = "changeStatement", nickname = "changeStatement")
@@ -200,9 +198,9 @@ public class RestConnector extends Component implements IncomingConnector {
             @PathVariable("id") String id
     ) {
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
-        result.addResources(statement.getID(),statement);
+        result.addResources(statement.getId(),statement);
         statement.setId(id);
-        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getID(),null,result));
+        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getId(),null,result));
 
     }
     @ApiOperation(value = "addStatementInEngine", nickname = "addStatementInEngine")
@@ -238,8 +236,8 @@ public class RestConnector extends Component implements IncomingConnector {
             @PathVariable("cepEngine") String cepEngine
     ) {
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
-        result.addResources(statement.getID(),statement);
-        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getID(),cepEngine,result));
+        result.addResources(statement.getId(),statement);
+        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getId(),cepEngine,result));
 
 
     }
@@ -283,8 +281,8 @@ public class RestConnector extends Component implements IncomingConnector {
 
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
         statement.setId(id);
-        result.addResources(statement.getID(),statement);
-        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getID(),cepEngine,result));
+        result.addResources(statement.getId(),statement);
+        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getId(),cepEngine,result));
 
     }
     @ApiOperation(value = "removeStatement", nickname = "removeStatement")
@@ -343,7 +341,7 @@ public class RestConnector extends Component implements IncomingConnector {
             try {
 
                 statement.getSynchronousResponse();
-                result.addResponse(createSuccessMapMessage(statement.getID(), "Statement", statement.getID(), 200, "OK", "Statement Processed"));
+                result.addResponse(createSuccessMapMessage(statement.getId(), "Statement", statement.getId(), 200, "OK", "Statement Processed"));
 
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
@@ -361,7 +359,7 @@ public class RestConnector extends Component implements IncomingConnector {
         URI uri= null;
         try {
             if(statement!=null)
-                uri = new URI("/statement/"+statement.getID());
+                uri = new URI("/statement/"+statement.getId());
         } catch (URISyntaxException e) {
             loggerService.error(e.getMessage(),e);
             result.addResponse(createErrorMapMessage(SharedSettings.getId(),"Agent",500,"Intern Server Error",e.getMessage()));

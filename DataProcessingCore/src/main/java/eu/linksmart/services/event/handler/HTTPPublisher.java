@@ -72,7 +72,7 @@ public class HTTPPublisher implements Publisher{
     public HTTPPublisher(Statement statement) {
         outputs = Arrays.asList(statement.getOutput());
         scopes =  Arrays.asList(statement.getScope());
-        id = statement.getID();
+        id = statement.getId();
         try {
             initScopes();
         } catch ( StatementException e) {

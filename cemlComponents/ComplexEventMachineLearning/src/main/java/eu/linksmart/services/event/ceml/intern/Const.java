@@ -3,7 +3,7 @@ package eu.linksmart.services.event.ceml.intern;
 /**
  * Created by José Ángel Carvajal on 18.12.2015 a researcher of Fraunhofer FIT.
  */
-public interface Const extends eu.linksmart.services.utils.constants.Const {
+public interface Const extends eu.linksmart.services.utils.constants.Const,eu.linksmart.services.event.intern.Const {
     public static final String CEML_GenerateReports =   "ceml_monitoring_evaluation_generateReports";
 
     public static final String CEML_MQTT_OUTPUT_TOPIC =   "ceml_api_mqtt_topic_output";

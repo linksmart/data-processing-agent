@@ -1,4 +1,4 @@
-package eu.linksmart.api.event.types.impl;
+package eu.linksmart.services.event.core;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * @see eu.linksmart.api.event.types.JsonSerializable
  *
  * */
-public class StatementInstance implements Statement {
+public class StatementInstance extends PersistentRequestInstance implements Statement {
     /**
      * Define which handler will be instantiate in the CEP engine when no Handler was specifically defined.
      * */
@@ -84,7 +84,7 @@ public class StatementInstance implements Statement {
     protected String[] scope={"outgoing"};
     protected static final String uuid =UUID.randomUUID().toString();
     @JsonIgnore
-    protected static final Object lock =new Object();
+    protected transient static final Object lock =new Object();
 
     @ApiModelProperty(notes = "In case of a synchronous request, the response will be sent here.")
     @Deprecated
@@ -96,15 +96,13 @@ public class StatementInstance implements Statement {
     @JsonProperty("TargetAgents")
     protected List<String> targetAgents= new  ArrayList<String>();
 
-    @ApiModelProperty(notes = "Unique identifier of the statement in the agent")
-    @Deprecated
-    @JsonProperty("ID")
-    protected String id = "";
+
 
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
     @JsonProperty("isRestOutput")
     private boolean restOutput;
-    private boolean toRegister = true;
+    @JsonIgnore
+    private transient boolean toRegister = true;
 
     public EventEnvelope getLastOutput() {
         return lastOutput;
@@ -114,22 +112,24 @@ public class StatementInstance implements Statement {
         this.lastOutput = lastOutput;
     }
 
-    @ApiModelProperty(notes = "The last compound event result of this statement")
-    @Deprecated
-    @JsonProperty("lastOutput")
+    //@ApiModelProperty(notes = "The last compound event result of this statement")
+    @JsonIgnore
     private EventEnvelope lastOutput ;
 
     public StatementInstance() {
+        super();
     }
 
     public StatementInstance(String name, String statement, String[] scope) {
+        super();
         this.name = name;
         this.statement = statement;
         this.scope = scope;
     }
 
 
-    public String getID() {
+    @Override
+    public String getId() {
         if(id==null||id.equals(""))
             id = Utils.hashIt(name + statement);
         return id;
@@ -232,7 +232,7 @@ public class StatementInstance implements Statement {
                         this.stateLifecycle.equals(obj.getStateLifecycle()) &&
                         Arrays.deepEquals(this.scope, obj.getScope()) &&
                         this.targetAgents.equals(obj.getTargetAgents()) &&
-                        id.equals(obj.getID())
+                        id.equals(obj.getId())
                 );
 
     }

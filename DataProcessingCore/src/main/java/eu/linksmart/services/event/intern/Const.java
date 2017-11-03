@@ -58,4 +58,8 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String LINKSMART_BROKER = "linksmart_broker";
     String LINKSMART_SERVICE_WILL_TOPIC = "linksmart_service_will_topic";
     String LINKSMART_REGISTRATION_TOPIC = "linksmart_service_registration_topic";
+    String FAIL_IF_PERSISTENCE_FAILS = "fails_if_persistence_fails";
+    String CONNECTOR_PERSISTENT_FILE = "connector_persist_in";
+    String PERSISTENT_ENABLED = "persistent_enabled";
+    String PERSISTENT_STORAGE_PERIOD = "persistent_storage_period";
 }

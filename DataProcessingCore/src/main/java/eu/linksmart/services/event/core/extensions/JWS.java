@@ -1,9 +1,6 @@
 package eu.linksmart.services.event.core.extensions;
 
-import com.nimbusds.jose.JWSHeader;
-import eu.linksmart.api.event.components.Enveloper;
-import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.api.event.types.impl.StatementInstance;
+import eu.linksmart.services.event.core.StatementInstance;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 import eu.linksmart.services.event.core.ServiceRegistratorService;
 import eu.linksmart.services.event.intern.Const;
@@ -15,7 +12,6 @@ import eu.linksmart.services.utils.serialization.JWSSerializer;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by José Ángel Carvajal on 16.10.2017 a researcher of Fraunhofer FIT.
