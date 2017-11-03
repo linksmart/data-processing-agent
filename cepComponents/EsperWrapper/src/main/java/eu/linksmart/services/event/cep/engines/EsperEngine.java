@@ -218,7 +218,7 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
         boolean result = false;
         try {
             // if the statement does not exists
-            if(epService.getEPAdministrator().getStatement(statement.getID())==null) {
+            if(epService.getEPAdministrator().getStatement(statement.getId())==null) {
 
                 result = addEsperStatement(statement);
             }
@@ -231,11 +231,11 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
 
             loggerService.error(e.getMessage(), e);
 
-            throw new UnknownException(statement.getID(), "Statement","The given handler of the statement ID:"+statement.getID()+" is unknown by this agent. If no handler was given this is an internal server error, otherwise the user provide wrong handler name");
+            throw new UnknownException(statement.getId(), "Statement","The given handler of the statement ID:"+statement.getId()+" is unknown by this agent. If no handler was given this is an internal server error, otherwise the user provide wrong handler name");
 
         }catch (Exception e){
             loggerService.error(e.getMessage(), e);
-            throw new InternalException(statement.getID(),e.getMessage(),e.getCause());
+            throw new InternalException(statement.getId(),e.getMessage(),e.getCause());
 
         }
 
@@ -266,7 +266,7 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
                 try {
                     result = epService.getEPRuntime().executeQuery(statement.getStatement());
                 }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),statement.getID(),e.getCause());
+                    throw new StatementException(e.getMessage(),statement.getId(),e.getCause());
                 }
                 if (handler != null) {
 
@@ -275,23 +275,23 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
                         if ( handler.getClass().isAssignableFrom(ComplexEventSyncHandler.class))
                             ((ComplexEventSyncHandler)handler).update(event.getUnderlying());
                         else
-                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",statement.getID(), "Statement");
+                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",statement.getId(), "Statement");
                     }
                 }
                 end = true;
                 break;
             case REMOVE:
-                end = removeStatement(statement.getID());
+                end = removeStatement(statement.getId());
                 break;
             case RUN:
             case PAUSE:
             default:
                 EPStatement epl;
                 try {
-                    epl = epService.getEPAdministrator().createEPL(statement.getStatement(), statement.getID());
+                    epl = epService.getEPAdministrator().createEPL(statement.getStatement(), statement.getId());
 
                 }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),statement.getID(),e );
+                    throw new StatementException(e.getMessage(),statement.getId(),e );
                 }
                 if (handler != null) {
                     epl.setSubscriber(handler);
@@ -304,7 +304,7 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
                     default:
                         epl.start();
                 }
-                deployedStatements.put(statement.getID(), statement);
+                deployedStatements.put(statement.getId(), statement);
                 end = true;
         }
         return end;
