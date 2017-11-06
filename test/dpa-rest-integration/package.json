@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "bamboo": "./node_modules/.bin/mocha --reporter mocha-bamboo-reporter"
+    "bamboo": "./node_modules/.bin/mocha --reporter mocha-bamboo-reporter --reporter-options output=/data/mocha.json"
   },
   "dependencies": {
     "chai": "^3.5.0",
