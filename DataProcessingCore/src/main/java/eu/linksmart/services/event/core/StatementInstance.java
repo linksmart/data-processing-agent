@@ -118,6 +118,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     public StatementInstance() {
         super();
+        setGenerateID();
     }
 
     public StatementInstance(String name, String statement, String[] scope) {
@@ -125,13 +126,17 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.name = name;
         this.statement = statement;
         this.scope = scope;
+        setGenerateID();
     }
 
+    private void setGenerateID(){
+        if(( ( id==null || "".equals(id)) && name!=null && statement!= null && !"".equals(name) && !"".equals(statement) ))
+            id = Utils.hashIt(name + statement);
+    }
 
     @Override
     public String getId() {
-        if(id==null||id.equals(""))
-            id = Utils.hashIt(name + statement);
+        setGenerateID();
         return id;
     }
 
@@ -165,6 +170,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @Override
     public String getName(){
+        setGenerateID();
         return  name;
     }
     @Override
@@ -266,6 +272,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     public void setStatement(String statement) {
+        setGenerateID();
         this.statement = statement;
     }
 
