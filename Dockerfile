@@ -23,8 +23,8 @@ VOLUME /dependencies
 
 
 # mounting configuration and extra dependencies volumes
-ADD https://linksmart.eu/repo/service/local/artifact/maven/content?r=releases&g=eu.linksmart.services.events.distributions&a=iot.learning.universal.agent&v=LATEST agent.jar
-#ONBUILD ADD distributions/IoTAgent/target/*.jar .
+ADD https://nexus.linksmart.eu/repository/linksmart-releases/eu/linksmart/services/events/ServiceLouncher/${version}/ServiceLouncher-${version}.jar agent.jar
+
 
 # starting the agent
 ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
