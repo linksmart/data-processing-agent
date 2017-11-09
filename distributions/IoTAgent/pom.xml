@@ -45,6 +45,11 @@
             <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
             <version>${ls.se.agents.version}</version>
         </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>LinearRegressionModel</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
 
 
     </dependencies>
