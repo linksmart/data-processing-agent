@@ -9,12 +9,36 @@
 
     <packaging>pom</packaging>
 
-    <description>Implementation of the IoT agents framework</description>
+    <description>Implementation of the IoT agents framework based in GPL</description>
     <developers>
         <developer>
             <id>jacarvajal</id>
             <email>jose.angel.angel.carvajal&lt;at&gt;fit.fraunhofer.de</email>
             <name>Jose Angel Carvajal Soto</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
+        <developer>
+            <id>tavakoli</id>
+            <email>farshid.tavakolizadeh@fit.fraunhofer.de</email>
+            <name>Farshid Tavakolizadeh</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
+        <developer>
+            <id>devasya</id>
+            <email>shreekantha.devasya@fit.fraunhofer.de</email>
+            <name>Shreekantha Devasya</name>
             <roles>
                 <role>Developer</role>
                 <role>Researcher</role>
@@ -38,18 +62,18 @@
         <repository>
             <id>releases</id>
             <name>Releases</name>
-            <url>https://linksmart.eu/repo/content/repositories/releases/</url>
+            <url>https://nexus.linksmart.eu/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>Snapshots</name>
-            <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+            <url>https://nexus.linksmart.eu/repository/maven-snapshots/</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <site>
             <id>agents</id>
             <name>linksmart-service-agents-repository</name>
-            <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
+            <url>dav:https://nexus.linksmart.eu/repository/iot-agents-site/</url>
         </site>
     </distributionManagement>
     <ciManagement>
@@ -283,7 +307,7 @@
 
         <repository>
             <id>central</id>
-            <url>https://linksmart.eu/repo/content/groups/public/</url>
+            <url>https://nexus.linksmart.eu/repository/maven-central/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
@@ -345,7 +369,7 @@
                                 <repository>
                                     <id>linksmart-repo</id>
                                     <name>LinkSmart - Nexus Managed Snapshot Repository</name>
-                                    <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+                                    <url>https://nexus.linksmart.eu/repository/maven-snapshots/</url>
                                     <releases>
                                         <enabled>true</enabled>
                                         <updatePolicy>never</updatePolicy>
@@ -357,7 +381,7 @@
                                     <site>
                                         <id>agents</id>
                                         <name>linksmart-service-agents-repository</name>
-                                        <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
+                                        <url>dav:https://nexus.linksmart.eu/repository/iot-agents-site/</url>
                                     </site>
                                 </repository>
                             </remoteRepositories>
@@ -386,7 +410,7 @@
         <license>
             <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
             <url>https://www.gnu.org/licenses/lgpl.txt</url>
-            <distribution>https://linksmart.eu/repo/content/repositories/snapshots/eu/linksmart/services/events/gpl/</distribution>
+            <distribution>https://nexus.linksmart.eu/repository/maven-releases/</distribution>
             <comments>LinkSmart Services: IoT Data-Processing and Learning GPL Agents is project based on the IoT Data-Processing and Learning. Differentiating from it in the Licence </comments>
         </license>
     </licenses>
