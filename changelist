@@ -1,8 +1,10 @@
  - 1.7.0 RELEASE:
     Features:
         * Persistence and Essentiality features had been added
+        * The default topics is provided in output of the Statement
     DEV:
         * Several changes to improve CI
+        * Move the Nexus server from linksmart.eu/repo to nexus.linksmart.eu
     FIX:
         * Now (De)Serializers are centralized
 17.10.2017 - 1.6.0 RELEASE:

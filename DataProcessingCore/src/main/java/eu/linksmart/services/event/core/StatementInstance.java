@@ -8,6 +8,8 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
+import eu.linksmart.services.event.intern.SharedSettings;
 import io.swagger.annotations.ApiModelProperty;
 
 import eu.linksmart.services.utils.function.Utils;
@@ -119,6 +121,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public StatementInstance() {
         super();
         setGenerateID();
+        setGenerateOutput();
     }
 
     public StatementInstance(String name, String statement, String[] scope) {
@@ -127,11 +130,18 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.statement = statement;
         this.scope = scope;
         setGenerateID();
+        setGenerateOutput();
     }
 
     private void setGenerateID(){
-        if(( ( id==null || "".equals(id)) && name!=null && statement!= null && !"".equals(name) && !"".equals(statement) ))
-            id = Utils.hashIt(name + statement);
+        if(( ( id==null || "".equals(id)) && name!=null && statement!= null && !"".equals(name) && !"".equals(statement) )) {
+            setId( Utils.hashIt(name + statement));
+        }
+    }
+    private void setGenerateOutput() {
+        if ((output == null || output.length < 1) && id != null && !"".equals(id))
+            setOutput(new String[]{DefaultMQTTPublisher.defaultOutput(SharedSettings.getId()) + id + "/"});
+
     }
 
     @Override
@@ -211,6 +221,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @Override
     public String[] getOutput() {
+        setGenerateOutput();
         return output;
     }
 
@@ -272,12 +283,13 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     public void setStatement(String statement) {
-        setGenerateID();
         this.statement = statement;
+        setGenerateID();
     }
 
     public void setName(String name) {
         this.name = name;
+        setGenerateID();
     }
     public void setCEHandler(String CEHandler) {
         this.CEHandler =CEHandler;
@@ -297,6 +309,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
     public void setId(String id){
         this.id =id;
+        setGenerateOutput();
     }
 
     public void setTargetAgents(List<String> targetAgents) {
@@ -325,6 +338,8 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @Override
     public JsonSerializable build() throws TraceableException, UntraceableException {
+        setGenerateID();
+        setGenerateOutput();
         return this;
     }
 

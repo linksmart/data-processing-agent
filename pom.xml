@@ -101,7 +101,7 @@
         <site.plugin.version>3.5.1</site.plugin.version>
         <maven.javadoc.version>2.10.4</maven.javadoc.version>
         <surefire-report.version>2.19.1</surefire-report.version>
-        <wagon-webdav-version>2.10</wagon-webdav-version>
+        <wagon-webdav-version>3.0.0</wagon-webdav-version>
         <swagger.version>1.5.10</swagger.version>
 
 
@@ -715,10 +715,7 @@
     </build>
 
     <repositories>
-		<repository>
-			<id>maven</id>
-			<url>http://repo1.maven.org/maven2</url>
-		</repository>
+
 		<repository>
 			<id>jboss-maven2-release-repository</id>
 			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
@@ -740,7 +737,7 @@
         </repository>
     <repository>
         <id>central</id>
-        <url>https://linksmart.eu/repo/content/groups/public/</url>
+        <url>https://nexus.linksmart.eu/repository/maven-central/</url>
         <releases>
             <enabled>true</enabled>
             <updatePolicy>never</updatePolicy>
@@ -757,18 +754,20 @@
       <repository>
           <id>releases</id>
           <name>Releases</name>
-          <url>https://linksmart.eu/repo/content/repositories/releases/</url>
+          <url>https://nexus.linksmart.eu/repository/maven-releases/</url>
       </repository>
       <snapshotRepository>
           <id>snapshots</id>
           <name>Snapshots</name>
-          <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+          <url>https://nexus.linksmart.eu/repository/maven-snapshots/</url>
+          <!--<url>https://linksmart.eu/repo/content/repositories/snapshots/</url>-->
           <uniqueVersion>false</uniqueVersion>
       </snapshotRepository>
       <site>
           <id>agents</id>
           <name>linksmart-service-agents-repository</name>
-          <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
+          <url>dav:https://nexus.linksmart.eu/repository/Sites/</url>
+          <!--<url>dav:https://linksmart.eu/repo/content/sites/agents</url>-->
       </site>
 	</distributionManagement>
 
@@ -844,7 +843,7 @@
                                 <repository>
                                     <id>linksmart-repo</id>
                                     <name>LinkSmart - Nexus Managed Snapshot Repository</name>
-                                    <url>https://linksmart.eu/repo/content/repositories/snapshots/</url>
+                                    <url>https://nexus.linksmart.eu/repository/maven-snapshots/</url>
                                     <releases>
                                         <enabled>true</enabled>
                                         <updatePolicy>never</updatePolicy>
@@ -856,7 +855,8 @@
                                     <site>
                                         <id>agents</id>
                                         <name>linksmart-service-agents-repository</name>
-                                        <url>dav:https://linksmart.eu/repo/content/sites/agents</url>
+                                        <url>dav:https://nexus.linksmart.eu/repository/Sites/</url>
+                                        <!--<url>dav:https://linksmart.eu/repo/content/sites/agents</url>-->
                                     </site>
                                 </repository>
                             </remoteRepositories>

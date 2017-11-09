@@ -74,7 +74,7 @@ public class CemlTest {
         }
 
         try {
-            SharedSettings.getDeserializer().getParser();
+
             System.out.println("Expecting unimportant exception!");
            // SharedSettings.getDeserializer().defineClassToInterface(Model.class, LinearRegressionModel.class);
             request = SharedSettings.getDeserializer().parse(requestStr, CEMLManager.class);

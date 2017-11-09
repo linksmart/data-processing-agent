@@ -51,7 +51,8 @@ public class DefaultMQTTPublisher implements Publisher {
     static {
         List<Object> alias = Configurator.getDefaultConfig().getList(Const.BROKERS_ALIAS);
 
-        knownInstances.addAll(alias.stream().map(Object::toString).collect(Collectors.toList()));
+        if(alias!=null)
+            knownInstances.addAll(alias.stream().map(Object::toString).collect(Collectors.toList()));
 
     }
 

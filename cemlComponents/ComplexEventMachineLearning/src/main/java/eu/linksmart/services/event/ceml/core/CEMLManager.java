@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.core.PersistentRequestInstance;
 import eu.linksmart.services.event.feeders.StatementFeeder;
+import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -46,11 +47,11 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     protected DataDescriptors descriptors;
     @JsonProperty(value = "Model")
     protected Model model;
-    @JsonProperty(value = "AuxiliaryStreams")
+    @JsonProperty(value = "auxiliaryStreams")
     protected List<Statement> auxiliaryStreams;
-    @JsonProperty(value = "LearningStreams")
+    @JsonProperty(value = "learningStreams")
     protected List<LearningStatement> learningStatements;
-    @JsonProperty(value = "DeploymentStreams")
+    @JsonProperty(value = "deploymentStreams")
     protected List<Statement> deployStatements;
     @JsonProperty(value = "Settings")
     protected Map<String,Object> settings;
@@ -122,14 +123,14 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
         this.deployStatements = deployStatements;
     }
 
-    @JsonGetter(value = "AuxiliaryStreams")
+    @JsonGetter(value = "auxiliaryStreams")
     @Override
     public Collection< Statement> getAuxiliaryStream() {
         return auxiliaryStreams;
     }
 
 
-    @JsonSetter(value = "AuxiliaryStreams")
+    @JsonSetter(value = "auxiliaryStreams")
     public void setAuxiliaryStreams(List<Statement> auxiliaryStreams) {
         this.auxiliaryStreams = auxiliaryStreams;
     }
@@ -216,9 +217,10 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                     for (Statement statement : auxiliaryStreams) {
                         statement.setCEHandler("");
                         statement.toRegister(false);
-                        statement.setName("AuxiliaryStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
-                        statement.setId("AS[" + String.valueOf(statementsCounter[0]) + "]:" + name);
+                        statement.setName(name + "/" + "Auxiliary/" + String.valueOf(statementsCounter[0]) + "/" + id );
+                        statement.setId(name + "/" + "A/" + String.valueOf(statementsCounter[0]) + "/" + id );
                         statement.setStatement(statement.getStatement().replace("<id>",name));
+                        statement.setOutput(null);
                         statement.build();
                         statementsCounter[0]++;
                     }
@@ -227,9 +229,10 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                 if (learningStatements != null && 3 <= buildTill)
                     for (LearningStatement statement : learningStatements) {
                         statement.setRequest(this);
-                        statement.setName("LearningStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
-                        statement.setId("LS[" + String.valueOf(statementsCounter[0]) + "]:" + name );
+                        statement.setName(name + "/" + "Learning/" + String.valueOf(statementsCounter[0]) + "/" + id);
+                        statement.setId(name + "/" + "L/" + String.valueOf(statementsCounter[0]) + "/" + id  );
                         statement.setStatement(statement.getStatement().replace("<id>",name));
+                        statement.setOutput(null);
                         statement.build();
                         statementsCounter[1]++;
                     }
@@ -237,8 +240,8 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
                 if (deployStatements != null && 4 <= buildTill)
                     for (Statement statement : deployStatements) {
-                        statement.setName("DeploymentStream[" + String.valueOf(statementsCounter[0]) + "]:" + name );
-                        statement.setId("DS[" + String.valueOf(statementsCounter[0]) + "]:" + name );
+                        statement.setName(name + "/" + "Learning/" + String.valueOf(statementsCounter[0]) + "/" + id);
+                        statement.setId(name + "/" + "D/" + String.valueOf(statementsCounter[0]) + "/" + id);
                         statement.setStatement(statement.getStatement().replace("<id>",name));
                         statement.build();
                         statementsCounter[2]++;
@@ -349,7 +352,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
             if ((i < 3 || (i > 4 && i < 6)) && (exception == null))
                 message = base + ": Basic requisites for building the request have not being met";
             else if ((i > 2 && i < 5) || (i > 6 && i < 10)) {
-                base += " on statement [" + String.valueOf(buildStatements[i - (i<5? 3: 4)]) + "]: ";
+                base += " on statement /" + String.valueOf(buildStatements[i - (i<5? 3: 4)]) + "/ ";
                 if (exception != null)
                     message = base + exception.getMessage();
                 else if (i > 2 && i < 5) {
@@ -460,35 +463,45 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
         return n;
     }
     public EventEnvelope predict(Object input){
+        Object aux = input;
+        List<EventEnvelope> orgInput= null;
         try {
-            Object aux = input;
-            List<EventEnvelope> orgInput= null;
             if(input instanceof ArrayList) {
                 List aux1= (ArrayList)input;
                 if(!aux1.isEmpty()&& aux1.get(1) instanceof EventEnvelope) {
                     orgInput = (ArrayList<EventEnvelope>) aux1;
-                    aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
+                    aux = orgInput.stream().map(i -> i.getValue()).collect(Collectors.toList());
                 }else
                     aux = input;
             }if (input instanceof EventEnvelope[]){
                 orgInput = new ArrayList<>(Arrays.asList((EventEnvelope[]) input));
-                aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
+                aux = orgInput.stream().map(i -> i.getValue()).collect(Collectors.toList());
 
             }else if(input instanceof Object[])
                 aux=Arrays.asList((Object[])input);
+            Prediction prediction;
+            try {
 
-            Prediction prediction = model.predict(aux);
+                prediction = model.predict(aux);
+            }catch (ClassCastException ex){
+                List auxs= new ArrayList();
+                auxs.add(aux);
+                prediction = model.predict(auxs);
+
+            }
             prediction.setOriginalInput(input);
 
-           setLastPrediction(prediction);
+            setLastPrediction(prediction);
             if(orgInput==null)
                 return Observation.factory(prediction,"Prediction",name, SharedSettings.getId());
             else {
                 return Observation.factory(prediction,"Prediction",name, SharedSettings.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
             }
+
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
             return Observation.factory(e.getMessage(),"Error",name, SharedSettings.getId());
         }
+
     }
 }
