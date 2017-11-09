@@ -28,6 +28,30 @@
             <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
             <url>http://www.fit.fraunhofer.de/</url>
         </developer>
+        <developer>
+            <id>tavakoli</id>
+            <email>farshid.tavakolizadeh@fit.fraunhofer.de</email>
+            <name>Farshid Tavakolizadeh</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
+        <developer>
+            <id>devasya</id>
+            <email>shreekantha.devasya@fit.fraunhofer.de</email>
+            <name>Shreekantha Devasya</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
     </developers>
 
 
@@ -43,7 +67,7 @@
         <license>
             <name>Apache 2.0 license</name>
             <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>https://linksmart.eu/repo/content/repositories/snapshots/eu/linksmart/services/events/</distribution>
+            <distribution>https://nexus.linksmart.eu/repository/maven-releases/</distribution>
             <comments>LinkSmart Services: IoT Data-Processing and Learning agents are released under the Apache 2.0 license.</comments>
         </license>
     </licenses>
@@ -125,23 +149,7 @@
         <!-- Java JSON Web Token (added in composition first) -->
         <jjwt.version>3.2.0</jjwt.version>
     </properties>
-   <!-- <profiles>
-        <profile>
-            <id>general</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <nd4jcust.version>${nd4j.version}</nd4jcust.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>raspberrypi</id>
-            <properties>
-                <nd4jcust.version>0.6.1-pi</nd4jcust.version>
-            </properties>
-        </profile>
-    </profiles>-->
+
     <prerequisites>
         <maven>${maven.version}</maven>
     </prerequisites>
@@ -156,7 +164,6 @@
         <module>test</module>
         <module>applications</module>
         <module>LinkSmartSDK</module>
-        <!-- <module>connectors</module> -->
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -766,7 +773,7 @@
       <site>
           <id>agents</id>
           <name>linksmart-service-agents-repository</name>
-          <url>dav:https://nexus.linksmart.eu/repository/Sites/</url>
+          <url>dav:https://nexus.linksmart.eu/repository/iot-agents-site/</url>
           <!--<url>dav:https://linksmart.eu/repo/content/sites/agents</url>-->
       </site>
 	</distributionManagement>
@@ -855,7 +862,7 @@
                                     <site>
                                         <id>agents</id>
                                         <name>linksmart-service-agents-repository</name>
-                                        <url>dav:https://nexus.linksmart.eu/repository/Sites/</url>
+                                        <url>dav:https://nexus.linksmart.eu/repository/iot-agents-site/</url>
                                         <!--<url>dav:https://linksmart.eu/repo/content/sites/agents</url>-->
                                     </site>
                                 </repository>
