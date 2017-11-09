@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "bamboo": "./node_modules/.bin/mocha --reporter mocha-bamboo-reporter --reporter-options output=/data/mocha.json"
   },
   "dependencies": {
     "chai": "^3.5.0",
@@ -14,5 +15,8 @@
     "mocha": "^3.2.0",
     "mqtt": "^2.4.0",
     "supertest": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha-bamboo-reporter": "^1.1.1"
   }
 }

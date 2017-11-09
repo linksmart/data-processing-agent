@@ -8,4 +8,5 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN npm install
 
-CMD [ "npm", "test" ]
+VOLUME ["/data"]
+CMD ["npm", "run-script", "bamboo"]
