@@ -73,7 +73,6 @@ public class Configurator extends CombinedConfiguration {
     public Configurator(String configurationFile) {
         super();
 
-
         String filename= configurationFile,extension=null;
 
 

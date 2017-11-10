@@ -34,7 +34,15 @@
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>PythonModelsIntergrator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>LinearRegressionModel</artifactId>
+        </dependency>
 
 
     </dependencies>
