@@ -723,13 +723,17 @@
 
     <repositories>
         <repository>
-            <id>linksmart</id>
-            <url>https://nexus.linksmart.eu/repository/maven-releases/</url>
+            <id>central</id>
+            <url>https://nexus.linksmart.eu/repository/public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
         </repository>
-		<repository>
-			<id>jboss-maven2-release-repository</id>
-			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
-		</repository>
 
         <repository>
             <id>Eclipse Paho Repo</id>
@@ -745,19 +749,10 @@
             <name>jcenter</name>
             <url>https://jcenter.bintray.com/</url>
         </repository>
-    <repository>
-        <id>central</id>
-        <url>https://nexus.linksmart.eu/repository/maven-central/</url>
-        <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>daily</updatePolicy>
-        </snapshots>
-    </repository>
-
+        <repository>
+            <id>jboss-maven2-release-repository</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
   </repositories>
   <distributionManagement>
 
