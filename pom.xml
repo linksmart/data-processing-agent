@@ -288,26 +288,8 @@
     </build>
     <repositories>
         <repository>
-            <id>maven</id>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>jboss-maven2-release-repository</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-        </repository>
-
-        <repository>
-            <id>Eclipse Paho Repo</id>
-            <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
-        </repository>
-        <repository>
-            <id>WSO2 Repo</id>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-        </repository>
-
-        <repository>
             <id>central</id>
-            <url>https://nexus.linksmart.eu/repository/maven-central/</url>
+            <url>https://nexus.linksmart.eu/repository/public/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
@@ -318,6 +300,24 @@
             </snapshots>
         </repository>
 
+        <repository>
+            <id>Eclipse Paho Repo</id>
+            <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+        </repository>
+        <repository>
+            <id>WSO2 Repo</id>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
+        </repository>
+        <!-- springfox -->
+        <repository>
+            <id>jcenter-snapshots</id>
+            <name>jcenter</name>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+        <repository>
+            <id>jboss-maven2-release-repository</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
     </repositories>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
