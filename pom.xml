@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.linksmart.services.events.gpl</groupId>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.7.0</version>
     <artifactId>reactor</artifactId>
     <name>IoT Agent LGPL reactor</name>
 
@@ -94,12 +94,12 @@
         <connection>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</connection>
         <developerConnection>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</developerConnection>
         <url>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</url>
-        <tag>HEAD</tag>
+        <tag>v1.7.0</tag>
     </scm>
     <properties>
         <esper.version>5.5.0</esper.version>
         <weka.version>3.7.13</weka.version>
-        <ls.se.agents.version>1.7.0-SNAPSHOT</ls.se.agents.version>
+        <ls.se.agents.version>1.7.0</ls.se.agents.version>
         <!-- test dependencies versions -->
         <java.junit.version>4.12</java.junit.version>
         <google.gson.version>2.6.2</google.gson.version>
