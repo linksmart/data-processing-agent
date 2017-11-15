@@ -3,6 +3,7 @@ MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
 ARG engine
 ARG extensions
+ARG version
 
 # enabling environmental variables configuration
 ENV env_var_enabled=true
@@ -23,7 +24,7 @@ VOLUME /dependencies
 
 
 # mounting configuration and extra dependencies volumes
-ADD https://nexus.linksmart.eu/repository/linksmart-releases/eu/linksmart/services/events/ServiceLouncher/${version}/ServiceLouncher-${version}.jar agent.jar
+ADD https://nexus.linksmart.eu/repository/maven-releases/eu/linksmart/services/events/distributions/iot.learning.universal.agent/${version}/iot.learning.universal.agent-${version}.jar agent.jar
 
 
 # starting the agent
