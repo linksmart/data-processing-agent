@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created by José Ángel Carvajal on 20.04.2017 a researcher of Fraunhofer FIT.
  */
-public class LinearRegressionModel extends RegressorModel<List<Double>,List<Double>,SimpleRegression> {
+public class LinearRegressionModel extends RegressorModel<List<Number>,List<Number>,SimpleRegression> {
 
     static {
         Model.loadedModels.put(LinearRegressionModel.class.getSimpleName(),LinearRegressionModel.class);
@@ -25,21 +25,21 @@ public class LinearRegressionModel extends RegressorModel<List<Double>,List<Doub
 
 
     @Override
-    public void learn(List<Double> xy) throws TraceableException, UntraceableException {
-        learner.addData(xy.get(0),xy.get(1));
+    public void learn(List<Number> xy) throws TraceableException, UntraceableException {
+        learner.addData(xy.get(0).doubleValue(),xy.get(1).doubleValue());
     }
 
 
     @Override
-    public Prediction< List<Double>> predict(List<Double> valueNothing) throws TraceableException, UntraceableException {
+    public Prediction< List<Number>> predict(List<Number> valueNothing) throws TraceableException, UntraceableException {
         Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
         evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
 
-        return new PredictionInstance<>(Arrays.asList(learner.predict(valueNothing.get(0))),valueNothing,this.getName(),evaluationMetrics);
+        return new PredictionInstance<>(Arrays.asList(learner.predict(valueNothing.get(0).doubleValue())),valueNothing,this.getName(),evaluationMetrics);
     }
 
     @Override
-    public Model<List<Double>, List<Double>, SimpleRegression> build() throws TraceableException, UntraceableException {
+    public Model<List<Number>, List<Number>, SimpleRegression> build() throws TraceableException, UntraceableException {
         learner = new SimpleRegression();
         return super.build();
     }
