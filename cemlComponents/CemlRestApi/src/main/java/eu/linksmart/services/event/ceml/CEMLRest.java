@@ -119,7 +119,7 @@ public class CEMLRest extends Component implements IncomingConnector{
 
     }
 
-    @RequestMapping(value="/ceml/add", method=  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/ceml/{name}", method=  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRequest(
             @RequestBody() String body
     ){
