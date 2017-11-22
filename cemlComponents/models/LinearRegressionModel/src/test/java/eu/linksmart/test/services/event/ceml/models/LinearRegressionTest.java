@@ -21,14 +21,14 @@ import static org.junit.Assert.fail;
 public class LinearRegressionTest {
     @Test
     public void linearRegressionTest(){
-        RegressorModel<List<Double>,List<Double>,SimpleRegression> regressor = new LinearRegressionModel(Arrays.asList(new TargetRequest(0.5,"RMSE","less")), new Hashtable<>(),new SimpleRegression());
+        RegressorModel<List<Number>,List<Number>,SimpleRegression> regressor = new LinearRegressionModel(Arrays.asList(new TargetRequest(0.5,"RMSE","less")), new Hashtable<>(),new SimpleRegression());
 
         try {
             regressor.learn(Arrays.asList(0.0, 0.0));
             regressor.learn(Arrays.asList(1.0,1.0));
             regressor.learn(Arrays.asList(2.0,2.0));
             regressor.learn(Arrays.asList(4.0,4.0));
-            assertEquals(3.0,regressor.predict(Arrays.asList(3.0,3.0)).getPrediction().get(0),0.5);
+            assertEquals(3.0, (Double) regressor.predict(Arrays.asList(3.0,3.0)).getPrediction().get(0),0.5);
         } catch (TraceableException | UntraceableException e) {
             e.printStackTrace();
             fail();
