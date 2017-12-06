@@ -17,7 +17,7 @@ public interface ThingNavigationLink extends CommonControlInfo {
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Thing.")
     @JsonGetter(value = "Thing@iot.navigationLink")
     default String getThingNavigationLink() {
-        return NavigationLink.getSelfLink(this.getClass().getSimpleName(),getId().toString(), "Thing");
+        return getSelfLink(this.getClass().getSimpleName(),getId().toString(), "Thing");
     }
     /**
      * navigationLink is the relative or absolute URL that retrieves content of the Thing.

@@ -37,32 +37,32 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @return the name of the statement as string
      * */
-    public String getName();
+    String getName();
     /***
      * The native statement for specific underling implementation of a CEP engine (e.g. EPL)
      *
      * @return  returns the statement in the native CEP language as string
      * */
-    public String getStatement();
+    String getStatement();
     /***
      * The source message handler (broker/http server) where the events are coming
      *
      * @return  The alias of message handler (broker/http server) as string
      * */
-    public String getSource();
+    String getSource();
     /***
      * The input topics/paths of the statement (DEPRECATED)
      *
      * @return  return the list of topics/paths that are needed in the statement
      * */
     @Deprecated
-     public String[] getInput();
+    String[] getInput();
     /***
      * return the scope. The scope is the output endpoints (e.g. broker, http server) where the events will be published
      *
      * @return  aliases of the endpoints as string
      * */
-    public String[] getScope();
+    String[] getScope();
     /***
      * The input topic/path number i of the statement (DEPRECATED)
      *
@@ -71,7 +71,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * @return  return the selected topic
      * */
     @Deprecated
-    public String getInput(int index);
+    String getInput(int index);
     /***
      * The output message handler (broker/http server) number i of the statement
      *
@@ -79,13 +79,13 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @return  The selected broker URL or alias as string
      * */
-    public String getScope(int index);
+    String getScope(int index);
     /***
      * The output topics/paths where the events will be published/posted
      *
      * @return  The output topics/paths as string
      * */
-    public String[] getOutput();
+    String[] getOutput();
     /***
      * The Input value is a optional value. This return if the value has been defined or not (DEPRECATED)
      *
@@ -93,19 +93,19 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * */
 
     @Deprecated
-    public boolean haveInput();
+    boolean haveInput();
     /***
      * The output value is a optional value. This return if the value has been defined or not
      *
      * @return  true if there is output has being defined, false otherwise
      * */
-    public boolean haveOutput();
+    boolean haveOutput();
     /***
      * The Scope value is a optional value. This return if the value has been defined or not
      *
      * @return  true if there is Scope has being defined, false otherwise
      * */
-    public boolean haveScope();
+    boolean haveScope();
 
     /***
      * Return the handler selected to process the result of the complex event, @Default ComplexEventHandlerImpl.
@@ -113,32 +113,32 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @return  the handler cannonic name of ComplexEventHandler of the statement, @Default ComplexEventHandlerImpl..
      * */
-    public String getCEHandler();
+    String getCEHandler();
     /***
      * Return the IDs selected to agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
      *
      * @return  List of targeted Agents address to process the statement, otherwise empty (all available agents):
      * */
-    public List<String> getTargetAgents();
+    List<String> getTargetAgents();
     /***
      * Return the state of the Statement, which determines how the statement will be at runtime.
      *
      * @return  Lifecycle Statement State @see StatementLifecycle .
      * */
-    public StatementLifecycle getStateLifecycle();
+    StatementLifecycle getStateLifecycle();
     /***
      * In case the LifeCycle of the statement is Sync, the response will be collected by this function instead of an handler.
      *
      * @return the response as an object (the type an semantic depends on the statement).
      * */
-    public Object getSynchronousResponse();
+    Object getSynchronousResponse();
     /**
      * Alike to the equals from the Object class.
      * The frameworks needs to determinate if two statements are logically equal or not.
      *
      * @see java.lang.Object
      * */
-    public boolean equals(Object org);
+    boolean equals(Object org);
     /**
      * Alike to the hashCode from the Object class.
      * The frameworks needs to determinate if two statements are logically equal or not,
@@ -147,45 +147,45 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @see java.lang.Object
      * */
-    public int hashCode();
+    int hashCode();
 
     /***
      * Setts the scope. The scope is the output endpoints (e.g. broker, http server) where the events will be published
      *
      * @param scopes  are a list of  aliases of the endpoints where will be published
      * */
-    public void setScope(String[] scopes);
+    void setScope(String[] scopes);
     /***
      * The output topics/paths where the events will be published/posted
      *
      * @param output array of output topics/paths as string
      * */
-    public void setOutput(String[] output);
+    void setOutput(String[] output);
     /***
      * The input topics/paths of the statement (DEPRECATED)
      *
      * @param  input is the list of topics/paths to be set in the statement
      * */
     @Deprecated
-    public void setInput(String[] input);
+    void setInput(String[] input);
     /***
      * Sets the sources. The source message handler (broker/http server) where the events are coming.
      *
      * @param source as alias of message handler (broker/http server) as string
      * */
-    public void setSource(String source);
+    void setSource(String source);
     /***
      * Set the statement. The native statement for specific underling implementation of a CEP engine (e.g. EPL)
      *
      * @param statement in the native CEP language as string
      * */
-    public void setStatement(String statement);
+    void setStatement(String statement);
     /***
      * sets the name of the statement. The user defined name of the statement
      *
      * @param name is the new given name of the statement as string
      * */
-    public void setName(String name);
+    void setName(String name);
     /***
      * setts the handler selected to process the result of the complex event, @Default ComplexEventHandlerImpl.
      * Note: The value "" or null is a valid response, this value represent silent events, events that just happen inside the CEP engine.
@@ -194,7 +194,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * @param  CEHandler is the canonical name of ComplexEventHandler of the statement, @Default ComplexEventHandlerImpl..
      *
      * */
-    public void setCEHandler(String CEHandler);
+    void setCEHandler(String CEHandler);
     /***
      * sets the state of the Statement, which determines how the statement will be at runtime.
      *
@@ -202,20 +202,20 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * @param  stateLifecycle is the Lifecycle Statement State
      *
      * */
-    public void setStateLifecycle(StatementLifecycle stateLifecycle);
+    void setStateLifecycle(StatementLifecycle stateLifecycle);
     /***
      * In case the LifeCycle of the statement is Sync, the response will be set by this function instead of an handler.
      *
      * @param response the response as an object (the type an semantic depends on the statement).
      * */
-    public void setSynchronousResponse(Object response) ;
+    void setSynchronousResponse(Object response) ;
 
     /***
      * setts the IDs of the selected agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
      *
      * @param targetAgents is the list of targeted agents address to process the statement, otherwise empty (all available agents):
      * */
-    public void setTargetAgents(List<String> targetAgents);
+    void setTargetAgents(List<String> targetAgents);
     /***
      *
      *
@@ -233,25 +233,25 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @return if the output of the statement are REST endpoints instead of MQTT topics
      * */
-    public boolean isRESTOutput();
+    boolean isRESTOutput();
     /***
      * setts if the output of the statement are REST endpoints instead of MQTT topics
      *
      * @param active true the outputs are REST endpoints, false the outputs are topics
      * */
-    public void isRESTOutput(boolean active);
+    void isRESTOutput(boolean active);
     /***
      * Returns the last compound event result of this statement
      *
      * @return the result of last processing made in this statement. In case of there is none then null
      * */
-    public EventEnvelope getLastOutput();
+    EventEnvelope getLastOutput();
     /***
      * Set the last compound event result of this statement
      *
      * @param lastOutput the result of last processing made in this statement. In case of there is none then null
      * */
-    public void setLastOutput(EventEnvelope lastOutput);
+    void setLastOutput(EventEnvelope lastOutput);
 
 
     /***
@@ -260,7 +260,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * For an exiting Statement, the statements represent a change of state
      *
      * */
-     public enum StatementLifecycle {
+    enum StatementLifecycle {
         /**
          * RUN Execute the statement adding a Handler, which adds a actuate or reacts to the triggered statement.
          */

@@ -14,7 +14,7 @@ public interface DatastreamsNavigationLink extends CommonControlInfo {
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Datastreams.")
     @JsonGetter(value = "Datastreams@iot.navigationLink")
     default String getDatastreamsNavigationLink() {
-        return NavigationLink.getSelfLink(this.getClass().getSimpleName(),getId().toString(), "Datastreams");
+        return getSelfLink(this.getClass().getSimpleName(),getId().toString(), "Datastreams");
     }
     /**
      * navigationLink is the relative or absolute URL that retrieves content of the Datastreams.

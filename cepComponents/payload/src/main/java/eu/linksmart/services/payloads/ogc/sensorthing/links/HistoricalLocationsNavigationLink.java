@@ -24,5 +24,5 @@ public interface HistoricalLocationsNavigationLink extends CommonControlInfo{
      */
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the HistoricalLocations.")
     @JsonSetter(value = "HistoricalLocations@iot.navigationLink")
-    default String getHistoricalLocationsNavigationLink(){return NavigationLink.getSelfLink(this.getClass().getSimpleName(),getId().toString(), "HistoricalLocations");}
+    default String getHistoricalLocationsNavigationLink(){return getSelfLink(this.getClass().getSimpleName(),getId().toString(), "HistoricalLocations");}
 }

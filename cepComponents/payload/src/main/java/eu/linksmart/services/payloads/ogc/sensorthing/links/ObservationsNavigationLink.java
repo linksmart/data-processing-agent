@@ -16,7 +16,7 @@ public interface ObservationsNavigationLink extends CommonControlInfo {
      */
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Observations.")
     @JsonGetter(value = "Observations@iot.navigationLink")
-    default String getObservationsNavigationLink(){ return NavigationLink.getSelfLink(this.getClass().getSimpleName(),getId().toString(), "Observations");}
+    default String getObservationsNavigationLink(){ return getSelfLink(this.getClass().getSimpleName(),getId().toString(), "Observations");}
     /**
      * navigationLink is the relative or absolute URL that retrieves content of the Observations.
      *

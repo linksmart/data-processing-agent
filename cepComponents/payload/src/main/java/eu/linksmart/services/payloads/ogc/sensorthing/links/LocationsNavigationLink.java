@@ -23,5 +23,5 @@ public interface LocationsNavigationLink extends CommonControlInfo{
      */
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Locations.")
     @JsonSetter(value = "Locations@iot.navigationLink")
-    default String getLocationsNavigationLink(){return NavigationLink.getSelfLink(this.getClass().getSimpleName(),getId().toString(), "Locations");}
+    default String getLocationsNavigationLink(){return getSelfLink(this.getClass().getSimpleName(),getId().toString(), "Locations");}
 }

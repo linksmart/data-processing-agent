@@ -210,7 +210,7 @@ public interface Observation extends EventEnvelope, CommonControlInfo, FeatureOf
     @JsonPropertyDescription("A Datastream can have zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
     void setDatastream(Datastream datastream);
     static Observation factory(Object event, String resultType, String StreamID, String sensorID, String name) {
-        return factory(event,resultType,sensorID,sensorID,(new Date()).getTime(), name);
+        return factory(event,resultType,StreamID,sensorID,(new Date()).getTime(), name);
 
     }
     static Observation factory(Object event, String resultType, String StreamID, String sensorID, long time, String name) {
@@ -232,7 +232,7 @@ public interface Observation extends EventEnvelope, CommonControlInfo, FeatureOf
 
         // construct feature of interest with Id made by the hash of the name of the statement
         FeatureOfInterest fi = new FeatureOfInterestImpl();
-        fi.setId(Utils.hashIt(name));
+        fi.setId(UUID.randomUUID());
         fi.setDescription(resultType);
 
 

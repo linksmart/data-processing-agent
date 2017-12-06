@@ -278,8 +278,16 @@ public class Configurator extends CombinedConfiguration {
     @Override
     public String[] getStringArray(String key) {
         int i = mostRecentConf(key);
+        if(i<0)
+            return null;
 
-        return i>-1?this.getConfiguration(i).getStringArray(key) :null;
+        String[] result = this.getConfiguration(i).getStringArray(key);
+
+        // fix the issue that when the array is given by env var the whole is detected as string instead of an array
+        if(result.length==1 && result[0].contains(","))
+            return result[0].split(",");
+        else
+            return result;
     }
 
     @Override

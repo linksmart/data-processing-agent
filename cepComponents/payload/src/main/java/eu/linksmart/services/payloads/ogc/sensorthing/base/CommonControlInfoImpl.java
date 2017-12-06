@@ -28,6 +28,8 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
 
     @JsonIgnore
     private String baseURL = "http://linksmart.eu/v1.0/";
+    @JsonIgnore
+    private static transient boolean navigationLinksEnabled= true, selfLinksEnabled = true;
 
     /**
      * Empty constructor
@@ -37,11 +39,20 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
         if(id== null || id.equals(""))
             id = UUID.randomUUID().toString();
     }
+
+    /**
+     * Enables the creation of the self links
+     * */
+    @JsonIgnore
+    public static void setSelfLinkEnabled(boolean set) {
+        selfLinksEnabled=set;
+    }
+
     /** selfLink is the absolute URL of an entity that is unique among all other entities. */
     @Override
     public String getSelfLink() {
 
-        return generateSelfLink();
+        return (selfLinksEnabled)?generateSelfLink():null;
     }
     /** selfLink is the absolute URL of an entity that is unique among all other entities. */
     @Override
@@ -114,4 +125,13 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
         return this.getClass().getCanonicalName();
     }
 
+    @Override
+    public boolean isNavigationLinkEnabled() {
+        return navigationLinksEnabled;
+    }
+
+    @JsonIgnore
+    public static void setNavigationLinkEnabled(boolean set) {
+        navigationLinksEnabled=set;
+    }
 }

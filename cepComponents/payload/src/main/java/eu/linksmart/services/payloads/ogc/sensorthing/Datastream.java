@@ -50,7 +50,7 @@ import java.util.Map;
 
 @JsonDeserialize(as = DatastreamImpl.class)
 @JsonSerialize(as = DatastreamImpl.class)
-public interface Datastream extends CommonControlInfoDescription, ObservationsNavigationLink,SensorNavigationLink, ObservedPropertyNavigationLink, ThingNavigationLink {
+public interface Datastream extends CommonControlInfoDescription, ThingNavigationLink,ObservationsNavigationLink,SensorNavigationLink, ObservedPropertyNavigationLink {
 
 
     /**

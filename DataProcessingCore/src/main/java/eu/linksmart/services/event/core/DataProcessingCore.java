@@ -42,14 +42,26 @@ public class DataProcessingCore {
     protected static boolean started =false;
     protected transient static Configurator conf;
     protected transient static  Logger loggerService;
-
+    /**
+     * Run will initialize the Agent and then run the status loop in this thread
+     *
+     * @param args the parameters provided in the console
+     *
+     * */
     public static void run(String args){
         if(!started) {
             init(args);
             statusLoop();
         }
     }
-
+    /**
+     *  Start will initialize the Agent in this thread and then start the status loop in a new thread. Finally, it will return the result of the initialization process.
+     *
+     * @param args the parameters provided in the console
+     *
+     * @return is the agent successfully initialized
+     *
+     * */
     public static boolean start(String args){
         if(!started) {
             Boolean ret = init(args);
@@ -60,7 +72,38 @@ public class DataProcessingCore {
         return false;
 
     }
-    static protected void statusLoop(){
+    /**
+     * Initialization process of the Agent
+     *
+     * @param args the parameters provided in the console
+     *
+     * @return is the agent successfully initialized
+     * */
+    private static synchronized boolean init(String args){
+        started =true;
+        initConf(args);
+
+
+        loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is "+(SharedSettings.isFirstLoad()?"":"re")+"starting with ID: " + SharedSettings.getId());
+
+        initCEPEngines();
+        intoCEPTypes();
+        initForceLoading();
+        boolean success = initFeeders();
+        bootstrapping();
+        // force the loading of the RegistrationService
+        ThingsRegistrationService.getReference();
+
+        new ServiceRegistratorService();
+
+        return success;
+    }
+    /**
+     * Tracks the status of the initialized agent
+     *
+     * */
+    // TODO: this status must be improved
+    static private void statusLoop(){
         active = true;
         while (active){
 
@@ -83,6 +126,12 @@ public class DataProcessingCore {
             }
         }
     }
+    /**
+     *  initConf will initialize the configuration service of the agent. If this the agent will crash.
+     *
+     * @param args the parameters provided in the console
+     *
+     * */
     private static void initConf(String args){
         if(args != null)
             Configurator.addConfFile(args);
@@ -119,28 +168,10 @@ public class DataProcessingCore {
         // set if this is my first start
         SharedSettings.isIsFirstLoad(!Utils.isFile(PersistentRequestInstance.getPersistentFile()));
     }
-
-    protected static synchronized boolean init(String args){
-        started =true;
-        initConf(args);
-
-
-        loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is "+(SharedSettings.isFirstLoad()?"":"re")+"starting with ID: " + SharedSettings.getId());
-
-        initCEPEngines();
-        intoCEPTypes();
-        initForceLoading();
-        boolean success = initFeeders();
-        bootstrapping();
-        // force the loading of the RegistrationService
-        ThingsRegistrationService.getReference();
-
-        new ServiceRegistratorService();
-
-        return success;
-    }
-
-
+    /**
+     *  This will bootstrap the agent with data and statements such that the agent has already data or statements pre-loaded.
+     *
+     * */
     private static void bootstrapping() {
         if(conf.getList(Const.PERSISTENT_DATA_FILE) != null && SharedSettings.isFirstLoad()) {
             FileConnector fileFeeder = new FileConnector((String[]) conf.getList(Const.PERSISTENT_DATA_FILE).toArray(new String[conf.getList(Const.PERSISTENT_DATA_FILE).size()]));
@@ -173,7 +204,10 @@ public class DataProcessingCore {
         }
 
     }
-
+    /**
+     * This function force to load packages by loading the classloader
+     *
+     * */
     private static void initForceLoading() {
         if(conf.containsKeyAnywhere(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)) {
             String[] modules = conf.getStringArray(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING);
@@ -191,7 +225,10 @@ public class DataProcessingCore {
         }
     }
 
-
+    /**
+     * This function initialize the feeders and connectors. By doing this the Network APIs are being set up
+     *
+     * */
     private static boolean initFeeders() {
 
         // loading of feeders
@@ -237,7 +274,10 @@ public class DataProcessingCore {
 
         return true;
     }
-
+    /**
+     * This initialize the CEP engines and their utilities.
+     *
+     * */
     private static void initCEPEngines() {
         // loading the CEP engines
         for (Object engines: conf.getList(Const.CEP_ENGINES_PATH))
@@ -263,23 +303,29 @@ public class DataProcessingCore {
         }
 
     }
+    /**
+     * This initialize the datatypes inside the CEP engines.
+     *
+     * */
     protected static void intoCEPTypes() {
-
+        // initialize mapping of alias->class set by the configuration
         Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
                 .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
                 .forEach(alias -> aliasTopicClass.put(alias, new ImmutablePair<>(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), conf.getString(Const.FeederPayloadClass + "_" + alias))));
 
-        if(aliasTopicClass.isEmpty())
-            try {
-                throw new InstantiationException(
+        // in case no alias is found the configuration the system has nothing to do and terminates all.
+        if(aliasTopicClass.isEmpty()){
+
+                InstantiationException e=new InstantiationException(
                         "The configuration parameters of incoming events "
                                 +Const.FeederPayloadAlias+" do not have proper topic or class configurations for properties: "
                                 +Const.FeederPayloadClass+"_<alias> "+Const.EVENT_IN_TOPIC_CONF_PATH+"_<alias> "
                 );
-            } catch (InstantiationException e) {
                 loggerService.error(e.getMessage(),e);
+                System.exit(-1);
             }
 
+        // initialize the types in the engines
         CEPEngine.instancedEngines.values().stream().forEach(engine->aliasTopicClass.forEach((alias,topicClass)-> {
                     try {
                         Class aClass = Class.forName(topicClass.getRight());
