@@ -1,4 +1,12 @@
- - 1.7.0 RELEASE:
+2017.11.14 - 1.7.1 RELEASE:
+    Features:
+        * Add Proxy REST multi caster utility for management of multi agents.
+        * Add async requests type for MQTT proxying management
+    DEV:
+    FIX:
+        * Fix some issues in Statement MQTT API
+
+2017.11.14 - 1.7.0 RELEASE:
     Features:
         * Persistence and Essentiality features had been added
         * The default topics is provided in output of the Statement

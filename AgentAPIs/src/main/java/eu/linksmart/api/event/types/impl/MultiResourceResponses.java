@@ -50,8 +50,6 @@ public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Ma
     Map<String,ResourceObject> resources= new Hashtable<>();
     @JsonIgnore
     int  overallStatus = 0;
-    @JsonIgnore
-    boolean containsSuccess = false;
 
     public MultiResourceResponses(Collection<GeneralRequestResponse> arrayList, Map<String, ResourceObject> resources) {
         this.generalRequestResponses = arrayList;
@@ -74,8 +72,7 @@ public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Ma
         else if(generalRequestResponses.isEmpty()){
             overallStatus = generalRequestResponse.getStatus();
         }
-        if(generalRequestResponse.getStatus()>=200 && generalRequestResponse.getStatus()<300)
-            containsSuccess = true;
+
 
 
     }
@@ -122,7 +119,7 @@ public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Ma
     }
     @JsonIgnore
     public boolean containsSuccess() {
-        return containsSuccess;
+        return generalRequestResponses.stream().anyMatch(i->i.getStatus()>=200 && i.getStatus()<300);
     }
 
 

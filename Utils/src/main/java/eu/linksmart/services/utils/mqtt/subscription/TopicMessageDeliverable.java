@@ -83,7 +83,7 @@ public class TopicMessageDeliverable implements Runnable{
                         observer.update(null, message);
                 }
 
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                LOG.error(e.getMessage(),e);
             }
             synchronized (this) {

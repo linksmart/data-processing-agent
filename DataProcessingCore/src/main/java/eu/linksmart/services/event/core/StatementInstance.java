@@ -98,7 +98,10 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonProperty("TargetAgents")
     protected List<String> targetAgents= new  ArrayList<String>();
 
-
+    @ApiModelProperty(notes = "Indicates the agent ID where this Statement was created")
+    @Deprecated
+    @JsonProperty("AgentID")
+    protected String agentID= SharedSettings.getId();
 
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
     @JsonProperty("isRestOutput")

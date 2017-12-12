@@ -47,7 +47,7 @@ public class EventMqttObserver extends IncomingMqttObserver {
 
         } catch (TraceableException e) {
             loggerService.error(e.getMessage(),e);
-            publishFeedback(e);
+            //publishFeedback(e);
         }catch ( UntraceableException e) {
             loggerService.error(e.getMessage(),e);
             publishFeedback(e);

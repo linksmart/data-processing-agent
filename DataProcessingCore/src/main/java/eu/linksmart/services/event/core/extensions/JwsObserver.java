@@ -47,13 +47,13 @@ public class JwsObserver extends EventMqttObserver {
                 loggerService.warn("Message in topic "+topic+" arrived but no key is know to verify it!");
         } catch (TraceableException e) {
             loggerService.error(e.getMessage(),e);
-            publishFeedback(e);
+            //publishFeedback(e);
         }catch ( UntraceableException e) {
             loggerService.error(e.getMessage(),e);
             publishFeedback(e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
-            publishFeedback(new InternalException(topic,SharedSettings.getId(),e));
+            publishFeedback(new UntraceableException(SharedSettings.getId(),e));
         }
     }
 }

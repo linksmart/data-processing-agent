@@ -17,6 +17,7 @@
     <modules>
         <module>tools</module>
         <module>producer</module>
+        <module>ProxyRequesterIT</module>
     </modules>
     <dependencyManagement>
         <dependencies>

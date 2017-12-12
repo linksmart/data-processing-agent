@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.ceml.api;
 
 import eu.linksmart.api.event.components.IncomingConnector;
+import eu.linksmart.api.event.types.impl.AsyncRequest;
 import eu.linksmart.services.event.ceml.core.CEML;
 import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.ceml.intern.Const;
@@ -16,6 +17,7 @@ import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
@@ -70,7 +72,16 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
         initRemoveRequest();
         loggerService.info("MQTT CEML API started!");
     }
+    private byte[] prepareRquest(byte[] payload) throws IOException {
+        AsyncRequest request;
 
+            request = SharedSettings.getDeserializer().deserialize(payload,AsyncRequest.class);
+            if(request.getTargets()==null || (!request.getTargets().isEmpty() && !request.getTargets().contains(SharedSettings.getId())))
+                return null;
+
+            return request.getResource();
+
+    }
     protected void initAddRequest()  {
 
         try {
@@ -81,7 +92,17 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                         @Override
                         protected void mangeEvent(String topic, byte[] payload) {
                             try {
-                                CEMLRequest request = SharedSettings.getDeserializer().deserialize(payload, CEMLManager.class);
+                                byte[] rawEvent;
+                                try {
+
+                                    if( (rawEvent = prepareRquest(payload) )== null) // not for me
+                                        return;
+                                }catch (Exception e){
+                                    loggerService.error(e.getMessage(),e);
+                                    return;
+                                }
+
+                                CEMLRequest request = SharedSettings.getDeserializer().deserialize(rawEvent, CEMLManager.class);
 
                                 MultiResourceResponses<CEMLRequest> response = CEML.create(request);
                                 reportFeedback(brokerService,response.getHeadResource().getName(),SharedSettings.getSerializer().toString(response));
@@ -110,6 +131,15 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                         @Override
                         protected void mangeEvent(String topic, byte[] payload) {
                             try {
+                                try {
+
+                                    if( (prepareRquest(payload) )== null) // not for me
+                                        return;
+                                }catch (Exception e){
+                                    loggerService.error(e.getMessage(),e);
+                                    return;
+                                }
+
                                 String[] parts = topic.split("/");
 
                                 String id = null;
@@ -146,6 +176,14 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                         @Override
                         protected void mangeEvent(String topic, byte[] payload) {
                             try {
+                                try {
+
+                                    if( (prepareRquest(payload) )== null) // not for me
+                                        return;
+                                }catch (Exception e){
+                                    loggerService.error(e.getMessage(),e);
+                                    return;
+                                }
                                 String[] parts = topic.split("/");
 
                                 String id = null;

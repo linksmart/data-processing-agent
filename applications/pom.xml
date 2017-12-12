@@ -12,5 +12,8 @@
     <modules>
         <module>ServiceLauncher</module>
     </modules>
+    <dependencies>
+
+    </dependencies>
 
 </project>

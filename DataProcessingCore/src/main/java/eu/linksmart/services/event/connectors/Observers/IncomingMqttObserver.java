@@ -1,8 +1,10 @@
 package eu.linksmart.services.event.connectors.Observers;
 
+import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
+import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.core.ThingsRegistrationService;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
@@ -98,16 +100,19 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
 
     protected abstract void mangeEvent(String topic, byte[] payload) ;
 
-    protected void publishFeedback(GeneralRequestResponse requestResponse){
+    protected void publishFeedback(String topic, MultiResourceResponses requestResponse){
         try {
-            brokerService.publish(requestResponse.getTopic(), requestResponse.getMessage());
+            brokerService.publish(
+                    topic,
+                    SharedSettings.getSerializer().serialize(requestResponse)
+            );
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
         }
     }
-    protected void publishFeedback(TraceableException e){
+    protected void publishFeedback(ErrorResponseException e){
         try {
-            brokerService.publish(buildTopic(SharedSettings.getId(),e.getErrorProducerType(),"error",e.getErrorProducerId()), e.getMessage());
+            brokerService.publish(e.getRequestResponse().getTopic(), e.getMessage());
         } catch (Exception ex) {
 
             loggerService.error(e.getMessage(), e);

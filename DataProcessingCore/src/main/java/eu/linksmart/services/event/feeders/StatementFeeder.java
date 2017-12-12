@@ -174,24 +174,31 @@ public class StatementFeeder implements Feeder<Statement> {
         return response;
     }
 
-    public static MultiResourceResponses<Statement> createReturnStructure(){
-        MultiResourceResponses<Statement> result = new MultiResourceResponses<Statement>();
 
-        return result;
-    }
-    public static MultiResourceResponses<Statement>  parseStatement(String statementString ){
+    public static MultiResourceResponses<Statement>  parseStatement(String statementString, String id ){
         Statement statement = null;
-        MultiResourceResponses<Statement> result = createReturnStructure();
 
         try {
             statement = SharedSettings.getDeserializer().parse(statementString, Statement.class);
         } catch (IOException e) {
+            MultiResourceResponses<Statement> result = new MultiResourceResponses<Statement>();
             loggerService.error(e.getMessage(), e);
             result.getResponses().add(createErrorMapMessage(
                     null,"none",400,"Bad Request","The send statement cannot be parsed: " + e.getMessage()));
 
             return result;
         }
+
+        if(!statement.getId().equals(id))
+            statement.setId(id);
+
+        return prepareResponse(statement);
+
+    }
+    public static MultiResourceResponses<Statement>  prepareResponse( Statement statement ){
+
+        MultiResourceResponses<Statement> result = new MultiResourceResponses<Statement>();
+
 
         Map<String, Object> resource = new HashMap<>();
         resource.put(statement.getId(),statement);
@@ -281,11 +288,14 @@ public class StatementFeeder implements Feeder<Statement> {
     }
     public static MultiResourceResponses<Statement>  addNewStatement(/*@NotNull*/ String stringStatement,/*@Nullable*/ String id,/*@Nullable*/ String cepEngine){
         // creating return structures structures
-        MultiResourceResponses<Statement> result = parseStatement(stringStatement);
+        MultiResourceResponses<Statement> result = parseStatement(stringStatement,  id);
+
+
         if (result.getResources()!= null && !result.getResources().isEmpty())
             return addNewStatement(result.getHeadResource(), id,cepEngine,result);
         return result;
     }
+
     public static MultiResourceResponses<Statement>  addNewStatement(/*@NotNull*/ Statement statement, String orgID, String cepEngine,MultiResourceResponses<Statement> result ){
         GeneralRequestResponse error;
         if(result==null){
@@ -337,6 +347,9 @@ public class StatementFeeder implements Feeder<Statement> {
                 }
             }
             try {
+                if(orgID!=null&& !id.equals(orgID))
+                    statement.setId(orgID);
+
                 // if (!processInternStatement(statement))
                 for (String key : workingCEPsList)
                     processRequestInWrapper(CEPEngine.instancedEngines.get(key),result,org);
@@ -382,7 +395,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
 
     public static  MultiResourceResponses<Statement> deleteStatement(String id) {
-        MultiResourceResponses<Statement> result =createReturnStructure();
+        MultiResourceResponses<Statement> result =new MultiResourceResponses<>();
 
         int count = 0;
 
@@ -422,7 +435,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
     public static MultiResourceResponses<Statement> getStatement(String id) {
 
-        MultiResourceResponses<Statement> result =createReturnStructure();
+        MultiResourceResponses<Statement> result =new MultiResourceResponses<>();
 
 
         if (CEPEngine.instancedEngines.size() == 0) {
@@ -480,7 +493,7 @@ public class StatementFeeder implements Feeder<Statement> {
         return result;
     }
     public static MultiResourceResponses<Statement> getStatements() {
-        MultiResourceResponses<Statement> result =createReturnStructure();
+        MultiResourceResponses<Statement> result =new MultiResourceResponses<>();
 
         Map<String,Statement> resource= new Hashtable<>();
 
@@ -508,7 +521,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
     public static MultiResourceResponses<Statement> update(String rawStatement, String id, String targetCep) {
         // creating return structures structures
-        MultiResourceResponses<Statement> result = parseStatement(rawStatement);
+        MultiResourceResponses<Statement> result = parseStatement(rawStatement,id);
         if (result.getResources()== null || result.getResources().isEmpty())
             return result;
         return result;
