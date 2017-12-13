@@ -57,7 +57,7 @@ public class RestInit {
     public static void init() {
 
         try {
-            Class.forName(ProxyRequester.class.getCanonicalName());
+            Class.forName(Rest2Mqtt.class.getCanonicalName());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

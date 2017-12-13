@@ -3,9 +3,7 @@ package eu.linksmart.api.event.types.impl;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by José Ángel Carvajal on 11.12.2017 a researcher of Fraunhofer FIT.
@@ -15,6 +13,8 @@ public class AsyncRequest {
     final private String id = UUID.randomUUID().toString();
     @JsonProperty
     private byte[] resource;
+    @JsonProperty
+    private Map<String,Object> properties;
     @JsonProperty
     private Type requestType= Type.MQTT;
     @JsonProperty
@@ -79,6 +79,23 @@ public class AsyncRequest {
 
     }
 
+    public void addProperty(String key, Object property) {
+        if( properties == null)
+            properties = new HashMap<>();
 
+        properties.put(key,property);
+
+    }
+    public Object getProperty(String key) {
+        return properties.getOrDefault(key,null);
+
+    }
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
+    }
 
 }

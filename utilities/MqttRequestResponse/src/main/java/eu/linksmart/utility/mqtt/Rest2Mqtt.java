@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @RestController
-public class ProxyRequester {
-    protected static Logger loggerService = Utils.initLoggingConf(ProxyRequester.class);
+public class Rest2Mqtt {
+    protected static Logger loggerService = Utils.initLoggingConf(Rest2Mqtt.class);
     protected Configurator conf = Configurator.getDefaultConfig();
    // public static String id = UUID.randomUUID().toString();
 
@@ -58,7 +58,7 @@ public class ProxyRequester {
             @ApiResponse(code = 400, message = "Bad Request 400: parsing error"),
             @ApiResponse(code = 500, message = "General Error: any internal error. Several messages can be generated here", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: internal service or a server was not available", response = MultiResourceResponses.class)})
-    @RequestMapping(value="/proxy/**", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/mqtt/**", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> request(
             @RequestParam(name="n",defaultValue = "1", required = false) int n,
             @RequestParam(name="timeout",defaultValue = "30000", required = false) long timeout,
@@ -68,11 +68,12 @@ public class ProxyRequester {
         MultiResourceResponses<Map> responses = new MultiResourceResponses<>();
         try {
             responses = requestManager.request(
-                    ((String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).replace("/proxy",""),
+                    ((String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).replace("/mqtt",""),
                     remoteRequest.getBytes(),
                     n,
                     timeout,
-                    targets
+                    targets,
+                    null
                     );
         } catch (Exception e) {
             responses.addResponse(createErrorMapMessage(requestManager.id, "Proxy", 400, "Bad Request", e.getMessage()));

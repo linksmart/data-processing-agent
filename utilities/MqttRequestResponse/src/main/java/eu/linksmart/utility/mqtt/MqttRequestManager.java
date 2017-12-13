@@ -51,8 +51,8 @@ public class MqttRequestManager<T>  {
             }
         });
     }*/
-    public MultiResourceResponses<T> request(String topic, byte[] payload, int n, long timeout, String[] targets) throws Exception {
-        AsyncRequest request = packRequest(payload,targets);
+    public MultiResourceResponses<T> request(String topic, byte[] payload, int n, long timeout, String[] targets, Map<String, Object> properties) throws Exception {
+        AsyncRequest request = packRequest(payload,targets,properties);
         RequestProcessor requester= new RequestProcessor(request.getId(),n,timeout);
         broker.addListener(request.getReturnEndpoint(),requester);
         if(!request.getReturnEndpoint().equals(request.getReturnErrorEndpoint()))
@@ -79,11 +79,12 @@ public class MqttRequestManager<T>  {
     public MultiResourceResponses<T> request(String topic, Object unserializedObject, int n, long timeout) throws Exception {
         return request(topic,serializer.serialize(unserializedObject));
     }
-    private AsyncRequest packRequest(byte[] orgReq, String[] targets){
+    private AsyncRequest packRequest(byte[] orgReq, String[] targets, Map<String,Object> properties){
         AsyncRequest request = new AsyncRequest();
         request.setResource(orgReq);
         request.setReturnEndpoint(constructTopic(request.getId()));
         request.setReturnErrorEndpoint(constructTopic(request.getId()));
+        request.setProperties(properties);
         if(targets!=null)
             request.setTargets(Arrays.asList(targets));
 

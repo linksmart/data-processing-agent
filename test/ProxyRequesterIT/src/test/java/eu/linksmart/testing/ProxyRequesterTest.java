@@ -27,13 +27,16 @@ import static org.junit.Assert.fail;
 public class ProxyRequesterTest {
 
     static transient private Configurator conf = Configurator.getDefaultConfig();
-    final static transient private String BASE_URL="base_url";
+    final static transient private String BASE_URL="base_url", INTEGRATION_TEST="integration_test";
 
     private static Deserializer deserializer = new DefaultDeserializer();
     private static Serializer serializer = new DefaultSerializer();
 
     @Test
     public void proxyAgentTest() {
+        if(!conf.containsKeyAnywhere("integration_test"))
+            return;
+
         String base = conf.getString(BASE_URL), dynamicStmID;
 
         Map<String, Object> statement = new HashMap<>();
