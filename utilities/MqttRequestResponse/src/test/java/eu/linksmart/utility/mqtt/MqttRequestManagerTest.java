@@ -31,7 +31,7 @@ public class MqttRequestManagerTest {
                     new String[]{"local"}
             );
 
-            MultiResourceResponses responses = requestManager.request("/statement/new/test/",serializer.serialize(statement), 3,3000,null);
+            MultiResourceResponses responses = requestManager.request("/statement/new/test/",serializer.serialize(statement), 3,3000,null,null);
             System.out.println(serializer.toString(responses));
         } catch (Exception e) {
             e.printStackTrace();
