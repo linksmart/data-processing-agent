@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>PythonModelsIntergrator</artifactId>
+            <artifactId>PythonModelsIntegrator</artifactId>
             <version>${ls.se.agents.version}</version>
         </dependency>
         <dependency>

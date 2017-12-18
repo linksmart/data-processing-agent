@@ -25,9 +25,9 @@
         </dependency>
 
         <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
+            <groupId>eu.linksmart.commons</groupId>
             <artifactId>utils</artifactId>
-            <version>${ls.se.agents.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
