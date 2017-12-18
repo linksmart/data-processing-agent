@@ -15,7 +15,6 @@
         <apache.commons.cli>1.2</apache.commons.cli>
     </properties>
     <modules>
-        <module>tools</module>
         <module>producer</module>
         <module>ProxyRequesterIT</module>
     </modules>

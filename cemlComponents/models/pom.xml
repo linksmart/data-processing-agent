@@ -11,8 +11,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>AutoregressiveNeuralNetworkModel</module>
-        <module>PythonModelsIntegrator</module>
         <module>LinearRegressionModel</module>
+        <module>PythonModelsIntegrator</module>
     </modules>
 
     <dependencies>

@@ -27,16 +27,8 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>eu.linksmart.services.events.testing</groupId>
-            <artifactId>tools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
+            <groupId>eu.linksmart.commons</groupId>
             <artifactId>utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>configuration.utils</artifactId>
         </dependency>
     </dependencies>
     <build>

@@ -76,6 +76,7 @@
         <ls.se.agents.version>1.7.1-SNAPSHOT</ls.se.agents.version>
         <!-- LS version -->
         <linksmart.version>0.0.0-ALPHA</linksmart.version>
+        <linksmart.commons.version>1.0.1-SNAPSHOT</linksmart.commons.version>
 
         <!-- dependencies versions -->
         <jackson.core.version>2.7.1</jackson.core.version>
@@ -154,7 +155,6 @@
         <maven>${maven.version}</maven>
     </prerequisites>
 	<modules>
-        <module>Utils</module>
         <module>AgentAPIs</module>
         <module>configurations</module>
         <module>cepComponents</module>
@@ -227,7 +227,7 @@
             <dependency>
                 <groupId>eu.linksmart.services.events</groupId>
                 <artifactId>configuration.utils</artifactId>
-                <version>${ls.se.agents.version}</version>
+                <version>${linksmart.commons.version}</version>
             </dependency>
 
             <dependency>
@@ -237,15 +237,9 @@
             </dependency>
 
             <dependency>
-                <groupId>eu.linksmart.services.events</groupId>
+                <groupId>eu.linksmart.commons</groupId>
                 <artifactId>utils</artifactId>
-                <version>${ls.se.agents.version}</version>
-            </dependency>
-            <!-- LS SE Event Testing -->
-            <dependency>
-                <groupId>eu.linksmart.services.events.testing</groupId>
-                <artifactId>tools</artifactId>
-                <version>${ls.se.agents.version}</version>
+                <version>${linksmart.commons.version}</version>
             </dependency>
 
             <!-- models -->

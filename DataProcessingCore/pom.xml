@@ -20,7 +20,7 @@
         </dependency>
 
         <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
+            <groupId>eu.linksmart.commons</groupId>
             <artifactId>utils</artifactId>
         </dependency>
 
