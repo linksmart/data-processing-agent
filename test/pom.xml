@@ -16,7 +16,6 @@
     </properties>
     <modules>
         <module>producer</module>
-        <module>ProxyRequesterIT</module>
     </modules>
     <dependencyManagement>
         <dependencies>
