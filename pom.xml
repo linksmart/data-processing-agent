@@ -164,7 +164,6 @@
         <module>test</module>
         <module>applications</module>
         <module>LinkSmartSDK</module>
-        <module>utilities</module>
     </modules>
     <dependencyManagement>
         <dependencies>
