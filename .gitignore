@@ -45,8 +45,6 @@ crashlytics-build.properties
 fabric.properties
 target/
 **/target/
-Client/
-SDKLibrary/
 /classes/
 /Utils/
 /gpl-artifacts/
