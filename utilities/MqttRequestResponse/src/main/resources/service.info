@@ -1,7 +1,0 @@
-linksmart.service.info.distribution.name = LinkSmart (R) Proxy Multicast Requester
-linksmart.service.info.distribution.description = Provides an REST API for multi-cast requests for MQTT based APIs
-linksmart.service.info.distribution.license = Apache License version 2.0
-linksmart.service.info.distribution.url =  http://www.apache.org/licenses/LICENSE-2.0
-linksmart.service.info.distribution.contact.name = Jose Angel Carvajal Soto
-linksmart.service.info.distribution.contact.url = https://fit.fraunhofer.de
-linksmart.service.info.distribution.contact.email = carvaja@fit.fhg.de
