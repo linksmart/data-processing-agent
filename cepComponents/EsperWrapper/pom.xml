@@ -27,7 +27,6 @@
         <dependency>
             <groupId>eu.linksmart.commons</groupId>
             <artifactId>utils</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
