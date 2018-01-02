@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.handler;
 
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.Statement;
@@ -23,7 +24,6 @@ public class DefaultMQTTPublisher implements Publisher {
     private List<String> outputs;
     private List<String> scopes;
     private String id;
-    private String agentID;
 
     private String will=null;
     private Map<String, StaticBroker> brokers = new Hashtable<>();
@@ -56,29 +56,28 @@ public class DefaultMQTTPublisher implements Publisher {
 
     }
 
-    public DefaultMQTTPublisher(Statement statement, String agentID,String will, String willTopic) {
+    public DefaultMQTTPublisher(Statement statement,String will, String willTopic) {
 
-        init(statement.getId(),agentID,statement.getOutput(),statement.getScope(),will, willTopic);
+        init(statement.getId(),statement.getOutput(),statement.getScope(),will, willTopic);
 
     }
     public DefaultMQTTPublisher(Statement statement, String agentID) {
 
-        init(id,agentID,statement.getOutput(),statement.getScope(),null, null);
+        init(id,statement.getOutput(),statement.getScope(),null, null);
 
     }
-    public DefaultMQTTPublisher(String id, String agentID,String[] outputs, String[] scopes){
-        init(id,agentID,outputs,scopes,null,null);
+    public DefaultMQTTPublisher(String id, String[] outputs, String[] scopes){
+        init(id,outputs,scopes,null,null);
 
     }
-    public DefaultMQTTPublisher(String id, String agentID,String[] outputs, String[] scopes,String will, String willTopic){
-        init(id,agentID,outputs,scopes,will, willTopic);
+    public DefaultMQTTPublisher(String id,String[] outputs, String[] scopes,String will, String willTopic){
+        init(id,outputs,scopes,will, willTopic);
 
     }
-    private void init(String id, String agentID,String[] outputs, String[] scopes, String will, String willTopic){
+    private void init(String id,String[] outputs, String[] scopes, String will, String willTopic){
         this.outputs = outputs!=null? Arrays.asList(outputs):null;
         this.scopes =  Arrays.asList(scopes);
         this.id = id;
-        this.agentID =agentID;
         this.will = will;
         this.willTopic = willTopic;
 
@@ -93,16 +92,14 @@ public class DefaultMQTTPublisher implements Publisher {
     private void initOutputs(){
         if(outputs==null ||outputs.isEmpty()){
 
-            outputs = Arrays.asList(defaultOutput(agentID) + id+"/");
+            outputs = Arrays.asList(defaultOutput() + id+"/");
         }
     }
-    static public String defaultOutput(String agentID){
-        String aux= Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
-        if(aux == null)
-            aux = "LS/LA/"+agentID+"/OGC/1.0/Datastreams/";
-        else
-            aux=aux.replace("<id>",agentID);
-        return aux;
+    static public String defaultOutput(){
+        String aux = Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
+        if(aux== null)
+            aux = "LS/test/test/OGC/1.0/Datastreams/";
+        return AgentUtils.topicReplace(aux);
 
     }
 

@@ -1,6 +1,6 @@
 package eu.linksmart.services.event.handler.base;
 
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.api.event.components.ComplexEventHandler;
 import eu.linksmart.api.event.types.Statement;
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public abstract class BaseEventHandler implements ComplexEventHandler {
     }
 
 
-    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
+    protected Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
 
 
     @Override

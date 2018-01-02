@@ -143,7 +143,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
     private void setGenerateOutput() {
         if ((output == null || output.length < 1) && id != null && !"".equals(id))
-            setOutput(new String[]{DefaultMQTTPublisher.defaultOutput(SharedSettings.getId()) + id + "/"});
+            setOutput(new String[]{DefaultMQTTPublisher.defaultOutput() + id + "/"});
 
     }
 

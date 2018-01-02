@@ -4,10 +4,9 @@ import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.services.event.connectors.Observers.IncomingMqttObserver;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
-import eu.linksmart.services.utils.mqtt.broker.StaticBrokerService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 
@@ -29,7 +28,7 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
             me= new MqttIncomingConnectorService();
         return me;
     }
-    protected transient Logger loggerService = Utils.initLoggingConf(this.getClass());
+    protected transient Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
     protected transient Configurator conf =  Configurator.getDefaultConfig();
     protected List<StaticBroker> brokers = new ArrayList<>();
     protected Map<String,IncomingMqttObserver> listeners = new Hashtable<>();
@@ -42,7 +41,7 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
         try {
             StaticBroker broker = new StaticBroker(alias, SharedSettings.getWill(), SharedSettings.getWillTopic());
             listener.setBrokerService(broker);
-            broker.addListener(topic.replace("<id>", SharedSettings.getId()), listener);
+            broker.addListener(AgentUtils.topicReplace(topic), listener);
             brokers.add(broker);
             listeners.put(topic,listener);
         }catch (Exception e){

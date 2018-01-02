@@ -1,6 +1,6 @@
 package eu.linksmart.services.event.handler.base;
 
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.api.event.types.Statement;
 
 /**
@@ -27,7 +27,7 @@ public abstract class BaseArrayObjectEventHandler extends BaseEventHandler {
     protected abstract void processMessage(Object[][] events);
     protected abstract void processMessage(Object[] events);
     public void update(Object[][] insertStream, Object[][] removeStream) {
-        loggerService.debug(Utils.getDateNowString() + " update Object[][] w/ handler " + this.getClass().getSimpleName() + " & query: " + query.getName());
+        loggerService.debug(AgentUtils.getDateNowString() + " update Object[][] w/ handler " + this.getClass().getSimpleName() + " & query: " + query.getName());
         if (insertStream != null)
             eventExecutor.stack(insertStream);
         if (removeStream != null)

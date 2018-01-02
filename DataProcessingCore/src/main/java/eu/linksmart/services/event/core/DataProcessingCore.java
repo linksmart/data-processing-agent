@@ -1,7 +1,6 @@
 package eu.linksmart.services.event.core;
 
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.api.event.types.PersistentRequest;
 import eu.linksmart.services.event.connectors.*;
 
 
@@ -10,7 +9,7 @@ import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.utils.configuration.Configurator;
@@ -84,7 +83,7 @@ public class DataProcessingCore {
         initConf(args);
 
 
-        loggerService.info("The Agent streaming core version "+Utils.getVersion()+" is "+(SharedSettings.isFirstLoad()?"":"re")+"starting with ID: " + SharedSettings.getId());
+        loggerService.info("The Agent streaming core version "+ AgentUtils.getVersion()+" is "+(SharedSettings.isFirstLoad()?"":"re")+"starting with ID: " + SharedSettings.getId());
 
         initCEPEngines();
         intoCEPTypes();
@@ -94,7 +93,7 @@ public class DataProcessingCore {
         // force the loading of the RegistrationService
         ThingsRegistrationService.getReference();
 
-        new ServiceRegistratorService();
+        ServiceRegistratorService.getRegistrator();
 
         return success;
     }
@@ -135,19 +134,19 @@ public class DataProcessingCore {
     private static void initConf(String args){
         if(args != null)
             Configurator.addConfFile(args);
-        else if(Utils.fileExists(Const.APPLICATION_CONFIGURATION_FILE))
+        else if(AgentUtils.fileExists(Const.APPLICATION_CONFIGURATION_FILE))
             Configurator.addConfFile(Const.APPLICATION_CONFIGURATION_FILE);
         if(System.getenv().containsKey(Const.ENVIRONMENTAL_VARIABLES_ENABLED))
             Configurator.getDefaultConfig().enableEnvironmentalVariables();
         conf = Configurator.getDefaultConfig();
 
         SharedSettings.setWill(ThingsRegistrationService.getReference().getThingString());
-        SharedSettings.setWillTopic(conf.getString(Const.OGC_REGISTRATION_TOPIC_WILL).replace("<id>", SharedSettings.getId()));
-        loggerService = Utils.initLoggingConf(DataProcessingCore.class);
+        SharedSettings.setWillTopic(conf.getString(Const.OGC_REGISTRATION_TOPIC_WILL));
+        loggerService = AgentUtils.initLoggingConf(DataProcessingCore.class);
         if(args != null) {
             loggerService.info("Loading configuration form file " + args);
 
-        }else if(Utils.fileExists(Const.APPLICATION_CONFIGURATION_FILE)) {
+        }else if(AgentUtils.fileExists(Const.APPLICATION_CONFIGURATION_FILE)) {
             loggerService.info("Loading configuration form file " + Const.APPLICATION_CONFIGURATION_FILE);
         }else
             loggerService.info("No configuration conf.cfg file in the class path or as argument at start. Only the defaults values are used");
@@ -166,7 +165,7 @@ public class DataProcessingCore {
 
         conf.setProperty(Const.ID_CONF_PATH, SharedSettings.getId());
         // set if this is my first start
-        SharedSettings.isIsFirstLoad(!Utils.isFile(PersistentRequestInstance.getPersistentFile()));
+        SharedSettings.isIsFirstLoad(!AgentUtils.isFile(PersistentRequestInstance.getPersistentFile()));
     }
     /**
      *  This will bootstrap the agent with data and statements such that the agent has already data or statements pre-loaded.

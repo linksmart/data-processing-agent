@@ -63,4 +63,5 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String PERSISTENT_ENABLED = "persistent_enabled";
     String PERSISTENT_STORAGE_PERIOD = "persistent_storage_period";
     String STATEMENT_IN_TOPIC_GET_CONF_PATH = "api_statements_mqtt_topic_base_get";
+    String LINKSMART_SERVICE_TTL = "linksmart_ttl";
 }

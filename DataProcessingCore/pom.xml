@@ -32,10 +32,6 @@
 
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>LinkSmartSDK</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
             <artifactId>cepTooling</artifactId>
         </dependency>
         <dependency>
@@ -101,6 +97,10 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>eu.linksmart.tools.registration</groupId>
+            <artifactId>service-catalog-client</artifactId>
         </dependency>
     </dependencies>
 

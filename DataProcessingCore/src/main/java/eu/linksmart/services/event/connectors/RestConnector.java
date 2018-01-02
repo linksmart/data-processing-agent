@@ -9,7 +9,7 @@ import eu.linksmart.services.event.core.StatementInstance;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class RestConnector extends Component implements IncomingConnector {
-    protected static Logger loggerService = Utils.initLoggingConf(RestConnector.class);
+    protected static Logger loggerService = AgentUtils.initLoggingConf(RestConnector.class);
     protected Configurator conf = Configurator.getDefaultConfig();
 
 

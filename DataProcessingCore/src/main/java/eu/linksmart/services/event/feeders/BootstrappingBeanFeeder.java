@@ -2,7 +2,6 @@ package eu.linksmart.services.event.feeders;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.services.event.core.StatementInstance;
-import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.TraceableException;
@@ -10,7 +9,7 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.core.BootstrappingBean;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;
 
@@ -21,7 +20,7 @@ import java.io.IOException;
  */
 public class BootstrappingBeanFeeder implements Feeder<BootstrappingBean> {
 
-    static protected Logger loggerService = Utils.initLoggingConf(BootstrappingBeanFeeder.class);
+    static protected Logger loggerService = AgentUtils.initLoggingConf(BootstrappingBeanFeeder.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
     static {
         Feeder.feeders.put(BootstrappingBean.class.getCanonicalName(),new BootstrappingBeanFeeder());

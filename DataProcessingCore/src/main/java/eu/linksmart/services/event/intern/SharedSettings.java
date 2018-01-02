@@ -16,6 +16,8 @@ public class SharedSettings implements Const {
     protected static String id = UUID.randomUUID().toString(), will = null, willTopic = null;
 
     protected static boolean isFirstLoad = true;
+
+    protected static String ls_code = "DPA";
     protected static Serializer serializer = new DefaultSerializer();
     protected static Deserializer deserializer = new DefaultDeserializer();
 
@@ -35,7 +37,7 @@ public class SharedSettings implements Const {
     protected static boolean isSet = false;
 
     public static String getWillTopic() {
-        return willTopic;
+        return AgentUtils.topicReplace(willTopic);
     }
 
     public static void setWillTopic(String willTopic) {
@@ -103,5 +105,13 @@ public class SharedSettings implements Const {
 
     public static void isIsFirstLoad(boolean isFirstLoad) {
         SharedSettings.isFirstLoad = isFirstLoad;
+    }
+
+    public static String getLs_code() {
+        return ls_code;
+    }
+
+    public static void setLs_code(String ls_code) {
+        SharedSettings.ls_code = ls_code;
     }
 }

@@ -62,6 +62,7 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         Configurator.addConfFile(Const.CEML_DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
 
+        SharedSettings.setLs_code("LA");
         SharedSettings.getSerializer().addModule("Descriptors",DataDescriptors.class,new DataDescriptorSerializer());
         SharedSettings.getDeserializer().addModule("Descriptors",DataDescriptors.class,new DataDescriptorsDeserializer());
 

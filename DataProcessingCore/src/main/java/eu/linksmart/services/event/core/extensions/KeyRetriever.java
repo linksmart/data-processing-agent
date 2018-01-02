@@ -1,20 +1,17 @@
 package eu.linksmart.services.event.core.extensions;
 
-import eu.linksmart.sdk.catalog.service.Registration;
-import eu.linksmart.sdk.catalog.service.ServiceRegistrations;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
-import eu.linksmart.services.utils.serialization.JWSDeserializer;
-import org.apache.commons.lang3.time.DateUtils;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.client.fluent.Response;
+import io.swagger.client.ApiClient;
+import io.swagger.client.api.ScApi;
+import io.swagger.client.model.APIIndex;
+import io.swagger.client.model.Service;
 import org.slf4j.Logger;
 
-import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,24 +21,25 @@ import java.util.concurrent.ConcurrentMap;
  * Created by José Ángel Carvajal on 13.10.2017 a researcher of Fraunhofer FIT.
  */
 public class KeyRetriever {
-    private Request request;
     private Timer timer = new Timer();
     private boolean running = false;
     private Set<String> servicesIds = new HashSet<>();
     // intentionally it's using the default one and not the serialized defined on
     private Deserializer deserializer = new DefaultDeserializer();
     private static Configurator conf = Configurator.getDefaultConfig();
-    private static Logger loggerService = Utils.initLoggingConf(KeyRetriever.class);
+    private static Logger loggerService = AgentUtils.initLoggingConf(KeyRetriever.class);
     private static KeyRetriever defaultRetriever = init();
     private int interval;
     public ConcurrentMap<String,String> idsKey = new ConcurrentHashMap<>();
     private long lastRequest = new Date().getTime();
+    private final ScApi SCclient;
 
     private KeyRetriever(String url, int interval) throws IllegalArgumentException {
         this.interval = interval;
         URI uri = URI.create(url+"meta/contains/key");
-        request = Request.Get(uri);
-
+        ApiClient apiClient = new ApiClient();
+        apiClient.setBasePath(url);
+        SCclient = new ScApi(apiClient);
 
     }
 
@@ -67,11 +65,11 @@ public class KeyRetriever {
             if ( (new Date()).getTime() - lastRequest < 1000 )
                 return;
 
-            Response response = request.execute();
+           APIIndex services=SCclient.jsonpathOperatorValueGet("meta","contains","key",new BigDecimal(1),new BigDecimal(1000));
 
-            ServiceRegistrations registrations = deserializer.parse(response.returnContent().asString(), ServiceRegistrations.class);
 
-            registrations.getServices().forEach(registration -> {
+
+            services.getServices().forEach(registration -> {
                         if (!idsKey.containsKey(registration.getId()))
                             updateKeyRegister(registration);
 
@@ -79,13 +77,13 @@ public class KeyRetriever {
             );
 
 
-        } catch (IOException e) {
+        } catch (Exception e) {
           loggerService.error(e.getMessage(),e);
         }
     }
-    private void  updateKeyRegister(Registration registration){
+    private void  updateKeyRegister(Service registration){
 
-        idsKey.put(registration.getId(),registration.getMeta().get("key").toString());
+        idsKey.put(registration.getId(),((Map)registration.getMeta()).get("key").toString());
 
     }
     public void startService(){

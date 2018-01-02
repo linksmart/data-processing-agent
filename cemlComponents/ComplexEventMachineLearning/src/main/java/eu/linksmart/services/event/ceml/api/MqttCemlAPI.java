@@ -10,6 +10,7 @@ import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 import eu.linksmart.services.event.connectors.Observers.IncomingMqttObserver;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
@@ -56,7 +57,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     public static void reportFeedback(StaticBroker brokerService, String id, String message){
 
         try {
-            brokerService.publish(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC).replace("<id>",id),message);
+            brokerService.publish(AgentUtils.topicReplace(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)),message);
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         }

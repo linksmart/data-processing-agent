@@ -4,9 +4,8 @@ import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,25 +27,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.builders.ParameterBuilder;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.WildcardType;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.Tag;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger.web.ApiKeyVehicle;
-import springfox.documentation.swagger.web.SecurityConfiguration;
-import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import static springfox.documentation.schema.AlternateTypeRules.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -62,7 +44,7 @@ import java.util.*;
 @EnableSwagger2
 public class RestInit {
     static Properties info = null;
-    protected transient static Logger loggerService = Utils.initLoggingConf(RestInit.class);
+    protected transient static Logger loggerService = AgentUtils.initLoggingConf(RestInit.class);
     private static Configurator conf;
     private static boolean la = false;
     private static boolean gpl = false;
@@ -71,9 +53,9 @@ public class RestInit {
 
 
         try {
-            info = Utils.createPropertyFiles("service.info");
+            info = AgentUtils.createPropertyFiles("service.info");
         } catch (IOException e) {
-            Utils.initLoggingConf(RestInit.class).error(e.getMessage(), e);
+            AgentUtils.initLoggingConf(RestInit.class).error(e.getMessage(), e);
         }
         if (conf.containsKeyAnywhere(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING))
             Arrays.asList(conf.getStringArray(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)).forEach(s -> {
@@ -160,7 +142,7 @@ public class RestInit {
         return new ApiInfoBuilder()
                 .title(info.getProperty((la)?"linksmart.service.info.distribution.name.la":"linksmart.service.info.distribution.name.dpa"))
                 .description(info.getProperty("linksmart.service.info.distribution.description"))
-                .version(Utils.getVersion())
+                .version(AgentUtils.getVersion())
                         //.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
                 .contact(new Contact(info.getProperty((la)?"linksmart.service.info.distribution.name.la":"linksmart.service.info.distribution.name.dpa"),info.getProperty("linksmart.service.info.distribution.contact.url"),info.getProperty("linksmart.service.info.distribution.contact.email")))
                 .license(info.getProperty((!gpl)?"linksmart.service.info.distribution.license":"linksmart.service.info.distribution.license.gpl"))

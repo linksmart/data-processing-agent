@@ -1,20 +1,18 @@
 package eu.linksmart.services.event.core;
 
-import eu.linksmart.sdk.catalog.service.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.mqtt.broker.Broker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBrokerService;
-import eu.linksmart.services.utils.serialization.JWSSerializer;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import io.swagger.client.model.Service;
+import io.swagger.client.model.ServiceDocs;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -22,51 +20,110 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by José Ángel Carvajal on 13.10.2017 a researcher of Fraunhofer FIT.
  */
-public class ServiceRegistratorService {
+public class ServiceRegistratorService implements Observer{
 
     private transient static Properties info = null;
-    private final Registration myRegistration;
-    private transient final static Logger loggerService = Utils.initLoggingConf(ServiceRegistratorService.class);
+    private final EditableService myRegistration;
+    private static final String restAPIName= "Agent RESTful API";
+    private transient final static Logger loggerService = AgentUtils.initLoggingConf(ServiceRegistratorService.class);
     private transient final static Configurator conf = Configurator.getDefaultConfig();
     public static ConcurrentMap<String,Object> meta = new ConcurrentHashMap<>();
+    private final StaticBroker broker;
+    private final Timer updater = new Timer();
 
-    public ServiceRegistratorService() {
-        myRegistration = new RegistrationDocumentImpl();
+    public final transient static ServiceRegistratorService registrator = new ServiceRegistratorService();
+    private ServiceRegistratorService() {
+        myRegistration = new EditableService();
         myRegistration.setId(SharedSettings.getId());
         myRegistration.setDescription(conf.getString(Const.AGENT_DESCRIPTION));
+        myRegistration.setName("_linksmart-"+SharedSettings.getLs_code().toLowerCase()+".tcp_");
+        myRegistration.setMeta(meta);
+        myRegistration.setApis(new ConcurrentHashMap<>());
+        myRegistration.setDocs(new ArrayList<>());
+        myRegistration.setTtl( conf.getLong(Const.LINKSMART_SERVICE_TTL));
 
 
-        meta.forEach(myRegistration::addMeta);
 
         if (conf.getBoolean(Const.ENABLE_REST_API)) {
-            APIDescriptor descriptor = new APIDescriptorImpl();
             try {
                 String host = InetAddress.getLocalHost().getHostName(), port = conf.getString("server_port"), protocol = "http";
                 if (conf.containsKeyAnywhere("server_ssl_key-store"))
                     protocol = "https";
 
-                descriptor.setUrl(protocol + "://" + host + ":" + port + "/");
-                descriptor.setProtocol(protocol.toUpperCase());
-                myRegistration.addApis(descriptor);
-                APIDoc doc = new APIDocImpl();
+                myRegistration.getApis().put(restAPIName, protocol + "://" + host + ":" + port + "/");
+
+                ServiceDocs doc = new ServiceDocs();
                 doc.setDescription("Open API V2");
-                doc.setUrl(descriptor.getUrl() + "swagger-ui.html");
-                myRegistration.addExternalDocs(doc);
-
-                StaticBroker broker = new StaticBroker(conf.getString(Const.LINKSMART_BROKER),SharedSettings.getSerializer().toString(myRegistration), conf.getString(Const.LINKSMART_SERVICE_WILL_TOPIC).replace("<id>", SharedSettings.getId())+SharedSettings.getId());
-
-                broker.publish(conf.getString(Const.LINKSMART_REGISTRATION_TOPIC).replace("<id>", SharedSettings.getId())+SharedSettings.getId(), SharedSettings.getSerializer().serialize(myRegistration));
-
+                doc.setUrl(myRegistration.getApis().get(restAPIName) + "swagger-ui.html");
+                doc.setType("application/json");
+                doc.setApis(Arrays.asList(restAPIName));
+                myRegistration.setDocs(Arrays.asList(doc));
             } catch (Exception e) {
                 loggerService.error(e.getMessage(), e);
             }
+
         }
-        APIDescriptor descriptor = new APIDescriptorImpl();
-        StaticBrokerService.brokerServices.values().forEach(broker -> {
-            descriptor.setProtocol("MQTT");
-            descriptor.setUrl(broker.getBrokerURL());
-            myRegistration.addApis(descriptor);
-                }
+
+        StaticBrokerService.brokerServices.forEach((broker, url) ->
+                myRegistration.getApis().put("Agent MQTT API", url.getBrokerURL())
         );
+
+        StaticBroker intent = null;
+        try {
+            intent = new StaticBroker(conf.getString(Const.LINKSMART_BROKER), SharedSettings.getSerializer().toString(myRegistration), AgentUtils.topicReplace(conf.getString(Const.LINKSMART_SERVICE_WILL_TOPIC)));
+
+
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
+            System.exit(-1);
+        }
+
+        broker = intent;
+        broker.addConnectionListener(this);
+
+        if(myRegistration.getTtl()>-1){
+            updater.schedule(
+                    new TimerTask() {
+                        @Override
+                        public void run() {
+                            update();
+                        }
+                    },
+                    myRegistration.getTtl()/3
+            );
+        }else
+            update();
+    }
+
+    public static ServiceRegistratorService getRegistrator() {
+        return registrator;
+    }
+    public void update(){
+        try {
+            broker.publish(AgentUtils.topicReplace(conf.getString(Const.LINKSMART_REGISTRATION_TOPIC))+ SharedSettings.getId(), SharedSettings.getSerializer().serialize(myRegistration));
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        update();
+
+    }
+
+    private class EditableService extends Service {
+        @JsonProperty("id")
+        protected String id;
+        @Override
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id){
+            this.id=id;
+        }
+
     }
 }

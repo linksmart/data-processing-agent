@@ -6,7 +6,7 @@ import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
@@ -30,7 +30,7 @@ public class ThingsRegistrationService {
     private Thing thing = new ThingImpl();
     private Map<String,Datastream> datastreamMap = new Hashtable<>();
 
-    private Logger loggerService = Utils.initLoggingConf(ThingsRegistrationService.class);
+    private Logger loggerService = AgentUtils.initLoggingConf(ThingsRegistrationService.class);
     private Timer timer;
     private boolean changed=true;
     private static ThingsRegistrationService registrationService = new ThingsRegistrationService();
@@ -132,9 +132,8 @@ public class ThingsRegistrationService {
 
         publisher = new DefaultMQTTPublisher(
                 SharedSettings.getId(),
-                SharedSettings.getId(),
-                new String[]{conf.getString(Const.OGC_REGISTRATION_TOPIC).replace("<id>", SharedSettings.getId())+thing.getId()},
-                new String[]{"control"},
+                new String[]{AgentUtils.topicReplace(conf.getString(Const.OGC_REGISTRATION_TOPIC))+thing.getId()},
+                new String[]{"linksmart"},
                 SharedSettings.getWill(),
                 SharedSettings.getWillTopic()
 

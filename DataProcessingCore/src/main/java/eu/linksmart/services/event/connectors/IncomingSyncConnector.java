@@ -3,7 +3,7 @@ package eu.linksmart.services.event.connectors;
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public abstract class IncomingSyncConnector implements IncomingConnector {
    // protected Map<String,Map<String, Map<String, List<Observer>>>> protocolHostTopicToObserver = new ConcurrentHashMap<>();
 
     static final private String ALL = "ALL";
-    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
+    protected Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
 
     //protected Map<String, Map<String, List<Observer>>> protocolTopicToObserver = new ConcurrentHashMap<>();
     protected Map<String, List<Observer>> topicToObserver = new ConcurrentHashMap<>();

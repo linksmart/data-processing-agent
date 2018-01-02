@@ -1,6 +1,6 @@
 package eu.linksmart.services.event.handler.base;
 
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.api.event.types.Statement;
 
 import java.util.Hashtable;
@@ -14,7 +14,7 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
         super(statement);
     }
     public void update(Map[] insertStream, Map[] removeStream){
-        loggerService.debug(Utils.getDateNowString() + " update map[] w/ handler " + this.getClass().getSimpleName() + " & query: " + query.getName());
+        loggerService.debug(AgentUtils.getDateNowString() + " update map[] w/ handler " + this.getClass().getSimpleName() + " & query: " + query.getName());
         if(insertStream!=null)
             for (Map m: insertStream)
                 eventExecutor.stack(m);

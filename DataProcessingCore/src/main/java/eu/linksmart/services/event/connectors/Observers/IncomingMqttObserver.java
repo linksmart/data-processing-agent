@@ -1,14 +1,12 @@
 package eu.linksmart.services.event.connectors.Observers;
 
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
-import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.core.ThingsRegistrationService;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.subscription.MqttMessageObserver;
@@ -28,7 +26,7 @@ import java.util.stream.Collectors;
 public abstract class IncomingMqttObserver implements MqttMessageObserver {
 
     protected transient long debugCount=0;
-    protected transient Logger loggerService = Utils.initLoggingConf(this.getClass());
+    protected transient Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
     protected transient Configurator conf =  Configurator.getDefaultConfig();
 
     protected StaticBroker brokerService;
@@ -43,7 +41,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     //End of code made for testing performance
 
     public IncomingMqttObserver(List<String> topics)  {
-        this.topics.addAll( topics.stream().map(s -> s.replace("<id>", SharedSettings.getId())).collect(Collectors.toList()));
+        this.topics.addAll( topics.stream().map(AgentUtils::topicReplace).collect(Collectors.toList()));
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE)) {
@@ -54,7 +52,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
         }
     }
     public IncomingMqttObserver(String topic)  {
-        topics.add(topic.replace("<id>", SharedSettings.getId()));
+        topics.add(AgentUtils.topicReplace(topic));
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_OBSERVERS   )) {
@@ -82,12 +80,12 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
         debugCount=(debugCount+1)%Long.MAX_VALUE;
         try {
             if(debugCount%conf.getInt(Const.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH) == 0)
-                loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
+                loggerService.debug(AgentUtils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
 
         }catch (Exception e){
             loggerService.warn("Error while loading configuration, doing the action from hardcoded values");
             if(debugCount%20== 0)
-                loggerService.debug(Utils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
+                loggerService.debug(AgentUtils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
 
         }
         // check if message is mine (true) or not (false)

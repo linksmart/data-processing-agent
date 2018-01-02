@@ -5,7 +5,7 @@ import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 import eu.linksmart.services.event.core.ServiceRegistratorService;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.Utils;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.serialization.JWSDeserializer;
 import eu.linksmart.services.utils.serialization.JWSSerializer;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 public class JWS {
 
     static private Configurator conf = Configurator.getDefaultConfig();
-    static private Logger loggingService = Utils.initLoggingConf(JWS.class);
+    static private Logger loggingService = AgentUtils.initLoggingConf(JWS.class);
     private static String publicKey;
     private static JWSDeserializer deserializer;
     private static JWSSerializer serializer;
@@ -41,7 +41,7 @@ public class JWS {
                             SharedSettings.addSharedObject(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias,true);
                             MqttIncomingConnectorService.getReference().addListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new JwsObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
                         } catch (Exception e) {
-                            Utils.initLoggingConf(JwsObserver.class).error(e.getMessage(), e);
+                            AgentUtils.initLoggingConf(JwsObserver.class).error(e.getMessage(), e);
                         }
                     }));
             StatementInstance.DEFAULT_HANDLER = JwsHandler.class.getCanonicalName();

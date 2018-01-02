@@ -4,7 +4,6 @@ import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
-import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
@@ -12,8 +11,7 @@ import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.Utils;
-import eu.linksmart.services.utils.serialization.DefaultDeserializer;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -35,7 +33,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
     protected Configurator conf =  Configurator.getDefaultConfig();
     protected Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();
     protected Map<String,String> classToAlias= new Hashtable<String, String>();
-    protected Logger loggerService = Utils.initLoggingConf(this.getClass());
+    protected Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
 
     private Map<String, Class> compiledTopicClass = new Hashtable<>(), aliasToClass =new Hashtable<>();
 
@@ -89,7 +87,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
         }
     }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
-        if(topic.contains(DefaultMQTTPublisher.defaultOutput(SharedSettings.getId()))) // if it is my topic the event should be ignore the message
+        if(topic.contains(DefaultMQTTPublisher.defaultOutput())) // if it is my topic the event should be ignore the message
             return;
 
         try {
