@@ -100,6 +100,7 @@ public class ServiceRegistratorService implements Observer{
     }
     public void update(){
         try {
+            loggerService.info("Sending registration message to topic: "+ AgentUtils.topicReplace(conf.getString(Const.LINKSMART_REGISTRATION_TOPIC))+ SharedSettings.getId() + " message: " +SharedSettings.getSerializer().toString(myRegistration));
             broker.publish(AgentUtils.topicReplace(conf.getString(Const.LINKSMART_REGISTRATION_TOPIC))+ SharedSettings.getId(), SharedSettings.getSerializer().serialize(myRegistration));
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
