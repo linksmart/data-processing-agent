@@ -1,0 +1,17 @@
+{
+	"name": "_linksmart-la.tcp_",
+	"description": "The instantiation of an LinkSmart(R) IoT Agent. A service for Stream Mining and Machine Learning management.",
+	"meta": {},
+	"apis": {
+		"Agent MQTT API": "tcp://magna:1883",
+		"Agent RESTful API": "http://van:8319/"
+	},
+	"docs": [{
+			"description": "Open API V2",
+			"apis": ["Agent RESTful API"],
+			"type": "application/json",
+			"url": "http://van:8319/swagger-ui.html"
+		}
+	],
+	"ttl": 0
+}
