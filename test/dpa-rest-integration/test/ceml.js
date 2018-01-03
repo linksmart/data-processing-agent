@@ -79,15 +79,19 @@ describe('Learning API (CEML)', function () {
 
         var client = mqtt.connect(mqttBroker);
         var counter = 0;
+        var end = false;
         client.on('message', function (topic, message) {
-            var value = JSON.parse(message).result;
+            if(!end) {
+                var value = JSON.parse(message).ResultValue;
 
-            expect(value.originalInput)
-                .to.closeTo(value.prediction[0], .1);
-            counter++;
-            // it starts to learn after ~3 messages
-            if (counter > numberOfMessages - 5) {
-                done();
+                expect(value.originalInput)
+                    .to.closeTo(value.prediction[0], .1);
+                counter++;
+                // it starts to learn after ~3 messages
+                if (counter > 3) {
+                    end = true;
+                    done();
+                }
             }
         });
 
