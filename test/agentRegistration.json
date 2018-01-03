@@ -9,8 +9,7 @@
 	"docs": [{
 			"description": "Open API V2",
 			"apis": ["Agent RESTful API"],
-			"type": "application/json",
-			"url": "http://van:8319/swagger-ui.html"
+			"type": "application/json"
 		}
 	],
 	"ttl": 0
