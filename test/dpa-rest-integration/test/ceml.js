@@ -80,7 +80,7 @@ describe('Learning API (CEML)', function () {
         var client = mqtt.connect(mqttBroker);
         var counter = 0;
         client.on('message', function (topic, message) {
-            var value = JSON.parse(message).ResultValue;
+            var value = JSON.parse(message).result;
 
             expect(value.originalInput)
                 .to.closeTo(value.prediction[0], .1);

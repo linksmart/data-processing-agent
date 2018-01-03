@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by José Ángel Carvajal on 28.07.2017 a researcher of Fraunhofer FIT.
@@ -28,7 +30,7 @@ public class ThingsRegistrationService {
 
 
     private Thing thing = new ThingImpl();
-    private Map<String,Datastream> datastreamMap = new Hashtable<>();
+    private final Map<String,Datastream> datastreamMap = new Hashtable<>();
 
     private Logger loggerService = AgentUtils.initLoggingConf(ThingsRegistrationService.class);
     private Timer timer;
@@ -90,16 +92,19 @@ public class ThingsRegistrationService {
     }
 
     private void checkDatastream(Map<String, Statement> resources) {
-        if(!datastreamMap.keySet().containsAll(resources.keySet())){
-            resources.keySet().stream().filter(d->!datastreamMap.keySet().contains(d)).forEach(match->datastreamMap.put(match,addDatastream(resources.get(match))));
-            changed =true;
+        synchronized (datastreamMap) {
+            if (!datastreamMap.keySet().containsAll(resources.keySet())) {
+                resources.keySet().stream().filter(d -> !datastreamMap.keySet().contains(d)).forEach(match -> datastreamMap.put(match, addDatastream(resources.get(match))));
+                changed = true;
+            }
+            if (!resources.keySet().containsAll(datastreamMap.keySet())) {
+                List<String> ids = datastreamMap.keySet().stream().filter(d -> !resources.keySet().contains(d)).collect(Collectors.toList());
+                ids.forEach(datastreamMap::remove);
+                changed = true;
+            }
+            if (changed)
+                thing.setDatastreams(new ArrayList<>(datastreamMap.values()));
         }
-        if(!resources.keySet().containsAll(datastreamMap.keySet())){
-            datastreamMap.keySet().stream().filter(d->!resources.keySet().contains(d)).forEach(match->datastreamMap.remove(match));
-            changed=true;
-        }
-        if(changed)
-            thing.setDatastreams(new ArrayList<>(datastreamMap.values()));
     }
 
     private void constructBaseThing(){
