@@ -5,8 +5,8 @@ import eu.linksmart.services.event.connectors.*;
 
 
 import eu.linksmart.services.event.connectors.file.BigFileConnector;
-import eu.linksmart.services.event.connectors.observers.EventMqttObserver;
-import eu.linksmart.services.event.connectors.observers.StatementMqttObserver;
+import eu.linksmart.services.event.connectors.mqtt.EventMqttObserver;
+import eu.linksmart.services.event.connectors.mqtt.StatementMqttObserver;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;

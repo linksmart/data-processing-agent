@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.connectors.observers;
+package eu.linksmart.services.event.connectors.mqtt;
 
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.types.impl.AsyncRequest;

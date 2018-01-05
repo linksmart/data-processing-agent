@@ -2,7 +2,7 @@ package eu.linksmart.services.event.core.extensions;
 
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.connectors.observers.EventMqttObserver;
+import eu.linksmart.services.event.connectors.mqtt.EventMqttObserver;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
 

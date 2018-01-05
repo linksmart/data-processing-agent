@@ -2,7 +2,7 @@ package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.InternalException;
-import eu.linksmart.services.event.connectors.observers.IncomingMqttObserver;
+import eu.linksmart.services.event.connectors.mqtt.IncomingMqttObserver;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
