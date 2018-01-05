@@ -70,7 +70,7 @@ public class HTTPPublisher implements Publisher{
     }
 
     public HTTPPublisher(Statement statement) {
-        outputs = Arrays.asList(statement.getOutput());
+        outputs = statement.getOutput();
         scopes =  Arrays.asList(statement.getScope());
         id = statement.getId();
         try {

@@ -1,9 +1,6 @@
-package eu.linksmart.services.event.connectors.Observers;
+package eu.linksmart.services.event.connectors.observers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
-import eu.linksmart.api.event.exceptions.UnknownException;
-import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.types.impl.AsyncRequest;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.services.event.feeders.StatementFeeder;
@@ -13,9 +10,7 @@ import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
-import sun.security.provider.SHA;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

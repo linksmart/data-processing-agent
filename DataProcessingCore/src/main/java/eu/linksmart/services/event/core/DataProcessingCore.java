@@ -4,8 +4,9 @@ import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.connectors.*;
 
 
-import eu.linksmart.services.event.connectors.Observers.EventMqttObserver;
-import eu.linksmart.services.event.connectors.Observers.StatementMqttObserver;
+import eu.linksmart.services.event.connectors.file.BigFileConnector;
+import eu.linksmart.services.event.connectors.observers.EventMqttObserver;
+import eu.linksmart.services.event.connectors.observers.StatementMqttObserver;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
@@ -244,17 +245,7 @@ public class DataProcessingCore {
                 mqtt.addListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
             //
 
-            Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
-                    .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
-                    .forEach(alias -> Arrays.asList(conf.getStringArray(Const.EVENTS_IN_BROKER_CONF_PATH)).forEach(broker->{
-                        try {
-                            if(! SharedSettings.existSharedObject(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias))
-                                mqtt.addListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
-                        } catch (Exception e) {
-                            loggerService.error(e.getMessage(),e);
-                        }
-                    }));
-
+           addEventConnection(Arrays.asList(conf.getStringArray(Const.EVENTS_IN_BROKER_CONF_PATH)));
 
 
           if (conf.containsKeyAnywhere(Const.ENABLE_REST_API)&&  conf.getBoolean(Const.ENABLE_REST_API))
@@ -272,6 +263,21 @@ public class DataProcessingCore {
 
 
         return true;
+    }
+    private static void addEventConnection(String alias, List<String> brokers){
+         brokers.forEach(broker->{
+                    try {
+                       // if(! SharedSettings.existSharedObject(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias))
+                            mqtt.addListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
+                    } catch (Exception e) {
+                        loggerService.error(e.getMessage(),e);
+                    }
+                });
+    }
+    public static void addEventConnection( List<String> brokers){
+        Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
+                .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
+                .forEach(alias -> brokers.forEach(broker->addEventConnection(alias,brokers)));
     }
     /**
      * This initialize the CEP engines and their utilities.

@@ -2,7 +2,7 @@ package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.InternalException;
-import eu.linksmart.services.event.connectors.Observers.IncomingMqttObserver;
+import eu.linksmart.services.event.connectors.observers.IncomingMqttObserver;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
@@ -30,8 +30,9 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
     }
     protected transient Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
     protected transient Configurator conf =  Configurator.getDefaultConfig();
-    protected List<StaticBroker> brokers = new ArrayList<>();
-    protected Map<String,IncomingMqttObserver> listeners = new Hashtable<>();
+
+    // protected List<StaticBroker> brokers = new ArrayList<>();
+    protected Map<String,Map<String, IncomingMqttObserver>> listeners = new Hashtable<>();
 
 
     protected MqttIncomingConnectorService() throws MalformedURLException, MqttException {
@@ -42,8 +43,10 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
             StaticBroker broker = new StaticBroker(alias, SharedSettings.getWill(), SharedSettings.getWillTopic());
             listener.setBrokerService(broker);
             broker.addListener(AgentUtils.topicReplace(topic), listener);
-            brokers.add(broker);
-            listeners.put(topic,listener);
+
+            loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") with incoming events broker alias: " + alias + "  URL: " +broker.getConfiguration().getURL()+topic);
+            listeners.putIfAbsent(alias,new Hashtable<>());
+            listeners.get(alias).put(topic,listener);
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
             throw new InternalException(alias,"Broker", e.getMessage(),e);
@@ -51,24 +54,41 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
 
 
     }
-    public synchronized void removeListener(String topic) throws InternalException{
+    public synchronized void removeListener(String alias) throws InternalException{
         try {
-            IncomingMqttObserver listener = listeners.get(topic);
-            if(listener!=null) {
-                StaticBroker broker = listeners.get(topic).getBrokerService();
-                broker.removeListener(listener);
-                brokers.remove(broker);
-                listeners.remove(topic);
-            }
+            List<Exception> exceptions = new ArrayList<>();
+            listeners.get(alias).values().forEach(listener->{
+                try {
+                    listener.getBrokerService().removeListener(listener);
+                   // listener.getBrokerService().removeListener(listener.getTopics().get(0),listener);
+                    if(!listener.getBrokerService().hasListeners()) {
+                        listener.getBrokerService().destroy();
+                        listeners.remove(alias);
+                    }
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(),e);
+                    exceptions.add(e);
+                    return;
+                }
+            });
+
+            if(!exceptions.isEmpty())
+                throw new InternalException(SharedSettings.getId(),this.getClass().getCanonicalName(),exceptions.get(0).getMessage(),exceptions.get(0));
+
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
+            throw new InternalException(SharedSettings.getId(),this.getClass().getCanonicalName(),e.getMessage(),e);
         }
 
 
     }
+    public Map<String, Map<String, IncomingMqttObserver>> getListeners() {
+        return listeners;
+    }
+
     @Override
     public boolean isUp() {
-
-        return brokers.stream().allMatch(StaticBroker::isConnected);
+        //todo
+        return true;
     }
 }

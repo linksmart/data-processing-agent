@@ -1,12 +1,7 @@
-package eu.linksmart.services.event.connectors;
+package eu.linksmart.services.event.connectors.rest;
 
-import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.IncomingConnector;
-import eu.linksmart.api.event.exceptions.StatementException;
-import eu.linksmart.api.event.exceptions.TraceableException;
-import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.core.StatementInstance;
-import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
@@ -28,23 +23,19 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.springframework.web.servlet.HandlerMapping;
-
-import javax.servlet.http.HttpServletRequest;
-
 
 /**
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 
-@RestController
-public class RestConnector extends Component implements IncomingConnector {
-    protected static Logger loggerService = AgentUtils.initLoggingConf(RestConnector.class);
+@RestController("statement")
+public class StatementRest extends Component implements IncomingConnector {
+    protected static Logger loggerService = AgentUtils.initLoggingConf(StatementRest.class);
     protected Configurator conf = Configurator.getDefaultConfig();
 
 
-    public RestConnector() {
-        super(RestConnector.class.getSimpleName(), "REST API for insert Statements into the CEP Engines", Feeder.class.getSimpleName());
+    public StatementRest() {
+        super(StatementRest.class.getSimpleName(), "REST API for insert Statements into the CEP Engines", Feeder.class.getSimpleName());
 
 
     }
@@ -300,33 +291,6 @@ public class RestConnector extends Component implements IncomingConnector {
     ) {
         return prepareHTTPResponse(StatementFeeder.deleteStatement(id));
 
-    }
-    @ApiOperation(value = "addEvent", nickname = "addEvent")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "topic", value = "Event's topic as is define in the configuration", required = true, dataType = "string", paramType = "path")
-    })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK 200: event had being fed", response = MultiResourceResponses.class),
-            @ApiResponse(code = 400, message = "Bad Request 400: parsing error"),
-            @ApiResponse(code = 500, message = "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors"),
-            @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement")})
-    @RequestMapping(value="/event/**", method= RequestMethod.POST, consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addEvent(
-            @RequestBody String rawEvent, HttpServletRequest  request
-    ) {
-        // todo update this this API to return MultiResourceResponses
-        if(  CEPEngine.instancedEngines.size()==0)
-            return new ResponseEntity<>("Service Unavailable: No CEP engine has been deployed", HttpStatus.SERVICE_UNAVAILABLE);
-        try {
-            EventFeeder.getFeeder().feed(
-                    (((String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE))).replace("/event",""),
-                    rawEvent);
-        } catch (StatementException e) {
-            return new ResponseEntity<>("Bad Request 400: parsing error:"+e.getMessage(),HttpStatus.BAD_REQUEST);
-        } catch (TraceableException | UntraceableException e) {
-            return new ResponseEntity<>("Internal Server Error 500:",HttpStatus.OK);
-        }
-        return new ResponseEntity<>("OK 200: event had being fed",HttpStatus.OK);
     }
 
     public static ResponseEntity<String>  prepareHTTPResponse( MultiResourceResponses<Statement> result){

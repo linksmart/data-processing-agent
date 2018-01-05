@@ -66,16 +66,16 @@ public class DefaultMQTTPublisher implements Publisher {
         init(id,statement.getOutput(),statement.getScope(),null, null);
 
     }
-    public DefaultMQTTPublisher(String id, String[] outputs, String[] scopes){
+    public DefaultMQTTPublisher(String id, List<String> outputs, String[] scopes){
         init(id,outputs,scopes,null,null);
 
     }
-    public DefaultMQTTPublisher(String id,String[] outputs, String[] scopes,String will, String willTopic){
+    public DefaultMQTTPublisher(String id,List<String> outputs, String[] scopes,String will, String willTopic){
         init(id,outputs,scopes,will, willTopic);
 
     }
-    private void init(String id,String[] outputs, String[] scopes, String will, String willTopic){
-        this.outputs = outputs!=null? Arrays.asList(outputs):null;
+    private void init(String id,List<String> outputs,  String[] scopes, String will, String willTopic){
+        this.outputs = outputs!=null? outputs:null;
         this.scopes =  Arrays.asList(scopes);
         this.id = id;
         this.will = will;

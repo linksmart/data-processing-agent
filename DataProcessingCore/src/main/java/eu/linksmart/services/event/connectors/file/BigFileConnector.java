@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.connectors;
+package eu.linksmart.services.event.connectors.file;
 
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;
@@ -6,6 +6,7 @@ import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.event.connectors.FileConnector;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;

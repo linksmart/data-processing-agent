@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
  *
  * */
 public class StatementInstance extends PersistentRequestInstance implements Statement {
+    private static final String STATEMENT_ID_MARK = "<stm_id>";
     /**
      * Define which handler will be instantiate in the CEP engine when no Handler was specifically defined.
      * */
@@ -55,33 +56,19 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @ApiModelProperty(notes = "Statement or Query in the underlying implementation of the CEP engine. For most of the cases is mandatory")
     protected String statement="";
 
-    @JsonProperty("source")
-    @ApiModelProperty(notes = "Server source for the event")
-    @Deprecated
-    protected String source = "";
-
-    @ApiModelProperty(notes = "The input URIs of the events")
-    @Deprecated
-    @JsonProperty("input")
-    protected String[] input ={""};
-
     @ApiModelProperty(notes = "The output URIs of the events")
-    @Deprecated
     @JsonProperty("output")
-    protected String[] output=null;
+    protected List<String> output=null;
 
     @ApiModelProperty(notes = "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean")
-    @Deprecated
     @JsonProperty("CEHandler")
     protected String CEHandler= DEFAULT_HANDLER;
 
     @ApiModelProperty(notes = "Statement's Lifecycle.")
-    @Deprecated
     @JsonProperty("StateLifecycle")
     protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;
 
     @ApiModelProperty(notes = "Server where the events will be pushed")
-    @Deprecated
     @JsonProperty("scope")
     protected String[] scope={"outgoing"};
     protected static final String uuid =UUID.randomUUID().toString();
@@ -89,17 +76,14 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     protected transient static final Object lock =new Object();
 
     @ApiModelProperty(notes = "In case of a synchronous request, the response will be sent here.")
-    @Deprecated
     @JsonProperty("SynchronousResponse")
     protected Object synchRespones ;
 
     @ApiModelProperty(notes = "Indicates the agent ID which should process the statement. Not used for REST API")
-    @Deprecated
     @JsonProperty("TargetAgents")
     protected List<String> targetAgents= new  ArrayList<String>();
 
     @ApiModelProperty(notes = "Indicates the agent ID where this Statement was created")
-    @Deprecated
     @JsonProperty("AgentID")
     protected String agentID= SharedSettings.getId();
 
@@ -142,8 +126,8 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         }
     }
     private void setGenerateOutput() {
-        if ((output == null || output.length < 1) && id != null && !"".equals(id))
-            setOutput(new String[]{DefaultMQTTPublisher.defaultOutput() + id + "/"});
+        if ((output == null || output.size() < 1) && id != null && !"".equals(id))
+            setOutput(Arrays.asList(DefaultMQTTPublisher.defaultOutput() + STATEMENT_ID_MARK + "/"));
 
     }
 
@@ -190,17 +174,10 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public String getStatement(){
         return  statement;
     }
-    @Override
-    public String[] getInput(){
-        return  input;
-    }
+
     @Override
     public String[] getScope(){
         return  scope;
-    }
-    @Override
-    public boolean haveInput(){
-        return input != null;
     }
     @Override
     public boolean haveOutput(){
@@ -211,10 +188,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         return scope != null;
     }
     @Override
-    public String getInput(int index){
-        return  input[index];
-    }
-    @Override
     public String getScope(int index){
         if (scope==null)
             initScope();
@@ -223,14 +196,9 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     @Override
-    public String[] getOutput() {
+    public List<String> getOutput() {
         setGenerateOutput();
-        return output;
-    }
-
-    @Override
-    public String getSource() {
-        return source;
+        return output.stream().map(s->s.replace(STATEMENT_ID_MARK,id)).collect(Collectors.toList());
     }
 
     private void initScope(){
@@ -245,9 +213,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
                 (
                         this.name.equals(obj.getName()) &&
                         this.statement.equals(obj.getStatement()) &&
-                        this.source.equals(obj.getSource()) &&
-                        Arrays.deepEquals(this.input, obj.getInput()) &&
-                        Arrays.deepEquals(this.output, obj.getOutput()) &&
+                        this.output.equals(obj.getOutput()) &&
                         this.CEHandler.equals(obj.getCEHandler()) &&
                         this.stateLifecycle.equals(obj.getStateLifecycle()) &&
                         Arrays.deepEquals(this.scope, obj.getScope()) &&
@@ -260,9 +226,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
    public int hashCode(){
        return (this.name +
                this.statement +
-               this.source +
-               Arrays.toString(this.input) +
-               Arrays.toString(this.output) +
+               this.output +
                this.CEHandler +
                this.stateLifecycle +
                Arrays.toString(this.scope) +
@@ -273,16 +237,8 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.scope = scope;
     }
 
-    public void setOutput(String[] output) {
+    public void setOutput(List<String> output) {
         this.output = output;
-    }
-
-    public void setInput(String[] input) {
-        this.input = input;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
     }
 
     public void setStatement(String statement) {

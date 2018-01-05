@@ -239,16 +239,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
                     }
                 }
-                if (result.getResponses().isEmpty() && org.getSource() != null && !org.getSource().equals(result.getHeadResource().getSource())) {
-                    // if no response had being created, and the source had not being changed
-                     dfw.getStatements().get(id).setSource(result.getHeadResource().getSource());
-                }
-                if (result.getResponses().isEmpty() && org.getSource() != null && !org.getSource().equals(result.getHeadResource().getSource())) {
-                    // TODO: update the source property
-                    loggerService.error("Statement " + result.getHeadResource().getId() + " try to change an outdated statement property");
-                    result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 500, "Internal Server Error", "The source property is not available in this agent version"));
 
-                }
                 if (result.getResponses().isEmpty() && result.getHeadResource().getName() != null && !"".equals(result.getHeadResource().getName()) && !org.getName().equals(result.getHeadResource().getName())) {
                     // the name of the statement had being change. Then we update it.
                      dfw.getStatements().get(id).setName(result.getHeadResource().getName());
@@ -336,7 +327,6 @@ public class StatementFeeder implements Feeder<Statement> {
             if (update) {
                 org = CEPEngine.instancedEngines.values().iterator().next().getStatements().get(orgID);
                 if (!(statement.getStatement().equals(org.getStatement()) || "".equals(statement.getStatement()))||
-                        (org.getInput() != null && !Arrays.deepEquals(org.getInput(),statement.getInput())) ||
                         (org.getCEHandler() != null && !org.getCEHandler().equals(statement.getCEHandler()))
                         ) {
                     result.addResponse(createErrorMapMessage(id, "Statement", 400, "Bad Request", "The 'statement string', 'CEHandler string', or 'input array' cannot be updated. It can be only removed and redeploy."));

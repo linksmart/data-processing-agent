@@ -1,5 +1,6 @@
-package eu.linksmart.services.event.connectors;
+package eu.linksmart.services.event.connectors.file;
 
+import eu.linksmart.services.event.connectors.FileConnector;
 import eu.linksmart.services.event.feeders.EventFeeder;
 
 import java.io.*;

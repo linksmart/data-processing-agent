@@ -9,7 +9,7 @@ import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
-import eu.linksmart.services.event.connectors.Observers.IncomingMqttObserver;
+import eu.linksmart.services.event.connectors.observers.IncomingMqttObserver;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.configuration.Configurator;

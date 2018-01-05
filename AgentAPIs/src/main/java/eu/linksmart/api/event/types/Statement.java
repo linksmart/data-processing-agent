@@ -45,33 +45,11 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * */
     String getStatement();
     /***
-     * The source message handler (broker/http server) where the events are coming
-     *
-     * @return  The alias of message handler (broker/http server) as string
-     * */
-    String getSource();
-    /***
-     * The input topics/paths of the statement (DEPRECATED)
-     *
-     * @return  return the list of topics/paths that are needed in the statement
-     * */
-    @Deprecated
-    String[] getInput();
-    /***
      * return the scope. The scope is the output endpoints (e.g. broker, http server) where the events will be published
      *
      * @return  aliases of the endpoints as string
      * */
     String[] getScope();
-    /***
-     * The input topic/path number i of the statement (DEPRECATED)
-     *
-     * @param index of the topic selected to return
-     *
-     * @return  return the selected topic
-     * */
-    @Deprecated
-    String getInput(int index);
     /***
      * The output message handler (broker/http server) number i of the statement
      *
@@ -85,15 +63,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @return  The output topics/paths as string
      * */
-    String[] getOutput();
-    /***
-     * The Input value is a optional value. This return if the value has been defined or not (DEPRECATED)
-     *
-     * @return  true if there is Input has being defined, false otherwise
-     * */
-
-    @Deprecated
-    boolean haveInput();
+    List<String> getOutput();
     /***
      * The output value is a optional value. This return if the value has been defined or not
      *
@@ -160,20 +130,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @param output array of output topics/paths as string
      * */
-    void setOutput(String[] output);
-    /***
-     * The input topics/paths of the statement (DEPRECATED)
-     *
-     * @param  input is the list of topics/paths to be set in the statement
-     * */
-    @Deprecated
-    void setInput(String[] input);
-    /***
-     * Sets the sources. The source message handler (broker/http server) where the events are coming.
-     *
-     * @param source as alias of message handler (broker/http server) as string
-     * */
-    void setSource(String source);
+    void setOutput(List<String> output);
     /***
      * Set the statement. The native statement for specific underling implementation of a CEP engine (e.g. EPL)
      *
