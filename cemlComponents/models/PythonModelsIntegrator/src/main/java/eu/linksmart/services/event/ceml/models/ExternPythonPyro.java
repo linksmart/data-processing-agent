@@ -56,8 +56,8 @@ public class ExternPythonPyro extends ClassifierModel<Object,Integer,PyroProxy> 
 
                 // Path to script is passed as parameter
                 String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath(),
-                        "--bname="+(String)backend.get("ModuleName"),
-                        "--bpath="+(String)backend.get("ModulePath")};
+                        "--bname="+ backend.get("ModuleName"),
+                        "--bpath="+ backend.get("ModulePath")};
                 proc = Runtime.getRuntime().exec(cmd);
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));

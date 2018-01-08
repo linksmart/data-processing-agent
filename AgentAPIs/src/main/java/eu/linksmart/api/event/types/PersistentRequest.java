@@ -26,11 +26,11 @@ public interface PersistentRequest {
      *
      * @return  The ID as string.
      * */
-    public String getId();
+    String getId();
     /***
      * setts the hash ID of the statement. By default this is the SHA256 of the statement.
      *
      * @param id as string.
      * */
-    public void setId(String id);
+    void setId(String id);
 }

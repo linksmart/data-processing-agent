@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class NNDeserialier extends DeserializerMode<MultiLayerNetwork> {
     @Override
-    public MultiLayerNetwork deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public MultiLayerNetwork deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readValue(jsonParser, JsonNode.class);
         byte[] paramsByteArr = node.get("params").binaryValue();
         INDArray params = Nd4j.fromByteArray(paramsByteArr);

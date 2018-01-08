@@ -13,7 +13,7 @@ import java.util.UUID;
 public class DataDescriptorsDeserializer extends DeserializerMode<DataDescriptors> {
 
     @Override
-    public DataDescriptors deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public DataDescriptors deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
         String name = "";

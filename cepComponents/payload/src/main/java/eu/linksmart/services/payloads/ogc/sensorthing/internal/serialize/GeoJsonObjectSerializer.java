@@ -20,7 +20,7 @@ public class GeoJsonObjectSerializer extends JsonSerializer<GeoJsonObject> {
     }
 
     @Override
-    public void serialize(GeoJsonObject geoJsonObject, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(GeoJsonObject geoJsonObject, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         Map<String, Object> map = new HashMap<>();
         map.put("type",geoJsonObject.getClass().getSimpleName());
         map.put("coordinates",mapper.writeValueAsString(geoJsonObject.getBbox()));

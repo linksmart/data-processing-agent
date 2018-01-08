@@ -51,6 +51,16 @@
         <groupId>org.nd4j</groupId>
         <artifactId>nd4j-jackson</artifactId>
         <version>${nd4j.version}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+            </exclusion>
+        </exclusions>
     </dependency>
     <dependency>
         <groupId>org.nd4j</groupId>

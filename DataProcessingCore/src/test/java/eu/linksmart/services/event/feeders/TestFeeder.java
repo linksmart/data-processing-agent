@@ -6,7 +6,7 @@ import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.core.StatementInstance;
+import eu.linksmart.services.event.types.StatementInstance;
 
 import java.util.Date;
 import java.util.Hashtable;

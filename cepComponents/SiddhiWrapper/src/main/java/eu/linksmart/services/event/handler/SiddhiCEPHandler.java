@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class SiddhiCEPHandler extends QueryCallback {
     protected ComplexEventHandler mqttHandler;
-    public SiddhiCEPHandler(Statement query) throws Exception, StatementException {
+    public SiddhiCEPHandler(Statement query) throws Exception {
         mqttHandler = new ComplexEventHandler(query);
     }
 

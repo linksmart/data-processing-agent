@@ -5,5 +5,5 @@ package eu.linksmart.services.event.feeders;
  */
 public interface Const {
 
-    public static final String LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH = "feeder_monitoring_report_every";
+    String LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH = "feeder_monitoring_report_every";
 }

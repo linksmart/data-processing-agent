@@ -42,7 +42,7 @@ import java.util.Map;
  * */
 @Deprecated
 public interface AnalyzerComponent {
-    static public final Map<String,Map<Component,ComponentInfo>> loadedComponents = new Hashtable();
+    Map<String,Map<Component,ComponentInfo>> loadedComponents = new Hashtable();
 
 
 }

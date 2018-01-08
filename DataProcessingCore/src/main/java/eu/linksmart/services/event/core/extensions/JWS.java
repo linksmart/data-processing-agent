@@ -1,6 +1,6 @@
 package eu.linksmart.services.event.core.extensions;
 
-import eu.linksmart.services.event.core.StatementInstance;
+import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 import eu.linksmart.services.event.core.ServiceRegistratorService;
 import eu.linksmart.services.event.intern.Const;

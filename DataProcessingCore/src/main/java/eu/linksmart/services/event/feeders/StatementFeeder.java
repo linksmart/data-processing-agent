@@ -9,7 +9,7 @@ import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.services.event.core.StatementInstance;
+import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.services.utils.configuration.Configurator;

@@ -42,28 +42,28 @@ public interface ComplexEventPropagationHandler extends ComplexEventHandler {
      * @param enveloper used to pack the compound event received by the @link CEPEngine.
      *
      * */
-    public void setEnveloper(Enveloper enveloper);
+    void setEnveloper(Enveloper enveloper);
     /**
      * Sets the Publisher used by the handler. If non is given an Default implementation should be used.
      *
      * @param publisher used to propagate the already packed and serialized compound-event received by the @link CEPEngine.
      *
      * */
-    public void setPublisher(Publisher publisher);
+    void setPublisher(Publisher publisher);
     /**
      * Provide the Enveloper used by the handler. If non is given an Default implementation should be used.
      *
      * @return an Enveloper used to pack the compound event received by the @link CEPEngine.
      *
      * */
-    public Enveloper getEnveloper();
+    Enveloper getEnveloper();
     /**
      * Provide the Publisher used by the handler. If non is given an Default implementation should be used.
      *
      * @return an Publisher used to propagate the already packed and serialized compound-event received by the @link CEPEngine.
      *
      * */
-    public Publisher getPublisher();
+    Publisher getPublisher();
 
 
 }

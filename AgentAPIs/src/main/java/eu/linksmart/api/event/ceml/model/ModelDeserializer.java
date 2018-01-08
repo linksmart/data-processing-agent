@@ -33,7 +33,7 @@ public class ModelDeserializer extends DeserializerMode<Model> {
     }
 
     @Override
-    public Model deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public Model deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String name =  node.get("Name").textValue();
         if(!loadClass("eu.linksmart.services.event.ceml.models."+name) && !loadClass(name))

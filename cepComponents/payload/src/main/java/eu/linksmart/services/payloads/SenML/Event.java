@@ -101,22 +101,22 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
 
         Object v=null,sv=null,bv=null;
         if(autoValue!=null && autoValue instanceof Number)
-            v = (Double)autoValue;
+            v = autoValue;
         if(autoValue!=null && autoValue instanceof String)
-            sv = (String)autoValue;
+            sv = autoValue;
         if(autoValue!=null && autoValue instanceof Boolean)
-            bv = (Boolean)autoValue;
+            bv = autoValue;
         return factory(bn,n,0L,(short)1,n,null,v,sv,bv,null,(new Date()).getTime(),null);
     }
     static public Event factory(Object bn, Object n, Object autoValue,Object ut){
 
         Object v=null,sv=null,bv=null;
         if(autoValue!=null && autoValue instanceof Number)
-            v = (Double)autoValue;
+            v = autoValue;
         if(autoValue!=null && autoValue instanceof String)
-            sv = (String)autoValue;
+            sv = autoValue;
         if(autoValue!=null && autoValue instanceof Boolean)
-            bv = (Boolean)autoValue;
+            bv = autoValue;
         return factory(bn,n,0L,(short)1,n,null,v,sv,bv,null,(new Date()).getTime(),ut);
     }
     public  Event(){

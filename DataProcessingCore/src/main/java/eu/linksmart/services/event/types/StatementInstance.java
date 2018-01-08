@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.core;
+package eu.linksmart.services.event.types;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,7 +1,7 @@
 package eu.linksmart.services.event.connectors.rest;
 
 import eu.linksmart.api.event.components.IncomingConnector;
-import eu.linksmart.services.event.core.StatementInstance;
+import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
@@ -111,7 +111,7 @@ public class StatementRest extends Component implements IncomingConnector {
         //return prepareHTTPResponse(StatementFeeder.addNewStatement(statementString, "DP_"+ UUID.randomUUID().toString().replace("-","_"),null));
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
         result.addResources(statement.getId(),statement);
-        return prepareHTTPResponse(StatementFeeder.addNewStatement((Statement)statement, statement.getId(),null,result));
+        return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getId(),null,result));
 
     }
 

@@ -27,7 +27,7 @@ public class DataDescriptorDeserializer extends DeserializerMode<DataDescriptor>
                     .defaultInstance()
                     .constructCollectionType(List.class, String.class);
     @Override
-    public DataDescriptor deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public DataDescriptor deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         String name =  node.get("Name").textValue();
         DataDescriptor.DescriptorTypes type = DataDescriptor.DescriptorTypes.NUMBER;

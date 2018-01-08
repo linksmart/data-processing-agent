@@ -6,11 +6,11 @@ package eu.almanac.event.datafusion.utils.generic;
  */
 @Deprecated
 public interface GenericCEP<T> {
-    public static final String GENERATED = "@CEPEvent";
-    public static final String TIMESTAMP = "@Timestamp";
-    public T aggregateToAnEvent(T cepEvent);
-    public void addValue(String key, Object value);
-    public Object getValue(String key);
-    public void setBaseName(String name);
-    public boolean isGenerated();
+    String GENERATED = "@CEPEvent";
+    String TIMESTAMP = "@Timestamp";
+    T aggregateToAnEvent(T cepEvent);
+    void addValue(String key, Object value);
+    Object getValue(String key);
+    void setBaseName(String name);
+    boolean isGenerated();
 }

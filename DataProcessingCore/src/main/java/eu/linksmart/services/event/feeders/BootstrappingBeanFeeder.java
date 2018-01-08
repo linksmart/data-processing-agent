@@ -1,14 +1,14 @@
 package eu.linksmart.services.event.feeders;
 
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
-import eu.linksmart.services.event.core.StatementInstance;
+import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
-import eu.linksmart.services.event.core.BootstrappingBean;
+import eu.linksmart.services.event.types.BootstrappingBean;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.slf4j.Logger;

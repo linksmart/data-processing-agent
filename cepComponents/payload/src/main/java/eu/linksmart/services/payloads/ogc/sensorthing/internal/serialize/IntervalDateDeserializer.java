@@ -17,7 +17,7 @@ public class IntervalDateDeserializer extends JsonDeserializer<Interval> {
         }
 
         @Override
-        public Interval deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+        public Interval deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
 
             return Interval.parse(jsonParser.getText());
         }

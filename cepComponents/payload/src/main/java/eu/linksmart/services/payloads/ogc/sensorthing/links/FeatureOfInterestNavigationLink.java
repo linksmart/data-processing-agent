@@ -25,5 +25,5 @@ public interface FeatureOfInterestNavigationLink extends CommonControlInfo{
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the FeatureOfInterest.")
     @JsonGetter(value = "FeatureOfInterest@iot.navigationLink")
     default String getFeatureOfInterestNavigationLink(){
-        return getSelfLink(this.getClass().getSimpleName(),getId().toString(), "FeatureOfInterest");};
+        return getSelfLink(this.getClass().getSimpleName(),getId().toString(), "FeatureOfInterest");}
 }

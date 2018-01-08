@@ -1,4 +1,4 @@
-package eu.linksmart.services.event.core;
+package eu.linksmart.services.event.types;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.types.EventEnvelope;
@@ -56,7 +56,7 @@ public class BootstrappingBean {
         if(statements==null)
             statements = new ArrayList<>();
 
-        statements.set(index, (StatementInstance) statement);
+        statements.set(index, statement);
 
     }
     public EventEnvelope[] getEvent(String topic) {

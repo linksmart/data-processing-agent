@@ -5,18 +5,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.api.FileCemlAPI;
 import eu.linksmart.services.event.connectors.PersistenceService;
-import eu.linksmart.services.event.core.PersistentRequestInstance;
-import eu.linksmart.services.event.core.StatementInstance;
+import eu.linksmart.services.event.types.PersistentRequestInstance;
+import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -278,12 +272,12 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
                 ArrayList aux1= (ArrayList)input;
                 if(!aux1.isEmpty()&& aux1.get(1) instanceof EventEnvelope) {
                     orgInput = (ArrayList<EventEnvelope>) aux1;
-                    aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
+                    aux = orgInput.stream().map(i -> i.getValue()).collect(Collectors.toList());
                 }else
                     aux = input;
             }if (input instanceof EventEnvelope[]){
                orgInput = new ArrayList<>(Arrays.asList((EventEnvelope[])input));
-                aux = orgInput.stream().map(i -> (Object) i.getValue()).collect(Collectors.toList());
+                aux = orgInput.stream().map(i -> i.getValue()).collect(Collectors.toList());
 
             }else if(input instanceof Object[])
                 aux=Arrays.asList((Object[])input);

@@ -40,7 +40,7 @@ describe('CEPEngine', function () {
             .end((err, res) => {
                 expect(res).to.have.deep.property('body.LoadedComponents.CEPEngine');
                 done();
-            });
+    })
     });
 
 
@@ -56,7 +56,7 @@ describe('CEPEngine', function () {
                 expect(res).to.have.deep.property('body.responses[0].messageType', 'SUCCESS');
                 expect(res).to.have.deep.property('body.responses[0].topic', statement1.topic);
                 done();
-            });
+    })
     });
 
     it('creates Statement 2', statementInserter(2, statement2));
@@ -147,7 +147,7 @@ describe('CEPEngine', function () {
                 if (err) return done(err);
                 expect(res).to.have.deep.property('body.responses[0].messageType', 'SUCCESS');
                 done();
-            });
+    })
     });
 
 
@@ -177,9 +177,9 @@ describe('CEPEngine', function () {
             var ds = {
                 bn: 'dev1',
                 bt: +new Date
-            }
+            };
             client.publish('/testing/generator/dev1', JSON.stringify(ds))
-        })
+        });
 
 
         setTimeout(function () {
@@ -209,6 +209,6 @@ function statementInserter(no, statement) {
                // console.log(statement['id']);
                // console.log(statement['topic']);
                 done();
-            });
+    })
     }
 }

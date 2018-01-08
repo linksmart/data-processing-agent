@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class DataDescriptorSerializer extends SerializerMode<DataDescriptors> {
     @Override
-    public void serialize(DataDescriptors value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
+    public void serialize(DataDescriptors value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         if(value.isLambdaTypeDefinition()){
             gen.writeStartObject();
             gen.writeStringField("Name", value.getName());

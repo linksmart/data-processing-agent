@@ -46,5 +46,5 @@ public interface JsonSerializable extends Serializable{
      *
      * @exception java.lang.Exception if some resource cannot released.
      * */
-    public void destroy()throws Exception;
+    void destroy()throws Exception;
 }

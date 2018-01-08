@@ -22,7 +22,7 @@ public class GeoJsonObjectDeserializer  extends JsonDeserializer<GeoJsonObject> 
 
     static ObjectMapper mapper = new ObjectMapper();
     @Override
-    public GeoJsonObject deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public GeoJsonObject deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         Map<String, Object> map = mapper.readValue(jsonParser.getText(), HashMap.class);
         GeoJsonObject geoJsonObject;
         if(map.get("type").equals("Feature")){

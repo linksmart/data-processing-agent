@@ -24,7 +24,7 @@ import java.util.Map;
 public class NNSerialier extends SerializerMode<MultiLayerNetwork> {
 
     @Override
-    public void serialize(MultiLayerNetwork nnet, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(MultiLayerNetwork nnet, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         MultiLayerConfiguration layerwiseConfiguration = nnet.getLayerWiseConfigurations();
         jsonGenerator.writeStartObject();
         ObjectMapper mapper = new ObjectMapper();

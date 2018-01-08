@@ -81,7 +81,7 @@ public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
      *
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
-    public void deploy() throws TraceableException;
+    void deploy() throws TraceableException;
     /***
      * Unsetts/remove/pause the deployment statements and objects in to the CEPEngine.
      *
@@ -90,30 +90,30 @@ public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
      *
      * @see eu.linksmart.api.event.exceptions.TraceableException
      * */
-    public void undeploy() throws TraceableException;
+    void undeploy() throws TraceableException;
     /***
      * Provide a report of the state of the statement. Where the report must be generated is implementation dependent.
      *
      * */
-    public void report();
+    void report();
     /***
      * Description of the data expected by the model
      *
      * @return the description of the data as DataDescriptors
      * */
-    public DataDescriptors getDescriptors();
+    DataDescriptors getDescriptors();
     /***
      * Define how the data will be analysed/learned/studied.
      *
      * @return an instantiation of an Algorithm.
      * */
-    public Model getModel();
+    Model getModel();
     /***
      * The name of the request, it is equivalent to an ID
      *
      * @return the name the request
      * */
-    public String getName();
+    String getName();
     /***
      * Setts the name of the request, it is equivalent to an ID
      *
@@ -126,35 +126,35 @@ public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
      * @return The LastPrediction as Prediction
      * @see eu.linksmart.api.event.ceml.prediction.Prediction
      * */
-    public Prediction  getLastPrediction();
+    Prediction  getLastPrediction();
     /***
      * The Last Prediction made by a model in this request. The prediction must be seated in the deployment phase!
      *
      * @param  prediction as Prediction
      * @see eu.linksmart.api.event.ceml.prediction.Prediction
      * */
-    public void setLastPrediction(Prediction  prediction);
+    void setLastPrediction(Prediction prediction);
     /***
      * Set of statements/rules that define how the model will get the data to further analysis. The results of the streams produce by this statements must match with the Descriptors (for learning).
      *
      * @return a collection of LearningStatements.
      * @see eu.linksmart.api.event.ceml.LearningStatement
      * */
-    public Collection<LearningStatement> getLearningStream();
+    Collection<LearningStatement> getLearningStream();
     /***
      * Set of statements/rules that define how the model will be used with the data the data. The results of the streams produce by this statements must match with the Descriptors (for predicting).
      *
      * @return a collection of Statements.
      * @see eu.linksmart.api.event.types.Statement
      * */
-    public Collection<Statement> getDeploymentStream();
+    Collection<Statement> getDeploymentStream();
     /***
      * Set of middle steps may be used by the DeploymentStreams or LearningStreams. No handler is given to this statements.
      *
      * @return a collection of Statements.
      * @see eu.linksmart.api.event.types.Statement
      * */
-    public Collection<Statement> getAuxiliaryStream();
+    Collection<Statement> getAuxiliaryStream();
     /***
      * Reruns any selected statement per ID Statement defined either as AuxiliaryStatements, LearningStreams, or DeploymentStreams.
      *
@@ -163,14 +163,14 @@ public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
      * @return the selected statement as Statements.
      * @see eu.linksmart.api.event.types.Statement
      * */
-    public Statement getStreamStatement(String StatementId);
+    Statement getStreamStatement(String StatementId);
     /***
      * Models or evaluation may have custom setting. Here such setting are defined. The semantic of the settings are completely implementation dependent.
      *
      * @return a map of objects where the key represent the name of a setting property and the object the setting value
      *
      * */
-    public Map<String,Object> getSettings();
+    Map<String,Object> getSettings();
 
 
 

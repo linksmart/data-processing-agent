@@ -28,7 +28,7 @@ public class GPRTtype extends Event<Integer,Double> implements Serializable {
     @JsonPropertyDescription("The estimated value of an observedProperty from the observation. This will be intended as a Measure with value and unit.")
     @JsonProperty(value = "value")
     public Double getValue() {
-        return (Double)super.getValue();
+        return super.getValue();
     }
 
     @JsonPropertyDescription("The estimated value of an observedProperty from the observation. This will be intended as a Measure with value and unit.")
@@ -40,7 +40,7 @@ public class GPRTtype extends Event<Integer,Double> implements Serializable {
     @JsonPropertyDescription("Id of the device which reported the measurement.")
     @JsonProperty(value = "deviceID")
     public int getDeviceID() {
-        return (Integer)super.getId();
+        return super.getId();
     }
     @JsonPropertyDescription("Id of the device which reported the measurement.")
     @JsonProperty(value = "deviceID")
@@ -51,7 +51,7 @@ public class GPRTtype extends Event<Integer,Double> implements Serializable {
     @JsonPropertyDescription("Id of the variable or observedProperty of the reported value.")
     @JsonProperty(value = "variableID")
     public int getVariableID() {
-        return (Integer)getAttributeId();
+        return getAttributeId();
     }
     @JsonPropertyDescription("Id of the variable or observedProperty of the reported value.")
     @JsonProperty(value = "variableID")

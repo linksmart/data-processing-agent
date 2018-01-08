@@ -26,5 +26,5 @@ public interface SensorNavigationLink extends CommonControlInfo {
      */
     @JsonPropertyDescription("navigationLink is the relative or absolute URL that retrieves content of the Sensor.")
     @JsonSetter(value = "Sensor@iot.navigationLink")
-    default  void setSensorNavigationLink(String value){};
+    default  void setSensorNavigationLink(String value){}
 }

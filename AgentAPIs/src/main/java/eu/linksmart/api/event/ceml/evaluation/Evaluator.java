@@ -21,7 +21,7 @@ public interface Evaluator<T> extends JsonSerializable {
     void reBuild(Evaluator<T> evaluator);
 
     Map<String,EvaluationMetric< Number>> getEvaluationAlgorithms();
-    public void setParameters(Map<String, Object> parameters);
+    void setParameters(Map<String, Object> parameters);
 
     String report();
 

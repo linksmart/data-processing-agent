@@ -14,7 +14,7 @@ public interface ClassificationMetrics {
      *
      */
   
-        public static double accuracy(long[] confusionMatrix) {
+        static double accuracy(long[] confusionMatrix) {
 
             double denominator = confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()] +
                     confusionMatrix[ClassificationEvaluationValue.trueNegatives.ordinal()] +
@@ -35,7 +35,7 @@ public interface ClassificationMetrics {
      */
  
 
-        public static double precision(long[] confusionMatrix) {
+        static double precision(long[] confusionMatrix) {
             long denominator = ( confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()]);
             if (denominator > 0)
                 return ((double) confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()]) / denominator;
@@ -48,7 +48,7 @@ public interface ClassificationMetrics {
      * Sensitivity (also called the true positive rate, the recall, or probability of detection[1] in some fields) measures the proportion of positives that are correctly identified as such (e.g., the percentage of sick people who are correctly identified as having the condition).
      * see https://en.wikipedia.org/wiki/Sensitivity_and_specificity
      */
-        public static double sensitivity(long[] confusionMatrix) {
+        static double sensitivity(long[] confusionMatrix) {
             long denominator = (confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.falseNegatives.ordinal()]);
             if (denominator > 0)
                 return (  ((double) confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()]) / (double)denominator);
@@ -59,7 +59,7 @@ public interface ClassificationMetrics {
      * Recall in information retrieval is the fraction of the documents that are relevant to the query that are successfully retrieved.
      * see https://en.wikipedia.org/wiki/Precision_and_recall#Recall
      */
-    public static double recall(long[] confusionMatrix) {
+    static double recall(long[] confusionMatrix) {
         return sensitivity(confusionMatrix);
     }
     
@@ -69,7 +69,7 @@ public interface ClassificationMetrics {
      * see https://en.wikipedia.org/wiki/Sensitivity_and_specificity
      */
 
-        public static double specificity(long[] confusionMatrix) {
+        static double specificity(long[] confusionMatrix) {
 
             long denominator = (confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.trueNegatives.ordinal()] );
             if (denominator > 0)
@@ -86,7 +86,7 @@ public interface ClassificationMetrics {
      *
      */
   
-        public static double negativePredictiveValue(long[] confusionMatrix) {
+        static double negativePredictiveValue(long[] confusionMatrix) {
 
             long denominator = (confusionMatrix[ClassificationEvaluationValue.trueNegatives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.falseNegatives.ordinal()]);
             if (denominator > 0)
@@ -104,7 +104,7 @@ public interface ClassificationMetrics {
      *
      */
 
-        public static double fallOut(long[] confusionMatrix) {
+        static double fallOut(long[] confusionMatrix) {
             Double denominator = (double) (confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.trueNegatives.ordinal()]);
             if (denominator > 0)
                 return (confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()] / denominator);
@@ -117,7 +117,7 @@ public interface ClassificationMetrics {
      * see https://en.wikipedia.org/wiki/False_discovery_rate
      */
 
-        public static double falseDiscoveryRate(long[] confusionMatrix) {
+        static double falseDiscoveryRate(long[] confusionMatrix) {
             Double denominator = (double)(confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()]);
             if (denominator > 0)
                 return ( (double)confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()])/denominator;
@@ -128,7 +128,7 @@ public interface ClassificationMetrics {
      * In statistical hypothesis testing, a type I error is the incorrect rejection of a true null hypothesis (a "false positive"), while a type II error is incorrectly retaining a false null hypothesis (a "false negative").[1] More simply stated, a type I error is detecting an effect that is not present, while a type II error is failing to detect an effect that is present.
      * see https://en.wikipedia.org/wiki/Type_I_and_type_II_errors#False_positive_and_false_negative_rates
      */
-        public static double missRate(long[] confusionMatrix) {
+        static double missRate(long[] confusionMatrix) {
             long denominator = (confusionMatrix[ClassificationEvaluationValue.falseNegatives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()]);
             if (denominator > 0)
                 return ( ((double) confusionMatrix[ClassificationEvaluationValue.falseNegatives.ordinal()]) / denominator);
@@ -141,7 +141,7 @@ public interface ClassificationMetrics {
      * see https://en.wikipedia.org/wiki/Type_I_and_type_II_errors#False_positive_and_false_negative_rates
      */
 
-        public static double f1Score(long[] confusionMatrix) {
+        static double f1Score(long[] confusionMatrix) {
             double denominator = (( confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()] *2.0) + confusionMatrix[ClassificationEvaluationValue.falsePositives.ordinal()] + confusionMatrix[ClassificationEvaluationValue.falseNegatives.ordinal()]);
             if (denominator > 0)
                 return ( ( confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()] *2.0) / denominator);
@@ -158,7 +158,7 @@ public interface ClassificationMetrics {
      * https://en.wikipedia.org/wiki/Matthews_correlation_coefficient
      */
 
-        public static double matthewsCorrelationCoefficient(long[] confusionMatrix) {
+        static double matthewsCorrelationCoefficient(long[] confusionMatrix) {
 
             long TP = confusionMatrix[ClassificationEvaluationValue.truePositives.ordinal()];
             long TN = confusionMatrix[ClassificationEvaluationValue.trueNegatives.ordinal()];
@@ -180,7 +180,7 @@ public interface ClassificationMetrics {
      * https://en.wikipedia.org/wiki/Youden%27s_J_statistic
      */
 
-        public static double informedness(long[] confusionMatrix) {
+        static double informedness(long[] confusionMatrix) {
             return ( sensitivity(confusionMatrix) + specificity(confusionMatrix) - 1);
 
         }
@@ -195,7 +195,7 @@ public interface ClassificationMetrics {
      */
 
 
-        public static double markedness(long[] confusionMatrix) {
+        static double markedness(long[] confusionMatrix) {
             return ( precision(confusionMatrix) + negativePredictiveValue(confusionMatrix) - 1);
         }
 

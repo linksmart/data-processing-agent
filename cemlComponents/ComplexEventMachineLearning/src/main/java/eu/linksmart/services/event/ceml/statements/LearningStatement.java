@@ -11,7 +11,7 @@ import eu.linksmart.services.event.ceml.handlers.MapLearningHandler;
 import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.types.JsonSerializable;
-import eu.linksmart.services.event.core.StatementInstance;
+import eu.linksmart.services.event.types.StatementInstance;
 
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.

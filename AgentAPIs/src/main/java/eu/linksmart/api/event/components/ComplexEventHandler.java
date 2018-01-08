@@ -36,7 +36,7 @@ public interface ComplexEventHandler extends AnalyzerComponent{
      * Terminate the Handler, releasing any resource us by it.
      *
      * */
-    public void destroy();
+    void destroy();
 
 
 

@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
     private Configurator conf =  Configurator.getDefaultConfig();
 
-    public ComplexEventHandler(Statement query) throws StatementException, Exception {
+    public ComplexEventHandler(Statement query) throws Exception {
         super(query);
 
         this.query=query;

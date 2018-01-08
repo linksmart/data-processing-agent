@@ -17,7 +17,7 @@ public class IntervalDateSerializer extends JsonSerializer<Interval> {
     }
 
     @Override
-    public void serialize(Interval interval, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+    public void serialize(Interval interval, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeString(interval.format());
     }
 }

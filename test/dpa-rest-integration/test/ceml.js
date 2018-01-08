@@ -69,7 +69,7 @@ describe('Learning API (CEML)', function () {
                 ceml['name'] = Object.keys(res.body.resources)[0];
                 ceml['body'] = res.body.resources[ceml['name']];
                 done();
-            });
+    })
     });
 
     it('should learn incoming stream', function (done) {
@@ -120,7 +120,7 @@ describe('Learning API (CEML)', function () {
                 if (err) return done(err);
                 expect(res).to.have.deep.property('body.responses[0].messageType', 'SUCCESS');
                 done();
-            });
+    })
     });
 
     it('should return 404 for ceml after deleting', function (done) {
@@ -129,7 +129,7 @@ describe('Learning API (CEML)', function () {
             .end((err, res) => {
                 expect(res).to.have.deep.property('body.responses[0].status', 404);
                 done();
-            });
+    })
     });
 
 
