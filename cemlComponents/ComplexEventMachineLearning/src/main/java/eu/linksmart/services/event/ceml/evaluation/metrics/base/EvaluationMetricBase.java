@@ -8,7 +8,8 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.MetricDefinition;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationAlgorithmExtended;
 import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
 
     protected ComparisonMethod method= ComparisonMethod.More;
     @JsonIgnore
-    protected transient static Logger loggerService = Utils.initLoggingConf(EvaluationMetricBase.class);
+    protected transient static Logger loggerService = LogManager.getLogger(EvaluationMetricBase.class);
     @JsonProperty("Name")
     protected String name;
     @JsonProperty("Target")

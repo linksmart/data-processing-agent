@@ -4,14 +4,15 @@ import eu.linksmart.services.event.handler.base.BaseEventHandler;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.api.event.components.ComplexEventSyncHandler;
 import eu.linksmart.api.event.types.Statement;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
  * Created by José Ángel Carvajal on 16.12.2015 a researcher of Fraunhofer FIT.
  */
 public class ComplexEventSynchHandler extends BaseEventHandler implements ComplexEventSyncHandler {
-    protected transient Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
+    protected transient Logger loggerService = LogManager.getLogger(this.getClass());
     protected Statement statement;
 
 

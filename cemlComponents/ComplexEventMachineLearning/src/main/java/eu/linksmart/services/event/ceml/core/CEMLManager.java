@@ -22,8 +22,8 @@ import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import java.util.*;
@@ -62,7 +62,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     @JsonIgnore
     private transient Configurator conf = Configurator.getDefaultConfig();
     @JsonIgnore
-    private transient Logger loggerService = Utils.initLoggingConf(CEMLManager.class);
+    private transient Logger loggerService = LogManager.getLogger(CEMLManager.class);
     @JsonIgnore
     private transient boolean built =false;
     private boolean alwaysDeploy = false;

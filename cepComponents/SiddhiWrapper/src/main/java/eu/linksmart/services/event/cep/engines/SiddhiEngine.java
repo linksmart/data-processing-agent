@@ -8,8 +8,8 @@ import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.handler.SiddhiCEPHandler;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import eu.linksmart.services.event.cep.engines.intern.Const;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SiddhiEngine extends Component implements CEPEngine {
     private static String STATEMENT_INOUT_BASE_TOPIC = "queries/", DEFAULT_TYPE = "almanacDefault";
     private transient static Configurator conf =  Configurator.getDefaultConfig();
-    private transient Logger loggerService = Utils.initLoggingConf(this.getClass());
+    private transient Logger loggerService = LogManager.getLogger(this.getClass());
     static transient protected SiddhiManager siddhiManager = new SiddhiManager();
     protected Map<String,ExecutionPlanRuntime> hashExecutionPlanRuntime = new ConcurrentHashMap<>();
 

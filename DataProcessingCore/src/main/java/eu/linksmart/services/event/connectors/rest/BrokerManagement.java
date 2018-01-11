@@ -4,13 +4,13 @@ import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.services.event.connectors.MqttIncomingConnectorService;
 import eu.linksmart.services.event.core.DataProcessingCore;
-import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +25,7 @@ import java.util.*;
 @RestController("broker")
 public class BrokerManagement extends Component {
 
-    protected transient Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
+    protected transient Logger loggerService = LogManager.getLogger(this.getClass());
     protected transient Configurator conf =  Configurator.getDefaultConfig();
     public BrokerManagement() {
         super(EventRest.class.getSimpleName(), "REST API manage broker configurations", Feeder.class.getSimpleName());

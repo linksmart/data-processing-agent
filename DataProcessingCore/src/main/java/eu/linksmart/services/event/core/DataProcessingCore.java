@@ -18,9 +18,11 @@ import eu.linksmart.services.event.types.PersistentRequestInstance;
 import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.utils.function.Utils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -84,6 +86,12 @@ public class DataProcessingCore {
      * */
     private static synchronized boolean init(String args){
         started =true;
+        System.out.println("\n" +
+                "╦   ╦ ╔╗╔ ╦╔═  ╔═╗ ╔╦╗ ╔═╗ ╦═╗ ╔╦╗ R\t╦ ╔═╗ ╔╦╗ \t╔═╗ ╦══ ╔══ ╔╗╔ ╔╦╗ \n" +
+                "║   ║ ║║║ ╠╩╗  ╚═╗ ║║║ ╠═╣ ╠╦╝  ║   \t║ ║ ║  ║ \t╠═╣ ║ ╗ ╠══ ║║║  ║ \n" +
+                "╩═╝ ╩ ╝╚╝ ╩ ╩  ╚═╝ ╩ ╩ ╩ ╩ ╩╚═  ╩   \t╩ ╚═╝  ╩ \t╩ ╩ ╩═╝ ╚══ ╝╚╝  ╩ \n"+
+                ":: LinkSmart ::        (v"+ Utils.getVersion("linksmart.version")+")\n"+
+                ":: IoT Agent ::        (v"+ Utils.getVersion()+")\n"    );
         initConf(args);
 
 
@@ -146,7 +154,7 @@ public class DataProcessingCore {
 
         SharedSettings.setWill(ThingsRegistrationService.getReference().getThingString());
         SharedSettings.setWillTopic(conf.getString(Const.OGC_REGISTRATION_TOPIC_WILL));
-        loggerService = AgentUtils.initLoggingConf(DataProcessingCore.class);
+        loggerService = LogManager.getLogger(DataProcessingCore.class);
         if(args != null) {
             loggerService.info("Loading configuration form file " + args);
 
@@ -223,6 +231,7 @@ public class DataProcessingCore {
                     }
                 } catch (ClassNotFoundException e) {
                     loggerService.error(e.getMessage(), e);
+                    System.exit(-1);
                 }
             });
         }
@@ -293,6 +302,7 @@ public class DataProcessingCore {
                 Class.forName(engines.toString());
             } catch (ClassNotFoundException e) {
                 loggerService.error(e.getMessage(),e);
+                System.exit(-1);
             }
         //initializing engines
         for (CEPEngine dfw: CEPEngine.instancedEngines.values()  ) {

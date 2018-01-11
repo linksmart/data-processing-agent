@@ -29,7 +29,9 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
 
     String CEP_ENGINES_PATH = "cep_init_engines";
 
-    String DEFAULT_CONFIGURATION_FILE = "__def__conf__.cfg";
+    String DEFAULT_CONFIGURATION_FILE = "__def__agent__conf__.cfg";
+
+    String DEFAULT_DEBUG_CONFIGURATION_FILE = "log4j2.properties";
 
     String APPLICATION_CONFIGURATION_FILE = "conf.cfg";
     String ID_CONF_PATH = "agent_id";

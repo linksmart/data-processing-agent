@@ -28,14 +28,14 @@ import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.ceml.api.MqttCemlAPI;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.event.ceml.intern.Const;
 import org.apache.commons.math3.filter.*;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by angel on 13/11/15.
@@ -44,14 +44,17 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
 
     static AnalyzerComponent info;
     static transient private Configurator conf = Configurator.getDefaultConfig();
-    static transient private Logger loggerService = Utils.initLoggingConf(CEML.class);
+    static transient private Logger loggerService = LogManager.getLogger(CEML.class);
 
     static private Map<String, CEMLRequest> requests = new Hashtable<>();
 
     private static Map<String, KalmanFilter> filters = new Hashtable<>();
 
     static {
-
+        System.out.println("\n" +
+                "╔═╗ ╔═╗ ╔╦╗ ╔╦  \n" +
+                "║   ╠═  ║║║ ║  \n" +
+                "╩═╝ ╩═╝ ╩ ╩ ╩═╝ \n" );
         // Add configuration file of the local package
         Configurator.addConfFile(Const.CEML_DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();

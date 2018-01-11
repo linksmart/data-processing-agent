@@ -5,8 +5,8 @@ import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.client.fluent.*;
 
 import java.util.*;
@@ -19,7 +19,7 @@ public class HTTPPublisher implements Publisher{
     private List<String> outputs;
     private List<String> scopes;
     private String id;
-    private Logger loggerService = Utils.initLoggingConf(this.getClass());
+    private Logger loggerService = LogManager.getLogger(this.getClass());
     private transient Configurator conf = Configurator.getDefaultConfig();
     private Map<String,Request> requesters = new HashMap<>();
 
@@ -44,7 +44,7 @@ public class HTTPPublisher implements Publisher{
         List<Object> brokerHostname = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH);
         List<Object> brokerPort = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_HTTP_SERVERS_PORT_CONF_PATH);
         if(alias.size()!=brokerHostname.size()&& alias.size()!=brokerPort.size())
-            Utils.initLoggingConf(DefaultMQTTPublisher.class).error("Inconsistent configuration in "+
+            LogManager.getLogger(DefaultMQTTPublisher.class).error("Inconsistent configuration in "+
                             Const.EVENTS_OUT_HTTP_SERVERS_ALIASES_CONF_PATH+ " and/or " +
                             Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+ " and/or " +
                             Const.EVENTS_OUT_HTTP_SERVERS_PORT_CONF_PATH

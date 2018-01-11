@@ -7,8 +7,9 @@ import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
+import org.apache.logging.log4j.LogManager;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
             me= new MqttIncomingConnectorService();
         return me;
     }
-    protected transient Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
+    protected transient Logger loggerService = LogManager.getLogger(this.getClass());
     protected transient Configurator conf =  Configurator.getDefaultConfig();
 
     // protected List<StaticBroker> brokers = new ArrayList<>();

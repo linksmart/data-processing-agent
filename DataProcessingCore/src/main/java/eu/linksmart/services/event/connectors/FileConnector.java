@@ -3,12 +3,12 @@ package eu.linksmart.services.event.connectors;
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.services.event.feeders.BootstrappingBeanFeeder;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.AgentUtils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;
 
 import eu.linksmart.services.utils.configuration.Configurator;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -19,7 +19,7 @@ import java.util.List;
  * Created by José Ángel Carvajal on 13.08.2015 a researcher of Fraunhofer FIT.
  */
 public class FileConnector extends Component implements IncomingConnector {
-    static protected Logger loggerService = AgentUtils.initLoggingConf(FileConnector.class);
+    static protected Logger loggerService = LogManager.getLogger(FileConnector.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
     protected List<String> filePaths = new ArrayList<>();
 

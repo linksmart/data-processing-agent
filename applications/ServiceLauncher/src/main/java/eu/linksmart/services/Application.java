@@ -1,6 +1,7 @@
 package eu.linksmart.services;
 import eu.linksmart.services.event.core.DataProcessingCore;
 import eu.linksmart.services.event.intern.Const;
+import org.hibernate.validator.internal.engine.ConfigurationImpl;
 
 import java.util.Properties;
 
@@ -14,6 +15,8 @@ public class Application {
     public static void main(String[] args) {
 
         String confFile = Const.DEFAULT_CONFIGURATION_FILE;
+        System.setProperty("log4j.configuration",Const.DEFAULT_CONFIGURATION_FILE);
+        System.setProperty("log4j.configurationFile",Const.DEFAULT_DEBUG_CONFIGURATION_FILE);
         if(args.length>0)
             confFile= args[0];
 

@@ -13,12 +13,12 @@ import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.SensorImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ThingImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by José Ángel Carvajal on 28.07.2017 a researcher of Fraunhofer FIT.
@@ -32,7 +32,7 @@ public class ThingsRegistrationService {
     private Thing thing = new ThingImpl();
     private final Map<String,Datastream> datastreamMap = new Hashtable<>();
 
-    private Logger loggerService = AgentUtils.initLoggingConf(ThingsRegistrationService.class);
+    private Logger loggerService = LogManager.getLogger(ThingsRegistrationService.class);
     private Timer timer;
     private boolean changed=true;
     private static ThingsRegistrationService registrationService = new ThingsRegistrationService();

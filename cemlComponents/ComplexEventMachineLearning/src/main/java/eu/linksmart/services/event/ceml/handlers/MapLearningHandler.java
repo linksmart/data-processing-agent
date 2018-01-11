@@ -12,8 +12,8 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -24,7 +24,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
 
     private static final String RETRAIN_EVERY = "RetrainEvery";
     static protected Configurator conf = Configurator.getDefaultConfig();
-    static protected Logger loggerService = Utils.initLoggingConf(MapLearningHandler.class);
+    static protected Logger loggerService = LogManager.getLogger(MapLearningHandler.class);
     final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;

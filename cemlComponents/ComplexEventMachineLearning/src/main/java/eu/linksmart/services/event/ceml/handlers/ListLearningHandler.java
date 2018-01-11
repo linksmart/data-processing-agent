@@ -1,7 +1,6 @@
 package eu.linksmart.services.event.ceml.handlers;
 
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.handler.base.BaseListEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -10,8 +9,8 @@ import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
 public  class ListLearningHandler extends BaseListEventHandler {
 
     static protected Configurator conf = Configurator.getDefaultConfig();
-    static protected Logger loggerService = Utils.initLoggingConf(ListLearningHandler.class);
+    static protected Logger loggerService = LogManager.getLogger(ListLearningHandler.class);
     final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;

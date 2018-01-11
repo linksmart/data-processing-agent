@@ -14,7 +14,8 @@ import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
 import eu.linksmart.services.event.ceml.evaluation.metrics.InitialSamples;
 import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implements TumbleEvaluator<Integer>  {
 
     @JsonIgnore
-    protected static Logger loggerService = Utils.initLoggingConf(DoubleTumbleWindowEvaluator.class);
+    protected static Logger loggerService = LogManager.getLogger(DoubleTumbleWindowEvaluator.class);
     @JsonProperty("WindowEvaluators")
     private WindowEvaluator[] windowEvaluators = new WindowEvaluator[2];
 

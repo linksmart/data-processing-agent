@@ -6,7 +6,8 @@ import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,7 +37,7 @@ import java.util.*;
  * Created by José Ángel Carvajal on 10.04.2017 a researcher of Fraunhofer FIT.
  */
 @Configuration
-@PropertySource("__def__conf__.cfg")
+@PropertySource("__def__agent__conf__.cfg")
 @EnableAutoConfiguration
 @ConfigurationProperties
 @SpringBootApplication
@@ -44,7 +45,7 @@ import java.util.*;
 @EnableSwagger2
 public class RestInit {
     static Properties info = null;
-    protected transient static Logger loggerService = AgentUtils.initLoggingConf(RestInit.class);
+    protected transient static Logger loggerService = LogManager.getLogger(RestInit.class);
     private static Configurator conf;
     private static boolean la = false;
     private static boolean gpl = false;
@@ -55,7 +56,7 @@ public class RestInit {
         try {
             info = AgentUtils.createPropertyFiles("service.info");
         } catch (IOException e) {
-            AgentUtils.initLoggingConf(RestInit.class).error(e.getMessage(), e);
+            LogManager.getLogger(RestInit.class).error(e.getMessage(), e);
         }
         if (conf.containsKeyAnywhere(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING))
             Arrays.asList(conf.getStringArray(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)).forEach(s -> {

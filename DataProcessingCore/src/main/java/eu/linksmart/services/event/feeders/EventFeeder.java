@@ -11,12 +11,12 @@ import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
     protected Configurator conf =  Configurator.getDefaultConfig();
     protected Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();
     protected Map<String,String> classToAlias= new Hashtable<String, String>();
-    protected Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
+    protected Logger loggerService = LogManager.getLogger(this.getClass());
 
     private Map<String, Class> compiledTopicClass = new Hashtable<>(), aliasToClass =new Hashtable<>();
 

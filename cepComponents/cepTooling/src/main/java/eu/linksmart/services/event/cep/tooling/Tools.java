@@ -173,7 +173,7 @@ public class Tools {
                 if(ob.getPhenomenonTime().after(getDateNow()))
                     EsperEngine.getEngine().setEngineTimeTo(ob.getDate());
             } catch (Exception e) {
-                Utils.initLoggingConf(Tools.class).error(e.getMessage(),e.getCause());
+                LogManager.getLogger(Tools.class).error(e.getMessage(),e.getCause());
             }*/
         return ob;
 

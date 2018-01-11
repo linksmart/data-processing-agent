@@ -5,12 +5,12 @@ import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.mqtt.broker.Broker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBrokerService;
 import io.swagger.client.model.Service;
 import io.swagger.client.model.ServiceDocs;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.InetAddress;
 import java.util.*;
@@ -25,7 +25,7 @@ public class ServiceRegistratorService implements Observer{
     private transient static Properties info = null;
     private final EditableService myRegistration;
     private static final String restAPIName= "Agent RESTful API";
-    private transient final static Logger loggerService = AgentUtils.initLoggingConf(ServiceRegistratorService.class);
+    private transient final static Logger loggerService = LogManager.getLogger(ServiceRegistratorService.class);
     private transient final static Configurator conf = Configurator.getDefaultConfig();
     public static ConcurrentMap<String,Object> meta = new ConcurrentHashMap<>();
     private final StaticBroker broker;

@@ -12,7 +12,8 @@ import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 
 import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ import java.util.UUID;
 public class CEMLRest extends Component implements IncomingConnector{
 
     // private Configurator conf = Configurator.getDefaultConfig();
-     private Logger loggerService = Utils.initLoggingConf(CEML.class);
+     private Logger loggerService = LogManager.getLogger(CEML.class);
 
     private Map<String, CEMLRequest> requests = new Hashtable<>();
 

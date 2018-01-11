@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import eu.linksmart.api.event.types.PersistentRequest;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import io.swagger.annotations.ApiModelProperty;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.*;
  * Created by José Ángel Carvajal on 30.10.2017 a researcher of Fraunhofer FIT.
  */
 public abstract class PersistentRequestInstance implements PersistentRequest {
-    protected static final transient  Logger loggerService = AgentUtils.initLoggingConf(PersistentRequestInstance.class);
+    protected static final transient  Logger loggerService = LogManager.getLogger(PersistentRequestInstance.class);
     protected static final transient  Configurator conf =  Configurator.getDefaultConfig();
     private static final transient Timer persistentRequestTracker = new Timer();
     private static final transient List<PersistentRequestInstance> requests = new ArrayList<>();

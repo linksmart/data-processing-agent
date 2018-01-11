@@ -13,10 +13,10 @@ import eu.linksmart.services.event.connectors.mqtt.IncomingMqttObserver;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
+import org.apache.logging.log4j.LogManager;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -32,7 +32,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     static private Logger loggerService ;
     static {
         try {
-            loggerService = Utils.initLoggingConf(MqttCemlAPI.class);
+            loggerService = LogManager.getLogger(MqttCemlAPI.class);
             conf = Configurator.getDefaultConfig();
             me= new MqttCemlAPI();
         } catch (Exception e) {

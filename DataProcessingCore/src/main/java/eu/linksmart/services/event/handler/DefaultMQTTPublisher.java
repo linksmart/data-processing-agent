@@ -6,10 +6,10 @@ import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
+import org.apache.logging.log4j.LogManager;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.net.MalformedURLException;
@@ -27,7 +27,7 @@ public class DefaultMQTTPublisher implements Publisher {
 
     private String will=null;
     private Map<String, StaticBroker> brokers = new Hashtable<>();
-    private transient Logger loggerService = Utils.initLoggingConf(this.getClass());
+    private transient Logger loggerService = LogManager.getLogger(this.getClass());
     private transient Configurator conf = Configurator.getDefaultConfig();
     /***
      * Location are the brokers unknown with an alias by the Handlers

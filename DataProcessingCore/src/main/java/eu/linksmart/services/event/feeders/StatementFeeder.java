@@ -13,8 +13,8 @@ import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.services.utils.configuration.Configurator;
-import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * Created by angel on 26/11/15.
  */
 public class StatementFeeder implements Feeder<Statement> {
-    protected static Logger loggerService = Utils.initLoggingConf(StatementFeeder.class);
+    protected static Logger loggerService = LogManager.getLogger(StatementFeeder.class);
     protected static Configurator conf =  Configurator.getDefaultConfig();
 
 

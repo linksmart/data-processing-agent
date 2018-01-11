@@ -9,9 +9,9 @@ import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.connectors.FileConnector;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.List;
  * Created by José Ángel Carvajal on 19.06.2017 a researcher of Fraunhofer FIT.
  */
 public class BigFileConnector extends Component implements IncomingConnector {
-    static protected Logger loggerService = AgentUtils.initLoggingConf(FileConnector.class);
+    static protected Logger loggerService = LogManager.getLogger(FileConnector.class);
     static protected Configurator conf =  Configurator.getDefaultConfig();
     final Class<? extends EventEnvelope> type;
     protected List<String> filePaths = new ArrayList<>();

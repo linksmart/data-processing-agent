@@ -9,7 +9,6 @@ import eu.linksmart.api.event.components.Enveloper;
 import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import eu.linksmart.services.utils.serialization.Serializer;
-import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
 

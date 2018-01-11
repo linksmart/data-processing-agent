@@ -1,7 +1,6 @@
 package eu.linksmart.services.event.core.extensions;
 
 import eu.linksmart.services.event.intern.Const;
-import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
@@ -9,7 +8,8 @@ import io.swagger.client.ApiClient;
 import io.swagger.client.api.ScApi;
 import io.swagger.client.model.APIIndex;
 import io.swagger.client.model.Service;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.net.URI;
@@ -27,7 +27,7 @@ public class KeyRetriever {
     // intentionally it's using the default one and not the serialized defined on
     private Deserializer deserializer = new DefaultDeserializer();
     private static Configurator conf = Configurator.getDefaultConfig();
-    private static Logger loggerService = AgentUtils.initLoggingConf(KeyRetriever.class);
+    private static Logger loggerService = LogManager.getLogger(KeyRetriever.class);
     private static KeyRetriever defaultRetriever = init();
     private int interval;
     public ConcurrentMap<String,String> idsKey = new ConcurrentHashMap<>();

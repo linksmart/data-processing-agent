@@ -4,7 +4,6 @@ import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.event.intern.AgentUtils;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
@@ -12,7 +11,8 @@ import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.utils.configuration.Configurator;
 import io.swagger.annotations.*;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +30,7 @@ import java.net.URISyntaxException;
 
 @RestController("statement")
 public class StatementRest extends Component implements IncomingConnector {
-    protected static Logger loggerService = AgentUtils.initLoggingConf(StatementRest.class);
+    protected static Logger loggerService = LogManager.getLogger(StatementRest.class);
     protected Configurator conf = Configurator.getDefaultConfig();
 
 

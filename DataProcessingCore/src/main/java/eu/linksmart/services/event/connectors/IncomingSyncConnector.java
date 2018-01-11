@@ -4,7 +4,8 @@ import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.intern.AgentUtils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public abstract class IncomingSyncConnector implements IncomingConnector {
    // protected Map<String,Map<String, Map<String, List<Observer>>>> protocolHostTopicToObserver = new ConcurrentHashMap<>();
 
     static final private String ALL = "ALL";
-    protected Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
+    protected Logger loggerService = LogManager.getLogger(this.getClass());
 
     //protected Map<String, Map<String, List<Observer>>> protocolTopicToObserver = new ConcurrentHashMap<>();
     protected Map<String, List<Observer>> topicToObserver = new ConcurrentHashMap<>();

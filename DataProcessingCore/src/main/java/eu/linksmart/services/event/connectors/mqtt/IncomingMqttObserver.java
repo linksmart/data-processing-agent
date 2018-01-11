@@ -12,7 +12,8 @@ import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.subscription.MqttMessageObserver;
 import eu.linksmart.services.utils.mqtt.types.MqttMessage;
 import eu.linksmart.testing.tooling.MessageValidator;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 public abstract class IncomingMqttObserver implements MqttMessageObserver {
 
     protected transient long debugCount=0;
-    protected transient Logger loggerService = AgentUtils.initLoggingConf(this.getClass());
+    protected transient Logger loggerService = LogManager.getLogger(this.getClass());
     protected transient Configurator conf =  Configurator.getDefaultConfig();
 
     protected StaticBroker brokerService;

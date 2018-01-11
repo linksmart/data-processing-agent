@@ -12,7 +12,8 @@ import eu.linksmart.services.event.ceml.evaluation.metrics.base.EvaluationMetric
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import java.util.Map;
  */
 public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
     @JsonIgnore
-    protected static Logger loggerService = Utils.initLoggingConf(WindowEvaluator.class);
+    protected static Logger loggerService = LogManager.getLogger(WindowEvaluator.class);
 
     protected Map<String,EvaluationMetricBase<Double>> evaluationAlgorithms = new HashMap<>();
 
