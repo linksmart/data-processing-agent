@@ -6,7 +6,8 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import weka.core.Attribute;
 import weka.core.Instances;
 
@@ -25,7 +26,7 @@ public class DataStructure extends DataDefinition {
     @JsonProperty(value = "AttributesStructures")
     private ArrayList<AttributeStructure> attributesStructures = null;
     @JsonIgnore
-    private Logger loggerService = Utils.initLoggingConf(DataStructure.class);
+    private Logger loggerService = LogManager.getLogger(DataStructure.class);
     @JsonIgnore
     private String[] usedBy = null;
     @JsonIgnore

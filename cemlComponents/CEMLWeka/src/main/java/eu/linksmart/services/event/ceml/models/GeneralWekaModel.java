@@ -16,7 +16,8 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.commons.lang3.math.NumberUtils;
 import weka.classifiers.Classifier;
 import weka.classifiers.UpdateableClassifier;
@@ -41,7 +42,7 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
     @JsonProperty(value = "Evaluation")
    // public Evaluator evaluation;
     private transient Configurator conf = Configurator.getDefaultConfig();
-    static transient private Logger loggerService = Utils.initLoggingConf(GeneralWekaModel.class);
+    static transient private Logger loggerService = LogManager.getLogger(GeneralWekaModel.class);
     public GeneralWekaModel(ArrayList<TargetRequest> targets,Map<String,Object> parameters,Object learner) {
         super(targets,parameters,new DoubleTumbleWindowEvaluator(targets),learner);
     }

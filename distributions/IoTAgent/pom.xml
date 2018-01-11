@@ -3,7 +3,7 @@
     <parent>
         <groupId>eu.linksmart.services.events.gpl.distributions</groupId>
         <artifactId>parent.reactor</artifactId>
-        <version>1.7.1-SNAPSHOT</version>
+        <version>1.8.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>iot.learning.universal.agent</artifactId>
@@ -12,48 +12,144 @@
     <dependencies>
        <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>ServiceLouncher</artifactId>
+            <artifactId>ServiceLauncher</artifactId>
            <version>${ls.se.agents.version}</version>
+           <exclusions>
+               <exclusion>
+                   <groupId>ch.qos.logback</groupId>
+                   <artifactId>logback-classic</artifactId>
+               </exclusion>
+               <exclusion>
+                   <groupId>org.slf4j</groupId>
+                   <artifactId>slf4j-log4j12</artifactId>
+               </exclusion>
+               <exclusion>
+                   <groupId>ch.qos.logback</groupId>
+                   <artifactId>logback-core</artifactId>
+               </exclusion>
+               <exclusion>
+                   <artifactId>log4j-over-slf4j</artifactId>
+                   <groupId>org.slf4j</groupId>
+               </exclusion>
+               <exclusion>
+                   <groupId>log4j</groupId>
+                   <artifactId>log4j</artifactId>
+               </exclusion>
+               <exclusion>
+                   <groupId>org.slf4j</groupId>
+                   <artifactId>slf4j-simple</artifactId>
+               </exclusion>
+           </exclusions>
        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>ceml</artifactId>
-            <version>${ls.se.agents.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>ceml.rest.api</artifactId>
-            <version>${ls.se.agents.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>configuration.agent.learning.agent</artifactId>
-            <version>${ls.se.agents.version}</version>
-        </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events.gpl</groupId>
             <artifactId>wrapper.esper</artifactId>
             <version>${ls.se.agents.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>PythonModelsIntegrator</artifactId>
-            <version>${ls.se.agents.version}</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
-            <version>${ls.se.agents.version}</version>
+            <groupId>com.fasterxml</groupId>
+            <artifactId>classmate</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>LinearRegressionModel</artifactId>
-            <version>${ls.se.agents.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.24</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.24</version>
+        </dependency>
     </dependencies>
     <build>
+        <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
         <plugins>
 
 
@@ -62,13 +158,15 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <!-- nothing here -->
             </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
 
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
 
         </plugins>
 

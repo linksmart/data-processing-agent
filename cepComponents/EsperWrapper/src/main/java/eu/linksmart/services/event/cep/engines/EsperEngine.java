@@ -18,7 +18,8 @@ import eu.linksmart.services.event.cep.engines.intern.Const;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.function.Utils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +37,7 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
 
     private Map<String, String> fullTypeNameToAlias = new HashMap<>();
     private Map<String,Statement> deployedStatements = new Hashtable<>();
-    private  Logger loggerService = Utils.initLoggingConf(this.getClass());
+    private  Logger loggerService = LogManager.getLogger(this.getClass());
     private Configurator conf =  Configurator.getDefaultConfig();
 
     private boolean SIMULATION_EXTERNAL_CLOCK = false;
