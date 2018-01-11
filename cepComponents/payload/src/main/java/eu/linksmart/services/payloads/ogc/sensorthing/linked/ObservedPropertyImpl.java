@@ -2,13 +2,10 @@ package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
-import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.ObservedProperty;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
 
-import javax.persistence.OneToMany;
 import java.util.List;
-import java.util.Set;
 
 /*
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
