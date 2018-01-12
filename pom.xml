@@ -129,8 +129,8 @@
         <!-- configuration settings  -->
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>{encoding}</project.reporting.outputEncoding>
-        <project.build.sourceEncoding>{encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <start-class>eu.linksmart.services.Application</start-class>
         <maven.version>3.0.4</maven.version>
