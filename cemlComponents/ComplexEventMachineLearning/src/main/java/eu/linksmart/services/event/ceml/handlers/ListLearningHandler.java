@@ -1,6 +1,8 @@
 package eu.linksmart.services.event.ceml.handlers;
 
+import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.handler.base.BaseListEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -8,10 +10,13 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.security.provider.SHA;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +32,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
     final protected CEMLRequest originalRequest;
     final protected Model model;
     final protected DataDescriptors descriptors;
+    final private Publisher publisher;
 
     public ListLearningHandler(Statement statement) {
         super(statement);
@@ -36,7 +42,10 @@ public  class ListLearningHandler extends BaseListEventHandler {
         model = originalRequest.getModel();
         descriptors = originalRequest.getDescriptors();
 
-
+        if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
+            publisher = new DefaultMQTTPublisher(statement, SharedSettings.getWill(),SharedSettings.getWillTopic());
+        else
+            publisher=null;
 
     }
 
@@ -58,6 +67,13 @@ public  class ListLearningHandler extends BaseListEventHandler {
         return aux;
     }
     protected void learn(List input) {
+        if(input!= null && publisher != null)
+            try {
+                publisher.publish(SharedSettings.getSerializer().serialize(input));
+            } catch (IOException e) {
+                loggerService.error(e.getMessage(),e);
+            }
+
         // learning process with independent learning input and learning target/ground truth, and  prediction input and evaluation ground truth
         if(input!=null&&input.size()>=descriptors.size()+descriptors.getTargetSize()){
             try {
@@ -123,29 +139,6 @@ public  class ListLearningHandler extends BaseListEventHandler {
             originalRequest.report();
         }
     }
-    static public void processMessage(List input, DataDescriptors  descriptors,Model model, CEMLRequest originalRequest) {
-        if(input!=null&&input.size()>=descriptors.size()){
-            try {
-                List measuredTargets =  input.subList(descriptors.getInputSize(),input.size());
-                List withoutTarget = input.subList(0, descriptors.getInputSize());
 
-                List prediction = (List) model.predict(withoutTarget).getPrediction();
-
-                model.learn(input);
-
-                model.getEvaluator().evaluate(prediction, measuredTargets);
-
-                if(model.getEvaluator().isDeployable())
-                    originalRequest.deploy();
-                else
-                    originalRequest.undeploy();
-
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(),e);
-            }
-
-            originalRequest.report();
-        }
-    }
 
 }

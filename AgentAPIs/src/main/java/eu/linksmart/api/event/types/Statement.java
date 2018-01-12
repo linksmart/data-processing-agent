@@ -49,7 +49,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @return  aliases of the endpoints as string
      * */
-    String[] getScope();
+    List<String> getScope();
     /***
      * The output message handler (broker/http server) number i of the statement
      *
@@ -122,9 +122,9 @@ public interface Statement extends JsonSerializable, PersistentRequest {
     /***
      * Setts the scope. The scope is the output endpoints (e.g. broker, http server) where the events will be published
      *
-     * @param scopes  are a list of  aliases of the endpoints where will be published
+     * @param scope are a list of  aliases of the endpoints where will be published
      * */
-    void setScope(String[] scopes);
+    void setScope(List<String> scope);
     /***
      * The output topics/paths where the events will be published/posted
      *

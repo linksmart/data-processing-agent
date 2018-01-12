@@ -71,7 +71,7 @@ public class HTTPPublisher implements Publisher{
 
     public HTTPPublisher(Statement statement) {
         outputs = statement.getOutput();
-        scopes =  Arrays.asList(statement.getScope());
+        scopes =  statement.getScope();
         id = statement.getId();
         try {
             initScopes();

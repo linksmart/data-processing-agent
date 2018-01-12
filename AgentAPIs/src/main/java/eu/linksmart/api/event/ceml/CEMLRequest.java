@@ -73,6 +73,13 @@ import java.util.Map;
  * @see eu.linksmart.api.event.ceml.prediction.Prediction
  */
 public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
+
+    // available settings for Settings MAP
+    // AlwaysDeploy = true -> deploys a model no matter if is ready or not
+    // IgnoreBuildFailures -> skips the error handling in building process
+    // p <= BuildTillPhase -> builds till phase equal or less than this number. All phases above are ignored
+    // ReportingEnabled -> enables/disables the periodic reports while learning
+    String ALWAYS_DEPLOY = "AlwaysDeploy", IGNORE_BUILD_FAILURES = "IgnoreBuildFailures", BUILD_TILL_PHASE = "BuildTillPhase", REPORTING_ENABLED = "ReportingEnabled", PUBLISH_INTERMEDIATE_STEPS="PublishIntermediateSteps";
     /***
      * Setts/inserts/starts the deployment statements and objects in to the CEPEngine.
      *
@@ -94,8 +101,20 @@ public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
     /***
      * Provide a report of the state of the statement. Where the report must be generated is implementation dependent.
      *
+     *
+     * @param reportObject the object containing the report
+     *
      * */
-    void report();
+    void report(Object reportObject);
+    /***
+     * Provide a report of the state of the statement. Where the report must be generated is implementation dependent.
+     *
+     *
+     * */
+    default void report() {
+        if((boolean)getSettings().getOrDefault(REPORTING_ENABLED,false))
+            report(getLastPrediction());
+    }
     /***
      * Description of the data expected by the model
      *

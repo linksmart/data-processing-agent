@@ -2,8 +2,10 @@ package eu.linksmart.services.event.ceml.handlers;
 
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
+import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
@@ -11,10 +13,12 @@ import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -37,6 +41,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
    private List<List> targets;
     private List<Map> rawMaps;
     private List<Map> inputs;
+    final private Publisher publisher;
 
 
 
@@ -56,7 +61,10 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         }else {
             retrainEvery = 1;
         }
-
+        if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
+            publisher = new DefaultMQTTPublisher(statement, SharedSettings.getWill(),SharedSettings.getWillTopic());
+        else
+            publisher=null;
     }
     private void elementsAssurance(Map rawMap, Map  withoutTarget, List measuredTargets){
         for (DataDescriptor descriptor : descriptors)
@@ -101,7 +109,18 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     }
     @Override
     protected void processMessage(Map eventMap) {
+        if(eventMap!= null && publisher != null)
+            try {
+                publisher.publish(SharedSettings.getSerializer().serialize(eventMap));
+            } catch (IOException e) {
+                loggerService.error(e.getMessage(),e);
+            }
+
         if(eventMap!=null){
+
+            if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
+                originalRequest.report(eventMap);
+
             try {
                 Map  withoutTarget= new HashMap<>();
                 List measuredTargets = new ArrayList<>();

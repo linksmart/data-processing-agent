@@ -8,7 +8,9 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.event.handler.ComplexEventHandler;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
+import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.SharedSettings;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -46,7 +48,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     /**
      * Define which handler will be instantiate in the CEP engine when no Handler was specifically defined.
      * */
-    public static String DEFAULT_HANDLER = "eu.linksmart.services.event.handler.ComplexEventHandler";
+    public static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
 
 
     @JsonProperty("name")
@@ -70,8 +72,8 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @ApiModelProperty(notes = "Server where the events will be pushed")
     @JsonProperty("scope")
-    protected String[] scope={"outgoing"};
-    protected static final String uuid =UUID.randomUUID().toString();
+    protected List<String> scope= Collections.singletonList("outgoing");
+
     @JsonIgnore
     protected transient static final Object lock =new Object();
 
@@ -108,27 +110,20 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public StatementInstance() {
         super();
         setGenerateID();
-        setGenerateOutput();
     }
 
-    public StatementInstance(String name, String statement, String[] scope) {
+    public StatementInstance(String name, String statement, List<String> scope) {
         super();
         this.name = name;
         this.statement = statement;
         this.scope = scope;
         setGenerateID();
-        setGenerateOutput();
     }
 
     private void setGenerateID(){
         if(( ( id==null || "".equals(id)) && name!=null && statement!= null && !"".equals(name) && !"".equals(statement) )) {
             setId( Utils.hashIt(name + statement));
         }
-    }
-    private void setGenerateOutput() {
-        if ((output == null || output.size() < 1) && id != null && !"".equals(id))
-            setOutput(Arrays.asList(DefaultMQTTPublisher.defaultOutput() + STATEMENT_ID_MARK + "/"));
-
     }
 
     @Override
@@ -176,7 +171,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     @Override
-    public String[] getScope(){
+    public List<String> getScope(){
         return  scope;
     }
     @Override
@@ -189,22 +184,15 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
     @Override
     public String getScope(int index){
-        if (scope==null)
-            initScope();
 
-        return  scope[index];
+        return scope.get(index);
     }
 
     @Override
     public List<String> getOutput() {
-        setGenerateOutput();
-        return output.stream().map(s->s.replace(STATEMENT_ID_MARK,id)).collect(Collectors.toList());
+        return output.stream().map(s->AgentUtils.topicReplace(s, id)).collect(Collectors.toList());
     }
 
-    private void initScope(){
-        scope =new String[1];
-        scope[0] ="local";
-    }
     @Override
     public boolean equals(Object object) {
 
@@ -216,7 +204,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
                         this.output.equals(obj.getOutput()) &&
                         this.CEHandler.equals(obj.getCEHandler()) &&
                         this.stateLifecycle.equals(obj.getStateLifecycle()) &&
-                        Arrays.deepEquals(this.scope, obj.getScope()) &&
+                        this.scope.equals(obj.getScope()) &&
                         this.targetAgents.equals(obj.getTargetAgents()) &&
                         id.equals(obj.getId())
                 );
@@ -229,11 +217,11 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
                this.output +
                this.CEHandler +
                this.stateLifecycle +
-               Arrays.toString(this.scope) +
+               this.scope +
                this.targetAgents.stream().map(Object::toString).collect(Collectors.joining()) +
                id).hashCode();
    }
-    public void setScope(String[] scope) {
+    public void setScope(List<String> Scope) {
         this.scope = scope;
     }
 
@@ -268,7 +256,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
     public void setId(String id){
         this.id =id;
-        setGenerateOutput();
     }
 
     public void setTargetAgents(List<String> targetAgents) {
@@ -298,7 +285,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @Override
     public JsonSerializable build() throws TraceableException, UntraceableException {
         setGenerateID();
-        setGenerateOutput();
+
         return this;
     }
 

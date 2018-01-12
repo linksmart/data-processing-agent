@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.event.ceml.intern.Const;
 import eu.linksmart.services.event.types.PersistentRequestInstance;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
@@ -33,12 +34,6 @@ import java.util.stream.Collectors;
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
 public class CEMLManager extends PersistentRequestInstance implements CEMLRequest {
-    // available settings for Settings MAP
-    // AlwaysDeploy = true -> deploys a model no matter if is ready or not
-    // IgnoreBuildFailures -> skips the error handling in building process
-    // p <= BuildTillPhase -> builds till phase equal or less than this number. All phases above are ignored
-    // ReportingEnabled -> enables/disables the periodic reports while learning
-    public static final String ALWAYS_DEPLOY = "AlwaysDeploy", IGNORE_BUILD_FAILURES = "IgnoreBuildFailures", BUILD_TILL_PHASE = "BuildTillPhase", REPORTING_ENABLED = "ReportingEnabled";
     @JsonProperty(value = "Name")
     protected String name;
     @JsonProperty(value = "Descriptors")
@@ -160,11 +155,9 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     }
 
     @Override
-    public void report() {
+    public void report(Object reportObject) {
         try {
-            if(settings.containsKey(CEMLManager.REPORTING_ENABLED) && (boolean) settings.get(CEMLManager.REPORTING_ENABLED))
-                CEML.report(name,SharedSettings.getSerializer().toString(lastPrediction));
-
+             CEML.report(name,SharedSettings.getSerializer().toString(reportObject));
         }catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         }
@@ -214,34 +207,47 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
             if(phasesDone[1] && 2 <= buildTill ) {
                 if (auxiliaryStreams != null)
                     for (Statement statement : auxiliaryStreams) {
-                        statement.setCEHandler("");
-                        statement.toRegister(false);
-                        statement.setName(name + "/" + "Auxiliary/" + String.valueOf(statementsCounter[0]) + "/" + id );
-                        statement.setId(name + "/" + "A/" + String.valueOf(statementsCounter[0]) + "/" + id );
-                        statement.setStatement(statement.getStatement().replace("<id>",name));
-                        statement.setOutput(null);
+
+                        if(!(boolean) settings.getOrDefault(PUBLISH_INTERMEDIATE_STEPS,false)) {
+                            statement.setCEHandler("");
+                            statement.setOutput(null);
+                        }else {
+                            statement.setOutput(Collections.singletonList(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)));
+                            statement.setScope(Collections.singletonList(conf.getString(Const.CEML_MQTT_BROKER_HOST)));
+                        }
+                        statement.toRegister( false);
+                        statement.setName(name + "/" + "Auxiliary/" + String.valueOf(statementsCounter[0]) + "/" + id);
+                        statement.setId(name + "/" + "A/" + String.valueOf(statementsCounter[0]) + "/" + id);
+                        statement.setStatement(statement.getStatement().replace("<id>", name));
                         statement.build();
                         statementsCounter[0]++;
                     }
-                phasesDone[2] =  (auxiliaryStreams == null || (auxiliaryStreams.size() == statementsCounter[0]));
+                phasesDone[2] = (auxiliaryStreams == null || (auxiliaryStreams.size() == statementsCounter[0]));
 
                 if (learningStatements != null && 3 <= buildTill)
                     for (LearningStatement statement : learningStatements) {
+
+                        if(!(boolean) settings.getOrDefault(PUBLISH_INTERMEDIATE_STEPS,false)) {
+                            statement.setCEHandler("");
+                            statement.setOutput(null);
+                        }else
+                            statement.setOutput(Collections.singletonList(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)));
+
                         statement.setRequest(this);
                         statement.setName(name + "/" + "Learning/" + String.valueOf(statementsCounter[0]) + "/" + id);
-                        statement.setId(name + "/" + "L/" + String.valueOf(statementsCounter[0]) + "/" + id  );
-                        statement.setStatement(statement.getStatement().replace("<id>",name));
-                        statement.setOutput(null);
+                        statement.setId(name + "/" + "L/" + String.valueOf(statementsCounter[0]) + "/" + id);
+                        statement.setStatement(statement.getStatement().replace("<id>", name));
+
                         statement.build();
                         statementsCounter[1]++;
                     }
-                phasesDone[3]=(learningStatements != null && learningStatements.size() == statementsCounter[1]);
+                phasesDone[3] = (learningStatements != null && learningStatements.size() == statementsCounter[1]);
 
                 if (deployStatements != null && 4 <= buildTill)
                     for (Statement statement : deployStatements) {
                         statement.setName(name + "/" + "Learning/" + String.valueOf(statementsCounter[0]) + "/" + id);
                         statement.setId(name + "/" + "D/" + String.valueOf(statementsCounter[0]) + "/" + id);
-                        statement.setStatement(statement.getStatement().replace("<id>",name));
+                        statement.setStatement(statement.getStatement().replace("<id>", name));
                         statement.build();
                         statementsCounter[2]++;
 

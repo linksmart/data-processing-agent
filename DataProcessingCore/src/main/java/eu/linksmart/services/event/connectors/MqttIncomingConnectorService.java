@@ -43,7 +43,7 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
         try {
             StaticBroker broker = new StaticBroker(alias, SharedSettings.getWill(), SharedSettings.getWillTopic());
             listener.setBrokerService(broker);
-            broker.addListener(AgentUtils.topicReplace(topic), listener);
+            broker.addListener(AgentUtils.topicReplace(topic, ""), listener);
 
             loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") with incoming events broker alias: " + alias + "  URL: " +broker.getConfiguration().getURL()+topic);
             listeners.putIfAbsent(alias,new Hashtable<>());

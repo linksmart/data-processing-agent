@@ -13,6 +13,8 @@ import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.services.event.types.StatementInstance;
 
+import java.util.Collections;
+
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
@@ -61,7 +63,7 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
     @JsonIgnore
     private CEMLRequest manager =null;
     public LearningStatement(String name, CEMLManager manager , String statement){
-        super(name,statement,new String[]{"default"});
+        super(name,statement, Collections.singletonList("local"));
 
         this.statement =statement;
         this.manager =manager;

@@ -42,7 +42,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     //End of code made for testing performance
 
     public IncomingMqttObserver(List<String> topics)  {
-        this.topics.addAll( topics.stream().map(AgentUtils::topicReplace).collect(Collectors.toList()));
+        this.topics.addAll( topics.stream().map(originalTopic -> AgentUtils.topicReplace(originalTopic, "")).collect(Collectors.toList()));
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_LOT_SIZE)) {
@@ -53,7 +53,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
         }
     }
     public IncomingMqttObserver(String topic)  {
-        topics.add(AgentUtils.topicReplace(topic));
+        topics.add(AgentUtils.topicReplace(topic, ""));
 
         /// Code for validation and test proposes
         if(VALIDATION_MODE = Configurator.getDefaultConfig().containsKeyAnywhere(eu.linksmart.services.utils.constants.Const.VALIDATION_OBSERVERS   )) {

@@ -376,7 +376,7 @@ public class StatementFeeder implements Feeder<Statement> {
         if(SharedSettings.getId().equals(id))
             return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),processedBy,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"/"+id+"/");
         else if(id!=null)
-            return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),processedBy,producerType,message,codeNo, DefaultMQTTPublisher.defaultOutput()+id+"/");
+            return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),processedBy,producerType,message,codeNo, DefaultMQTTPublisher.defaultOutput(id));
 
         return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),null,producerType,message,codeNo, conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+ SharedSettings.getId()+"/");
     }

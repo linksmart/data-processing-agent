@@ -11,13 +11,15 @@ public class AgentUtils extends eu.linksmart.services.utils.function.Utils {
 
     protected transient static Logger loggerService = LogManager.getLogger(AgentUtils.class);
     protected transient static Configurator conf =  Configurator.getDefaultConfig();
-    public static String topicReplace(String originalTopic){
+    public static String topicReplace(String originalTopic, String id){
         if(originalTopic!=null) {
             if (SharedSettings.getId() != null)
                 originalTopic = originalTopic
                         .replace("<id>", SharedSettings.getId());
             if (SharedSettings.getLs_code() != null)
                 originalTopic = originalTopic.replace("<ls_code>", SharedSettings.getLs_code());
+            if (SharedSettings.getLs_code() != null)
+                originalTopic = originalTopic.replace("<datastream_id>",id);
         }
         return originalTopic;
     }

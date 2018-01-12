@@ -66,17 +66,17 @@ public class DefaultMQTTPublisher implements Publisher {
         init(id,statement.getOutput(),statement.getScope(),null, null);
 
     }
-    public DefaultMQTTPublisher(String id, List<String> outputs, String[] scopes){
+    public DefaultMQTTPublisher(String id, List<String> outputs, List<String> scopes){
         init(id,outputs,scopes,null,null);
 
     }
-    public DefaultMQTTPublisher(String id,List<String> outputs, String[] scopes,String will, String willTopic){
+    public DefaultMQTTPublisher(String id,List<String> outputs, List<String> scopes,String will, String willTopic){
         init(id,outputs,scopes,will, willTopic);
 
     }
-    private void init(String id,List<String> outputs,  String[] scopes, String will, String willTopic){
+    private void init(String id,List<String> outputs,  List<String> scopes, String will, String willTopic){
         this.outputs = outputs;
-        this.scopes =  Arrays.asList(scopes);
+        this.scopes =  scopes;
         this.id = id;
         this.will = will;
         this.willTopic = willTopic;
@@ -90,16 +90,19 @@ public class DefaultMQTTPublisher implements Publisher {
     }
 
     private void initOutputs(){
-        if(outputs==null ||outputs.isEmpty()){
-
-            outputs = Arrays.asList(defaultOutput() + id+"/");
+        List<String> outputs = this.outputs;
+        if(this.outputs==null ||this.outputs.isEmpty()){
+           this.outputs = Collections.singletonList(defaultOutput(id));
+        }else {
+            this.outputs = new ArrayList<>();
+            outputs.forEach(s -> this.outputs.add(AgentUtils.topicReplace(s, id)));
         }
     }
-    static public String defaultOutput(){
+    static public String defaultOutput(String id){
         String aux = Configurator.getDefaultConfig().getString(Const.EVENT_OUT_TOPIC_CONF_PATH);
         if(aux== null)
-            aux = "LS/test/test/OGC/1.0/Datastreams/";
-        return AgentUtils.topicReplace(aux);
+            aux = "LS/test/test/OGC/1.0/Datastreams/"+id+"/";
+        return AgentUtils.topicReplace(aux, id);
 
     }
 

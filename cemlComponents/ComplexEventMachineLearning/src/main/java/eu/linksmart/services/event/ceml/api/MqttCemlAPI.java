@@ -48,7 +48,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     }
     public static void reportError(StaticBroker brokerService,String message){
         try {
-            brokerService.publish(conf.getString(Const.CEML_MQTT_ERROR_TOPIC),message);
+            brokerService.publish(AgentUtils.topicReplace(conf.getString(Const.CEML_MQTT_ERROR_TOPIC), ""),message);
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         }
@@ -57,7 +57,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
     public static void reportFeedback(StaticBroker brokerService, String id, String message){
 
         try {
-            brokerService.publish(AgentUtils.topicReplace(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)),message);
+            brokerService.publish(AgentUtils.topicReplace(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC), id),message);
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         }

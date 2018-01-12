@@ -37,7 +37,7 @@ public class SharedSettings implements Const {
     protected static boolean isSet = false;
 
     public static String getWillTopic() {
-        return AgentUtils.topicReplace(willTopic);
+        return AgentUtils.topicReplace(willTopic, "");
     }
 
     public static void setWillTopic(String willTopic) {

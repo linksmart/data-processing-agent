@@ -137,8 +137,8 @@ public class ThingsRegistrationService {
 
         publisher = new DefaultMQTTPublisher(
                 SharedSettings.getId(),
-                Collections.singletonList(AgentUtils.topicReplace(conf.getString(Const.OGC_REGISTRATION_TOPIC))+thing.getId()),
-                new String[]{"linksmart"},
+                Collections.singletonList(AgentUtils.topicReplace(conf.getString(Const.OGC_REGISTRATION_TOPIC), thing.getId().toString())),
+                Collections.singletonList("linksmart"),
                 SharedSettings.getWill(),
                 SharedSettings.getWillTopic()
 

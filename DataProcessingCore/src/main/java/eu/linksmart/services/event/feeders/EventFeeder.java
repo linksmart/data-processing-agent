@@ -87,7 +87,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
         }
     }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
-        if(topic.contains(DefaultMQTTPublisher.defaultOutput())) // if it is my topic the event should be ignore the message
+        if(topic.contains(DefaultMQTTPublisher.defaultOutput(""))) // if it is my topic the event should be ignore the message
             return;
 
         try {

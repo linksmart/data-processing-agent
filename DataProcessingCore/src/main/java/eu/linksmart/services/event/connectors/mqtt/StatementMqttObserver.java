@@ -25,13 +25,13 @@ public class StatementMqttObserver extends IncomingMqttObserver {
     public StatementMqttObserver(List<String> topics) {
         super(topics);
 
-        loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") waiting for queries from BASE/[OPERATION] topic: " + AgentUtils.topicReplace(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)) + "[" + conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "]");
+        loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") waiting for queries from BASE/[OPERATION] topic: " + AgentUtils.topicReplace(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH), "") + "[" + conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "]");
 
     }
 
     public StatementMqttObserver(String topic) {
         super(topic);
-        loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") waiting for queries from BASE/[OPERATION] topic: " + AgentUtils.topicReplace(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)) + "[" + conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "]");
+        loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") waiting for queries from BASE/[OPERATION] topic: " + AgentUtils.topicReplace(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH), "") + "[" + conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "|" + conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH).replace("<id>", SharedSettings.getId()) + "]");
 
     }
 
