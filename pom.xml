@@ -117,8 +117,8 @@
         <linksmart.commons.version>1.2.0-SNAPSHOT</linksmart.commons.version>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>{encoding}</project.reporting.outputEncoding>
-        <project.build.sourceEncoding>{encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
     </properties>
     <dependencyManagement>
