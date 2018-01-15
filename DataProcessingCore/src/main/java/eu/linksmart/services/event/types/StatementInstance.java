@@ -3,6 +3,7 @@ package eu.linksmart.services.event.types;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
@@ -11,7 +12,10 @@ import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.handler.ComplexEventHandler;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.AgentUtils;
+import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
+import eu.linksmart.services.utils.configuration.Configurator;
 import io.swagger.annotations.ApiModelProperty;
 
 import eu.linksmart.services.utils.function.Utils;
@@ -44,12 +48,12 @@ import java.util.stream.Collectors;
  *
  * */
 public class StatementInstance extends PersistentRequestInstance implements Statement {
-    private static final String STATEMENT_ID_MARK = "<stm_id>";
     /**
      * Define which handler will be instantiate in the CEP engine when no Handler was specifically defined.
      * */
     public static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
-
+    @JsonIgnore
+    private static final transient Configurator conf = Configurator.getDefaultConfig();
 
     @JsonProperty("name")
     @ApiModelProperty(notes = "Name of the statement. For add a statement (POST) is mandatory")
@@ -89,9 +93,17 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonProperty("AgentID")
     protected String agentID= SharedSettings.getId();
 
+
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
-    @JsonProperty("isRestOutput")
+    @JsonProperty("resultType")
+    private String resultType = Observation.class.getCanonicalName();
+    @JsonIgnore
+    private Class<EventEnvelope> nativeResultType;
+
+    @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
+    @JsonProperty("produce")
     private boolean restOutput;
+
     @JsonIgnore
     private transient boolean toRegister = true;
 
@@ -110,6 +122,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public StatementInstance() {
         super();
         setGenerateID();
+
     }
 
     public StatementInstance(String name, String statement, List<String> scope) {
@@ -117,6 +130,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.name = name;
         this.statement = statement;
         this.scope = scope;
+        this.resultType = conf.getString(Const.FeederPayloadClass + "_" +Const.STATEMENT_DEFAULT_OUTPUT_TYPE);
         setGenerateID();
     }
 
@@ -285,7 +299,12 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @Override
     public JsonSerializable build() throws TraceableException, UntraceableException {
         setGenerateID();
+        try {
+            nativeResultType = (Class<EventEnvelope>) Class.forName(resultType);
 
+        } catch (Exception e) {
+            throw new StatementException(id, this.getClass().getCanonicalName(),e.getMessage());
+        }
         return this;
     }
 
@@ -297,5 +316,13 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         }
     }
 
+    @Override
+    public String getResultType() {
+        return resultType;
+    }
 
+    @Override
+    public void setResultType(String resultType) {
+        this.resultType = resultType;
+    }
 }

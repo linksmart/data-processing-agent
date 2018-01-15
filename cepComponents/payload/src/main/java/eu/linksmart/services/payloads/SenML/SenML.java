@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
 
 import java.util.*;
@@ -37,9 +38,15 @@ import java.util.*;
  |   Update Time | ut   | Number         |
  +---------------+------+----------------+
  */
-public class Event extends eu.linksmart.services.payloads.generic.Event<String,Vector<Event.Measurement>> implements EventEnvelope<String,Vector<Event.Measurement>>{
+public class SenML extends eu.linksmart.services.payloads.generic.Event<String,Vector<SenML.Measurement>> implements EventEnvelope<String,Vector<SenML.Measurement>>{
 
+    static {
+        EventBuilder.registerBuilder(SenML.class,new SenMLBuilder());
+    }
     private static final long serialVersionUID = -1510508593277110230L;
+    @JsonIgnore
+    public static transient String defaultTopic = null;
+
    // @JsonProperty("bn")
     //private String bn;
     //@JsonProperty("bt")
@@ -57,8 +64,8 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
     @JsonIgnore
     final private transient Object lock = new Object();
 
-    static public Event factory(Object bn, Object bt, Object bu,Object ver, Object n, Object u, Object v, Object sv, Object bv, Object s, Object t, Object ut){
-        Event event = new Event();
+    static public SenML factory(Object bn, Object bt, Object bu, Object ver, Object n, Object u, Object v, Object sv, Object bv, Object s, Object t, Object ut){
+        SenML event = new SenML();
 
         if(bn!=null && bn instanceof String)
             event.setBn((String)bn);
@@ -97,7 +104,7 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
 
 
     }
-    static public Event factory(Object bn, Object n, Object autoValue){
+    static public SenML factory(Object bn, Object n, Object autoValue){
 
         Object v=null,sv=null,bv=null;
         if(autoValue!=null && autoValue instanceof Number)
@@ -108,7 +115,7 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
             bv = autoValue;
         return factory(bn,n,0L,(short)1,n,null,v,sv,bv,null,(new Date()).getTime(),null);
     }
-    static public Event factory(Object bn, Object n, Object autoValue,Object ut){
+    static public SenML factory(Object bn, Object n, Object autoValue, Object ut){
 
         Object v=null,sv=null,bv=null;
         if(autoValue!=null && autoValue instanceof Number)
@@ -119,7 +126,7 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
             bv = autoValue;
         return factory(bn,n,0L,(short)1,n,null,v,sv,bv,null,(new Date()).getTime(),ut);
     }
-    public  Event(){
+    public SenML(){
         super();
         index = null;
         eNameChanged = false;
@@ -265,7 +272,7 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
     }
     @JsonIgnore
     @Override
-    public Event build() throws TraceableException, UntraceableException {
+    public SenML build() throws TraceableException, UntraceableException {
          indexing();
         return this;
     }
@@ -282,6 +289,16 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
     @JsonIgnore
     public Measurement getLast(){
         return value.lastElement();
+    }
+
+    @Override
+    public String getClassTopic() {
+        return defaultTopic;
+    }
+
+    @Override
+    public void setClassTopic(String topic) {
+        defaultTopic = topic;
     }
 
     /**
@@ -514,6 +531,16 @@ public class Event extends eu.linksmart.services.payloads.generic.Event<String,V
         @Override
         public void destroy() throws Exception {
             /// nothing
+        }
+
+        @Override
+        public String getClassTopic() {
+            return null;
+        }
+
+        @Override
+        public void setClassTopic(String topic) {
+            // nothing
         }
     }
 

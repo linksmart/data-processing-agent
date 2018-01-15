@@ -1,6 +1,8 @@
 package eu.linksmart.api.event.types;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 /**
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
@@ -210,13 +212,16 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * */
     void setLastOutput(EventEnvelope lastOutput);
 
-
-    /***
-     * Represent the possible States of a Statement can be in runtime.
-     * The states for a new Statements represent the state how they will be deployed in the engine.
-     * For an exiting Statement, the statements represent a change of state
+    /**
      *
+     * @return the type of event this statement will produce
+     */
+    String getResultType();
+    /**
+     * @param type set the type this statement will produce
      * */
+    void setResultType(String type);
+
     enum StatementLifecycle {
         /**
          * RUN Execute the statement adding a Handler, which adds a actuate or reacts to the triggered statement.

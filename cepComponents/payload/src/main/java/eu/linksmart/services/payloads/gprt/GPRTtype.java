@@ -11,6 +11,7 @@ import eu.linksmart.services.payloads.generic.Event;
  */
 public class GPRTtype extends Event<Integer,Double> implements Serializable {
 
+    public static String defaultTopic = null;
     public GPRTtype() {
         super();
 
@@ -35,6 +36,16 @@ public class GPRTtype extends Event<Integer,Double> implements Serializable {
     @JsonProperty(value = "value")
     public void setValue(Double value) {
         super.setValue(value);
+    }
+
+    @Override
+    public String getClassTopic() {
+        return defaultTopic;
+    }
+
+    @Override
+    public void setClassTopic(String topic) {
+        defaultTopic = topic;
     }
 
     @JsonPropertyDescription("Id of the device which reported the measurement.")

@@ -37,26 +37,12 @@ package eu.linksmart.api.event.components;
 public interface ComplexEventPropagationHandler extends ComplexEventHandler {
 
     /**
-     * Sets the Enveloper used by the handler. If non is given an Default implementation should be used.
-     *
-     * @param enveloper used to pack the compound event received by the @link CEPEngine.
-     *
-     * */
-    void setEnveloper(Enveloper enveloper);
-    /**
      * Sets the Publisher used by the handler. If non is given an Default implementation should be used.
      *
      * @param publisher used to propagate the already packed and serialized compound-event received by the @link CEPEngine.
      *
      * */
     void setPublisher(Publisher publisher);
-    /**
-     * Provide the Enveloper used by the handler. If non is given an Default implementation should be used.
-     *
-     * @return an Enveloper used to pack the compound event received by the @link CEPEngine.
-     *
-     * */
-    Enveloper getEnveloper();
     /**
      * Provide the Publisher used by the handler. If non is given an Default implementation should be used.
      *

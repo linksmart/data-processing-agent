@@ -4,6 +4,8 @@ package eu.linksmart.api.event.types;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
@@ -38,6 +40,7 @@ import java.util.Date;
  *
  * */
 public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
+    Map<String, EventBuilder> builders = new HashMap<>();
     /**
      * Some cases the some extra data of the event may be extracted from the topic/path of the event.
      * In this case, the topic/path can be provided so the underlying implementation extracts the needed data.
@@ -111,6 +114,19 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      * */
     @JsonIgnore
     void setValue(ValueType value);
+    /**
+     * gets the associate topic of the envelope
+     *
+     * @return the associate topic of the envelope
+     * */
     @JsonIgnore
-    SerializationFactory getSerializationFactory();
+    String getClassTopic();
+    /**
+     * setts the associate topic of the envelope
+     *
+     * @param  topic the associate topic of the envelope
+     * */
+    @JsonIgnore
+    void setClassTopic(String topic);
+
 }

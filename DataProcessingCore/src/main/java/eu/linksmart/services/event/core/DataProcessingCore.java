@@ -263,7 +263,6 @@ public class DataProcessingCore {
           if (conf.containsKeyAnywhere(Const.ENABLE_REST_API)&&  conf.getBoolean(Const.ENABLE_REST_API))
                     RestInit.init(conf);
 
-
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         }
@@ -346,10 +345,11 @@ public class DataProcessingCore {
         // initialize the types in the engines
         CEPEngine.instancedEngines.values().stream().forEach(engine->aliasTopicClass.forEach((alias,topicClass)-> {
                     try {
-                        Class aClass = Class.forName(topicClass.getRight());
+                        Class<EventEnvelope> aClass = (Class<EventEnvelope>) Class.forName(topicClass.getRight());
+                        aClass.newInstance().setClassTopic(topicClass.getLeft());
 
                         engine.addEventType(alias,aClass);
-                    } catch (ClassNotFoundException e) {
+                    } catch (IllegalAccessException | InstantiationException|ClassNotFoundException e) {
                         loggerService.error(e.getMessage(), e);
                     }
                 })

@@ -1,22 +1,21 @@
 package eu.linksmart.services.payloads.ogc.sensorthing.linked;
 
 import com.fasterxml.jackson.annotation.*;
-import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.api.event.types.JsonSerializable;
-import eu.linksmart.api.event.types.SerializationFactory;
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 import eu.linksmart.services.payloads.ogc.sensorthing.FeatureOfInterest;
+import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
-import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
-import eu.linksmart.services.utils.function.Utils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Period;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /*
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
  *
@@ -43,7 +42,26 @@ import java.util.List;
  */
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Observation.class)
-public class ObservationImpl extends CommonControlInfoImpl implements Observation, EventEnvelope {
+public class ObservationImpl extends CommonControlInfoImpl implements Observation, EventEnvelope<Object,Object> {
+    static {
+        try {
+            EventBuilder.setAsDefaultBuilder(Observation.class, new OGCEventBuilder());
+        } catch (UntraceableException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String defaultTopic = null;
+
+    @Override
+    public String getClassTopic() {
+        return defaultTopic;
+    }
+
+    @Override
+    public void setClassTopic(String topic) {
+        defaultTopic = topic;
+    }
 
     @JsonIgnore
     private List<Pair<String, String>> parameters=null;
@@ -59,6 +77,8 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     protected Object result;
     @JsonIgnore
     protected Period validTime;
+    @JsonIgnore
+    protected String topic;
 
     /*
     * First the implementation of the Observation Interface.
@@ -134,6 +154,7 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         this.datastream = datastream;
         this.datastream.addObservation(this);
     }
+
 
 
 }

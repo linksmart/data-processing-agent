@@ -1,8 +1,10 @@
 package eu.linksmart.services.event.feeders;
 
 import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.SharedSettings;
+import eu.linksmart.services.payloads.generic.Event;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.StatementException;
@@ -11,6 +13,7 @@ import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.intern.Const;
+import eu.linksmart.services.payloads.raw.RawEvent;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.types.Topic;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -18,6 +21,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -30,10 +34,11 @@ public class EventFeeder implements Feeder<EventEnvelope> {
         Feeder.feeders.put(me.getClass().getCanonicalName(),me);
     }
 
-    protected Configurator conf =  Configurator.getDefaultConfig();
-    protected Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();
-    protected Map<String,String> classToAlias= new Hashtable<String, String>();
-    protected Logger loggerService = LogManager.getLogger(this.getClass());
+    protected transient Configurator conf =  Configurator.getDefaultConfig();
+    protected transient Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();
+    protected transient Map<String,String> classToAlias= new Hashtable<String, String>();
+    protected transient Logger loggerService = LogManager.getLogger(this.getClass());
+    private boolean promiscuous = false;
 
     private Map<String, Class> compiledTopicClass = new Hashtable<>(), aliasToClass =new Hashtable<>();
 
@@ -43,6 +48,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
         } catch (InstantiationException e) {
             loggerService.error(e.getMessage(),e);
         }
+        promiscuous = conf.getBoolean(Const.PROMISCUOUS_EVENT_PARSING);
 
     }
 
@@ -87,26 +93,34 @@ public class EventFeeder implements Feeder<EventEnvelope> {
         }
     }
     protected void addEvent(String topic, byte[] rawEvent) throws TraceableException, UntraceableException{
-        if(topic.contains(DefaultMQTTPublisher.defaultOutput(""))) // if it is my topic the event should be ignore the message
-            return;
+      //  if(topic.contains(DefaultMQTTPublisher.defaultOutput(""))) // if it is my topic the event should be ignore the message
+       //     return;
 
         try {
             Object event=null;
-            if(!compiledTopicClass.containsKey(topic)) {
+            try {
+                if(!compiledTopicClass.containsKey(topic)) {
 
-                if(topicToClass.isEmpty())
-                    event = SharedSettings.getDeserializer().deserialize(rawEvent, Observation.class);
-                else
-                    for (Topic t : topicToClass.keySet()) {
-                        if (t.equals(topic)) {
-                            event = SharedSettings.getDeserializer().deserialize(rawEvent, topicToClass.get(t));
-                            compiledTopicClass.put(topic, topicToClass.get(t));
-                            break;
+                    if(topicToClass.isEmpty())
+                        event = SharedSettings.getDeserializer().deserialize(rawEvent, EventBuilder.getBuilder().getClass());
+                    else
+                        for (Topic t : topicToClass.keySet()) {
+                            if (t.equals(topic)) {
+                                event = SharedSettings.getDeserializer().deserialize(rawEvent, topicToClass.get(t));
+                                compiledTopicClass.put(topic, topicToClass.get(t));
+                                break;
+                            }
                         }
-                    }
-            }else{
-                event = SharedSettings.getDeserializer().deserialize(rawEvent, compiledTopicClass.get(topic));
+                }else{
+                    event = SharedSettings.getDeserializer().deserialize(rawEvent, compiledTopicClass.get(topic));
+                }
+            }catch (IOException ex){
+                if(promiscuous){
+                    event = SharedSettings.getDeserializer().deserialize(rawEvent, RawEvent.class);
+                }else
+                    throw new StatementException(this.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
             }
+
 
             if(event instanceof EventEnvelope) {
 
@@ -114,10 +128,10 @@ public class EventFeeder implements Feeder<EventEnvelope> {
 
                 addEvent( (EventEnvelope) event,topic);
             }else
-            if(event!=null)
-                throw new StatementException(event.getClass().getCanonicalName(),"Event","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
-            else
-                throw new StatementException(SharedSettings.getId(),"Agent","Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+                if (event != null)
+                    throw new StatementException(event.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+                else
+                    throw new StatementException(SharedSettings.getId(), "Agent", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
 
 
         }catch(TraceableException|UntraceableException e) {

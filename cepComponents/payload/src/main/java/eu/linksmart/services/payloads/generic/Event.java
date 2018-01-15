@@ -5,16 +5,16 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
-import eu.linksmart.api.event.types.SerializationFactory;
-import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by José Ángel Carvajal on 16.08.2016 a researcher of Fraunhofer FIT.
  */
-public class Event<IDType, ValueType> implements EventEnvelope<IDType,ValueType > {
+public abstract class Event<IDType, ValueType> implements EventEnvelope<IDType,ValueType > {
    @JsonIgnore
     protected Date date;
     @JsonIgnore
@@ -89,40 +89,10 @@ public class Event<IDType, ValueType> implements EventEnvelope<IDType,ValueType 
         this.value=value;
     }
 
-    @Override
-    public SerializationFactory getSerializationFactory() {
-        return new DefaultSerializationFactory();
-    }
 
     @Override
     public String toString(){
         return getIsoTimestamp();
-    }
-
-    static public <T, M> EventEnvelope factory(Date date, T id, T attributeId, M value) {
-        return new Event(date,id,attributeId,value);
-    }
-    static public<T extends Object> EventEnvelope factory(Date date) {
-        EventEnvelope event= new Event();
-        event.setDate(date);
-        return event;
-    }
-    static public<T , M> EventEnvelope factory(Date date, T id, M value) {
-        EventEnvelope event= new Event();
-        event.setDate(date);
-        event.setId(id);
-        return event;
-    }
-    static public<T extends Object> EventEnvelope factory(Date date, T value) {
-        EventEnvelope event= new Event();
-        event.setDate(date);
-        event.setValue(value);
-        return event;
-    }
-    static public<T extends Object> EventEnvelope factory(Object value) {
-        EventEnvelope event= new Event();
-        event.setValue(value);
-        return event;
     }
 
     @Override

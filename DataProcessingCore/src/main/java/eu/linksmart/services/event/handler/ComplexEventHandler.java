@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.handler;
 
 
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
@@ -22,8 +23,8 @@ import java.util.stream.Collectors;
     public class ComplexEventHandler extends BaseMapEventHandler implements ComplexEventPropagationHandler {
 
     protected Publisher publisher;
-    protected Enveloper enveloper;
     protected Serializer serializer;
+    protected EventBuilder builder;
 
 
     private Configurator conf =  Configurator.getDefaultConfig();
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 
         this.query=query;
         try {
-            enveloper = new DefaultEnveloper();
+            builder = EventBuilder.getBuilder(query.getResultType());
             serializer = SharedSettings.getSerializer();
             if(!query.isRESTOutput()) {
                 publisher = new DefaultMQTTPublisher(query, SharedSettings.getWill(), SharedSettings.getWillTopic());
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
 
                 publisher = new HTTPPublisher(query);
             }
-            query.setLastOutput(enveloper.pack(Double.NaN,new Date(), SharedSettings.getId(),query.getId(),"BootstrapMessage",query.getName()));
+            query.setLastOutput(builder.factory(SharedSettings.getId(), query.getId(),Double.NaN,new Date(), new HashMap<>()));
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
         }
@@ -55,12 +56,12 @@ import java.util.stream.Collectors;
     protected void processMessage(Map eventMap){
 
             if (eventMap.size() == 1) {
-                query.setLastOutput(enveloper.pack(
-                        eventMap.get(eventMap.keySet().toArray()[0]),
-                        new Date(), SharedSettings.getId(),
+                query.setLastOutput(builder.factory(
+                        SharedSettings.getId(),
                         query.getId(),
-                        eventMap.keySet().toArray()[0].toString(),
-                        query.getName()
+                        eventMap.get(eventMap.values().toArray()[0]),
+                        (new Date()).getTime(),
+                        new HashMap<>()
                 ));
                 // if the eventMap is only one then is sent as one event
                 try {
@@ -70,14 +71,15 @@ import java.util.stream.Collectors;
                     loggerService.error(eEntity.getMessage(), eEntity);
                 }
             }else {
+                Object tmpDate = eventMap.getOrDefault("time",eventMap.getOrDefault("Time",eventMap.getOrDefault("date", eventMap.getOrDefault("Date", new Date()))));
+                Date date = ( (tmpDate instanceof Date) ?  (Date) tmpDate : ( (tmpDate instanceof Long )? new Date( (Long) tmpDate): new Date() ));
                 query.setLastOutput(
-                        enveloper.pack(
-                                eventMap,
-                                new Date(),
+                        builder.factory(
                                 SharedSettings.getId(),
                                 query.getId(),
-                                "Map",
-                                query.getName()
+                                eventMap,
+                                date.getTime(),
+                                new HashMap<>()
                         )
                 );
 
@@ -91,13 +93,12 @@ import java.util.stream.Collectors;
                     }
                 }else {
                     query.setLastOutput(
-                            enveloper.pack(
-                                    eventMap,
-                                    new Date(),
+                            builder.factory(
                                     SharedSettings.getId(),
                                     query.getId(),
-                                    "Map",
-                                    query.getName()
+                                    eventMap,
+                                    date.getTime(),
+                                    new HashMap<>()
                             )
                     );
                     // if the aggregation option is off; each value of the map is send as an independent event
@@ -119,16 +120,6 @@ import java.util.stream.Collectors;
     public  synchronized void destroy(){
 
         publisher.close();
-        enveloper.close();
-    }
-    @Override
-    public Enveloper getEnveloper() {
-        return enveloper;
-    }
-
-    @Override
-    public void setEnveloper(Enveloper enveloper) {
-        this.enveloper = enveloper;
     }
 
     @Override

@@ -23,8 +23,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.api.event.types.SerializationFactory;
-import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.services.utils.function.Utils;
 
 import java.util.Date;
@@ -40,7 +39,7 @@ import java.util.Date;
  */
 public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventEnvelope<String,Object>
 {
-
+	public static String defaultTopic = null;
 	/**
 	 * The time point/period of when the observation happens. To be rendered as
 	 * ISO8601 time point/period string.
@@ -320,10 +319,17 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 
     }
 
-    @Override
-    public SerializationFactory getSerializationFactory() {
-        return new DefaultSerializationFactory();
-    }
+	@Override
+	public String getClassTopic() {
+		return defaultTopic;
+	}
+
+	@Override
+	public void setClassTopic(String topic) {
+		defaultTopic = topic;
+
+	}
+
 
     public static Observation factory(Object event, String resultType, String StreamID, String sensorID) {
        return factory(event,resultType,sensorID,sensorID,(new Date()).getTime());

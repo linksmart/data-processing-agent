@@ -9,13 +9,11 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
-import eu.linksmart.api.event.types.SerializationFactory;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateDeserializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.serialize.DateSerializer;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.DatastreamNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.FeatureOfInterestNavigationLink;
-import eu.linksmart.services.payloads.serialization.DefaultSerializationFactory;
 import eu.linksmart.services.utils.function.Utils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -57,7 +55,7 @@ import java.util.UUID;
 
 @JsonDeserialize(as = ObservationImpl.class)
 @JsonSerialize(as = ObservationImpl.class)
-public interface Observation extends EventEnvelope, CommonControlInfo, FeatureOfInterestNavigationLink,DatastreamNavigationLink {
+public interface Observation extends EventEnvelope<Object,Object>, CommonControlInfo, FeatureOfInterestNavigationLink,DatastreamNavigationLink {
 
     /**
      * Gets the phenomenon time as a Date.
@@ -209,53 +207,6 @@ public interface Observation extends EventEnvelope, CommonControlInfo, FeatureOf
     @JsonSetter("datastream")
     @JsonPropertyDescription("A Datastream can have zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
     void setDatastream(Datastream datastream);
-    static Observation factory(Object event, String resultType, String StreamID, String sensorID, String name) {
-        return factory(event,resultType,StreamID,sensorID,(new Date()).getTime(), name);
-
-    }
-    static Observation factory(Object event, String resultType, String StreamID, String sensorID, long time, String name) {
-        // Construct Sensor and Thing with the the Agent id.
-        Sensor sen = new SensorImpl();
-        sen.setId(sensorID);
-
-        Thing th = new ThingImpl();
-        th.setId(sensorID);
-
-        // construct the a Datastream with the Statement Id
-        Datastream ds = new DatastreamImpl();
-        ds.setId(StreamID);
-        ds.setSensor(sen);
-
-        // add related objects
-        ds.setSensor(sen);
-        ds.setThing(th);
-
-        // construct feature of interest with Id made by the hash of the name of the statement
-        FeatureOfInterest fi = new FeatureOfInterestImpl();
-        fi.setId(UUID.randomUUID());
-        fi.setDescription(resultType);
-
-
-
-        // construct Observation with random ID
-        Observation ob = new ObservationImpl();
-        ob.setId(UUID.randomUUID());
-        ob.setDatastream(ds);
-        ob.setPhenomenonTime(new Date());
-        ob.setFeatureOfInterest(fi);
-        ob.setDatastream(ds);
-        ob.setResult(event);
-        ob.setFeatureOfInterest(null);
-        ob.setDate(new Date(time));
-        // add related objects
-        fi.addObservations(ob);
-
-        ArrayList<Observation> obs = (new ArrayList<>());
-        obs.add(ob);
-        ds.setObservations(obs);
-
-        return ob;
-    }
 
     @Override
     default void topicDataConstructor(String topic) {
@@ -300,10 +251,6 @@ public interface Observation extends EventEnvelope, CommonControlInfo, FeatureOf
     @Override
     default void setValue(Object value) {
         setResult(value);
-    }
-    @Override
-    default SerializationFactory getSerializationFactory() {
-        return new DefaultSerializationFactory();
     }
 
     @Override
