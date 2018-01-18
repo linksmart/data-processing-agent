@@ -204,6 +204,9 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @Override
     public List<String> getOutput() {
+        if(output==null)
+            output = Collections.singletonList(conf.getString(Const.EVENT_OUT_TOPIC_CONF_PATH));
+
         return output.stream().map(s->AgentUtils.topicReplace(s, id)).collect(Collectors.toList());
     }
 

@@ -13,6 +13,7 @@ public class Application {
 
 
     public static void main(String[] args) {
+        com.google.common.collect.UnmodifiableIterator l;
 
         String confFile = Const.DEFAULT_CONFIGURATION_FILE;
         System.setProperty("log4j.configuration",Const.DEFAULT_CONFIGURATION_FILE);

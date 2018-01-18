@@ -89,7 +89,7 @@
         <apache.commons.beanutils.version>1.9.3</apache.commons.beanutils.version>
         <apache.commons.lang.version>3.1</apache.commons.lang.version>
         <google.gson.version>2.6.2</google.gson.version>
-        <google.guava.version>19.0</google.guava.version>
+        <google.guava.version>21.0</google.guava.version>
         <org.json.version>20160212</org.json.version>
 
         <wso2.siddhi.version>3.0.2</wso2.siddhi.version>
