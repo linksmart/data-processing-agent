@@ -120,6 +120,8 @@
         <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 
+        <google.guava.version>21.0</google.guava.version>
+
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -184,6 +186,22 @@
                 <groupId>eu.linksmart.commons</groupId>
                 <artifactId>utils</artifactId>
                 <version>${linksmart.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
