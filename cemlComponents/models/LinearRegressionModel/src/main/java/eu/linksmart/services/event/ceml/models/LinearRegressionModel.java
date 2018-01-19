@@ -35,7 +35,7 @@ public class LinearRegressionModel extends RegressorModel<List<Number>,List<Numb
         Collection<EvaluationMetric> evaluationMetrics = new ArrayList<>();
         evaluationMetrics.addAll(evaluator.getEvaluationAlgorithms().values());
 
-        return new PredictionInstance<>(Arrays.asList(learner.predict(valueNothing.get(0).doubleValue())),valueNothing,this.getName(),evaluationMetrics);
+        return new PredictionInstance<>(Arrays.asList(learner.predict(valueNothing.get(0).doubleValue())),valueNothing,name+":"+this.getName(),evaluationMetrics);
     }
 
     @Override

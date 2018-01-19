@@ -3,6 +3,7 @@ package eu.linksmart.api.event.types;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +64,12 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      * @return date as string
      * */
     @JsonIgnore
-    String getIsoTimestamp();
+    default String getIsoTimestamp() {
+
+        return DateTimeFormatter.ISO_INSTANT.format(getDate().toInstant());
+
+
+    }
     /**
      * returns the id as IDType (the semantic depends on the implementation)
      *
@@ -115,6 +121,15 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
     @JsonIgnore
     void setValue(ValueType value);
     /**
+     * setts the value/measurement
+     *
+     * @param value is the value/measurement to be setted
+     * */
+    @JsonIgnore
+    default void setUnsafeValue(Object value){
+        setValue((ValueType) value);
+    }
+    /**
      * gets the associate topic of the envelope
      *
      * @return the associate topic of the envelope
@@ -128,5 +143,11 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      * */
     @JsonIgnore
     void setClassTopic(String topic);
+
+    @JsonIgnore
+    default Map<String, Object> getAdditionalData(){ return new HashMap<>();}
+
+    @JsonIgnore
+    default void setAdditionalData(Map<String, Object> additionalData){}
 
 }

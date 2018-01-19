@@ -51,6 +51,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     /**
      * Define which handler will be instantiate in the CEP engine when no Handler was specifically defined.
      * */
+    @JsonIgnore
     public static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
     @JsonIgnore
     private static final transient Configurator conf = Configurator.getDefaultConfig();
@@ -216,13 +217,13 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         Statement obj;
         return  (object instanceof Statement && (obj = (Statement) object) == object) &&
                 (
-                        this.name.equals(obj.getName()) &&
-                        this.statement.equals(obj.getStatement()) &&
-                        this.output.equals(obj.getOutput()) &&
-                        this.CEHandler.equals(obj.getCEHandler()) &&
-                        this.stateLifecycle.equals(obj.getStateLifecycle()) &&
-                        this.scope.equals(obj.getScope()) &&
-                        this.targetAgents.equals(obj.getTargetAgents()) &&
+                        ( obj.getName() == this.name || ( this.name != null && this.name.equals(obj.getName()) ) ) &&
+                ( obj.getStatement() == this.statement || ( this.statement != null ) && this.statement.equals(obj.getStatement()) ) &&
+                ( obj.getOutput() == this.getOutput() || ( this.output != null ) && this.output.equals(obj.getOutput()) ) &&
+                ( obj.getCEHandler() == this.CEHandler || ( this.CEHandler != null ) && this.CEHandler.equals(obj.getCEHandler()) ) &&
+                ( obj.getStateLifecycle() == this.stateLifecycle || ( this.stateLifecycle != null ) && this.stateLifecycle.equals(obj.getStateLifecycle()) ) &&
+                ( obj.getScope() == this.getScope() || ( this.scope != null ) && this.scope.equals(obj.getScope()) ) &&
+                ( obj.getTargetAgents() == this.targetAgents || ( this.targetAgents != null ) && this.targetAgents.equals(obj.getTargetAgents()) ) &&
                         id.equals(obj.getId())
                 );
 

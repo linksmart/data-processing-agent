@@ -3,10 +3,17 @@ package eu.linksmart.services.payloads.SenML;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.impl.Event;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -38,11 +45,14 @@ import java.util.*;
  |   Update Time | ut   | Number         |
  +---------------+------+----------------+
  */
-public class SenML extends eu.linksmart.services.payloads.generic.Event<String,Vector<SenML.Measurement>> implements EventEnvelope<String,Vector<SenML.Measurement>>{
+public class SenML extends Event<String,Vector<SenML.Measurement>> implements EventEnvelope<String,Vector<SenML.Measurement>>{
 
     static {
         EventBuilder.registerBuilder(SenML.class,new SenMLBuilder());
+
     }
+    protected static final transient Logger loggerService = LogManager.getLogger(SenML.class);
+
     private static final long serialVersionUID = -1510508593277110230L;
     @JsonIgnore
     public static transient String defaultTopic = null;
@@ -292,6 +302,25 @@ public class SenML extends eu.linksmart.services.payloads.generic.Event<String,V
     }
 
     @Override
+    public void setUnsafeValue(Object value) {
+
+        if(value instanceof Map ){
+
+            ((Map) value).forEach((k,v)->this.addValue(k.toString(),v));
+
+        }if(value instanceof Collection){
+            int i = 0;
+            for (Object e : (Collection) value){
+                this.addValue(this.getBaseName()+"["+i+"]",e);
+                i++;
+            }
+
+        }else {
+            this.addValue(this.getBaseName(),value);
+        }
+    }
+
+    @Override
     public String getClassTopic() {
         return defaultTopic;
     }
@@ -316,7 +345,7 @@ public class SenML extends eu.linksmart.services.payloads.generic.Event<String,V
      |   Update Time | ut   | Number         |
      +---------------+------+----------------+
      */
-    public static class Measurement  extends eu.linksmart.services.payloads.generic.Event<String,Number>  implements EventEnvelope<String,Number>{
+    public static class Measurement  extends Event<String,Number> implements EventEnvelope<String,Number>{
         private static final long serialVersionUID = -3921246268323727465L;
         @JsonProperty("u")
         private String u;
@@ -499,8 +528,23 @@ public class SenML extends eu.linksmart.services.payloads.generic.Event<String,V
             }else if (value instanceof String){
                 sv = value.toString();
 
-            }else
-                sv = value.toString();
+            }else if( value instanceof Map || value instanceof Collection){
+                 ObjectMapper mapper = new ObjectMapper();
+                 try {
+                     sv = mapper.writeValueAsString(value);
+                 } catch (JsonProcessingException e) {
+                     SenML.loggerService.error(e.getMessage(),e);
+                 }
+
+             }else {
+                 ObjectMapper mapper = new ObjectMapper();
+                 try {
+                     sv = mapper.writeValueAsString(value);
+                 } catch (JsonProcessingException e) {
+                     SenML.loggerService.error(e.getMessage(),e);
+                 }
+             }
+
 
         }
 

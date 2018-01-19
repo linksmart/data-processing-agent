@@ -19,6 +19,8 @@ public abstract class BaseEventHandler implements ComplexEventHandler {
     protected Statement query;
 
 
+    protected Logger loggerService = LogManager.getLogger(this.getClass());
+
 
     public BaseEventHandler(Statement statement){
 
@@ -88,8 +90,6 @@ public abstract class BaseEventHandler implements ComplexEventHandler {
         }
     }
 
-
-    protected Logger loggerService = LogManager.getLogger(this.getClass());
 
 
     @Override

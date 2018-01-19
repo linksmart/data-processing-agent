@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import eu.linksmart.services.payloads.generic.Event;
+import eu.linksmart.api.event.types.impl.Event;
 
 /**
  * Created by angel on 12/11/15.

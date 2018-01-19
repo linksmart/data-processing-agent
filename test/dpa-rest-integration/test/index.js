@@ -82,7 +82,8 @@ describe('CEPEngine', function () {
         var counter = 0;
         client.on('message', function (topic, message) {
             ds = JSON.parse(message).result;
-            messagesReceived[topic.split('/')[topic.split('/').length-2]].push(ds);
+            messagesReceived[topic.split('/')[topic.split('/').length-1]].push(ds);
+           
             counter++;
             if (counter === numberOfMessages) {
                 client.end();

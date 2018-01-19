@@ -69,7 +69,15 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
 
     @Override
     public void setValue(Map value) {
+        this.putAll(value);
+    }
 
+    @Override
+    public void setUnsafeValue(Object value) {
+        if (value instanceof Map)
+            setValue((Map) value);
+
+        this.putIfAbsent("result",value);
     }
 
     @Override
@@ -80,6 +88,16 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
     @Override
     public void setClassTopic(String topic) {
         defaultTopic = topic;
+    }
+
+    @Override
+    public Map<String, Object> getAdditionalData() {
+        return this;
+    }
+
+    @Override
+    public void setAdditionalData(Map<String, Object> additionalData) {
+        additionalData.putAll(additionalData);
     }
 
     @Override

@@ -12,10 +12,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Period;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 /*
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
  *
@@ -45,7 +42,9 @@ import java.util.Map;
 public class ObservationImpl extends CommonControlInfoImpl implements Observation, EventEnvelope<Object,Object> {
     static {
         try {
-            EventBuilder.setAsDefaultBuilder(Observation.class, new OGCEventBuilder());
+            EventBuilder eventBuilder = new OGCEventBuilder();
+            EventBuilder.setAsDefaultBuilder(ObservationImpl.class, eventBuilder);
+            EventBuilder.registerBuilder(Observation.class, eventBuilder);
         } catch (UntraceableException e) {
             e.printStackTrace();
         }
@@ -63,8 +62,34 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         defaultTopic = topic;
     }
 
+    @Override
+    public Map<String, Object> getAdditionalData() {
+        final Map<String,Object> additionalData = new HashMap<>();
+        if(featureOfInterest!=null && featureOfInterest.getDescription()!=null)
+            additionalData.put("featureOfInterest.description",featureOfInterest.getDescription());
+        parameters.forEach(e->additionalData.put(e.getKey(),e.getValue()));
+
+        return additionalData;
+    }
+
+    @Override
+    public void setAdditionalData(Map<String, Object> additionalData) {
+        FeatureOfInterest fi = new FeatureOfInterestImpl();
+        fi.setId(UUID.randomUUID());
+        fi.setDescription(additionalData.getOrDefault("featureOfInterest.description", this.getResult()==null? null:this.getResult().getClass().getSimpleName()).toString());
+        if(fi.getDescription()!=null)
+            this.setFeatureOfInterest(fi);
+
+        additionalData.remove("featureOfInterest.description");
+        if(!additionalData.isEmpty()) {
+            if(parameters==null)
+                parameters = new ArrayList<>();
+            additionalData.forEach((k, v) -> parameters.add(Pair.of(k, v)));
+        }
+    }
+
     @JsonIgnore
-    private List<Pair<String, String>> parameters=null;
+    private List<Pair<String, Object>> parameters=null;
     @JsonIgnore
     protected FeatureOfInterest featureOfInterest;
     @JsonIgnore
@@ -123,12 +148,12 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     }
 
     @Override
-    public List<Pair<String, String>> getParameters() {
+    public List<Pair<String, Object>> getParameters() {
         return this.parameters;
     }
 
     @Override
-    public void setParameters(List<Pair<String, String>> parameters) {
+    public void setParameters(List<Pair<String, Object>> parameters) {
         this.parameters=parameters;
     }
 

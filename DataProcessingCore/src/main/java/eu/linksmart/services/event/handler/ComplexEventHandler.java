@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.handler;
 
 
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.event.intern.Const;
@@ -56,13 +57,17 @@ import java.util.stream.Collectors;
     protected void processMessage(Map eventMap){
 
             if (eventMap.size() == 1) {
-                query.setLastOutput(builder.factory(
-                        SharedSettings.getId(),
-                        query.getId(),
-                        eventMap.get(eventMap.values().toArray()[0]),
-                        (new Date()).getTime(),
-                        new HashMap<>()
-                ));
+                try {
+                    query.setLastOutput(builder.factory(
+                            SharedSettings.getId(),
+                            query.getId(),
+                            eventMap.values().toArray()[0],
+                            (new Date()).getTime(),
+                            new HashMap<>()
+                    ));
+                } catch (UntraceableException e) {
+                    loggerService.error(e.getMessage(),e);
+                }
                 // if the eventMap is only one then is sent as one event
                 try {
                     publisher.publish(serializer.serialize( query.getLastOutput()));
@@ -73,15 +78,20 @@ import java.util.stream.Collectors;
             }else {
                 Object tmpDate = eventMap.getOrDefault("time",eventMap.getOrDefault("Time",eventMap.getOrDefault("date", eventMap.getOrDefault("Date", new Date()))));
                 Date date = ( (tmpDate instanceof Date) ?  (Date) tmpDate : ( (tmpDate instanceof Long )? new Date( (Long) tmpDate): new Date() ));
-                query.setLastOutput(
-                        builder.factory(
-                                SharedSettings.getId(),
-                                query.getId(),
-                                eventMap,
-                                date.getTime(),
-                                new HashMap<>()
-                        )
-                );
+                try {
+                    query.setLastOutput(
+                            builder.factory(
+                                    SharedSettings.getId(),
+                                    query.getId(),
+                                    eventMap,
+                                    date.getTime(),
+                                    new HashMap<>()
+                            )
+                    );
+                } catch (UntraceableException e) {
+
+                    loggerService.error(e.getMessage(),e);
+                }
 
                 // if the eventMap has several events in it
                 if(conf.getBoolean(Const.AGGREGATE_EVENTS_CONF)) {
@@ -92,15 +102,20 @@ import java.util.stream.Collectors;
                         loggerService.error(e.getMessage(), e);
                     }
                 }else {
-                    query.setLastOutput(
-                            builder.factory(
-                                    SharedSettings.getId(),
-                                    query.getId(),
-                                    eventMap,
-                                    date.getTime(),
-                                    new HashMap<>()
-                            )
-                    );
+                    try {
+                        query.setLastOutput(
+                                builder.factory(
+                                        SharedSettings.getId(),
+                                        query.getId(),
+                                        eventMap,
+                                        date.getTime(),
+                                        new HashMap<>()
+                                )
+                        );
+                    } catch (UntraceableException e) {
+
+                        loggerService.error(e.getMessage(),e);
+                    }
                     // if the aggregation option is off; each value of the map is send as an independent event
                     eventMap.keySet().forEach(key -> {
                                 try {

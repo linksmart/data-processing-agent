@@ -2,9 +2,7 @@ package eu.linksmart.services.event.feeders;
 
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.types.EventBuilder;
-import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.payloads.generic.Event;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.StatementException;

@@ -1,16 +1,13 @@
-package eu.linksmart.services.payloads.generic;
+package eu.linksmart.api.event.types.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Map;
-
 /**
  * Created by José Ángel Carvajal on 16.08.2016 a researcher of Fraunhofer FIT.
  */
@@ -46,13 +43,6 @@ public abstract class Event<IDType, ValueType> implements EventEnvelope<IDType,V
         return date;
     }
 
-    @JsonIgnore
-    @Override
-    public String getIsoTimestamp() {
-
-        return DateTimeFormatter.ISO_INSTANT.format(date.toInstant());
-
-    }
     @JsonIgnore
     @Override
     public IDType getId() {

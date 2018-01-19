@@ -4,31 +4,19 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by José Ángel Carvajal on 12.01.2018 a researcher of Fraunhofer FIT.
  */
-public class OGCEventBuilder implements EventBuilder<Object,Object>{
+public class OGCEventBuilder implements EventBuilder<Object, Object,ObservationImpl>{
 
 
-    @Override
-    public EventEnvelope<Object, Object> factory(Object id, Object attributeID, Object value, long time, Map<String, Object> additionalAttributes) {
-
-        return factory(value,additionalAttributes.getOrDefault("featureOfInterest.description",value.getClass().getSimpleName()).toString(),attributeID.toString(),id.toString(), time);
-    }
 
     @Override
-    public EventEnvelope factory(String id, String attributeID, Object value, long time, Map<String, Object> additionalAttributes) {
-        return factory((Object) id,(Object)attributeID, value,time, additionalAttributes);
-    }
-
-    @Override
-    public Class BuilderOf() {
+    public Class<ObservationImpl> BuilderOf() {
         return ObservationImpl.class;
     }
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.ceml.intern.Const;
 import eu.linksmart.services.event.types.PersistentRequestInstance;
@@ -497,11 +499,8 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
             prediction.setOriginalInput(input);
 
             setLastPrediction(prediction);
-            if(orgInput==null)
-                return Observation.factory(prediction,"Prediction",name, SharedSettings.getId());
-            else {
-                return Observation.factory(prediction,"Prediction",name, SharedSettings.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
-            }
+
+            return EventBuilder.getBuilder().refactory(prediction);
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);

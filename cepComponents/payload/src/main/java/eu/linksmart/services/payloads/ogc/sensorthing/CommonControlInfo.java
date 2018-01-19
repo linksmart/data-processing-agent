@@ -69,7 +69,8 @@ public interface CommonControlInfo {
 
     @JsonIgnore
     default String getSelfLink(String clazz, String id, String linking) {
-
+        if(clazz==null || id ==null || linking ==null)
+            return null;
         return (isNavigationLinkEnabled())?clazz.replace("Impl","")+"("+id+")/"+linking:null;
     }
 }

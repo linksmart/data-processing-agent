@@ -152,7 +152,7 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
      * */
     @JsonPropertyDescription("The time period during which the result may be used.")
     @JsonGetter(value = "parameters")
-    List<Pair<String,String>> getParameters();
+    List<Pair<String,Object>> getParameters();
     /**
      * Sets the parameters time with the given Array of objects.
      * Key-value pairs showing the environmental conditions during measurement.
@@ -162,7 +162,7 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
      * */
     @JsonPropertyDescription("The time period during which the result may be used.")
     @JsonSetter(value = "parameters")
-    void setParameters(List<Pair<String,String>> parameters);
+    void setParameters(List<Pair<String,Object>> parameters);
     /**
      * Gets the related FeatureOfInterest of this observation.
      *
