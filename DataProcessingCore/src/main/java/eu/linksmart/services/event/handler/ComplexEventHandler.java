@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
     protected Publisher publisher;
     protected Serializer serializer;
     protected EventBuilder builder;
-
+    static final private String POSTFIX_ID = "$topic";
 
     private Configurator conf =  Configurator.getDefaultConfig();
 
@@ -55,6 +55,9 @@ import java.util.stream.Collectors;
     }
 
     protected void processMessage(Map eventMap){
+        String outputpostfix="";
+        if(eventMap!=null)
+            outputpostfix=eventMap.getOrDefault(POSTFIX_ID,"").toString();
 
             if (eventMap.size() == 1) {
                 try {
@@ -70,7 +73,7 @@ import java.util.stream.Collectors;
                 }
                 // if the eventMap is only one then is sent as one event
                 try {
-                    publisher.publish(serializer.serialize( query.getLastOutput()));
+                    publisher.publish(serializer.serialize( query.getLastOutput()),outputpostfix);
 
                 } catch (Exception eEntity) {
                     loggerService.error(eEntity.getMessage(), eEntity);
@@ -97,7 +100,7 @@ import java.util.stream.Collectors;
                 if(conf.getBoolean(Const.AGGREGATE_EVENTS_CONF)) {
                     // if the aggregation option is on; the whole map is send as it is
                     try {
-                        publisher.publish(serializer.serialize(query.getLastOutput()));
+                        publisher.publish(serializer.serialize(query.getLastOutput()),outputpostfix);
                     } catch (Exception e) {
                         loggerService.error(e.getMessage(), e);
                     }
@@ -117,9 +120,10 @@ import java.util.stream.Collectors;
                         loggerService.error(e.getMessage(),e);
                     }
                     // if the aggregation option is off; each value of the map is send as an independent event
+                    final String aux = outputpostfix;
                     eventMap.keySet().forEach(key -> {
                                 try {
-                                    publisher.publish(serializer.serialize(query.getLastOutput()));
+                                    publisher.publish(serializer.serialize(query.getLastOutput()),aux);
                                 } catch (Exception ex) {
                                     loggerService.error(ex.getMessage(), ex);
                                 }

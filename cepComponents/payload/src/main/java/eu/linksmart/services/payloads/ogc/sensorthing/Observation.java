@@ -244,8 +244,10 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
 
     @Override
     default void setAttributeId(Object id) {
-        if(getDatastream()!=null)
-            getDatastream().setId(id);
+        if(getDatastream()==null)
+            setDatastream(new DatastreamImpl());
+        getDatastream().setId(id);
+
     }
 
     @Override

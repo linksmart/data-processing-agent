@@ -38,7 +38,7 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
 
     @Override
     public Object getId() {
-        return this.getOrDefault("id",this.getOrDefault("ID",this.getOrDefault("Id",null))).toString();
+        return this.getOrDefault("id",this.getOrDefault("ID",this.getOrDefault("Id",this.getOrDefault("@iot.id",null)))).toString();
     }
 
     @Override

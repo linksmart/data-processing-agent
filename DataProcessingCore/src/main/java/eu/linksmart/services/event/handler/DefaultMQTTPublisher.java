@@ -162,14 +162,14 @@ public class DefaultMQTTPublisher implements Publisher {
     }
 
     @Override
-    public boolean publish(byte[] payload, String output) {
-        brokers.values().stream().forEach(b->{
+    public boolean publish(byte[] payload, String outputpostfix) {
+        brokers.values().stream().forEach(b-> outputs.forEach(o -> {
             try {
-                b.publish(makeTopic(output), payload);
+                b.publish(makeTopic(o)+outputpostfix, payload);
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
             }
-        });
+        }));
         return true;
     }
 

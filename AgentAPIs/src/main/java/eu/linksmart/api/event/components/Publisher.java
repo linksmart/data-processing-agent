@@ -55,12 +55,12 @@ public interface Publisher {
      * Transmits the payload in the implementation propagation protocol into given output (path).
      *
      * @param payload bytes to be propagated
-     * @param output the path where the message will be propagated.
+     * @param outputpostfix is addeded to the output path.
      *
      * @return if the event has been published
      *
      * */
-    boolean publish(byte[] payload, String output);
+    boolean publish(byte[] payload, String outputpostfix);
 
     /**
      * returns the pre-configured outputs of the Publisher.
