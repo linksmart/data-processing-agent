@@ -114,7 +114,7 @@
         <project-info-reports.version>2.9</project-info-reports.version>
         <maven.javadoc.version>2.10.4</maven.javadoc.version>
         <surefire-report.version>2.19.1</surefire-report.version>
-        <linksmart.commons.version>1.2.0-SNAPSHOT</linksmart.commons.version>
+        <linksmart.commons.version>1.2.1-SNAPSHOT</linksmart.commons.version>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
