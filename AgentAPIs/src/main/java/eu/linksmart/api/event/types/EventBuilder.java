@@ -54,8 +54,8 @@ public interface EventBuilder<IDType, ValueType, Event extends EventEnvelope<IDT
         else {
             ret.setDate(event.getDate());
             ret.setId( event.getId());
-            ret.setAttributeId(event.getAttributeId());
             ret.setUnsafeValue(event.getValue());
+            ret.setAttributeId(event.getAttributeId());
             ret.setAdditionalData(event.getAdditionalData());
         }
 

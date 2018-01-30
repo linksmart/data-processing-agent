@@ -226,7 +226,7 @@ public class DataProcessingCore {
             Arrays.stream(modules).forEach(cls -> {
                 try {
                     if (!"".equals(cls)) {
-                        Class c = Class.forName(cls);
+                        Class c = Class.forName(cls.trim());
                         loggerService.info("Extension: " + c.getSimpleName() + " loaded");
                     }
                 } catch (ClassNotFoundException e) {
@@ -251,6 +251,8 @@ public class DataProcessingCore {
             Class.forName(StatementFeeder.class.getCanonicalName());
             Class.forName(BootstrappingBean.class.getCanonicalName());
             mqtt = MqttIncomingConnectorService.getReference();
+            if(conf.getBoolean(Const.TRANSLATOR_MODE))
+                StatementFeeder.addNewStatement("{\"name\": \"translator"+"\" ,\"statement\": \"select cast(EventEnvelope.builders.get('default'), eu.linksmart.api.event.types.EventBuilder).refactory(event) as vector from GenericEvent as event\"}",null,null);
 
 
             if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))
@@ -343,16 +345,20 @@ public class DataProcessingCore {
             }
 
         // initialize the types in the engines
-        CEPEngine.instancedEngines.values().stream().forEach(engine->aliasTopicClass.forEach((alias,topicClass)-> {
-                    try {
-                        Class<EventEnvelope> aClass = (Class<EventEnvelope>) Class.forName(topicClass.getRight());
-                        aClass.newInstance().setClassTopic(topicClass.getLeft());
+        CEPEngine.instancedEngines.values().stream().forEach(engine->
+                {
+                    aliasTopicClass.forEach((alias, topicClass) -> {
+                        try {
+                            Class<EventEnvelope> aClass = (Class<EventEnvelope>) Class.forName(topicClass.getRight());
+                            aClass.newInstance().setClassTopic(topicClass.getLeft());
 
-                        engine.addEventType(alias,aClass);
-                    } catch (IllegalAccessException | InstantiationException|ClassNotFoundException e) {
-                        loggerService.error(e.getMessage(), e);
-                    }
-                })
+                            engine.addEventType(alias, aClass);
+                        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                            loggerService.error(e.getMessage(), e);
+                        }
+                    });
+                    engine.addEventType("GenericEvent", EventEnvelope.class);
+                }
 
         );
     }

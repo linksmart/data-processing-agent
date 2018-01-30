@@ -33,12 +33,12 @@ public class EventFeeder implements Feeder<EventEnvelope> {
     }
 
     protected transient Configurator conf =  Configurator.getDefaultConfig();
-    protected transient Map<Topic,Class> topicToClass= new Hashtable<Topic,Class>();
+    protected transient Map<Topic,Class<EventEnvelope>> topicToClass= new Hashtable<>();
     protected transient Map<String,String> classToAlias= new Hashtable<String, String>();
     protected transient Logger loggerService = LogManager.getLogger(this.getClass());
     private boolean promiscuous = false;
 
-    private Map<String, Class> compiledTopicClass = new Hashtable<>(), aliasToClass =new Hashtable<>();
+    private Map<String, Class<EventEnvelope>> compiledTopicClass = new Hashtable<>(), aliasToClass =new Hashtable<>();
 
     protected EventFeeder() {
         try {
@@ -95,12 +95,12 @@ public class EventFeeder implements Feeder<EventEnvelope> {
        //     return;
 
         try {
-            Object event=null;
+            EventEnvelope event=null;
             try {
                 if(!compiledTopicClass.containsKey(topic)) {
 
                     if(topicToClass.isEmpty())
-                        event = SharedSettings.getDeserializer().deserialize(rawEvent, EventBuilder.getBuilder().getClass());
+                        event = SharedSettings.getDeserializer().deserialize(rawEvent, (Class<EventEnvelope>) EventBuilder.getBuilder().BuilderOf());
                     else
                         for (Topic t : topicToClass.keySet()) {
                             if (t.equals(topic)) {
@@ -119,6 +119,11 @@ public class EventFeeder implements Feeder<EventEnvelope> {
                     throw new StatementException(this.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
             }
 
+            if(event.getAttributeId() == null && event.getValue() == null)
+                if(promiscuous){
+                    event = SharedSettings.getDeserializer().deserialize(rawEvent, RawEvent.class);
+                }else
+                    throw new StatementException(this.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
 
             if(event instanceof EventEnvelope) {
 

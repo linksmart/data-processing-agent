@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
+/*
  *  Copyright [2013] [Fraunhofer-Gesellschaft]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

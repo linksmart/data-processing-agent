@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.impl.Event;
+import eu.linksmart.services.payloads.SenML.SenML;
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 import eu.linksmart.services.payloads.ogc.sensorthing.FeatureOfInterest;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
@@ -51,6 +53,18 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     }
 
     public static String defaultTopic = null;
+
+    @Override
+    public void setUnsafeValue(Object value) {
+        if(value != null && value instanceof Collection && ((Collection)value).size() == 1)
+            setUnsafeValue(((Collection)value).iterator().next());
+        else if(value != null && value instanceof Map && ((Map)value).size() == 1)
+            setUnsafeValue(((Map)value).values().iterator().next());
+        else if(value != null && value instanceof EventEnvelope )
+            setValue(((EventEnvelope)value).getValue());
+        else
+            setValue(value);
+    }
 
     @Override
     public String getClassTopic() {

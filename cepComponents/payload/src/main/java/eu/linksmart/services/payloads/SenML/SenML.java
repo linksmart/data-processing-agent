@@ -145,6 +145,24 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
         value = new Vector<>();
     }
 
+    @Override
+    public String getAttributeId() {
+        if(value ==null) {
+            value = new Vector<>();
+            value.lastElement().setAttributeId(UUID.randomUUID().toString());
+        }
+
+        return value.lastElement().getAttributeId();
+    }
+
+    @Override
+    public void setAttributeId(String value) {
+        if(this.value ==null)
+            this.value = new Vector<>();
+
+        this.getLast().setAttributeId(value);
+    }
+
 
     @JsonProperty("bn")
     public String getBn() {
@@ -189,7 +207,7 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
     }
     @JsonProperty("e")
     public void setE(Measurement[] e) {
-        this.value = new Vector<Measurement>(Arrays.asList(e));
+        this.value = new Vector<>(Arrays.asList(e));
     }
     @JsonProperty("e")
     public Measurement getE(int i) {
@@ -227,7 +245,12 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
         addProperty(key).setAutoValue(value);
 
     }
+    @JsonIgnore
+    public void addValue(Object value) {
+        this.value.add(new Measurement());
+        this.value.lastElement().setAutoValue(value);
 
+    }
     @JsonIgnore
     public Object getValue(String key) {
         return getEbyName(key);
@@ -303,20 +326,21 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
 
     @Override
     public void setUnsafeValue(Object value) {
-
+        int i = (this.getE()!=null)?this.getE().size():0;
         if(value instanceof Map ){
 
             ((Map) value).forEach((k,v)->this.addValue(k.toString(),v));
 
         }if(value instanceof Collection){
-            int i = 0;
+
             for (Object e : (Collection) value){
                 this.addValue(this.getBaseName()+"["+i+"]",e);
+
                 i++;
             }
 
         }else {
-            this.addValue(this.getBaseName(),value);
+            addValue(value);
         }
     }
 

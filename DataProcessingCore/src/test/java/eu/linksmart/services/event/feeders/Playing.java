@@ -3,7 +3,9 @@ package eu.linksmart.services.event.feeders;
 
 import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
+import eu.linksmart.services.payloads.SenML.SenMLBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
@@ -40,18 +42,19 @@ public class Playing {
             e.printStackTrace();
             return;
         }
+        int i=0;
         while (true){
             try {
-                Observation observation = (Observation) (new OGCEventBuilder()).factory(
+                EventEnvelope observation = (EventEnvelope) (new SenMLBuilder()).factory(
                         uuid.toString(),
                         uuid.toString(),
-                        random.nextInt(100)+1,
+                        i++,
                         new Date(),
                         new HashMap<>()
 
                 );
                 //deserializer.deserialize(serializer.serialize(observation),ObservationImpl.class);
-                client.publish("LS/test/1/OGC/1.0/Datastreams/1",serializer.serialize(observation),0,false);
+                client.publish("LS/test/1/SenML/10/Event/1",serializer.serialize(observation),0,false);
                 Thread.sleep(50);
             } catch (Exception e) {
                 e.printStackTrace();

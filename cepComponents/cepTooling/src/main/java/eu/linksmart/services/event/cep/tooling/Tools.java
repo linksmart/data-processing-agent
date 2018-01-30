@@ -4,6 +4,7 @@ import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.utils.function.Utils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.DateUtils;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
@@ -20,133 +21,12 @@ import java.util.*;
 public class Tools {
     static private Map<String, Object> variables= new HashMap<>();
     static public Random Random = new Random();
-        static public IoTEntityEvent CreateIoTEntity(String entity, String property, String observation ){
 
-            try {
-
-                IoTEntityEvent ret = new IoTEntityEvent(entity);
-
-                ret.addProperty(  entity+"##"+property );
-                ret.getProperties(0).addIoTStateObservation(observation);
-
-                return ret;
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-    static public IoTEntityEvent CreateIoTEntity(String entity, String property, Boolean observation ){
-
-       return  CreateIoTEntity(entity,property,observation.toString());
-    }
-    static public IoTEntityEvent CreateIoTEntity(String entity, String property, Integer observation ){
-
-        return  CreateIoTEntity(entity,property,observation.toString());
-    }
-
-    static public IoTEntityEvent CreateIoTEntity(String entity, String property, Float observation ){
-
-        return  CreateIoTEntity(entity,property,observation.toString());
-    }
-
-    static public IoTEntityEvent CreateIoTEntity(String entity, String property, Double observation ){
-
-        return  CreateIoTEntity(entity,property,observation.toString());
-    }
-    static public IoTEntityEvent CreateIoTEntity(String entity, String property, Object observation ){
-
-        return  CreateIoTEntity(entity,property,observation.toString());
-    }
-    static public IoTEntityEvent CreateIoTEntity( String property, Boolean observation ){
-
-        return  CreateIoTEntity(generateRandomAbout(),property,observation.toString());
-    }
-
-    static public IoTEntityEvent CreateIoTEntity(String property, Integer observation ){
-
-        return  CreateIoTEntity(generateRandomAbout(),property,observation.toString());
-    }
-
-    static public IoTEntityEvent CreateIoTEntity( String property, Float observation ){
-
-        return  CreateIoTEntity(generateRandomAbout(),property,observation.toString());
-    }
-
-    static public IoTEntityEvent CreateIoTEntity( String property, Double observation ){
-
-        return  CreateIoTEntity(generateRandomAbout(),property,observation.toString());
-    }
-
-    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, String observation){
-
-
-        Map<String,IoTEntityEvent> arg =entities;
-        Map<String, IoTEntityEvent> ret = new HashMap<String,IoTEntityEvent>();
-
-        for (String key: arg.keySet()){
-            ret.put(key,CreateIoTEntity(key,generateRandomAbout()+property,observation));
-        }
-
-        return ret;
-    }
-    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, Float observation){
-
-        return CreateIoTEntities(entities,property,observation.toString());
-    }
-
-    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, Double observation){
-
-        return CreateIoTEntities(entities,property,observation.toString());
-    }
-
-    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, Integer observation){
-
-        return CreateIoTEntities(entities,property,observation.toString());
-    }
-    static public Map<String, IoTEntityEvent> CreateIoTEntities(Map<String, IoTEntityEvent> entities, String property, Boolean observation){
-
-        return CreateIoTEntities(entities,property,observation.toString());
-    }
-
-    static public IoTEntityEvent CreateIoTEntities(IoTEntityEvent entities, String property, Object observation ){
-
-        return CreateIoTEntity(entities.getAbout(),property,observation.toString());
-    }
-
-    static public Boolean containsProperty(IoTEntityEvent entity, String property) {
-
-        System.out.println(entity.hasProperty(property));
-        return entity.hasProperty(property);
-    }
-    static public Boolean containsProperty(IoTProperty[] properties, String property) {
-
-
-        for (IoTProperty p: properties)
-            if(p.getAbout().equals(property)) {
-                System.out.println(true);
-                return true;
-            }
-        System.out.println(false);
-        return false;
-    }
     static public long getMilliseconds(Date date){
         return date.getTime();
     }
 
-    static public Boolean likeProperty(IoTEntityEvent entity, String property) {
 
-
-        return entity.hasLikeProperty(property);
-    }
-    static public Boolean likeProperty(IoTProperty[] properties, String property) {
-
-
-        for (IoTProperty p: properties)
-            if(p.getAbout().contains(property)) {
-                return true;
-            }
-        return false;
-    }
     static public String lastObservationOfProperty(IoTEntityEvent entity, String property ){
 
       return  entity.getProperties(property).getIoTStateObservation(0).getValue();
@@ -180,10 +60,10 @@ public class Tools {
     }
 
     static public String getIsoTimeFormat(){
-        return "yyyy-MM-dd'T'HH:mm:ss.S'Z'";
+        return Utils.isoFormatMSTZ.toString();
     }
     static public String getEsperTimeFormat(){
-        return "yyyy-MM-dd HH:mm:ss.SSS";
+        return Utils.getDateFormat().toString();
     }
     static private DateFormat dateFormat =null;
 
@@ -221,34 +101,7 @@ public class Tools {
         return (new BigInteger(1,SHA256.digest((string).getBytes()))).toString();
     }
 
- /*   static public Observation generateObservation(String id, Date date, Object observation, String resultType){
 
-        Sensor sen = new Sensor();
-        sen.setId(id);
-        sen.setEvent(null);
-        Datastream ds = new Datastream();
-        ds.setEvent(null);
-        ds.setId(hashIt(UUID.randomUUID().toString()));
-        Observation ob = new Observation();
-        ob.setDatastream(ds);
-        ob.setSensor(sen);
-        ob.setPhenomenonTime(new Date());
-        ob.setResultType(observation);
-        ob.setResultValue(resultType);
-        ob.setFeatureOfInterest(null);
-        return ob;
-
-    }
-    static public Observation generateObservation( Date date, Object observation, String resultType){
-       return generateObservation(UUID.randomUUID().toString(),date,observation,resultType);
-    }
-    static public Observation generateObservation( Date date, Object observation){
-        return  generateObservation(new Date(),observation, "Measure");
-    }
-    static public Observation generateObservation(  Object observation){
-
-        return  generateObservation(new Date(),observation);
-    }*/
     static private Map<String, Map> used = new Hashtable<String,Map>();
     static public boolean hadBeanUsed(String queryName, Object[] objects){
         boolean hadBeanUsed ;
@@ -325,6 +178,7 @@ public class Tools {
 
             return result;
     }
+
     static public Object[] addAll(Object o, Object o2){
         if(o instanceof Object[] && o2 instanceof Object[] ){
             return ArrayUtils.addAll((Object[])o,(Object[])o2);

@@ -28,7 +28,7 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
 
     @Override
     public Date getDate() {
-        return (Date) this.getOrDefault("date", this.getOrDefault("Date",this.getOrDefault("time",this.getOrDefault("Time", null))));
+        return (Date) this.getOrDefault("date", this.getOrDefault("Date",this.getOrDefault("time",this.getOrDefault("Time", this.getOrDefault("phenomenonTime",this.getOrDefault("phenomenontime",null))))));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
 
     @Override
     public Object getId() {
-        return this.getOrDefault("id",this.getOrDefault("ID",this.getOrDefault("Id",this.getOrDefault("@iot.id",null)))).toString();
+        return this.getOrDefault("id",this.getOrDefault("ID",this.getOrDefault("Id",this.getOrDefault("@iot.id",this.getOrDefault("bn",null))))).toString();
     }
 
     @Override
