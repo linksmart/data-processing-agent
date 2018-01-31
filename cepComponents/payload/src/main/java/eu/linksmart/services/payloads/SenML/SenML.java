@@ -149,6 +149,10 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
     public String getAttributeId() {
         if(value ==null) {
             value = new Vector<>();
+
+        }
+        if(value.isEmpty()) {
+            value.add(new Measurement());
             value.lastElement().setAttributeId(UUID.randomUUID().toString());
         }
 

@@ -90,7 +90,7 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     public void setAdditionalData(Map<String, Object> additionalData) {
         FeatureOfInterest fi = new FeatureOfInterestImpl();
         fi.setId(UUID.randomUUID());
-        fi.setDescription(additionalData.getOrDefault("featureOfInterest.description", this.getResult()==null? null:this.getResult().getClass().getSimpleName()).toString());
+        fi.setDescription((String) additionalData.getOrDefault("featureOfInterest.description", this.getResult()==null? null:this.getResult().getClass().getSimpleName()));
         if(fi.getDescription()!=null)
             this.setFeatureOfInterest(fi);
 

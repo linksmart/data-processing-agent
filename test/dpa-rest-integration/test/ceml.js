@@ -88,15 +88,17 @@ describe('Learning API (CEML)', function () {
             if(!end) {
                 var value = JSON.parse(message);
                 var org = -10000;
-                var pred = value.result[0];
+                var pred = value.result;
 
                 for (var i = 0, len = value.parameters.length; i < len; i++) {
                         if ( 'input' in value.parameters[0] ){
-                            org = value.parameters[0].input;
+                            org = value.parameters[0]['input'];
+                            
                         }
                 }
-                expect(org)
-                    .to.closeTo(pred, .1);
+                console.log("org:", org );
+                console.log("pred:", pred );
+                expect(org).to.closeTo(pred, .1);
                 counter++;
                 // it starts to learn after ~3 messages
                 if (counter > 3) {
