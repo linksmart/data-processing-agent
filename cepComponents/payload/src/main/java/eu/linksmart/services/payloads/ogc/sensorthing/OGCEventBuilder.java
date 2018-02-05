@@ -14,6 +14,33 @@ import java.util.*;
 public class OGCEventBuilder implements EventBuilder<Object, Object,ObservationImpl>{
 
 
+    @Override
+    public EventEnvelope factory(Object id, Object attributeID, Object value, long time, Map<String, Object> additionalAttributes) throws UntraceableException {
+        Observation event;
+
+       if (value instanceof EventEnvelope ) {
+            return refactory((EventEnvelope) value);
+        }
+        else {
+
+           event = factory(value,value!=null?value.toString():"",attributeID,id,time);
+        }
+
+        return event;
+    }
+
+    @Override
+    public ObservationImpl refactory(EventEnvelope event) throws UntraceableException {
+        Observation ret ;
+
+        if (event instanceof Observation)
+             ret = (Observation) event;
+        else {
+           ret = factory(event.getValue(),event.getValue()!=null?event.getValue().toString():"",event.getAttributeId(),event.getId(),event.getDate().getTime());
+        }
+
+        return (ObservationImpl) ret;
+    }
 
     @Override
     public Class<ObservationImpl> BuilderOf() {
@@ -24,7 +51,7 @@ public class OGCEventBuilder implements EventBuilder<Object, Object,ObservationI
         return factory(event,resultType,StreamID,sensorID,(new Date()).getTime());
 
     }
-    static Observation factory(Object event, String resultType, String StreamID, String sensorID, long time ) {
+    static Observation factory(Object event, String resultType, Object StreamID, Object sensorID, long time ) {
         // Construct Sensor and Thing with the the Agent id.
         Sensor sen = new SensorImpl();
         sen.setId(sensorID);
