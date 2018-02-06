@@ -20,12 +20,20 @@ class PyroAdapter(object):
         self.backend.learn(datapoint)
 
     @Pyro4.expose
+    def learn(self, datapoint, label):
+        self.backend.learn(datapoint, label)
+
+    @Pyro4.expose
     def predict(self, datapoint):
         return self.backend.predict(datapoint)
 
     @Pyro4.expose
     def batchLearn(self, datapoints):
         self.backend.batchLearn(datapoints)
+
+    @Pyro4.expose
+    def batchLearn(self, datapoints, labels):
+        self.backend.batchLearn(datapoints, labels)
 
     @Pyro4.expose
     def batchPredict(self, datapoints):

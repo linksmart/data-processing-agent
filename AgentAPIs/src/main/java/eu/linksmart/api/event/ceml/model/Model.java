@@ -3,6 +3,7 @@ package eu.linksmart.api.event.ceml.model;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
+import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
@@ -32,8 +33,10 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     void learn(Input input) throws TraceableException, UntraceableException;
     Prediction<Output> predict(Input input) throws TraceableException, UntraceableException;
 
-    default void train(Input input) throws TraceableException, UntraceableException{predict(input);}
+    default void train(Input input) throws TraceableException, UntraceableException{learn(input);}
 
+   void learn(Input input, Input targetLabel) throws TraceableException, UntraceableException;
+    void batchLearn(List<Input> input, List<Input> targetLabel) throws TraceableException, UntraceableException ;
     default void batchLearn(List<Input> input) throws TraceableException, UntraceableException{
         for (Input i : input)
             learn(i);

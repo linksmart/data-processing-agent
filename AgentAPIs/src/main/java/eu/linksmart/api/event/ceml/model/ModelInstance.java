@@ -8,6 +8,7 @@ import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
@@ -121,6 +122,29 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
         return this;
     }
+    public void learn(Input input, Input targetLabel) throws TraceableException, UntraceableException {
+        if (input instanceof List) {
+            if (targetLabel instanceof List)
+                ((List) input).addAll((List) targetLabel);
+            else
+                ((List) input).add(targetLabel);
+        }else if (input instanceof Map) {
+            ((Map) input).put("target",targetLabel);
+        }else
+            throw new InternalException(getName(),"Internal Server Error","Unsuported type of data by the default learn function. Plase use list or map");
+
+        learn(input);
+    }
+    public void batchLearn(List<Input> input, List<Input> targetLabel) throws TraceableException, UntraceableException {
+        if(input != null && !input.isEmpty() && targetLabel != null && !targetLabel.isEmpty() && input.size() == targetLabel.size()) {
+            for(Input inputInstance : input)
+                for(Input targetInputInstance : input) {
+
+                    learn(inputInstance, targetInputInstance);
+                }
+        }
+    }
+
 /*
     @Override
     public void rebuild(Model<Input, Output, LearningObject> me) throws Exception {
