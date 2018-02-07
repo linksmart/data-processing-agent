@@ -81,6 +81,9 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         final Map<String,Object> additionalData = new HashMap<>();
         if(featureOfInterest!=null && featureOfInterest.getDescription()!=null)
             additionalData.put("featureOfInterest.description",featureOfInterest.getDescription());
+        if(parameters== null)
+            parameters = new ArrayList<>();
+
         parameters.forEach(e->additionalData.put(e.getKey(),e.getValue()));
 
         return additionalData;

@@ -38,6 +38,7 @@ public class OGCEventBuilder implements EventBuilder<Object, Object,ObservationI
         else {
            ret = factory(event.getValue(),event.getValue()!=null?event.getValue().toString():"",event.getAttributeId(),event.getId(),event.getDate().getTime());
         }
+        ret.setAdditionalData(event.getAdditionalData());
 
         return (ObservationImpl) ret;
     }

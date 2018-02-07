@@ -88,7 +88,7 @@ describe('Learning API (CEML)', function () {
             if(!end) {
                 var value = JSON.parse(message);
                 var org = -10000;
-                var pred = value.result;
+                var pred = value.result[0];
 
                 for (var i = 0, len = value.parameters.length; i < len; i++) {
                         if ( 'input' in value.parameters[0] ){
