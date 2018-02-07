@@ -52,7 +52,7 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         }
     }
 
-    public static String defaultTopic = null;
+    public static String defaultTopic = "LS/sensor/"+UUID.randomUUID().toString()+"/OGC/1.0/Datastreams/";
 
     @Override
     public void setUnsafeValue(Object value) {

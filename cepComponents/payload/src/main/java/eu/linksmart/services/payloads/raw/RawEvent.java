@@ -10,6 +10,7 @@ import eu.linksmart.services.utils.function.Utils;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,7 +21,7 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
         EventBuilder.registerBuilder(RawEvent.class,new RawEventBuilder());
     }
     @JsonIgnore
-    public static transient String defaultTopic = null;
+    public static transient String defaultTopic = "LS/sensor/"+UUID.randomUUID().toString()+"/RAW/1.0/Datastream/";
     @Override
     public void topicDataConstructor(String topic) {
 

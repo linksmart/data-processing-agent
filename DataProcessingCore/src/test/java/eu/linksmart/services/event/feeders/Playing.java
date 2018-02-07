@@ -26,15 +26,18 @@ import java.util.*;
 public class Playing {
     public static void main(String [] arg){
 
-        UUID uuid = UUID.randomUUID();
+        List<String> sensorID = new ArrayList<>(), streamID = new ArrayList<>();
         MqttClient client;
         Random random = new Random();
         Serializer serializer = new DefaultSerializer();
         Deserializer deserializer = new DefaultDeserializer();
-
+        for(int i =0; i<60; i++) {
+            sensorID.add("S"+String.valueOf(i));
+            streamID.add("D"+String.valueOf(i));
+        }
 
         try {
-             client = new MqttClient("tcp://localhost:1883",uuid.toString(), new MemoryPersistence());
+             client = new MqttClient("tcp://magna:1883",UUID.randomUUID().toString(), new MemoryPersistence());
              client.connect();
 
             Thread.sleep(1000);
@@ -43,22 +46,26 @@ public class Playing {
             return;
         }
         int i=0;
+        Map<String, Object> aux= new HashMap<>();
         while (true){
             try {
-                EventEnvelope observation = (EventEnvelope) (new SenMLBuilder()).factory(
-                        uuid.toString(),
-                        uuid.toString(),
-                        i++,
-                        new Date(),
-                        new HashMap<>()
+               for (int j=0; j<60;j++){
+                   EventEnvelope observation = (new OGCEventBuilder()).factory(
+                           sensorID.get(j),
+                           streamID.get(j),
+                           i,
+                           new Date(),
+                           aux
 
-                );
-                //deserializer.deserialize(serializer.serialize(observation),ObservationImpl.class);
-                client.publish("LS/test/1/SenML/10/Event/1",serializer.serialize(observation),0,false);
-                Thread.sleep(50);
+                   );
+                   //deserializer.deserialize(serializer.serialize(observation),ObservationImpl.class);
+                   client.publish(observation.getClassTopic()+observation.getAttributeId(),serializer.serialize(observation),0,false);
+               }
+                Thread.sleep(100);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            i++;
         }
 
 

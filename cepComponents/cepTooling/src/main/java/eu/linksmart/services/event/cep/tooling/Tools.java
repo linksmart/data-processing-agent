@@ -17,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Tools {
     static private Map<String, Object> variables= new HashMap<>();
@@ -182,6 +183,20 @@ public class Tools {
     static public Object[] addAll(Object o, Object o2){
         if(o instanceof Object[] && o2 instanceof Object[] ){
             return ArrayUtils.addAll((Object[])o,(Object[])o2);
+        }
+        if(o instanceof List ){
+            return addAll(((List) o).toArray(),  o2);
+
+        }
+        if(o2 instanceof List ){
+            return addAll(o,  ((List) o2).toArray());
+
+        }
+        if(o instanceof Object[] ){
+            return ArrayUtils.addAll((Object[])o, Collections.singletonList(o2));
+        }
+        if(o2 instanceof Object[] ){
+            return ArrayUtils.addAll( new Object[]{o}, (Object[])o2) ;
         }
         return new Object[]{o,o2};
     }

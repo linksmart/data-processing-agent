@@ -55,7 +55,7 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
 
     private static final long serialVersionUID = -1510508593277110230L;
     @JsonIgnore
-    public static transient String defaultTopic = null;
+    public static transient String defaultTopic = "LS/sensor/"+UUID.randomUUID().toString()+"/SenML/10/";
 
    // @JsonProperty("bn")
     //private String bn;
