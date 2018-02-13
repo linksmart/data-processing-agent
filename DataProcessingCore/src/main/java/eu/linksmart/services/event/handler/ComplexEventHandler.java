@@ -1,7 +1,7 @@
 package eu.linksmart.services.event.handler;
 
 
-import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.services.event.intern.Const;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
     private Configurator conf =  Configurator.getDefaultConfig();
 
-    public ComplexEventHandler(Statement query) throws Exception {
+    public ComplexEventHandler(Statement query) throws TraceableException, UntraceableException {
         super(query);
 
         this.query=query;
@@ -46,10 +46,13 @@ import java.util.stream.Collectors;
                 publisher = new HTTPPublisher(query);
             }
             query.setLastOutput(builder.factory(SharedSettings.getId(), query.getId(),Double.NaN,new Date(), new HashMap<>()));
+        }catch (TraceableException e){
+            loggerService.error(e.getMessage(),e);
+            throw e;
         }catch (Exception e){
             loggerService.error(e.getMessage(),e);
+            throw new UnknownException(query.getId(),"Internal Error",e.getMessage(),e);
         }
-
 
 
     }

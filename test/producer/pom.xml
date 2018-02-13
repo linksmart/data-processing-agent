@@ -30,6 +30,10 @@
             <groupId>eu.linksmart.commons</groupId>
             <artifactId>utils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>payload</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

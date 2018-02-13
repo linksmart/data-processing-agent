@@ -1,5 +1,7 @@
 package eu.linksmart.services.event.core;
 
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.connectors.*;
 
@@ -70,7 +72,11 @@ public class DataProcessingCore {
     public static boolean start(String args){
         if(!started) {
             Boolean ret = init(args);
-            ThingsRegistrationService.getReference().startTimer();
+            try {
+                ThingsRegistrationService.getReference().startTimer();
+            } catch (TraceableException | UntraceableException e) {
+                loggerService.error(e.getMessage(),e);
+            }
             new Thread(() -> statusLoop()).start();
             return ret;
         }

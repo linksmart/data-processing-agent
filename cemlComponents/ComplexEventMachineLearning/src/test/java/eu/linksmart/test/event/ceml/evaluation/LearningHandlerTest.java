@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.*;
 
 /**
@@ -68,7 +69,13 @@ public class LearningHandlerTest {
             e.printStackTrace();
         }
 
-        ListLearningHandler handler = new ListLearningHandler(learningStatement);
+        ListLearningHandler handler = null;
+        try {
+            handler = new ListLearningHandler(learningStatement);
+        } catch (TraceableException | UntraceableException e) {
+            e.printStackTrace();
+            fail();
+        }
         handler.update(new Object[][]{listSize(updateSize).toArray()},null);
         try {
             Thread.sleep(100);

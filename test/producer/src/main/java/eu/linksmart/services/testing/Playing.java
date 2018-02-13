@@ -1,28 +1,16 @@
-package eu.linksmart.services.event.feeders;
+package eu.linksmart.services.testing;
 
-
-import eu.linksmart.api.event.components.Publisher;
-import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
-import eu.linksmart.services.payloads.SenML.SenMLBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
-import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.serialization.DefaultDeserializer;
 import eu.linksmart.services.utils.serialization.DefaultSerializer;
 import eu.linksmart.services.utils.serialization.Deserializer;
 import eu.linksmart.services.utils.serialization.Serializer;
 import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.util.*;
 
-/**
- * Created by Jose Angel Carvajal on 09.03.2016 a researcher of Fraunhofer FIT.
- */
-@Deprecated
 public class Playing {
     public static void main(String [] arg){
 
@@ -37,7 +25,7 @@ public class Playing {
         }
 
         try {
-             client = new MqttClient("tcp://magna:1883",UUID.randomUUID().toString(), new MemoryPersistence());
+             client = new MqttClient("tcp://localhost:1883", UUID.randomUUID().toString(), new MemoryPersistence());
              client.connect();
 
             Thread.sleep(1000);
@@ -53,7 +41,7 @@ public class Playing {
                    EventEnvelope observation = (new OGCEventBuilder()).factory(
                            sensorID.get(j),
                            streamID.get(j),
-                           i,
+                           streamID.get(j)+String.valueOf(i),
                            new Date(),
                            aux
 

@@ -1,6 +1,8 @@
 package eu.linksmart.services.event.core;
 
 import eu.linksmart.api.event.components.Publisher;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
@@ -133,7 +135,7 @@ public class ThingsRegistrationService {
 
     }
 
-    public void startTimer() {
+    public void startTimer() throws TraceableException, UntraceableException {
 
         publisher = new DefaultMQTTPublisher(
                 SharedSettings.getId(),

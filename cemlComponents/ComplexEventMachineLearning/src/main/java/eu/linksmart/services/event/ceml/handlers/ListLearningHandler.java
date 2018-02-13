@@ -1,6 +1,8 @@
 package eu.linksmart.services.event.ceml.handlers;
 
 import eu.linksmart.api.event.components.Publisher;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.handler.base.BaseListEventHandler;
@@ -34,7 +36,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
     final protected DataDescriptors descriptors;
     final private Publisher publisher;
 
-    public ListLearningHandler(Statement statement) {
+    public ListLearningHandler(Statement statement) throws TraceableException, UntraceableException {
         super(statement);
 
         this.statement = (LearningStatement) statement;
@@ -43,7 +45,14 @@ public  class ListLearningHandler extends BaseListEventHandler {
         descriptors = originalRequest.getDescriptors();
 
         if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
-            publisher = new DefaultMQTTPublisher(statement, SharedSettings.getWill(),SharedSettings.getWillTopic());
+            try {
+                publisher = new DefaultMQTTPublisher(statement, SharedSettings.getWill(),SharedSettings.getWillTopic());
+            } catch (TraceableException | UntraceableException e) {
+                loggerService.error(e.getMessage(),e);
+                if(statement.isEssential())
+                    System.exit(-1);
+                throw e;
+            }
         else
             publisher=null;
 

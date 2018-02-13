@@ -91,7 +91,13 @@ public class CemlTest {
             fail();
         }
 
-        ListLearningHandler handler = new ListLearningHandler(request.getLearningStream().iterator().next());
+        ListLearningHandler handler = null;
+        try {
+            handler = new ListLearningHandler(request.getLearningStream().iterator().next());
+        } catch (TraceableException | UntraceableException e) {
+            e.printStackTrace();
+            fail();
+        }
 
         assertTrue(request.getModel().getClass().getSimpleName().equals("LinearRegressionModel"));
         try {

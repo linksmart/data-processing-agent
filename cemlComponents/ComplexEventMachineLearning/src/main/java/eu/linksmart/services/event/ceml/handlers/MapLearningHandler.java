@@ -45,7 +45,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
 
 
 
-    public MapLearningHandler(Statement statement) {
+    public MapLearningHandler(Statement statement) throws TraceableException, UntraceableException {
         super(statement);
 
         this.statement = (LearningStatement) statement;
@@ -62,7 +62,14 @@ public  class MapLearningHandler extends BaseMapEventHandler {
             retrainEvery = 1;
         }
         if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
-            publisher = new DefaultMQTTPublisher(statement, SharedSettings.getWill(),SharedSettings.getWillTopic());
+            try {
+                publisher = new DefaultMQTTPublisher(statement, SharedSettings.getWill(),SharedSettings.getWillTopic());
+            } catch (TraceableException | UntraceableException e) {
+                loggerService.error(e.getMessage(),e);
+                if(statement.isEssential())
+                    System.exit(-1);
+                throw e;
+            }
         else
             publisher=null;
     }

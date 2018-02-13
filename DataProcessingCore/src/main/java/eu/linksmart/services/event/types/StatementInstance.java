@@ -15,6 +15,7 @@ import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -69,15 +70,15 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @ApiModelProperty(notes = "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean")
     @JsonProperty("CEHandler")
-    protected String CEHandler= DEFAULT_HANDLER;
+    protected String CEHandler= null;
 
     @ApiModelProperty(notes = "Statement's Lifecycle.")
     @JsonProperty("StateLifecycle")
-    protected StatementLifecycle stateLifecycle=StatementLifecycle.RUN;
+    protected StatementLifecycle stateLifecycle = null;
 
     @ApiModelProperty(notes = "Server where the events will be pushed")
     @JsonProperty("scope")
-    protected List<String> scope= Collections.singletonList("outgoing");
+    protected List<String> scope =null;
 
     @JsonIgnore
     protected transient static final Object lock =new Object();
@@ -88,18 +89,18 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @ApiModelProperty(notes = "Indicates the agent ID which should process the statement. Not used for REST API")
     @JsonProperty("TargetAgents")
-    protected List<String> targetAgents= new  ArrayList<String>();
+    protected List<String> targetAgents= null;
 
     @ApiModelProperty(notes = "Indicates the agent ID where this Statement was created")
     @JsonProperty("AgentID")
-    protected String agentID= SharedSettings.getId();
+    protected String agentID= null;
 
 
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
     @JsonProperty("resultType")
-    private String resultType = Observation.class.getCanonicalName();
+    private String resultType = null;
     @JsonIgnore
-    private Class<EventEnvelope> nativeResultType;
+    private Class<EventEnvelope> nativeResultType = null;
 
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
     @JsonProperty("produce")
@@ -120,14 +121,34 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonIgnore
     private EventEnvelope lastOutput ;
 
+    private void initValues(){
+        if(scope==null)
+            scope= Collections.singletonList("outgoing");
+        if(CEHandler ==null)
+            CEHandler =DEFAULT_HANDLER;
+        if(SharedSettings.getId() !=null && agentID == null)
+            agentID= SharedSettings.getId();
+        if(targetAgents==null)
+            targetAgents=new ArrayList<>();
+        if(resultType==null)
+            resultType = ObservationImpl.class.getCanonicalName();
+        if(nativeResultType==null)
+            nativeResultType = EventEnvelope.builders.get(resultType).BuilderOf();
+        if(stateLifecycle==null)
+            stateLifecycle=StatementLifecycle.RUN;
+
+    }
+
     public StatementInstance() {
         super();
+       initValues();
         setGenerateID();
 
     }
 
     public StatementInstance(String name, String statement, List<String> scope) {
         super();
+        initValues();
         this.name = name;
         this.statement = statement;
         this.scope = scope;
@@ -239,7 +260,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
                this.targetAgents.stream().map(Object::toString).collect(Collectors.joining()) +
                id).hashCode();
    }
-    public void setScope(List<String> Scope) {
+    public void setScope(List<String> scope) {
         this.scope = scope;
     }
 

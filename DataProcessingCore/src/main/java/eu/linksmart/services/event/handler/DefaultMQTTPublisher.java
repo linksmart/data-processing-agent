@@ -1,5 +1,8 @@
 package eu.linksmart.services.event.handler;
 
+import eu.linksmart.api.event.exceptions.InternalException;
+import eu.linksmart.api.event.exceptions.TraceableException;
+import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.api.event.components.Publisher;
@@ -49,32 +52,32 @@ public class DefaultMQTTPublisher implements Publisher {
         return true;
     }
     static {
-        List<Object> alias = Configurator.getDefaultConfig().getList(Const.BROKERS_ALIAS);
+        String[] alias = Configurator.getDefaultConfig().getStringArray(Const.BROKERS_ALIAS);
 
         if(alias!=null)
-            knownInstances.addAll(alias.stream().map(Object::toString).collect(Collectors.toList()));
+            knownInstances.addAll(Arrays.stream(alias).map(Object::toString).collect(Collectors.toList()));
 
     }
 
-    public DefaultMQTTPublisher(Statement statement,String will, String willTopic) {
+    public DefaultMQTTPublisher(Statement statement,String will, String willTopic) throws TraceableException, UntraceableException{
 
         init(statement.getId(),statement.getOutput(),statement.getScope(),will, willTopic);
 
     }
-    public DefaultMQTTPublisher(Statement statement, String agentID) {
+    public DefaultMQTTPublisher(Statement statement, String agentID) throws TraceableException, UntraceableException{
 
         init(id,statement.getOutput(),statement.getScope(),null, null);
 
     }
-    public DefaultMQTTPublisher(String id, List<String> outputs, List<String> scopes){
+    public DefaultMQTTPublisher(String id, List<String> outputs, List<String> scopes)throws TraceableException, UntraceableException{
         init(id,outputs,scopes,null,null);
 
     }
-    public DefaultMQTTPublisher(String id,List<String> outputs, List<String> scopes,String will, String willTopic){
+    public DefaultMQTTPublisher(String id,List<String> outputs, List<String> scopes,String will, String willTopic)throws TraceableException, UntraceableException{
         init(id,outputs,scopes,will, willTopic);
 
     }
-    private void init(String id,List<String> outputs,  List<String> scopes, String will, String willTopic){
+    private void init(String id,List<String> outputs,  List<String> scopes, String will, String willTopic) throws TraceableException, UntraceableException{
         this.outputs = outputs;
         this.scopes =  scopes;
         this.id = id;
@@ -84,8 +87,12 @@ public class DefaultMQTTPublisher implements Publisher {
         try {
             initScopes();
             initOutputs();
-        } catch (MalformedURLException | RemoteException | StatementException e) {
+        } catch (StatementException e) {
             loggerService.error(e.getMessage(), e.getCause());
+            throw e;
+        } catch (Exception ex) {
+            loggerService.error(ex.getMessage(), ex.getCause());
+            throw new InternalException(id,"Internal Exception", ex.getMessage(),ex);
         }
     }
 
