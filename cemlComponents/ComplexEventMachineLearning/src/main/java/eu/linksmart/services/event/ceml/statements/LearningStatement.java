@@ -29,11 +29,7 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
     public void setRequest(CEMLRequest request) {
         manager =request;
     }
-    @JsonIgnore
-    @Override
-    public EventEnvelope getLastOutput() {
-        return null;
-    }
+
 
 
     @Override

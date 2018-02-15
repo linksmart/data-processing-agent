@@ -6,8 +6,7 @@ package eu.linksmart.services.event.handler;
 public interface HandlerConst {
     String EVENT_OUT_TOPIC_CONF_PATH = "api_events_mqtt_topic_outgoing";
 
-    String EVENTS_OUT_HTTP_SERVERS_ALIASES_CONF_PATH ="EVENTS_OUT_HTTP_SERVERS_ALIASES";
-    String EVENTS_OUT_HTTP_SERVERS_CONF_PATH ="EVENTS_OUT_HTTP_SERVERS";
-    String EVENTS_OUT_HTTP_SERVERS_PORT_CONF_PATH ="EVENTS_OUT_HTTP_SERVERS_PORTS";
+    String EVENTS_OUT_HTTP_SERVERS_ALIASES_CONF_PATH ="connection_hosts_rest_aliases";
+    String EVENTS_OUT_HTTP_SERVERS_CONF_PATH ="connection_host_rest_endpoint";
     String AGGREGATE_EVENTS_CONF = "handler_events_output_aggregation";
 }

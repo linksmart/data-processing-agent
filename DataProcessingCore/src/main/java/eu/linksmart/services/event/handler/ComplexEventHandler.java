@@ -35,17 +35,22 @@ import java.util.stream.Collectors;
 
         this.query=query;
         try {
-            builder = EventBuilder.getBuilder(query.getResultType());
+            if(query.getResultType()!=null && EventBuilder.getBuilder(query.getResultType()) != null ) {
+                builder = EventBuilder.getBuilder(query.getResultType());
+                query.setLastOutput(builder.factory(SharedSettings.getId(), query.getId(), Double.NaN, new Date(), new HashMap<>()));
+            }else
+                builder = null;
             serializer = SharedSettings.getSerializer();
             if(!query.isRESTOutput()) {
                 publisher = new DefaultMQTTPublisher(query, SharedSettings.getWill(), SharedSettings.getWillTopic());
                 loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") generating events for statement ID "+query.getId()+" in the broker " + query.getScope(0) + "  URL: " + publisher.getScopes().stream().map(s->BrokerConfiguration.loadConfigurations().get(s).getURL()).collect(Collectors.joining(",")));
-                loggerService.info("The Agent(ID:"+ SharedSettings.getId()+") generating event in the topic(s): " + publisher.getOutputs().stream().collect(Collectors.joining(",")));
+
             }else {
 
                 publisher = new HTTPPublisher(query);
+                loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") generating events for statement ID "+query.getId()+" in the broker " + query.getScope(0) + "  URL: " + publisher.getScopes().stream().map(HTTPPublisher.knownInstances::get).collect(Collectors.joining(",")));
+
             }
-            query.setLastOutput(builder.factory(SharedSettings.getId(), query.getId(),Double.NaN,new Date(), new HashMap<>()));
         }catch (TraceableException e){
             loggerService.error(e.getMessage(),e);
             throw e;
@@ -54,60 +59,34 @@ import java.util.stream.Collectors;
             throw new UnknownException(query.getId(),"Internal Error",e.getMessage(),e);
         }
 
-
+       loggerService.info("The Agent(ID:"+ SharedSettings.getId()+") generating event in the topic(s): " + publisher.getOutputs().stream().collect(Collectors.joining(",")));
     }
 
     protected void processMessage(Map eventMap){
-        String outputpostfix="";
-        if(eventMap!=null)
-            outputpostfix=eventMap.getOrDefault(POSTFIX_ID,"").toString();
-
-            if (eventMap.size() == 1) {
-                try {
-                    query.setLastOutput(builder.factory(
-                            SharedSettings.getId(),
-                            query.getId(),
-                            eventMap.values().toArray()[0],
-                            (new Date()).getTime(),
-                            new HashMap<>()
-                    ));
-                } catch (UntraceableException e) {
-                    loggerService.error(e.getMessage(),e);
-                }
-                // if the eventMap is only one then is sent as one event
-                try {
-                    publisher.publish(serializer.serialize( query.getLastOutput()),outputpostfix);
-
-                } catch (Exception eEntity) {
-                    loggerService.error(eEntity.getMessage(), eEntity);
-                }
-            }else {
-                Object tmpDate = eventMap.getOrDefault("time",eventMap.getOrDefault("Time",eventMap.getOrDefault("date", eventMap.getOrDefault("Date", new Date()))));
-                Date date = ( (tmpDate instanceof Date) ?  (Date) tmpDate : ( (tmpDate instanceof Long )? new Date( (Long) tmpDate): new Date() ));
-                try {
-                    query.setLastOutput(
-                            builder.factory(
-                                    SharedSettings.getId(),
-                                    query.getId(),
-                                    eventMap,
-                                    date.getTime(),
-                                    new HashMap<>()
-                            )
-                    );
-                } catch (UntraceableException e) {
-
-                    loggerService.error(e.getMessage(),e);
-                }
-
-                // if the eventMap has several events in it
-                if(conf.getBoolean(Const.AGGREGATE_EVENTS_CONF)) {
-                    // if the aggregation option is on; the whole map is send as it is
+        if(eventMap!=null) {
+            if(builder!=null) {
+                if (eventMap.size() == 1) {
                     try {
-                        publisher.publish(serializer.serialize(query.getLastOutput()),outputpostfix);
-                    } catch (Exception e) {
+                        query.setLastOutput(builder.factory(
+                                SharedSettings.getId(),
+                                query.getId(),
+                                eventMap.values().toArray()[0],
+                                (new Date()).getTime(),
+                                new HashMap<>()
+                        ));
+                    } catch (UntraceableException e) {
                         loggerService.error(e.getMessage(), e);
                     }
-                }else {
+                    // if the eventMap is only one then is sent as one event
+                    try {
+                        publisher.publish(serializer.serialize(query.getLastOutput()));
+
+                    } catch (Exception eEntity) {
+                        loggerService.error(eEntity.getMessage(), eEntity);
+                    }
+                } else {
+                    Object tmpDate = eventMap.getOrDefault("time", eventMap.getOrDefault("Time", eventMap.getOrDefault("date", eventMap.getOrDefault("Date", new Date()))));
+                    Date date = ((tmpDate instanceof Date) ? (Date) tmpDate : ((tmpDate instanceof Long) ? new Date((Long) tmpDate) : new Date()));
                     try {
                         query.setLastOutput(
                                 builder.factory(
@@ -120,21 +99,57 @@ import java.util.stream.Collectors;
                         );
                     } catch (UntraceableException e) {
 
-                        loggerService.error(e.getMessage(),e);
+                        loggerService.error(e.getMessage(), e);
                     }
-                    // if the aggregation option is off; each value of the map is send as an independent event
-                    final String aux = outputpostfix;
-                    eventMap.keySet().forEach(key -> {
-                                try {
-                                    publisher.publish(serializer.serialize(query.getLastOutput()),aux);
-                                } catch (Exception ex) {
-                                    loggerService.error(ex.getMessage(), ex);
+
+                    // if the eventMap has several events in it
+                    if (conf.getBoolean(Const.AGGREGATE_EVENTS_CONF)) {
+                        // if the aggregation option is on; the whole map is send as it is
+                        try {
+                            publisher.publish(serializer.serialize(query.getLastOutput()));
+                        } catch (Exception e) {
+                            loggerService.error(e.getMessage(), e);
+                        }
+                    } else {
+                        try {
+                            query.setLastOutput(
+                                    builder.factory(
+                                            SharedSettings.getId(),
+                                            query.getId(),
+                                            eventMap,
+                                            date.getTime(),
+                                            new HashMap<>()
+                                    )
+                            );
+                        } catch (UntraceableException e) {
+
+                            loggerService.error(e.getMessage(), e);
+                        }
+                        // if the aggregation option is off; each value of the map is send as an independent event
+
+                        eventMap.keySet().forEach(key -> {
+                                    try {
+                                        publisher.publish(serializer.serialize(query.getLastOutput()));
+                                    } catch (Exception ex) {
+                                        loggerService.error(ex.getMessage(), ex);
+                                    }
                                 }
-                            }
-                    );
+                        );
+                    }
+                }
+            }else {
+
+                query.setLastOutput(eventMap);
+
+                // if the eventMap is only one then is sent as one event
+                try {
+                    publisher.publish(serializer.serialize(query.getLastOutput()));
+
+                } catch (Exception eEntity) {
+                    loggerService.error(eEntity.getMessage(), eEntity);
                 }
             }
-
+        }
 
     }
 

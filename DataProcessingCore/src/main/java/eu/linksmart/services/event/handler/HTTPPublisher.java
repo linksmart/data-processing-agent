@@ -26,13 +26,12 @@ public class HTTPPublisher implements Publisher{
     /***
      * Location are the brokers unknown with an alias by the Handlers
      * */
-    public final static Map<String,Map.Entry<String,String>> knownInstances= new Hashtable<>();
+    public final static Map<String,String> knownInstances= new Hashtable<>();
     public static boolean addKnownLocations(String statement) throws StatementException {
         String[] nameURL = statement.toLowerCase().replace("add instance", "").trim().split("=");
         if (nameURL.length == 2) {
-            String namePort[] = nameURL[1].split(":");
 
-            knownInstances.put(nameURL[0], new AbstractMap.SimpleImmutableEntry<>(namePort[0], namePort[1]));
+            knownInstances.put(nameURL[0], nameURL[1]);
 
         } else {
             return false;
@@ -42,21 +41,17 @@ public class HTTPPublisher implements Publisher{
     static {
         List<Object> alias = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_HTTP_SERVERS_ALIASES_CONF_PATH);
         List<Object> brokerHostname = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH);
-        List<Object> brokerPort = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_HTTP_SERVERS_PORT_CONF_PATH);
-        if(alias.size()!=brokerHostname.size()&& alias.size()!=brokerPort.size())
+        if(alias.size()!=brokerHostname.size())
             LogManager.getLogger(DefaultMQTTPublisher.class).error("Inconsistent configuration in "+
                             Const.EVENTS_OUT_HTTP_SERVERS_ALIASES_CONF_PATH+ " and/or " +
-                            Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+ " and/or " +
-                            Const.EVENTS_OUT_HTTP_SERVERS_PORT_CONF_PATH
+                            Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+ " and/or "
             );
         else {
             for(int i=0;i<alias.size();i++)
                 knownInstances.put(
                         alias.get(i).toString(),
-                        new AbstractMap.SimpleEntry<>(
-                                brokerHostname.get(i).toString(),
-                                brokerPort.get(i).toString()
-                        )
+                        brokerHostname.get(i).toString()
+
                 );
         }
     }
@@ -100,37 +95,33 @@ public class HTTPPublisher implements Publisher{
                    if (!knownInstances.containsKey(scope.toLowerCase()))
                        loggerService.error("Scope:" + scope+ "not found");
                    else {
+                       int n =requesters.size();
                        outputs.forEach(o ->
                                        requesters.put(
-                                              makeUri(scope,o),
+                                              scope+o,
                                                Request.Post(
                                                        makeUri(scope,o)
                                                        )
                                        )
                        );
-                       if(!requesters.containsKey(knownInstances.get(scope.toLowerCase()).getKey() +"/" + knownInstances.get(scope.toLowerCase()).getValue()))
-                           requesters.put(
-                                        makeUri(scope),
-                                        Request.Post(
-                                               makeUri(scope)
-                                        )
-                                   );
+
                    }
                }
        );
     }
-    private String makeUri(String scope){
-        return knownInstances.get(scope.toLowerCase()).getKey() +":" + knownInstances.get(scope.toLowerCase()).getValue();
-    }
     private String makeUri(String scope, String output){
-        return makeUri(scope)+ "/" + output;
+        return knownInstances.get(scope)+ output;
     }
 
     @Override
     public boolean publish(byte[] payload) {
         requesters.values().forEach(r ->{
-            try {r.bodyByteArray(payload).execute();}
-            catch (Exception e){loggerService.error(e.getMessage(),e);}
+            try {
+                Response response = r.bodyByteArray(payload).execute();
+            }
+            catch (Exception e){
+                loggerService.error(e.getMessage(),e);
+            }
 
         });
         return false;
@@ -138,34 +129,13 @@ public class HTTPPublisher implements Publisher{
 
     @Override
     public boolean publish(byte[] payload, String output, String scope) {
-        if(requesters.containsKey(makeUri(scope,output))){
-            try {
-                requesters.get(makeUri(scope,output)).bodyByteArray(payload).execute();
-                return true;
-            }catch (Exception e){
-                loggerService.error(e.getMessage(),e);
-                return false;
-            }
-
-        }
-
-        return false;
+        return publish(payload);
     }
 
     @Override
     public boolean publish(byte[] payload, String output) {
-        if(requesters.containsKey(makeUri(DEFAULT,output))){
-            try {
-                requesters.get(makeUri(DEFAULT,output)).bodyByteArray(payload).execute();
-                return true;
-            }catch (Exception e){
-                loggerService.error(e.getMessage(),e);
-                return false;
-            }
+       return publish(payload);
 
-        }
-
-        return false;
     }
 
     @Override

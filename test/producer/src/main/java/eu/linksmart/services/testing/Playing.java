@@ -41,7 +41,7 @@ public class Playing {
                    EventEnvelope observation = (new OGCEventBuilder()).factory(
                            sensorID.get(j),
                            streamID.get(j),
-                           streamID.get(j)+String.valueOf(i),
+                           Math.floorMod(i,100),
                            new Date(),
                            aux
 

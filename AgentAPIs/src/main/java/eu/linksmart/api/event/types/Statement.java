@@ -204,13 +204,13 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @return the result of last processing made in this statement. In case of there is none then null
      * */
-    EventEnvelope getLastOutput();
+    Object getLastOutput();
     /***
      * Set the last compound event result of this statement
      *
      * @param lastOutput the result of last processing made in this statement. In case of there is none then null
      * */
-    void setLastOutput(EventEnvelope lastOutput);
+    void setLastOutput(Object lastOutput);
 
     /**
      *

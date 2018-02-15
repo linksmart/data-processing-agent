@@ -453,9 +453,9 @@ public class StatementFeeder implements Feeder<Statement> {
 
         return result;
     }
-    public static MultiResourceResponses<EventEnvelope> getStatementLastOutput(String id) {
+    public static MultiResourceResponses<Object> getStatementLastOutput(String id) {
 
-        MultiResourceResponses<EventEnvelope> result = new MultiResourceResponses<>();
+        MultiResourceResponses<Object> result = new MultiResourceResponses<>();
 
         if (CEPEngine.instancedEngines.size() == 0) {
             result.addResponse(createErrorMapMessage(id, "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));

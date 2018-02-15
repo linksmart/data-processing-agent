@@ -109,17 +109,17 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonIgnore
     private transient boolean toRegister = true;
 
-    public EventEnvelope getLastOutput() {
+    public Object getLastOutput() {
         return lastOutput;
     }
 
-    public void setLastOutput(EventEnvelope lastOutput) {
+    public void setLastOutput(Object lastOutput) {
         this.lastOutput = lastOutput;
     }
 
     //@ApiModelProperty(notes = "The last compound event result of this statement")
     @JsonIgnore
-    private EventEnvelope lastOutput ;
+    private Object lastOutput ;
 
     private void initValues(){
         if(scope==null)
@@ -132,8 +132,9 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
             targetAgents=new ArrayList<>();
         if(resultType==null)
             resultType = ObservationImpl.class.getCanonicalName();
-        if(nativeResultType==null)
+        if(nativeResultType==null && EventEnvelope.builders.containsKey(resultType))
             nativeResultType = EventEnvelope.builders.get(resultType).BuilderOf();
+
         if(stateLifecycle==null)
             stateLifecycle=StatementLifecycle.RUN;
 
