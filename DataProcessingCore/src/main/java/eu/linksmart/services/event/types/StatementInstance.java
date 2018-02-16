@@ -103,7 +103,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     private Class<EventEnvelope> nativeResultType = null;
 
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
-    @JsonProperty("produce")
+    @JsonProperty("rest")
     private boolean restOutput;
 
     @JsonIgnore
