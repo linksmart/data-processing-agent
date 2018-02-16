@@ -3,6 +3,7 @@ package eu.linksmart.services.event.handler.base;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.api.event.types.Statement;
 
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -16,26 +17,39 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
     public void update(Map[] insertStream, Map[] removeStream){
         loggerService.debug(AgentUtils.getDateNowString() + " update map[] w/ handler " + this.getClass().getSimpleName() + " & query: " + query.getName());
         if(insertStream!=null)
-            for (Map m: insertStream)
-                eventExecutor.stack(m);
+           eventExecutor.insertStack(insertStream);
         if(removeStream!=null)
-            for (Map m: removeStream)
-                eventExecutor.stack(m);
+            eventExecutor.removeStack(removeStream);
     }
 
-    protected abstract void processMessage(Map events);
+    protected abstract void processMessage(Map[] events);
+
+    protected abstract void processLeavingMessage(Map[] events);
     protected void processMessage(Object events){
 
         if(events!=null) {
             if (events instanceof Map){
-                processMessage((Map)events);
+                processMessage(new Map[]{(Map) events});
             }else if (events instanceof Map[]){
-                for (Object o: (Object[])events)
-                    processMessage((Map)o);
+               processMessage((Map[])events);
             } else {
                 Map map = new Hashtable<>();
                 map.put(events.getClass().getName(),events);
                 processMessage(map);
+            }
+        }
+    }
+    protected void processLeavingMessage(Object events){
+
+        if(events!=null) {
+            if (events instanceof Map){
+                processLeavingMessage(new Map[]{(Map) events});
+            }else if (events instanceof Map[]){
+                processLeavingMessage((Map[])events);
+            } else {
+                Map map = new Hashtable<>();
+                map.put(events.getClass().getName(),events);
+                processLeavingMessage(map);
             }
         }
     }

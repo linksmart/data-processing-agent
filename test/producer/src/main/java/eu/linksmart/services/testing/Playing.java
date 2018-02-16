@@ -41,7 +41,7 @@ public class Playing {
                    EventEnvelope observation = (new OGCEventBuilder()).factory(
                            sensorID.get(j),
                            streamID.get(j),
-                           Math.floorMod(i,100),
+                           "D"+String.valueOf(j)+"-"+String.valueOf(i),
                            new Date(),
                            aux
 
@@ -49,7 +49,7 @@ public class Playing {
                    //deserializer.deserialize(serializer.serialize(observation),ObservationImpl.class);
                    client.publish(observation.getClassTopic()+observation.getAttributeId(),serializer.serialize(observation),0,false);
                }
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (Exception e) {
                 e.printStackTrace();
             }

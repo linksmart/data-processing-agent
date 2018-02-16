@@ -73,6 +73,21 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         else
             publisher=null;
     }
+
+    @Override
+    protected void processMessage(Map[] events) {
+        loggerService.warn("Learning events arriving as Map[] they are process individually");
+        if(events!=null)
+            for (Map m: events)
+                processMessage(m);
+    }
+
+    @Override
+    protected void processLeavingMessage(Map[] events) {
+        loggerService.warn("Learning events arriving remove streams, they are handle as inserting streams ");
+        processMessage(events);
+    }
+
     private void elementsAssurance(Map rawMap, Map  withoutTarget, List measuredTargets){
         for (DataDescriptor descriptor : descriptors)
             if (descriptor.isTarget()) {
@@ -114,7 +129,6 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         else
             model.getEvaluator().evaluate(prediction.getPrediction(), target);
     }
-    @Override
     protected void processMessage(Map eventMap) {
         if(eventMap!= null && publisher != null)
             try {

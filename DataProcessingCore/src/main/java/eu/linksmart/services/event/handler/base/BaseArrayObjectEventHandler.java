@@ -24,14 +24,30 @@ public abstract class BaseArrayObjectEventHandler extends BaseEventHandler {
         }
 
     }
+    protected void processLeavingMessage(Object events) {
+        if(events!=null){
+            if(events.getClass().isAssignableFrom(Object[][].class)){
+                processLeavingMessage((Object[][])events);
+            }else if(events.getClass().isAssignableFrom(Object[].class)){
+                processLeavingMessage((Object[])events);
+            }else {
+                processLeavingMessage(new Object[]{events});
+            }
+        }
+
+    }
     protected abstract void processMessage(Object[][] events);
     protected abstract void processMessage(Object[] events);
+
+    protected abstract void processLeavingMessage(Object[][] events);
+    protected abstract void processLeavingMessage(Object[] events);
+
     public void update(Object[][] insertStream, Object[][] removeStream) {
         loggerService.debug(AgentUtils.getDateNowString() + " update Object[][] w/ handler " + this.getClass().getSimpleName() + " & query: " + query.getName());
         if (insertStream != null)
-            eventExecutor.stack(insertStream);
+            eventExecutor.insertStack(insertStream);
         if (removeStream != null)
-            eventExecutor.stack(removeStream);
+            eventExecutor.removeStack(removeStream);
     }
 
 }

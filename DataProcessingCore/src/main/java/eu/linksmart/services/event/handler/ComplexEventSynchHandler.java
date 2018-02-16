@@ -27,8 +27,15 @@ public class ComplexEventSynchHandler extends BaseEventHandler implements Comple
         if(events!=null)
             statement.setSynchronousResponse(events);
     }
+
+    @Override
+    protected void processLeavingMessage(Object events) {
+        if(events!=null)
+            statement.setSynchronousResponse(events);
+    }
+
     @Override
     public void update(Object event) {
-        eventExecutor.stack(event);
+        eventExecutor.insertStack(event);
     }
 }

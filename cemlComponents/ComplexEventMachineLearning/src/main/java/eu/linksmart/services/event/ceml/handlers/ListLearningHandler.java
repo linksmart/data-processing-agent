@@ -59,6 +59,11 @@ public  class ListLearningHandler extends BaseListEventHandler {
     }
 
     @Override
+    protected void processLeavingMessage(List<Object> events) {
+        loggerService.warn("Getting leaving messages that are not being processed");
+    }
+
+    @Override
     protected void processMessage(List input) {
 
         learn(flattList(input));

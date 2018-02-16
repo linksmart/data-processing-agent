@@ -1,6 +1,6 @@
 package eu.linksmart.services.event.handler.base;
 
-import eu.linksmart.services.event.intern.AgentUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.linksmart.api.event.components.ComplexEventHandler;
 import eu.linksmart.api.event.types.Statement;
 import org.apache.logging.log4j.LogManager;
@@ -40,6 +40,7 @@ public abstract class BaseEventHandler implements ComplexEventHandler {
     }
 
     protected abstract void processMessage(Object events);
+    protected abstract void processLeavingMessage(Object events);
 /*
    public  void update(Map eventMap) {
         initThread();
@@ -48,16 +49,22 @@ public abstract class BaseEventHandler implements ComplexEventHandler {
 
     }*/
     protected class EventExecutor implements Runnable{
-        private final LinkedBlockingQueue<Object> queue = new LinkedBlockingQueue<>();
+        private final LinkedBlockingQueue<Object> inserting = new LinkedBlockingQueue<>(), removing =  new LinkedBlockingQueue<>();
+        private final Object queues= new Object();
         private boolean active = true;
 
-        public synchronized void stack(Object eventMap){
-            queue.add(eventMap);
-            synchronized (queue) {
-                queue.notifyAll();
+        public synchronized void insertStack(Object eventMap){
+            inserting.add(eventMap);
+            synchronized (queues) {
+                inserting.notifyAll();
             }
         }
-
+    public synchronized void removeStack(Object eventMap){
+        inserting.add(eventMap);
+        synchronized (queues) {
+            inserting.notifyAll();
+        }
+    }
         public synchronized void setActive(boolean value){
             active = value;
         }
@@ -72,15 +79,17 @@ public abstract class BaseEventHandler implements ComplexEventHandler {
             while (active) {
 
                 try {
-                    processMessage(queue.take());
-
+                    if(!inserting.isEmpty())
+                        processMessage(inserting.take());
+                    if(!removing.isEmpty())
+                        processLeavingMessage(removing.take());
 
                     synchronized (this) {
                         active = this.active;
                     }
-                    if (queue.size() == 0)
-                        synchronized (queue) {
-                            queue.wait(500);
+                    if (inserting.size() == 0 && removing.size() == 0)
+                        synchronized (queues) {
+                            queues.wait(500);
                         }
 
                 } catch (InterruptedException e) {

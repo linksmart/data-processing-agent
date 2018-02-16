@@ -19,6 +19,11 @@ public abstract class BaseListEventHandler extends BaseArrayObjectEventHandler {
 
         processMessage(toList(events));
     }
+    @Override
+    protected void processLeavingMessage(Object[][] events) {
+
+        processLeavingMessage(toList(events));
+    }
     private List<Object> toList(Object events){
         List<Object> response = new ArrayList<>();
         if(events instanceof Object[])
@@ -35,5 +40,12 @@ public abstract class BaseListEventHandler extends BaseArrayObjectEventHandler {
         processMessage(Arrays.asList(events));
     }
 
+    @Override
+    protected void processLeavingMessage(Object[] events) {
+        processMessage(Arrays.asList(events));
+    }
+
     protected abstract void processMessage(List<Object> events) ;
+
+    protected abstract void processLeavingMessage(List<Object> events) ;
 }
