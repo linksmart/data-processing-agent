@@ -56,13 +56,13 @@ public abstract class BaseEventHandler implements ComplexEventHandler {
         public synchronized void insertStack(Object eventMap){
             inserting.add(eventMap);
             synchronized (queues) {
-                inserting.notifyAll();
+                queues.notifyAll();
             }
         }
     public synchronized void removeStack(Object eventMap){
         inserting.add(eventMap);
         synchronized (queues) {
-            inserting.notifyAll();
+            queues.notifyAll();
         }
     }
         public synchronized void setActive(boolean value){
