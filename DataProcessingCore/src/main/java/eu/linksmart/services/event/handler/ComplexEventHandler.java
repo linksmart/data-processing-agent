@@ -77,7 +77,11 @@ import java.util.stream.Collectors;
         if (eventMap != null) {
             if (eventMap.length == 1)
                 processSingleMap(eventMap[0]);
-            else {
+            else if(eventMap.length>1&&( eventMap[0].containsKey("k") || eventMap[0].containsKey("key")) && (eventMap[0].containsKey("v")|| eventMap[0].containsKey("values"))){
+                final Map aux = new HashMap();
+                Arrays.stream(eventMap).forEach(i->aux.put(i.getOrDefault("k",i.get("key")), i.getOrDefault("v",i.get("values"))));
+                processSingleMap(aux);
+            }else {
                 try {
                     query.setLastOutput(
                             builder.factory(

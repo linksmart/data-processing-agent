@@ -37,19 +37,20 @@ public class Playing {
         Map<String, Object> aux= new HashMap<>();
         while (true){
             try {
-               for (int j=0; j<60;j++){
-                   EventEnvelope observation = (new OGCEventBuilder()).factory(
-                           sensorID.get(j),
-                           streamID.get(j),
-                           "D"+String.valueOf(j)+"-"+String.valueOf(i),
-                           new Date(),
-                           aux
+                for (int j=0; j<32;j++)
+                    for (int k=0; k<60;k++){
+                        EventEnvelope observation = (new OGCEventBuilder()).factory(
+                               sensorID.get(j),
+                               streamID.get(j),
+                               "D"+String.valueOf(j)+"-"+String.valueOf(k),
+                               new Date(),
+                               aux
 
-                   );
-                   //deserializer.deserialize(serializer.serialize(observation),ObservationImpl.class);
-                   client.publish(observation.getClassTopic()+observation.getAttributeId(),serializer.serialize(observation),0,false);
+                       );
+                       //deserializer.deserialize(serializer.serialize(observation),ObservationImpl.class);
+                       client.publish(observation.getClassTopic()+observation.getAttributeId(),serializer.serialize(observation),0,false);
                }
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (Exception e) {
                 e.printStackTrace();
             }
