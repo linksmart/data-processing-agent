@@ -69,7 +69,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     protected List<String> output=null;
 
     @ApiModelProperty(notes = "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean")
-    @JsonProperty("CEHandler")
+    @JsonProperty("cehandler")
     protected String CEHandler= null;
 
     @ApiModelProperty(notes = "Statement's Lifecycle.")

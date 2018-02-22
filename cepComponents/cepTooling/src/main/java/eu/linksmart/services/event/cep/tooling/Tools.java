@@ -5,6 +5,7 @@ import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.utils.function.Utils;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.DateUtils;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
@@ -228,6 +229,133 @@ public class Tools {
         }
 
         return new Object[0];
+    }
+    public static Object[] sortArray(Object array, Object order, Object reorder){
+        if(array==null || order==null)
+            return new Object[0];
+
+
+        final int[] newOrder = sortArrayLike(order,reorder);
+        final  Object[] ret = new Object[newOrder.length];
+
+        if(array instanceof Object[] ){
+            final Object[] toOrder =(Object[])array;
+            Arrays.stream(newOrder).forEach(i->ret[i] = toOrder[newOrder[i]] );
+
+        } else if(array instanceof List){
+            final List toOrder =(List)array;
+            Object[] oldOrder = (Object[]) order;
+            Arrays.stream(newOrder).forEach(i->ret[i] = toOrder.get(newOrder[i]));
+
+        }
+        return ret;
+    }
+    public static int[] sortArrayLike(Object order, Object reorder){
+        int[] sorted = null;
+        if(reorder instanceof Object[] && order instanceof Object[]){
+            Object[] toOrder =(Object[])reorder, newOrder = (Object[]) order;
+            sorted = new int[toOrder.length];
+
+            for(int i=0;i<sorted.length;i++){
+                for(int j=0;j<sorted.length;j++){
+                    if(toOrder[i].equals(newOrder[j])){
+                        sorted[j] = i;
+                        break;
+                    }
+
+                }
+            }
+
+        } else if((reorder instanceof List) && order instanceof Object[]){
+            List toOrder =(List)reorder;
+            Object[] newOrder = (Object[]) order;
+            sorted = new int[toOrder.size()];
+
+            for(int i=0;i<toOrder.size();i++){
+                for(int j=0;j<toOrder.size();j++){
+                    if(toOrder.get(i).equals(newOrder[j])){
+                        sorted[j] = i;
+                        break;
+                    }
+
+                }
+            }
+        }else if(reorder instanceof Object[] && order instanceof List){
+            Object[] toOrder =(Object[])reorder;
+            List newOrder = (List) order;
+            sorted = new int[toOrder.length];
+
+            for(int i=0;i<toOrder.length;i++){
+                for(int j=0;j<toOrder.length;j++){
+                    if(toOrder[i].equals(newOrder.get(j))){
+                        sorted[j] = i;
+                        break;
+                    }
+
+                }
+            }
+        }else if(reorder instanceof List && order instanceof List){
+            List toOrder =(List)reorder, newOrder = (List) order;
+            sorted = new int[toOrder.size()];
+
+            for(int i=0;i<sorted.length;i++){
+                for(int j=0;j<sorted.length;j++){
+                    if(toOrder.get(i).equals(newOrder.get(j))){
+                        sorted[j] = i;
+                        break;
+                    }
+
+                }
+            }
+        }
+
+        return sorted;
+
+    }
+    public static Map toMap(Object keys, Object values ){
+        final Map map =new HashMap();
+        if(keys instanceof Object[] && values instanceof Object[]){
+            final Object[] keyss =(Object[])keys, valuess = (Object[]) values;
+            for(int i=0;i<keyss.length;i++)
+                map.put(keyss[i],valuess[i]);
+
+
+        } else if((keys instanceof List) && values instanceof Object[]){
+            List keyss =(List)keys;
+            Object[] valuess = (Object[]) values;
+            for(int i=0;i<keyss.size();i++)
+                map.put(keyss.get(i),valuess[i]);
+
+        }else if(keys instanceof Object[] && values instanceof List){
+            Object[] keyss =(Object[])keys;
+            List valuess = (List) values;
+            for(int i=0;i<keyss.length;i++)
+                map.put(keyss[i], valuess.get(i));
+
+        }else if(keys instanceof List && values instanceof List){
+            List keyss =(List)keys, valuess = (List) values;
+            for(int i=0;i<keyss.size();i++)
+                map.put(keyss.get(i), valuess.get(i));
+
+        }
+        return map;
+    }
+    Map applyTo(Object values ){
+        final Map map =new HashMap();
+        if( values instanceof Object[]){
+            final Object[]  valuess = (Object[]) values;
+            for(int i=0;i<valuess.length;i++)
+                map.put("D"+String.valueOf(i),valuess[i]);
+
+
+        }else if( values instanceof List){
+
+            List valuess = (List) values;
+            for(int i=0;i<valuess.size();i++)
+                map.put("D"+String.valueOf(i), valuess.get(i));
+
+        }
+        return map;
     }
 
 }

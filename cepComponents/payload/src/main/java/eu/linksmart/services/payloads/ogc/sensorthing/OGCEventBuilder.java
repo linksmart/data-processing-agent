@@ -70,9 +70,9 @@ public class OGCEventBuilder implements EventBuilder<Object, Object,ObservationI
         ds.setThing(th);
 
         // construct feature of interest with Id made by the hash of the name of the statement
-        FeatureOfInterest fi = new FeatureOfInterestImpl();
-        fi.setId(UUID.randomUUID());
-        fi.setDescription(resultType);
+      //  FeatureOfInterest fi = new FeatureOfInterestImpl();
+       // fi.setId(UUID.randomUUID());
+        //fi.setDescription(resultType);
 
 
 
@@ -81,13 +81,13 @@ public class OGCEventBuilder implements EventBuilder<Object, Object,ObservationI
         ob.setId(UUID.randomUUID());
         ob.setDatastream(ds);
         ob.setPhenomenonTime(new Date());
-        ob.setFeatureOfInterest(fi);
+//        ob.setFeatureOfInterest(fi);
         ob.setDatastream(ds);
         ob.setResult(event);
         ob.setFeatureOfInterest(null);
         ob.setDate(new Date(time));
         // add related objects
-        fi.addObservations(ob);
+        //fi.addObservations(ob);
 
         ArrayList<Observation> obs = (new ArrayList<>());
         obs.add(ob);

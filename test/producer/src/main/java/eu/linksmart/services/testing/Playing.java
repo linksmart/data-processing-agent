@@ -9,6 +9,7 @@ import eu.linksmart.services.utils.serialization.Serializer;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.time.Instant;
 import java.util.*;
 
 public class Playing {
@@ -25,7 +26,7 @@ public class Playing {
         }
 
         try {
-             client = new MqttClient("tcp://localhost:1883", UUID.randomUUID().toString(), new MemoryPersistence());
+             client = new MqttClient("tcp://magna:1883", UUID.randomUUID().toString(), new MemoryPersistence());
              client.connect();
 
             Thread.sleep(1000);
@@ -33,28 +34,36 @@ public class Playing {
             e.printStackTrace();
             return;
         }
-        int i=0;
+        int[] ids= new int[]{0,1,2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 19, 12, 55};
+        int i=0,n=0;
         Map<String, Object> aux= new HashMap<>();
         while (true){
             try {
-                for (int j=0; j<32;j++)
-                    for (int k=0; k<60;k++){
-                        EventEnvelope observation = (new OGCEventBuilder()).factory(
-                               sensorID.get(j),
-                               streamID.get(j),
-                               "D"+String.valueOf(j)+"-"+String.valueOf(k),
-                               new Date(),
-                               aux
+                Long before = (new Date()).getTime();
+                for(int j=0; j<32;j++){
+                    for (int id : ids)
+                        for (int k = 1; k < 4; k++,i++,n++) {
+                            EventEnvelope observation = (new OGCEventBuilder()).factory(
+                                    String.valueOf(id),
+                                    "ds_" + String.valueOf(k) + "-" + String.valueOf(id),
+                                     "_" + String.valueOf(i)+"_"+ String.valueOf(n++)+"___" + "_ds_" + String.valueOf(k) + "-" + String.valueOf(id),
+                                    new Date(),
+                                    aux
 
-                       );
-                       //deserializer.deserialize(serializer.serialize(observation),ObservationImpl.class);
-                       client.publish(observation.getClassTopic()+observation.getAttributeId(),serializer.serialize(observation),0,false);
-               }
-                Thread.sleep(500);
+                            );
+
+                            //deserializer.deserialize(serializer.serialize(observation),ObservationImpl.class);
+                            client.publish(observation.getClassTopic() + observation.getAttributeId(), serializer.serialize(observation), 0, false);
+                        }
+
+                    i = 0;
+                }
+                n=0;
+                System.out.println("Took: " + String.valueOf(((new Date()).getTime() - before) / 1000.0) + " sec");
+                Thread.sleep(6000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            i++;
         }
 
 

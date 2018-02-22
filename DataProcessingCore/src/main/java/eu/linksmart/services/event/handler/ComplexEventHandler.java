@@ -77,11 +77,12 @@ import java.util.stream.Collectors;
         if (eventMap != null) {
             if (eventMap.length == 1)
                 processSingleMap(eventMap[0]);
-            else if(eventMap.length>1&&( eventMap[0].containsKey("k") || eventMap[0].containsKey("key")) && (eventMap[0].containsKey("v")|| eventMap[0].containsKey("values"))){
-                final Map aux = new HashMap();
-                Arrays.stream(eventMap).forEach(i->aux.put(i.getOrDefault("k",i.get("key")), i.getOrDefault("v",i.get("values"))));
+            else if(eventMap.length>1&&( eventMap[0].containsKey("k") && eventMap[0].get("k") != null || eventMap[0].containsKey("key") && eventMap[0].get("key") != null) && (eventMap[0].containsKey("v") && eventMap[0].get("v") != null|| eventMap[0].containsKey("values") && eventMap[0].get("values") != null)){
+                final Map<Object,Collection> aux = new HashMap();
+                Arrays.stream(eventMap).forEach(i->applyMap(i,aux));
                 processSingleMap(aux);
             }else {
+
                 try {
                     query.setLastOutput(
                             builder.factory(
@@ -107,6 +108,17 @@ import java.util.stream.Collectors;
 
 
     }
+    private void applyMap(Map source,Map<Object,Collection> target){
+        target.putIfAbsent(source.getOrDefault("k",source.get("key")), new ArrayList());
+        if(source.getOrDefault("v",source.get("values")) instanceof Collection)
+            target.get(source.getOrDefault("k",source.get("key"))).addAll(  (Collection) source.getOrDefault("v",source.get("values")) );
+        else if(source.getOrDefault("v",source.get("values")) instanceof Object[])
+            target.get(source.getOrDefault("k",source.get("key"))).addAll(  Arrays.asList((Object[]) source.getOrDefault("v",source.get("values"))) );
+        else if(source.getOrDefault("v",source.get("values")) instanceof Map && (((Map) source.getOrDefault("v",source.get("values"))).size() == 1))
+            target.get(source.getOrDefault("k",source.get("key"))).addAll(  ((Map) source.getOrDefault("v",source.get("values"))).values() );
+        else
+            target.get(source.getOrDefault("k",source.get("key"))).add(source.getOrDefault("v",source.get("values")));
+    }
     protected void processSingleMap(Map eventMap){
         if(builder!=null) {
             if (eventMap.size() == 1) {
@@ -128,7 +140,11 @@ import java.util.stream.Collectors;
                 } catch (Exception eEntity) {
                     loggerService.error(eEntity.getMessage(), eEntity);
                 }
-            } else {
+            }  else if (eventMap.size() == 2 &&( eventMap.containsKey("k") && eventMap.get("k")!= null || eventMap.containsKey("key") && eventMap.get("key")!= null) && (eventMap.containsKey("v") && eventMap.get("v")!= null || eventMap.containsKey("values") && eventMap.get("values")!= null)) {
+                final Map aux = new HashMap();
+                applyMap(eventMap,aux);
+                processSingleMap(aux);
+            }else {
                 Object tmpDate = eventMap.getOrDefault("time", eventMap.getOrDefault("Time", eventMap.getOrDefault("date", eventMap.getOrDefault("Date", new Date()))));
                 Date date = ((tmpDate instanceof Date) ? (Date) tmpDate : ((tmpDate instanceof Long) ? new Date((Long) tmpDate) : new Date()));
                 try {

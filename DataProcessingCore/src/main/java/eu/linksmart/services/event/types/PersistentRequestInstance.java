@@ -34,7 +34,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
     protected boolean persistent = false, essential = false;
 
     @ApiModelProperty(notes = "Unique identifier of the statement in the agent")
-    @JsonProperty("ID")
+    @JsonProperty("id")
     protected String id = getId();
 
     public PersistentRequestInstance() {
@@ -43,20 +43,20 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
     }
 
 
-    @JsonGetter("Persistent")
+    @JsonGetter("persistent")
     @ApiModelProperty(notes = "Indicates if the request should be stored persistently")
     @Override
     public boolean isPersistent() {
         return persistent;
     }
-    @JsonGetter("Essential")
+    @JsonGetter("essential")
     @ApiModelProperty(notes = "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting")
     @Override
     public boolean isEssential() {
         return essential;
     }
 
-    @JsonSetter("Persistent")
+    @JsonSetter("persistent")
     @ApiModelProperty(notes = "Indicates if the request should be stored persistently")
     @Override
     public void isPersistent(boolean persistent) {
@@ -71,7 +71,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
     public void setId(String id){
         this.id =id;
     }
-    @JsonSetter("Essential")
+    @JsonSetter("essential")
     @ApiModelProperty(notes = "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting")
     @Override
     public void isEssential(boolean essential) {
