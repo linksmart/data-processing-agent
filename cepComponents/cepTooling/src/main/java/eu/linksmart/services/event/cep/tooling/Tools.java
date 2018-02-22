@@ -4,6 +4,7 @@ import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.function.Utils;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.ArrayUtils;
@@ -19,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Tools {
     static private Map<String, Object> variables= new HashMap<>();
@@ -356,6 +358,94 @@ public class Tools {
 
         }
         return map;
+    }
+   static public int CompositionOrder(Object values ){
+        final Map<Object,Integer> map =new HashMap();
+        map.put("ds_1-0", 1);
+        map.put("ds_2-0", 2);
+        map.put("ds_3-0", 3);
+        map.put("ds_1-1", 4);
+        map.put("ds_2-1", 5);
+        map.put("ds_3-1", 6);
+        map.put("ds_1-2", 7);
+        map.put("ds_2-2", 8);
+        map.put("ds_3-2", 9);
+        map.put("ds_1-3", 10);
+        map.put("ds_2-3", 11);
+        map.put("ds_3-3", 12);
+        map.put("ds_1-4", 13);
+        map.put("ds_2-4", 14);
+        map.put("ds_3-4", 15);
+        map.put("ds_1-5", 16);
+        map.put("ds_2-5", 17);
+        map.put("ds_3-5", 18);
+        map.put("ds_1-6", 19);
+        map.put("ds_2-6", 20);
+        map.put("ds_3-6", 21);
+        map.put("ds_1-7", 22);
+        map.put("ds_2-7", 23);
+        map.put("ds_3-7", 24);
+        map.put("ds_1-8", 25);
+        map.put("ds_2-8", 26);
+        map.put("ds_3-8", 27);
+        map.put("ds_1-9", 28);
+        map.put("ds_2-9", 29);
+        map.put("ds_3-9", 30);
+        map.put("ds_1-10", 31);
+        map.put("ds_2-10", 32);
+        map.put("ds_3-10", 33);
+        map.put("ds_1-11", 34);
+        map.put("ds_2-11", 35);
+        map.put("ds_3-11", 36);
+        map.put("ds_1-12", 37);
+        map.put("ds_2-12", 38);
+        map.put("ds_3-12", 39);
+        map.put("ds_1-14", 40);
+        map.put("ds_2-14", 41);
+        map.put("ds_3-14", 42);
+        map.put("ds_1-15", 43);
+        map.put("ds_2-15", 44);
+        map.put("ds_3-15", 45);
+        map.put("ds_1-16", 46);
+        map.put("ds_2-16", 47);
+        map.put("ds_3-16", 48);
+        map.put("ds_1-17", 49);
+        map.put("ds_2-17", 50);
+        map.put("ds_3-17", 51);
+        map.put("ds_1-18", 52);
+        map.put("ds_2-18", 53);
+        map.put("ds_3-18", 54);
+        map.put("ds_1-19", 55);
+        map.put("ds_2-19", 56);
+        map.put("ds_3-19", 57);
+        map.put("ds_1-55", 58);
+        map.put("ds_2-55", 59);
+        map.put("ds_3-55", 60);
+       return sort(map, values);
+    }
+
+    static private int sort(Map<Object,Integer> map, Object values ){
+
+        if(values instanceof ObservationImpl){
+            return map.get(((ObservationImpl) values).getDatastream().getId().toString());
+        } else if(values instanceof String){
+            return map.get(values);
+        }
+        return -1;
+    }
+    static public int sortBy(Object values, Object order ){
+        Map<Object,Integer> map = new HashMap<>();
+        Stream stream;
+        if(order instanceof Collection){
+            stream= ((Collection) order).stream();
+        }else if (order instanceof Object[]){
+            stream = Arrays.stream((Object[]) order);
+        }else
+            return -1;
+
+        stream.forEach(i->map.put(i,map.size()));
+
+        return sort(map,values);
     }
 
 }
