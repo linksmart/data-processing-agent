@@ -390,7 +390,9 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
     public CEPEngineAdvanced getAdvancedFeatures() {
         return this;
     }
-
+    public boolean executeStatement(Statement statement) throws StatementException, InternalException {
+        return runAsynchronousStatement(statement);
+    }
 
     static public long getTimeNow(){
         return EsperEngine.getEngine().getEngineCurrentDate().getTime();
