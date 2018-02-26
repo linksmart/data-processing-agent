@@ -4,10 +4,13 @@
         * Add async requests type for MQTT proxying management
         * Service discovery for the broker
         * LinkSmart Service registration 2.2
+        * new /execute/ endpoint to run statement that don't run continuously.
+        * Add /broker-conf/ and /broker-connections/ to dynamically change broker configurations
     DEV:
         * LA-SC IT added
     FIX:
         * Fix some issues in Statement MQTT API
+        * Fix issues with REST response
 
 2017.11.14 - 1.7.0 RELEASE:
     Features:

@@ -199,37 +199,41 @@ public class SiddhiEngine extends Component implements CEPEngine {
     @Override
     public boolean removeStatement(String id, Statement statement)  {
 
-        loggerService.error("addEventType(String nameType, Object type) function not implemented");
+        loggerService.error("removeStatement(String id, Statement statement) function not implemented");
         return false;
     }
 
     @Override
     public boolean pauseStatement(String id) throws StatementException {
 
-        loggerService.error("addEventType(String nameType, Object type) function not implemented");
+        loggerService.error("pauseStatement(String id) function not implemented");
         return false;
     }
 
     @Override
     public boolean startStatement(String id) throws StatementException {
 
-        loggerService.error("addEventType(String nameType, Object type) function not implemented");
+        loggerService.error("startStatement(String id) function not implemented");
         return false;
     }
 
     @Override
     public void destroy() {
 
-        loggerService.error("addEventType(String nameType, Object type) function not implemented");
+        loggerService.error(" destroy() function not implemented");
     }
 
     @Override
     public Map<String, Statement> getStatements() {
 
-        loggerService.error("addEventType(String nameType, Object type) function not implemented");
+        loggerService.error("getStatements() function not implemented");
         return null;
     }
+    public boolean executeStatement(Statement statement) throws StatementException, InternalException{
 
+        loggerService.error("executeStatement(Statement statement) function not implemented");
+        return false;
+    }
     @Override
     public CEPEngineAdvanced getAdvancedFeatures() {
 

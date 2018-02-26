@@ -179,4 +179,5 @@ public interface CEPEngine extends AnalyzerComponent {
 	CEPEngineAdvanced getAdvancedFeatures();
 
 
+    boolean executeStatement(Statement statement) throws StatementException, InternalException;
 }

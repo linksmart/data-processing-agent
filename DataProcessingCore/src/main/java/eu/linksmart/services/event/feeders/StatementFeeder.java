@@ -477,6 +477,50 @@ public class StatementFeeder implements Feeder<Statement> {
 
         return result;
     }
+    public static  MultiResourceResponses<Statement> executeStatement( String deleteStatement) {
+        MultiResourceResponses<Statement> result =new MultiResourceResponses<>();
+
+        int count = 0;
+
+        Statement statement = null, nativeStatement = null;
+
+        if (deleteStatement !=null){
+            nativeStatement = new StatementInstance();
+            nativeStatement.setOutput(null);
+            nativeStatement.setCEHandler(ComplexEventSynchHandler.class.getCanonicalName());
+            nativeStatement.setStatement(deleteStatement);
+            nativeStatement.setScope(null);
+            nativeStatement.setName(UUID.randomUUID().toString());
+            nativeStatement.setStateLifecycle(Statement.StatementLifecycle.SYNCHRONOUS);
+        }
+
+        if (CEPEngine.instancedEngines.size() == 0) {
+            result.addResponse(createErrorMapMessage(statement.getId(), "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
+        }else {
+
+            for (CEPEngine dfw : CEPEngine.instancedEngines.values())
+                try {
+                   dfw.executeStatement(statement);
+
+                } catch (StatementException e) {
+                    loggerService.error(e.getMessage(), e);
+                    result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 400, e.getErrorProducerType(), e.getMessage()));
+                } catch (TraceableException  e) {
+                    loggerService.error(e.getMessage(), e);
+                    result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 500, e.getErrorProducerType(), e.getMessage()));
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(), e);
+                    result.addResponse(StatementFeeder.createErrorMapMessage(statement.getId(), "Statement", 500, "Internal Server Error", e.getMessage()));
+                }
+
+        }
+        if (count==0 && result.getResponses().isEmpty()) {
+            result.addResponse(StatementFeeder.createErrorMapMessage(statement.getId(), "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + statement.getId()));
+        }else if (count!=0 )
+            result.addResponse(StatementFeeder.createSuccessMapMessage(statement.getId(), "Statement", statement.getId(), 200, "OK", "It was deleted the statement with ID: " + statement.getId()));
+
+        return result;
+    }
     public static MultiResourceResponses<Statement> getStatement(String id) {
 
         MultiResourceResponses<Statement> result =new MultiResourceResponses<>();
