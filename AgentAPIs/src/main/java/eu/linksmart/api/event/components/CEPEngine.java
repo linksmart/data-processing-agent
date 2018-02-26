@@ -113,6 +113,7 @@ public interface CEPEngine extends AnalyzerComponent {
      * Removes an statement form the CEP engine.
      *
      * @param id of the statement to be removed.
+	 * @param statement additional instruction for a successful removal, null if none is needed.
 	 *
 	 * @return if the statement with the id had been removed by this operation request
      *
@@ -122,7 +123,7 @@ public interface CEPEngine extends AnalyzerComponent {
      * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
      * the developer.
      * */
-    boolean removeStatement( String id)  throws UnknownException, StatementException;
+    boolean removeStatement( String id, Statement statement) throws UnknownException, StatementException, InternalException;
     /**
      * Pauses an statement form the CEP engine.
      *

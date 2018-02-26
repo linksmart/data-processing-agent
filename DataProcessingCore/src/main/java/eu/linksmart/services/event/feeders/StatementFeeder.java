@@ -3,6 +3,7 @@ package eu.linksmart.services.event.feeders;
 
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.event.handler.ComplexEventSynchHandler;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
@@ -83,7 +84,7 @@ public class StatementFeeder implements Feeder<Statement> {
         return response;
     }
     static public  MultiResourceResponses<Statement> pauseStatement(String hash){
-        return changeStatement(hash,Statement.StatementLifecycle.PAUSE);
+        return changeStatement(hash,Statement.StatementLifecycle.PAUSE,null);
     }
 
     static public  MultiResourceResponses<Statement> removeStatements(Collection<Statement> statements){
@@ -102,14 +103,14 @@ public class StatementFeeder implements Feeder<Statement> {
         MultiResourceResponses<Statement> response ;
 
 
-        response=removeStatement(statement.getId());
+        response=removeStatement(statement.getId(),statement);
 
 
         response.addResources(statement.getId(),statement);
         return response;
     }
-    static public  MultiResourceResponses<Statement> removeStatement(String hash){
-       return changeStatement(hash,Statement.StatementLifecycle.REMOVE);
+    static public  MultiResourceResponses<Statement> removeStatement(String hash,Statement statement){
+       return changeStatement(hash,Statement.StatementLifecycle.REMOVE,statement);
     }
    static public  MultiResourceResponses<Statement> startStatements(Collection<Statement> statements){
 
@@ -129,10 +130,10 @@ public class StatementFeeder implements Feeder<Statement> {
         return response;
     }
     static public  MultiResourceResponses<Statement> startStatement(String hash){
-        return changeStatement(hash, Statement.StatementLifecycle.RUN);
+        return changeStatement(hash, Statement.StatementLifecycle.RUN,null);
     }
 
-    static public  MultiResourceResponses<Statement> changeStatement(String hash, Statement.StatementLifecycle action){
+    static public  MultiResourceResponses<Statement> changeStatement(String hash, Statement.StatementLifecycle action,Statement statement){
         boolean success =true;
         MultiResourceResponses<Statement> response = new MultiResourceResponses<>();
 
@@ -148,7 +149,7 @@ public class StatementFeeder implements Feeder<Statement> {
                         res=dfw.pauseStatement(hash);
                         break;
                     case REMOVE:
-                        res=dfw.removeStatement(hash);
+                        res=dfw.removeStatement(hash,statement);
                         break;
                 }
                 if(res)
@@ -234,7 +235,7 @@ public class StatementFeeder implements Feeder<Statement> {
                             dfw.pauseStatement(result.getHeadResource().getId());
                             break;
                         case REMOVE:
-                            dfw.removeStatement(result.getHeadResource().getId());
+                            dfw.removeStatement(result.getHeadResource().getId(), result.getHeadResource());
                             break;
 
                     }
@@ -384,7 +385,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
 
 
-    public static  MultiResourceResponses<Statement> deleteStatement(String id) {
+   /* public static  MultiResourceResponses<Statement> deleteStatement(String id) {
         MultiResourceResponses<Statement> result =new MultiResourceResponses<>();
 
         int count = 0;
@@ -421,8 +422,61 @@ public class StatementFeeder implements Feeder<Statement> {
             result.addResponse(StatementFeeder.createSuccessMapMessage(id, "Statement", id, 200, "OK", "It was deleted the statement with ID: " + id));
 
         return result;
-    }
+    }*/
+    public static  MultiResourceResponses<Statement> deleteStatement(String id, String deleteStatement) {
+        MultiResourceResponses<Statement> result =new MultiResourceResponses<>();
 
+        int count = 0;
+
+        Statement statement = null, nativeStatement = null;
+
+        if (deleteStatement !=null){
+            nativeStatement = new StatementInstance();
+            nativeStatement.setOutput(null);
+            nativeStatement.setCEHandler(ComplexEventSynchHandler.class.getCanonicalName());
+            nativeStatement.setStatement(deleteStatement);
+            nativeStatement.setScope(null);
+            nativeStatement.setName(id+"delete");
+            nativeStatement.setStateLifecycle(Statement.StatementLifecycle.REMOVE);
+        }
+
+        if (CEPEngine.instancedEngines.size() == 0) {
+            result.addResponse(createErrorMapMessage(id, "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
+        }else {
+
+            for (CEPEngine dfw : CEPEngine.instancedEngines.values())
+                try {
+                    if (statement == null && dfw.getStatements().containsKey(id)) {
+                        statement = dfw.getStatements().get(id);
+
+                        result.addResources(id, statement);
+
+                    }
+                    if (dfw.removeStatement(id,nativeStatement))
+                        count++;
+                    else
+                        result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "In the CEP engine " + dfw.getName() + " there is no statement with ID: " + id));
+
+
+                } catch (StatementException e) {
+                    loggerService.error(e.getMessage(), e);
+                    result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 400, e.getErrorProducerType(), e.getMessage()));
+                } catch (TraceableException  e) {
+                    loggerService.error(e.getMessage(), e);
+                    result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 500, e.getErrorProducerType(), e.getMessage()));
+                } catch (Exception e) {
+                    loggerService.error(e.getMessage(), e);
+                    result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
+                }
+
+        }
+        if (count==0 && result.getResponses().isEmpty()) {
+            result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + id));
+        }else if (count!=0 )
+            result.addResponse(StatementFeeder.createSuccessMapMessage(id, "Statement", id, 200, "OK", "It was deleted the statement with ID: " + id));
+
+        return result;
+    }
     public static MultiResourceResponses<Statement> getStatement(String id) {
 
         MultiResourceResponses<Statement> result =new MultiResourceResponses<>();

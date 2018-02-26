@@ -3,7 +3,9 @@ package eu.linksmart.services.event.cep.engines;
 import eu.almanac.event.datafusion.utils.generic.Component;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
+import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.StatementException;
+import eu.linksmart.api.event.exceptions.UnknownException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.handler.SiddhiCEPHandler;
@@ -177,6 +179,8 @@ public class SiddhiEngine extends Component implements CEPEngine {
         return true;
     }
 
+
+
     private String cachedStatements ="";
     private int i=0;
     private synchronized String getAllStatement(){
@@ -193,7 +197,7 @@ public class SiddhiEngine extends Component implements CEPEngine {
     }
 
     @Override
-    public boolean removeStatement(String id)  {
+    public boolean removeStatement(String id, Statement statement)  {
 
         loggerService.error("addEventType(String nameType, Object type) function not implemented");
         return false;

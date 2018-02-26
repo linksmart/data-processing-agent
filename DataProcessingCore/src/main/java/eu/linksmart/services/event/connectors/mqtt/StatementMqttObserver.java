@@ -10,6 +10,7 @@ import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.services.event.types.StatementInstance;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +80,10 @@ public class StatementMqttObserver extends IncomingMqttObserver {
 
 
                 } else if (des.contains(conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH))) {//  BASE/delete/<statementID>/
-                    responses = StatementFeeder.deleteStatement(id);
+                    if(rawEvent != null && rawEvent.length >0)
+                        responses = StatementFeeder.deleteStatement(id, new String(rawEvent));
+                    else
+                        responses = StatementFeeder.deleteStatement(id,null);
 
                 } else if (des.contains(conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH))) {//  BASE/update/<statementID>/
                     responses = StatementFeeder.addNewStatement(new String(request.getResource()), id, null);
@@ -96,7 +100,12 @@ public class StatementMqttObserver extends IncomingMqttObserver {
                 if (des.equals(conf.getString(Const.STATEMENT_IN_TOPIC_CREATE_CONF_PATH))) { //BASE/<targetCEP>/new/<statementID>/
                     responses = StatementFeeder.addNewStatement(new String(request.getResource()), id, targetCEP);
                 } else if (des.equals(conf.getString(Const.STATEMENT_IN_TOPIC_DELETE_CONF_PATH))) { //BASE/<targetCEP>/delete/<statementID>/
-                    responses = StatementFeeder.deleteStatement(id);
+
+                    if(rawEvent != null && rawEvent.length >0)
+                        responses = StatementFeeder.deleteStatement(id, new String(rawEvent));
+                    else
+                        responses = StatementFeeder.deleteStatement(id,null);
+
                 } else if (des.equals(conf.getString(Const.STATEMENT_IN_TOPIC_UPDATE_CONF_PATH))) { //BASE/<targetCEP>/update/<statementID>/
                     responses = StatementFeeder.addNewStatement(new String(request.getResource()), id, targetCEP);
                 }
