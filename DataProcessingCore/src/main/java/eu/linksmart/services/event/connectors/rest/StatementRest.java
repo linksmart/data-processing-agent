@@ -42,7 +42,7 @@ public class StatementRest extends Component implements IncomingConnector {
 
     @ApiOperation(value = "getStatements", nickname = "getStatements")
    // @RequestMapping(method = RequestMethod.GET, path="/greeting", produces = "application/json")
-    @RequestMapping(value = "/statement/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = MultiResourceResponses.class)})
     public ResponseEntity<String> getStatements() {
 
@@ -59,7 +59,7 @@ public class StatementRest extends Component implements IncomingConnector {
             @ApiResponse(code = 404, message = "Not Found: The given ID doesn't exists", response = MultiResourceResponses.class),
             @ApiResponse(code = 500, message = "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getStatement(@PathVariable("id") String id) {
         return prepareHTTPResponse(StatementFeeder.getStatement(id));
 
@@ -73,7 +73,7 @@ public class StatementRest extends Component implements IncomingConnector {
             @ApiResponse(code = 404, message = "Not Found: The given ID doesn't exists", response = MultiResourceResponses.class),
             @ApiResponse(code = 500, message = "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/{id}/output", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/{id}/output", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getStatementLastOutput(@PathVariable("id") String id) {
         return finalHTTPCreationResponse(StatementFeeder.getStatementLastOutput(id),null);
 
@@ -104,7 +104,7 @@ public class StatementRest extends Component implements IncomingConnector {
            // @ApiResponse(code = 500, message = "General Error: Unknown Source Intern Server Error", response = MultiResourceResponses.class),
             //@ApiResponse(code = 500, message = "General Error: Unknown Status", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addStatement(
             @RequestBody StatementInstance statement
     ) {
@@ -141,7 +141,7 @@ public class StatementRest extends Component implements IncomingConnector {
             // @ApiResponse(code = 500, message = "General Error: Unknown Source Intern Server Error", response = MultiResourceResponses.class),
             //@ApiResponse(code = 500, message = "General Error: Unknown Status", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/execute/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/execute/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> executeStatement(
             @RequestBody String statement
     ) {
@@ -177,7 +177,7 @@ public class StatementRest extends Component implements IncomingConnector {
             @ApiResponse(code = 500, message = "General Error: Unknown Source Intern Server Error", response = MultiResourceResponses.class),
             @ApiResponse(code = 500, message = "General Error: Unknown Status", response = MultiResourceResponses.class),*/
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createStatement(
             @RequestBody StatementInstance statement
     ) {
@@ -216,7 +216,7 @@ public class StatementRest extends Component implements IncomingConnector {
            // @ApiResponse(code = 500, message = "General Error: Unknown Source Intern Server Error", response = MultiResourceResponses.class),
            // @ApiResponse(code = 500, message = "General Error: Unknown Status", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> changeStatement(
             @RequestBody StatementInstance statement,
             @PathVariable("id") String id
@@ -254,7 +254,7 @@ public class StatementRest extends Component implements IncomingConnector {
            // @ApiResponse(code = 500, message = "General Error: Unknown Source Intern Server Error", response = MultiResourceResponses.class),
            // @ApiResponse(code = 500, message = "General Error: Unknown Status", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/{cepEngine}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/{cepEngine}/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addStatementIntoCep(
             @RequestBody StatementInstance statement,
             @PathVariable("cepEngine") String cepEngine
@@ -296,7 +296,7 @@ public class StatementRest extends Component implements IncomingConnector {
             //@ApiResponse(code = 500, message = "General Error: Unknown Source Intern Server Error", response = MultiResourceResponses.class),
            // @ApiResponse(code = 500, message = "General Error: Unknown Status", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/{cepEngine}/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/{cepEngine}/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> changeStatementIntoCep(
             @RequestBody StatementInstance statement,
             @PathVariable("id") String id,
@@ -320,7 +320,7 @@ public class StatementRest extends Component implements IncomingConnector {
             @ApiResponse(code = 404, message = "Provided ID doesn't exist in any CEP engine. ID:", response = MultiResourceResponses.class),
             @ApiResponse(code = 500, message = "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors", response = MultiResourceResponses.class),
             @ApiResponse(code = 503, message = "Service Unavailable: No CEP engine found to deploy statement", response = MultiResourceResponses.class)})
-    @RequestMapping(value = "/statement/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/statement/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> removeStatement(
             @PathVariable("id") String id
       //      ,@RequestBody String statement
