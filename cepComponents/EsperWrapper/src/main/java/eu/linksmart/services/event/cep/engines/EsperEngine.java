@@ -221,18 +221,12 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
             // if the statement does not exists
             if(epService.getEPAdministrator().getStatement(statement.getId())==null) {
 
-                result = addEsperStatement(statement);
+                result = manageStatementLifeCycle(statement);
             }
         } catch (StatementException  e) {
 
             loggerService.error(e.getMessage(), e);
             throw e;
-
-        }catch (ClassNotFoundException e){
-
-            loggerService.error(e.getMessage(), e);
-
-            throw new UnknownException(statement.getId(), "Statement","The given handler of the statement ID:"+statement.getId()+" is unknown by this agent. If no handler was given this is an internal server error, otherwise the user provide wrong handler name");
 
         }catch (Exception e){
             loggerService.error(e.getMessage(), e);
@@ -242,10 +236,11 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
 
         return result;
     }
-    private boolean addEsperStatement( Statement statement) throws StatementException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        ComplexEventHandler handler=null;
+
+    private ComplexEventHandler newHandlerFor(Statement statement) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // add the query and the listener for the query
-        if(statement.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS) {
+        ComplexEventHandler handler=null;
+        if(statement.getStateLifecycle()== Statement.StatementLifecycle.SYNCHRONOUS || statement.getStateLifecycle()== Statement.StatementLifecycle.REMOVE) {
             //statement.setCEHandler("eu.linksmart.services.event.datafusion.handler.ComplexEventSynchHandler");
             Class clazz = Class.forName(statement.getCEHandler());
             Constructor constructor = clazz.getConstructor(Statement.class);
@@ -255,68 +250,91 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
             Constructor constructor = clazz.getConstructor(Statement.class);
             handler = (ComplexEventHandler) constructor.newInstance(statement);
         }
-       return manageStatementLifeCycle(statement, handler);
+        return handler;
     }
 
-    private boolean manageStatementLifeCycle(Statement statement, ComplexEventHandler handler) throws StatementException{
+    private boolean manageStatementLifeCycle(Statement statement) throws StatementException, InternalException{
         boolean end = false;
         switch (statement.getStateLifecycle()) {
             case ONCE:
             case SYNCHRONOUS:
-                EPOnDemandQueryResult result;
-                try {
-                    result = epService.getEPRuntime().executeQuery(statement.getStatement());
-                }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),statement.getId(),e.getCause());
-                }
-                if (handler != null) {
-
-                    for (EventBean event : result.getArray()) {
-
-                        if ( handler.getClass().isAssignableFrom(ComplexEventSyncHandler.class))
-                            ((ComplexEventSyncHandler)handler).update(event.getUnderlying());
-                        else
-                            throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",statement.getId(), "Statement");
-                    }
-                }
-                end = true;
+                runSynchronousStatement(statement);
                 break;
             case REMOVE:
-                end = removeStatement(statement.getId());
+                end = removeStatement(statement.getId(),statement);
                 break;
             case RUN:
             case PAUSE:
             default:
-                EPStatement epl;
-                try {
-                    epl = epService.getEPAdministrator().createEPL(statement.getStatement(), statement.getId());
 
-                }catch (EPStatementException e){
-                    throw new StatementException(e.getMessage(),statement.getId(),e );
-                }
-                if (handler != null) {
-                    epl.setSubscriber(handler);
-                }
-                switch (statement.getStateLifecycle()) {
-                    case PAUSE:
-                        epl.stop();
-                        break;
-                    case RUN:
-                    default:
-                        epl.start();
-                }
-                deployedStatements.put(statement.getId(), statement);
-                end = true;
+                end = runAsynchronousStatement(statement);
         }
         return end;
     }
+    private boolean runAsynchronousStatement(Statement statement) throws StatementException, InternalException {
+
+        ComplexEventHandler handler = null;
+        try {
+            handler = newHandlerFor(statement);
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
+           throw new InternalException(statement.getId(),"The selected handler cannot be instantiated",e.getMessage(),e);
+        }
+        EPStatement epl;
+        try {
+            epl = epService.getEPAdministrator().createEPL(statement.getStatement(), statement.getId());
+
+        }catch (EPStatementException e){
+            throw new StatementException(e.getMessage(),statement.getId(),e );
+        }
+        if (handler != null) {
+            epl.setSubscriber(handler);
+        }
+        switch (statement.getStateLifecycle()) {
+            case PAUSE:
+                epl.stop();
+                break;
+            case RUN:
+            default:
+                epl.start();
+        }
+        deployedStatements.put(statement.getId(), statement);
+        return true;
+
+    }
+    private boolean runSynchronousStatement(Statement statement) throws StatementException, InternalException {
+        ComplexEventHandler handler = null;
+        try {
+            handler = newHandlerFor(statement);
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
+            throw new InternalException(statement.getId(),"The selected handler cannot be instantiated",e.getMessage(),e);
+        }
+        EPOnDemandQueryResult result;
+        try {
+            result = epService.getEPRuntime().executeQuery(statement.getStatement());
+        }catch (EPStatementException e){
+            throw new StatementException(statement.getId(),"Syntax error",e.getMessage(),e.getCause());
+        }
+        if (handler != null) {
+
+            for (EventBean event : result.getArray()) {
+
+                if ( handler.getClass().isAssignableFrom(ComplexEventSyncHandler.class))
+                    ((ComplexEventSyncHandler)handler).update(event.getUnderlying());
+                else
+                    throw new StatementException("Unsupported event in on-demand statement for the handler to generate an response ",statement.getId(), "Statement");
+            }
+        }
+       return true;
+
+    }
 
     @Override
-    public boolean removeStatement(String id)  {
+    public boolean removeStatement(String id,Statement deleteStatement) throws StatementException, InternalException {
 
         if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
-
+        if(deleteStatement!=null)
+            runSynchronousStatement(deleteStatement);
         ComplexEventHandler handler = ((ComplexEventHandler)epService.getEPAdministrator().getStatement(id).getSubscriber());
         if(handler!=null)
             handler.destroy();
@@ -355,7 +373,7 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
     public void destroy() {
         Arrays.stream(epService.getEPAdministrator().getStatementNames()).forEach((id) -> {
             try {
-                removeStatement(id);
+                removeStatement(id, null);
             }catch (Exception e){
                 loggerService.error(e.getMessage(),e);
             }
