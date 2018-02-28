@@ -1,1 +1,2318 @@
-
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "A complex analytic service that offers Machine Learning and other complex analytics as a service",
+    "version": "1.8.0",
+    "title": "LinkSmart (R) IoT Learning Agent",
+    "contact": {
+      "name": "LinkSmart (R) IoT Learning Agent",
+      "url": "https://fit.fraunhofer.de",
+      "email": "carvaja@fit.fhg.de"
+    },
+    "license": {
+      "name": "Apache License version 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "dpa:8319",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "broker-management",
+      "description": "Broker Management"
+    },
+    {
+      "name": "statement-rest",
+      "description": "Statement Rest"
+    },
+    {
+      "name": "event-rest",
+      "description": "Event Rest"
+    },
+    {
+      "name": "rest-init",
+      "description": "Rest Init"
+    },
+    {
+      "name": "basic-error-controller",
+      "description": "Basic Error Controller"
+    },
+    {
+      "name": "ceml-rest",
+      "description": "CEML Rest"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "rest-init"
+        ],
+        "summary": "status",
+        "operationId": "statusUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/broker-conf/": {
+      "get": {
+        "tags": [
+          "broker-management"
+        ],
+        "summary": "getBrokerConfigurations",
+        "operationId": "getBrokerConfigurations",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/BrokerConfiguration"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/broker-conf/{alias}": {
+      "get": {
+        "tags": [
+          "broker-management"
+        ],
+        "summary": "getBrokerConfiguration",
+        "operationId": "getBrokerConfiguration",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "alias",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/BrokerConfiguration"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "broker-management"
+        ],
+        "summary": "getBrokerConfigurations",
+        "operationId": "getBrokerConfigurations_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "configuration",
+            "description": "configuration",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BrokerConfiguration"
+            }
+          },
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "alias",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/BrokerConfiguration"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "broker-management"
+        ],
+        "summary": "removeBrokerConfiguration",
+        "operationId": "removeBrokerConfiguration",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "alias",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/BrokerConfiguration"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/broker-connections/": {
+      "get": {
+        "tags": [
+          "broker-management"
+        ],
+        "summary": "getBrokerIncomingConnections",
+        "operationId": "getBrokerIncomingConnections",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/broker-connections/{alias}": {
+      "put": {
+        "tags": [
+          "broker-management"
+        ],
+        "summary": "putBrokerIncomingConnections",
+        "operationId": "putBrokerIncomingConnections",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "alias",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "broker-management"
+        ],
+        "summary": "removeBrokerIncomingConnections",
+        "operationId": "removeBrokerIncomingConnections",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "alias",
+            "in": "path",
+            "description": "alias",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/ceml": {
+      "get": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "getAll",
+        "operationId": "getAllUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/ceml/": {
+      "post": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "createRequest",
+        "operationId": "createRequestUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/ceml/{name}": {
+      "get": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "getRequest",
+        "operationId": "getRequestUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "createRequest",
+        "operationId": "createRequestUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "deleteRequest",
+        "operationId": "deleteRequestUsingDELETE",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/ceml/{name}/data": {
+      "get": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "getRequestData",
+        "operationId": "getRequestDataUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/ceml/{name}/deployment": {
+      "get": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "getDeployment",
+        "operationId": "getDeploymentUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/ceml/{name}/evaluation": {
+      "get": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "getEvaluation",
+        "operationId": "getEvaluationUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/ceml/{name}/learning": {
+      "get": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "getLearning",
+        "operationId": "getLearningUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/ceml/{name}/model": {
+      "get": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "getModel",
+        "operationId": "getModelUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/ceml/{name}/model/prediction": {
+      "get": {
+        "tags": [
+          "ceml-rest"
+        ],
+        "summary": "classifyWithModel",
+        "operationId": "classifyWithModelUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/error": {
+      "get": {
+        "tags": [
+          "basic-error-controller"
+        ],
+        "summary": "error",
+        "operationId": "errorUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "basic-error-controller"
+        ],
+        "summary": "error",
+        "operationId": "errorUsingHEAD",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "basic-error-controller"
+        ],
+        "summary": "error",
+        "operationId": "errorUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "basic-error-controller"
+        ],
+        "summary": "error",
+        "operationId": "errorUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "basic-error-controller"
+        ],
+        "summary": "error",
+        "operationId": "errorUsingDELETE",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "options": {
+        "tags": [
+          "basic-error-controller"
+        ],
+        "summary": "error",
+        "operationId": "errorUsingOPTIONS",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "basic-error-controller"
+        ],
+        "summary": "error",
+        "operationId": "errorUsingPATCH",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/event/**": {
+      "post": {
+        "tags": [
+          "event-rest"
+        ],
+        "summary": "addEvent",
+        "operationId": "addEvent",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "rawEvent",
+            "description": "rawEvent",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "topic",
+            "in": "path",
+            "description": "Event's topic as is define in the configuration",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK 200: event had being fed",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request 400: parsing error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors"
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement"
+          }
+        }
+      }
+    },
+    "/execute/": {
+      "post": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "executeStatement",
+        "operationId": "executeStatement",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statement",
+            "description": "statement",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "207": {
+            "description": "Multi-status",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "304": {
+            "description": "Not Modified: This exact statement already exists in this agent",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "400": {
+            "description": "Syntax error: 'reason'",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "409": {
+            "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
+    "/statement/": {
+      "get": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "getStatements",
+        "operationId": "getStatements",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "addStatement",
+        "operationId": "addStatement",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statement",
+            "description": "statement",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatementInstance"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "207": {
+            "description": "Multi-status",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "304": {
+            "description": "Not Modified: This exact statement already exists in this agent",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "400": {
+            "description": "Syntax error: 'reason'",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "409": {
+            "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "createStatement",
+        "operationId": "createStatement",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statement",
+            "description": "statement",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatementInstance"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created: Statement 'id' was successful",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "201": {
+            "description": "Created: Statement 'id' was successful",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "207": {
+            "description": "Multi-status",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "304": {
+            "description": "Not Modified: This exact statement already exists in this agent",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "400": {
+            "description": "Syntax error: 'reason'",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "409": {
+            "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
+    "/statement/{cepEngine}/": {
+      "post": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "addStatementInEngine",
+        "operationId": "addStatementInEngine",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statement",
+            "description": "statement",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatementInstance"
+            }
+          },
+          {
+            "name": "cepEngine",
+            "in": "path",
+            "description": "Target engine of for the statement",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "207": {
+            "description": "Multi-status",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "304": {
+            "description": "Not Modified: This exact statement already exists in this agent",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "400": {
+            "description": "Syntax error: 'reason'",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID or cepEngine doesn't exists \n The cep engine named 'cepEngine' doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "409": {
+            "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
+    "/statement/{cepEngine}/{id}": {
+      "put": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "changeStatementIntoCep",
+        "operationId": "changeStatementIntoCep",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statement",
+            "description": "statement",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatementInstance"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ID",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cepEngine",
+            "in": "path",
+            "description": "Target CEP engine for the statement ",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Statement 'id' was successful (in case of an update of an existing statement)",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "201": {
+            "description": "Created: Statement 'id' was successful",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "207": {
+            "description": "Multi-status",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "304": {
+            "description": "Not Modified: This exact statement already exists in this agent",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "400": {
+            "description": "Syntax error: 'reason'",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "409": {
+            "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
+    "/statement/{id}": {
+      "get": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "getStatement",
+        "operationId": "getStatement",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "changeStatement",
+        "operationId": "changeStatement",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statement",
+            "description": "statement",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatementInstance"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "ID",
+            "description": "Statement's ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Statement 'id' was successful (in case of an update of an existing statement)",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "201": {
+            "description": "Created: Statement 'id' was successful",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "207": {
+            "description": "Multi-status",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "304": {
+            "description": "Not Modified: This exact statement already exists in this agent",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "400": {
+            "description": "Syntax error: 'reason'",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "409": {
+            "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "removeStatement",
+        "operationId": "removeStatement",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Provided ID doesn't exist in any CEP engine. ID:",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
+    "/statement/{id}/output": {
+      "get": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "getStatementLastOutput",
+        "operationId": "getStatementLastOutput",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BrokerConfiguration": {
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "automaticReconnect": {
+          "type": "boolean"
+        },
+        "cleanSession": {
+          "type": "boolean"
+        },
+        "filePersistence": {
+          "type": "boolean"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "initSecurityConfiguration": {
+          "$ref": "#/definitions/BrokerSecurityConfiguration"
+        },
+        "keepAlive": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxInFlightMessages": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "noTries": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pubQoS": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "reconnectWaitingTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "retainPolicy": {
+          "type": "boolean"
+        },
+        "secConf": {
+          "$ref": "#/definitions/BrokerSecurityConfiguration"
+        },
+        "securePort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "subQoS": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "timeOut": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "url": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "enum": [
+            "DEFAULT",
+            "V3",
+            "V3_1",
+            "V3_1_1"
+          ]
+        },
+        "will": {
+          "type": "string"
+        },
+        "willTopic": {
+          "type": "string"
+        }
+      }
+    },
+    "BrokerSecurityConfiguration": {
+      "type": "object",
+      "properties": {
+        "capassword": {
+          "type": "string"
+        },
+        "capath": {
+          "type": "string"
+        },
+        "clientCertificatePassword": {
+          "type": "string"
+        },
+        "clientCertificatePath": {
+          "type": "string"
+        },
+        "keyPassword": {
+          "type": "string"
+        },
+        "keyPath": {
+          "type": "string"
+        }
+      }
+    },
+    "GeneralRequestResponse": {
+      "type": "object",
+      "required": [
+        "agentID",
+        "headline",
+        "message",
+        "messageType",
+        "producerID",
+        "producerName",
+        "status",
+        "topic"
+      ],
+      "properties": {
+        "agentID": {
+          "type": "string",
+          "description": "Provide the id of the agent where the response was generated"
+        },
+        "headline": {
+          "type": "string",
+          "description": "Provide the content title of the response"
+        },
+        "message": {
+          "type": "string",
+          "description": "Message of the response"
+        },
+        "messageType": {
+          "type": "string",
+          "description": "Verbose code of the response",
+          "enum": [
+            "SUCCESS",
+            "INFORMATIVE",
+            "REDIRECTION",
+            "CLIENT_ERROR",
+            "ERROR"
+          ]
+        },
+        "producerID": {
+          "type": "string",
+          "description": "Provide the id of the request that provide a response"
+        },
+        "producerName": {
+          "type": "string",
+          "description": "Provide the name of the request that provide a response"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Code of the response"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Topic of the response. Used as URI"
+        }
+      }
+    },
+    "ModelAndView": {
+      "type": "object",
+      "properties": {
+        "empty": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": "object"
+        },
+        "modelMap": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "reference": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "100",
+            "101",
+            "102",
+            "103",
+            "200",
+            "201",
+            "202",
+            "203",
+            "204",
+            "205",
+            "206",
+            "207",
+            "208",
+            "226",
+            "300",
+            "301",
+            "302",
+            "303",
+            "304",
+            "305",
+            "307",
+            "308",
+            "400",
+            "401",
+            "402",
+            "403",
+            "404",
+            "405",
+            "406",
+            "407",
+            "408",
+            "409",
+            "410",
+            "411",
+            "412",
+            "413",
+            "414",
+            "415",
+            "416",
+            "417",
+            "418",
+            "419",
+            "420",
+            "421",
+            "422",
+            "423",
+            "424",
+            "426",
+            "428",
+            "429",
+            "431",
+            "451",
+            "500",
+            "501",
+            "502",
+            "503",
+            "504",
+            "505",
+            "506",
+            "507",
+            "508",
+            "509",
+            "510",
+            "511"
+          ]
+        },
+        "view": {
+          "$ref": "#/definitions/View"
+        },
+        "viewName": {
+          "type": "string"
+        }
+      }
+    },
+    "MultiResourceResponses": {
+      "type": "object",
+      "required": [
+        "resources",
+        "responses"
+      ],
+      "properties": {
+        "resources": {
+          "type": "object",
+          "description": "The resource involved or result of the request. In most of the cases, the map has only one result. In some cases the map is empty, usually in case of an unsuccessfully request "
+        },
+        "responses": {
+          "type": "array",
+          "description": "The verbose result of all process generated by a request. In most of the cases the vector has only one result",
+          "items": {
+            "$ref": "#/definitions/GeneralRequestResponse"
+          }
+        }
+      }
+    },
+    "StatementInstance": {
+      "type": "object",
+      "properties": {
+        "AgentID": {
+          "type": "string",
+          "description": "Indicates the agent ID where this Statement was created"
+        },
+        "Essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
+        "Persistent": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "StateLifecycle": {
+          "type": "string",
+          "description": "Statement's Lifecycle.",
+          "enum": [
+            "RUN",
+            "ONCE",
+            "SYNCHRONOUS",
+            "PAUSE",
+            "REMOVE"
+          ]
+        },
+        "SynchronousResponse": {
+          "type": "object",
+          "description": "In case of a synchronous request, the response will be sent here."
+        },
+        "TargetAgents": {
+          "type": "array",
+          "description": "Indicates the agent ID which should process the statement. Not used for REST API",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cehandler": {
+          "type": "string",
+          "description": "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the statement in the agent"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the statement. For add a statement (POST) is mandatory"
+        },
+        "output": {
+          "type": "array",
+          "description": "The output URIs of the events",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rest": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB"
+        },
+        "resultType": {
+          "type": "string",
+          "description": "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB"
+        },
+        "scope": {
+          "type": "array",
+          "description": "Server where the events will be pushed",
+          "items": {
+            "type": "string"
+          }
+        },
+        "statement": {
+          "type": "string",
+          "description": "Statement or Query in the underlying implementation of the CEP engine. For most of the cases is mandatory"
+        },
+        "synchronousResponse": {
+          "type": "object"
+        }
+      }
+    },
+    "View": {
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
