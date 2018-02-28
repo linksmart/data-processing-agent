@@ -76,7 +76,7 @@
         <linksmart.minor.version>2</linksmart.minor.version>
         <linksmart.patch.version>1</linksmart.patch.version>
         <linksmart.version>${linksmart.major.version}.${linksmart.minor.version}</linksmart.version>
-        <linksmart.commons.version>1.2.1-SNAPSHOT</linksmart.commons.version>
+        <linksmart.commons.version>1.3.0-SNAPSHOT</linksmart.commons.version>
 
         <!-- dependencies versions -->
         <jackson.core.version>2.8.9</jackson.core.version>
