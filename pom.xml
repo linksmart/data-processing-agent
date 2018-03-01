@@ -85,6 +85,8 @@
         <jackson.maper.asl.version>1.9.13</jackson.maper.asl.version>
         <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
         <eclipse.paho.mqtt.version>1.2.0</eclipse.paho.mqtt.version>
+	<apache.commons.email.version>1.5</apache.commons.email.version>
+        <apache.commons.validator.version>1.6</apache.commons.validator.version>
         <apache.commons.configuration.version>1.10</apache.commons.configuration.version>
         <apache.commons.beanutils.version>1.9.3</apache.commons.beanutils.version>
         <apache.commons.lang.version>3.1</apache.commons.lang.version>
@@ -309,6 +311,16 @@
                 <version>${eclipse.paho.mqtt.version}</version>
             </dependency>
             <!-- Apache -->
+            <dependency>
+  		<groupId>org.apache.commons</groupId>
+    		<artifactId>commons-email</artifactId>
+                <version>${apache.commons.email.version}</version>
+            </dependency>
+	    <dependency>
+	        <groupId>commons-validator</groupId>
+	        <artifactId>commons-validator</artifactId>
+	        <version>${apache.commons.validator.version}</version>
+            </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>

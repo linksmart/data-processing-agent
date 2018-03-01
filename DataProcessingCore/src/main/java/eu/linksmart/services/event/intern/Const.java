@@ -10,7 +10,8 @@ import eu.linksmart.services.event.handler.HandlerConst;
  * Created by José Ángel Carvajal on 06.08.2015 a researcher of Fraunhofer FIT.
  */
 public interface Const extends eu.linksmart.services.utils.constants.Const, eu.linksmart.services.event.feeders.Const, HandlerConst {
-
+	int EMAIL_DISPATCHER_QUEUE_CAPACITY = 256; 
+	long EMAIL_DISPATCHER_JOIN_INTERVAL = 5000;
 
     String STATEMENT_INOUT_BROKER_CONF_PATH ="api_statements_mqtt_broker";
     String STATEMENT_INOUT_BASE_TOPIC_CONF_PATH ="api_statements_mqtt_topic_base";
