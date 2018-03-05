@@ -50,7 +50,7 @@ public class HTTPPublisher implements Publisher{
         String[] nameURL = statement.toLowerCase().replace("add instance", "").trim().split("=");
         if (nameURL.length == 2) {
 
-            knownInstances.put(nameURL[0], nameURL[1]);
+            knownInstances.put(nameURL[0].trim(), nameURL[1].trim());
 
         } else {
             return false;
@@ -68,8 +68,8 @@ public class HTTPPublisher implements Publisher{
         else {
             for(int i=0;i<alias.size();i++)
                 knownInstances.put(
-                        alias.get(i).toString(),
-                        brokerHostname.get(i).toString()
+                        alias.get(i).toString().trim(),
+                        brokerHostname.get(i).toString().trim()
 
                 );
         }
