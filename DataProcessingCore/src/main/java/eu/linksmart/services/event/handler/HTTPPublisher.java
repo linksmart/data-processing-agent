@@ -5,10 +5,16 @@ import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
+import io.swagger.client.ApiClient;
+import io.swagger.client.api.ScApi;
+import io.swagger.client.model.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.http.client.fluent.*;
+import org.springframework.web.client.RestClientException;
 
+import java.net.URI;
 import java.util.*;
 
 /**
@@ -20,13 +26,26 @@ public class HTTPPublisher implements Publisher{
     private List<String> scopes;
     private String id;
     private Logger loggerService = LogManager.getLogger(this.getClass());
-    private transient Configurator conf = Configurator.getDefaultConfig();
+    private static transient Configurator conf = Configurator.getDefaultConfig();
     private Map<String,Request> requesters = new HashMap<>();
+    // using host, port and protocol form Service Catalog
+    static private transient ScApi SCclient = null;
+    static {
 
+        if(Utils.isRestAvailable(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))){
+            ApiClient apiClient = new ApiClient();
+            apiClient.setBasePath(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
+            SCclient = new ScApi(apiClient);
+        }
+
+
+    }
     /***
      * Location are the brokers unknown with an alias by the Handlers
      * */
     public final static Map<String,String> knownInstances= new Hashtable<>();
+    private String SC_API_NAME = "HTTP";
+
     public static boolean addKnownLocations(String statement) throws StatementException {
         String[] nameURL = statement.toLowerCase().replace("add instance", "").trim().split("=");
         if (nameURL.length == 2) {
@@ -92,10 +111,38 @@ public class HTTPPublisher implements Publisher{
 
 
        scopes.forEach(scope-> {
-                   if (!knownInstances.containsKey(scope.toLowerCase()))
-                       loggerService.error("Scope:" + scope+ "not found");
-                   else {
-                       int n =requesters.size();
+                   if (!knownInstances.containsKey(scope.toLowerCase())) {
+                       try {
+
+                           if (SCclient != null ){
+
+                               Service service =null;
+                               try{
+                                   service =SCclient.idGet(scope);
+                               }catch (RestClientException e){
+                                   loggerService.error(e.getMessage(),e);
+
+                               }
+
+                               final URI url = new URI(service.getApis().get(SC_API_NAME));
+
+
+                               outputs.forEach(o ->
+                                       requesters.put(
+                                               url.toString()+o,
+                                               Request.Post(
+                                                       makeUri(url.toString(),o)
+                                               )
+                                       )
+                               );
+
+                           }else
+                               loggerService.error("Scope:" + scope + "not found");
+                       }catch (Exception ignored){
+                           //nothing
+                       }
+                   }else {
+
                        outputs.forEach(o ->
                                        requesters.put(
                                               scope+o,
