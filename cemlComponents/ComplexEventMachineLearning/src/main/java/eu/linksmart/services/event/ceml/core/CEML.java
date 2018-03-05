@@ -80,7 +80,9 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
             PersistenceService fileFeeder = new PersistenceService(PersistentRequestInstance.getPersistentFile());
 
             fileFeeder.loadFiles();
-            List<CEMLManager> requests = new ArrayList<>(fileFeeder.getRequests(CEMLManager.class.getCanonicalName()));
+            List<CEMLManager> requests = new ArrayList<>();
+            if(fileFeeder.getRequests(CEMLManager.class.getCanonicalName())!=null)
+                requests.add((CEMLManager) fileFeeder.getRequests(CEMLManager.class.getCanonicalName()));
             if(!requests.isEmpty())
                 requests.forEach(CEML::create);
         }
