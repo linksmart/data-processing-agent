@@ -2012,22 +2012,19 @@
     "BrokerSecurityConfiguration": {
       "type": "object",
       "properties": {
-        "capassword": {
+        "acceptAllCerts": {
+          "type": "boolean"
+        },
+        "keyStorePassword": {
           "type": "string"
         },
-        "capath": {
+        "keyStorePath": {
           "type": "string"
         },
-        "clientCertificatePassword": {
+        "trustStorePassword": {
           "type": "string"
         },
-        "clientCertificatePath": {
-          "type": "string"
-        },
-        "keyPassword": {
-          "type": "string"
-        },
-        "keyPath": {
+        "trustStorePath": {
           "type": "string"
         }
       }
