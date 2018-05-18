@@ -163,7 +163,8 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
     public void setAttributeId(String value) {
         if(this.value ==null)
             this.value = new Vector<>();
-
+        if(this.value.isEmpty())
+            this.value.add(new Measurement());
         this.getLast().setAttributeId(value);
     }
 
