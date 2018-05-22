@@ -35,28 +35,48 @@ public class ModelDeserializer extends DeserializerMode<Model> {
     @Override
     public Model deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+
+
+       String name = loadName(node);
+       return constructModel(node,name,loadTargets(node),loadParameters(node),loadLerner(node,name));
+
+       //else
+         //   throw new IOException("The field Parameters is a mandatory field!");
+
+
+    }
+    protected String loadName(JsonNode node) throws IOException{
         String name =  node.get("Name").textValue();
         if(!loadClass("eu.linksmart.services.event.ceml.models."+name) && !loadClass(name))
             throw new IOException("Loaded class: "+name+" or "+"eu.linksmart.services.event.ceml.models."+name+ " do not exist!");
-
-
+        return name;
+    }
+    protected  List<TargetRequest>  loadTargets(JsonNode node) throws IOException{
         List<TargetRequest> targetRequests;
-        Map<String,Object> parameters = new Hashtable<>();
         if(node.hasNonNull("Targets")) {
             targetRequests = mapper.reader(collectionType).readValue(node.get("Targets"));
 
         }else
             throw new IOException("The field Targets is a mandatory field!");
+        return targetRequests;
+    }
+    protected Map<String,Object> loadParameters(JsonNode node) throws IOException{
+        Map<String,Object> parameters = new Hashtable<>();
         if(node.hasNonNull("Parameters")) {
             parameters = mapper.reader(mapType).readValue(node.get("Parameters"));
 
-        }//else
-         //   throw new IOException("The field Parameters is a mandatory field!");
+        }
+        return parameters;
+    }
+    protected Object loadLerner(JsonNode node, String name) throws IOException{
         Object learner = null;
         if(node.hasNonNull("Learner")) {
             JavaType learnerType = learners.get(name);
             learner = mapper.reader(learnerType).readValue(node.get("Learner"));
         }
+        return learner;
+    }
+    protected Model constructModel(JsonNode node, String name, List<TargetRequest> targetRequests, Map<String,Object> parameters, Object learner)throws IOException {
         try {
             return Model.factory(name,targetRequests,parameters,learner);
         } catch (Exception e) {

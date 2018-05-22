@@ -1,7 +1,12 @@
 package eu.linksmart.services.event.ceml.models;
 
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.ceml.model.Model;
+import eu.linksmart.api.event.ceml.model.ModelDeserializer;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.*;
@@ -23,10 +28,12 @@ public class PythonPyroBase<T> extends ClassifierModel<T,Integer,PyroProxy>{
     protected Process proc;
     protected File pyroAdapter;
     protected int counter = 0;
-    protected final String pyroAdapterFilename = "pyroAdapter.py";
+    protected final static String pyroAdapterFilename = "pyroAdapter.py";
+    protected Object baseModel = null;
 
     public PythonPyroBase(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
-        super(targets, parameters, learner);
+        super(targets, parameters, null);
+        baseModel= learner;
     }
 
     @Override
@@ -84,6 +91,7 @@ public class PythonPyroBase<T> extends ClassifierModel<T,Integer,PyroProxy>{
             }
 
             loggerService.info("Learner: {}:{} {}", learner.hostname, learner.port, learner.pyroHandshake);
+            learner.call("importModel", baseModel);
             learner.call("build", parameters.get("Classifier"));
 
         } catch (PyroException e) {
