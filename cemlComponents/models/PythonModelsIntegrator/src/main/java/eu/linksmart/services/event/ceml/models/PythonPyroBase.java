@@ -26,9 +26,13 @@ import org.apache.commons.io.FileUtils;
 public class PythonPyroBase<T> extends ClassifierModel<T,Integer,PyroProxy>{
 
     protected Process proc;
+    static protected Process orchProc;
     protected File pyroAdapter;
+    static protected File pyroOrchFile;
     protected int counter = 0;
     protected final static String pyroAdapterFilename = "pyroAdapter.py";
+    protected final static String pyroOrchestratorFilename = "pyroOrchestrator.py";
+    protected static PyroProxy orchestrator = null;
     protected Object baseModel = null;
 
     public PythonPyroBase(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
@@ -50,44 +54,23 @@ public class PythonPyroBase<T> extends ClassifierModel<T,Integer,PyroProxy>{
                 NameServerProxy ns = NameServerProxy.locateNS((String)backend.get("NameServer"));
                 learner = new PyroProxy(ns.lookup((String)backend.get("RegisteredName")));
                 ns.close();
-            } else {
-                pyroAdapter = new File(System.getProperty("java.io.tmpdir")+File.separator+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
-                pyroAdapter.deleteOnExit();
-                FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource(pyroAdapterFilename), pyroAdapter);
-                loggerService.info("Saved script to {}", pyroAdapter.getAbsolutePath());
-
-                // Path to script is passed as parameter
-                String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath(),
-                        "--bname="+ backend.get("ModuleName"),
-                        "--bpath="+ backend.get("ModulePath")};
-                proc = Runtime.getRuntime().exec(cmd);
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-                String agentPyroURI = stdInput.readLine();
-                if(agentPyroURI == null || !agentPyroURI.startsWith("PYRO")) {
-                    String s = null;
-                    while ((s = stdError.readLine()) != null) {
-                        loggerService.error("Proc: {}", s);
+            }if(backend.containsValue("Orchestrator") || backend.containsValue("OrchestratorName")) {
+                if(orchestrator==null){
+                    if(backend.containsValue("OrchestratorName")){
+                        // search for existing orchestrator
+                        loggerService.info("Looking up '{}' in name server '{}'", backend.get("OrchestratorName"), backend.get("NameServer"));
+                        NameServerProxy ns = NameServerProxy.locateNS((String)backend.get("NameServer"));
+                        orchestrator = new PyroProxy(ns.lookup((String)backend.get("OrchestratorName")));
+                        ns.close();
+                    }else {
+                        // run an orchestrator form scratch
+                        orchestrator = constructProxy(pyroOrchestratorFilename,orchProc,pyroOrchFile);
                     }
-                    throw new InternalException(this.getName(), "Pyro", "Expected PYRO:obj@host:port but got: " + agentPyroURI);
                 }
+                learner = new PyroProxy(new PyroURI(orchestrator.call("addressOf",this.getName()).toString()));
 
-                new Thread(() -> {
-                    String s = null;
-                    try {
-                        while ((s = stdInput.readLine()) != null) {
-                            loggerService.info("Proc: {}", s);
-                        }
-                        // errors
-                        while ((s = stdError.readLine()) != null) {
-                            loggerService.error("Proc: {}", s);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-
-                learner = new PyroProxy(new PyroURI(agentPyroURI));
+            } else {
+               learner = constructProxy(pyroAdapterFilename,proc,pyroAdapter);
             }
 
             loggerService.info("Learner: {}:{} {}", learner.hostname, learner.port, learner.pyroHandshake);
@@ -104,6 +87,49 @@ public class PythonPyroBase<T> extends ClassifierModel<T,Integer,PyroProxy>{
         super.build();
         return this;
     }
+    private PyroProxy constructProxy(String pythonFilename, Process proc,File pyroAdapter) throws IOException, InternalException {
+
+        LinkedHashMap backend = (LinkedHashMap)parameters.get("Backend");
+
+        pyroAdapter = new File(System.getProperty("java.io.tmpdir")+File.separator+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
+        pyroAdapter.deleteOnExit();
+        FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource(pythonFilename), pyroAdapter);
+        loggerService.info("Saved script to {}", pyroAdapter.getAbsolutePath());
+
+        // Path to script is passed as parameter
+        String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath(),
+                "--bname="+ backend.get("ModuleName"),
+                "--bpath="+ backend.get("ModulePath")};
+        proc = Runtime.getRuntime().exec(cmd);
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+        String agentPyroURI = stdInput.readLine();
+        if(agentPyroURI == null || !agentPyroURI.startsWith("PYRO")) {
+            String s = null;
+            while ((s = stdError.readLine()) != null) {
+                loggerService.error("Proc: {}", s);
+            }
+            throw new InternalException(this.getName(), "Pyro", "Expected PYRO:obj@host:port but got: " + agentPyroURI);
+        }
+
+        new Thread(() -> {
+            String s = null;
+            try {
+                while ((s = stdInput.readLine()) != null) {
+                    loggerService.info("Proc: {}", s);
+                }
+                // errors
+                while ((s = stdError.readLine()) != null) {
+                    loggerService.error("Proc: {}", s);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        return new PyroProxy(new PyroURI(agentPyroURI));
+    }
+
 
     @Override
     public synchronized void learn(T input) throws TraceableException, UntraceableException {
