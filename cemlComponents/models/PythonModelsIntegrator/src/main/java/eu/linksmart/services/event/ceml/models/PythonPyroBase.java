@@ -11,6 +11,7 @@ import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindowEvaluator;
+import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 
 import java.io.*;
@@ -18,63 +19,109 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
+import io.swagger.client.ApiClient;
+import io.swagger.client.api.ScApi;
 import net.razorvine.pyro.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.entity.ContentType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Created by José Ángel Carvajal on 06.02.2018 a researcher of Fraunhofer FIT.
  */
 public class PythonPyroBase<T> extends ClassifierModel<T,Integer,PyroProxy>{
-
+    public transient static Logger loggerService = LogManager.getLogger(PythonPyroBase.class);
     protected Process proc;
     static protected Process orchProc;
     protected File pyroAdapter;
     static protected File pyroOrchFile;
     protected int counter = 0;
     protected final static String pyroAdapterFilename = "pyroAdapter.py";
-    protected final static String pyroOrchestratorFilename = "pyroOrchestrator.py";
-    protected static PyroProxy orchestrator = null;
+    private static final Configurator conf = Configurator.getDefaultConfig();
+    protected final static String pythonPath ;
+    static {
+        String path = "";
+        try {
+            path = conf.getString(Const.PYTHON_PATH);
+        }catch (Exception e){
+            loggerService.error(e.getMessage(),e);
+        }
+        path.trim();
+        if(!path.isEmpty() && path.charAt(path.length()-1) != File.separator.charAt(0))
+            path=path+File.separator;
+        pythonPath = path;
+    }
+    protected Request orchestrator = null;
     protected Object baseModel = null;
+
 
     public PythonPyroBase(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
         super(targets, parameters, null);
         baseModel= learner;
+
+
     }
 
     @Override
     public PythonPyroBase build() throws TraceableException, UntraceableException {
 
+        ScApi SCclient;
         ((DoubleTumbleWindowEvaluator)evaluator).setClasses( ((ClassesDescriptor)descriptors.getTargetDescriptors().get(0)).getClasses());
 
         try {
             LinkedHashMap backend = (LinkedHashMap)parameters.get("Backend");
 
-            if((boolean)backend.get("Lookup")) {
+            if((boolean)backend.getOrDefault("Lookup",false)) {
                 // Lookup a running agent
                 loggerService.info("Looking up '{}' in name server '{}'", backend.get("RegisteredName"), backend.get("NameServer"));
                 NameServerProxy ns = NameServerProxy.locateNS((String)backend.get("NameServer"));
                 learner = new PyroProxy(ns.lookup((String)backend.get("RegisteredName")));
                 ns.close();
-            }if(backend.containsValue("Orchestrator") || backend.containsValue("OrchestratorName")) {
-                if(orchestrator==null){
-                    if(backend.containsValue("OrchestratorName")){
-                        // search for existing orchestrator
-                        loggerService.info("Looking up '{}' in name server '{}'", backend.get("OrchestratorName"), backend.get("NameServer"));
-                        NameServerProxy ns = NameServerProxy.locateNS((String)backend.get("NameServer"));
-                        orchestrator = new PyroProxy(ns.lookup((String)backend.get("OrchestratorName")));
-                        ns.close();
-                    }else {
-                        // run an orchestrator form scratch
-                        orchestrator = constructProxy(pyroOrchestratorFilename,orchProc,pyroOrchFile);
+            }if(backend.get("Orchestrator")!=null) {
+                String lernerUri, orchURL;
+                if (backend.get("OrchestratorName")!=null) {
+                    // search for existing orchestrator
+                    loggerService.info("Looking up '{}' in name server '{}'", backend.get("OrchestratorName"), backend.get("NameServer"));
+                    if (Utils.isRestAvailable(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))) {
+                        ApiClient apiClient = new ApiClient();
+                        apiClient.setBasePath(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
+                        SCclient = new ScApi(apiClient);
+                        orchURL = SCclient.idGet(String.valueOf(backend.containsValue("OrchestratorName"))).getApis().get("HTTP");
+                    } else {
+                        throw new StatementException(this.getName(), "Bad Request", "The orchestration was unable to be obtain from Service Catalog");
                     }
-                }
-                learner = new PyroProxy(new PyroURI(orchestrator.call("addressOf",this.getName()).toString()));
 
-            } else {
-               learner = constructProxy(pyroAdapterFilename,proc,pyroAdapter);
+                } else if (backend.get("OrchestratorURL")!=null) {
+                    // search for existing orchestrator
+                    loggerService.info("Looking up '{}' in name server '{}'", backend.get("OrchestratorURL"));
+                    orchURL = String.valueOf(backend.get("OrchestratorURL")) + "/pyro/";
+                    // orchestrator = new PyroProxy(ns.lookup((String)backend.get("OrchestratorName")));
+
+                } else {
+                    throw new StatementException(this.getName(), "Bad Request", "The orchestration option was given but the orchestrator was not provided");
+                }
+
+                Request request = Request.Post(orchURL).bodyString(SharedSettings.getSerializer().toString(backend.get("Orchestrator")), ContentType.APPLICATION_JSON);
+                Map response = SharedSettings.getDeserializer().parse(request.execute().returnContent().asString(), Map.class);
+                lernerUri = response.get("uri").toString();
+                learner = new PyroProxy(new PyroURI(lernerUri));
+
+                // loggerService.info("Orchestrator: {}:{} {}", orchestrator.hostname, orchestrator.port, orchestrator.pyroHandshake);
+
+            }else {
+                //  create temp python script for the pythonAdapter
+                pyroAdapter = copyPyScripts(pyroAdapterFilename);
+                // run an adapter form scratch
+               learner = constructProxy(pyroAdapter,proc,backend.getOrDefault("ModuleName","").toString());
             }
 
             loggerService.info("Learner: {}:{} {}", learner.hostname, learner.port, learner.pyroHandshake);
-            learner.call("importModel", baseModel);
+            if(baseModel != null)
+                learner.call("importModel", baseModel);
             learner.call("build", parameters.get("Classifier"));
 
         } catch (PyroException e) {
@@ -87,48 +134,30 @@ public class PythonPyroBase<T> extends ClassifierModel<T,Integer,PyroProxy>{
         super.build();
         return this;
     }
-    private PyroProxy constructProxy(String pythonFilename, Process proc,File pyroAdapter) throws IOException, InternalException {
 
-        LinkedHashMap backend = (LinkedHashMap)parameters.get("Backend");
+    private File copyPyScripts(String pyScriptFilename) throws IOException {
+        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+pyScriptFilename);
+        file.deleteOnExit();
+        FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource(pyScriptFilename), file);
+        return file;
+    }
+    private PyroProxy constructProxy(File file, Process proc,String moduleName) throws IOException, InternalException {
 
-        pyroAdapter = new File(System.getProperty("java.io.tmpdir")+File.separator+UUID.randomUUID().toString()+"-"+pyroAdapterFilename);
-        pyroAdapter.deleteOnExit();
-        FileUtils.copyURLToFile(this.getClass().getClassLoader().getResource(pythonFilename), pyroAdapter);
-        loggerService.info("Saved script to {}", pyroAdapter.getAbsolutePath());
+       // LinkedHashMap backend = (LinkedHashMap)parameters.get("Backend");
+
+        loggerService.info("Saved script to {}", file.getAbsolutePath());
 
         // Path to script is passed as parameter
-        String[] cmd = {"python", "-u", pyroAdapter.getAbsolutePath(),
-                "--bname="+ backend.get("ModuleName"),
-                "--bpath="+ backend.get("ModulePath")};
-        proc = Runtime.getRuntime().exec(cmd);
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-        BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-        String agentPyroURI = stdInput.readLine();
-        if(agentPyroURI == null || !agentPyroURI.startsWith("PYRO")) {
-            String s = null;
-            while ((s = stdError.readLine()) != null) {
-                loggerService.error("Proc: {}", s);
-            }
-            throw new InternalException(this.getName(), "Pyro", "Expected PYRO:obj@host:port but got: " + agentPyroURI);
-        }
+        String[] cmd = {pythonPath+"python", "-u", file.getAbsolutePath(),
+                "--bname="+ moduleName,
+                "--bpath="+ file.getAbsolutePath(),
+                "--orch="+ ("Orchestrator".equals(moduleName))};
 
-        new Thread(() -> {
-            String s = null;
-            try {
-                while ((s = stdInput.readLine()) != null) {
-                    loggerService.info("Proc: {}", s);
-                }
-                // errors
-                while ((s = stdError.readLine()) != null) {
-                    loggerService.error("Proc: {}", s);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        String agentPyroURI = Utils.runGetLastOutput(cmd,moduleName,loggerService);
 
         return new PyroProxy(new PyroURI(agentPyroURI));
     }
+
 
 
     @Override

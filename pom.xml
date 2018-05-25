@@ -159,6 +159,7 @@
         <module>cepComponents</module>
         <module>DataProcessingCore</module>
 		<module>cemlComponents</module>
+        <module>PyroBackendManager</module>
         <module>distributions</module>
         <module>test</module>
         <module>applications</module>

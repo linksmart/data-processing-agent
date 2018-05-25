@@ -54,7 +54,7 @@ class PyroAdapter(object):
 
 def startPyro(options):
     Pyro4.config.SERIALIZER = 'pickle'
-    daemon = Pyro4.Daemon(host=options.host, port=options.port)
+    daemon = Pyro4.Daemon(host=options.host, port=options.port, nathost=options.nathost, natport=options.natport)
     uri = daemon.register(PyroAdapter)
     # e.g. uri: PYRO:obj_73fcc95930ed45caacba17be6bdbce74@localhost:43210
     print(uri)  # NOTE: This is read by the parent process.
@@ -77,6 +77,8 @@ def parseArgs():
     parser.add_option("--bpath", help="path to backend module (python script)")
     parser.add_option("--host", default="localhost", help="hostname to bind server on")
     parser.add_option("--port", type="int", default=0, help="port to bind server on (0=random)")
+    parser.add_option("--nathost", help="the external host name to use in case of NAT")
+    parser.add_option("--natport", type="int", help="the external port use in case of NAT")
     parser.add_option("--ns", dest="nameserver", action="store_true", default=False, help="register the server into pyro nameserver")
     parser.add_option("--rname", default="python-agent-0", help="name used for registration into pyro nameserver")
     options, args = parser.parse_args()

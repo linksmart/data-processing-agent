@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
+import eu.linksmart.services.utils.EditableService;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBrokerService;
@@ -114,17 +115,5 @@ public class ServiceRegistratorService implements Observer{
 
     }
 
-    private class EditableService extends Service {
-        @JsonProperty("id")
-        protected String id;
-        @Override
-        public String getId() {
-            return id;
-        }
 
-        public void setId(String id){
-            this.id=id;
-        }
-
-    }
 }

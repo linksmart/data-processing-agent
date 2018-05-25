@@ -69,4 +69,5 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String STATEMENT_DEFAULT_OUTPUT_TYPE = "api_statements_default_output_type";
     String PROMISCUOUS_EVENT_PARSING = "api_events_promiscuous";
     String TRANSLATOR_MODE = "api_events_translator";
+    String PYTHON_PATH = "python_path";
 }
