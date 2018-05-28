@@ -82,7 +82,8 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
 
         if(bt!=null && bt instanceof Long)
             event.setBt((Long) bt);
-
+        else if(bt!=null && bt instanceof Integer)
+            event.setBt( Long.valueOf((Integer) bt));
         if(bu!=null && bu instanceof String)
             event.setBu((String)bu);
 
@@ -105,8 +106,14 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
                 m.setS((Double) s);
             if(t!=null && t instanceof Long)
                 m.setT((Long) t);
+            else if(t!=null && t instanceof Integer)
+                event.setBt( Long.valueOf((Integer) t));
+
             if(ut!=null && ut instanceof Long)
                 m.setUt((Long) ut);
+            else if(ut!=null && ut instanceof Integer)
+                event.setBt( Long.valueOf((Integer) ut));
+
             event.setE(m);
         }
 
