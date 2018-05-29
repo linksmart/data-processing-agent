@@ -91,7 +91,17 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
             event.setVer((Short) ver);
 
         if(n!=null || v!=null || sv!=null|| bv!=null|| s!=null|| t!=null|| ut!=null){
-            Measurement m = new Measurement();
+            event.setE(factory(n, u, v, sv, bv, s, t, ut));
+        }
+
+        return event;
+
+
+    }
+    static public Measurement factory(Object n, Object u, Object v, Object sv, Object bv, Object s, Object t, Object ut){
+        Measurement m = new Measurement();
+        if(n!=null || v!=null || sv!=null|| bv!=null|| s!=null|| t!=null|| ut!=null){
+
             if(n!=null && n instanceof String)
                 m.setN((String) n);
             if(u!=null && u instanceof String)
@@ -107,19 +117,15 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
             if(t!=null && t instanceof Long)
                 m.setT((Long) t);
             else if(t!=null && t instanceof Integer)
-                event.setBt( Long.valueOf((Integer) t));
+                m.setT( Long.valueOf((Integer) t));
 
             if(ut!=null && ut instanceof Long)
                 m.setUt((Long) ut);
             else if(ut!=null && ut instanceof Integer)
-                event.setBt( Long.valueOf((Integer) ut));
+                m.setUt( Long.valueOf((Integer) ut));
 
-            event.setE(m);
         }
-
-        return event;
-
-
+        return m;
     }
     static public SenML factory(Object bn, Object n, Object autoValue){
 
@@ -364,6 +370,12 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
     @Override
     public void setClassTopic(String topic) {
         defaultTopic = topic;
+    }
+    @JsonIgnore
+    public SenML addMeasurement(Object n, Object u, Object v, Object sv, Object bv, Object s, Object t, Object ut){
+
+        value.addElement(factory(n, u, v, sv, bv, s, t, ut));
+        return this;
     }
 
     /**
