@@ -3,13 +3,21 @@
  PyroAdapter exposes an external learning module via Pyro4
 """
 import Pyro4
-import sys, imp, os
+import sys, imp, os, logging
 from optparse import OptionParser
 
+logging.basicConfig(format='%(asctime)s %(levelname)s %(name)s: %(message)s', level=logging.DEBUG)
+logger = logging.getLogger(__file__)
 
 class PyroAdapter(object):
     def __init__(self):
-        self.backend = backendModule
+        logger.info("Initializing Pyro object.")
+        # TODO: move this to build(...) to support different backends on one pyro server
+        try:
+            module = imp.load_source(OPTIONS.bname, OPTIONS.bpath)
+            self.backend = getattr(module, OPTIONS.bname)()
+        except Exception as e:
+            logger.error(e)
 
     @Pyro4.expose
     def build(self, classifier):
@@ -20,20 +28,12 @@ class PyroAdapter(object):
         self.backend.learn(datapoint)
 
     @Pyro4.expose
-    def learn(self, datapoint, label):
-        self.backend.learn(datapoint, label)
-
-    @Pyro4.expose
     def predict(self, datapoint):
         return self.backend.predict(datapoint)
 
     @Pyro4.expose
     def batchLearn(self, datapoints):
         self.backend.batchLearn(datapoints)
-
-    @Pyro4.expose
-    def batchLearn(self, datapoints, labels):
-        self.backend.batchLearn(datapoints, labels)
 
     @Pyro4.expose
     def batchPredict(self, datapoints):
@@ -64,7 +64,7 @@ def startPyro(options):
             ns = Pyro4.locateNS()
             ns.register(options.rname, uri)
         except Exception as e:
-            print("Exception: {}".format(e))
+            logger.error(e)
             raise SystemExit
 
     daemon.requestLoop()
@@ -85,7 +85,7 @@ def parseArgs():
     # check mangatory args
     for opt in mandatoryArgs:
         if not getattr(options, opt):
-            print("Argument `{}` not given.".format(opt))
+            logger.error("Argument `{}` not given.".format(opt))
             parser.print_help()
             sys.exit(2)
 
@@ -97,9 +97,8 @@ def main(options):
     backendDir = os.path.dirname(options.bpath)
     sys.path.append(backendDir)
 
-    module = imp.load_source(options.bname, options.bpath)
-    global backendModule
-    backendModule = getattr(module, options.bname)()
+    global OPTIONS
+    OPTIONS = options
 
     startPyro(options)
 
