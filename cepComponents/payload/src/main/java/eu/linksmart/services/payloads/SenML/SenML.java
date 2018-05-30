@@ -156,7 +156,7 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
         bu = null;
         ver = null;
         value = new Vector<>();
-        date=null;
+        date=new Date(0L);
     }
 
     @Override
