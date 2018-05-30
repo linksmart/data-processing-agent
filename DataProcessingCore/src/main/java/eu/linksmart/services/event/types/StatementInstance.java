@@ -138,6 +138,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         if(stateLifecycle==null)
             stateLifecycle=StatementLifecycle.RUN;
 
+        this.resultType = conf.getString(Const.FeederPayloadClass + "_" +conf.getString(Const.STATEMENT_DEFAULT_OUTPUT_TYPE));
     }
 
     public StatementInstance() {
@@ -153,7 +154,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.name = name;
         this.statement = statement;
         this.scope = scope;
-        this.resultType = conf.getString(Const.FeederPayloadClass + "_" +Const.STATEMENT_DEFAULT_OUTPUT_TYPE);
         setGenerateID();
     }
 
