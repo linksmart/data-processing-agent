@@ -10,6 +10,7 @@ import java.util.Date;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class DataDescriptorInstance implements DataDescriptor {
     @JsonProperty("Name")
      protected String name = null;

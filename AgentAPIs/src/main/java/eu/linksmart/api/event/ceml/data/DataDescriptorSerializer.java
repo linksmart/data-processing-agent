@@ -12,6 +12,7 @@ import java.io.IOException;
 /**
  * Created by José Ángel Carvajal on 26.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class DataDescriptorSerializer extends SerializerMode<DataDescriptors> {
     @Override
     public void serialize(DataDescriptors value, JsonGenerator gen, SerializerProvider serializers) throws IOException {

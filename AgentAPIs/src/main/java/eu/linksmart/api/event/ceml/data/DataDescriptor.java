@@ -41,6 +41,7 @@ import java.util.function.Function;
  * @see eu.linksmart.api.event.ceml.data.ClassesDescriptor
  *
  * */
+@Deprecated
 public interface DataDescriptor extends JsonSerializable {
     /**
      * Creates an lambda DataDescriptor of the reference implementation of a DataDescriptorInstance

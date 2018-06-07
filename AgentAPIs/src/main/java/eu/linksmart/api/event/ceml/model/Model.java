@@ -8,6 +8,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -51,6 +52,8 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
         }
     void setDescriptors(DataDescriptors descriptors);
     DataDescriptors getDescriptors();
+    SchemaNode getDataSchema();
+    void setDataSchema(SchemaNode schema);
     Prediction<Output> getLastPrediction();
     void setLastPrediction(Prediction<Output> value);
 

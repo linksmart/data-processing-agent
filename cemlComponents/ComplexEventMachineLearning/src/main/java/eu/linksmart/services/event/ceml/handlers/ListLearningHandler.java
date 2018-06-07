@@ -4,6 +4,8 @@ import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.impl.ExtractedElements;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.handler.base.BaseListEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -33,7 +35,9 @@ public  class ListLearningHandler extends BaseListEventHandler {
     final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;
+    @Deprecated
     final protected DataDescriptors descriptors;
+    final protected SchemaNode schema;
     final private Publisher publisher;
 
     public ListLearningHandler(Statement statement) throws TraceableException, UntraceableException {
@@ -43,6 +47,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
         this.originalRequest =((LearningStatement)statement).getRequest();
         model = originalRequest.getModel();
         descriptors = originalRequest.getDescriptors();
+        schema = originalRequest.getDataSchema();
 
         if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
             try {
@@ -66,7 +71,10 @@ public  class ListLearningHandler extends BaseListEventHandler {
     @Override
     protected void processMessage(List input) {
 
-        learn(flattList(input));
+        if(schema!=null)
+            learn(input);
+        else
+            learn(flattList(input));
 
     }
     private List<Object> flattList(List input){
@@ -80,13 +88,86 @@ public  class ListLearningHandler extends BaseListEventHandler {
 
         return aux;
     }
+
     protected void learn(List input) {
+        verbose(input);
+
+        // legacy or current method
+        if(schema==null) {
+            legacyLearn(input);
+            return;
+
+        }
+        ExtractedElements elements = schema.collect(input);
+        if(elements==null) {
+            loggerService.error("Incoming data from learning statement  id " + statement.getId() + " do not match which data schema!");
+            return;
+        }
+
+        // learning process with independent learning input and learning target/ground truth, and  prediction input and evaluation ground truth
+        if(input!=null&&elements.size()>=schema.size() && input.size()>schema.size()){
+            try {
+                synchronized (originalRequest) {
+                    Prediction prediction = model.predict(elements.getInputsList());
+                    model.learn(elements.getInputsList(),elements.getTargetsList());
+                    List auxInput;
+
+                    if (input.get(0) instanceof EventEnvelope)
+                        auxInput = (List) input.stream().map(m -> ((EventEnvelope) m).getValue()).collect(Collectors.toList());
+                    else
+                        auxInput = input;
+
+                    List groundTruth = auxInput.subList(schema.size(), schema.size() + schema.getTargetSize());
+
+                    model.getEvaluator().evaluate(prediction.getPrediction(), groundTruth);
+
+                }
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+            }
+
+        // learning process with same learning input as prediction input, and learning target/ground truth and evaluation ground truth
+        }else if(input!=null&&input.size()>=schema.size()){
+            try {
+                synchronized (originalRequest) {
+                    Prediction prediction = model.predict(elements.getInputsList());
+                    model.learn(elements.getInputsList(),elements.getTargetsList());
+
+                    model.getEvaluator().evaluate(prediction.getPrediction(), elements.getTargetsList());
+
+                }
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+            }
+
+        }
+        if(input!=null&&input.size()>=schema.size())
+            asses();
+    }
+    protected void verbose(Object input){
         if(input!= null && publisher != null)
             try {
                 publisher.publish(SharedSettings.getSerializer().serialize(input));
             } catch (IOException e) {
                 loggerService.error(e.getMessage(),e);
             }
+    }
+    protected void asses(){
+        try {
+
+            if(model.getEvaluator().isDeployable())
+                originalRequest.deploy();
+            else
+                originalRequest.undeploy();
+
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
+        }
+
+        originalRequest.report();
+    }
+    @Deprecated
+    private void legacyLearn(List input){
 
         // learning process with independent learning input and learning target/ground truth, and  prediction input and evaluation ground truth
         if(input!=null&&input.size()>=descriptors.size()+descriptors.getTargetSize()){
@@ -111,7 +192,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
                 loggerService.error(e.getMessage(),e);
             }
 
-        // learning process with same learning input as prediction input, and learning target/ground truth and evaluation ground truth
+            // learning process with same learning input as prediction input, and learning target/ground truth and evaluation ground truth
         }else if(input!=null&&input.size()>=descriptors.size()){
             try {
                 synchronized (originalRequest) {
@@ -138,20 +219,9 @@ public  class ListLearningHandler extends BaseListEventHandler {
             }
 
         }
-        if(input!=null&&input.size()>=descriptors.size()){
-            try {
+        if(input!=null&&input.size()>=descriptors.size())
+            asses();
 
-                if(model.getEvaluator().isDeployable())
-                    originalRequest.deploy();
-                else
-                    originalRequest.undeploy();
-
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(),e);
-            }
-
-            originalRequest.report();
-        }
     }
 
 

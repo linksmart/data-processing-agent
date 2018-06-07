@@ -139,6 +139,8 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
             stateLifecycle=StatementLifecycle.RUN;
 
         this.resultType = conf.getString(Const.FeederPayloadClass + "_" +conf.getString(Const.STATEMENT_DEFAULT_OUTPUT_TYPE));
+        if(resultType==null)
+            resultType = ObservationImpl.class.getCanonicalName();
     }
 
     public StatementInstance() {

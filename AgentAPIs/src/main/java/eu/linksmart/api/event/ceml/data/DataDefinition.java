@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDescriptors{
     @JsonProperty("InputSize")
     protected   int inputSize=-1;

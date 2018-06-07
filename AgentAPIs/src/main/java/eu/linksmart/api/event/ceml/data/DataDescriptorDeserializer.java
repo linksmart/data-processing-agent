@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class DataDescriptorDeserializer extends DeserializerMode<DataDescriptor> {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final CollectionType collectionType =

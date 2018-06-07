@@ -139,29 +139,7 @@ public class SchemaTest {
                         "\"test2\":"+simpleListArraySchema+" "+
                     "}"+
                     "}";
-    private Object createSimpleAnonymousObject(){
-       return new Object(){
-            public String getProperty1() {
-                return property1;
-            }
 
-            public void setProperty1(String property1) {
-                this.property1 = property1;
-            }
-
-            public int getProperty2() {
-                return property2;
-            }
-
-            public void setProperty2(int property2) {
-                this.property2 = property2;
-            }
-
-            String property1="hola";
-            int property2=1;
-
-        };
-    }
 
     private Map createSimpleMap(){
         Map map = new Hashtable();
@@ -182,7 +160,7 @@ public class SchemaTest {
     public void simpleMapTest(){
         // test
         Map map = createSimpleMap();
-        Object o = createSimpleAnonymousObject();
+        Object o = new TestOnly1();
         test(simpleMapSchema,map);
         test(simpleMapSchema,o);
 
@@ -190,27 +168,8 @@ public class SchemaTest {
         map = new Hashtable();
         map.put("property1",1);
         contraTest(simpleMapSchema,map);
-        o = new Object(){
-            public int getProperty1() {
-                return property1;
-            }
+        o = new TestOnly2();
 
-            public void setProperty1(int property1) {
-                this.property1 = property1;
-            }
-
-            public String getProperty2() {
-                return property2;
-            }
-
-            public void setProperty2(String property2) {
-                this.property2 = property2;
-            }
-
-            int property1;
-            String property2;
-
-        };
         contraTest(simpleMapSchema,o);
         map.clear();
         map.put("my", "bad");
@@ -226,16 +185,17 @@ public class SchemaTest {
                 this.p = p;
             }
 
-            String p;
+            public String p;
 
         };
         contraTest(simpleMapSchema,o);
     }
+
     @Test
     public void advancedMapTest(){
         // test
         Map map = createSimpleMap();
-        Object o = createSimpleAnonymousObject();
+        Object o = new TestOnly1();
         test(advancedMapSchema,map);
         test(advancedMapSchema,o);
         test(simpleMapSchema,map);
@@ -245,35 +205,7 @@ public class SchemaTest {
         test(advancedMapSchema,map);
       //  contraTest(simpleMapSchema,map);
 
-        o =   new Object(){
-            public int getProperty3() {
-                return property3;
-            }
-
-            public void setProperty3(int property3) {
-                this.property3 = property3;
-            }
-
-            public String getProperty1() {
-                return property1;
-            }
-
-            public void setProperty1(String property1) {
-                this.property1 = property1;
-            }
-
-            public int getProperty2() {
-                return property2;
-            }
-
-            public void setProperty2(int property2) {
-                this.property2 = property2;
-            }
-
-            String property1 ="hola";
-            int property2, property3;
-
-        };
+        o =   new TestOnly3();
 //        contraTest(simpleMapSchema,o);
         test(advancedMapSchema,o);
 
@@ -422,5 +354,79 @@ public class SchemaTest {
         }
         contraTest(boundedAnonymousSchema,list);
         contraTest(boundedAnonymousSchema,o);
+    }
+    // the class below could be anonymous but then is not accessible from reflection outside this package, which brakes the test.
+    // Therefore, this dummy test class had been made to test the code. They need to be public!
+    public class TestOnly1{
+        public String getProperty1() {
+            return property1;
+        }
+
+        public void setProperty1(String property1) {
+            this.property1 = property1;
+        }
+
+        public int getProperty2() {
+            return property2;
+        }
+
+        public void setProperty2(int property2) {
+            this.property2 = property2;
+        }
+
+        public String property1="hola";
+        public int property2=1;
+    }
+    // the class below could be anonymous but then is not accessible from reflection outside this package, which brakes the test.
+    // Therefore, this dummy test class had been made to test the code. They need to be public!
+    public class TestOnly2{
+        public int getProperty1() {
+            return property1;
+        }
+
+        public void setProperty1(int property1) {
+            this.property1 = property1;
+        }
+
+        public String getProperty2() {
+            return property2;
+        }
+
+        public void setProperty2(String property2) {
+            this.property2 = property2;
+        }
+
+        public int property1;
+        public String property2;
+    }
+    // the class below could be anonymous but then is not accessible from reflection outside this package, which brakes the test.
+    // Therefore, this dummy test class had been made to test the code. They need to be public!
+    public class TestOnly3{
+        public int getProperty3() {
+            return property3;
+        }
+
+        public void setProperty3(int property3) {
+            this.property3 = property3;
+        }
+
+        public String getProperty1() {
+            return property1;
+        }
+
+        public void setProperty1(String property1) {
+            this.property1 = property1;
+        }
+
+        public int getProperty2() {
+            return property2;
+        }
+
+        public void setProperty2(int property2) {
+            this.property2 = property2;
+        }
+
+        public String property1 ="hola";
+        public int property2, property3;
     }
 }

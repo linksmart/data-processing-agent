@@ -1,6 +1,9 @@
 package eu.linksmart.api.event.types.impl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
+import eu.linksmart.api.event.ceml.data.DataDefinition;
+import eu.linksmart.api.event.ceml.data.DataDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
@@ -12,9 +15,36 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/*
+ *  Copyright [2013] [Fraunhofer-Gesellschaft]
+         *
+         * Licensed under the Apache License, Version 2.0 (the "License");
+         * you may not use this file except in compliance with the License.
+         * You may obtain a copy of the License at
+         *
+         * http://www.apache.org/licenses/LICENSE-2.0
+         *
+         * Unless required by applicable law or agreed to in writing, software
+         * distributed under the License is distributed on an "AS IS" BASIS,
+         * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+         * See the License for the specific language governing permissions and
+         * limitations under the License.
+         *
+         *
+         */
 /**
- * Created by José Ángel Carvajal on 01.06.2018 a researcher of Fraunhofer FIT.
- */
+ * This interfaces represent a schema of a set of data that a model will get for learning/training, evaluating or predicting.
+ *
+ *
+ *
+ *
+ * @author Jose Angel Carvajal Soto
+ * @since       1.1.1
+ * @see eu.linksmart.api.event.ceml.data.DataDescriptors
+ * @see eu.linksmart.api.event.types.JsonSerializable
+ * @see eu.linksmart.api.event.ceml.data.ClassesDescriptor
+ *
+ * */
 public class SchemaNode implements JsonSerializable {
     private transient static final Logger loggerService = LogManager.getLogger(SchemaNode.class);
     private String type, name, tile, ofDefinition, ofType;
@@ -31,128 +61,7 @@ public class SchemaNode implements JsonSerializable {
     private SchemaNode parent;
     private int index = -1 , size = -1, targetSize=0;
 
-    public SchemaNode getRoot() {
-        if(parent!=null)
-            return parent.getRoot();
-        else
-            return this;
 
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTile() {
-        return tile;
-    }
-
-    public void setTile(String tile) {
-        this.tile = tile;
-    }
-
-    public Set<String> getRequired() {
-        return required;
-    }
-
-    public void setRequired(Set<String> required) {
-        this.required = required;
-    }
-
-    public Map<String, SchemaNode> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Map<String, SchemaNode> properties) {
-        this.properties = properties;
-    }
-
-    public List<SchemaNode> getItems() {
-        return items;
-    }
-
-    public void setItems(List<SchemaNode> items) {
-        this.items = items;
-    }
-
-    public Number getMinValue() {
-        return minValue;
-    }
-
-    public void setMinValue(Number minValue) {
-        this.minValue = minValue;
-    }
-
-    public Number getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(Number maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public Object getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(Object defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-    public SchemaNode getParent() {
-        return parent;
-    }
-
-    public void setParent(SchemaNode parent) {
-        this.parent = parent;
-    }
-
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-    public boolean isNeeded() {
-        return needed;
-    }
-
-    public void setNeeded(boolean needed) {
-        this.needed = needed;
-    }
-
-    public String getOfDefinition() {
-        return ofDefinition;
-    }
-
-    public void setOfDefinition(String ofDefinition) {
-        this.ofDefinition = ofDefinition;
-    }
-
-    public Map<String, SchemaNode> getDefinition() {
-        return definition;
-    }
-
-    public void setDefinition(Map<String, SchemaNode> definition) {
-        this.definition = definition;
-    }
-    @JsonIgnore
-    public Class getNativeType(){
-        return getNativeType(type);
-    }
     public Class similar(Class original){
         if(original.isPrimitive()) {
             if(original.getSimpleName().equals("int") || original.getSimpleName().equals("short"))
@@ -387,9 +296,6 @@ public class SchemaNode implements JsonSerializable {
        }
 
    }
-   private boolean validatePOJO(Object object) {
-       return validatePOJO(object, null);
-   }
 
    private boolean validatePOJO(Object object, ExtractedElements collector) { // this must be revised
 
@@ -482,11 +388,183 @@ public class SchemaNode implements JsonSerializable {
 
     }
 
+    private DataDescriptor.DescriptorTypes legacyType(Class cla){
+        if(cla == Number.class || cla == Double.class || cla == Float.class || cla == float.class || cla == double.class  )
+            return DataDescriptor.DescriptorTypes.NUMBER;
+        else if(cla == Integer.class || cla == int.class || cla == short.class)
+            return DataDescriptor.DescriptorTypes.INTEGER;
+        else if(cla == Date.class || cla == Long.class || cla == long.class)
+            return DataDescriptor.DescriptorTypes.DATE;
+        else if(cla == Boolean.class || cla == boolean.class )
+            return DataDescriptor.DescriptorTypes.BOOLEAN;
+        else if(cla == Enum.class )
+            return DataDescriptor.DescriptorTypes.NOMINAL_CLASSES;
+        else
+            return DataDescriptor.DescriptorTypes.OBJECT;
+
+    }
+
+    public DataDescriptor toLegacy() throws TraceableException, UntraceableException {
+        if(parent==null){
+            if(items==null && properties == null && enumeration == null){
+                return DataDescriptors.factory(name,getSize()-targetSize,targetSize,legacyType(getNativeType(ofType)));
+            } else if(properties!=null){
+                DataDescriptor descriptors[] = new DataDescriptor[properties.size()];
+                int i =0;
+                for(SchemaNode node: properties.values()) {
+                    descriptors[i] = node.toLegacy();
+                    i++;
+                }
+                return DataDescriptors.factory(descriptors);
+
+            } else if(items != null) {
+
+                DataDescriptor descriptors[] = new DataDescriptor[items.size()];
+
+                for(int i=0; i<items.size();i++)
+                    descriptors[i] = items.get(i).toLegacy();
+
+                return DataDescriptors.factory(descriptors);
+
+            }else {
+                throw new UntraceableException("An enumeration cannot be used in the root of the data schema or data descriptors!");
+            }
+        }else {
+            if(getNativeType()==Enum.class){
+                return ClassesDescriptor.factory(name,new ArrayList<>(enumeration),target);
+
+            }else
+                return DataDescriptor.factory(legacyType(getNativeType()),name,null,null,null,target);
+
+        }
+
+    }
     @Override
     public void destroy() throws Exception {
 
     }
+    public SchemaNode getRoot() {
+        if(parent!=null)
+            return parent.getRoot();
+        else
+            return this;
 
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTile() {
+        return tile;
+    }
+
+    public void setTile(String tile) {
+        this.tile = tile;
+    }
+
+    public Set<String> getRequired() {
+        return required;
+    }
+
+    public void setRequired(Set<String> required) {
+        this.required = required;
+    }
+
+    public Map<String, SchemaNode> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, SchemaNode> properties) {
+        this.properties = properties;
+    }
+
+    public List<SchemaNode> getItems() {
+        return items;
+    }
+
+    public void setItems(List<SchemaNode> items) {
+        this.items = items;
+    }
+
+    public Number getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(Number minValue) {
+        this.minValue = minValue;
+    }
+
+    public Number getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Number maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public Object getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(Object defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+    public SchemaNode getParent() {
+        return parent;
+    }
+
+    public void setParent(SchemaNode parent) {
+        this.parent = parent;
+    }
+
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+    public boolean isNeeded() {
+        return needed;
+    }
+
+    public void setNeeded(boolean needed) {
+        this.needed = needed;
+    }
+
+    public String getOfDefinition() {
+        return ofDefinition;
+    }
+
+    public void setOfDefinition(String ofDefinition) {
+        this.ofDefinition = ofDefinition;
+    }
+
+    public Map<String, SchemaNode> getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(Map<String, SchemaNode> definition) {
+        this.definition = definition;
+    }
+    @JsonIgnore
+    public Class getNativeType(){
+        return getNativeType(type);
+    }
 
     public Number getCeilingValue() {
         return ceilingValue;

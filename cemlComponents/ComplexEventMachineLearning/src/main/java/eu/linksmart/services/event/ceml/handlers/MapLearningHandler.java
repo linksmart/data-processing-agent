@@ -5,6 +5,8 @@ import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.impl.ExtractedElements;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.handler.base.BaseMapEventHandler;
 import eu.linksmart.api.event.ceml.CEMLRequest;
@@ -32,6 +34,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;
+    @Deprecated
     final protected DataDescriptors descriptors;
 
     // if property is different than 1, the learning handler is an batch retrainer
@@ -42,7 +45,8 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     private List<Map> rawMaps;
     private List<Map> inputs;
     final private Publisher publisher;
-
+    final protected SchemaNode schema;
+    List<ExtractedElements> accInput = new ArrayList<>();
 
 
     public MapLearningHandler(Statement statement) throws TraceableException, UntraceableException {
@@ -52,6 +56,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         this.originalRequest =((LearningStatement)statement).getRequest();
         model = originalRequest.getModel();
         descriptors = originalRequest.getDescriptors();
+        schema = originalRequest.getDataSchema();
 
         if(model.getParameters().containsKey(RETRAIN_EVERY)) {
             this.retrainEvery = (int) model.getParameters().get(RETRAIN_EVERY);
@@ -87,7 +92,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         loggerService.warn("Learning events arriving remove streams, they are handle as inserting streams ");
         processMessage(events);
     }
-
+    @Deprecated
     private void elementsAssurance(Map rawMap, Map  withoutTarget, List measuredTargets){
         for (DataDescriptor descriptor : descriptors)
             if (descriptor.isTarget()) {
@@ -112,7 +117,9 @@ public  class MapLearningHandler extends BaseMapEventHandler {
             else
                 loggerService.error("Type mismatch between the the expected input and received one");
     }
-    private void iterativeTraining(Map rawMap, Map  withoutTarget, List measuredTargets) throws TraceableException, UntraceableException {
+
+    @Deprecated
+    private void iterativeTrainingLegacy(Map rawMap, Map  withoutTarget, List measuredTargets) throws TraceableException, UntraceableException {
         // crate a prediction for evaluation proposes
         Prediction prediction = model.predict(withoutTarget);
 
@@ -121,7 +128,6 @@ public  class MapLearningHandler extends BaseMapEventHandler {
 
         evaluate(prediction,measuredTargets);
     }
-
     private void evaluate(Prediction prediction, List target){
         // evaluating the current learning instance
         if (target.size() == 1)
@@ -137,29 +143,33 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                 loggerService.error(e.getMessage(),e);
             }
 
-        if(eventMap!=null){
+            if(schema==null) {
+                 processMessageLegacy(eventMap);
+                 return;
+            }
+
+        ExtractedElements elements = schema.collect(eventMap);
+        if(elements!=null){
 
             if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
                 originalRequest.report(eventMap);
 
             try {
-                Map  withoutTarget= new HashMap<>();
-                List measuredTargets = new ArrayList<>();
                 synchronized (originalRequest) {
-                    // check if all elements to learn are there
-                    elementsAssurance(eventMap,withoutTarget,measuredTargets);
 
-                    if(retrainEvery==1)
-                        iterativeTraining(eventMap,withoutTarget,measuredTargets);
+                    if(retrainEvery==1) { // iterative
+                        Prediction prediction = model.predict(elements.toMappedInputs());
+                        model.learn(elements.toMappedInputs(),elements.getTargetsList());
+                        evaluate(prediction,elements.getInputsList());
+
+                    }
                     else if (rawMaps.size()<retrainEvery) {
-                        rawMaps.add(eventMap);
-                        inputs.add(withoutTarget);
-                        targets.add(measuredTargets);
-                    }else if (rawMaps.size() == retrainEvery){
-                        retrain();
-                        targets = new ArrayList<>();
-                        rawMaps= new ArrayList<>();
-                        inputs= new ArrayList<>();
+                        targets.add(elements.getTargetsList());
+                        rawMaps.add(elements.toMap());
+                        inputs.add(elements.toMappedInputs());
+                        if (rawMaps.size() == retrainEvery)
+                            retrain();
+
                     }
 
                 }
@@ -174,14 +184,57 @@ public  class MapLearningHandler extends BaseMapEventHandler {
             originalRequest.report();
         }
     }
+    @Deprecated
+    protected void processMessageLegacy(Map eventMap) {
 
+        if(eventMap!=null){
+
+            if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
+                originalRequest.report(eventMap);
+
+            try {
+                Map  withoutTarget= new HashMap<>();
+                List measuredTargets = new ArrayList<>();
+                synchronized (originalRequest) {
+                    // check if all elements to learn are there
+                    elementsAssurance(eventMap,withoutTarget,measuredTargets);
+
+                    if(retrainEvery==1)
+                        iterativeTrainingLegacy(eventMap,withoutTarget,measuredTargets);
+                    else if (rawMaps.size()<retrainEvery) {
+                        rawMaps.add(eventMap);
+                        inputs.add(withoutTarget);
+                        targets.add(measuredTargets);
+                        if (rawMaps.size() == retrainEvery)
+                            retrain();
+                    }
+
+
+                }
+                if( model.getEvaluator().isDeployable())
+                    originalRequest.deploy();
+                else
+                    originalRequest.undeploy();
+
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+            }
+            originalRequest.report();
+        }
+    }
     private void retrain() throws TraceableException, UntraceableException {
-        List<Prediction> predictions =  model.batchPredict(inputs);
+        List<Prediction> predictions = model.batchPredict(inputs);
 
         model.batchLearn(rawMaps);
 
-        for(int i=0; i< predictions.size();i++)
-            evaluate(predictions.get(i),targets.get(i));
+        for (int i = 0; i < predictions.size(); i++)
+            evaluate(predictions.get(i), targets.get(i));
+
+
+        targets = new ArrayList<>();
+        rawMaps = new ArrayList<>();
+        inputs = new ArrayList<>();
+
 
     }
 }

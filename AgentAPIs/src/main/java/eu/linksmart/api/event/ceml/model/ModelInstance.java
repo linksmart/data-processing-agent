@@ -12,6 +12,7 @@ import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 
 
 import java.util.*;
@@ -48,7 +49,8 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     @JsonProperty(value = "Learner")
     protected LearningObject learner;
-
+    @JsonProperty("DataSchema")
+    protected SchemaNode schema;
     public String getType() {
         return type;
     }
@@ -98,6 +100,17 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     @Override
     public DataDescriptors getDescriptors() {
         return descriptors;
+    }
+
+    @Override
+    public SchemaNode getDataSchema() {
+        return schema;
+    }
+
+    @Override
+    public void setDataSchema(SchemaNode schema) {
+        this.schema=schema;
+
     }
 
     @Override

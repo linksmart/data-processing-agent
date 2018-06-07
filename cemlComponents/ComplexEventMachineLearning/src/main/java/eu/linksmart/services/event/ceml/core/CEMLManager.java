@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 import eu.linksmart.services.event.ceml.intern.Const;
 import eu.linksmart.services.event.types.PersistentRequestInstance;
 import eu.linksmart.services.event.feeders.StatementFeeder;
@@ -41,6 +42,8 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     @JsonProperty(value = "Descriptors")
     @JsonDeserialize(as = DataDefinition.class)
     protected DataDescriptors descriptors;
+    @JsonProperty(value = "Schema")
+    protected SchemaNode schema;
     @JsonProperty(value = "Model")
     protected Model model;
     @JsonProperty(value = "auxiliaryStreams")
@@ -78,6 +81,11 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     @Override
     public DataDescriptors getDescriptors() {
         return descriptors;
+    }
+
+    @Override
+    public SchemaNode getDataSchema() {
+        return schema;
     }
 
     @Override
@@ -198,11 +206,16 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
         try {
 
-            if (descriptors == null || model == null || learningStatements == null)
-                throw new Exception("The descriptors, model and evaluator are mandatory fields!");
+            if ((schema==null && descriptors == null) || model == null || learningStatements == null)
+                throw new Exception("The data descriptors or schema, model and evaluator are mandatory fields!");
             phasesDone[0] =true;
 
-            descriptors.build();
+            if(schema!=null) {
+                schema.build();
+                descriptors = (DataDescriptors) schema.toLegacy();
+            }else
+                descriptors.build();
+
             phasesDone[1] = true;
 
 
@@ -258,6 +271,8 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
             }
 
             if(phasesDone[4] && 5 <= buildTill) {
+                if(schema!=null)
+                    model.setDataSchema(schema);
                 model.setDescriptors(descriptors);
               //  model.setName(name);
                 model.build();
@@ -342,6 +357,8 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
         model.destroy();
 
+        if(schema!=null)
+            schema.destroy();
         descriptors.destroy();
 
 

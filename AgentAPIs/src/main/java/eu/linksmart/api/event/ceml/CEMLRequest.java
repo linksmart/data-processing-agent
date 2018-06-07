@@ -7,6 +7,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.types.PersistentRequest;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 
 import java.util.Collection;
 import java.util.Map;
@@ -120,7 +121,14 @@ public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
      *
      * @return the description of the data as DataDescriptors
      * */
+    @Deprecated
     DataDescriptors getDescriptors();
+    /***
+     * Schema of the data expected by the model
+     *
+     * @return the schema of the data as root SchemaNode
+     * */
+    SchemaNode getDataSchema();
     /***
      * Define how the data will be analysed/learned/studied.
      *
