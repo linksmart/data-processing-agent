@@ -5,6 +5,7 @@ import eu.linksmart.api.event.types.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by José Ángel Carvajal on 27.07.2016 a researcher of Fraunhofer FIT.
@@ -28,7 +29,7 @@ public abstract class BaseListEventHandler extends BaseArrayObjectEventHandler {
         List<Object> response = new ArrayList<>();
         if(events instanceof Object[])
             for (Object o : ( Object[])events)
-                response.add(toList(o));
+                response.addAll(Arrays.asList(( Object[])o));
         else
             response.add(events);
         return response;

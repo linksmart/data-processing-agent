@@ -211,10 +211,11 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
             phasesDone[0] =true;
 
             if(schema!=null) {
+                schema.setName(name);
                 schema.build();
                 descriptors = (DataDescriptors) schema.toLegacy();
-            }else
-                descriptors.build();
+            }
+            descriptors.build();
 
             phasesDone[1] = true;
 

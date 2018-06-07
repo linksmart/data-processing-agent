@@ -40,6 +40,7 @@ public class SchemaTest {
     }
     static private String simpleMapSchema =
             "{" +
+                    "\"name\":\"simpleMapSchema\"," +
                     "\"type\":\"object\"," +
                     "\"properties\":{" +
                         "\"property1\":{" +
@@ -52,6 +53,7 @@ public class SchemaTest {
             "}";
     static private String advancedMapSchema =
             "{" +
+                    "\"name\":\"advancedMapSchema\"," +
                     "\"type\":\"object\"," +
                     "\"required\":[\"property1\",\"property2\"]," +
                     "\"properties\":{" +
@@ -68,6 +70,7 @@ public class SchemaTest {
             "}";
     static private String simpleListArraySchema =
                  "{" +
+                         "\"name\":\"simpleListArraySchema\"," +
                     "\"type\": \"array\"," +
                     "\"items\": [" +
                          "{\"name\": \"item1\",\"type\": \"string\"}, " +
@@ -76,6 +79,7 @@ public class SchemaTest {
                 "}";
     static private String advancedListSchema =
             "{" +
+                    "\"name\":\"advancedListSchema\"," +
                     "\"type\": \"array\"," +
                     "\"items\": [" +
                         "{\"type\": \"string\"}, " +
@@ -86,12 +90,14 @@ public class SchemaTest {
             "}";
     static private String simpleAnonymousSchema =
             "{" +
+                    "\"name\":\"simpleAnonymousSchema\"," +
                     "\"type\": \"array\"," +
                     "\"size\": 10," +
                     "\"ofType\": \"int\"" +
             "}";
     static private String boundedAnonymousSchema =
             "{" +
+                    "\"name\":\"boundedAnonymousSchema\"," +
                     "\"type\": \"array\"," +
                     "\"minValue\": 5," +
                     "\"maxValue\": 10," +
@@ -100,6 +106,7 @@ public class SchemaTest {
             "}";
     static private String mapDefTest =
             "{" +
+                    "\"name\":\"mapDefTest\"," +
                     "\"type\":\"object\"," +
                     "\"properties\":{" +
                             "\"property1\":{\"ofDefinition\":\"test1\"}," +
@@ -112,6 +119,7 @@ public class SchemaTest {
             "}";
     static private String deepMapTest =
             "{" +
+                    "\"name\":\"deepMapTest\"," +
                     "\"type\":\"object\"," +
                     "\"properties\":{" +
                         "\"root1\":"+ simpleMapSchema +
@@ -121,6 +129,7 @@ public class SchemaTest {
                     "}";
     static private String deepListArraySchema =
             "{" +
+                    "\"name\":\"deepListArraySchema\"," +
                     "\"type\": \"array\"," +
                     "\"items\": [" +
                         simpleMapSchema + "," +
@@ -129,6 +138,7 @@ public class SchemaTest {
                     "}";
     static private String listDefTest =
             "{" +
+                    "\"name\":\"listDefTest\"," +
                     "\"type\":\"array\"," +
                     "\"items\":[" +
                         "{\"ofDefinition\":\"test1\"}," +

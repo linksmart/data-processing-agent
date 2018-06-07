@@ -109,7 +109,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
             try {
                 synchronized (originalRequest) {
                     Prediction prediction = model.predict(elements.getInputsList());
-                    model.learn(elements.getInputsList(),elements.getTargetsList());
+                    model.learn(elements);
                     List auxInput;
 
                     if (input.get(0) instanceof EventEnvelope)
@@ -131,7 +131,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
             try {
                 synchronized (originalRequest) {
                     Prediction prediction = model.predict(elements.getInputsList());
-                    model.learn(elements.getInputsList(),elements.getTargetsList());
+                    model.learn(elements);
 
                     model.getEvaluator().evaluate(prediction.getPrediction(), elements.getTargetsList());
 

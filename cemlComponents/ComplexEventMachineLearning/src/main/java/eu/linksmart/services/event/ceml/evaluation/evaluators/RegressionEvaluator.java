@@ -52,7 +52,9 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         latestEntries.clear();
 
         Iterator<Number> iteratorPredicted = predicted.iterator();
-        for (Number actualEntry : actual) { // O(n)
+        for (int i=0; i<actual.size();i++) { // O(n)
+            List<Number> list = new ArrayList<>(actual);
+            Number actualEntry = list.get(i);
             Number predictedEntry = iteratorPredicted.next();
             if(actualEntry.equals(Double.NaN) || predictedEntry.equals(Double.NaN))
                 continue;

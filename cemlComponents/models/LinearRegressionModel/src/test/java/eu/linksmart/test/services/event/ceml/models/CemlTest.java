@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
  * Created by José Ángel Carvajal on 20.04.2017 a researcher of Fraunhofer FIT.
  */
 public class CemlTest {
-    private static final String requestStr = "{\n" +
+    private static final String legacy = "{\n" +
             "  \"Name\":\"test\",\n" +
             "  \"Descriptors\":\n" +
             "  {\n" +
@@ -59,9 +59,49 @@ public class CemlTest {
             "     \"ReportingEnabled\": false\n"+
             "  }"+
             "}";
+    private static final String current = "{\n" +
+            "  \"Name\":\"test\",\n" +
+            "  \"Schema\":\n" +
+                    "{" +
+                        "\"type\": \"array\"," +
+                        "\"size\": 2," +
+                        "\"targetSize\": 1," +
+                        "\"ofType\": \"int\"" +
+                    "},"+
+            "  \"Model\":{\n" +
+            "    \"Name\":\"LinearRegressionModel\",\n" +
+            "    \"Targets\":[\n" +
+            "      {\n" +
+            "        \"Name\":\"RMSE\",\n" +
+            "        \"Threshold\":5.0,\n" +
+            "        \"Method\":\"less\"\n" +
+            "      }\n" +
+            "\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  \"LearningStreams\":[\n" +
+            "    {\n" +
+            "      \"statement\":\" \"\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"DeploymentStreams\":[\n" +
+            "    {\n" +
+            "      \"statement\":\"\"\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"Settings\":\n"+
+            "  {\n" +
+            "     \"BuildTillPhase\": 5,\n"+
+            "     \"ReportingEnabled\": false\n"+
+            "  }"+
+            "}";
 
     @Test
     public void testCEML() {
+        test(legacy);
+        test(current);
+    }
+    private void test(String requestStr){
         CEMLManager request;
         ObjectMapper mapper;
         try {
@@ -76,7 +116,7 @@ public class CemlTest {
         try {
 
             System.out.println("Expecting unimportant exception!");
-           // SharedSettings.getDeserializer().defineClassToInterface(Model.class, LinearRegressionModel.class);
+            // SharedSettings.getDeserializer().defineClassToInterface(Model.class, LinearRegressionModel.class);
             request = SharedSettings.getDeserializer().parse(requestStr, CEMLManager.class);
 
         } catch (IOException e) {

@@ -47,7 +47,7 @@ import java.util.*;
  * */
 public class SchemaNode implements JsonSerializable {
     private transient static final Logger loggerService = LogManager.getLogger(SchemaNode.class);
-    private String type, name, tile, ofDefinition, ofType;
+    private String type, name, ofDefinition, ofType;
     private Set<String> required;
     @JsonProperty("enum")
     private Set<String> enumeration;
@@ -59,6 +59,7 @@ public class SchemaNode implements JsonSerializable {
     private Number minValue, maxValue, ceilingValue, floorValue;
     private Object defaultValue;
     private SchemaNode parent;
+    private Set<String> names = new HashSet<>();
     private int index = -1 , size = -1, targetSize=0;
 
 
@@ -150,7 +151,6 @@ public class SchemaNode implements JsonSerializable {
         }
     }
    public ExtractedElements collect(Object o) {
-       String collectorID = UUID.randomUUID().toString();
        ExtractedElements collector = new ExtractedElements<>();
        if (validate(o, collector))
            return collector;
@@ -342,7 +342,12 @@ public class SchemaNode implements JsonSerializable {
     @Override
     public JsonSerializable build() throws TraceableException, UntraceableException {
         boolean defaultNeeded;
-
+        if(name==null)
+            throw new UntraceableException("A Schema should have always a name!");
+        if(getRoot().names.contains(name))
+            throw new UntraceableException("All given names must be unique!");
+        else
+            getRoot().names.add(name);
         if((properties==null && "object".equals(type.toLowerCase())) || ( "array".equals(type.toLowerCase()) && ((size()>0 && minValue!=null && maxValue!=null) || (size()<0 &&minValue==null && maxValue==null)) ) || (enumeration==null && "enum".equals(type.toLowerCase())))
             throw new UntraceableException("If is array must have items defined! If is a object must have properties! If is a enm must have enum!");
         if ((properties!=null && items!=null) || (properties!=null && enumeration!=null) || (items!=null && enumeration!=null))
@@ -364,20 +369,47 @@ public class SchemaNode implements JsonSerializable {
                     buildSubCollection(properties.get(key));
                 }else if (getRoot().getDefinition().containsKey(properties.get(key).ofDefinition)){
                     properties.put(key, getRoot().getDefinition().get(properties.get(key).ofDefinition));
+                    properties.get(key).name = properties.get(key).name+":"+name;
                 }else
                     throw new UntraceableException("The definition "+properties.get(key).ofDefinition + " was given but not defined in root node!");
             }
-        if(items!=null)
-            for(int i=0; i< items.size(); i++) {
-                if(items.get(i).ofDefinition==null) {
+        if(items!=null) {
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).ofDefinition == null) {
                     items.get(i).setIndex(i);
+                    if(items.get(i).name==null)
+                        items.get(i).setName(name+"["+i+"]");
 
                     buildSubCollection(items.get(i));
-                }else if (getRoot().getDefinition().containsKey(items.get(i).ofDefinition)){
+                } else if (getRoot().getDefinition().containsKey(items.get(i).ofDefinition)) {
                     items.set(i, getRoot().getDefinition().get(items.get(i).ofDefinition));
-                }else
-                    throw new UntraceableException("The definition "+items.get(i).ofDefinition + " was given but not defined in root node!");
+                    items.get(i).name = name+"["+i+"]";
+                } else
+                    throw new UntraceableException("The definition " + items.get(i).ofDefinition + " was given but not defined in root node!");
             }
+        }else if(targetSize>0 && size>0){
+            items = new ArrayList<>();
+            for (int i = 0; i < size-targetSize; i++) {
+                SchemaNode node = new SchemaNode();
+                node.type = ofType;
+                node.index = i;
+                node.setName(name+"["+i+"]");
+                buildSubCollection(node);
+
+                items.add(node);
+            }
+            for (int i = 0; i < targetSize; i++) {
+                SchemaNode node = new SchemaNode();
+                node.type = ofType;
+                node.setName(name+"["+i+size+"]");
+                node.target =true;
+                node.index = i+size;
+                buildSubCollection(node);
+                items.add(node);
+            }
+
+        }
+
 
         return this;
     }
@@ -467,13 +499,7 @@ public class SchemaNode implements JsonSerializable {
         this.name = name;
     }
 
-    public String getTile() {
-        return tile;
-    }
 
-    public void setTile(String tile) {
-        this.tile = tile;
-    }
 
     public Set<String> getRequired() {
         return required;
