@@ -137,16 +137,21 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     }
     public void learn(Input input, Input targetLabel) throws TraceableException, UntraceableException {
         if (input instanceof List) {
+            List complete = new ArrayList((List)input);
             if (targetLabel instanceof List)
-                ((List) input).addAll((List) targetLabel);
+                complete.addAll((List) targetLabel);
             else
-                ((List) input).add(targetLabel);
-        }else if (input instanceof Map) {
-            ((Map) input).put("target",targetLabel);
-        }else
-            throw new InternalException(getName(),"Internal Server Error","Unsuported type of data by the default learn function. Plase use list or map");
+                complete.add(targetLabel);
 
-        learn(input);
+            learn((Input)complete);
+
+        }else if (input instanceof Map) {
+            Map complete = new Hashtable((Map)input);
+            complete.put("target",targetLabel);
+            learn((Input) complete);
+        }else
+            throw new InternalException(getName(),"Internal Server Error","Unsupported type of data by the default learn function. Plase use list or map");
+
     }
     public void batchLearn(List<Input> input, List<Input> targetLabel) throws TraceableException, UntraceableException {
         if(input != null && !input.isEmpty() && targetLabel != null && !targetLabel.isEmpty() && input.size() == targetLabel.size()) {
