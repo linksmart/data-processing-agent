@@ -11,6 +11,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.FeatureOfInterest;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Period;
@@ -197,6 +198,21 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         this.datastream.addObservation(this);
     }
 
+    @Override
+    public String getURL() {
+        if(parameters!=null) {
+            Optional<Pair<String,Object>> optional = parameters.stream().filter(p->"url".equals(p.getKey().toLowerCase())).findFirst();
+            if(optional.isPresent())
+                return optional.get().getValue().toString();
+        }
+        return null;
+    }
+    @Override
+    public void setURL(String url) {
 
+        if(parameters==null)
+             parameters = new ArrayList<>();
 
+        parameters.add(Pair.of("url", url));
+    }
 }

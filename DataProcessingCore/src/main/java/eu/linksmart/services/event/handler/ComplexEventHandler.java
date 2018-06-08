@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
         try {
             if(query.getResultType()!=null && EventBuilder.getBuilder(query.getResultType()) != null ) {
                 builder = EventBuilder.getBuilder(query.getResultType());
-                query.setLastOutput(builder.factory(SharedSettings.getId(), query.getId(), Double.NaN, new Date(), new HashMap<>()));
+                query.setLastOutput(builder.factory(SharedSettings.getId(), query.getId(), Double.NaN, new Date(),null, new HashMap<>()));
             }else
                 builder = null;
             serializer = SharedSettings.getSerializer();
@@ -90,6 +90,7 @@ import java.util.stream.Collectors;
                                     query.getId(),
                                     eventMap,
                                     new Date(),
+                                    null,
                                     new HashMap<>()
                             )
                     );
@@ -128,6 +129,7 @@ import java.util.stream.Collectors;
                             query.getId(),
                             eventMap.values().toArray()[0],
                             (new Date()).getTime(),
+                            null,
                             new HashMap<>()
                     ));
                 } catch (UntraceableException e) {
@@ -154,6 +156,7 @@ import java.util.stream.Collectors;
                                     query.getId(),
                                     eventMap,
                                     date.getTime(),
+                                    null,
                                     new HashMap<>()
                             )
                     );
@@ -178,6 +181,7 @@ import java.util.stream.Collectors;
                                         query.getId(),
                                         eventMap,
                                         date.getTime(),
+                                        null,
                                         new HashMap<>()
                                 )
                         );

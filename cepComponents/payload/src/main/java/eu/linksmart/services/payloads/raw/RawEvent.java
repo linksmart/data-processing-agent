@@ -104,6 +104,19 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
     }
 
     @Override
+    public String getURL() {
+        Object ret = this.getOrDefault("url", this.getOrDefault("URL", this.get("Url")));
+        if(ret!=null)
+            return ret.toString();
+        return null;
+    }
+
+    @Override
+    public void setURL(String URL) {
+        this.put("url",URL);
+    }
+
+    @Override
     public Map<String, Object> getAdditionalData() {
         return this;
     }

@@ -56,6 +56,8 @@ public class SchemaNode implements JsonSerializable {
     private Map<String,SchemaNode> properties;
     private List<SchemaNode> items;
     private Map<String,SchemaNode> definition;
+    private Map<String, SchemaNode> resolveMap = new Hashtable<>();
+    private List<SchemaNode> resolveList = new ArrayList<>();
     private Number minValue, maxValue, ceilingValue, floorValue;
     private Object defaultValue;
     private SchemaNode parent;
@@ -370,6 +372,8 @@ public class SchemaNode implements JsonSerializable {
                 }else if (getRoot().getDefinition().containsKey(properties.get(key).ofDefinition)){
                     properties.put(key, getRoot().getDefinition().get(properties.get(key).ofDefinition));
                     properties.get(key).name = properties.get(key).name+":"+name;
+
+                    buildSubCollection(properties.get(key));
                 }else
                     throw new UntraceableException("The definition "+properties.get(key).ofDefinition + " was given but not defined in root node!");
             }
@@ -384,10 +388,15 @@ public class SchemaNode implements JsonSerializable {
                 } else if (getRoot().getDefinition().containsKey(items.get(i).ofDefinition)) {
                     items.set(i, getRoot().getDefinition().get(items.get(i).ofDefinition));
                     items.get(i).name = name+"["+i+"]";
+
+                    buildSubCollection(items.get(i));
                 } else
                     throw new UntraceableException("The definition " + items.get(i).ofDefinition + " was given but not defined in root node!");
             }
-        }else if(targetSize>0 && size>0){
+        }else if(size>0 || (maxValue!=null && maxValue.intValue()>0)){
+            if(maxValue!=null )
+                size = maxValue.intValue();
+
             items = new ArrayList<>();
             for (int i = 0; i < size-targetSize; i++) {
                 SchemaNode node = new SchemaNode();
@@ -404,11 +413,13 @@ public class SchemaNode implements JsonSerializable {
                 node.setName(name+"["+i+size+"]");
                 node.target =true;
                 node.index = i+size;
+
                 buildSubCollection(node);
                 items.add(node);
             }
 
         }
+
 
 
         return this;
@@ -417,6 +428,8 @@ public class SchemaNode implements JsonSerializable {
         value.setParent(this);
         value.setTarget(target?target:value.target);
         value.build();
+        getRoot().resolveList.add(value);
+        getRoot().resolveMap.put(value.getName(),value);
 
     }
 
@@ -675,4 +688,30 @@ public class SchemaNode implements JsonSerializable {
     public void setTargetSize(int targetSize) {
         this.targetSize = targetSize;
     }
+
+    public Map<String, SchemaNode> getResolveMap() {
+        return resolveMap;
+    }
+
+    public void setResolveMap(Map<String, SchemaNode> resolveMap) {
+        this.resolveMap = resolveMap;
+    }
+
+    public List<SchemaNode> getResolveList() {
+        return resolveList;
+    }
+
+    public void setResolveList(List<SchemaNode> resolveList) {
+        this.resolveList = resolveList;
+    }
+
+    public Set<String> getNames() {
+        return names;
+    }
+
+    public void setNames(Set<String> names) {
+        this.names = names;
+    }
+
+
 }

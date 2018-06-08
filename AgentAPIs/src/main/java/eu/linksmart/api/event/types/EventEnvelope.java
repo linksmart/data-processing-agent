@@ -143,6 +143,20 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      * */
     @JsonIgnore
     void setClassTopic(String topic);
+    /**
+     * gets the relative URL from which this event arrived
+     *
+     * @return the relative URL from which this instance arrived
+     * */
+    @JsonIgnore
+    String getURL();
+    /**
+     * setts  the relative URL from which this event arrived
+     *
+     * @param  URL relative to the server endpoint where this event arrived
+     * */
+    @JsonIgnore
+    void setURL(String URL);
 
     @JsonIgnore
     default Map<String, Object> getAdditionalData(){ return new HashMap<>();}

@@ -173,6 +173,16 @@ public class PredictionInstance<T> implements Prediction<T> {
     }
 
     @Override
+    public String getURL() {
+        return null; // will never be used
+    }
+
+    @Override
+    public void setURL(String URL) {// will never be used
+
+    }
+
+    @Override
     public Map<String, Object> getAdditionalData() {
         Map<String, Object> addidtionalValues = new HashMap<>();
         addidtionalValues.put("evaluations",this.getEvaluationMetrics());

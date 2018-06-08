@@ -32,6 +32,7 @@ import java.util.Set;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
+@Deprecated
 public class Sensor extends OGCSensorThingsAPIDataModelEntry
 {
 	/**

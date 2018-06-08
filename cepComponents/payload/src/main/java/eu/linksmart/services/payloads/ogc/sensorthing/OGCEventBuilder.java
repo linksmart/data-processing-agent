@@ -15,7 +15,7 @@ public class OGCEventBuilder implements EventBuilder<Object, Object,ObservationI
 
 
     @Override
-    public EventEnvelope factory(Object id, Object attributeID, Object value, long time, Map<String, Object> additionalAttributes) throws UntraceableException {
+    public EventEnvelope factory(Object id, Object attributeID, Object value, long time, Object url, Map<String, Object> additionalAttributes) throws UntraceableException {
         Observation event;
 
        if (value instanceof EventEnvelope ) {

@@ -128,7 +128,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
             if(event instanceof EventEnvelope) {
 
                 ((EventEnvelope)event).topicDataConstructor(topic);
-
+                event.setURL(topic);
                 addEvent( (EventEnvelope) event,topic);
             }else
                 if (event != null)
