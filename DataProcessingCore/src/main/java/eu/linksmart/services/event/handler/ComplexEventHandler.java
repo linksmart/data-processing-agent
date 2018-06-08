@@ -122,7 +122,7 @@ import java.util.stream.Collectors;
     }
     protected void processSingleMap(Map eventMap){
         if(builder!=null) {
-            if (eventMap.size() == 1) {
+            if (eventMap.size() == 1 && eventMap.values().toArray()[0]!=null) { // has only one element
                 try {
                     query.setLastOutput(builder.factory(
                             SharedSettings.getId(),
@@ -143,10 +143,11 @@ import java.util.stream.Collectors;
                     loggerService.error(eEntity.getMessage(), eEntity);
                 }
             }  else if (eventMap.size() == 2 &&( eventMap.containsKey("k") && eventMap.get("k")!= null || eventMap.containsKey("key") && eventMap.get("key")!= null) && (eventMap.containsKey("v") && eventMap.get("v")!= null || eventMap.containsKey("values") && eventMap.get("values")!= null)) {
+                // re-creates the map mapping the given keys and values
                 final Map aux = new HashMap();
                 applyMap(eventMap,aux);
                 processSingleMap(aux);
-            }else {
+            }else if (!eventMap.isEmpty()){ // if there is objects to work with
                 Object tmpDate = eventMap.getOrDefault("time", eventMap.getOrDefault("Time", eventMap.getOrDefault("date", eventMap.getOrDefault("Date", new Date()))));
                 Date date = ((tmpDate instanceof Date) ? (Date) tmpDate : ((tmpDate instanceof Long) ? new Date((Long) tmpDate) : new Date()));
                 try {
