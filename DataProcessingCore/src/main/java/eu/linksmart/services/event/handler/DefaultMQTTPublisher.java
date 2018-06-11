@@ -9,6 +9,7 @@ import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -35,7 +36,7 @@ public class DefaultMQTTPublisher implements Publisher {
     /***
      * Location are the brokers unknown with an alias by the Handlers
      * */
-    public final static Set<String> knownInstances= new HashSet<>();
+    public final static Set<String> knownInstances= BrokerConfiguration.knownBrokers();
     private String willTopic;
 
     public static boolean addKnownLocations(String statement) throws StatementException {
@@ -51,13 +52,7 @@ public class DefaultMQTTPublisher implements Publisher {
 
         return true;
     }
-    static {
-        String[] alias = Configurator.getDefaultConfig().getStringArray(Const.BROKERS_ALIAS);
 
-        if(alias!=null)
-            knownInstances.addAll(Arrays.stream(alias).map(Object::toString).collect(Collectors.toList()));
-
-    }
 
     public DefaultMQTTPublisher(Statement statement,String will, String willTopic) throws TraceableException, UntraceableException{
 

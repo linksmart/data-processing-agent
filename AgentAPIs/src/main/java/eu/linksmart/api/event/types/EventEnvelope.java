@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -187,6 +188,30 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
         if(o==null)
             return null;
         return o.toString();
+
+    }
+    @JsonIgnore
+    default List toLsit(){
+        Object o = getValue();
+        if(o==null || !( getValue() instanceof List ))
+            return null;
+        return (List)o;
+
+    }
+    @JsonIgnore
+    default Object[] toArray(){
+        Object o = getValue();
+        if(o==null || !( getValue() instanceof Object[] ))
+            return null;
+        return (Object[])o;
+
+    }
+    @JsonIgnore
+    default Map toMap(){
+        Object o = getValue();
+        if(o==null || !( getValue() instanceof Map ))
+            return null;
+        return (Map)o;
 
     }
     @JsonIgnore
