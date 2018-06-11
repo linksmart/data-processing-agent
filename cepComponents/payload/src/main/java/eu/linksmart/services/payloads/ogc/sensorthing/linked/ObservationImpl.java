@@ -13,6 +13,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
 
 import java.time.Period;
 import java.util.*;
@@ -52,7 +53,14 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
             e.printStackTrace();
         }
     }
-
+    public static Observation factory(Object event, Object StreamID, Object sensorID, long time){
+        try {
+            return (Observation) EventBuilder.getBuilder(ObservationImpl.class).factory(event,StreamID,sensorID,time,null,new Hashtable<>());
+        } catch (UntraceableException e) {
+            LogManager.getLogger(ObservationImpl.class).error(e.getMessage(),e);
+            return null;
+        }
+    }
     public static String defaultTopic = "LS/sensor/"+UUID.randomUUID().toString()+"/OGC/1.0/Datastreams/";
 
     @Override

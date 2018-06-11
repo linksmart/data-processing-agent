@@ -3,6 +3,8 @@ package eu.linksmart.services.event.cep.tooling;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
 import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
+import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.function.Utils;
@@ -19,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -87,6 +90,14 @@ public class Tools {
         return dateFormat;
 
     }
+    static public EventEnvelope randomEvent(String thingId, String streamID,int min, int max){
+        try {
+            return EventBuilder.getBuilder().factory(thingId, streamID,  ThreadLocalRandom.current().nextInt(min, max + 1),(new Date()).getTime(),null, new Hashtable<>());
+        } catch (UntraceableException e) {
+            return null;
+        }
+    }
+
     static public String getDateNowString(){
         return getDateFormat(getIsoTimeFormat(), "UTC").format(new Date());
     }

@@ -76,7 +76,8 @@ public class ServiceRegistratorService implements Observer{
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            System.exit(-1);
+            loggerService.error("Service registrator failed!");
+            //System.exit(-1);
         }
 
         broker = intent;

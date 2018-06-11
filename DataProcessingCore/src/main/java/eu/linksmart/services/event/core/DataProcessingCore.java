@@ -367,5 +367,24 @@ public class DataProcessingCore {
                 }
 
         );
+        // load types as libraries in esper
+        aliasTopicClass.values().forEach(pkgName-> CEPEngine.instancedEngines.values().forEach(dfw->
+                {
+                    if (!"".equals(pkgName.getValue())) {
+                        try {
+                            CEPEngineAdvanced dfwExtensions = dfw.getAdvancedFeatures();
+                            if (dfwExtensions != null) {
+                                dfwExtensions.loadAdditionalPackages(pkgName.getValue());
+                                loggerService.info("Library : " + pkgName.getValue() + " loaded in "+dfw.getName());
+                            }
+                        } catch (Exception e) {
+                            loggerService.error(e.getMessage(), e);
+                        }
+                    }
+
+                }
+                )
+
+        );
     }
 }

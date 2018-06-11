@@ -57,6 +57,10 @@ import java.util.UUID;
 @JsonSerialize(as = ObservationImpl.class)
 public interface Observation extends EventEnvelope<Object,Object>, CommonControlInfo, FeatureOfInterestNavigationLink,DatastreamNavigationLink {
 
+
+    static Observation factory(Object event, Object StreamID, Object sensorID, long time){
+        return ObservationImpl.factory((Object)event,(Object)StreamID,sensorID,time);
+    }
     /**
      * Gets the phenomenon time as a Date.
      * The phenomenon time is the time instant or period of when the Observation happens.
