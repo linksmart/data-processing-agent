@@ -48,6 +48,7 @@ public class Playing {
                                     "ds_" + String.valueOf(k) + "-" + String.valueOf(id),
                                      "_" + String.valueOf(i)+"_"+ String.valueOf(n++)+"___" + "_ds_" + String.valueOf(k) + "-" + String.valueOf(id),
                                     new Date(),
+                                    null,
                                     aux
 
                             );

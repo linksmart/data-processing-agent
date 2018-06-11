@@ -2,7 +2,10 @@ package eu.linksmart.api.event.types;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.models.auth.In;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
@@ -163,5 +166,48 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
 
     @JsonIgnore
     default void setAdditionalData(Map<String, Object> additionalData){}
+    @JsonIgnore
+    default int toInt(){
+       return toNumber().intValue();
 
+    }
+    @JsonIgnore
+    default double toDouble(){
+        return toNumber().intValue();
+
+    }
+    @JsonIgnore
+    default long toLong(){
+        return toNumber().longValue();
+
+    }
+    @JsonIgnore
+    default String toStr(){
+        Object o = getValue();
+        if(o==null)
+            return null;
+        return o.toString();
+
+    }
+    @JsonIgnore
+    default Number toNumber(){
+        Object o = getValue();
+        if(o==null)
+            return Double.NaN;
+
+        if (o.getClass() == int.class || o.getClass() == Integer.class || o.getClass() == BigDecimal.class ||  o.getClass() == BigInteger.class  || o.getClass() == short.class || o.getClass() == Short.class || o.getClass() == long.class || o.getClass() == Long.class || o.getClass() == float.class || o.getClass() == Float.class || o.getClass() == double.class || o.getClass() == Double.class || o.getClass() == Number.class || Number.class.isAssignableFrom(o.getClass())){
+            return (Number) o;
+        } else if (o.getClass() == boolean.class || o.getClass() == Boolean.class || Boolean.class.isAssignableFrom(o.getClass())){
+            return ((Boolean)o)?1:0;
+        } else if (o.getClass() == int.class || o.getClass() == String.class){
+            return (Integer)o;
+        } else if (String.class.isAssignableFrom(o.getClass())|| o.getClass() == Integer.class){
+            try {
+                Number number = Double.valueOf(o.toString());
+            }catch (NumberFormatException e){
+               // nothing
+            }
+        }
+        return Double.NaN;
+    }
 }
