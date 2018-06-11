@@ -55,6 +55,7 @@ public class Playing {
                            streamID.get(j),
                            i,
                            new Date(),
+                           null,
                            aux
 
                    );
