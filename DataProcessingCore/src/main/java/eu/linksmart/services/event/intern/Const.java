@@ -70,4 +70,5 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String PROMISCUOUS_EVENT_PARSING = "api_events_promiscuous";
     String TRANSLATOR_MODE = "api_events_translator";
     String PYTHON_PATH = "python_path";
+    String FILTER_KNOWN_AGENT_TOPICS = "api_event_filter_own_topics";
 }

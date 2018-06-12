@@ -37,7 +37,6 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     protected final boolean VALIDATION_MODE;
     private final MessageValidator validator;
 
-    private final ConcurrentMap<String,Boolean> myKnownTopics = new ConcurrentHashMap();
 
     //End of code made for testing performance
 
@@ -90,8 +89,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
 
         }
         // check if message is mine (true) or not (false)
-        myKnownTopics.putIfAbsent(topic,topic.contains(ThingsRegistrationService.getReference().getThing().getId().toString()));
-        if(!myKnownTopics.get(topic))
+        if(!conf.getBoolean(Const.FILTER_KNOWN_AGENT_TOPICS) || !topic.contains("/"+ThingsRegistrationService.getReference().getThing().getId().toString()+"/"))
             mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
 
         if(VALIDATION_MODE) toValidation(mqttMessage.getTopic(),  mqttMessage.getPayload());
