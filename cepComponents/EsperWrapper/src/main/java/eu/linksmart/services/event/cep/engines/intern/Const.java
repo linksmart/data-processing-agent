@@ -10,5 +10,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const {
 
     String SIMULATION_EXTERNAL_CLOCK_STARTING_TIME = "cep_simulation_staringTime";
 
+    String FILTER_KNOWN_AGENT_TOPICS = "api_event_filter_own_topics";
+
 
 }
