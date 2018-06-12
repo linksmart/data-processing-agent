@@ -88,9 +88,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
                 loggerService.debug(AgentUtils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
 
         }
-        // check if message is mine (true) or not (false)
-        if(!conf.getBoolean(Const.FILTER_KNOWN_AGENT_TOPICS) || !topic.contains("/"+ThingsRegistrationService.getReference().getThing().getId().toString()+"/"))
-            mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
+         mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
 
         if(VALIDATION_MODE) toValidation(mqttMessage.getTopic(),  mqttMessage.getPayload());
     }
