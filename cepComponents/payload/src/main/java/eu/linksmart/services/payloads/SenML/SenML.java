@@ -268,6 +268,8 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
     public void addValue(Object value) {
         this.value.add(new Measurement());
         this.value.lastElement().setAutoValue(value);
+        if(date!= null && date.getTime()!= 0L && this.value.lastElement().getDate()!=null && this.value.lastElement().getDate().getTime()!=0L)
+            this.value.lastElement().setDate(new Date(0));
 
     }
     @JsonIgnore
