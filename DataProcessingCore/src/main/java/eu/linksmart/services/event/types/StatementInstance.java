@@ -56,7 +56,9 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
     @JsonIgnore
     private static final transient Configurator conf = Configurator.getDefaultConfig();
-
+    @JsonProperty("LSApiKeyName")
+    @ApiModelProperty(notes = "The key-name of the service in the service catalog.")
+    protected String LSApiKeyName = null;
     @JsonProperty("name")
     @ApiModelProperty(notes = "Name of the statement. For add a statement (POST) is mandatory")
     protected String name = "";
@@ -104,7 +106,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @ApiModelProperty(notes = "Indicates which publisher will be used (MQTT_PUB default)")
     @JsonProperty("publisher")
     private Publisher publisher = Publisher.MQTT_PUB;
-    @JsonIgnore
     private boolean toRegister = true;
 
     public Object getLastOutput() {
@@ -308,13 +309,11 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     @Override
-    @Deprecated
     public boolean isRegistrable() {
         return toRegister;
     }
 
     @Override
-    @Deprecated
     public boolean isRESTOutput() {
 
         switch (publisher){
@@ -335,6 +334,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     @Override
+    @Deprecated
     public void isRESTOutput(boolean active) {
         publisher = Publisher.HTTP_POST;
     }
@@ -377,5 +377,15 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @Override
     public void setResultType(String resultType) {
         this.resultType = resultType;
+    }
+
+    @Override
+    public String getLSApiKeyName() {
+        return LSApiKeyName;
+    }
+
+    @Override
+    public void setLSApiKeyName(String keyName) {
+        LSApiKeyName = keyName;
     }
 }

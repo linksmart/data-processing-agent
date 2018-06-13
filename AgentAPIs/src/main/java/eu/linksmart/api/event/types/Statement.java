@@ -189,15 +189,13 @@ public interface Statement extends JsonSerializable, PersistentRequest {
     boolean isRegistrable();
     /***
      *
-     *
-     * @return if the output of the statement are REST endpoints instead of MQTT topics
+     * @return This value is true if getPublisher returns HTTP_GET, REST_GET, HTTP, REST, HTTP_POST, REST_POST, false otherwise.
      * */
-    @Deprecated
     boolean isRESTOutput();
     /***
-     * setts if the output of the statement are REST endpoints instead of MQTT topics
+     * This doesn't do anything. This value is set using setPublisher (isRESTOutput)
      *
-     * @param active true the outputs are REST endpoints, false the outputs are topics
+     * @param active means nothing
      * */
     @Deprecated
     void isRESTOutput(boolean active);
@@ -235,6 +233,15 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * @param type set the type this statement will produce
      * */
     void setResultType(String type);
+    /**
+     *
+     * @return gets the key-name to locate the endpoint in the service catalog
+     */
+    String getLSApiKeyName();
+    /**
+     * @param keyName set the key-name to locate the endpoint in the service catalog
+     * */
+    void setLSApiKeyName(String keyName);
 
     enum StatementLifecycle {
         /**
@@ -260,13 +267,37 @@ public interface Statement extends JsonSerializable, PersistentRequest {
         REMOVE
     }
     enum Publisher{
+        /**
+         * MQTT or MQTT_PUB will use {@see eu.linksmart.services.event.handler.DefaultMQTTPublisher} to publish the events in a broker
+         */
         MQTT,
+        /**
+         * MQTT or MQTT_PUB will use {@see eu.linksmart.services.event.handler.DefaultMQTTPublisher} to publish the events in a broker
+         */
         MQTT_PUB,
+        /**
+         * HTTP, REST, HTTP_POST, REST_POST will use {@see eu.linksmart.services.event.handler.HTTPPublisher} to post the events in a HTTP server
+         */
         REST,
+        /**
+         * HTTP, REST, HTTP_POST, REST_POST will use {@see eu.linksmart.services.event.handler.HTTPPublisher} to post the events in a HTTP server
+         */
         HTTP,
+        /**
+         * HTTP, REST, HTTP_POST, REST_POST will use {@see eu.linksmart.services.event.handler.HTTPPublisher} to post the events in a HTTP server
+         */
         REST_POST,
+        /**
+         * HTTP, REST, HTTP_POST, REST_POST will use {@see eu.linksmart.services.event.handler.HTTPPublisher} to post the events in a HTTP server
+         */
         HTTP_POST,
+        /**
+         * REST_GET, HTTP_GET will use {@see eu.linksmart.services.event.handler.HTTPPublisher} to get the events from a HTTP server and inserted into the CEPEngine
+         */
         REST_GET,
+        /**
+         * REST_GET, HTTP_GET will use {@see eu.linksmart.services.event.handler.HTTPPublisher} to get the events from a HTTP server and inserted into the CEPEngine
+         */
         HTTP_GET,
     }
 
