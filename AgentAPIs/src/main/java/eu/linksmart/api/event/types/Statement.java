@@ -178,13 +178,13 @@ public interface Statement extends JsonSerializable, PersistentRequest {
     /***
      *
      *
-     * @param registrable if the statement should or should not be register outside agent
+     * @param registrable if the statement should or should not be register outside agent (some catalog)
      * */
     void toRegister(boolean registrable);
     /***
      *
      *
-     * @return if the statement should be register outside agent
+     * @return if the statement should be register outside agent (some catalog)
      * */
     boolean isRegistrable();
     /***
@@ -192,13 +192,27 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @return if the output of the statement are REST endpoints instead of MQTT topics
      * */
+    @Deprecated
     boolean isRESTOutput();
     /***
      * setts if the output of the statement are REST endpoints instead of MQTT topics
      *
      * @param active true the outputs are REST endpoints, false the outputs are topics
      * */
+    @Deprecated
     void isRESTOutput(boolean active);
+    /***
+     *
+     *
+     * @return if the output of the statement are REST (GET,POST) endpoints or MQTT (PUB) topics
+     * */
+    Publisher getPublisher();
+    /***
+     * setts if the output of the statement are REST (GET,POST) endpoints or MQTT (PUB) topics
+     *
+     * @param publisher define the output according to the possibilities in Publisher enum {@see Publisher}
+     * */
+    void setPublisher(Publisher publisher);
     /***
      * Returns the last compound event result of this statement
      *
@@ -244,6 +258,16 @@ public interface Statement extends JsonSerializable, PersistentRequest {
          * This will remove the Statement form the CEP engine realising all other resources related to it
          */
         REMOVE
+    }
+    enum Publisher{
+        MQTT,
+        MQTT_PUB,
+        REST,
+        HTTP,
+        REST_POST,
+        HTTP_POST,
+        REST_GET,
+        HTTP_GET,
     }
 
 }

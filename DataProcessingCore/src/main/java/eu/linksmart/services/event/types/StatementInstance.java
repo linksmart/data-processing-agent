@@ -101,13 +101,11 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     private String resultType = null;
     @JsonIgnore
     private Class<EventEnvelope> nativeResultType = null;
-
-    @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
-    @JsonProperty("rest")
-    private boolean restOutput;
-
+    @ApiModelProperty(notes = "Indicates which publisher will be used (MQTT_PUB default)")
+    @JsonProperty("publisher")
+    private Publisher publisher = Publisher.MQTT_PUB;
     @JsonIgnore
-    private transient boolean toRegister = true;
+    private boolean toRegister = true;
 
     public Object getLastOutput() {
         return lastOutput;
@@ -310,18 +308,45 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     @Override
+    @Deprecated
     public boolean isRegistrable() {
         return toRegister;
     }
 
     @Override
+    @Deprecated
     public boolean isRESTOutput() {
-        return restOutput;
+
+        switch (publisher){
+            case HTTP_GET:
+            case REST_GET:
+                return false;
+            case HTTP:
+            case REST:
+            case HTTP_POST:
+            case REST_POST:
+                return true;
+            case MQTT:
+            case MQTT_PUB:
+            default:
+                return false;
+
+        }
     }
 
     @Override
     public void isRESTOutput(boolean active) {
-        restOutput = active;
+        publisher = Publisher.HTTP_POST;
+    }
+
+    @Override
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    @Override
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     @Override
