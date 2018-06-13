@@ -2211,6 +2211,10 @@
           "example": false,
           "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
         },
+        "LSApiKeyName": {
+          "type": "string",
+          "description": "The key-name of the service in the service catalog."
+        },
         "Persistent": {
           "type": "boolean",
           "example": false,
@@ -2245,6 +2249,9 @@
         "id": {
           "type": "string",
           "description": "Unique identifier of the statement in the agent"
+        },
+        "lsapiKeyName": {
+          "type": "string"
         },
         "name": {
           "type": "string",
