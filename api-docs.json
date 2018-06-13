@@ -2257,10 +2257,19 @@
             "type": "string"
           }
         },
-        "rest": {
-          "type": "boolean",
-          "example": false,
-          "description": "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB"
+        "publisher": {
+          "type": "string",
+          "description": "Indicates which publisher will be used (MQTT_PUB default)",
+          "enum": [
+            "MQTT",
+            "MQTT_PUB",
+            "REST",
+            "HTTP",
+            "REST_POST",
+            "HTTP_POST",
+            "REST_GET",
+            "HTTP_GET"
+          ]
         },
         "resultType": {
           "type": "string",
