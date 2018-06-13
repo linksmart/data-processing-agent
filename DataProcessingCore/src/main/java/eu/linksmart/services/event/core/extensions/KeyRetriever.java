@@ -24,8 +24,6 @@ public class KeyRetriever {
     private Timer timer = new Timer();
     private boolean running = false;
     private Set<String> servicesIds = new HashSet<>();
-    // intentionally it's using the default one and not the serialized defined on
-    private Deserializer deserializer = new DefaultDeserializer();
     private static Configurator conf = Configurator.getDefaultConfig();
     private static Logger loggerService = LogManager.getLogger(KeyRetriever.class);
     private static KeyRetriever defaultRetriever = init();

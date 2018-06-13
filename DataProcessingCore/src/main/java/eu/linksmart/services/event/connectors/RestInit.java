@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.connectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;
 import eu.linksmart.services.event.intern.Const;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -160,5 +162,9 @@ public class RestInit {
             }
         }
         return properties;
+    }
+    @Bean
+    public ObjectMapper objectMapper() {
+        return (ObjectMapper) SharedSettings.getSerializerDeserializer().getParser();
     }
 }

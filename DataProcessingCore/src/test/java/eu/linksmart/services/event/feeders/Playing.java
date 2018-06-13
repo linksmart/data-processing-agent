@@ -30,7 +30,6 @@ public class Playing {
         MqttClient client;
         Random random = new Random();
         Serializer serializer = new DefaultSerializer();
-        Deserializer deserializer = new DefaultDeserializer();
         for(int i =0; i<60; i++) {
             sensorID.add("S"+String.valueOf(i));
             streamID.add("D"+String.valueOf(i));

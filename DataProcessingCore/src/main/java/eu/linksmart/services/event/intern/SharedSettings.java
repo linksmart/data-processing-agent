@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.intern;
 
+
 import eu.linksmart.services.utils.serialization.*;
 
 import java.io.IOException;
@@ -18,8 +19,7 @@ public class SharedSettings implements Const {
     protected static boolean isFirstLoad = true;
 
     protected static String ls_code = "DPA";
-    protected static Serializer serializer = new DefaultSerializer();
-    protected static Deserializer deserializer = new DefaultDeserializer();
+    protected static SerializerDeserializer serializer = new DefaultSerializerDeserializer();
 
     protected static JWSSerializer jwsserializer;
     protected static JWSDeserializer jwsdeserializer;
@@ -28,7 +28,7 @@ public class SharedSettings implements Const {
         try {
             jwsserializer = new JWSSerializer(serializer);
 
-            jwsdeserializer = new JWSDeserializer(jwsserializer.getPublicKeyInBase64String(), deserializer);
+            jwsdeserializer = new JWSDeserializer(jwsserializer.getPublicKeyInBase64String(), serializer);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -74,16 +74,18 @@ public class SharedSettings implements Const {
         return serializer;
     }
 
-    public static void setSerializer(Serializer serializer) {
+    public static void setSerializer(SerializerDeserializer serializer) {
         SharedSettings.serializer = serializer;
     }
 
     public static Deserializer getDeserializer() {
-        return deserializer;
+        return serializer;
     }
-
-    public static void setDeserializer(Deserializer deserializer) {
-        SharedSettings.deserializer = deserializer;
+    public static SerializerDeserializer getSerializerDeserializer() {
+        return serializer;
+    }
+    public static void setDeserializer(SerializerDeserializer deserializer) {
+        SharedSettings.serializer = deserializer;
     }
 
 
