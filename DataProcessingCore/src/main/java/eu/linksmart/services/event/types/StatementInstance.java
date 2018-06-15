@@ -10,11 +10,9 @@ import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.handler.ComplexEventHandler;
-import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
 import io.swagger.annotations.ApiModelProperty;
@@ -53,7 +51,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
      * Define which handler will be instantiate in the CEP engine when no Handler was specifically defined.
      * */
     @JsonIgnore
-    public static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
+    public transient static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
     @JsonIgnore
     private static final transient Configurator conf = Configurator.getDefaultConfig();
     @JsonProperty("LSApiKeyName")
@@ -102,11 +100,13 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonProperty("resultType")
     private String resultType = null;
     @JsonIgnore
-    private Class<EventEnvelope> nativeResultType = null;
+    private transient Class<EventEnvelope> nativeResultType = null;
     @ApiModelProperty(notes = "Indicates which publisher will be used (MQTT_PUB default)")
     @JsonProperty("publisher")
     private Publisher publisher = Publisher.MQTT_PUB;
-    private boolean toRegister = true;
+    @ApiModelProperty(notes = "if the statement should or should not be register outside agent (some catalog)")
+    @JsonProperty("isRegister")
+    private boolean register = true;
 
     public Object getLastOutput() {
         return lastOutput;
@@ -305,12 +305,12 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @Override
     public void toRegister(boolean registrable) {
-        toRegister=registrable;
+        register =registrable;
     }
 
     @Override
     public boolean isRegistrable() {
-        return toRegister;
+        return register;
     }
 
     @Override
@@ -388,4 +388,22 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public void setLSApiKeyName(String keyName) {
         LSApiKeyName = keyName;
     }
+
+    public Object getSynchRespones() {
+        return synchRespones;
+    }
+
+    public void setSynchRespones(Object synchRespones) {
+        this.synchRespones = synchRespones;
+    }
+
+    public String getAgentID() {
+        return agentID;
+    }
+
+    public void setAgentID(String agentID) {
+        this.agentID = agentID;
+    }
+
+
 }

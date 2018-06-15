@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.*;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.api.event.types.impl.Event;
-import eu.linksmart.services.payloads.SenML.SenML;
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 import eu.linksmart.services.payloads.ogc.sensorthing.FeatureOfInterest;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 
@@ -61,7 +58,10 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
             return null;
         }
     }
-    public static String defaultTopic = "LS/sensor/"+UUID.randomUUID().toString()+"/OGC/1.0/Datastreams/";
+    @JsonIgnore
+    public static String classTopic = "LS/sensor/"+UUID.randomUUID().toString()+"/OGC/1.0/Datastreams/";
+
+
 
     @Override
     public void setUnsafeValue(Object value) {
@@ -77,12 +77,12 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
 
     @Override
     public String getClassTopic() {
-        return defaultTopic;
+        return classTopic;
     }
 
     @Override
     public void setClassTopic(String topic) {
-        defaultTopic = topic;
+        classTopic = topic;
     }
 
     @Override
@@ -128,8 +128,6 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     protected Object result;
     @JsonIgnore
     protected Period validTime;
-    @JsonIgnore
-    protected String topic;
 
     /*
     * First the implementation of the Observation Interface.

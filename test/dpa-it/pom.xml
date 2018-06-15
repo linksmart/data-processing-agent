@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>test.parent</artifactId>
+        <groupId>eu.linksmart.services.events.testing</groupId>
+        <version>1.8.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>dpa-it</artifactId>
+
+<dependencies>
+    <!-- Testing dependencies -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <!-- HTTP client -->
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>fluent-hc</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <scope>test</scope>
+
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <scope>test</scope>
+
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <scope>test</scope>
+
+    </dependency>
+    <dependency>
+        <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+        <groupId>org.eclipse.paho</groupId>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+        <artifactId>api.agents</artifactId>
+        <groupId>eu.linksmart.services.events</groupId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>eu.linksmart.services.events</groupId>
+        <artifactId>payload</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+</dependencies>
+</project>

@@ -568,35 +568,36 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
 
         @JsonIgnore
         public void setAutoValue(Object value){
-             if (value instanceof Long){
-                setT((Long)value);
-            }else if (value instanceof Number){
-                this.value = (Number)value;
+            if(value!=null) {
+                if (Number.class.isAssignableFrom(value.getClass()) || value instanceof Long) {
+                    setT((Long) value);
+                } else if (Number.class.isAssignableFrom(value.getClass()) || value instanceof Number) {
+                    this.value = (Number) value;
 
-            } else if (value instanceof Boolean){
-                bv = (Boolean)value;
+                } else if (Boolean.class.isAssignableFrom(value.getClass()) || value instanceof Boolean) {
+                    bv = (Boolean) value;
 
-            }else if (value instanceof String){
-                sv = value.toString();
+                } else if (String.class.isAssignableFrom(value.getClass()) || value instanceof String) {
+                    sv = value.toString();
 
-            }else if( value instanceof Map || value instanceof Collection){
-                 ObjectMapper mapper = new ObjectMapper();
-                 try {
-                     sv = mapper.writeValueAsString(value);
-                 } catch (JsonProcessingException e) {
-                     SenML.loggerService.error(e.getMessage(),e);
-                 }
+                } else if (Map.class.isAssignableFrom(value.getClass()) || value instanceof Map || value instanceof Collection) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        sv = mapper.writeValueAsString(value);
+                    } catch (JsonProcessingException e) {
+                        SenML.loggerService.error(e.getMessage(), e);
+                    }
 
-             }else {
-                 ObjectMapper mapper = new ObjectMapper();
-                 try {
-                     sv = mapper.writeValueAsString(value);
-                 } catch (JsonProcessingException e) {
-                     SenML.loggerService.error(e.getMessage(),e);
-                 }
-             }
+                } else {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        sv = mapper.writeValueAsString(value);
+                    } catch (JsonProcessingException e) {
+                        SenML.loggerService.error(e.getMessage(), e);
+                    }
+                }
 
-
+            }
         }
 
         @JsonIgnore

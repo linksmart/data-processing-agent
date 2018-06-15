@@ -1,5 +1,6 @@
 package eu.linksmart.services.event.handler;
 
+import com.google.common.io.CharStreams;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
@@ -22,6 +23,8 @@ import org.apache.http.client.fluent.*;
 import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.util.*;
 
@@ -198,6 +201,7 @@ public class HTTPPublisher implements Publisher{
         });
         return success[0];
     }
+
     private boolean processResponse(Response response) {
         HttpResponse httpResponse;
         try {
@@ -207,8 +211,8 @@ public class HTTPPublisher implements Publisher{
             return false;
         }
         String rawEvent;
-        try {
-            rawEvent = response.returnContent().asString();
+        try (final Reader reader = new InputStreamReader(httpResponse.getEntity().getContent())) {
+            rawEvent = CharStreams.toString(reader);
         } catch (IOException e) {
             loggerService.error("remote endpoint gives following response code "+httpResponse.getStatusLine().getStatusCode()+" and the agent is unable to process the response body");
             loggerService.error(e.getMessage(), e);

@@ -36,10 +36,10 @@ import java.util.stream.Collectors;
         try {
             if(query.getResultType()!=null && EventBuilder.getBuilder(query.getResultType()) != null ) {
                 builder = EventBuilder.getBuilder(query.getResultType());
-                query.setLastOutput(builder.factory(SharedSettings.getId(), query.getId(), new Object(), new Date(),null, new HashMap<>()));
+                query.setLastOutput(builder.factory(SharedSettings.getId(), query.getId(),Double.NaN, new Date(),null, new HashMap<>()));
             }else {
                 builder = null;
-                query.setLastOutput(new Object());
+                query.setLastOutput(Double.NaN);
             }
             serializer = SharedSettings.getSerializer();
             if(!query.isRESTOutput()) {

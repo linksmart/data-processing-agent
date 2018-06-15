@@ -212,4 +212,11 @@ public class ThingImpl extends CommonControlInfoDescriptionImpl implements Thing
 
 	}
 
+	public ConcurrentMap<Object, Datastream> getDatastreamsByKey() {
+		return datastreamsByKey;
+	}
+
+	public void setDatastreamsByKey(ConcurrentMap<Object, Datastream> datastreamsByKey) {
+		this.datastreamsByKey = datastreamsByKey;
+	}
 }
