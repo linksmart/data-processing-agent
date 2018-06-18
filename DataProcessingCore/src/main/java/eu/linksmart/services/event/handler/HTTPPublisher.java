@@ -150,8 +150,8 @@ public class HTTPPublisher implements Publisher{
 
 
                 } else {
-                    loggerService.error("Scope:" + scope + "not found");
-                    throw new StatementException(statement.getId(), "Bad Request", "Scope:" + scope + "not found");
+                    loggerService.error("Scope:" + scope + " not found");
+                    throw new StatementException(statement.getId(), "Bad Request", "Scope:" + scope + " not found");
 
                 }
 
