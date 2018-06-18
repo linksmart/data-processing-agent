@@ -119,7 +119,7 @@ public class HTTPPublisher implements Publisher{
 
 
         for (String scope : scopes) {
-            if (!knownInstances.containsKey(scope.toLowerCase())) {
+            if (!knownInstances.containsKey(scope)) {
 
 
                 if (SCclient != null && statement.getLSApiKeyName()!=null) {
