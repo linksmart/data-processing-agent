@@ -122,6 +122,8 @@ public interface CEPEngine extends AnalyzerComponent {
      * @exception eu.linksmart.api.event.exceptions.UnknownException is thrown when an exception happens but the reason of
      * the exception is unknown. In other words, this exception is used to mark all exceptions that had not being yet handled by
      * the developer.
+	 * @exception eu.linksmart.api.event.exceptions.InternalException is thrown if an known exception happens, but the source of
+	 * the exception is not related to the input itself. In other words, exceptions which are known and expected by the developer.
      * */
     boolean removeStatement( String id, Statement statement) throws UnknownException, StatementException, InternalException;
     /**
