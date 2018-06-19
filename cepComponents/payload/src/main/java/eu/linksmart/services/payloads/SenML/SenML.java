@@ -569,7 +569,16 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
         @JsonIgnore
         public void setAutoValue(Object value){
             if(value!=null) {
-               if (Number.class.isAssignableFrom(value.getClass()) || value instanceof Number) {
+                if (Double.class.isAssignableFrom(value.getClass()) || value instanceof Double || value instanceof Float || value.getClass() == double.class || value.getClass() == float.class ) {
+                    this.value = (double) value;
+
+                }else if (Integer.class.isAssignableFrom(value.getClass()) || value instanceof Integer || value instanceof Short || value.getClass() == int.class || value.getClass() == short.class ) {
+                    this.value = (int) value;
+
+                }else if (Long.class.isAssignableFrom(value.getClass()) || value instanceof Long || value.getClass() == long.class ) {
+                    this.value = (long) value;
+
+                }else if (Number.class.isAssignableFrom(value.getClass()) || value instanceof Number) {
                     this.value = (Number) value;
 
                 } else if (Boolean.class.isAssignableFrom(value.getClass()) || value instanceof Boolean) {
