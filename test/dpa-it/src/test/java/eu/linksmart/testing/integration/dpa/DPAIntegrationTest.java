@@ -500,6 +500,68 @@ public class DPAIntegrationTest implements MqttCallback{
         }while (after-before<time&&!arrived[0]);
 
     }
+    @Test
+    public void Tutorial9_protocol_translate() {
+        upkeep();
+        final String tutorial_short_name="protocol_translate";
+        MultiResourceResponses responses = processResponse(execute(
+                Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
+                        "{\n" +
+                                "    \"name\": \""+tutorial_short_name+"\" ,\n" +
+                                "    \"statement\": \"select event from Observation as event\",\n" +
+                                "    \"scope\":[\"appbackend\"],\n" +
+                                "    \"output\":[\"publish/event\"],\n" +
+                                "    \"publisher\":\"REST_POST\"\n" +
+                                "}",
+                        ContentType.APPLICATION_JSON
+                )),201);
+
+
+        arrived[0] =false;
+        final String[] arrTopic ={""};
+        final String[] error ={""};
+
+
+        MqttClient city =prepareSecondBroker();
+
+        city.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                if(topic.contains("event")) {
+                    arrived[0]=true;
+                    arrTopic[0]=topic;
+                }
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
+
+        tryTill(10000,city,"#");
+        unsubscribe(city, "#");
+        //MultiResourceResponses<ObservationImpl> result = processResponse(execute(Request.Get(testURL(agentURL+"/statement/"+tutorial_short_name+"/output/"))),200,new TypeReference<MultiResourceResponses<ObservationImpl>>() {});
+
+        execute(Request.Delete(testURL(agentURL+"/statement/"+tutorial_short_name+"/")));
+
+        if(!"".equals(error[0]))
+            fail(error[0]);
+
+        assertEquals("Messaged arrive to the endpoint?",true,arrived[0]);
+        // TODO: if LS-369 is fixed uncomment this two lines
+        //assertEquals("The arrived topic and topic defined of the query do not match",arrTopic[0],(responses.getResponsesTail().getTopic()));
+        //assertEquals("The topic defined in the query and response topic  do not match","LS/my/topic",(responses.getResponsesTail().getTopic()));
+        System.err.println("(open issue LS-369) The arrived topic and topic defined of the query do not match"); // <-- TODO remove this line if  LS-369 is fixed
+        assertEquals("The defined topic and the arrived topic of the query do not match","event",arrTopic[0]);
+
+        ending();
+    }
     private MqttClient prepareSecondBroker(){
         try {
             String url2 = System.getenv().getOrDefault("BROKER2_URL", System.getenv().getOrDefault("CITY_URL", "tcp://localhost:1881"));
