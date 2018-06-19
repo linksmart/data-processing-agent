@@ -79,8 +79,8 @@ public class HTTPPublisher implements Publisher{
     }
     static {
         List<Object> alias = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_HTTP_SERVERS_ALIASES_CONF_PATH);
-        List<Object> brokerHostname = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH);
-        if(alias.size()!=brokerHostname.size())
+        List<Object> defEndpoint = Configurator.getDefaultConfig().getList(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH);
+        if(alias.size()!=defEndpoint.size())
             LogManager.getLogger(DefaultMQTTPublisher.class).error("Inconsistent configuration in "+
                             Const.EVENTS_OUT_HTTP_SERVERS_ALIASES_CONF_PATH+ " and/or " +
                             Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+ " and/or "
@@ -89,7 +89,7 @@ public class HTTPPublisher implements Publisher{
             for(int i=0;i<alias.size();i++)
                 knownInstances.put(
                         alias.get(i).toString().trim(),
-                        brokerHostname.get(i).toString().trim()
+                        conf.containsKeyAnywhere(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+"_"+alias.get(i).toString().trim())?conf.getString(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+"_"+alias.get(i).toString().trim()):defEndpoint.get(i).toString().trim()
 
                 );
         }
