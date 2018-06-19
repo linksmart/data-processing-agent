@@ -521,10 +521,10 @@ public class DPAIntegrationTest implements MqttCallback{
         final String[] arrTopic ={""};
         final String[] error ={""};
 
+        connect(subscriber);
+        subscribe(subscriber,"#");
 
-        MqttClient city =prepareSecondBroker();
-
-        city.setCallback(new MqttCallback() {
+        subscriber.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
 
@@ -544,8 +544,8 @@ public class DPAIntegrationTest implements MqttCallback{
             }
         });
 
-        tryTill(10000,city,"#");
-        unsubscribe(city, "#");
+        tryTill(10000,subscriber,"#");
+        unsubscribe(subscriber, "#");
         //MultiResourceResponses<ObservationImpl> result = processResponse(execute(Request.Get(testURL(agentURL+"/statement/"+tutorial_short_name+"/output/"))),200,new TypeReference<MultiResourceResponses<ObservationImpl>>() {});
 
         execute(Request.Delete(testURL(agentURL+"/statement/"+tutorial_short_name+"/")));
