@@ -511,7 +511,7 @@ public class DPAIntegrationTest implements MqttCallback{
                                 "    \"statement\": \"select event from Observation as event\",\n" +
                                 "    \"LSApiKeyName\": \"post2pub\",\n" +
                                 "    \"scope\":[\"appbackend\"],\n" +
-                                "    \"output\":[\"publish/event\"],\n" +
+                                "    \"output\":[\"routed\"],\n" +
                                 "    \"publisher\":\"REST_POST\"\n" +
                                 "}",
                         ContentType.APPLICATION_JSON
@@ -533,7 +533,7 @@ public class DPAIntegrationTest implements MqttCallback{
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                if(topic.contains("event")) {
+                if(topic.contains("routed")) {
                     arrived[0]=true;
                     arrTopic[0]=topic;
                 }
@@ -559,7 +559,7 @@ public class DPAIntegrationTest implements MqttCallback{
         //assertEquals("The arrived topic and topic defined of the query do not match",arrTopic[0],(responses.getResponsesTail().getTopic()));
         //assertEquals("The topic defined in the query and response topic  do not match","LS/my/topic",(responses.getResponsesTail().getTopic()));
         System.err.println("(open issue LS-369) The arrived topic and topic defined of the query do not match"); // <-- TODO remove this line if  LS-369 is fixed
-        assertEquals("The defined topic and the arrived topic of the query do not match","event",arrTopic[0]);
+        assertEquals("The defined topic and the arrived topic of the query do not match","routed",arrTopic[0]);
 
         ending();
     }
