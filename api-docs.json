@@ -2302,9 +2302,6 @@
           "example": false,
           "description": "if the statement should or should not be register outside agent (some catalog)"
         },
-        "lsapiKeyName": {
-          "type": "string"
-        },
         "name": {
           "type": "string",
           "description": "Name of the statement. For add a statement (POST) is mandatory"
