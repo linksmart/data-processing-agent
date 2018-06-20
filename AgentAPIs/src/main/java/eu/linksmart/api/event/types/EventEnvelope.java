@@ -168,22 +168,22 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
     @JsonIgnore
     default void setAdditionalData(Map<String, Object> additionalData){}
     @JsonIgnore
-    default int toInt(){
-       return toNumber().intValue();
+    default int getIntResult(){
+       return getNumberResult().intValue();
 
     }
     @JsonIgnore
-    default double toDouble(){
-        return toNumber().intValue();
+    default double getDoubleResult(){
+        return getNumberResult().intValue();
 
     }
     @JsonIgnore
-    default long toLong(){
-        return toNumber().longValue();
+    default long getLongResult(){
+        return getNumberResult().longValue();
 
     }
     @JsonIgnore
-    default String toStr(){
+    default String getStringResult(){
         Object o = getValue();
         if(o==null)
             return null;
@@ -191,7 +191,7 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
 
     }
     @JsonIgnore
-    default List toLsit(){
+    default List getLsitResult(){
         Object o = getValue();
         if(o==null || !( getValue() instanceof List ))
             return null;
@@ -199,7 +199,7 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
 
     }
     @JsonIgnore
-    default Object[] toArray(){
+    default Object[] getArrayResult(){
         Object o = getValue();
         if(o==null || !( getValue() instanceof Object[] ))
             return null;
@@ -207,7 +207,7 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
 
     }
     @JsonIgnore
-    default Map toMap(){
+    default Map getMapResult(){
         Object o = getValue();
         if(o==null || !( getValue() instanceof Map ))
             return null;
@@ -215,7 +215,7 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
 
     }
     @JsonIgnore
-    default Number toNumber(){
+    default Number getNumberResult(){
         Object o = getValue();
         if(o==null)
             return Double.NaN;

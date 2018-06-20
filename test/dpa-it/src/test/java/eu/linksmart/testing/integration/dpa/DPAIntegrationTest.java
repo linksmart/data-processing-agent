@@ -151,7 +151,7 @@ public class DPAIntegrationTest implements MqttCallback{
         wait(1000);
 
        //unsubscribe("LS/#");
-        assertEquals("total message must be equal to message type 1 and 2", result.getHeadResource().toInt(),result1.getHeadResource().toInt()+result2.getHeadResource().toInt());
+        assertEquals("total message must be equal to message type 1 and 2", result.getHeadResource().getIntResult(),result1.getHeadResource().getIntResult()+result2.getHeadResource().getIntResult());
 
        // if(messages.stream().anyMatch(p->!p))
        //     fail("Not all messages arrived after finishing the test!");
@@ -168,7 +168,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
-                                "    \"statement\": \"select avg(observation.toInt()) from Observation(datastream.id.toString() like 'tmp%').win:time(30 sec) as observation\"\n" +
+                                "    \"statement\": \"select avg(intResult) from Observation(datastream.id.toString() like 'tmp%').win:time(30 sec)\"\n" +
                                 "}",
                         ContentType.APPLICATION_JSON
                 )),201);
@@ -181,7 +181,7 @@ public class DPAIntegrationTest implements MqttCallback{
         execute(Request.Delete(testURL(agentURL+"/statement/"+tutorial_short_name+"/")));
 
 
-        assertEquals("expect between 3 to 5 events",25.0,result.getHeadResource().toDouble(),15.0);
+        assertEquals("expect between 3 to 5 events",25.0,result.getHeadResource().getDoubleResult(),15.0);
 
         ending();
     }
@@ -194,7 +194,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
-                                "    \"statement\": \"select datastream.thing.id from Observation(datastream.id.toString() like 'fill%' and cast(result,int)> 0)\"\n" +
+                                "    \"statement\": \"select datastream.thing.id from Observation(datastream.id.toString() like 'fill%' and intResult > 0)\"\n" +
                                 "}",
                         ContentType.APPLICATION_JSON
                 )),201);
@@ -219,7 +219,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
-                                "    \"statement\": \"select datastream.thing.id as binID, cast(result,int)*10000 as weight  from Observation(datastream.id.toString() like 'fill%')\"\n" +
+                                "    \"statement\": \"select datastream.thing.id as binID, intResult*10000 as weight  from Observation(datastream.id.toString() like 'fill%')\"\n" +
                                 "}",
                         ContentType.APPLICATION_JSON
                 )),201);
@@ -243,7 +243,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
-                                "    \"statement\": \"select 'bin1' as binID  from Observation(datastream.id.toString() like '%1'  and ( cast(result,int)> 10 or cast(result,int)> 0)).win:time(1 sec)  having count(*)=2\"\n" +
+                                "    \"statement\": \"select 'bin1' as binID  from Observation(datastream.id.toString() like '%1'  and ( intResult > 10 or intResult > 0)).win:time(1 sec)  having count(*)=2\"\n" +
                                 "}",
                         ContentType.APPLICATION_JSON
                 )),201);
@@ -268,7 +268,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
-                                "    \"statement\": \"select 'bin2' as binID  from Observation(datastream.id.toString() like '%2'  and ( cast(result,int)> 25 or cast(result,int)> 50)).win:time(1 sec)  having count(*)=2\",\n" +
+                                "    \"statement\": \"select 'bin2' as binID  from Observation(datastream.id.toString() like '%2'  and ( intResult > 10 or intResult > 0)).win:time(1 sec)  having count(*)=2\",\n" +
                                 "    \"scope\":[\"city\"]\n" +
                                 "}",
                         ContentType.APPLICATION_JSON
@@ -318,7 +318,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
-                                "    \"statement\": \"select 'bin3' as binID  from Observation(datastream.id.toString() like '%3'  and ( cast(result,int)> 25 or cast(result,int)> 50)).win:time(1 sec)  having count(*)=2\",\n" +
+                                "    \"statement\": \"select 'bin3' as binID  from Observation(datastream.id.toString() like '%3'  and ( intResult> 10 or intResult> 0)).win:time(1 sec)  having count(*)=2\",\n" +
                                 "    \"scope\":[\"city\"],\n" +
                                 "    \"output\":[\"LS/my/topic\"]\n" +
                                 "}",
@@ -375,7 +375,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
-                                "    \"statement\": \"select 'bin4' as binID  from Observation(datastream.id.toString() like '%4'  and ( cast(result,int)> 25 or cast(result,int)> 50)).win:time(1 sec)  having count(*)=2\",\n" +
+                                "    \"statement\": \"select 'bin4' as binID  from Observation(datastream.id.toString() like '%4'  and ( intResult> 10 or intResult > 0)).win:time(1 sec)  having count(*)=2\",\n" +
                                 "    \"scope\":[\"city\"],\n" +
                                 "    \"output\":[\"LS/DPA/1/SenML/10/Event/stinky_bin_route_translate\"],\n" +
                                 "    \"resultType\":\"SenML\"\n" +
@@ -433,7 +433,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Request.Put(testURL(agentURL+"/statement/"+tutorial_short_name+"/")).bodyString(
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
-                                "    \"statement\": \"select 'bin5' as binID  from Observation(datastream.id.toString() like '%5'  and ( cast(result,int)> 25 or cast(result,int)> 50)).win:time(1 sec)  having count(*)=2\",\n" +
+                                "    \"statement\": \"select 'bin5' as binID  from Observation(datastream.id.toString() like '%5'  and ( intResult > 10 or intResult > 0)).win:time(1 sec)  having count(*)=2\",\n" +
                                 "    \"scope\":[\"city\"],\n" +
                                 "    \"output\":[\"LS/DPA/1/RAW/0/RAW/stinky_bin\"],\n" +
                                 "    \"resultType\":\"none\"\n" +
@@ -812,7 +812,7 @@ public class DPAIntegrationTest implements MqttCallback{
                 Observation observation = parse(message.getPayload(), ObservationImpl.class);
                 if (topic.contains("DPA") || topic.contains("LA")) {
                     if (topic.contains(counting)) {
-                        messages.set(observation.toInt() - 1, true);
+                        messages.set(observation.getIntResult() - 1, true);
                      //   messages.remove(0);
                         messageN++;
                     } else if (topic.contains(count1)) {
@@ -822,7 +822,7 @@ public class DPAIntegrationTest implements MqttCallback{
                      //   messages.remove(0);
                         message2N++;
                     } else if (topic.contains("average_temperature")) {
-                        average = observation.toDouble();
+                        average = observation.getDoubleResult();
                     } else {
                         System.err.println("An agent message was not processed");
                         receivingFail = true;
@@ -832,7 +832,7 @@ public class DPAIntegrationTest implements MqttCallback{
             }
             if(topic.contains("sensor")) {
                 Observation observation = parse(message.getPayload(), ObservationImpl.class);
-                System.out.println("number "+observation.toInt()+" count "+sensorN);
+                System.out.println("number "+observation.getIntResult()+" count "+sensorN);
                 arrived[0] = true;
                 sensorN++;
             }
