@@ -509,6 +509,7 @@ public class DPAIntegrationTest implements MqttCallback{
                         "{\n" +
                                 "    \"name\": \""+tutorial_short_name+"\" ,\n" +
                                 "    \"statement\": \"select event from Observation as event\",\n" +
+                                "    \"LSApiKeyName\": \"post2pub\",\n" +
                                 "    \"scope\":[\"appbackend\"],\n" +
                                 "    \"output\":[\"publish/event\"],\n" +
                                 "    \"publisher\":\"REST_POST\"\n" +
