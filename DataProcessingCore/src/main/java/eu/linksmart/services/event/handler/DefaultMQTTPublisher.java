@@ -143,8 +143,10 @@ public class DefaultMQTTPublisher implements Publisher {
             for(String scope: scopes) {
                 if (!knownInstances.contains(scope.toLowerCase()) )
                     try {
-                        if( SCclient!=null )
+                        if( SCclient!=null ) {
                             SCclient.idGet(scope);
+                            BrokerConfiguration.loadConfiguration(scope);
+                        }
                     }catch (Exception e){
                         throw new StatementException( id,"Statement", "The selected scope (" + scopes.get(0) + ") is unknown");
                     }

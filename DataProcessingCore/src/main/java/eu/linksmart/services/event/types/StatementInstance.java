@@ -54,8 +54,8 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public transient static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
     @JsonIgnore
     private static final transient Configurator conf = Configurator.getDefaultConfig();
-    @JsonProperty("LSApiKeyName")
     @ApiModelProperty(notes = "The key-name of the service in the service catalog.")
+    @JsonProperty("LSApiKeyName")
     protected String LSApiKeyName = null;
     @JsonProperty("name")
     @ApiModelProperty(notes = "Name of the statement. For add a statement (POST) is mandatory")
