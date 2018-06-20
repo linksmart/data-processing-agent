@@ -3,6 +3,7 @@ package eu.linksmart.services.event.types;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
@@ -54,8 +55,8 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public transient static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
     @JsonIgnore
     private static final transient Configurator conf = Configurator.getDefaultConfig();
-    @ApiModelProperty(notes = "The key-name of the service in the service catalog.")
-    @JsonProperty("LSApiKeyName")
+
+    @JsonIgnore
     protected String LSApiKeyName = null;
     @JsonProperty("name")
     @ApiModelProperty(notes = "Name of the statement. For add a statement (POST) is mandatory")
@@ -378,12 +379,14 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public void setResultType(String resultType) {
         this.resultType = resultType;
     }
-
+    @ApiModelProperty(notes = "The key-name of the service in the service catalog.")
+    @JsonSetter(value = "LSApiKeyName")
     @Override
     public String getLSApiKeyName() {
         return LSApiKeyName;
     }
-
+    @ApiModelProperty(notes = "The key-name of the service in the service catalog.")
+    @JsonSetter(value = "LSApiKeyName")
     @Override
     public void setLSApiKeyName(String keyName) {
         LSApiKeyName = keyName;

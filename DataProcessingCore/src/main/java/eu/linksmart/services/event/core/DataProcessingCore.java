@@ -18,6 +18,7 @@ import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.event.types.BootstrappingBean;
 import eu.linksmart.services.event.types.PersistentRequestInstance;
 import eu.linksmart.services.event.types.StatementInstance;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.utils.function.Utils;
@@ -26,6 +27,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -91,6 +93,7 @@ public class DataProcessingCore {
      * @return is the agent successfully initialized
      * */
     private static synchronized boolean init(String args){
+
         started =true;
         System.out.println("\n" +
                 "╦   ╦ ╔╗╔ ╦╔═  ╔═╗ ╔╦╗ ╔═╗ ╦═╗ ╔╦╗ R\t╦ ╔═╗ ╔╦╗ \t╔═╗ ╦══ ╔══ ╔╗╔ ╔╦╗ \n" +
@@ -112,7 +115,6 @@ public class DataProcessingCore {
         ThingsRegistrationService.getReference();
 
         ServiceRegistratorService.getRegistrator();
-
         return success;
     }
     /**
