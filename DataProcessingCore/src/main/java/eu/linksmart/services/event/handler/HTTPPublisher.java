@@ -87,9 +87,10 @@ public class HTTPPublisher implements Publisher{
             );
         else {
             for(int i=0;i<alias.size();i++)
+                if(conf.containsKeyAnywhere(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+"_"+alias.get(i).toString().trim()))
                 knownInstances.put(
                         alias.get(i).toString().trim(),
-                        conf.containsKeyAnywhere(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+"_"+alias.get(i).toString().trim())?conf.getString(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+"_"+alias.get(i).toString().trim()):defEndpoint.get(i).toString().trim()
+                        conf.getString(Const.EVENTS_OUT_HTTP_SERVERS_CONF_PATH+"_"+alias.get(i).toString().trim())
 
                 );
         }
