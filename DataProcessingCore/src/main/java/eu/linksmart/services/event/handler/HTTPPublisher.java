@@ -137,8 +137,8 @@ public class HTTPPublisher implements Publisher{
 
             outputs.forEach(o ->
                     requesters.put(
-                            url + o,
-                            prepareRequest(url, o)
+                            scope + o,
+                            prepareRequest(scope, o)
                     )
             );
         } catch (Exception e) {
