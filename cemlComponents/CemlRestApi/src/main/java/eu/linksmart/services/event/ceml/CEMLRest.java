@@ -2,6 +2,7 @@ package eu.linksmart.services.event.ceml;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.linksmart.api.event.components.IncomingConnector;
+import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 
@@ -129,9 +130,10 @@ public class CEMLRest extends Component implements IncomingConnector{
     @RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRequest(
             @PathVariable("name") String name,
-            @RequestBody() String body
+            @RequestBody CEMLManager cemlRequest
     ){
-        return prepareHTTPResponse(CEML.create(name, body, ""));
+        cemlRequest.setName(name);
+        return prepareHTTPResponse(CEML.create(cemlRequest));
     }
     @RequestMapping(value="/ceml/{name}", method=  RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteRequest(

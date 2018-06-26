@@ -56,7 +56,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     protected Map<String,Object> settings;
     @JsonProperty(value = "isDeployed")
     protected boolean deployed=false;
-    @JsonProperty(value = "LastPrediction")
+    @JsonIgnore
     protected Prediction lastPrediction;
 
     @JsonIgnore

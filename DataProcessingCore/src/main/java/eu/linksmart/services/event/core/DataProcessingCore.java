@@ -108,13 +108,14 @@ public class DataProcessingCore {
 
         initCEPEngines();
         intoCEPTypes();
-        initForceLoading();
+        initForceLoading(Const.BASIC_EXTENSIONS);
+        initForceLoading(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING);
         boolean success = initFeeders();
         bootstrapping();
         // force the loading of the RegistrationService
-        ThingsRegistrationService.getReference();
+       // ThingsRegistrationService.getReference();
 
-        ServiceRegistratorService.getRegistrator();
+       // ServiceRegistratorService.getRegistrator();
         return success;
     }
     /**
@@ -227,9 +228,9 @@ public class DataProcessingCore {
      * This function force to load packages by loading the classloader
      *
      * */
-    private static void initForceLoading() {
-        if(conf.containsKeyAnywhere(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING)) {
-            String[] modules = conf.getStringArray(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING);
+    private static void initForceLoading(String toLoad) {
+        if(conf.containsKeyAnywhere(toLoad)) {
+            String[] modules = conf.getStringArray(toLoad);
             loggerService.info("Loading following extensions "+ Arrays.toString(modules));
             Arrays.stream(modules).forEach(cls -> {
                 try {

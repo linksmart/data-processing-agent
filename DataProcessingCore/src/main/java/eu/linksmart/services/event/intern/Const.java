@@ -45,6 +45,8 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
 
     String ADDITIONAL_CLASS_TO_BOOTSTRAPPING = "agent_init_extensions";
 
+    String BASIC_EXTENSIONS = "agent_init_basic_extensions";
+
     String START_MQTT_STATEMENT_API = "api_statements_mqtt_enable";
     String MONITOR_TOPICS = "connector_monitoring_mqtt_events_report_topics";
     String MONITOR_EVENTS = "connector_monitoring_mqtt_events_report_everySeconds";
