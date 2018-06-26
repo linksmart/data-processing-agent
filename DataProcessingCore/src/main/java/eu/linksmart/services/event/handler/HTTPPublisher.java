@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.http.client.fluent.*;
 import org.springframework.web.client.RestClientException;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -115,7 +116,38 @@ public class HTTPPublisher implements Publisher{
 
 
     }
+    private void initScopeFromServiceCatalog(String scope)throws Exception{
 
+        Service service = null;
+        String[] aux = scope.split(":");
+        if(aux.length!=2) {
+            throw new Exception(" Scope "+scope+" is not properly format <scope>::=<ServiceID>:<APIKey>");
+        }
+        Pair<String,String> ret = Pair.of(aux[0], aux[1]);
+        try {
+            service = SCclient.idGet(ret.getKey());
+        } catch (RestClientException e) {
+            loggerService.error(e.getMessage(), e);
+            throw new Exception(e.getMessage(), e);
+        }
+        try {
+            final String url = service.getApis().get(ret.getValue());
+            new URI(url);
+            knownInstances.put(scope, url);
+
+            outputs.forEach(o ->
+                    requesters.put(
+                            url + o,
+                            prepareRequest(url, o)
+                    )
+            );
+        } catch (Exception e) {
+
+            loggerService.error("Service catalog url is not an URL");
+            loggerService.error(e.getMessage(), e);
+            throw new Exception("Service catalog url is not an URL");
+        }
+    }
     private void initScopes(Statement statement) throws StatementException {
 
 
@@ -123,32 +155,14 @@ public class HTTPPublisher implements Publisher{
             if (!knownInstances.containsKey(scope)) {
 
 
-                if (SCclient != null && statement.getLSApiKeyName()!=null) {
+                if (SCclient != null ) {
 
-                    Service service = null;
-                    try {
-                        service = SCclient.idGet(scope);
-                    } catch (RestClientException e) {
-                        loggerService.error(e.getMessage(), e);
-                        throw new StatementException(statement.getId(), "Bad Request", e.getMessage(), e);
-                    }
-                    try {
-                        final URI url = new URI(service.getApis().get(statement.getLSApiKeyName()));
-                        knownInstances.put(scope, url.toString());
+                 try {
+                     initScopeFromServiceCatalog(scope);
+                 }catch (Exception e){
 
-                        outputs.forEach(o ->
-                                requesters.put(
-                                        scope + o,
-                                        prepareRequest(scope, o)
-                                )
-                        );
-                    } catch (Exception e) {
-
-                        loggerService.error("Service catalog url is not an URL");
-                        loggerService.error(e.getMessage(), e);
-                        throw new StatementException(statement.getId(), "Bad Request", "Service catalog url is not an URL");
-                    }
-
+                     throw new StatementException(statement.getId(), "Bad Request", e.getMessage());
+                 }
 
                 } else {
                     loggerService.error("Scope:" + scope + " not found");

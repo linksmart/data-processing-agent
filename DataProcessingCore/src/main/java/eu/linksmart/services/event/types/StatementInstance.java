@@ -56,8 +56,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonIgnore
     private static final transient Configurator conf = Configurator.getDefaultConfig();
 
-    @JsonIgnore
-    protected String LSApiKeyName = null;
+
     @JsonProperty("name")
     @ApiModelProperty(notes = "Name of the statement. For add a statement (POST) is mandatory")
     protected String name = "";
@@ -379,18 +378,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public void setResultType(String resultType) {
         this.resultType = resultType;
     }
-    @ApiModelProperty(notes = "The key-name of the service in the service catalog.")
-    @JsonSetter(value = "LSApiKeyName")
-    @Override
-    public String getLSApiKeyName() {
-        return LSApiKeyName;
-    }
-    @ApiModelProperty(notes = "The key-name of the service in the service catalog.")
-    @JsonSetter(value = "LSApiKeyName")
-    @Override
-    public void setLSApiKeyName(String keyName) {
-        LSApiKeyName = keyName;
-    }
+
 
     public Object getSynchRespones() {
         return synchRespones;

@@ -233,15 +233,6 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * @param type set the type this statement will produce
      * */
     void setResultType(String type);
-    /**
-     *
-     * @return gets the key-name to locate the endpoint in the service catalog
-     */
-    String getLSApiKeyName();
-    /**
-     * @param keyName set the key-name to locate the endpoint in the service catalog
-     * */
-    void setLSApiKeyName(String keyName);
 
     enum StatementLifecycle {
         /**
