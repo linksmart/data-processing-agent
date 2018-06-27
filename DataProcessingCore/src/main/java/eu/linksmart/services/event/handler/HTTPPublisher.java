@@ -44,12 +44,7 @@ public class HTTPPublisher implements Publisher{
     static private transient ScApi SCclient = null;
     static {
 
-        if(Utils.isRestAvailable(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))){
-            ApiClient apiClient = new ApiClient();
-            apiClient.setBasePath(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
-            SCclient = new ScApi(apiClient);
-        }
-
+        SCclient = Utils.getServiceCatalogClient(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
 
     }
     /***

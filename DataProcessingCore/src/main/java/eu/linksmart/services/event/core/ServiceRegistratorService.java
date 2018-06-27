@@ -6,8 +6,10 @@ import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.EditableService;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBrokerService;
+import io.swagger.client.api.ScApi;
 import io.swagger.client.model.Service;
 import io.swagger.client.model.ServiceDocs;
 import org.apache.logging.log4j.LogManager;
@@ -29,10 +31,11 @@ public class ServiceRegistratorService implements Observer{
     private transient final static Logger loggerService = LogManager.getLogger(ServiceRegistratorService.class);
     private transient final static Configurator conf = Configurator.getDefaultConfig();
     public static ConcurrentMap<String,Object> meta = new ConcurrentHashMap<>();
-    private final StaticBroker broker;
     private final Timer updater = new Timer();
 
     public final transient static ServiceRegistratorService registrator = new ServiceRegistratorService();
+    private ScApi SCclient=null;
+
     private ServiceRegistratorService() {
         myRegistration = new EditableService();
         myRegistration.setId(SharedSettings.getId());
@@ -80,8 +83,8 @@ public class ServiceRegistratorService implements Observer{
             //System.exit(-1);
         }
 
-        broker = intent;
-        broker.addConnectionListener(this);
+        SCclient = Utils.getServiceCatalogClient(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
+
 
         if(myRegistration.getTtl()>-1){
             updater.schedule(
@@ -103,7 +106,7 @@ public class ServiceRegistratorService implements Observer{
     public void update(){
         try {
             loggerService.info("Sending registration message to topic: "+ AgentUtils.topicReplace(conf.getString(Const.LINKSMART_REGISTRATION_TOPIC), SharedSettings.getId() )+ " message: " +SharedSettings.getSerializer().toString(myRegistration));
-            broker.publish(AgentUtils.topicReplace(conf.getString(Const.LINKSMART_REGISTRATION_TOPIC), SharedSettings.getId()), SharedSettings.getSerializer().serialize(myRegistration));
+            SCclient.idPut(myRegistration.getId(),myRegistration);
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
         }
