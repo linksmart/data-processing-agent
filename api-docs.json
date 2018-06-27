@@ -2076,6 +2076,9 @@
     "CEMLManager": {
       "type": "object",
       "properties": {
+        "DataSchema": {
+          "$ref": "#/definitions/SchemaNode"
+        },
         "Descriptors": {
           "type": "array",
           "items": {
@@ -2097,9 +2100,6 @@
           "type": "boolean",
           "example": false,
           "description": "Indicates if the request should be stored persistently"
-        },
-        "Schema": {
-          "$ref": "#/definitions/SchemaNode"
         },
         "Settings": {
           "type": "object"
@@ -2610,9 +2610,6 @@
         },
         "ofType": {
           "type": "string"
-        },
-        "parent": {
-          "$ref": "#/definitions/SchemaNode"
         },
         "properties": {
           "type": "object",
