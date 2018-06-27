@@ -61,7 +61,7 @@ public class CemlTest {
             "}";
     private static final String current = "{\n" +
             "  \"Name\":\"test\",\n" +
-            "  \"Schema\":\n" +
+            "  \"DataSchema\":\n" +
                     "{" +
                         "\"type\": \"array\"," +
                         "\"size\": 2," +
