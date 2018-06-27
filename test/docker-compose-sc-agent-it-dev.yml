@@ -1,0 +1,22 @@
+version: '3'
+services:
+  main_broker:
+    ports:
+      - "1883:1883"
+  sc:
+    ports:
+      - "8082:8082"
+  agent:
+    ports:
+      - "8319:8319"
+      - "5004:5005"
+    entrypoint:
+      - "java"
+      - "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+      - "-cp"
+      - "./*:/dependencies/*"
+      - "org.springframework.boot.loader.PropertiesLauncher"
+  it:
+    ports:
+      - "8319:8319"
+      - "5005:5005"
