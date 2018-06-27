@@ -1,0 +1,42 @@
+version: '3'
+services:
+  main_broker:
+    image: eclipse-mosquitto
+  sc:
+    image: docker.linksmart.eu/sc:latest
+    depends_on:
+      - main_broker
+    links:
+      - main_broker
+    environment:
+      - SC_MQTT_CLIENT_BROKERURI=tcp://main_broker:1883
+  agent:
+    image: docker.linksmart.eu/agent:dpa-experimental
+    hostname: agent
+    depends_on:
+      - sc
+      - main_broker
+    links:
+      - main_broker
+      - sc
+    environment:
+      - linksmart_service_catalog_endpoint=http://sc:8082
+  it:
+    image: docker.linksmart.eu/ci/maven-builder:latest
+    working_dir: /data/
+    depends_on:
+      - main_broker
+      - sc
+      - agent
+    links:
+      - main_broker
+      - sc
+      - agent
+    volumes:
+      - ./:/data/
+    environment:
+      - BROKER_URL=tcp://main_broker:1883
+      - AGENT_URL=http://agent:8319
+    command:
+      - -Dversion=1.8.1-SNAPSHOT
+      - test
