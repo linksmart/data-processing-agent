@@ -334,7 +334,12 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
         if(epService.getEPAdministrator().getStatement(id)==null)
             return false;
         if(deleteStatement!=null)
-            runSynchronousStatement(deleteStatement);
+            try {
+                runSynchronousStatement(deleteStatement);
+            }catch (Exception e){
+            loggerService.warn("While removing statement id="+id+" got error:"+e.getMessage());
+
+            }
         ComplexEventHandler handler = ((ComplexEventHandler)epService.getEPAdministrator().getStatement(id).getSubscriber());
         if(handler!=null)
             handler.destroy();
