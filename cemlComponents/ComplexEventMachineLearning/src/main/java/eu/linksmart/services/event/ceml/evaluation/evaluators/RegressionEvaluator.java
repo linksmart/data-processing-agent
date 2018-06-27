@@ -99,8 +99,8 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
             double squaredSum = 0.0;
             for(Map.Entry entry:latestEntries){
 //                Map.Entry entry = latestEntries.get(latestEntries.size()-1);
-                Double predicted = (Double) entry.getKey();
-                Double actual = (Double) entry.getValue();
+                Double predicted = ((Number) entry.getKey()).doubleValue();
+                Double actual = ((Number) entry.getValue()).doubleValue();
                 double diff =  actual-predicted;
                 squaredSum += diff * diff;
             }
@@ -133,8 +133,8 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
             double absErrorSum = 0.0;
             for(Map.Entry entry:latestEntries){
-                Double predicted = (Double) entry.getKey();
-                Double actual = (Double) entry.getValue();
+                Double predicted = ((Number) entry.getKey()).doubleValue();
+                Double actual = ((Number) entry.getValue()).doubleValue();
                 double diff =  actual-predicted;
                 absErrorSum += Math.abs(diff);
 

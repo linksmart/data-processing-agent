@@ -1,6 +1,5 @@
 package eu.linksmart.api.event.types.impl;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.data.DataDefinition;
 import eu.linksmart.api.event.ceml.data.DataDescriptor;
@@ -46,6 +45,7 @@ import java.util.*;
  *
  * */
 public class SchemaNode implements JsonSerializable {
+
     private transient static final Logger loggerService = LogManager.getLogger(SchemaNode.class);
     private String type, name, ofDefinition, ofType;
     private Set<String> required;
@@ -54,12 +54,14 @@ public class SchemaNode implements JsonSerializable {
     private Set<String> targets;
     private boolean needed = true, skip=false, target=false;
     private Map<String,SchemaNode> properties;
+
     private List<SchemaNode> items;
     private Map<String,SchemaNode> definition;
     private Map<String, SchemaNode> resolveMap = new Hashtable<>();
     private List<SchemaNode> resolveList = new ArrayList<>();
     private Number minValue, maxValue, ceilingValue, floorValue;
     private Object defaultValue;
+    @JsonIgnore
     private SchemaNode parent;
     private Set<String> names = new HashSet<>();
     private int index = -1 , size = -1, targetSize=0;
@@ -488,6 +490,7 @@ public class SchemaNode implements JsonSerializable {
     public void destroy() throws Exception {
 
     }
+    @JsonIgnore
     public SchemaNode getRoot() {
         if(parent!=null)
             return parent.getRoot();

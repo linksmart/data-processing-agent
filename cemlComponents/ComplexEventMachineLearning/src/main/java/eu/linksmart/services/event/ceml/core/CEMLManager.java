@@ -42,7 +42,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     @JsonProperty(value = "Descriptors")
     @JsonDeserialize(as = DataDefinition.class)
     protected DataDescriptors descriptors;
-    @JsonProperty(value = "Schema")
+    @JsonProperty(value = "DataSchema")
     protected SchemaNode schema;
     @JsonProperty(value = "Model")
     protected Model model;
@@ -453,7 +453,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
             for (int i=0; i<till;i++) {
                 if(statements.get(i) instanceof Statement) {
                     aux = (Statement) statements.get(i);
-                    StatementFeeder.removeStatement(aux);
+                    StatementFeeder.deleteStatement(aux.getId(), null);
                 }
             }
         }catch (Exception e){
