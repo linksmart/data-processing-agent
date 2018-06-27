@@ -18,7 +18,6 @@ import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.services.event.types.BootstrappingBean;
 import eu.linksmart.services.event.types.PersistentRequestInstance;
 import eu.linksmart.services.event.types.StatementInstance;
-import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.utils.function.Utils;
@@ -27,7 +26,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -106,12 +104,17 @@ public class DataProcessingCore {
 
         loggerService.info("The Agent streaming core version "+ AgentUtils.getVersion()+" is "+(SharedSettings.isFirstLoad()?"":"re")+"starting with ID: " + SharedSettings.getId());
 
+        initForceLoading(Const.PRE_CEP_EXTENSIONS);
         initCEPEngines();
+        initForceLoading(Const.PRE_TYPES_EXTENSIONS);
         intoCEPTypes();
-        initForceLoading(Const.BASIC_EXTENSIONS);
+        initForceLoading(Const.PRE_FEEDERS_EXTENSIONS);
+        // legacy equivalent before feeders
         initForceLoading(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING);
         boolean success = initFeeders();
+        initForceLoading(Const.PRE_BOOTSTRAP_EXTENSIONS);
         bootstrapping();
+        initForceLoading(Const.PRE_END_EXTENSIONS);
         // force the loading of the RegistrationService
        // ThingsRegistrationService.getReference();
 
