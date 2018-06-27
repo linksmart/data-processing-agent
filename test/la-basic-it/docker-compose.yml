@@ -33,7 +33,7 @@ services:
       - sc
       - agent
     volumes:
-      - ./../../:/data/
+      - ./:/data/
     environment:
       - BROKER_URL=tcp://main_broker:1883
       - AGENT_URL=http://agent:8319

@@ -33,7 +33,7 @@ services:
       - sc
       - agent
     volumes:
-      - ./:/data/
+      - ./../../:/data/
     environment:
       - filename=/data/agent/test/agentRegistration.json
       - base_url=http://sc:8082
