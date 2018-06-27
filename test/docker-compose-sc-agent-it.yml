@@ -23,6 +23,7 @@ services:
       - linksmart_service_catalog_endpoint=http://sc:8082
   it:
     image: docker.linksmart.eu/ci/maven-deployer:latest
+    working_dir: /data/sc/integration-test/registration3rdService
     depends_on:
       - main_broker
       - sc
@@ -37,4 +38,8 @@ services:
       - filename=/data/agent/test/agentRegistration.json
       - base_url=http://sc:8082
     command:
-      - SC-Service-IT.sh
+      - mvn
+      - -B
+      - -Dtest=*
+      - -D'ls.sc.version'=`jq -r .info.version /data/sc/apidoc/swagger.json`
+      - test
