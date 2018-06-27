@@ -10,8 +10,8 @@
     <artifactId>models</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <!-- too heavy an unnecessary most of the cases -->
-       <!-- <module>AutoregressiveNeuralNetworkModel</module> -->
+
+       <module>AutoregressiveNeuralNetworkModel</module>
         <module>LinearRegressionModel</module>
         <module>PythonModelsIntegrator</module>
     </modules>

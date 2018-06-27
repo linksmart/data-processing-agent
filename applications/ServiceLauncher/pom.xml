@@ -34,10 +34,6 @@
         </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
-            <artifactId>AutoregressiveNeuralNetworkModel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>eu.linksmart.services.events</groupId>
             <artifactId>LinearRegressionModel</artifactId>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
