@@ -562,11 +562,11 @@
           },
           {
             "in": "body",
-            "name": "body",
-            "description": "body",
+            "name": "cemlRequest",
+            "description": "cemlRequest",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/CEMLManager"
             }
           }
         ],
@@ -2073,6 +2073,142 @@
         }
       }
     },
+    "CEMLManager": {
+      "type": "object",
+      "properties": {
+        "Descriptors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DataDescriptor"
+          }
+        },
+        "Essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
+        "Model": {
+          "$ref": "#/definitions/Model"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Persistent": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "Schema": {
+          "$ref": "#/definitions/SchemaNode"
+        },
+        "Settings": {
+          "type": "object"
+        },
+        "alwaysDeploy": {
+          "type": "boolean"
+        },
+        "auxiliaryStreams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "deploymentStream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "deploymentStreams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the statement in the agent"
+        },
+        "isDeployed": {
+          "type": "boolean"
+        },
+        "learningStream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LearningStatement"
+          }
+        },
+        "learningStreams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LearningStatement"
+          }
+        }
+      }
+    },
+    "CEMLRequest": {
+      "type": "object",
+      "properties": {
+        "Essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
+        "Persistent": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lastPrediction": {
+          "$ref": "#/definitions/Prediction"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "DataDescriptor": {
+      "type": "object"
+    },
+    "EvaluationMetric": {
+      "type": "object",
+      "properties": {
+        "comparisonMethod": {
+          "type": "string",
+          "enum": [
+            "Equal",
+            "More",
+            "MoreEqual",
+            "Less",
+            "LessEqual"
+          ]
+        },
+        "target": {
+          "type": "object"
+        }
+      }
+    },
+    "EvaluationMetric«object»": {
+      "type": "object",
+      "properties": {
+        "comparisonMethod": {
+          "type": "string",
+          "enum": [
+            "Equal",
+            "More",
+            "MoreEqual",
+            "Less",
+            "LessEqual"
+          ]
+        },
+        "target": {
+          "type": "object"
+        }
+      }
+    },
     "GeneralRequestResponse": {
       "type": "object",
       "required": [
@@ -2125,6 +2261,115 @@
         "topic": {
           "type": "string",
           "description": "Topic of the response. Used as URI"
+        }
+      }
+    },
+    "LearningStatement": {
+      "type": "object",
+      "properties": {
+        "Essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
+        "Persistent": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "cehandler": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lastOutput": {
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "publisher": {
+          "type": "string",
+          "enum": [
+            "MQTT",
+            "MQTT_PUB",
+            "REST",
+            "HTTP",
+            "REST_POST",
+            "HTTP_POST",
+            "REST_GET",
+            "HTTP_GET"
+          ]
+        },
+        "request": {
+          "$ref": "#/definitions/CEMLRequest"
+        },
+        "resultType": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stateLifecycle": {
+          "type": "string",
+          "enum": [
+            "RUN",
+            "ONCE",
+            "SYNCHRONOUS",
+            "PAUSE",
+            "REMOVE"
+          ]
+        },
+        "statement": {
+          "type": "string"
+        },
+        "synchronousResponse": {
+          "type": "object"
+        },
+        "targetAgents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Model": {
+      "type": "object",
+      "properties": {
+        "dataSchema": {
+          "$ref": "#/definitions/SchemaNode"
+        },
+        "descriptors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DataDescriptor"
+          }
+        },
+        "lastPrediction": {
+          "$ref": "#/definitions/Prediction«object»"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TargetRequest"
+          }
         }
       }
     },
@@ -2246,6 +2491,255 @@
         }
       }
     },
+    "Number": {
+      "type": "object"
+    },
+    "Prediction": {
+      "type": "object",
+      "properties": {
+        "acceptedPrediction": {
+          "type": "boolean"
+        },
+        "certaintyDegree": {
+          "type": "number",
+          "format": "double"
+        },
+        "evaluationMetrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EvaluationMetric"
+          }
+        },
+        "madeAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "originalInput": {
+          "type": "object"
+        },
+        "predictedBy": {
+          "type": "string"
+        }
+      }
+    },
+    "Prediction«object»": {
+      "type": "object",
+      "properties": {
+        "acceptedPrediction": {
+          "type": "boolean"
+        },
+        "certaintyDegree": {
+          "type": "number",
+          "format": "double"
+        },
+        "evaluationMetrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EvaluationMetric«object»"
+          }
+        },
+        "madeAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "originalInput": {
+          "type": "object"
+        },
+        "predictedBy": {
+          "type": "string"
+        }
+      }
+    },
+    "SchemaNode": {
+      "type": "object",
+      "properties": {
+        "ceilingValue": {
+          "$ref": "#/definitions/Number"
+        },
+        "defaultValue": {
+          "type": "object"
+        },
+        "definition": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/SchemaNode"
+          }
+        },
+        "enum": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "floorValue": {
+          "$ref": "#/definitions/Number"
+        },
+        "index": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "input": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SchemaNode"
+          }
+        },
+        "maxValue": {
+          "$ref": "#/definitions/Number"
+        },
+        "minValue": {
+          "$ref": "#/definitions/Number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "needed": {
+          "type": "boolean"
+        },
+        "ofDefinition": {
+          "type": "string"
+        },
+        "ofType": {
+          "type": "string"
+        },
+        "parent": {
+          "$ref": "#/definitions/SchemaNode"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/SchemaNode"
+          }
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resolveList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SchemaNode"
+          }
+        },
+        "resolveMap": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/SchemaNode"
+          }
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "skip": {
+          "type": "boolean"
+        },
+        "target": {
+          "type": "boolean"
+        },
+        "targetSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Statement": {
+      "type": "object",
+      "properties": {
+        "Essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
+        "Persistent": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "cehandler": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lastOutput": {
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "publisher": {
+          "type": "string",
+          "enum": [
+            "MQTT",
+            "MQTT_PUB",
+            "REST",
+            "HTTP",
+            "REST_POST",
+            "HTTP_POST",
+            "REST_GET",
+            "HTTP_GET"
+          ]
+        },
+        "resultType": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stateLifecycle": {
+          "type": "string",
+          "enum": [
+            "RUN",
+            "ONCE",
+            "SYNCHRONOUS",
+            "PAUSE",
+            "REMOVE"
+          ]
+        },
+        "statement": {
+          "type": "string"
+        },
+        "synchronousResponse": {
+          "type": "object"
+        },
+        "targetAgents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "StatementInstance": {
       "type": "object",
       "properties": {
@@ -2257,10 +2751,6 @@
           "type": "boolean",
           "example": false,
           "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
-        },
-        "LSApiKeyName": {
-          "type": "string",
-          "description": "The key-name of the service in the service catalog."
         },
         "Persistent": {
           "type": "boolean",
@@ -2344,6 +2834,28 @@
         },
         "synchronousResponse": {
           "type": "object"
+        }
+      }
+    },
+    "TargetRequest": {
+      "type": "object",
+      "properties": {
+        "Method": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Threshold": {
+          "type": "number",
+          "format": "double"
+        },
+        "Thresholds": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "double"
+          }
         }
       }
     },
