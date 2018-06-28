@@ -24,7 +24,7 @@ services:
   it:
     image: docker.linksmart.eu/ci/maven-deployer:latest
     volumes:
-      - ./:/data/
+      - ../../:/data/
     depends_on:
       - main_broker
       - sc
