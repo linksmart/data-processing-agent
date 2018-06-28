@@ -25,7 +25,6 @@ services:
     image: docker.linksmart.eu/ci/maven-deployer:latest
     volumes:
       - ./:/data/
-    working_dir: /data/sc/integration-test/registration3rdService
     depends_on:
       - main_broker
       - sc
@@ -37,6 +36,7 @@ services:
     environment:
       - filename=/data/agent/test/agentRegistration.json
       - base_url=http://sc:8082
+    working_dir: /data/sc/integration-test/registration3rdService
     command:
       - mvn
       - -B
