@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoDescriptionImpl;
-import jdk.nashorn.internal.objects.annotations.Setter;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

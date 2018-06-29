@@ -17,7 +17,7 @@ import io.swagger.client.api.ScApi;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.apache.logging.log4j.Logger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.lang.UnsupportedOperationException;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
@@ -56,7 +56,7 @@ public class DefaultMQTTPublisher implements Publisher {
 
     public static boolean addKnownLocations(String statement) throws StatementException {
         // todo need to define how we add new locations into the Agent configuration
-       throw new NotImplementedException();
+       throw new UnsupportedOperationException();
     }
 
     public static boolean removeKnownLocations(String alias) throws StatementException {

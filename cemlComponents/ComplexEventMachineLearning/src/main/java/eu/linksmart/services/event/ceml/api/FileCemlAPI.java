@@ -8,7 +8,6 @@ import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.connectors.FileConnector;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import sun.security.provider.SHA;
 
 import java.io.IOException;
 import java.util.ArrayList;

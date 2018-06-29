@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.services.utils.serialization.DeserializerMode;
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -7,7 +7,6 @@ import org.geojson.LngLatAlt;
 import org.geojson.Point;
 import org.geojson.Polygon;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -55,8 +54,13 @@ public class UtilsLinked {
         ObservationImpl observation = new ObservationImpl();
         observation.setId(1);
 
-        observation.setPhenomenonTime(DatatypeConverter.parseDateTime("2014-12-31T11:59:59.00+08:00").getTime());
-        observation.setResultTime(DatatypeConverter.parseDateTime("2014-12-31T11:59:59.00+08:00").getTime());
+        try {
+
+            observation.setPhenomenonTime(eu.linksmart.services.utils.function.Utils.formISO8601("2014-12-31T11:59:59.00+08:00"));
+            observation.setResultTime(eu.linksmart.services.utils.function.Utils.formISO8601("2014-12-31T11:59:59.00+08:00"));
+        }catch (Exception e){
+            return null;
+        }
         observation.setResult(70.4);
         observation.setFeatureOfInterest(constructFeatureOfInterest());
         observation.getFeatureOfInterest().setId(2);
@@ -130,7 +134,12 @@ public class UtilsLinked {
     public static HistoricalLocation constructHistoricalLocation(boolean childObjects) {
         HistoricalLocation historicalLocation = new HistoricalLocationImpl();
         historicalLocation.setId(1);
-        historicalLocation.setTime(DatatypeConverter.parseDateTime("2015-01-25T12:00:00-07:00").getTime());
+        try {
+            historicalLocation.setTime(eu.linksmart.services.utils.function.Utils.formISO8601("2015-01-25T12:00:00-07:00"));
+        }catch (Exception e){
+            return null;
+        }
+
         if(childObjects){
             //todo
         }

@@ -1,6 +1,6 @@
 package eu.linksmart.api.event.types.impl;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.lang.UnsupportedOperationException;
 
 import java.util.*;
 
@@ -97,7 +97,7 @@ public class ExtractedElements<T> implements List<T>  {
     @Override
     public boolean remove(Object o) {
         // the elements should be append only
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
 
@@ -121,26 +121,26 @@ public class ExtractedElements<T> implements List<T>  {
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
         // the elements should be append only
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
         // the elements should be append only
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
 
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
         // the elements should be append only
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void clear() {
         // the elements should be append only
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public ExtractedElements<T> add(String key, T element){
@@ -170,19 +170,19 @@ public class ExtractedElements<T> implements List<T>  {
     @Override
     public T set(int index, T element) {
         // the elements should be append only
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void add(int index, T element) {
         // the elements should be append only
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public T remove(int index) {
         // the elements should be append only
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -244,7 +244,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public Iterator<T> iterator() {
             // too complicated and not useful
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -270,7 +270,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public boolean remove(Object o) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -281,13 +281,13 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public boolean addAll(Collection<? extends T> c) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public boolean addAll(int index, Collection<? extends T> c) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -298,13 +298,13 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public boolean retainAll(Collection<?> c) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void clear() {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -330,20 +330,20 @@ public class ExtractedElements<T> implements List<T>  {
         public T set(int index, T element) {
 
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void add(int index, T element) {
 
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public T remove(int index) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -361,20 +361,20 @@ public class ExtractedElements<T> implements List<T>  {
         public ListIterator<T> listIterator() {
 
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public ListIterator<T> listIterator(int index) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public List<T> subList(int fromIndex, int toIndex) {
 
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
     public class Inputs implements List<T>{
@@ -398,7 +398,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public Iterator<T> iterator() {
             // too complicated and not useful
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -424,7 +424,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public boolean remove(Object o) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -435,13 +435,13 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public boolean addAll(Collection<? extends T> c) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public boolean addAll(int index, Collection<? extends T> c) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -452,13 +452,13 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public boolean retainAll(Collection<?> c) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void clear() {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -484,20 +484,20 @@ public class ExtractedElements<T> implements List<T>  {
         public T set(int index, T element) {
 
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void add(int index, T element) {
 
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public T remove(int index) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -515,20 +515,20 @@ public class ExtractedElements<T> implements List<T>  {
         public ListIterator<T> listIterator() {
 
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public ListIterator<T> listIterator(int index) {
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public List<T> subList(int fromIndex, int toIndex) {
 
             // read only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -573,7 +573,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public T remove(Object key) {
             // the elements should be append only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
 
         }
 
@@ -585,7 +585,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public void clear() {
             // the elements should be append only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -601,7 +601,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public Set<Entry<String,T>> entrySet() {
             // too complicated and not useful
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
     public class MappedInputs implements Map<String, T>{
@@ -645,7 +645,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public T remove(Object key) {
             // the elements should be append only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
 
         }
 
@@ -657,7 +657,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public void clear() {
             // the elements should be append only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -668,13 +668,13 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public Collection values() {
             // too complicated and not useful
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public Set<Entry<String,T>> entrySet() {
             // too complicated and not useful
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
     public class MappedTargets implements Map<String, T>{
@@ -718,7 +718,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public T remove(Object key) {
             // the elements should be append only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
 
         }
 
@@ -730,7 +730,7 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public void clear() {
             // the elements should be append only
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -741,13 +741,13 @@ public class ExtractedElements<T> implements List<T>  {
         @Override
         public Collection values() {
             // too complicated and not useful
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public Set<Entry<String,T>> entrySet() {
             // too complicated and not useful
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
 
