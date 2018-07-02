@@ -38,6 +38,16 @@ public class ServiceRegistratorService implements Observer{
 
     private ServiceRegistratorService() {
         myRegistration = new EditableService();
+        if(!conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT) || !Utils.isRestAvailable(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))) {
+            loggerService.warn("Service catalog not found"+ ( conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT) ? " in " +Utils.isRestAvailable(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT)) : "")+"!");
+            if(conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP) && conf.getBoolean(Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP)){
+                System.err.println("Registration failed, and  "+Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP + " set to true. Now agent is stopping!");
+                System.exit(-1);
+            }
+            System.err.println("Registration failed, and  "+Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP + " set to false");
+            return;
+        }
+
         myRegistration.setId(SharedSettings.getId());
         myRegistration.setDescription(conf.getString(Const.AGENT_DESCRIPTION));
         myRegistration.setName("_linksmart-"+SharedSettings.getLs_code().toLowerCase()+".tcp_");
@@ -72,32 +82,23 @@ public class ServiceRegistratorService implements Observer{
                 myRegistration.getApis().put("Agent MQTT API", url.getBrokerURL())
         );
 
-        StaticBroker intent = null;
-        try {
-            intent = new StaticBroker(conf.getString(Const.LINKSMART_BROKER), SharedSettings.getSerializer().toString(myRegistration), AgentUtils.topicReplace(conf.getString(Const.LINKSMART_SERVICE_WILL_TOPIC), ""));
+        if(conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT) && Utils.isRestAvailable(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))) {
+            SCclient = Utils.getServiceCatalogClient(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
 
 
-        } catch (Exception e) {
-            loggerService.error(e.getMessage(), e);
-            loggerService.error("Service registrator failed!");
-            //System.exit(-1);
+            if (myRegistration.getTtl() > -1) {
+                updater.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                update();
+                            }
+                        },
+                        myRegistration.getTtl() / 3
+                );
+            } else
+                update();
         }
-
-        SCclient = Utils.getServiceCatalogClient(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
-
-
-        if(myRegistration.getTtl()>-1){
-            updater.schedule(
-                    new TimerTask() {
-                        @Override
-                        public void run() {
-                            update();
-                        }
-                    },
-                    myRegistration.getTtl()/3
-            );
-        }else
-            update();
     }
 
     public static ServiceRegistratorService getRegistrator() {

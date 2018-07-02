@@ -4,8 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.linksmart.api.event.types.impl.ExtractedElements;
 import eu.linksmart.api.event.types.impl.SchemaNode;
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -17,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * Created by José Ángel Carvajal on 05.06.2018 a researcher of Fraunhofer FIT.
  */
 public class SchemaTest {
+
+    private ObjectMapper objectMapper = new ObjectMapper();
     private void test(String schema, Object o, boolean test){
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -77,17 +83,7 @@ public class SchemaTest {
                          "{\"name\": \"item2\",\"type\": \"int\"}" +
                     "]" +
                 "}";
-    static private String advancedListSchema =
-            "{" +
-                    "\"name\":\"advancedListSchema\"," +
-                    "\"type\": \"array\"," +
-                    "\"items\": [" +
-                        "{\"type\": \"string\"}, " +
-                        "{\"type\": \"int\"}" +
-                        "{\"type\": \"string\",\"needed\":false }, " +
-                        "{\"type\": \"boolean\"}, " +
-                    "]" +
-            "}";
+
     static private String simpleAnonymousSchema =
             "{" +
                     "\"name\":\"simpleAnonymousSchema\"," +
@@ -150,7 +146,41 @@ public class SchemaTest {
                     "}"+
                     "}";
 
+    private Map getStatement(String name){
+        Map statement = null;
+        String path = "./src/test/dataSchemasTests.json";
+        File source = new File(path);
+        if(!source.exists())
+            Assert.fail("statement source file not found!");
+        try {
+            statement =parse( Files.readAllBytes(Paths.get(path)), Map.class);
+            return (Map) statement.get(name);
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
 
+        }
+        return statement;
+    }
+    private <T> T  parse(byte[] content, Class<? extends T> clas)  {
+        try {
+            return  objectMapper.readValue(content, clas);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+
+        }
+        return null;
+    }
+    private String toString(Object object){
+        try {
+            return  objectMapper.writeValueAsString(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+
+        }
+        return null;
+    }
     private Map createSimpleMap(){
         Map map = new Hashtable();
         map.put("property1","hola");
@@ -171,20 +201,20 @@ public class SchemaTest {
         // test
         Map map = createSimpleMap();
         Object o = new TestOnly1();
-        test(simpleMapSchema,map);
-        test(simpleMapSchema,o);
+        test(toString(getStatement("simpleMapSchema")),map);
+        test(toString(getStatement("simpleMapSchema")),o);
 
         // contra test
         map = new Hashtable();
         map.put("property1",1);
-        contraTest(simpleMapSchema,map);
+        contraTest(toString(getStatement("simpleMapSchema")),map);
         o = new TestOnly2();
 
-        contraTest(simpleMapSchema,o);
+        contraTest(toString(getStatement("simpleMapSchema")),o);
         map.clear();
         map.put("my", "bad");
 
-        contraTest(simpleMapSchema,map);
+        contraTest(toString(getStatement("simpleMapSchema")),map);
 
         o = new Object(){
             public String getP() {
@@ -198,7 +228,7 @@ public class SchemaTest {
             public String p;
 
         };
-        contraTest(simpleMapSchema,o);
+        contraTest(toString(getStatement("simpleMapSchema")),o);
     }
 
     @Test
@@ -206,20 +236,20 @@ public class SchemaTest {
         // test
         Map map = createSimpleMap();
         Object o = new TestOnly1();
-        test(advancedMapSchema,map);
-        test(advancedMapSchema,o);
-        test(simpleMapSchema,map);
-        test(simpleMapSchema,o);
+        test(toString(getStatement("advancedMapSchema")),map);
+        test(toString(getStatement("advancedMapSchema")),o);
+        test(toString(getStatement("simpleMapSchema")),map);
+        test(toString(getStatement("simpleMapSchema")),o);
         map.put("property3",1);
 
-        test(advancedMapSchema,map);
+        test(toString(getStatement("advancedMapSchema")),map);
       //  contraTest(simpleMapSchema,map);
 
         o =   new TestOnly3();
 //        contraTest(simpleMapSchema,o);
-        test(advancedMapSchema,o);
+        test(toString(getStatement("advancedMapSchema")),o);
 
-        extract(advancedMapSchema,o);
+        extract(toString(getStatement("advancedMapSchema")),o);
     }
 
     private void extract(String advancedMapSchema, Object o) {
@@ -242,15 +272,17 @@ public class SchemaTest {
         Object[] o =createSimpleArray();
 
 
-        test(simpleListArraySchema,list);
-        test(simpleListArraySchema,o);
+
+
+        test(toString(getStatement("simpleListArraySchema")),list);
+        test(toString(getStatement("simpleListArraySchema")),o);
         list.clear();
         list.add(1);
         list.add("hola");
         o = new Object[]{1,"hola"};
 
-        contraTest(simpleListArraySchema,list);
-        contraTest(simpleListArraySchema,o);
+        contraTest(toString(getStatement("simpleListArraySchema")),list);
+        contraTest(toString(getStatement("simpleListArraySchema")),o);
 
 
     }
@@ -263,7 +295,7 @@ public class SchemaTest {
         root.add(list);
 
 
-        test(listDefTest,root);
+        test(toString(getStatement("listDefTest")),root);
     }
     @Test
     public void defMapTest(){
@@ -274,7 +306,8 @@ public class SchemaTest {
         root.put("property2",list);
 
 
-        test(mapDefTest,root);
+        test(toString(getStatement("mapDefTest")),root);
+
     }
     @Test
     public void deepArrayTest(){
@@ -285,7 +318,7 @@ public class SchemaTest {
         root.add(list);
 
 
-        test(deepListArraySchema,root);
+        test(toString(getStatement("deepListArraySchema")),root);
     }
     @Test
     public void deepMapTest(){
@@ -297,8 +330,8 @@ public class SchemaTest {
 
 
 
-        test(deepMapTest,root);
-        extract(deepMapTest,root);
+        test(toString(getStatement("deepMapTest")),root);
+        extract(toString(getStatement("deepMapTest")),root);
 
     }
     @Test
@@ -312,8 +345,9 @@ public class SchemaTest {
             list.add(i);
             o[i]=1;
         }
-        test(simpleAnonymousSchema,list);
-        test(simpleAnonymousSchema,o);
+
+        test(toString(getStatement("simpleAnonymousSchema")),list);
+        test(toString(getStatement("simpleAnonymousSchema")),o);
 
         List<String> contraList = new ArrayList<>();
         String[] contraArray= new String[10];
@@ -322,13 +356,13 @@ public class SchemaTest {
             contraList.add("hola");
             contraArray[i]="hola";
         }
-        contraTest(simpleAnonymousSchema,contraList);
-        contraTest(simpleAnonymousSchema,contraArray);
+        contraTest(toString(getStatement("simpleAnonymousSchema")),contraList);
+        contraTest(toString(getStatement("simpleAnonymousSchema")),contraArray);
 
         list.clear();
         o= new Integer[5];
-        contraTest(simpleAnonymousSchema,list);
-        contraTest(simpleAnonymousSchema,o);
+        contraTest(toString(getStatement("simpleAnonymousSchema")),list);
+        contraTest(toString(getStatement("simpleAnonymousSchema")),o);
 
 
 
@@ -344,8 +378,9 @@ public class SchemaTest {
             list.add(i);
             o[i]=1;
         }
-        test(boundedAnonymousSchema,list);
-        test(boundedAnonymousSchema,o);
+
+        test(toString(getStatement("boundedAnonymousSchema")),list);
+        test(toString(getStatement("boundedAnonymousSchema")),o);
 
         o = new Integer[2];
         list.clear();
@@ -353,8 +388,8 @@ public class SchemaTest {
             list.add(i);
             o[i]=1;
         }
-        contraTest(boundedAnonymousSchema,list);
-        contraTest(boundedAnonymousSchema,o);
+        contraTest(toString(getStatement("boundedAnonymousSchema")),list);
+        contraTest(toString(getStatement("boundedAnonymousSchema")),o);
 
         o = new Integer[15];
         list.clear();
@@ -362,8 +397,8 @@ public class SchemaTest {
             list.add(i);
             o[i]=1;
         }
-        contraTest(boundedAnonymousSchema,list);
-        contraTest(boundedAnonymousSchema,o);
+        contraTest(toString(getStatement("boundedAnonymousSchema")),list);
+        contraTest(toString(getStatement("boundedAnonymousSchema")),o);
     }
     // the class below could be anonymous but then is not accessible from reflection outside this package, which brakes the test.
     // Therefore, this dummy test class had been made to test the code. They need to be public!

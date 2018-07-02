@@ -57,14 +57,19 @@ public class SchemaNode implements JsonSerializable {
 
     private List<SchemaNode> items;
     private Map<String,SchemaNode> definition;
+    @JsonIgnore
     private Map<String, SchemaNode> resolveMap = new Hashtable<>();
+    @JsonIgnore
     private List<SchemaNode> resolveList = new ArrayList<>();
     private Number minValue, maxValue, ceilingValue, floorValue;
     private Object defaultValue;
     @JsonIgnore
     private SchemaNode parent;
+    @JsonIgnore
     private Set<String> names = new HashSet<>();
-    private int index = -1 , size = -1, targetSize=0;
+    @JsonIgnore
+    private int size = -1;
+    private int index = -1 , targetSize=0;
 
 
     public Class similar(Class original){
@@ -639,7 +644,7 @@ public class SchemaNode implements JsonSerializable {
     public void setEnumeration(Set<String> enumeration) {
         this.enumeration = enumeration;
     }
-
+    @JsonGetter("size")
     public int size() {
         if(items!=null)
             return items.size();
@@ -649,6 +654,7 @@ public class SchemaNode implements JsonSerializable {
     public int getSize() {
         return size();
     }
+    @JsonSetter("size")
     public void setSize(int size) {
         this.size = size;
     }
