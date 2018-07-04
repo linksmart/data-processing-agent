@@ -41,10 +41,10 @@ public class ServiceRegistratorService implements Observer{
         if(!conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT) || !Utils.isRestAvailable(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))) {
             loggerService.warn("Service catalog not found"+ ( conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT) ? " in " +Utils.isRestAvailable(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT)) : "")+"!");
             if(conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP) && conf.getBoolean(Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP)){
-                System.err.println("Registration failed, and  "+Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP + " set to true. Now agent is stopping!");
+                loggerService.error("Registration failed, and  "+Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP + " set to true. Now agent is stopping!");
                 System.exit(-1);
             }
-            System.err.println("Registration failed, and  "+Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP + " set to false");
+            loggerService.warn("Registration failed, and  "+Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP + " set to false");
             return;
         }
 
