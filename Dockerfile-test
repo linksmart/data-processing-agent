@@ -1,4 +1,4 @@
-FROM openjdk:10-jre
+FROM java:8-jre-alpine
 
 LABEL project="Linksmart(R) IoT Agents"
 LABEL "project.code"=LA

@@ -1,4 +1,4 @@
-FROM openjdk:10-jre
+FROM java:8-jre-alpine
 MAINTAINER Jose Angel Carvajal Soto <carvajal@fit.fhg.de>
 
 ENV CHANGED_AT = 2017-06-16T14:00
