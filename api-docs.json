@@ -2596,12 +2596,6 @@
         "name": {
           "type": "string"
         },
-        "names": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "needed": {
           "type": "boolean"
         },
@@ -2621,18 +2615,6 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
-        },
-        "resolveList": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/SchemaNode"
-          }
-        },
-        "resolveMap": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/SchemaNode"
           }
         },
         "size": {

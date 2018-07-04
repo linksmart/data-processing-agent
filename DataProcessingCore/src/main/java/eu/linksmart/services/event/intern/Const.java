@@ -76,4 +76,5 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String PROMISCUOUS_EVENT_PARSING = "api_events_promiscuous";
     String TRANSLATOR_MODE = "api_events_translator";
     String PYTHON_PATH = "python_path";
+    String LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP = "linksmart_service_catalog_in_registration_fail_stop";
 }
