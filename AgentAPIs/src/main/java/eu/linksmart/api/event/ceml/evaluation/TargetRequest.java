@@ -26,7 +26,7 @@ public class TargetRequest implements MetricDefinition {
     }
 
     @JsonPropertyDescription("Value to be consider by the selected method as threshold for the current evaluation metrics to be achieved")
-    @JsonProperty(value = "Threshold")
+    @JsonProperty(value = "threshold")
     private double threshold = 0;
 
     public Double[] getThresholds() {
@@ -34,13 +34,13 @@ public class TargetRequest implements MetricDefinition {
     }
 
     @JsonPropertyDescription("Value to be consider by the selected method as threshold for the current evaluation metrics to be achieved")
-    @JsonProperty(value = "Thresholds")
+    @JsonProperty(value = "thresholds")
     private Double[] thresholds = null;
     @JsonPropertyDescription("Name of the metrics to use")
-    @JsonProperty(value = "Name")
+    @JsonProperty(value = "name")
     private String name = "";
     @JsonPropertyDescription("Evaluation methodology to compare with threshold: more, less, more or equal, less or equal, equal")
-    @JsonProperty(value = "Method")
+    @JsonProperty(value = "method")
     private String method = "default";
 
 

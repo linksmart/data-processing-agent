@@ -25,11 +25,11 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
     protected ComparisonMethod method= ComparisonMethod.More;
     @JsonIgnore
     protected transient static Logger loggerService = LogManager.getLogger(EvaluationMetricBase.class);
-    @JsonProperty("Name")
+    @JsonProperty("name")
     protected String name;
-    @JsonProperty("Target")
+    @JsonProperty("target")
     protected T target ;
-    @JsonProperty("CurrentValue")
+    @JsonProperty("currentValue")
     protected T currentValue;
     @JsonIgnore
     protected transient Cloner cloner = new Cloner();

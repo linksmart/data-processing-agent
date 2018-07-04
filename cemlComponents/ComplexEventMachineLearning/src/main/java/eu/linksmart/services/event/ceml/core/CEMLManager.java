@@ -37,14 +37,14 @@ import java.util.stream.Collectors;
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
 public class CEMLManager extends PersistentRequestInstance implements CEMLRequest {
-    @JsonProperty(value = "Name")
+    @JsonProperty(value = "name")
     protected String name;
-    @JsonProperty(value = "Descriptors")
+    @JsonProperty(value = "descriptors")
     @JsonDeserialize(as = DataDefinition.class)
     protected DataDescriptors descriptors;
-    @JsonProperty(value = "DataSchema")
+    @JsonProperty(value = "dataSchema")
     protected SchemaNode schema;
-    @JsonProperty(value = "Model")
+    @JsonProperty(value = "model")
     protected Model model;
     @JsonProperty(value = "auxiliaryStreams")
     protected List<Statement> auxiliaryStreams;
@@ -52,7 +52,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     protected List<LearningStatement> learningStatements;
     @JsonProperty(value = "deploymentStreams")
     protected List<Statement> deployStatements;
-    @JsonProperty(value = "Settings")
+    @JsonProperty(value = "settings")
     protected Map<String,Object> settings;
     @JsonProperty(value = "isDeployed")
     protected boolean deployed=false;
@@ -109,32 +109,35 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
         lastPrediction= prediction;
     }
 
+    @JsonProperty(value = "learningStreams")
     @Override
     public Collection<LearningStatement> getLearningStream() {
         return learningStatements;
     }
 
+    @JsonProperty(value = "learningStreams")
     public void setLearningStream(List<LearningStatement> learningStatements) {
         this.learningStatements = learningStatements;
     }
+
+    @JsonProperty(value = "deploymentStreams")
     @Override
     public Collection< Statement> getDeploymentStream() {
         return deployStatements;
     }
 
-
+    @JsonProperty(value = "deploymentStreams")
     public void setDeploymentStream(List<Statement> deployStatements) {
         this.deployStatements = deployStatements;
     }
 
-    @JsonGetter(value = "auxiliaryStreams")
+    @JsonProperty(value = "auxiliaryStreams")
     @Override
     public Collection< Statement> getAuxiliaryStream() {
         return auxiliaryStreams;
     }
 
-
-    @JsonSetter(value = "auxiliaryStreams")
+    @JsonProperty(value = "auxiliaryStreams")
     public void setAuxiliaryStreams(List<Statement> auxiliaryStreams) {
         this.auxiliaryStreams = auxiliaryStreams;
     }

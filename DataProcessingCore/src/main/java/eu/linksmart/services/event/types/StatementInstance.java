@@ -73,7 +73,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     protected String CEHandler= null;
 
     @ApiModelProperty(notes = "Statement's Lifecycle.")
-    @JsonProperty("StateLifecycle")
+    @JsonProperty("stateLifecycle")
     protected StatementLifecycle stateLifecycle = null;
 
     @ApiModelProperty(notes = "Server where the events will be pushed")
@@ -84,15 +84,15 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     protected transient static final Object lock =new Object();
 
     @ApiModelProperty(notes = "In case of a synchronous request, the response will be sent here.")
-    @JsonProperty("SynchronousResponse")
+    @JsonProperty("synchronousResponse")
     protected Object synchRespones ;
 
     @ApiModelProperty(notes = "Indicates the agent ID which should process the statement. Not used for REST API")
-    @JsonProperty("TargetAgents")
+    @JsonProperty("targetAgents")
     protected List<String> targetAgents= null;
 
     @ApiModelProperty(notes = "Indicates the agent ID where this Statement was created")
-    @JsonProperty("AgentID")
+    @JsonProperty("agentID")
     protected String agentID= null;
 
 
@@ -287,6 +287,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.stateLifecycle=stateLifecycle;
     }
 
+    @JsonProperty("synchronousResponse")
     public void setSynchronousResponse(Object response) {
 
         this.synchRespones = response;
@@ -379,7 +380,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.resultType = resultType;
     }
 
-
+    @JsonProperty("synchronousResponse")
     public Object getSynchRespones() {
         return synchRespones;
     }
