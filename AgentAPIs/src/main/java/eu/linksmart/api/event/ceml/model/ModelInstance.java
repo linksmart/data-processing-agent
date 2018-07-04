@@ -26,30 +26,30 @@ import java.util.*;
 
 public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
-    @JsonProperty("Descriptors")
+    @JsonProperty("descriptors")
     protected DataDescriptors descriptors;
-    @JsonProperty("Name")
+    @JsonProperty("name")
     protected String name;
-    @JsonProperty("NativeType")
+    @JsonProperty("nativeType")
     protected Class<LearningObject> nativeType;
     @JsonPropertyDescription("Algorithm use to build the model")
-    @JsonProperty(value = "Type")
+    @JsonProperty(value = "type")
     protected String type;
     //@JsonProperty(value = "Evaluator")
-    @JsonProperty(value = "Evaluator")
+    @JsonProperty(value = "evaluator")
     protected  Evaluator<Output> evaluator ;
 
-    @JsonProperty(value = "Targets")
+    @JsonProperty(value = "targets")
     protected  List<TargetRequest> targets;
 
-    @JsonProperty(value = "Parameters")
+    @JsonProperty(value = "parameters")
     protected  Map<String,Object> parameters;
-    @JsonProperty(value = "Prediction")
+    @JsonProperty(value = "prediction")
     protected Prediction<Output> lastPrediction;
 
-    @JsonProperty(value = "Learner")
+    @JsonProperty(value = "learner")
     protected LearningObject learner;
-    @JsonProperty("DataSchema")
+    @JsonProperty("dataSchema")
     protected SchemaNode schema;
     public String getType() {
         return type;

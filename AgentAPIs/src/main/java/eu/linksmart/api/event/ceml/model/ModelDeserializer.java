@@ -1,17 +1,15 @@
 package eu.linksmart.api.event.ceml.model;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.services.utils.serialization.DefaultSerializerDeserializer;
 import eu.linksmart.services.utils.serialization.DeserializerMode;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +18,7 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
 public class ModelDeserializer extends DeserializerMode<Model> {
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = (ObjectMapper) new DefaultSerializerDeserializer().getParser();
     private static final CollectionType collectionType =TypeFactory.defaultInstance().constructCollectionType(List.class, TargetRequest.class);
     //private static final CollectionType learnersListType =TypeFactory.defaultInstance().constructCollectionType(List.class,MultiLayerNetwork.class);
     private static final MapType mapType =TypeFactory.defaultInstance().constructMapType(Map.class, String.class,Object.class);

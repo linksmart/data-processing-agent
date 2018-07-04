@@ -31,7 +31,11 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
     private static final transient String persistentFile = conf.containsKeyAnywhere(Const.CONNECTOR_PERSISTENT_FILE)?conf.getString(Const.CONNECTOR_PERSISTENT_FILE)+"-"+ SharedSettings.getId()+".json":null;
 
 
-    protected boolean persistent = false, essential = false;
+    @JsonProperty("persistent")
+    protected boolean persistent = false;
+
+    @JsonProperty("essential")
+    protected boolean essential = false;
 
     @ApiModelProperty(notes = "Unique identifier of the statement in the agent")
     @JsonProperty("id")
@@ -43,20 +47,20 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
     }
 
 
-    @JsonGetter("persistent")
+    @JsonProperty("persistent")
     @ApiModelProperty(notes = "Indicates if the request should be stored persistently")
     @Override
     public boolean isPersistent() {
         return persistent;
     }
-    @JsonGetter("essential")
+    @JsonProperty("essential")
     @ApiModelProperty(notes = "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting")
     @Override
     public boolean isEssential() {
         return essential;
     }
 
-    @JsonSetter("persistent")
+    @JsonProperty("persistent")
     @ApiModelProperty(notes = "Indicates if the request should be stored persistently")
     @Override
     public void isPersistent(boolean persistent) {
@@ -71,7 +75,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
     public void setId(String id){
         this.id =id;
     }
-    @JsonSetter("essential")
+    @JsonProperty("essential")
     @ApiModelProperty(notes = "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting")
     @Override
     public void isEssential(boolean essential) {
