@@ -1,4 +1,4 @@
-FROM maven:3-jdk-8
+FROM maven:3-jdk-10
 
 # the folder where the apache code is located
 VOLUME /apache-artifacts

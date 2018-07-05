@@ -1,7 +1,10 @@
 package eu.linksmart.api.event.ceml.model;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -24,9 +27,9 @@ public class ModelDeserializer extends DeserializerMode<Model> {
     private static final MapType mapType =TypeFactory.defaultInstance().constructMapType(Map.class, String.class,Object.class);
     protected static final Map<String,JavaType> learners = new Hashtable<>();
 
-    static public void registerModule(Module module){
-        mapper.registerModule(module);
-    }
+//    static public void registerModule(Module module){
+//        mapper.registerModule(module);
+//    }
     static public void setLearnerType(String name, JavaType type){
         learners.put(name,type);
     }
