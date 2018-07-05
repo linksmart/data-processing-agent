@@ -83,7 +83,7 @@
         <jackson.version>${jackson.core.version}</jackson.version>
         <jackson.geojeson.version>1.6</jackson.geojeson.version>
         <jackson.maper.asl.version>1.9.13</jackson.maper.asl.version>
-        <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
+        <spring.boot.version>1.5.14.RELEASE</spring.boot.version>
         <eclipse.paho.mqtt.version>1.2.0</eclipse.paho.mqtt.version>
 	<apache.commons.email.version>1.5</apache.commons.email.version>
         <apache.commons.validator.version>1.6</apache.commons.validator.version>
