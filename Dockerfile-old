@@ -28,7 +28,7 @@ VOLUME /config
 VOLUME /dependencies
 
 # starting the agent
-ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
+ENTRYPOINT ["java","--add-modules", "java.xml.bind", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
 
 EXPOSE 8319
 # NOTES:
