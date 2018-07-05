@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import eu.linksmart.api.event.types.EventEnvelope;
+//import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.Sensor;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
@@ -16,7 +16,8 @@ import org.geojson.LngLatAlt;
 import org.geojson.Point;
 import org.geojson.Polygon;
 
-import javax.xml.bind.DatatypeConverter;
+import java.time.OffsetDateTime;
+//import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.util.*;
 
@@ -118,8 +119,8 @@ public class Utils {
         eu.linksmart.services.payloads.ogc.sensorthing.Observation observation = new ObservationImpl();
         observation.setId(1);
 
-        observation.setPhenomenonTime(DatatypeConverter.parseDateTime("2014-12-31T11:59:59.00+08:00").getTime());
-        observation.setResultTime(DatatypeConverter.parseDateTime("2014-12-31T11:59:59.00+08:00").getTime());
+        observation.setPhenomenonTime(Date.from(OffsetDateTime.parse("2014-12-31T11:59:59.00+08:00").toInstant()));
+        observation.setResultTime(Date.from(OffsetDateTime.parse("2014-12-31T11:59:59.00+08:00").toInstant()));
         observation.setResult(70.4);
 
 
@@ -184,7 +185,7 @@ public class Utils {
     public static HistoricalLocation constructHistoricalLocation(boolean childObjects) {
         HistoricalLocation historicalLocation = new HistoricalLocationImpl();
         historicalLocation.setId(1);
-        historicalLocation.setTime(DatatypeConverter.parseDateTime("2015-01-25T12:00:00-07:00").getTime());
+        historicalLocation.setTime(Date.from(OffsetDateTime.parse("2015-01-25T12:00:00-07:00").toInstant()));
         if(childObjects){
             //todo
         }
