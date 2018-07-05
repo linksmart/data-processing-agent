@@ -38,4 +38,4 @@ ADD https://nexus.linksmart.eu/repository/maven-releases/eu/linksmart/services/e
 
 
 # starting the agent
-ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
+ENTRYPOINT ["java","--add-modules", "java.xml.bind", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
