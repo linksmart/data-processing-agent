@@ -42,7 +42,7 @@
     </dependencies>
    
     <modules>
-        <module>../../../data-processing-agent</module>
+        <module>../../../IoTAgents</module>
         <module>../../gpl-artifacts</module>
     </modules>
     <build>
