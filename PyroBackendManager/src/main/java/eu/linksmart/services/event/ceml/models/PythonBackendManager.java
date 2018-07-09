@@ -18,7 +18,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+//import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -120,7 +122,7 @@ public class PythonBackendManager {
         return service;
     }
     @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer() {
         return (container -> {
             container.setPort(8666);
         });
