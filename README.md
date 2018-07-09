@@ -47,7 +47,7 @@ For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven
 
 ## Run DPA
 ```
-java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
+java -jar distributions/IoTAgent/target/iot.learning.universal.agent-<current.version>.jar
 ```
 
 ## Run LA
