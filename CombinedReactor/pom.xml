@@ -17,7 +17,7 @@
         <google.gson.version>2.6.2</google.gson.version>
         <start-class>eu.linksmart.services.Application</start-class>
         <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
-        <spring.boot.version>1.5.14.RELEASE</spring.boot.version>
+        <spring.boot.version>2.0.3.RELEASE</spring.boot.version>
         <java.version>1.10</java.version>
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <site.plugin.version>3.5.1</site.plugin.version>
@@ -42,7 +42,7 @@
     </dependencies>
    
     <modules>
-        <module>../../../IoTAgents</module>
+        <module>../../../data-processing-agent</module>
         <module>../../gpl-artifacts</module>
     </modules>
     <build>
@@ -79,6 +79,16 @@
                             </goals>
                         </execution>
                     </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-properties-migrator</artifactId>
+                        <version>${spring.boot.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+
+
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
