@@ -2113,6 +2113,27 @@
     "CEMLRequest": {
       "type": "object",
       "properties": {
+        "auxiliaryStream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "dataSchema": {
+          "$ref": "#/definitions/SchemaNode"
+        },
+        "deploymentStream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "descriptors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DataDescriptor"
+          }
+        },
         "essential": {
           "type": "boolean",
           "example": false,
@@ -2124,6 +2145,15 @@
         "lastPrediction": {
           "$ref": "#/definitions/Prediction"
         },
+        "learningStream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LearningStatement"
+          }
+        },
+        "model": {
+          "$ref": "#/definitions/Model"
+        },
         "name": {
           "type": "string"
         },
@@ -2131,11 +2161,37 @@
           "type": "boolean",
           "example": false,
           "description": "Indicates if the request should be stored persistently"
+        },
+        "settings": {
+          "type": "object"
         }
       }
     },
     "DataDescriptor": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "classesDescription": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "target": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "NOMINAL_CLASSES",
+            "INTEGER",
+            "DOUBLE",
+            "NUMBER",
+            "BOOLEAN",
+            "OBJECT",
+            "DATE"
+          ]
+        }
+      }
     },
     "EvaluationMetric": {
       "type": "object",
@@ -2150,8 +2206,58 @@
             "LessEqual"
           ]
         },
+        "controlMetric": {
+          "type": "boolean"
+        },
+        "extended": {
+          "$ref": "#/definitions/ModelEvaluationAlgorithmExtended"
+        },
+        "normalizedResult": {
+          "type": "number",
+          "format": "double"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "object"
+        },
         "target": {
           "type": "object"
+        }
+      }
+    },
+    "EvaluationMetric«Number»": {
+      "type": "object",
+      "properties": {
+        "comparisonMethod": {
+          "type": "string",
+          "enum": [
+            "Equal",
+            "More",
+            "MoreEqual",
+            "Less",
+            "LessEqual"
+          ]
+        },
+        "controlMetric": {
+          "type": "boolean"
+        },
+        "extended": {
+          "$ref": "#/definitions/ModelEvaluationAlgorithmExtended"
+        },
+        "normalizedResult": {
+          "type": "number",
+          "format": "double"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "result": {
+          "$ref": "#/definitions/Number"
+        },
+        "target": {
+          "$ref": "#/definitions/Number"
         }
       }
     },
@@ -2168,7 +2274,40 @@
             "LessEqual"
           ]
         },
+        "controlMetric": {
+          "type": "boolean"
+        },
+        "extended": {
+          "$ref": "#/definitions/ModelEvaluationAlgorithmExtended"
+        },
+        "normalizedResult": {
+          "type": "number",
+          "format": "double"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "object"
+        },
         "target": {
+          "type": "object"
+        }
+      }
+    },
+    "Evaluator«object»": {
+      "type": "object",
+      "properties": {
+        "deployable": {
+          "type": "boolean"
+        },
+        "evaluationAlgorithms": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/EvaluationMetric«Number»"
+          }
+        },
+        "parameters": {
           "type": "object"
         }
       }
@@ -2272,8 +2411,14 @@
             "HTTP_GET"
           ]
         },
+        "registrable": {
+          "type": "boolean"
+        },
         "request": {
           "$ref": "#/definitions/CEMLRequest"
+        },
+        "restoutput": {
+          "type": "boolean"
         },
         "resultType": {
           "type": "string"
@@ -2311,6 +2456,12 @@
     "Model": {
       "type": "object",
       "properties": {
+        "classifier": {
+          "type": "boolean"
+        },
+        "clusterer": {
+          "type": "boolean"
+        },
         "dataSchema": {
           "$ref": "#/definitions/SchemaNode"
         },
@@ -2320,6 +2471,9 @@
             "$ref": "#/definitions/DataDescriptor"
           }
         },
+        "evaluator": {
+          "$ref": "#/definitions/Evaluator«object»"
+        },
         "lastPrediction": {
           "$ref": "#/definitions/Prediction«object»"
         },
@@ -2328,6 +2482,9 @@
         },
         "parameters": {
           "type": "object"
+        },
+        "regressor": {
+          "type": "boolean"
         },
         "targets": {
           "type": "array",
@@ -2435,6 +2592,37 @@
         }
       }
     },
+    "ModelEvaluationAlgorithmExtended": {
+      "type": "object",
+      "properties": {
+        "confusionMatrix": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "totalFalseNegatives": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalFalsePositives": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalTrueNegatives": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalTruePositives": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
     "MultiResourceResponses": {
       "type": "object",
       "required": [
@@ -2483,6 +2671,9 @@
         },
         "predictedBy": {
           "type": "string"
+        },
+        "prediction": {
+          "type": "object"
         }
       }
     },
@@ -2511,6 +2702,9 @@
         },
         "predictedBy": {
           "type": "string"
+        },
+        "prediction": {
+          "type": "object"
         }
       }
     },
@@ -2650,6 +2844,12 @@
             "HTTP_GET"
           ]
         },
+        "registrable": {
+          "type": "boolean"
+        },
+        "restoutput": {
+          "type": "boolean"
+        },
         "resultType": {
           "type": "string"
         },
@@ -2737,6 +2937,12 @@
             "REST_GET",
             "HTTP_GET"
           ]
+        },
+        "registrable": {
+          "type": "boolean"
+        },
+        "restoutput": {
+          "type": "boolean"
         },
         "resultType": {
           "type": "string",
