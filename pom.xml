@@ -104,7 +104,7 @@
         <hibernate.version>6.0.10.Final</hibernate.version>
         <apache.commons.configuration2.version>2.2</apache.commons.configuration2.version>
 
-        <cglib.version>3.2.4</cglib.version>
+        <cglib.version>3.2.7</cglib.version>
         <apache.fluent.hc.version>4.5.2</apache.fluent.hc.version>
         <springfox.version>2.7.0</springfox.version>
         <javax.servelet.version>2.5</javax.servelet.version>
