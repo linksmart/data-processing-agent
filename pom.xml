@@ -420,13 +420,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-properties-migrator</artifactId>
-                <version>${spring.boot.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-
-            <dependency>
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
