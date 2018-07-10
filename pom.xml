@@ -251,16 +251,6 @@
                             </goals>
                         </execution>
                     </executions>
-
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.springframework.boot</groupId>
-                            <artifactId>spring-boot-properties-migrator</artifactId>
-                            <version>${spring.boot.version}</version>
-                            <scope>runtime</scope>
-                        </dependency>
-                    </dependencies>
-
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
