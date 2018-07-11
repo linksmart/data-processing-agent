@@ -26,7 +26,7 @@ import java.util.*;
 
 public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
-    @JsonProperty("descriptors")
+    @JsonIgnore
     protected DataDescriptors descriptors;
     @JsonProperty("name")
     protected String name;
@@ -49,7 +49,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     @JsonProperty(value = "learner")
     protected LearningObject learner;
-    @JsonProperty("dataSchema")
+    @JsonIgnore
     protected SchemaNode schema;
     public String getType() {
         return type;
