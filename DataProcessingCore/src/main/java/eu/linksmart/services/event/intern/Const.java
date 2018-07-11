@@ -48,7 +48,8 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String PRE_CEP_EXTENSIONS = "agent_init_after_conf_before_CEP";
     String PRE_TYPES_EXTENSIONS = "agent_init_after_CEP_before_types";
     String PRE_FEEDERS_EXTENSIONS = "agent_init_after_types_before_feeders";
-    String PRE_BOOTSTRAP_EXTENSIONS = "agent_init_after_feeders_before_bootstrapping";
+    String PRE_CONNECTORS_EXTENSIONS = "agent_init_after_feeders_before_connectors";
+    String PRE_BOOTSTRAP_EXTENSIONS = "agent_init_after_connectors_before_bootstrapping";
     String PRE_END_EXTENSIONS = "agent_init_end";
 
     String START_MQTT_STATEMENT_API = "api_statements_mqtt_enable";

@@ -3,6 +3,7 @@ package eu.linksmart.services.event.connectors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.almanac.event.datafusion.utils.generic.ComponentInfo;
 import eu.linksmart.api.event.components.AnalyzerComponent;
+import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
@@ -45,12 +46,13 @@ import java.util.*;
 @SpringBootApplication
 @RestController
 @EnableSwagger2
-public class RestInit {
+public class RestInit implements IncomingConnector {
     static Properties info = null;
     protected transient static Logger loggerService = LogManager.getLogger(RestInit.class);
-    private static Configurator conf;
+    private static Configurator conf = Configurator.getDefaultConfig();
     private static boolean la = false;
     private static boolean gpl = false;
+
     public static void init(Configurator conf) {
         RestInit.conf = conf;
 
@@ -106,6 +108,10 @@ public class RestInit {
         springApp.run();
 
 
+    }
+    static {
+        if (conf.containsKeyAnywhere(Const.ENABLE_REST_API)&&  conf.getBoolean(Const.ENABLE_REST_API))
+            RestInit.init(conf);
     }
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status() {
@@ -166,5 +172,10 @@ public class RestInit {
     @Bean
     public ObjectMapper objectMapper() {
         return (ObjectMapper) SharedSettings.getSerializerDeserializer().getParser();
+    }
+
+    @Override
+    public boolean isUp() {
+        return true;
     }
 }

@@ -7,8 +7,6 @@ import eu.linksmart.services.event.connectors.*;
 
 
 import eu.linksmart.services.event.connectors.file.BigFileConnector;
-import eu.linksmart.services.event.connectors.mqtt.EventMqttObserver;
-import eu.linksmart.services.event.connectors.mqtt.StatementMqttObserver;
 import eu.linksmart.services.event.feeders.EventFeeder;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
@@ -36,7 +34,6 @@ public class DataProcessingCore {
 
  //   protected static List<Feeder> feeders = new ArrayList<>();
 
-    protected static MqttIncomingConnectorService mqtt =null;
     private static Map<String,Pair<String,String>> aliasTopicClass= new HashMap<>();
     private DataProcessingCore() {
     }
@@ -69,18 +66,17 @@ public class DataProcessingCore {
      * @return is the agent successfully initialized
      *
      * */
-    public static boolean start(String args){
+    public static void start(String args){
         if(!started) {
-            Boolean ret = init(args);
+          init(args);
             try {
                 ThingsRegistrationService.getReference().startTimer();
             } catch (TraceableException | UntraceableException e) {
                 loggerService.error(e.getMessage(),e);
             }
             new Thread(() -> statusLoop()).start();
-            return ret;
+
         }
-        return false;
 
     }
     /**
@@ -90,7 +86,7 @@ public class DataProcessingCore {
      *
      * @return is the agent successfully initialized
      * */
-    private static synchronized boolean init(String args){
+    private static synchronized void init(String args){
 
         started =true;
         System.out.println("\n" +
@@ -111,7 +107,9 @@ public class DataProcessingCore {
         initForceLoading(Const.PRE_FEEDERS_EXTENSIONS);
         // legacy equivalent before feeders
         initForceLoading(Const.ADDITIONAL_CLASS_TO_BOOTSTRAPPING);
-        boolean success = initFeeders();
+        initFeeders();
+        initForceLoading(Const.PRE_CONNECTORS_EXTENSIONS);
+        initConnectors();
         initForceLoading(Const.PRE_BOOTSTRAP_EXTENSIONS);
         bootstrapping();
         initForceLoading(Const.PRE_END_EXTENSIONS);
@@ -119,7 +117,6 @@ public class DataProcessingCore {
        // ThingsRegistrationService.getReference();
 
        // ServiceRegistratorService.getRegistrator();
-        return success;
     }
     /**
      * Tracks the status of the initialized agent
@@ -129,8 +126,6 @@ public class DataProcessingCore {
     static private void statusLoop(){
         active = true;
         while (active){
-
-            active = mqtt.isUp();
             if(active) {
                 loggerService.info("The Agent with ID "+ SharedSettings.getId()+" is alive");
                 int hb = 5000;
@@ -232,7 +227,7 @@ public class DataProcessingCore {
      *
      * */
     private static void initForceLoading(String toLoad) {
-        if(conf.containsKeyAnywhere(toLoad)) {
+        if(conf.containsKeyAnywhere(toLoad)&& conf.getStringArray(toLoad).length>0) {
             String[] modules = conf.getStringArray(toLoad);
             loggerService.info("Loading following extensions "+ Arrays.toString(modules));
             Arrays.stream(modules).forEach(cls -> {
@@ -253,7 +248,7 @@ public class DataProcessingCore {
      * This function initialize the feeders and connectors. By doing this the Network APIs are being set up
      *
      * */
-    private static boolean initFeeders() {
+    private static void initFeeders() {
 
         // loading of feeders
         //IncomingConnector mqtt = null;
@@ -262,47 +257,37 @@ public class DataProcessingCore {
             Class.forName(EventFeeder.class.getCanonicalName());
             Class.forName(StatementFeeder.class.getCanonicalName());
             Class.forName(BootstrappingBean.class.getCanonicalName());
-            mqtt = MqttIncomingConnectorService.getReference();
+
             if(conf.getBoolean(Const.TRANSLATOR_MODE))
                 StatementFeeder.addNewStatement("{\"name\": \"translator"+"\" ,\"statement\": \"select cast(EventEnvelope.builders.get('default'), eu.linksmart.api.event.types.EventBuilder).refactory(event) as vector from GenericEvent as event\"}",null,null);
 
 
-            if(conf.getBoolean(Const.START_MQTT_STATEMENT_API))
-                mqtt.addListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
-            //
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
+            System.exit(-1);
+        }
 
-           addEventConnection(Arrays.asList(conf.getStringArray(Const.EVENTS_IN_BROKER_CONF_PATH)));
+    }
+    private static void initConnectors() {
 
 
-          if (conf.containsKeyAnywhere(Const.ENABLE_REST_API)&&  conf.getBoolean(Const.ENABLE_REST_API))
-                    RestInit.init(conf);
+        try {
+
+            Class.forName(MqttIncomingConnectorService.class.getCanonicalName());
+            Class.forName(RestInit.class.getCanonicalName());
+
+
+            if(conf.getBoolean(Const.TRANSLATOR_MODE))
+                StatementFeeder.addNewStatement("{\"name\": \"translator"+"\" ,\"statement\": \"select cast(EventEnvelope.builders.get('default'), eu.linksmart.api.event.types.EventBuilder).refactory(event) as vector from GenericEvent as event\"}",null,null);
+
+
+
+
 
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
         }
 
-        if(mqtt!=null&& !mqtt.isUp()){
-            loggerService.error("The feeders couldn't start! Agent now is stopping");
-            return false;
-        }
-
-
-        return true;
-    }
-    private static void addEventConnection(String alias, List<String> brokers){
-         brokers.forEach(broker->{
-                    try {
-                       // if(! SharedSettings.existSharedObject(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias))
-                            mqtt.addListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
-                    } catch (Exception e) {
-                        loggerService.error(e.getMessage(),e);
-                    }
-                });
-    }
-    public static void addEventConnection( List<String> brokers){
-        Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
-                .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
-                .forEach(alias -> brokers.forEach(broker->addEventConnection(alias,brokers)));
     }
     /**
      * This initialize the CEP engines and their utilities.
