@@ -23,7 +23,7 @@ services:
       - linksmart_service_catalog_endpoint=http://sc:8082
   it:
     image: docker.linksmart.eu/ci/maven-builder:latest
-    working_dir: /data/
+    working_dir: /test/
     depends_on:
       - main_broker
       - sc
@@ -34,6 +34,7 @@ services:
       - agent
     volumes:
       - ./:/data/
+      - ./IoTAgents/test/la-basic-it:/test/
     environment:
       - BROKER_URL=tcp://main_broker:1883
       - AGENT_URL=http://agent:8319
