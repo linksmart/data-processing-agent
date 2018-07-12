@@ -23,7 +23,7 @@ services:
       - linksmart_service_catalog_endpoint=http://sc:8082
   it:
     image: docker.linksmart.eu/ci/maven-builder:latest
-    working_dir: /test/
+    working_dir: /data/
     depends_on:
       - main_broker
       - sc
