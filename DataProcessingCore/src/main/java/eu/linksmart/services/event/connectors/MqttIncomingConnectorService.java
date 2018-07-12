@@ -2,7 +2,10 @@ package eu.linksmart.services.event.connectors;
 
 import eu.linksmart.api.event.components.IncomingConnector;
 import eu.linksmart.api.event.exceptions.InternalException;
+import eu.linksmart.services.event.connectors.mqtt.EventMqttObserver;
 import eu.linksmart.services.event.connectors.mqtt.IncomingMqttObserver;
+import eu.linksmart.services.event.connectors.mqtt.StatementMqttObserver;
+import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.utils.configuration.Configurator;
@@ -12,10 +15,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by José Ángel Carvajal on 01.09.2016 a researcher of Fraunhofer FIT.
@@ -29,10 +29,36 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
             me= new MqttIncomingConnectorService();
         return me;
     }
-    protected transient Logger loggerService = LogManager.getLogger(this.getClass());
-    protected transient Configurator conf =  Configurator.getDefaultConfig();
+    protected static transient Logger loggerService = LogManager.getLogger(MqttIncomingConnectorService.class);
+    protected static transient Configurator conf =  Configurator.getDefaultConfig();
 
-    // protected List<StaticBroker> brokers = new ArrayList<>();
+    private static void addEventConnection(String alias, List<String> brokers){
+        brokers.forEach(broker->{
+            try {
+                me.addListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+            }
+        });
+    }
+    public static void addEventConnection( List<String> brokers){
+        Arrays.asList(conf.getStringArray(Const.FeederPayloadAlias)).stream()
+                .filter(i -> conf.containsKeyAnywhere(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + i) && conf.containsKeyAnywhere(Const.FeederPayloadClass + "_" + i))
+                .forEach(alias -> brokers.forEach(broker->addEventConnection(alias,brokers)));
+    }
+    static {
+        if(conf.getBoolean(Const.START_MQTT_STATEMENT_API)) {
+            try {
+                getReference().addListener(conf.getString(Const.STATEMENT_INOUT_BROKER_CONF_PATH),conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#", new StatementMqttObserver(conf.getString(Const.STATEMENT_INOUT_BASE_TOPIC_CONF_PATH)+"#"));
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(),e);
+                loggerService.error("Programmatically exiting!");
+                System.exit(-1);
+            }
+        }
+
+        addEventConnection(Arrays.asList(conf.getStringArray(Const.EVENTS_IN_BROKER_CONF_PATH)));
+    }
     protected Map<String,Map<String, IncomingMqttObserver>> listeners = new Hashtable<>();
 
 

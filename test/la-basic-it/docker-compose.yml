@@ -11,7 +11,7 @@ services:
     environment:
       - SC_MQTT_CLIENT_BROKERURI=tcp://main_broker:1883
   agent:
-    image: docker.linksmart.eu/agent:dpa-experimental
+    image: docker.linksmart.eu/agent:la-experimental
     hostname: agent
     depends_on:
       - sc
