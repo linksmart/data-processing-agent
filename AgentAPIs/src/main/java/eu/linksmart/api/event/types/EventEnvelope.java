@@ -224,7 +224,7 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
             return (Number) o;
         } else if (o.getClass() == boolean.class || o.getClass() == Boolean.class || Boolean.class.isAssignableFrom(o.getClass())){
             return ((Boolean)o)?1:0;
-        } else if (o.getClass() == int.class || o.getClass() == String.class){
+        } else if (o.getClass() == int.class || o.getClass() == Integer.class){
             return (Integer)o;
         } else if (String.class.isAssignableFrom(o.getClass())|| o.getClass() == Integer.class){
             try {
