@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 
 /**
@@ -341,7 +342,7 @@ public class StatementRest extends Component implements IncomingConnector {
             try {
 
                 statement.getSynchronousResponse();
-                result.addResponse(createSuccessMapMessage(statement.getId(), "Statement", statement.getId(), 200, "OK", "Statement Processed"));
+                result.addResponse(createSuccessMapMessage(statement.getId(), "Statement", statement.getId(), 200, "OK", "Statement Processed",statement.getOutput()));
 
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
@@ -386,10 +387,10 @@ public class StatementRest extends Component implements IncomingConnector {
     }
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy,String producerType,int codeNo, String codeTxt,String message){
-        return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),null,producerType,message,codeNo, "");
+        return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),null,producerType,message,codeNo);
     }
-    public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message){
-        return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),processedBy,producerType,message,codeNo, "");
+    public static GeneralRequestResponse createSuccessMapMessage(String processedBy,String producerType,String id,int codeNo, String codeTxt,String message,List<String> output){
+        return new GeneralRequestResponse(codeTxt, SharedSettings.getId(),processedBy,producerType,message,codeNo, output);
     }
     public static String toJsonString(Object message){
 

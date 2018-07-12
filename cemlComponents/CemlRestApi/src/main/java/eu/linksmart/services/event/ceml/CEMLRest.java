@@ -27,6 +27,8 @@ import java.net.URISyntaxException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by angel on 13/11/15.
@@ -153,7 +155,9 @@ public class CEMLRest extends Component implements IncomingConnector{
 
         // returning error in case neither an error was produced nor success. This case theoretical cannot happen, if it does there is a program error.
         if(result.getResponses().isEmpty()) {
-            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, "Unknown status"));
+            List<String> topics = new ArrayList<String>();
+            topics.add("Unknown status");
+            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, topics));
             loggerService.error("Impossible state reached");
         }
         // preparing location header
@@ -163,8 +167,9 @@ public class CEMLRest extends Component implements IncomingConnector{
                 uri = new URI("/ceml/"+statementID);
         } catch (URISyntaxException e) {
             loggerService.error(e.getMessage(),e);
-
-            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, e.getMessage()));
+            List<String> topics = new ArrayList<String>();
+            topics.add(e.getMessage());
+            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, topics));
         }
         // creating HTTP response
 

@@ -14,6 +14,7 @@ import eu.linksmart.services.event.types.StatementInstance;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -117,6 +118,8 @@ public class StatementMqttObserver extends IncomingMqttObserver {
             publishFeedback(request.getReturnEndpoint(),responses);
 
     } catch (Exception e) {
+        List<String> topics = new ArrayList<String>();
+        topics.add(request.getReturnErrorEndpoint());
         publishFeedback(
                 new ErrorResponseException(
                         new GeneralRequestResponse(
@@ -125,7 +128,7 @@ public class StatementMqttObserver extends IncomingMqttObserver {
                                 StatementMqttObserver.class.getCanonicalName(),
                                 e.getMessage(),
                                 500,
-                                request.getReturnErrorEndpoint())
+                                topics)
                 )
         );
     }

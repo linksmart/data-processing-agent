@@ -107,7 +107,9 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     }
     protected void publishFeedback(ErrorResponseException e){
         try {
-            brokerService.publish(e.getRequestResponse().getTopic(), e.getMessage());
+            List<String> topics = e.getRequestResponse().getTopics();
+            for(String topic : topics)
+            brokerService.publish(topic, e.getMessage());
         } catch (Exception ex) {
 
             loggerService.error(e.getMessage(), e);
