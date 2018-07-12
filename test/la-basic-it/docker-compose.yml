@@ -34,10 +34,12 @@ services:
       - agent
     volumes:
       - ./:/data/
-      - ./IoTAgents/test/la-basic-it:/test/
+ #     - ./IoTAgents/test/la-basic-it:/test/
     environment:
       - BROKER_URL=tcp://main_broker:1883
       - AGENT_URL=http://agent:8319
     command:
+      - -f
+      - /data/IoTAgents/test/la-basic-it/pom.xml
       - -Dversion=1.8.1-SNAPSHOT
       - test
