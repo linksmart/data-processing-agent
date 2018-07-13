@@ -566,6 +566,7 @@ public class StatementFeeder implements Feeder<Statement> {
                     Map<String, Statement> aux = dfw.getStatements();
                     if (!aux.isEmpty() && aux.containsKey(id)) {
                         result.addResources(dfw.getName(), aux.get(id));
+                        result.addResponse(StatementFeeder.createSuccessMapMessage(id, "Statement", id, 200, "OK", "GET Statement ID: " + id + " result found in  'Resources' ", aux.get(id).getOutput()));
                     }
 
                 } catch (Exception e) {
@@ -577,8 +578,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
         if (result.getResources().size() == 0 && result.getResponses().isEmpty()) {
             result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + id));
-        } else if (result.getResources().size() != 0)
-            result.addResponse(StatementFeeder.createSuccessMapMessage(id, "Statement", id, 200, "OK", "GET Statement ID: " + id + " result found in  'Resources' "));
+        }
 
         return result;
     }
