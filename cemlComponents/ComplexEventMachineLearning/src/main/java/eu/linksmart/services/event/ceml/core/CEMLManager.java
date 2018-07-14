@@ -364,7 +364,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
         if(schema!=null)
             schema.destroy();
         descriptors.destroy();
-
+        super.destroy();
 
     }
     private void errorHandling(boolean[] phasesDone,String[] phasesNames,int[] buildStatements, Exception exception,  MultiResourceResponses<Statement> response)throws TraceableException, UnknownUntraceableException {

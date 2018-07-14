@@ -19,38 +19,37 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import io.swagger.annotations.ApiModelProperty;
 
 import eu.linksmart.services.utils.function.Utils;
+
 import java.util.*;
 import java.util.stream.Collectors;
 /**
- *  Copyright [2013] [Fraunhofer-Gesellschaft]
- *
+ * Copyright [2013] [Fraunhofer-Gesellschaft]
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- *
  */
+
 /**
  * Basic and reference implementation of a statement.
  *
  * @author Jose Angel Carvajal Soto
- * @since       1.2.0
  * @see eu.linksmart.api.event.types.Statement
  * @see eu.linksmart.api.event.types.JsonSerializable
- *
- * */
+ * @since 1.2.0
+ */
 public class StatementInstance extends PersistentRequestInstance implements Statement {
     /**
      * Define which handler will be instantiate in the CEP engine when no Handler was specifically defined.
-     * */
+     */
     @JsonIgnore
     public transient static String DEFAULT_HANDLER = ComplexEventHandler.class.getCanonicalName();
     @JsonIgnore
@@ -62,15 +61,15 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     protected String name = "";
     @JsonProperty("statement")
     @ApiModelProperty(notes = "Statement or Query in the underlying implementation of the CEP engine. For most of the cases is mandatory")
-    protected String statement="";
+    protected String statement = "";
 
     @ApiModelProperty(notes = "The output URIs of the events")
     @JsonProperty("output")
-    protected List<String> output=null;
+    protected List<String> output = null;
 
     @ApiModelProperty(notes = "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean")
     @JsonProperty("cehandler")
-    protected String CEHandler= null;
+    protected String CEHandler = null;
 
     @ApiModelProperty(notes = "Statement's Lifecycle.")
     @JsonProperty("stateLifecycle")
@@ -78,22 +77,22 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @ApiModelProperty(notes = "Server where the events will be pushed")
     @JsonProperty("scope")
-    protected List<String> scope =null;
+    protected List<String> scope = null;
 
     @JsonIgnore
-    protected transient static final Object lock =new Object();
+    protected transient static final Object lock = new Object();
 
     @ApiModelProperty(notes = "In case of a synchronous request, the response will be sent here.")
     @JsonProperty("synchronousResponse")
-    protected Object synchRespones ;
+    protected Object synchRespones;
 
     @ApiModelProperty(notes = "Indicates the agent ID which should process the statement. Not used for REST API")
     @JsonProperty("targetAgents")
-    protected List<String> targetAgents= null;
+    protected List<String> targetAgents = null;
 
     @ApiModelProperty(notes = "Indicates the agent ID where this Statement was created")
     @JsonProperty("agentID")
-    protected String agentID= null;
+    protected String agentID = null;
 
 
     @ApiModelProperty(notes = "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB")
@@ -118,39 +117,36 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     //@ApiModelProperty(notes = "The last compound event result of this statement")
     @JsonIgnore
-    private Object lastOutput ;
+    private Object lastOutput;
 
-    private void initValues(){
-        if(scope==null)
-            scope= Collections.singletonList("outgoing");
-        if(CEHandler ==null)
-            CEHandler =DEFAULT_HANDLER;
-        if(SharedSettings.getId() !=null && agentID == null)
-            agentID= SharedSettings.getId();
-        if(targetAgents==null)
-            targetAgents=new ArrayList<>();
-        if(resultType==null)
+    private void initValues() {
+        if (scope == null)
+            scope = Collections.singletonList("outgoing");
+        if (CEHandler == null)
+            CEHandler = DEFAULT_HANDLER;
+        if (SharedSettings.getId() != null && agentID == null)
+            agentID = SharedSettings.getId();
+        if (targetAgents == null)
+            targetAgents = new ArrayList<>();
+        if (resultType == null)
             resultType = ObservationImpl.class.getCanonicalName();
-        if(nativeResultType==null && EventEnvelope.builders.containsKey(resultType))
+        if (nativeResultType == null && EventEnvelope.builders.containsKey(resultType))
             nativeResultType = EventEnvelope.builders.get(resultType).BuilderOf();
 
-        if(stateLifecycle==null)
-            stateLifecycle=StatementLifecycle.RUN;
+        if (stateLifecycle == null)
+            stateLifecycle = StatementLifecycle.RUN;
 
-        this.resultType = conf.getString(Const.FeederPayloadClass + "_" +conf.getString(Const.STATEMENT_DEFAULT_OUTPUT_TYPE));
-        if(resultType==null)
+        this.resultType = conf.getString(Const.FeederPayloadClass + "_" + conf.getString(Const.STATEMENT_DEFAULT_OUTPUT_TYPE));
+        if (resultType == null)
             resultType = ObservationImpl.class.getCanonicalName();
     }
 
     public StatementInstance() {
-        super();
-       initValues();
+        initValues();
         setGenerateID();
-
     }
 
     public StatementInstance(String name, String statement, List<String> scope) {
-        super();
         initValues();
         this.name = name;
         this.statement = statement;
@@ -158,9 +154,9 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         setGenerateID();
     }
 
-    private void setGenerateID(){
-        if(( ( id==null || "".equals(id)) && name!=null && statement!= null && !"".equals(name) && !"".equals(statement) )) {
-            setId( Utils.hashIt(name + statement));
+    private void setGenerateID() {
+        if (((id == null || "".equals(id)) && name != null && statement != null && !"".equals(name) && !"".equals(statement))) {
+            setId(Utils.hashIt(name + statement));
         }
     }
 
@@ -185,7 +181,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @Override
     public Object getSynchronousResponse() {
-        if(stateLifecycle == StatementLifecycle.SYNCHRONOUS)
+        if (stateLifecycle == StatementLifecycle.SYNCHRONOUS)
             synchronized (lock) {
                 try {
                     lock.wait(60000);
@@ -199,69 +195,75 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
 
     @Override
-    public String getName(){
+    public String getName() {
         setGenerateID();
-        return  name;
-    }
-    @Override
-    public String getStatement(){
-        return  statement;
+        return name;
     }
 
     @Override
-    public List<String> getScope(){
-        return  scope;
+    public String getStatement() {
+        return statement;
     }
+
     @Override
-    public boolean haveOutput(){
+    public List<String> getScope() {
+        return scope;
+    }
+
+    @Override
+    public boolean haveOutput() {
         return output != null;
     }
+
     @Override
-    public boolean haveScope(){
+    public boolean haveScope() {
         return scope != null;
     }
+
     @Override
-    public String getScope(int index){
+    public String getScope(int index) {
 
         return scope.get(index);
     }
 
     @Override
     public List<String> getOutput() {
-        if(output==null)
+        if (output == null)
             output = Collections.singletonList(conf.getString(Const.EVENT_OUT_TOPIC_CONF_PATH));
 
-        return output.stream().map(s->AgentUtils.topicReplace(s, id)).collect(Collectors.toList());
+        return output.stream().map(s -> AgentUtils.topicReplace(s, id)).collect(Collectors.toList());
     }
 
     @Override
     public boolean equals(Object object) {
 
         Statement obj;
-        return  (object instanceof Statement && (obj = (Statement) object) == object) &&
+        return (object instanceof Statement && (obj = (Statement) object) == object) &&
                 (
-                        ( obj.getName() == this.name || ( this.name != null && this.name.equals(obj.getName()) ) ) &&
-                ( obj.getStatement() == this.statement || ( this.statement != null ) && this.statement.equals(obj.getStatement()) ) &&
-                ( obj.getOutput() == this.getOutput() || ( this.output != null ) && this.output.equals(obj.getOutput()) ) &&
-                ( obj.getCEHandler() == this.CEHandler || ( this.CEHandler != null ) && this.CEHandler.equals(obj.getCEHandler()) ) &&
-                ( obj.getStateLifecycle() == this.stateLifecycle || ( this.stateLifecycle != null ) && this.stateLifecycle.equals(obj.getStateLifecycle()) ) &&
-                ( obj.getScope() == this.getScope() || ( this.scope != null ) && this.scope.equals(obj.getScope()) ) &&
-                ( obj.getTargetAgents() == this.targetAgents || ( this.targetAgents != null ) && this.targetAgents.equals(obj.getTargetAgents()) ) &&
-                        id.equals(obj.getId())
+                        (obj.getName() == this.name || (this.name != null && this.name.equals(obj.getName()))) &&
+                                (obj.getStatement() == this.statement || (this.statement != null) && this.statement.equals(obj.getStatement())) &&
+                                (obj.getOutput() == this.getOutput() || (this.output != null) && this.output.equals(obj.getOutput())) &&
+                                (obj.getCEHandler() == this.CEHandler || (this.CEHandler != null) && this.CEHandler.equals(obj.getCEHandler())) &&
+                                (obj.getStateLifecycle() == this.stateLifecycle || (this.stateLifecycle != null) && this.stateLifecycle.equals(obj.getStateLifecycle())) &&
+                                (obj.getScope() == this.getScope() || (this.scope != null) && this.scope.equals(obj.getScope())) &&
+                                (obj.getTargetAgents() == this.targetAgents || (this.targetAgents != null) && this.targetAgents.equals(obj.getTargetAgents())) &&
+                                id.equals(obj.getId())
                 );
 
     }
-   @Override
-   public int hashCode(){
-       return (this.name +
-               this.statement +
-               this.output +
-               this.CEHandler +
-               this.stateLifecycle +
-               this.scope +
-               this.targetAgents.stream().map(Object::toString).collect(Collectors.joining()) +
-               id).hashCode();
-   }
+
+    @Override
+    public int hashCode() {
+        return (this.name +
+                this.statement +
+                this.output +
+                this.CEHandler +
+                this.stateLifecycle +
+                this.scope +
+                this.targetAgents.stream().map(Object::toString).collect(Collectors.joining()) +
+                id).hashCode();
+    }
+
     public void setScope(List<String> scope) {
         this.scope = scope;
     }
@@ -279,12 +281,13 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.name = name;
         setGenerateID();
     }
+
     public void setCEHandler(String CEHandler) {
-        this.CEHandler =CEHandler;
+        this.CEHandler = CEHandler;
     }
 
     public void setStateLifecycle(StatementLifecycle stateLifecycle) {
-        this.stateLifecycle=stateLifecycle;
+        this.stateLifecycle = stateLifecycle;
     }
 
     @JsonProperty("synchronousResponse")
@@ -296,8 +299,11 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         }
 
     }
-    public void setId(String id){
-        this.id =id;
+
+    public void setId(String id) {
+        super.removeFromRequests(this.id);
+        this.id = id;
+        super.addToRequests(id);
     }
 
     public void setTargetAgents(List<String> targetAgents) {
@@ -306,7 +312,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @Override
     public void toRegister(boolean registrable) {
-        register =registrable;
+        register = registrable;
     }
 
     @Override
@@ -317,7 +323,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @Override
     public boolean isRESTOutput() {
 
-        switch (publisher){
+        switch (publisher) {
             case HTTP_GET:
             case REST_GET:
                 return false;
@@ -357,7 +363,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
             nativeResultType = (Class<EventEnvelope>) Class.forName(resultType);
 
         } catch (Exception e) {
-            throw new StatementException(id, this.getClass().getCanonicalName(),e.getMessage());
+            throw new StatementException(id, this.getClass().getCanonicalName(), e.getMessage());
         }
         return this;
     }
@@ -368,6 +374,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         synchronized (lock) {
             lock.notifyAll();
         }
+        super.destroy();
     }
 
     @Override

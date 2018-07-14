@@ -10,6 +10,7 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import eu.linksmart.api.event.types.JsonSerializable;
 
 import java.io.*;
 import java.util.*;
@@ -17,12 +18,11 @@ import java.util.*;
 /**
  * Created by José Ángel Carvajal on 30.10.2017 a researcher of Fraunhofer FIT.
  */
-public abstract class PersistentRequestInstance implements PersistentRequest {
+public abstract class PersistentRequestInstance implements PersistentRequest, JsonSerializable {
     protected static final transient Logger loggerService = LogManager.getLogger(PersistentRequestInstance.class);
     protected static final transient Configurator conf = Configurator.getDefaultConfig();
     private static final transient Timer persistentRequestTracker = new Timer();
-    private static final transient List<PersistentRequestInstance> requests = new ArrayList<>();
-
+    private static final transient Map<String, PersistentRequestInstance> requests = new HashMap<>();
 
     public static String getPersistentFile() {
         return persistentFile;
@@ -41,11 +41,13 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
     @JsonProperty("id")
     protected String id = getId();
 
-    public PersistentRequestInstance() {
-        requests.add(this);
-
+    public void addToRequests(String id) {
+        requests.put(id, this);
     }
 
+    public void removeFromRequests(String id) {
+        requests.remove(id);
+    }
 
     @JsonProperty("persistent")
     @ApiModelProperty(notes = "Indicates if the request should be stored persistently")
@@ -92,6 +94,11 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
         this.essential = essential;
     }
 
+    public void destroy() throws Exception {
+
+        removeFromRequests(this.getId());
+    }
+
     static {
         if (persistentFile != null) {
 
@@ -103,7 +110,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
                                 OutputStream outputStream = null;
                                 try {
                                     Map<String, List<String>> toStore = new HashMap<>();
-                                    requests.stream().filter(p -> p.persistent).forEach(r -> {
+                                    requests.values().stream().filter(p -> p.persistent).forEach(r -> {
 
                                         try {
                                             if (!toStore.containsKey(r.getClass().getCanonicalName()))
@@ -120,16 +127,16 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
                                         }
                                     });
 
-                                    // File f = new File(persistentFile);
+                                    outputStream = new FileOutputStream(persistentFile);
                                     if (!toStore.isEmpty()) {
                                         loggerService.info("Writing persistent file " + persistentFile);
-                                        outputStream = new FileOutputStream(persistentFile);
-
                                         outputStream.write(SharedSettings.getSerializer().serialize(toStore));
 
-                                        outputStream.flush();
-                                        outputStream.close();
+                                    } else {
+                                        loggerService.info("Clearing persistent file " + persistentFile);
                                     }
+                                    outputStream.flush();
+                                    outputStream.close();
                                 } catch (IOException e) {
                                     loggerService.error(e.getMessage(), e);
                                 } finally {
@@ -144,7 +151,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest {
 
                         }
                     },
-                    60000,
+                    6000,
                     conf.getInt(Const.PERSISTENT_STORAGE_PERIOD)
             );
         }
