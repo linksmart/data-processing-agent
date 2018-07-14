@@ -346,8 +346,13 @@ import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
 
         epService.getEPAdministrator().getStatement(id).destroy();
 
+        Statement toBeDeleted = deployedStatements.get(id);
+        try {
+            toBeDeleted.destroy();
+        } catch (Exception e) {
+            loggerService.warn("Statement id="+id+" could not be destroyed:"+e.getMessage());
+        }
         deployedStatements.remove(id);
-
         return true;
     }
 
