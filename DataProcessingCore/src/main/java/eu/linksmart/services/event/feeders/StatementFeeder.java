@@ -222,6 +222,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
         String id = result.getHeadResource().getId();
         try {
+            //create new statement
             if (org == null) {
                 if (!dfw.addStatement(result.getHeadResource())) {
                     if (dfw.getStatements().containsKey(result.getHeadResource().getId()))
@@ -234,8 +235,9 @@ public class StatementFeeder implements Feeder<Statement> {
                     loggerService.info("Statement " + result.getHeadResource().getId() + " was successful");
                     result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getId(), 201, "Created", "Statement " + result.getHeadResource().getId() + " was successful", result.getHeadResource().getOutput()));
                 }
+                //update statement
             } else {
-
+                //change lifecycle state
                 if (result.getResponses().isEmpty() && org.getStateLifecycle() != null && !org.getStateLifecycle().equals(result.getHeadResource().getStateLifecycle())) {
                     switch (result.getHeadResource().getStateLifecycle()) {
                         case RUN:
@@ -255,6 +257,23 @@ public class StatementFeeder implements Feeder<Statement> {
                     // the name of the statement had being change. Then we update it.
                     dfw.getStatements().get(id).setName(result.getHeadResource().getName());
                 }
+
+                //the statement text has been changed; delete and re-create the statement
+                if (result.getResponses().isEmpty() && !result.getHeadResource().getStatement().equals(org.getStatement())) {
+                    dfw.removeStatement(org.getId(), org);
+                    if (!dfw.addStatement(result.getHeadResource())) {
+                        if (dfw.getStatements().containsKey(result.getHeadResource().getId()))
+                            result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 304, "Not modified", "This exact statement already exists in this agent"));
+                        else if (result.getHeadResource().getStateLifecycle() == Statement.StatementLifecycle.REMOVE)
+                            result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 400, "Bad Request", "The remove statement with id " + result.getHeadResource().getId() + " does not exist"));
+                        else
+                            result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 500, "Internal Server Error", dfw.getName() + ": Oops we have a problem"));
+                    } else {
+                        loggerService.info("Statement " + result.getHeadResource().getId() + " was successful");
+                        result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getId(), 201, "Created", "Statement " + result.getHeadResource().getId() + " was successful", result.getHeadResource().getOutput()));
+                    }
+}
+
                 if (result.getResponses().isEmpty()) {
                     // if there is any other change in other property is irrelevant, so is consider successful.
                     loggerService.info("Statement " + result.getHeadResource().getId() + " was successful");
@@ -338,8 +357,9 @@ public class StatementFeeder implements Feeder<Statement> {
                     workingCEPsList.add(cepEngine);
             if (update) {
                 org = CEPEngine.instancedEngines.values().iterator().next().getStatements().get(orgID);
-                if (!(statement.getStatement().equals(org.getStatement()) || "".equals(statement.getStatement())) ||
-                        (org.getCEHandler() != null && !org.getCEHandler().equals(statement.getCEHandler()))
+
+                //if (!(statement.getStatement().equals(org.getStatement()) || "".equals(statement.getStatement())) ||
+                if ((org.getCEHandler() != null && !org.getCEHandler().equals(statement.getCEHandler()))
                         ) {
                     result.addResponse(createErrorMapMessage(id, "Statement", 400, "Bad Request", "The 'statement string', 'CEHandler string', or 'input array' cannot be updated. It can be only removed and redeploy."));
                     return result;
@@ -351,6 +371,7 @@ public class StatementFeeder implements Feeder<Statement> {
             try {
                 if (orgID != null && !id.equals(orgID))
                     statement.setId(orgID);
+
 
                 // if (!processInternStatement(statement))
                 for (String key : workingCEPsList)
