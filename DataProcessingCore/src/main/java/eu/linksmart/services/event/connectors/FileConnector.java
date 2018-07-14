@@ -20,65 +20,68 @@ import java.util.List;
  */
 public class FileConnector extends Component implements IncomingConnector {
     static protected Logger loggerService = LogManager.getLogger(FileConnector.class);
-    static protected Configurator conf =  Configurator.getDefaultConfig();
+    static protected Configurator conf = Configurator.getDefaultConfig();
     protected List<String> filePaths = new ArrayList<>();
 
-    public FileConnector(String... filePaths){
+    public FileConnector(String... filePaths) {
         super(FileConnector.class.getSimpleName(), "Feeder that inserts statements and Events at loading time", Feeder.class.getSimpleName());
 
-        for(String f: filePaths)
-            if(f!=null&&!f.equals(""))
+        for (String f : filePaths)
+            if (f != null && !f.equals(""))
                 this.filePaths.add(f);
 
     }
-    public void loadFiles(){
+
+    public void loadFiles() {
         filePaths.forEach(this::loadFile);
 
     }
-    protected void loadFile(String filePath)  {
+
+    protected void loadFile(String filePath) {
 
         InputStream inputStream = null;
         try {
-            boolean found =false;
+            boolean found = false;
             File f = new File(filePath);
-            if(f.exists() && !f.isDirectory()) {
-                loggerService.info("Loading file "+ filePath);
-                inputStream = new FileInputStream(filePath);
+            if (f.exists() && !f.isDirectory()) {
+                if (f.length() > 0) {
+                    loggerService.info("Loading file " + filePath);
+                    inputStream = new FileInputStream(filePath);
 
-                found =true;
-            }else {
-                loggerService.info("Loading resource "+ filePath);
+                    found = true;
+                }
+            } else {
+                loggerService.info("Loading resource " + filePath);
                 ClassLoader classloader = Thread.currentThread().getContextClassLoader();
                 inputStream = classloader.getResourceAsStream(filePath);
 
-                found =inputStream != null && inputStream.markSupported();
+                found = inputStream != null && inputStream.markSupported();
             }
-            if(!found)
+            if (!found)
                 loggerService.warn("There is no bootstrapping file ");
             else
                 loadStream(IOUtils.toString(inputStream));
 
         } catch (Exception e) {
-            loggerService.error(e.getMessage(),e);
-            if(conf.containsKeyAnywhere(Const.PERSISTENT_ENABLED) && conf.getBoolean(Const.PERSISTENT_ENABLED) &&
+            loggerService.error(e.getMessage(), e);
+            if (conf.containsKeyAnywhere(Const.PERSISTENT_ENABLED) && conf.getBoolean(Const.PERSISTENT_ENABLED) &&
                     conf.containsKeyAnywhere(Const.FAIL_IF_PERSISTENCE_FAILS) && conf.getBoolean(Const.FAIL_IF_PERSISTENCE_FAILS)) {
                 loggerService.error("Fail in persistence process and the programmatic exit is set");
                 System.exit(-1);
             }
         } finally {
             try {
-                assert inputStream != null;
-                inputStream.close();
+                if (inputStream != null)
+                    inputStream.close();
             } catch (IOException e) {
                 loggerService.error(e.getMessage(), e);
             }
         }
     }
+
     protected void loadStream(String inputStream) throws IOException {
         BootstrappingBeanFeeder.feed(inputStream);
     }
-
-
 
 
     @Override
