@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.linksmart.services.events.gpl</groupId>
@@ -50,9 +51,6 @@
     </developers>
 
 
-
-
-
     <organization>
         <name>Fraunhofer FIT Institute</name>
         <url>http://www.fit.fraunhofer.de</url>
@@ -97,7 +95,7 @@
         <tag>HEAD</tag>
     </scm>
     <properties>
-        <esper.version>5.5.0</esper.version>
+        <esper.version>7.1.0</esper.version>
         <weka.version>3.7.13</weka.version>
         <ls.se.agents.version>1.8.1-SNAPSHOT</ls.se.agents.version>
         <!-- test dependencies versions -->
@@ -443,7 +441,9 @@
             <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
             <url>https://www.gnu.org/licenses/lgpl.txt</url>
             <distribution>https://nexus.linksmart.eu/repository/maven-releases/</distribution>
-            <comments>LinkSmart Services: IoT Data-Processing and Learning GPL Agents is project based on the IoT Data-Processing and Learning. Differentiating from it in the Licence </comments>
+            <comments>LinkSmart Services: IoT Data-Processing and Learning GPL Agents is project based on the IoT
+                Data-Processing and Learning. Differentiating from it in the Licence
+            </comments>
         </license>
     </licenses>
 </project>
