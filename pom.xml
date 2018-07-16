@@ -97,7 +97,7 @@
         <tag>HEAD</tag>
     </scm>
     <properties>
-        <esper.version>5.5.0</esper.version>
+        <esper.version>7.1.0</esper.version>
         <weka.version>3.7.13</weka.version>
         <ls.se.agents.version>1.8.1-SNAPSHOT</ls.se.agents.version>
         <!-- test dependencies versions -->
