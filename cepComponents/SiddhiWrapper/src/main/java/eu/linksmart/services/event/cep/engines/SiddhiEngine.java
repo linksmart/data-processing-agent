@@ -204,6 +204,13 @@ public class SiddhiEngine extends Component implements CEPEngine {
     }
 
     @Override
+    public boolean updateStatement(Statement statement)  {
+
+        loggerService.error("updateStatement(String id, Statement statement) function not implemented");
+        return false;
+    }
+
+    @Override
     public boolean pauseStatement(String id) throws StatementException {
 
         loggerService.error("pauseStatement(String id) function not implemented");
