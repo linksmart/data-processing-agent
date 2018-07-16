@@ -272,7 +272,17 @@ public class StatementFeeder implements Feeder<Statement> {
                         loggerService.info("Statement " + result.getHeadResource().getId() + " was successful");
                         result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getId(), 201, "Created", "Statement " + result.getHeadResource().getId() + " was successful", result.getHeadResource().getOutput()));
                     }
-}
+                }
+
+                if (result.getResponses().isEmpty() && (!result.getHeadResource().getResultType().equals(org.getResultType()) || !result.getHeadResource().getOutput().equals(org.getOutput())))
+                {
+                    org.setResultType(result.getHeadResource().getResultType());
+                    org.setOutput(result.getHeadResource().getOutput());
+                    dfw.updateStatement(org);
+                    loggerService.info("Statement " + result.getHeadResource().getId() + " was updated successfully");
+                    result.addResponse(createSuccessMapMessage(result.getHeadResource().getId(), "Statement", result.getHeadResource().getId(), 200, "OK", "Statement " + result.getHeadResource().getId() + " was updated successfully", result.getHeadResource().getOutput()));
+
+                }
 
                 if (result.getResponses().isEmpty()) {
                     // if there is any other change in other property is irrelevant, so is consider successful.
