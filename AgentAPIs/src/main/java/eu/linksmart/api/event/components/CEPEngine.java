@@ -112,7 +112,18 @@ public interface CEPEngine extends AnalyzerComponent {
      * */
     boolean addStatement(Statement statement) throws StatementException, UnknownException, InternalException;
 
-    boolean updateStatement(Statement statement) throws StatementException, UnknownException, InternalException;
+    /**
+     * Update the statement handler to reflect changes to the statement object affecting the handler.<p>
+     *
+     * @param statement to update
+     *
+     * @return <code>true</code> if the handler was replaced successfully. <code>false</code> otherwise.
+     *
+     * @exception eu.linksmart.api.event.exceptions.InternalException is thrown if an known exception happens, but the source of
+     * the exception is not related to the input itself. In other words, exceptions which are known and expected by the developer.
+     *
+     * */
+    boolean updateHandler(Statement statement) throws InternalException;
 
     /**
      * Removes an statement form the CEP engine.
