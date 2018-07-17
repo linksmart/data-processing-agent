@@ -241,7 +241,8 @@ public class EsperEngine extends Component implements CEPEngineAdvanced {
         return result;
     }
 
-    public boolean updateStatement(Statement statement) throws StatementException, UnknownException, InternalException {
+    @Override
+    public boolean updateHandler(Statement statement) throws InternalException {
         ComplexEventHandler handler = null;
         try {
             handler = newHandlerFor(statement);
@@ -368,9 +369,8 @@ public class EsperEngine extends Component implements CEPEngineAdvanced {
 
         epService.getEPAdministrator().getStatement(id).destroy();
 
-        Statement toBeDeleted = deployedStatements.get(id);
         try {
-            toBeDeleted.destroy();
+            deployedStatements.get(id).destroy();
         } catch (Exception e) {
             loggerService.warn("Statement id=" + id + " could not be destroyed:" + e.getMessage());
         }
