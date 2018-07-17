@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.types;
 
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -86,10 +87,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonProperty("synchronousResponse")
     protected Object synchRespones;
 
-    @ApiModelProperty(notes = "Indicates the agent ID which should process the statement. Not used for REST API")
-    @JsonProperty("targetAgents")
-    protected List<String> targetAgents = null;
-
     @ApiModelProperty(notes = "Indicates the agent ID where this Statement was created")
     @JsonProperty("agentID")
     protected String agentID = null;
@@ -103,9 +100,9 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @ApiModelProperty(notes = "Indicates which publisher will be used (MQTT_PUB default)")
     @JsonProperty("publisher")
     private Publisher publisher = Publisher.MQTT_PUB;
-    @ApiModelProperty(notes = "if the statement should or should not be register outside agent (some catalog)")
-    @JsonProperty("isRegister")
-    private boolean register = true;
+
+    @JsonIgnore
+    private boolean registrable = true;
 
     public Object getLastOutput() {
         return lastOutput;
@@ -126,8 +123,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
             CEHandler = DEFAULT_HANDLER;
         if (SharedSettings.getId() != null && agentID == null)
             agentID = SharedSettings.getId();
-        if (targetAgents == null)
-            targetAgents = new ArrayList<>();
         if (resultType == null)
             resultType = ObservationImpl.class.getCanonicalName();
         if (nativeResultType == null && EventEnvelope.builders.containsKey(resultType))
@@ -168,11 +163,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     public String getCEHandler() {
         return CEHandler;
-    }
-
-    @Override
-    public List<String> getTargetAgents() {
-        return targetAgents;
     }
 
     public StatementLifecycle getStateLifecycle() {
@@ -246,7 +236,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
                                 (obj.getCEHandler() == this.CEHandler || (this.CEHandler != null) && this.CEHandler.equals(obj.getCEHandler())) &&
                                 (obj.getStateLifecycle() == this.stateLifecycle || (this.stateLifecycle != null) && this.stateLifecycle.equals(obj.getStateLifecycle())) &&
                                 (obj.getScope() == this.getScope() || (this.scope != null) && this.scope.equals(obj.getScope())) &&
-                                (obj.getTargetAgents() == this.targetAgents || (this.targetAgents != null) && this.targetAgents.equals(obj.getTargetAgents())) &&
                                 id.equals(obj.getId())
                 );
 
@@ -260,7 +249,6 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
                 this.CEHandler +
                 this.stateLifecycle +
                 this.scope +
-                this.targetAgents.stream().map(Object::toString).collect(Collectors.joining()) +
                 id).hashCode();
     }
 
@@ -306,18 +294,18 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         super.addToRequests(id);
     }
 
-    public void setTargetAgents(List<String> targetAgents) {
-        this.targetAgents = targetAgents;
-    }
-
     @Override
+    @ApiModelProperty(notes = "if the statement should or should not be register outside agent (some catalog)")
+    @JsonSetter("registrable")
     public void toRegister(boolean registrable) {
-        register = registrable;
+        this.registrable = registrable;
     }
 
     @Override
+    @ApiModelProperty(notes = "if the statement should or should not be register outside agent (some catalog)")
+    @JsonGetter("registrable")
     public boolean isRegistrable() {
-        return register;
+        return registrable;
     }
 
     @Override
