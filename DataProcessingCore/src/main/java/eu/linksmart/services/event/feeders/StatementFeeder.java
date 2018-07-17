@@ -222,8 +222,13 @@ public class StatementFeeder implements Feeder<Statement> {
 
         String id = result.getHeadResource().getId();
         try {
-            //create new statement
-            if (org == null) {
+            //create new statement (also if statement object exists but statement text is supposed to be updated)
+            if (org == null || !result.getHeadResource().getStatement().equals(org.getStatement())) {
+
+                if (org != null) {
+                    dfw.removeStatement(org.getId(), org);
+                }
+
                 if (!dfw.addStatement(result.getHeadResource())) {
                     if (dfw.getStatements().containsKey(result.getHeadResource().getId()))
                         result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 304, "Not modified", "This exact statement already exists in this agent"));
@@ -238,7 +243,7 @@ public class StatementFeeder implements Feeder<Statement> {
                 //update statement
             } else {
                 //change lifecycle state
-                if (result.getResponses().isEmpty() && org.getStateLifecycle() != null && !org.getStateLifecycle().equals(result.getHeadResource().getStateLifecycle())) {
+                if (org.getStateLifecycle() != null && !org.getStateLifecycle().equals(result.getHeadResource().getStateLifecycle())) {
                     switch (result.getHeadResource().getStateLifecycle()) {
                         case RUN:
                             dfw.startStatement(result.getHeadResource().getId());
@@ -253,34 +258,32 @@ public class StatementFeeder implements Feeder<Statement> {
                     }
                 }
 
-                if (result.getResponses().isEmpty() && result.getHeadResource().getName() != null && !"".equals(result.getHeadResource().getName()) && !org.getName().equals(result.getHeadResource().getName())) {
+                if (result.getHeadResource().getName() != null && !"".equals(result.getHeadResource().getName()) && !org.getName().equals(result.getHeadResource().getName())) {
                     // the name of the statement had being change. Then we update it.
                     dfw.getStatements().get(id).setName(result.getHeadResource().getName());
                 }
 
-                //the statement text has been changed; delete and re-create the statement
-                if (result.getResponses().isEmpty() && !result.getHeadResource().getStatement().equals(org.getStatement())) {
-                    dfw.removeStatement(org.getId(), org);
-                    if (!dfw.addStatement(result.getHeadResource())) {
-                        if (dfw.getStatements().containsKey(result.getHeadResource().getId()))
-                            result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 304, "Not modified", "This exact statement already exists in this agent"));
-                        else if (result.getHeadResource().getStateLifecycle() == Statement.StatementLifecycle.REMOVE)
-                            result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 400, "Bad Request", "The remove statement with id " + result.getHeadResource().getId() + " does not exist"));
-                        else
-                            result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 500, "Internal Server Error", dfw.getName() + ": Oops we have a problem"));
-                    } else {
-                        loggerService.info("Statement " + result.getHeadResource().getId() + " was successful");
-                        result.addResponse(createSuccessMapMessage(dfw.getName(), "CEPEngine", result.getHeadResource().getId(), 201, "Created", "Statement " + result.getHeadResource().getId() + " was successful", result.getHeadResource().getOutput()));
-                    }
-                }
+                //update resultType, Output, Scope or CEHandler; this needs a re-creation of the handler
+                if (!result.getHeadResource().getResultType().equals(org.getResultType()) || !result.getHeadResource().getOutput().equals(org.getOutput()) || !result.getHeadResource().getCEHandler().equals(org.getCEHandler()) || !result.getHeadResource().getScope().equals(org.getScope())) {
 
-                if (result.getResponses().isEmpty() && (!result.getHeadResource().getResultType().equals(org.getResultType()) || !result.getHeadResource().getOutput().equals(org.getOutput())))
-                {
-                    org.setResultType(result.getHeadResource().getResultType());
-                    org.setOutput(result.getHeadResource().getOutput());
-                    dfw.updateStatement(org);
-                    loggerService.info("Statement " + result.getHeadResource().getId() + " was updated successfully");
-                    result.addResponse(createSuccessMapMessage(result.getHeadResource().getId(), "Statement", result.getHeadResource().getId(), 200, "OK", "Statement " + result.getHeadResource().getId() + " was updated successfully", result.getHeadResource().getOutput()));
+                    if (result.getHeadResource().getResultType() != null && !result.getHeadResource().getResultType().isEmpty())
+                        org.setResultType(result.getHeadResource().getResultType());
+
+                    if (result.getHeadResource().getOutput() != null && !result.getHeadResource().getOutput().isEmpty())
+                        org.setOutput(result.getHeadResource().getOutput());
+
+                    if (result.getHeadResource().getScope() != null && !result.getHeadResource().getScope().isEmpty())
+                        org.setScope(result.getHeadResource().getScope());
+
+                    if (result.getHeadResource().getCEHandler() != null && !result.getHeadResource().getCEHandler().isEmpty())
+                        org.setCEHandler(result.getHeadResource().getCEHandler());
+
+                    if (dfw.updateHandler(org)) {
+                        loggerService.info("Statement handler " + result.getHeadResource().getId() + " was updated successfully");
+                        result.addResponse(createSuccessMapMessage(result.getHeadResource().getId(), "Statement", result.getHeadResource().getId(), 200, "OK", "Statement " + result.getHeadResource().getId() + " was updated successfully", result.getHeadResource().getOutput()));
+                    } else {
+                        result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 500, "Internal Server Error", dfw.getName() + ": Oops we have a problem"));
+                    }
 
                 }
 
@@ -289,17 +292,6 @@ public class StatementFeeder implements Feeder<Statement> {
                     loggerService.info("Statement " + result.getHeadResource().getId() + " was successful");
                     result.addResponse(createSuccessMapMessage(result.getHeadResource().getId(), "Statement", result.getHeadResource().getId(), 200, "OK", "Statement " + result.getHeadResource().getId() + " was successful", result.getHeadResource().getOutput()));
                 }
-                if (result.getResponses().isEmpty() && org.getTargetAgents() != null && !org.getTargetAgents().equals(result.getHeadResource().getTargetAgents()) && !result.getHeadResource().getTargetAgents().isEmpty()) {
-                    if (result.getHeadResource().getTargetAgents().contains(SharedSettings.getId())) {
-                        // the statement addresses me as processing agent
-                        dfw.getStatements().get(id).setTargetAgents(result.getHeadResource().getTargetAgents());
-                    } else {
-                        // the statement doesn't address me as processing agent
-                        loggerService.warn("Statement " + result.getHeadResource().getId() + " was not modified because I was not addressed in the request.");
-                        result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 100, "Not Modified", "The resource is located at the server but the request do not address me as processing agent of the request. If this request was intent to be an implicit DELETE request, this message should be read as Bad Request 400"));
-                    }
-                }
-
             }
 
         } catch (StatementException se) {
@@ -368,12 +360,7 @@ public class StatementFeeder implements Feeder<Statement> {
             if (update) {
                 org = CEPEngine.instancedEngines.values().iterator().next().getStatements().get(orgID);
 
-                //if (!(statement.getStatement().equals(org.getStatement()) || "".equals(statement.getStatement())) ||
-                if ((org.getCEHandler() != null && !org.getCEHandler().equals(statement.getCEHandler()))
-                        ) {
-                    result.addResponse(createErrorMapMessage(id, "Statement", 400, "Bad Request", "The 'statement string', 'CEHandler string', or 'input array' cannot be updated. It can be only removed and redeploy."));
-                    return result;
-                } else if (statement.equals(org)) {
+                if (statement.equals(org)) {
                     result.addResponse(createSuccessMapMessage(id, "Statement", id, 304, "Not Modified", "Resource is identically to the update. No changes had being made", statement.getOutput()));
                     return result;
                 }
