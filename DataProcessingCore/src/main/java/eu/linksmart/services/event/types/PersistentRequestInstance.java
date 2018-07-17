@@ -132,8 +132,6 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
                                         loggerService.info("Writing persistent file " + persistentFile);
                                         outputStream.write(SharedSettings.getSerializer().serialize(toStore));
 
-                                    } else {
-                                        loggerService.info("Clearing persistent file " + persistentFile);
                                     }
                                     outputStream.flush();
                                     outputStream.close();
@@ -151,7 +149,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
 
                         }
                     },
-                    6000,
+                    60000,
                     conf.getInt(Const.PERSISTENT_STORAGE_PERIOD)
             );
         }
