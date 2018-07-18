@@ -230,13 +230,17 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         Statement obj;
         return (object instanceof Statement && (obj = (Statement) object) == object) &&
                 (
-                        (obj.getName() == this.name || (this.name != null && this.name.equals(obj.getName()))) &&
-                                (obj.getStatement() == this.statement || (this.statement != null) && this.statement.equals(obj.getStatement())) &&
-                                (obj.getOutput() == this.getOutput() || (this.output != null) && this.output.equals(obj.getOutput())) &&
-                                (obj.getCEHandler() == this.CEHandler || (this.CEHandler != null) && this.CEHandler.equals(obj.getCEHandler())) &&
-                                (obj.getStateLifecycle() == this.stateLifecycle || (this.stateLifecycle != null) && this.stateLifecycle.equals(obj.getStateLifecycle())) &&
-                                (obj.getScope() == this.getScope() || (this.scope != null) && this.scope.equals(obj.getScope())) &&
-                                id.equals(obj.getId())
+                        ((this.getName() != null && this.getName().equals(obj.getName()))) &&
+                                (this.getStatement() != null && this.getStatement().equals(obj.getStatement())) &&
+                                (this.getOutput() != null && this.getOutput().equals(obj.getOutput())) &&
+                                (this.getCEHandler() != null && this.getCEHandler().equals(obj.getCEHandler())) &&
+                                (this.getStateLifecycle() != null && this.getStateLifecycle().equals(obj.getStateLifecycle())) &&
+                                (this.getScope() != null && this.getScope().equals(obj.getScope())) &&
+                                id.equals(obj.getId()) &&
+                                this.isPersistent() == obj.isPersistent() &&
+                                this.isEssential() == obj.isEssential() &&
+                                (this.getResultType() != null && this.getResultType().equals(obj.getResultType())) &&
+                                (this.getPublisher() != null && this.getPublisher().equals(obj.getPublisher()))
                 );
 
     }
