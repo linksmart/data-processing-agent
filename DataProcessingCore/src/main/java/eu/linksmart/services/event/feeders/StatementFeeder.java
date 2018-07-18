@@ -242,6 +242,10 @@ public class StatementFeeder implements Feeder<Statement> {
                 }
                 //update statement
             } else {
+
+                org.isEssential(result.getHeadResource().isEssential());
+                org.isPersistent(result.getHeadResource().isPersistent());
+
                 //change lifecycle state
                 if (org.getStateLifecycle() != null && !org.getStateLifecycle().equals(result.getHeadResource().getStateLifecycle())) {
                     switch (result.getHeadResource().getStateLifecycle()) {
@@ -361,7 +365,12 @@ public class StatementFeeder implements Feeder<Statement> {
                 org = CEPEngine.instancedEngines.values().iterator().next().getStatements().get(orgID);
 
                 if (statement.equals(org)) {
-                    result.addResponse(createSuccessMapMessage(id, "Statement", id, 304, "Not Modified", "Resource is identically to the update. No changes had being made", statement.getOutput()));
+                    result.addResponse(createSuccessMapMessage(id, "Statement", id, 304, "Not Modified", "Resource is identical to the update. No changes have been made", statement.getOutput()));
+                    return result;
+                }
+
+                if (!statement.getPublisher().equals(org.getPublisher())) {
+                    result.addResponse(createErrorMapMessage(id, "Statement", 400, "Bad Request", "The field publisher cannot be updated currently. Delete and re-create the statement if necessary."));
                     return result;
                 }
             }
