@@ -101,6 +101,12 @@ public class Tools {
     static public String getDateNowString(){
         return getDateFormat(getIsoTimeFormat(), "UTC").format(new Date());
     }
+
+    //give current timestamp in a format that GOST server understands
+    static public String getDateNowWithoutTimeZone() {
+        return Utils.isoFormatMSWTZ.format(Date.from(java.time.Instant.now()));
+    }
+
     static private String toTimestamp(Date date){
 
         return getDateFormat(getEsperTimeFormat(), "UTC").format(date);
