@@ -234,7 +234,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                             statement.setOutput(Collections.singletonList(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)));
                             statement.setScope(Collections.singletonList(conf.getString(Const.CEML_MQTT_BROKER_HOST)));
                         }
-                        statement.toRegister( false);
+                        statement.isRegistrable(false);
                         statement.setName(name + "/" + "Auxiliary/" + String.valueOf(statementsCounter[0]) + "/" + id);
                         statement.setId(name + "/" + "A/" + String.valueOf(statementsCounter[0]) + "/" + id);
                         statement.setStatement(statement.getStatement().replace("<id>", name));

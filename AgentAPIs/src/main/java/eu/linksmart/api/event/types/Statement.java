@@ -169,7 +169,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      *
      * @param registrable if the statement should or should not be register outside agent (some catalog)
      * */
-    void toRegister(boolean registrable);
+    void isRegistrable(boolean registrable);
     /***
      *
      *

@@ -245,6 +245,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
                 org.isEssential(result.getHeadResource().isEssential());
                 org.isPersistent(result.getHeadResource().isPersistent());
+                org.isRegistrable(result.getHeadResource().isRegistrable());
 
                 //change lifecycle state
                 if (org.getStateLifecycle() != null && !org.getStateLifecycle().equals(result.getHeadResource().getStateLifecycle())) {

@@ -301,7 +301,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @Override
     @ApiModelProperty(notes = "if the statement should or should not be register outside agent (some catalog)")
     @JsonSetter("registrable")
-    public void toRegister(boolean registrable) {
+    public void isRegistrable(boolean registrable) {
         this.registrable = registrable;
     }
 
