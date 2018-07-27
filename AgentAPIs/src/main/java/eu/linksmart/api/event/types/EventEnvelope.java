@@ -79,7 +79,7 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      *
      * @return id  as IDType
      * */
-    @JsonIgnore
+    //@JsonIgnore
     IDType getId();
     /**
      * returns the id of the attribute as IDType (the semantic depends on the implementation)
@@ -108,7 +108,7 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
      *
      * @param id is the id as IDType
      * */
-    @JsonIgnore
+    //@JsonIgnore
     void  setId(IDType id);
     /**
      * setts the id of the attribute (the semantic depends on the implementation)
