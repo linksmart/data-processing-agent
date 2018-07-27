@@ -19,7 +19,8 @@ public abstract class CommonControlInfoImpl implements CommonControlInfo {
      * id is unique among the entities of the same entity type in a SensorThings service
      */
 
-    @JsonProperty(value = "@iot.id")
+    //@JsonProperty(value = "@iot.id")
+    @JsonIgnore
     protected Object id;
   //  /** selfLink is the absolute URL of an entity that is unique among all other entities. */
   //  @JsonPropertyDescription("id is the system-generated identifier of an entity.")
