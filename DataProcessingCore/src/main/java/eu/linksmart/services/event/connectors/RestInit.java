@@ -164,7 +164,7 @@ public class RestInit implements IncomingConnector {
             String [] keys = configurator.getStringArray(Const.SPRING_MANAGED_FEATURES);
             for (String key :keys) {
                 if (configurator.containsKeyAnywhere(key))
-                    properties.put(key, configurator.getString(key));
+                    properties.put(key.replace("_","."), configurator.getString(key));
             }
         }
         return properties;
