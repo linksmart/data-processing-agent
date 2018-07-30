@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import eu.linksmart.api.event.types.PersistentRequest;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
+import eu.linksmart.services.event.types.PersistentRequestInstance;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
@@ -18,6 +19,12 @@ public class PersistenceService extends FileConnector{
 
     public PersistenceService(String... filePaths) {
         super(filePaths);
+    }
+
+    @Override
+    public void loadFiles() {
+        super.loadFiles();
+        PersistentRequestInstance.setPersistentFileOnceExisted(true);
     }
 
     @Override

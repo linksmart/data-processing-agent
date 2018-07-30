@@ -23,6 +23,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
     protected static final transient Configurator conf = Configurator.getDefaultConfig();
     private static final transient Timer persistentRequestTracker = new Timer();
     private static final transient Map<String, PersistentRequestInstance> requests = new HashMap<>();
+    private static transient boolean PersistentFileOnceExisted = false;
 
     public static String getPersistentFile() {
         return persistentFile;
@@ -40,6 +41,14 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
     @ApiModelProperty(notes = "Unique identifier of the statement in the agent")
     @JsonProperty("id")
     protected String id = getId();
+
+    public static void setPersistentFileOnceExisted(boolean existed) {
+        PersistentFileOnceExisted = existed;
+    }
+
+    public static boolean getPersistentFileOnceExisted() {
+        return PersistentFileOnceExisted;
+    }
 
     public void addToRequests(String id) {
         requests.put(id, this);
@@ -127,14 +136,24 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
                                         }
                                     });
 
-                                    outputStream = new FileOutputStream(persistentFile);
+                                    File f = new File(persistentFile);
                                     if (!toStore.isEmpty()) {
+                                        outputStream = new FileOutputStream(f);
                                         loggerService.info("Writing persistent file " + persistentFile);
                                         outputStream.write(SharedSettings.getSerializer().serialize(toStore));
+                                        outputStream.flush();
+                                        outputStream.close();
+                                        setPersistentFileOnceExisted(true);
+                                    } else if (f.exists() && getPersistentFileOnceExisted()) {
+                                        outputStream = new FileOutputStream(f);
+                                        outputStream.flush();
+                                        outputStream.close();
 
+                                        if (f.length() == 0) {
+                                            loggerService.info("Deleting file " + persistentFile);
+                                            f.delete();
+                                        }
                                     }
-                                    outputStream.flush();
-                                    outputStream.close();
                                 } catch (IOException e) {
                                     loggerService.error(e.getMessage(), e);
                                 } finally {
