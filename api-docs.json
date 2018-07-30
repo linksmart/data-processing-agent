@@ -2680,6 +2680,9 @@
             "$ref": "#/definitions/EvaluationMetric"
           }
         },
+        "id": {
+          "type": "string"
+        },
         "madeAt": {
           "type": "string",
           "format": "date-time"
@@ -2710,6 +2713,9 @@
           "items": {
             "$ref": "#/definitions/EvaluationMetric«object»"
           }
+        },
+        "id": {
+          "type": "string"
         },
         "madeAt": {
           "type": "string",
