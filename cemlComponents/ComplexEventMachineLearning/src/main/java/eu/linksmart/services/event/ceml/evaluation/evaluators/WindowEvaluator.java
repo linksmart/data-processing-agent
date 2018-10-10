@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * Created by angel on 1/12/15.
  */
-public class WindowEvaluator extends GenericEvaluator<Integer> implements Evaluator<Integer> {
+public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluator<Number> {
 
     @JsonProperty
     private double[][] confusionMatrix;
@@ -37,8 +37,8 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     }
 
     @Override
-    public double evaluate(Integer predicted, Integer actual) {
-        confusionMatrix[actual][predicted]++;
+    public double evaluate(Number predicted, Number actual) {
+        confusionMatrix[actual.intValue()][predicted.intValue()]++;
 
         for (int i = 0; i < classes.size(); i++) {
             if (actual.equals(i) && actual.equals(predicted)) {
@@ -60,7 +60,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     }
 
 
-    protected double calculateEvaluationMetrics(int evaluatedClass) {
+    protected double calculateEvaluationMetrics(Number evaluatedClass) {
         double accumulateMetric = 0;
         int i = 0;
         for (EvaluationMetric algorithm : evaluationAlgorithms.values()) {
@@ -68,7 +68,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             if (algorithm instanceof ModelEvaluationMetric)
                 ((ModelEvaluationMetric) algorithm).calculate();
             else if (algorithm instanceof ClassEvaluationMetric)
-                ((ClassEvaluationMetric) algorithm).calculate(evaluatedClass);
+                ((ClassEvaluationMetric) algorithm).calculate(evaluatedClass.intValue());
             else
                 loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
 

@@ -23,7 +23,7 @@ import static org.junit.Assert.fail;
  */
 public class DummyClassifierTest {
     @Test
-    public void ITTest(){
+    public void BasicTest(){
         ClassifierModel<List<Number>,Number,Function<List<Number>,Integer>> classifier = new DummyClassifier(Arrays.asList(new TargetRequest(0.4,"Accuracy","more"), new TargetRequest(100,"SlideAfter","more")), new Hashtable<>(),new Object());
         classifier.setName("Test");
 
@@ -60,5 +60,6 @@ public class DummyClassifierTest {
             e.printStackTrace();
             fail();
         }    }
+
 
 }

@@ -13,12 +13,39 @@ class PyroAdapter(object):
     def __init__(self):
         logger.info("Initializing Pyro object.")
         # TODO: move this to build(...) to support different backends on one pyro server
-        try:
-            module = imp.load_source(OPTIONS.bname, OPTIONS.bpath)
-            self.backend = getattr(module, OPTIONS.bname)()
-        except Exception as e:
-            logger.error(e)
-
+		if sys.version_info.major < 3:
+			try:
+				module = imp.load_source(OPTIONS.bname, OPTIONS.bpath)
+				self.backend = getattr(module, OPTIONS.bname)()
+			except Exception as e:
+				logger.error(e)
+		else:
+			example_package, myclass = dynamic_importer(OPTIONS.bpath,OPTIONS.bname)
+			self.backend = myclass
+			
+	def dynamic_importer(name, class_name):
+		"""
+		Dynamically imports modules / classes
+		"""
+		try:
+			fp, pathname, description = imp.find_module(name)
+		except ImportError:
+			print "unable to locate module: " + name
+			return (None, None)
+	 
+		try:
+			example_package = imp.load_module(name, fp, pathname, description)
+		except Exception, e:
+			print e
+	 
+		try:
+			myclass = imp.load_module("%s.%s" % (name, class_name), fp, pathname, description)
+			print myclass
+		except Exception, e:
+			print e
+	 
+		return example_package, myclass
+		
     @Pyro4.expose
     def build(self, classifier):
         return self.backend.build(classifier)
@@ -69,6 +96,8 @@ def startPyro(options):
 
     daemon.requestLoop()
 
+
+ 
 
 def parseArgs():
     mandatoryArgs = ['bname', 'bpath']

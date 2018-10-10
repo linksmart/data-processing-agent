@@ -35,11 +35,12 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
             loggerService = LogManager.getLogger(MqttCemlAPI.class);
             conf = Configurator.getDefaultConfig();
             me= new MqttCemlAPI();
-        } catch (Exception e) {
-            if(loggerService!=null)
-                loggerService.error(e.getMessage(),e);
-            else
-                e.printStackTrace();
+        } catch (Exception | NoClassDefFoundError e) {
+            if(conf==null || (conf!=null && !conf.getBoolean("Test")))
+                if(loggerService!=null)
+                    loggerService.error(e.getMessage(),e);
+                else
+                    e.printStackTrace();
         }
     }
 

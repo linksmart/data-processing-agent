@@ -27,6 +27,7 @@ import java.util.*;
 public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
     @JsonIgnore
+    @Deprecated
     protected DataDescriptors descriptors;
     @JsonProperty("name")
     protected String name;
@@ -126,15 +127,20 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     @Override
     public Model<Input, Output, LearningObject> build() throws TraceableException, UntraceableException {
-        if(descriptors== null || !descriptors.isEmpty() ||evaluator== null  || learner == null)
+        final boolean schemaOK =  schema==null || !schema.isBuilt();
+        final boolean legacySchema =   ((schemaOK) || (descriptors== null || !descriptors.isEmpty() ) );
+        if( legacySchema || evaluator== null  || learner == null)
             throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(),"For the model the descriptors, evaluator and learner are mandatory fields!");
 
         nativeType = (Class<LearningObject>) learner.getClass();
+
+
 
         evaluator.build();
 
         return this;
     }
+
     public void learn(Input input, Input targetLabel) throws TraceableException, UntraceableException {
         if (input instanceof List) {
             List complete = new ArrayList((List)input);

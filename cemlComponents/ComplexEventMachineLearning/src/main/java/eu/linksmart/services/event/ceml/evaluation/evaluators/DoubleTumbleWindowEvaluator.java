@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Created by angel on 1/12/15.
  */
-public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implements TumbleEvaluator<Integer>  {
+public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implements TumbleEvaluator<Number>  {
 
     @JsonIgnore
     protected static Logger loggerService = LogManager.getLogger(DoubleTumbleWindowEvaluator.class);
@@ -53,7 +53,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
 
 
     @Override
-    public synchronized double  evaluate(Integer predicted,Integer actual){
+    public synchronized double  evaluate(Number predicted,Number actual){
 
 
         if(initialSamples.isReady()) {

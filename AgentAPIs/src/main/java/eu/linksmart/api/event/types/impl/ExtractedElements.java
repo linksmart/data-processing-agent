@@ -397,8 +397,8 @@ public class ExtractedElements<T> implements List<T>  {
 
         @Override
         public Iterator<T> iterator() {
-            // too complicated and not useful
-            throw new UnsupportedOperationException();
+            // not sure about this
+            return this.new InputsIterator();
         }
 
         @Override
@@ -529,6 +529,20 @@ public class ExtractedElements<T> implements List<T>  {
 
             // read only
             throw new UnsupportedOperationException();
+        }
+        public class InputsIterator implements Iterator<T>{
+            private InputsIterator(){}
+            private int index = -1;
+            @Override
+            public boolean hasNext() {
+                return index<inputs.size();
+            }
+
+            @Override
+            public T next() {
+                index++;
+                return featureSpace.get(index);
+            }
         }
     }
 
