@@ -1,6 +1,8 @@
 package eu.linksmart.services.event.ceml.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.api.event.ceml.data.ClassesDescriptor;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.model.ModelInstance;
@@ -24,7 +26,13 @@ public abstract class ClassifierModel<Input,Output,LearningObject> extends Model
 
     public ClassifierModel(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
         super(targets,parameters,new DoubleTumbleWindowEvaluator(targets),learner);
+        ((DoubleTumbleWindowEvaluator)evaluator).setInitialConfusionMatrix((long[][]) parameters.getOrDefault("InitialConfusionMatrix",null));
+        ((DoubleTumbleWindowEvaluator)evaluator).setInitialSamplesMatrix((long[][]) parameters.getOrDefault("InitialSamplesMatrix",null));
     }
+
+
+
+
 
     @Override
     public boolean isClassifier() {

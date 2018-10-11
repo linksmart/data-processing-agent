@@ -3,6 +3,7 @@ package eu.linksmart.api.event.ceml.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
@@ -42,6 +43,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     @JsonProperty(value = "targets")
     protected  List<TargetRequest> targets;
+
 
     @JsonProperty(value = "parameters")
     protected  Map<String,Object> parameters;

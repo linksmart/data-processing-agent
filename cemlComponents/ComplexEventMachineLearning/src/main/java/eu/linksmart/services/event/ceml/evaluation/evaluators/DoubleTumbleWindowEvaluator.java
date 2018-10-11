@@ -36,10 +36,14 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implement
     private ModelEvaluationMetric initialSamples;
 
     private List<String> classes;
+    private long[][] initialSamplesMatrix;
 
     public List<String> getClasses() {
         return classes;
     }
+
+    @JsonIgnore
+    private   long[][] initialConfusionMatrix = null;
 
     public void setClasses(List<String> classes) {
         this.classes = classes;
@@ -49,7 +53,9 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implement
 
 
     }
-
+    public void setInitialConfusionMatrix(long[][] initialConfusionMatrix) {
+        this.initialConfusionMatrix = initialConfusionMatrix;
+    }
 
 
     @Override
@@ -144,6 +150,9 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implement
         windowEvaluators[0] = new WindowEvaluator(classes, targets);
         windowEvaluators[1] = new WindowEvaluator(classes,targets);
 
+        windowEvaluators[0].setInitialConfusionMatrix(initialConfusionMatrix);
+        windowEvaluators[0].setInitialSamplesMatrix(initialSamplesMatrix);
+
         windowEvaluators[0].build();
         windowEvaluators[1].build();
 
@@ -178,5 +187,9 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implement
     @Override
     public void destroy() throws Exception {
         // nothing
+    }
+
+    public void setInitialSamplesMatrix(long[][] initialSamplesMatrix) {
+        this.initialSamplesMatrix = initialSamplesMatrix;
     }
 }

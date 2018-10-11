@@ -85,17 +85,16 @@
     },
     "LearningStreams": [
       {
-        "statement": ""
+        "statement": "select window(result) from Observation#length(1000)"
       }
     ],
     "DeploymentStreams": [
       {
-        "statement": ""
+        "statement": "select <id>.predict(window(result)) from Observation#length(1000"
       }
     ],
     "Settings": {
-      "BuildTillPhase": 5,
-      "ReportingEnabled": false
+      "ReportingEnabled": true
     }
   }
 }

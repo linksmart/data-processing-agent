@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
@@ -29,7 +30,14 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
     private List<String> classes;
     @JsonProperty
     private long[][] sequentialConfusionMatrix;
+    private long[][] initialSamplesMatrix;
 
+    public void setInitialConfusionMatrix(long[][] initialConfusionMatrix) {
+        this.initialConfusionMatrix = initialConfusionMatrix;
+    }
+
+    @JsonIgnore
+    private   long[][] initialConfusionMatrix = null;
 
     public WindowEvaluator(Collection<String> namesClasses, List<TargetRequest> targets) {
         super(targets);
@@ -115,12 +123,9 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
             confusionMatrix = new double[classes.size()][classes.size()];
             sequentialConfusionMatrix = new long[classes.size()][4];
-            for (int i = 0; i < classes.size(); i++) {
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()] = 0;
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()] = 0;
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
-            }
+
+            calculateInitialConfusionMatrix();
+
         } catch (Exception e) {
             throw new UnknownUntraceableException(e.getMessage(), e);
         }
@@ -130,6 +135,38 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
 
         return this;
+    }
+
+    private void calculateInitialConfusionMatrix(){
+        if(initialSamplesMatrix!=null && initialSamplesMatrix.length==classes.size()){
+            for(int i=0; i< initialSamplesMatrix.length; i++)
+                for(int j=0; j< initialSamplesMatrix[0].length; j++)
+                    for(int k=0; k< initialSamplesMatrix[0].length; k++) {
+                    if(k ==i && k==j)
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.truePositives.ordinal()] = initialSamplesMatrix[i][j];
+                    else if(k==i && k!=j )
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.falseNegatives.ordinal()] = initialSamplesMatrix[i][j];
+                    else if(k!=i && k==j ){
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.falsePositives.ordinal()] = initialSamplesMatrix[i][j];
+                    } else
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.trueNegatives.ordinal()] = initialSamplesMatrix[i][j];
+                }
+
+        } else if(initialConfusionMatrix!=null && initialConfusionMatrix.length==classes.size())
+            sequentialConfusionMatrix = initialConfusionMatrix;
+        else {
+            for (int i = 0; i < classes.size(); i++) {
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()] = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()] = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
+            }
+        }
+    }
+    public void setInitialSamplesMatrix(long[][] initialSamplesMatrix) {
+        this.initialSamplesMatrix = initialSamplesMatrix;
+
+
     }
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")

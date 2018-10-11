@@ -6,7 +6,6 @@ import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import javafx.print.Collation;
 
 import java.util.ArrayList;
 import java.util.Collection;
