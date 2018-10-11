@@ -95,7 +95,7 @@
         <org.json.version>20160212</org.json.version>
 
         <wso2.siddhi.version>3.0.2</wso2.siddhi.version>
-        <antlr.version>4.5.3</antlr.version>
+        <antlr.version>4.7</antlr.version>
         <apache.commons.io.version>2.4</apache.commons.io.version>
         <lmax.disruptor.version>3.3.4</lmax.disruptor.version>
         <apache.sis.version>0.6</apache.sis.version>

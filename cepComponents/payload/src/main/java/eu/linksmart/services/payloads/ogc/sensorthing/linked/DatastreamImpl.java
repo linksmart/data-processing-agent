@@ -223,5 +223,22 @@ public class DatastreamImpl extends CommonControlInfoDescriptionImpl implements 
         // initialize inner sets
     }
 
+    @Override
+    public Object getId(){
+        return super.getId();
+    }
+
+    /**
+     * Sets the ID of the specific model entry instance, as a String
+     *
+     * @param id
+     *            the id to set
+     */
+    @Override
+    public void setId(Object id){
+        super.setId(id);
+
+    }
+
 
 }

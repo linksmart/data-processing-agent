@@ -86,12 +86,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * @return  the handler cannonic name of ComplexEventHandler of the statement, @Default ComplexEventHandlerImpl..
      * */
     String getCEHandler();
-    /***
-     * Return the IDs selected to agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
-     *
-     * @return  List of targeted Agents address to process the statement, otherwise empty (all available agents):
-     * */
-    List<String> getTargetAgents();
+
     /***
      * Return the state of the Statement, which determines how the statement will be at runtime.
      *
@@ -170,17 +165,11 @@ public interface Statement extends JsonSerializable, PersistentRequest {
     void setSynchronousResponse(Object response) ;
 
     /***
-     * setts the IDs of the selected agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
-     *
-     * @param targetAgents is the list of targeted agents address to process the statement, otherwise empty (all available agents):
-     * */
-    void setTargetAgents(List<String> targetAgents);
-    /***
      *
      *
      * @param registrable if the statement should or should not be register outside agent (some catalog)
      * */
-    void toRegister(boolean registrable);
+    void isRegistrable(boolean registrable);
     /***
      *
      *

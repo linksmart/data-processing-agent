@@ -39,7 +39,7 @@ import java.util.*;
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  */
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Observation.class)
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Observation.class)
 public class ObservationImpl extends CommonControlInfoImpl implements Observation, EventEnvelope<Object,Object> {
     static {
         try {
@@ -221,4 +221,22 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
 
         parameters.add(Pair.of("url", url));
     }
+
+    @Override
+    public Object getId(){
+        return super.getId();
+    }
+
+    /**
+     * Sets the ID of the specific model entry instance, as a String
+     *
+     * @param id
+     *            the id to set
+     */
+    @Override
+    public void setId(Object id){
+        super.setId(id);
+
+    }
+
 }

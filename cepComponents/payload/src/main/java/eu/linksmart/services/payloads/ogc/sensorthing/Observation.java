@@ -1,8 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.linksmart.api.event.exceptions.TraceableException;
@@ -175,6 +173,7 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
      * @return FeatureOfInterest of this observation
      *
      * */
+    @JsonIgnore
     @JsonGetter("featureOfInterest")
     @JsonPropertyDescription("An Observation observes on one-and-only-one FeatureOfInterest. One FeatureOfInterest could be observed by zero-to-many Observations.")
     FeatureOfInterest getFeatureOfInterest();
@@ -268,6 +267,24 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
     default void destroy() throws Exception {
 
     }
+
+    @Override
+    @JsonIgnore
+    @JsonPropertyDescription("id is the system-generated identifier of an entity.")
+    @JsonSetter(value = "@iot.id")
+    Object getId();
+
+    /**
+     * Sets the ID of the specific model entry instance, as a String
+     *
+     * @param id
+     *            the id to set
+     */
+
+    @Override
+    @JsonProperty(value = "@iot.id")
+    @JsonSetter(value = "@iot.id")
+    void setId(Object id);
 
 
     /*
