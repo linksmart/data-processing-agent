@@ -53,8 +53,10 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implement
 
 
     @Override
-    public synchronized double  evaluate(Number predicted,Number actual){
-
+    public double evaluate(List<Number> predicted, List<Number> actual){
+        // The evaluation only works when the classes are mutually exclusive
+        if(predicted.size()!=actual.size() && actual.size()!=1)
+            throw new UnsupportedOperationException("The evaluation only supports mutually exclusive classes.");
 
         if(initialSamples.isReady()) {
            double re= windowEvaluators[learning].evaluate( predicted, actual);

@@ -10,6 +10,7 @@ import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.ceml.handlers.ListLearningHandler;
 import eu.linksmart.services.event.ceml.models.LinearRegressionModel;
 import eu.linksmart.services.event.intern.SharedSettings;
+import eu.linksmart.services.utils.configuration.Configurator;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -98,6 +99,8 @@ public class CemlTest {
 
     @Test
     public void testCEML() {
+        Configurator conf = Configurator.getDefaultConfig();
+        conf.setSetting("Test",true);
         test(legacy);
         test(current);
     }

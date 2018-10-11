@@ -128,7 +128,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     @Override
     public Model<Input, Output, LearningObject> build() throws TraceableException, UntraceableException {
         final boolean schemaOK =  schema==null || !schema.isBuilt();
-        final boolean legacySchema =   ((schemaOK) || (descriptors== null || !descriptors.isEmpty() ) );
+        final boolean legacySchema =   ((schemaOK) && (descriptors== null || !descriptors.isEmpty() ) );
         if( legacySchema || evaluator== null  || learner == null)
             throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(),"For the model the descriptors, evaluator and learner are mandatory fields!");
 

@@ -21,6 +21,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -118,7 +120,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
 
                     List groundTruth = auxInput.subList(schema.size(), schema.size() + schema.getTargetSize());
 
-                    model.getEvaluator().evaluate(prediction.getPrediction(), groundTruth);
+                    model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), groundTruth);
 
                 }
             } catch (Exception e) {
@@ -131,8 +133,8 @@ public  class ListLearningHandler extends BaseListEventHandler {
                 synchronized (originalRequest) {
                     Prediction prediction = model.predict(elements.getInputsList());
                     model.learn(elements.getInputsList(),elements.getTargetsList());
+                    model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), elements.getTargetsList());
 
-                    model.getEvaluator().evaluate(prediction.getPrediction(), elements.getTargetsList());
 
                 }
             } catch (Exception e) {
@@ -184,7 +186,7 @@ public  class ListLearningHandler extends BaseListEventHandler {
                     List groundTruth = auxInput.subList(descriptors.size(), descriptors.size() + descriptors.getTargetSize());
                     List predictionInput = auxInput.subList(descriptors.getTargetSize(), descriptors.getTargetSize() + descriptors.getInputSize());
                     Prediction prediction = model.predict(predictionInput);
-                    model.getEvaluator().evaluate(prediction.getPrediction(), groundTruth);
+                    model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), groundTruth);
 
                 }
             } catch (Exception e) {
@@ -209,7 +211,8 @@ public  class ListLearningHandler extends BaseListEventHandler {
 
                     model.learn(learningInput);
 
-                    model.getEvaluator().evaluate(prediction.getPrediction(), groundTruth);
+                    model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), groundTruth);
+
 
 
                 }

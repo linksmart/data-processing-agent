@@ -13,19 +13,7 @@ import java.util.Map;
  */
 //@JsonDeserialize(as = DoubleTumbleWindowEvaluator.class)
 public interface Evaluator<T> extends JsonSerializable {
-     double evaluate(T predicted, T actual);
-    default double evaluate(List<T> predicted, List<T> actual){
-        if(predicted.size() == actual.size() && actual.size() == 1 )
-            return evaluate(predicted.get(0),actual.get(0));
-
-        throw new UnsupportedOperationException();
-    }
-    default double evaluate(T predicted, List<T> actual){
-        if( actual.size() == 1 )
-            return evaluate(predicted,actual.get(0));
-
-        throw new UnsupportedOperationException();
-    }
+     double evaluate(List<T> predicted, List<T> actual);
      boolean isDeployable();
 
     //void build(DataDescriptors classesNames) throws Exception;

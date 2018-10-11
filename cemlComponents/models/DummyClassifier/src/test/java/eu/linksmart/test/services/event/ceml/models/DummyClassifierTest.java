@@ -45,7 +45,7 @@ public class DummyClassifierTest {
             for (int j=0; j <n; j++) {
                 ints.add(random.nextInt(n));
                 Prediction p =classifier.predict(ints);
-                classifier.getEvaluator().evaluate((Number) p.getPrediction(),1.0);
+                classifier.getEvaluator().evaluate(Collections.singletonList((Number) p.getPrediction()),Collections.singletonList(1.0));
                 acc += classifier.predict(ints).getPrediction().doubleValue()== 1 ? 1.0 :0.0 ;
 
 

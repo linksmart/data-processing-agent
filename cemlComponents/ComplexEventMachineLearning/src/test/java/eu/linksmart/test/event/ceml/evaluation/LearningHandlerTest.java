@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static junit.framework.TestCase.fail;
@@ -60,7 +61,7 @@ public class LearningHandlerTest {
 
 
         when(prediction.getPrediction()).thenReturn(0.0);
-        when(evaluator.evaluate(prediction.getPrediction(),listSize(inputSize))).thenReturn(0.0);
+        when(evaluator.evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()),listSize(inputSize))).thenReturn(0.0);
         when(model.getEvaluator()).thenReturn(evaluator);
 
         try {
@@ -92,7 +93,7 @@ public class LearningHandlerTest {
         } catch (TraceableException | UntraceableException e) {
             e.printStackTrace();
         }
-        verify(evaluator,atLeastOnce()).evaluate(0.0,listSize(updateSize).subList(inputSize+groundTruth,inputSize+targetSize+groundTruth));
+        verify(evaluator,atLeastOnce()).evaluate(Collections.singletonList(0.0),listSize(updateSize).subList(inputSize+groundTruth,inputSize+targetSize+groundTruth));
 
     }
     private List listSize(int size){

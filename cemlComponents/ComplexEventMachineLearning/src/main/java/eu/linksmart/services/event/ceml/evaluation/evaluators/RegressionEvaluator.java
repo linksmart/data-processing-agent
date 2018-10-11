@@ -14,7 +14,7 @@ import java.util.*;
  * Created by devasya on 7/20/2016.
  * For evaluating regression
  */
-public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
+public class RegressionEvaluator extends GenericEvaluator<Number> {
 
 
     LinkedList<Map.Entry<Number,Number>> fixedSizeList = new LinkedList<>();
@@ -48,7 +48,7 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
 
     @Override
-    public double evaluate(Collection<Number> predicted, Collection<Number>  actual) { // O(n*m) -> O(n^2)
+    public double evaluate(List<Number> predicted, List<Number>  actual) { // O(n*m) -> O(n^2)
         latestEntries.clear();
 
         Iterator<Number> iteratorPredicted = predicted.iterator();

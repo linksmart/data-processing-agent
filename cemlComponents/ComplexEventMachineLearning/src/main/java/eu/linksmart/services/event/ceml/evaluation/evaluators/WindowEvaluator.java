@@ -37,24 +37,28 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
     }
 
     @Override
-    public double evaluate(Number predicted, Number actual) {
-        confusionMatrix[actual.intValue()][predicted.intValue()]++;
+    public double evaluate(List<Number> predicted, List<Number> actual) {
+        // The evaluation only works when the classes are mutually exclusive
+        if(predicted.size()!=actual.size() && actual.size()!=1)
+            throw new UnsupportedOperationException("The evaluation only supports mutually exclusive classes.");
+        int prediction=predicted.get(0).intValue(),groundTruth= actual.get(0).intValue();
+        confusionMatrix[prediction][groundTruth]++;
 
         for (int i = 0; i < classes.size(); i++) {
-            if (actual.equals(i) && actual.equals(predicted)) {
+            if (i==groundTruth && groundTruth == prediction) {
                 sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]++;
-            } else if (!actual.equals(i) && predicted.equals(i)) {
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()]++;
-            } else if (actual.equals(i) && !predicted.equals(i)) {
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()]++;
-            } else if (!actual.equals(i) && !predicted.equals(i)) {
+            } else if (i!=groundTruth && i != prediction) {
                 sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()]++;
+            } else if (i==groundTruth && i != prediction) {
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()]++;
+            } else if ( i!=groundTruth && i == prediction) {
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()]++;
             }
 
 
         }
 
-        return calculateEvaluationMetrics(actual);
+        return calculateEvaluationMetrics(groundTruth);
 
 
     }
