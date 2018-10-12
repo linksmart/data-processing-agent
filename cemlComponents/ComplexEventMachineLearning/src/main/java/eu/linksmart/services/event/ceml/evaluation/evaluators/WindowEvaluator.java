@@ -1,6 +1,7 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
@@ -21,7 +22,7 @@ import java.util.*;
 /**
  * Created by angel on 1/12/15.
  */
-public class WindowEvaluator extends GenericEvaluator<Integer> implements Evaluator<Integer> {
+public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluator<Number> {
 
     @JsonProperty
     private double[][] confusionMatrix;
@@ -29,7 +30,14 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     private List<String> classes;
     @JsonProperty
     private long[][] sequentialConfusionMatrix;
+    private long[][] initialSamplesMatrix;
 
+    public void setInitialConfusionMatrix(long[][] initialConfusionMatrix) {
+        this.initialConfusionMatrix = initialConfusionMatrix;
+    }
+
+    @JsonIgnore
+    private   long[][] initialConfusionMatrix = null;
 
     public WindowEvaluator(Collection<String> namesClasses, List<TargetRequest> targets) {
         super(targets);
@@ -37,30 +45,34 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
     }
 
     @Override
-    public double evaluate(Integer predicted, Integer actual) {
-        confusionMatrix[actual][predicted]++;
+    public double evaluate(List<Number> predicted, List<Number> actual) {
+        // The evaluation only works when the classes are mutually exclusive
+        if(predicted.size()!=actual.size() && actual.size()!=1)
+            throw new UnsupportedOperationException("The evaluation only supports mutually exclusive classes.");
+        int prediction=predicted.get(0).intValue(),groundTruth= actual.get(0).intValue();
+        confusionMatrix[prediction][groundTruth]++;
 
         for (int i = 0; i < classes.size(); i++) {
-            if (actual.equals(i) && actual.equals(predicted)) {
+            if (i==groundTruth && groundTruth == prediction) {
                 sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()]++;
-            } else if (!actual.equals(i) && predicted.equals(i)) {
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()]++;
-            } else if (actual.equals(i) && !predicted.equals(i)) {
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()]++;
-            } else if (!actual.equals(i) && !predicted.equals(i)) {
+            } else if (i!=groundTruth && i != prediction) {
                 sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()]++;
+            } else if (i==groundTruth && i != prediction) {
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()]++;
+            } else if ( i!=groundTruth && i == prediction) {
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()]++;
             }
 
 
         }
 
-        return calculateEvaluationMetrics(actual);
+        return calculateEvaluationMetrics(groundTruth);
 
 
     }
 
 
-    protected double calculateEvaluationMetrics(int evaluatedClass) {
+    protected double calculateEvaluationMetrics(Number evaluatedClass) {
         double accumulateMetric = 0;
         int i = 0;
         for (EvaluationMetric algorithm : evaluationAlgorithms.values()) {
@@ -68,7 +80,7 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
             if (algorithm instanceof ModelEvaluationMetric)
                 ((ModelEvaluationMetric) algorithm).calculate();
             else if (algorithm instanceof ClassEvaluationMetric)
-                ((ClassEvaluationMetric) algorithm).calculate(evaluatedClass);
+                ((ClassEvaluationMetric) algorithm).calculate(evaluatedClass.intValue());
             else
                 loggerService.error("Evaluation algorithm " + algorithm.getClass().getName() + " is an instance of an unknown algorithm class");
 
@@ -111,12 +123,9 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
             confusionMatrix = new double[classes.size()][classes.size()];
             sequentialConfusionMatrix = new long[classes.size()][4];
-            for (int i = 0; i < classes.size(); i++) {
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()] = 0;
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()] = 0;
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
-                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
-            }
+
+            calculateInitialConfusionMatrix();
+
         } catch (Exception e) {
             throw new UnknownUntraceableException(e.getMessage(), e);
         }
@@ -126,6 +135,38 @@ public class WindowEvaluator extends GenericEvaluator<Integer> implements Evalua
 
 
         return this;
+    }
+
+    private void calculateInitialConfusionMatrix(){
+        if(initialSamplesMatrix!=null && initialSamplesMatrix.length==classes.size()){
+            for(int i=0; i< initialSamplesMatrix.length; i++)
+                for(int j=0; j< initialSamplesMatrix[0].length; j++)
+                    for(int k=0; k< initialSamplesMatrix[0].length; k++) {
+                    if(k ==i && k==j)
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.truePositives.ordinal()] = initialSamplesMatrix[i][j];
+                    else if(k==i && k!=j )
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.falseNegatives.ordinal()] = initialSamplesMatrix[i][j];
+                    else if(k!=i && k==j ){
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.falsePositives.ordinal()] = initialSamplesMatrix[i][j];
+                    } else
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.trueNegatives.ordinal()] = initialSamplesMatrix[i][j];
+                }
+
+        } else if(initialConfusionMatrix!=null && initialConfusionMatrix.length==classes.size())
+            sequentialConfusionMatrix = initialConfusionMatrix;
+        else {
+            for (int i = 0; i < classes.size(); i++) {
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()] = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()] = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falsePositives.ordinal()] = 0;
+                sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
+            }
+        }
+    }
+    public void setInitialSamplesMatrix(long[][] initialSamplesMatrix) {
+        this.initialSamplesMatrix = initialSamplesMatrix;
+
+
     }
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")

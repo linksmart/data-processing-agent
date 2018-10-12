@@ -70,6 +70,7 @@ public class SchemaNode implements JsonSerializable {
     @JsonIgnore
     private int size = -1;
     private int index = -1 , targetSize=0;
+    private boolean built = false;
 
 
     public Class similar(Class original){
@@ -420,6 +421,8 @@ public class SchemaNode implements JsonSerializable {
                 node.setName(name+"["+i+size+"]");
                 node.target =true;
                 node.index = i+size;
+                if (node.targets == null )
+                    node.targets = Set.of("0","1");
 
                 buildSubCollection(node);
                 items.add(node);
@@ -427,7 +430,7 @@ public class SchemaNode implements JsonSerializable {
 
         }
 
-
+        built = true;
 
         return this;
     }
@@ -723,4 +726,7 @@ public class SchemaNode implements JsonSerializable {
     }
 
 
+    public boolean isBuilt() {
+        return built;
+    }
 }

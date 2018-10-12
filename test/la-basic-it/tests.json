@@ -1,7 +1,6 @@
 {
-  "linear_regression_legacy":{
-    "Descriptors":
-    {
+  "linear_regression_legacy": {
+    "Descriptors": {
       "TargetSize": 1,
       "InputSize": 1,
       "Type": "NUMBER"
@@ -26,8 +25,7 @@
         "statement": "select <id>.predict(result) from Observation"
       }
     ],
-    "Settings":
-    {
+    "Settings": {
       "ReportingEnabled": true
     }
   },
@@ -56,6 +54,43 @@
     "DeploymentStreams": [
       {
         "statement": "select <id>.predict(result) from Observation"
+      }
+    ],
+    "Settings": {
+      "ReportingEnabled": true
+    }
+  },
+  "dummy_classification": {
+    "Name": "test",
+    "DataSchema": {
+      "type": "array",
+      "size": 1000,
+      "targetSize": 1,
+      "ofType": "int"
+    },
+    "Model": {
+      "Name": "DummyClassifier",
+      "Targets": [
+        {
+          "Name": "Accuracy",
+          "Threshold": 0.40,
+          "Method": "more"
+        },
+        {
+          "Name": "SlideAfter",
+          "Threshold": 100,
+          "Method": "more"
+        }
+      ]
+    },
+    "LearningStreams": [
+      {
+        "statement": "select window(result) from Observation#length(1000)"
+      }
+    ],
+    "DeploymentStreams": [
+      {
+        "statement": "select <id>.predict(window(result)) from Observation#length(1000"
       }
     ],
     "Settings": {

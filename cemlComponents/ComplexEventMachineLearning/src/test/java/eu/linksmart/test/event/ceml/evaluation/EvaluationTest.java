@@ -13,11 +13,10 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by José Ángel Carvajal on 15.02.2017 a researcher of Fraunhofer FIT.
@@ -67,7 +66,7 @@ public class EvaluationTest {
 
         feedClassificationEvaluator(evaluator);
 
-        assertEquals("Testing WindowEvaluator with (Accuracy > 0.8 && SlideAfter > 26 ) == ", true, evaluator.isDeployable());
+        assertTrue("Testing WindowEvaluator with (Accuracy > 0.8 && SlideAfter > 26 ) == ", evaluator.isDeployable());
 
 
     }
@@ -111,7 +110,7 @@ public class EvaluationTest {
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", false, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == ", false, evaluator.isDeployable());
         assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == ", false, evaluator.readyToSlide());
-        evaluator.evaluate(0, 0);
+        evaluator.evaluate(Collections.singletonList(0), Collections.singletonList(0));
         testValuesOfMetrics(evaluator);
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Accuracy").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Precision").isReady());
@@ -142,7 +141,7 @@ public class EvaluationTest {
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == false", true, evaluator.isDeployable());
         assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == false", false, evaluator.readyToSlide());
-        evaluator.evaluate(0, 0);
+        evaluator.evaluate(Collections.singletonList(0), Collections.singletonList(0));
         testValuesOfMetrics(evaluator);
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Accuracy").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.accuracy.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("Precision").isReady());
@@ -164,7 +163,7 @@ public class EvaluationTest {
         for (int i = 0; i < samples.length; i++)
             for (int j = 0; j < samples[i].length; j++)
                 for (int k = 0; k < samples[i][j]; k++) {
-                    evaluator.evaluate(i, j);
+                    evaluator.evaluate(Collections.singletonList(i), Collections.singletonList(j));
                     testValuesOfMetrics(evaluator);
                 }
     }

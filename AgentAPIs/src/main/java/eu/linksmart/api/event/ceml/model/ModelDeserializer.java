@@ -41,7 +41,7 @@ public class ModelDeserializer extends DeserializerMode<Model> {
 
 
        String name = loadName(node);
-       return constructModel(node,name,loadTargets(node),loadParameters(node),loadLerner(node,name));
+       return constructModel(node,name,loadTargets(node),loadParameters(node),loadLerner(node,name), loadInitialConfusionMatrix(node), loadInitialSamplesMatrix(node));
 
        //else
          //   throw new IOException("The field Parameters is a mandatory field!");
@@ -63,6 +63,26 @@ public class ModelDeserializer extends DeserializerMode<Model> {
             throw new IOException("The field Targets is a mandatory field!");
         return targetRequests;
     }
+    protected  long[][]  loadInitialConfusionMatrix(JsonNode node) throws IOException{
+        long[][] confusionMatrix = null;
+        if(node.hasNonNull("InitialConfusionMatrix")) {
+            confusionMatrix = mapper.readValue(node.get("InitialConfusionMatrix").asText(),long[][].class);
+
+        }else if (node.hasNonNull("initialConfusionMatrix"))
+            confusionMatrix = mapper.readValue(node.get("initialConfusionMatrix").asText(),long[][].class);
+
+        return confusionMatrix;
+    }
+    protected  long[][]  loadInitialSamplesMatrix(JsonNode node) throws IOException{
+        long[][] confusionMatrix = null;
+        if(node.hasNonNull("InitialSamplesMatrix")) {
+            confusionMatrix = mapper.readValue(node.get("InitialSamplesMatrix").asText(),long[][].class);
+
+        }else if (node.hasNonNull("initialSamplesMatrix"))
+            confusionMatrix = mapper.readValue(node.get("initialSamplesMatrix").asText(),long[][].class);
+
+        return confusionMatrix;
+    }
     protected Map<String,Object> loadParameters(JsonNode node) throws IOException{
         Map<String,Object> parameters = new Hashtable<>();
         if(node.hasNonNull("Parameters")) {
@@ -79,9 +99,16 @@ public class ModelDeserializer extends DeserializerMode<Model> {
         }
         return learner;
     }
-    protected Model constructModel(JsonNode node, String name, List<TargetRequest> targetRequests, Map<String,Object> parameters, Object learner)throws IOException {
+    protected Model constructModel(JsonNode node, String name, List<TargetRequest> targetRequests, Map<String,Object> parameters, Object learner, long[][] initialConfusionMatrix, long[][] initialSamplesMatrix)throws IOException {
         try {
-            return Model.factory(name,targetRequests,parameters,learner);
+            Model model = Model.factory(name,targetRequests,parameters,learner);
+            if(model.isClassifier()) {
+                if(initialConfusionMatrix!=null)
+                    model.getParameters().put("InitialConfusionMatrix", initialConfusionMatrix);
+                if(initialSamplesMatrix!=null)
+                    model.getParameters().put("InitialSamplesMatrix", initialSamplesMatrix);
+            }
+            return model;
         } catch (Exception e) {
             throw new IOException(e);
         }

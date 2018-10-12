@@ -57,7 +57,16 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
             }
         }
 
-        addEventConnection(Arrays.asList(conf.getStringArray(Const.EVENTS_IN_BROKER_CONF_PATH)));
+        try {
+
+            addEventConnection(Arrays.asList(conf.getStringArray(Const.EVENTS_IN_BROKER_CONF_PATH)));
+        }catch (Exception e){
+            if(!conf.getBoolean("Test")) {
+                loggerService.error(e.getMessage(), e);
+                loggerService.error("Programmatically exiting!");
+                System.exit(-1);
+            }
+        }
     }
     protected Map<String,Map<String, IncomingMqttObserver>> listeners = new Hashtable<>();
 

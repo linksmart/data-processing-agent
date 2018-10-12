@@ -70,7 +70,7 @@ public class PythonPyroBase<T> extends ClassifierModel<T,Integer,PyroProxy>{
     public PythonPyroBase build() throws TraceableException, UntraceableException {
 
         ScApi SCclient;
-        ((DoubleTumbleWindowEvaluator)evaluator).setClasses( ((ClassesDescriptor)descriptors.getTargetDescriptors().get(0)).getClasses());
+
 
         try {
             LinkedHashMap backend = (LinkedHashMap)parameters.get("Backend");

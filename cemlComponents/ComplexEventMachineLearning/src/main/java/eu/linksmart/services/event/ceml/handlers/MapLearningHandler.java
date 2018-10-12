@@ -130,10 +130,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     }
     private void evaluate(Prediction prediction, List target){
         // evaluating the current learning instance
-        if (target.size() == 1)
-            model.getEvaluator().evaluate(prediction.getPrediction(), target.get(0));
-        else
-            model.getEvaluator().evaluate(prediction.getPrediction(), target);
+        model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), target);
     }
     protected void processMessage(Map eventMap) {
         if(eventMap!= null && publisher != null)

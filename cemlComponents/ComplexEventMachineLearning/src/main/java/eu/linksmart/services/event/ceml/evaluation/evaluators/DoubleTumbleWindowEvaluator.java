@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Created by angel on 1/12/15.
  */
-public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implements TumbleEvaluator<Integer>  {
+public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implements TumbleEvaluator<Number>  {
 
     @JsonIgnore
     protected static Logger loggerService = LogManager.getLogger(DoubleTumbleWindowEvaluator.class);
@@ -36,10 +36,14 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     private ModelEvaluationMetric initialSamples;
 
     private List<String> classes;
+    private long[][] initialSamplesMatrix;
 
     public List<String> getClasses() {
         return classes;
     }
+
+    @JsonIgnore
+    private   long[][] initialConfusionMatrix = null;
 
     public void setClasses(List<String> classes) {
         this.classes = classes;
@@ -49,12 +53,16 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
 
 
     }
-
+    public void setInitialConfusionMatrix(long[][] initialConfusionMatrix) {
+        this.initialConfusionMatrix = initialConfusionMatrix;
+    }
 
 
     @Override
-    public synchronized double  evaluate(Integer predicted,Integer actual){
-
+    public double evaluate(List<Number> predicted, List<Number> actual){
+        // The evaluation only works when the classes are mutually exclusive
+        if(predicted.size()!=actual.size() && actual.size()!=1)
+            throw new UnsupportedOperationException("The evaluation only supports mutually exclusive classes.");
 
         if(initialSamples.isReady()) {
            double re= windowEvaluators[learning].evaluate( predicted, actual);
@@ -142,6 +150,9 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
         windowEvaluators[0] = new WindowEvaluator(classes, targets);
         windowEvaluators[1] = new WindowEvaluator(classes,targets);
 
+        windowEvaluators[0].setInitialConfusionMatrix(initialConfusionMatrix);
+        windowEvaluators[0].setInitialSamplesMatrix(initialSamplesMatrix);
+
         windowEvaluators[0].build();
         windowEvaluators[1].build();
 
@@ -176,5 +187,9 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Integer> implemen
     @Override
     public void destroy() throws Exception {
         // nothing
+    }
+
+    public void setInitialSamplesMatrix(long[][] initialSamplesMatrix) {
+        this.initialSamplesMatrix = initialSamplesMatrix;
     }
 }
