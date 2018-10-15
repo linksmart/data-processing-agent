@@ -65,6 +65,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String OGC_REGISTRATION_TOPIC_WILL = "ogc_topic_will";
 
     String LINKSMART_SERVICE_CATALOG_ENDPOINT = "linksmart_service_catalog_endpoint";
+    String GOST_API_ENDPOINT = "gost_api_endpoint";
     String LINKSMART_SERVICE_WILL_TOPIC = "linksmart_service_will_topic";
     String LINKSMART_REGISTRATION_TOPIC = "linksmart_service_registration_topic";
     String FAIL_IF_PERSISTENCE_FAILS = "fails_if_persistence_fails";
