@@ -70,6 +70,10 @@
     },
     "Model": {
       "Name": "DummyClassifier",
+      "InitialConfusionMatrix":[
+        [26, 25, 25, 25],
+        [25, 25, 25, 26]
+      ],
       "Targets": [
         {
           "Name": "Accuracy",

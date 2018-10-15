@@ -66,20 +66,20 @@ public class ModelDeserializer extends DeserializerMode<Model> {
     protected  long[][]  loadInitialConfusionMatrix(JsonNode node) throws IOException{
         long[][] confusionMatrix = null;
         if(node.hasNonNull("InitialConfusionMatrix")) {
-            confusionMatrix = mapper.readValue(node.get("InitialConfusionMatrix").asText(),long[][].class);
+            confusionMatrix = mapper.readValue(node.get("InitialConfusionMatrix").toString(),long[][].class);
 
         }else if (node.hasNonNull("initialConfusionMatrix"))
-            confusionMatrix = mapper.readValue(node.get("initialConfusionMatrix").asText(),long[][].class);
+            confusionMatrix = mapper.readValue(node.get("InitialConfusionMatrix").toString(),long[][].class);
 
         return confusionMatrix;
     }
     protected  long[][]  loadInitialSamplesMatrix(JsonNode node) throws IOException{
         long[][] confusionMatrix = null;
         if(node.hasNonNull("InitialSamplesMatrix")) {
-            confusionMatrix = mapper.readValue(node.get("InitialSamplesMatrix").asText(),long[][].class);
+            confusionMatrix = mapper.readValue(node.get("InitialSamplesMatrix").toString(),long[][].class);
 
         }else if (node.hasNonNull("initialSamplesMatrix"))
-            confusionMatrix = mapper.readValue(node.get("initialSamplesMatrix").asText(),long[][].class);
+            confusionMatrix = mapper.readValue(node.get("initialSamplesMatrix").toString(),long[][].class);
 
         return confusionMatrix;
     }

@@ -162,5 +162,10 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
 
 
 
+    public void setCurrentValue(T currentValue) {
+        this.currentValue = currentValue;
+    }
+
+
 
 }

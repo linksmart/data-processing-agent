@@ -116,6 +116,7 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
     @Override
     public WindowEvaluator build() throws TraceableException, UntraceableException {
 
+        super.build();
         try {
 
             if (classes == null || classes.isEmpty())
@@ -131,30 +132,37 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
         }
 
 
-        super.build();
 
 
         return this;
     }
 
-    private void calculateInitialConfusionMatrix(){
-        if(initialSamplesMatrix!=null && initialSamplesMatrix.length==classes.size()){
-            for(int i=0; i< initialSamplesMatrix.length; i++)
-                for(int j=0; j< initialSamplesMatrix[0].length; j++)
-                    for(int k=0; k< initialSamplesMatrix[0].length; k++) {
-                    if(k ==i && k==j)
+    private void calculateInitialConfusionMatrix() {
+        if (initialSamplesMatrix != null && initialSamplesMatrix.length == classes.size()) {
+            for (int i = 0; i < initialSamplesMatrix.length; i++)
+                for (int j = 0; j < initialSamplesMatrix[0].length; j++)
+                    for (int k = 0; k < initialSamplesMatrix[(int) initialSamplesMatrix[i][j]].length; k++) {
+                   /* if(k ==i && k==j)
                         sequentialConfusionMatrix[k][ClassificationEvaluationValue.truePositives.ordinal()] = initialSamplesMatrix[i][j];
                     else if(k==i && k!=j )
                         sequentialConfusionMatrix[k][ClassificationEvaluationValue.falseNegatives.ordinal()] = initialSamplesMatrix[i][j];
                     else if(k!=i && k==j ){
                         sequentialConfusionMatrix[k][ClassificationEvaluationValue.falsePositives.ordinal()] = initialSamplesMatrix[i][j];
                     } else
-                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.trueNegatives.ordinal()] = initialSamplesMatrix[i][j];
-                }
+                        sequentialConfusionMatrix[k][ClassificationEvaluationValue.trueNegatives.ordinal()] = initialSamplesMatrix[i][j];*/
 
-        } else if(initialConfusionMatrix!=null && initialConfusionMatrix.length==classes.size())
+                        evaluate(Collections.singletonList(i), Collections.singletonList(j));
+                    }
+
+
+        } else if (initialConfusionMatrix != null && initialConfusionMatrix.length == classes.size()){
             sequentialConfusionMatrix = initialConfusionMatrix;
-        else {
+            double n=0;
+            for(int i=0;i<sequentialConfusionMatrix[0].length;i++)
+                n += sequentialConfusionMatrix[0][i];
+            evaluationAlgorithms.values().stream().forEach(a -> ((ModelEvaluationMetric) a).calculate());
+            evaluationAlgorithms.get("SlideAfter").setCurrentValue(n);
+        }else {
             for (int i = 0; i < classes.size(); i++) {
                 sequentialConfusionMatrix[i][ClassificationEvaluationValue.truePositives.ordinal()] = 0;
                 sequentialConfusionMatrix[i][ClassificationEvaluationValue.trueNegatives.ordinal()] = 0;
@@ -162,6 +170,7 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
                 sequentialConfusionMatrix[i][ClassificationEvaluationValue.falseNegatives.ordinal()] = 0;
             }
         }
+        initialConfusionMatrix = initialSamplesMatrix = null;
     }
     public void setInitialSamplesMatrix(long[][] initialSamplesMatrix) {
         this.initialSamplesMatrix = initialSamplesMatrix;

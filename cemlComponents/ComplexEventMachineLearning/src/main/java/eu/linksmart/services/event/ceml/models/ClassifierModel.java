@@ -42,6 +42,8 @@ public abstract class ClassifierModel<Input,Output,LearningObject> extends Model
     @Override
     public ClassifierModel build()throws TraceableException, UntraceableException {
 
+        ((DoubleTumbleWindowEvaluator)evaluator).setInitialConfusionMatrix((long[][]) parameters.getOrDefault("InitialConfusionMatrix",null));
+        ((DoubleTumbleWindowEvaluator)evaluator).setInitialSamplesMatrix((long[][]) parameters.getOrDefault("InitialSamplesMatrix",null));
         try {// try legacy first!
             ((DoubleTumbleWindowEvaluator) evaluator).setClasses(((ClassesDescriptor) descriptors.getTargetDescriptors().get(0)).getClasses());
         }catch (Exception e){

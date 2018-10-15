@@ -38,7 +38,7 @@ public class CemlClassificationTest {
         conf.setSetting("Test",true);
         try {
             Integer ints[] = new Integer[n];
-            ListLearningHandler handler = initHandler(request = initRequest());
+            ListLearningHandler handler = initHandler(request = initRequest(strReq));
 
             double acc=0.0;
 
@@ -69,8 +69,67 @@ public class CemlClassificationTest {
             fail();
         }
     }
+    @Test
+    public void initITTest() {
+        CEMLManager request = null;
+        try {
 
+            request = initRequest(initial);
+            ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>> classifier = ((ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>>) request.getModel());
+
+            assertTrue("Initial Confusion Matrix is deployabe!", classifier.getEvaluator().isDeployable());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
     private static final int n = 1000, tries =150;
+    private static final String initial = "{\n" +
+                    "  \"Name\":\"test\",\n" +
+                    "  \"DataSchema\":\n" +
+                    "{" +
+                    "\"type\": \"array\"," +
+                    "\"size\": " + n + "," +
+                    "\"targetSize\": 1," +
+                    "\"ofType\": \"int\"" +
+                    "}," +
+                    "  \"Model\":{\n" +
+                    "    \"Name\":\"DummyClassifier\",\n" +
+                    "      \"InitialConfusionMatrix\":[\n" +
+                    "        [26, 25, 25, 25],\n" +
+                    "        [25, 25, 25, 26]\n" +
+                    "      ]," +
+                    "    \"Targets\":[\n" +
+                    "      {\n" +
+                    "        \"Name\":\"Accuracy\",\n" +
+                    "        \"Threshold\":0.40,\n" +
+                    "        \"Method\":\"more\"\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"Name\":\"SlideAfter\",\n" +
+                    "        \"Threshold\":100,\n" +
+                    "        \"Method\":\"more\"\n" +
+                    "      }\n" +
+                    "\n" +
+                    "    ]\n" +
+                    "  },\n" +
+                    "  \"LearningStreams\":[\n" +
+                    "    {\n" +
+                    "      \"statement\":\" \"\n" +
+                    "    }\n" +
+                    "  ],\n" +
+                    "  \"DeploymentStreams\":[\n" +
+                    "    {\n" +
+                    "      \"statement\":\"\"\n" +
+                    "    }\n" +
+                    "  ],\n" +
+                    "  \"Settings\":\n" +
+                    "  {\n" +
+                    "     \"BuildTillPhase\": 5,\n" +
+                    "     \"ReportingEnabled\": false\n" +
+                    "  }" +
+                    "}";
     private static final String strReq = "{\n" +
             "  \"Name\":\"test\",\n" +
             "  \"DataSchema\":\n" +
@@ -113,7 +172,7 @@ public class CemlClassificationTest {
             "  }" +
             "}";
 
-    private CEMLManager initRequest() {
+    private CEMLManager initRequest(String req) {
         CEMLManager request;
         try {
             Class.forName(CEML.class.getCanonicalName());
@@ -127,7 +186,7 @@ public class CemlClassificationTest {
         try {
 
             System.out.println("Expecting unimportant exception!");
-            request = SharedSettings.getDeserializer().parse(strReq, CEMLManager.class);
+            request = SharedSettings.getDeserializer().parse(req, CEMLManager.class);
 
         } catch (IOException e) {
             e.printStackTrace();
