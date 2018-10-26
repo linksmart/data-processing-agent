@@ -15,6 +15,7 @@
         <module>LinearRegressionModel</module>
         <module>PythonModelsIntegrator</module>
         <module>DummyClassifier</module>
+        <module>TestModel</module>
     </modules>
 
     <dependencies>

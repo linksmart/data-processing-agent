@@ -1,12 +1,15 @@
 package eu.linksmart.services.event.cep.tooling;
 
-import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
-import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
-import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
+
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
+import eu.linksmart.services.payloads.ogc.sensorthing.Sensor;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.SensorImpl;
 import eu.linksmart.services.utils.function.Utils;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.ArrayUtils;
@@ -34,37 +37,12 @@ public class Tools {
     }
 
 
-    static public String lastObservationOfProperty(IoTEntityEvent entity, String property ){
-
-      return  entity.getProperties(property).getIoTStateObservation(0).getValue();
-    }
-    static public String lastObservationLikeProperty(IoTEntityEvent entity, String property ){
-
-        for (IoTProperty p: entity.getProperties())
-            if(p.getAbout().contains(property)) {
-
-                return p.getIoTStateObservation().get(0).getValue();
-            }
-
-        return null;
-    }
     static public String generateRandomAbout(){
 
         return UUID.randomUUID().toString().replace("-","_").replace("#","_");
     }
 
-    static public Observation ObservationFactory(Object event, String resultType, String StreamID, String sensorID, long time){
-        Observation ob = Observation.factory(event,resultType,StreamID,sensorID,time);
-         /*if(Configurator.getDefaultConfig().getBoolean(Const.SIMULATION_EXTERNAL_CLOCK))
-           try {
-                if(ob.getPhenomenonTime().after(getDateNow()))
-                    EsperEngine.getEngine().setEngineTimeTo(ob.getDate());
-            } catch (Exception e) {
-                LogManager.getLogger(Tools.class).error(e.getMessage(),e.getCause());
-            }*/
-        return ob;
 
-    }
 
     static public String getIsoTimeFormat(){
         return Utils.isoFormatMSTZ.toString();
@@ -441,7 +419,47 @@ public class Tools {
        return sort(map, values);
     }
 
+
+    static public Observation[] gapFillUp(Observation[] observations, int finalSize){
+        if(finalSize<=observations.length)
+            return observations;
+
+        Observation[] ret = new Observation[finalSize];
+        int pointer =0;
+
+        for (int i=0; i < observations.length-1;i++){
+            int diff=0;
+            if(( diff = (Integer.valueOf(observations[i+1].getDatastream().getId().toString().split("-")[1]) - Integer.valueOf(observations[i].getDatastream().getId().toString().split("-")[1]) ) )> 1) {
+                for (int j = 0; j < diff; j++) {
+                    if (pointer + j > ret.length)
+                        return ret;
+                    else {
+                        Sensor sensor = new SensorImpl();
+                        sensor.setId(observations[i].getDatastream().getSensor().getId().toString().split("-")[0]+"-"+observations[i].getDatastream().getSensor().getId().toString().split("-")[1]+j);
+                        Datastream datastream = new DatastreamImpl();
+                        datastream.setId(observations[i].getDatastream().getId().toString().split("-")[0]+"-"+observations[i].getDatastream().getId().toString().split("-")[1]+j);
+                        Observation observation = new ObservationImpl();
+                        observation.setDate(observations[i].getDate());
+                        observation.setResult(0);
+                        observations[pointer] = observation;
+                        pointer++;
+                    }
+                }
+
+
+            }
+
+            ret[pointer] = observations[i];
+            pointer++;
+
+        }
+
+        ret[pointer] = observations[observations.length-1];
+
+        return ret;
+    }
     static private int sort(Map<Object,Integer> map, Object values ){
+
 
         if(values instanceof ObservationImpl){
             return map.get(((ObservationImpl) values).getDatastream().getId().toString());
