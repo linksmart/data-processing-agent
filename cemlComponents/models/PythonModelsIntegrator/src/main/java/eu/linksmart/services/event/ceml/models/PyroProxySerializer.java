@@ -16,7 +16,10 @@ public class PyroProxySerializer extends SerializerMode<PyroProxy> {
     @Override
     public void serialize(PyroProxy pyro, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeString(pyro.call("exportModel").toString());
+        Object result = pyro.call("exportModel");
+        if(result != null) {
+            jsonGenerator.writeString(result.toString());
+        }
         jsonGenerator.writeEndObject();
     }
 }
