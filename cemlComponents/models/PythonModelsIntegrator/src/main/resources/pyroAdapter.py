@@ -23,13 +23,13 @@ class PyroAdapter(object):
             myclass = PyroAdapter.dynamic_importer(OPTIONS.bpath,OPTIONS.bname)
             self.backend = myclass
 
-    def dynamic_importer(name, class_name):
+    def dynamic_importer(path, class_name):
         """
         Dynamically imports modules / classes
         """
 
         try:
-            spec = importlib.util.spec_from_file_location(OPTIONS.bname, name)
+            spec = importlib.util.spec_from_file_location(class_name, path)
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
 
@@ -88,8 +88,6 @@ def startPyro(options):
             raise SystemExit
 
     daemon.requestLoop()
-
-
 
 
 def parseArgs():
