@@ -52,7 +52,8 @@ public class SiddhiEngine extends Component implements CEPEngine {
     static SiddhiEngine init(){
         SiddhiEngine SE= new SiddhiEngine();
 
-        instancedEngines.put(SE.getName(),SE);
+        instancedEngine.setLeft(SE.getName());
+        instancedEngine.setValue(SE);
 
         return SE;
     }

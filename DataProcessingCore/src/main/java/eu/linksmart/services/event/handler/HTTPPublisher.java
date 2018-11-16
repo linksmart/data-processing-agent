@@ -241,7 +241,7 @@ public class HTTPPublisher implements Publisher{
                         return false;
                     }
                     try {
-                        CEPEngine.instancedEngines.values().iterator().next().addEvent(envelope, outputType);
+                        CEPEngine.instancedEngine.getValue().addEvent(envelope, outputType);
                     } catch (TraceableException | UntraceableException e) {
                         loggerService.error(e.getMessage(), e);
                         return false;

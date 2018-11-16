@@ -94,7 +94,7 @@ public class StatementMqttObserver extends IncomingMqttObserver {
 
             } else if (nParts == 2 && getN(op, -1).equals(conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH))) { //  BASE/<targetCEP>/add/ or
                 responses = StatementFeeder.addNewStatement(new String(request.getResource()), null, getN(op, -2)); // BASE/<targetCEP>/add/
-            }else if ((nParts == 3 && CEPEngine.instancedEngines.containsKey(targetCEP = getN(topic, -3)))) { //  BASE/<targetCEP>/<discriminator>/ID/
+            }else if ((nParts == 3 && CEPEngine.instancedEngine.getKey() == (targetCEP = getN(topic, -3)))) { //  BASE/<targetCEP>/<discriminator>/ID/
 
                 String des = getN(op, -2);
                 String id = getN(op, -1);
