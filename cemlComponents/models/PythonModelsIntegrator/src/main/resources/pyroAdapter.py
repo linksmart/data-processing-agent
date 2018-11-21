@@ -9,6 +9,7 @@ from optparse import OptionParser
 logging.basicConfig(format='%(asctime)s %(levelname)s %(name)s: %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__file__)
 
+@Pyro4.behavior(instance_mode="single")
 class PyroAdapter(object):
     def __init__(self):
         logger.info("Initializing Pyro object.")
