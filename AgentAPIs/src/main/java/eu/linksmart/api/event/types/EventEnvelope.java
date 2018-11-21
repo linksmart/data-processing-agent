@@ -191,7 +191,7 @@ public interface EventEnvelope<IDType, ValueType> extends JsonSerializable {
 
     }
     @JsonIgnore
-    default List getLsitResult(){
+    default List getListResult(){
         Object o = getValue();
         if(o==null || !( getValue() instanceof List ))
             return null;
