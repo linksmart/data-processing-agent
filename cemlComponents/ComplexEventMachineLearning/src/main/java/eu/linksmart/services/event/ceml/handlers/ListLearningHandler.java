@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
-public  class ListLearningHandler extends BaseListEventHandler {
+public  class   ListLearningHandler extends BaseListEventHandler {
 
     static protected Configurator conf = Configurator.getDefaultConfig();
     static protected Logger loggerService = LogManager.getLogger(ListLearningHandler.class);

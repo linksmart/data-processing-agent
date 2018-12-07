@@ -458,6 +458,59 @@ public class Tools {
 
         return ret;
     }
+    static public Observation[] fillUp(Observation[] observations, int startIndex , int finalSize){
+
+
+        try {
+
+            if(finalSize<=observations.length || observations.length < 1)
+                return observations;
+            Observation[] ret = new Observation[finalSize];
+            String idDSBase = observations[0].getDatastream().getId().toString().split("-")[0], idSBase = idDSBase.replace("ds_", "");
+
+            int pointer = 0;
+
+            for(int i=0; i<ret.length;i++) {
+
+                if(pointer < observations.length && observations[pointer].getDatastream().getId().equals(idDSBase+"-"+(startIndex+i))){
+                    ret[i] = observations[pointer];
+                    pointer++;
+                } else {
+                    Sensor sensor = new SensorImpl();
+                    sensor.setId(idSBase + "-" + (startIndex + i));
+                    Datastream datastream = new DatastreamImpl();
+                    datastream.setId(idDSBase + "-" + (startIndex + i));
+                    Observation observation = new ObservationImpl();
+                    observation.setDate(observations[0].getDate());
+                    observation.setResult(0);
+                    observation.setDatastream(datastream);
+                    ret[i] = observation;
+                }
+            }
+
+            return ret;
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+            return observations;
+        }
+    }
+
+    static public Observation[] singleFillUp(Observation observation, int startIndex , int finalSize){
+        Observation[] ret = {observation};
+        return fillUp(ret,startIndex,finalSize);
+    }
+    static public Object[] mapToArray(Map map, List<String> order){
+        Object[] re = new Object[order.size()];
+        int i=0;
+        for(String key: order ){
+            re[i]=map.get(key);
+            i++;
+        }
+
+        return re;
+    }
     static private int sort(Map<Object,Integer> map, Object values ){
 
 
