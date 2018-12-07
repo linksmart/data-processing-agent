@@ -44,6 +44,9 @@ public class EsperEngine extends Component implements CEPEngineAdvanced {
     static protected EsperEngine init() {
         EsperEngine EE = new EsperEngine();
 
+        instancedEngine.setLeft(EE.getName());
+        instancedEngine.setValue(EE);
+
         return EE;
     }
 
