@@ -25,7 +25,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-import static eu.linksmart.services.event.cep.tooling.Tools.ObservationFactory;
 
 /**
  * Created by Caravajal on 06.10.2014.
@@ -45,7 +44,6 @@ public class EsperEngine extends Component implements CEPEngineAdvanced {
     static protected EsperEngine init() {
         EsperEngine EE = new EsperEngine();
 
-        instancedEngines.put(EE.getName(), EE);
         return EE;
     }
 
@@ -428,50 +426,9 @@ public class EsperEngine extends Component implements CEPEngineAdvanced {
         return runAsynchronousStatement(statement);
     }
 
-    static public long getTimeNow() {
-        return EsperEngine.getEngine().getEngineCurrentDate().getTime();
-    }
 
-    static public Date getDateNow() {
-        return EsperEngine.getEngine().getEngineCurrentDate();
-    }
 
-    static public boolean insertMultipleEvents(long noEvents, Object event) {
-        EsperEngine engine = EsperEngine.getEngine();
-        EventEnvelope eventEnvelope;
-        if (!(event instanceof EventEnvelope))
-            eventEnvelope = ObservationFactory(event, event.getClass().getCanonicalName(), UUID.randomUUID().toString(), engine.getName(), engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
-        else
-            eventEnvelope = (EventEnvelope) event;
-        for (int i = 0; i < noEvents; i++) {
 
-            engine.addEvent(eventEnvelope, eventEnvelope.getClass());
-            eventEnvelope.setDate(DateUtils.addHours(eventEnvelope.getDate(), 1));
-        }
-        return true;
-
-    }
-
-    static public EventEnvelope[] creatMultipleEvents(long noEvents, Object event) {
-        EventEnvelope eventEnvelope;
-        EsperEngine engine = EsperEngine.getEngine();
-        EventEnvelope[] result = new Observation[(int) noEvents];
-        if (!(event instanceof EventEnvelope))
-            eventEnvelope = ObservationFactory(event, event.getClass().getCanonicalName(), UUID.randomUUID().toString(), engine.getName(), engine.getAdvancedFeatures().getEngineCurrentDate().getTime());
-        else
-            eventEnvelope = (EventEnvelope) event;
-
-        result[0] = ObservationFactory(event, event.getClass().getCanonicalName(), UUID.randomUUID().toString(), engine.getName(), DateUtils.addHours(eventEnvelope.getDate(), 1).getTime());
-
-        for (int i = 1; i < noEvents; i++) {
-
-            //engine.addEvent("", eventEnvelope, eventEnvelope.getClass());
-            result[i] = ObservationFactory(event, event.getClass().getCanonicalName(), UUID.randomUUID().toString(), engine.getName(), DateUtils.addHours(result[i - 1].getDate(), 1).getTime());
-
-        }
-        return result;
-
-    }
 
 
 }
