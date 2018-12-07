@@ -1,25 +1,22 @@
 package eu.linksmart.services.event.feeders;
 
-
+import eu.linksmart.api.event.components.CEPEngine;
+import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.*;
-import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
+import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.handler.ComplexEventSynchHandler;
 import eu.linksmart.services.event.handler.DefaultMQTTPublisher;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
-import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
-import eu.linksmart.api.event.types.impl.MultiResourceResponses;
-import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.services.event.types.StatementInstance;
-import eu.linksmart.api.event.components.CEPEngine;
-import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by angel on 26/11/15.
@@ -27,7 +24,6 @@ import java.util.stream.Collectors;
 public class StatementFeeder implements Feeder<Statement> {
     protected static Logger loggerService = LogManager.getLogger(StatementFeeder.class);
     protected static Configurator conf = Configurator.getDefaultConfig();
-
 
     static {
         SharedSettings.getDeserializer().defineClassToInterface(Statement.class, StatementInstance.class);
@@ -37,7 +33,6 @@ public class StatementFeeder implements Feeder<Statement> {
     private StatementFeeder() {
         // super(StatementFeeder.class.getSimpleName(), "Provide intern infrastructure to feed the CEP with learning DF statements ", Feeder.class.getSimpleName(),"CEML");
     }
-
 
     public static MultiResourceResponses<Statement> feedStatements(Collection<Statement> statements) {
         boolean success = true;
@@ -56,9 +51,7 @@ public class StatementFeeder implements Feeder<Statement> {
         String retur = "";
         MultiResourceResponses<Statement> response;
 
-
         response = addNewStatement(statement, null, null, null);
-
 
         return response;
     }
@@ -66,7 +59,6 @@ public class StatementFeeder implements Feeder<Statement> {
     static public MultiResourceResponses<Statement> pauseStatements(Collection<Statement> statements) {
 
         MultiResourceResponses<Statement> response = new MultiResourceResponses<Statement>();
-
 
         for (Statement statement : statements) {
 
@@ -82,7 +74,6 @@ public class StatementFeeder implements Feeder<Statement> {
         MultiResourceResponses<Statement> response = pauseStatement(statement.getId());
         response.addResources(statement.getId(), statement);
 
-
         return response;
     }
 
@@ -92,7 +83,6 @@ public class StatementFeeder implements Feeder<Statement> {
 
     static public MultiResourceResponses<Statement> removeStatements(Collection<Statement> statements) {
         MultiResourceResponses<Statement> response = new MultiResourceResponses<Statement>();
-
 
         for (Statement statement : statements) {
             MultiResourceResponses<Statement> aux = removeStatement(statement);
@@ -106,9 +96,7 @@ public class StatementFeeder implements Feeder<Statement> {
 
         MultiResourceResponses<Statement> response;
 
-
         response = removeStatement(statement.getId(), statement);
-
 
         response.addResources(statement.getId(), statement);
         return response;
@@ -145,44 +133,37 @@ public class StatementFeeder implements Feeder<Statement> {
         boolean success = true;
         MultiResourceResponses<Statement> response = new MultiResourceResponses<>();
 
-        for (CEPEngine dfw : CEPEngine.instancedEngines.values()) {
-
-            try {
-                boolean res = false;
-                switch (action) {
-                    case RUN:
-                        res = dfw.startStatement(hash);
-                        break;
-                    case PAUSE:
-                        res = dfw.pauseStatement(hash);
-                        break;
-                    case REMOVE:
-                        res = dfw.removeStatement(hash, statement);
-                        break;
-                }
-                if (res)
-                    response.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(), hash, "Agent", "Unexpected error in statement with id " + hash + " in engine " + dfw.getName(), 500));
-
-            } catch (StatementException e) {
-                loggerService.error(e.getMessage(), e);
-                response.addResponse(new GeneralRequestResponse("Bad Request", SharedSettings.getId(), hash, "Agent", e.getMessage(), 400));
-
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(), e);
-                response.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(), null, "Agent", e.getMessage(), 500));
-
-                success = false;
+        try {
+            boolean res = false;
+            switch (action) {
+                case RUN:
+                    res = CEPEngine.instancedEngine.getValue().startStatement(hash);
+                    break;
+                case PAUSE:
+                    res = CEPEngine.instancedEngine.getValue().pauseStatement(hash);
+                    break;
+                case REMOVE:
+                    res = CEPEngine.instancedEngine.getValue().removeStatement(hash, statement);
+                    break;
             }
-            if (success) {
-                loggerService.info("Statement " + hash + " was successful");
+            if (res)
+                response.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(), hash, "Agent", "Unexpected error in statement with id " + hash + " in engine " + CEPEngine.instancedEngine.getValue().getName(), 500));
+        } catch (StatementException e) {
+            loggerService.error(e.getMessage(), e);
+            response.addResponse(new GeneralRequestResponse("Bad Request", SharedSettings.getId(), hash, "Agent", e.getMessage(), 400));
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
+            response.addResponse(new GeneralRequestResponse("Internal Server Error", SharedSettings.getId(), null, "Agent", e.getMessage(), 500));
 
-                response.addResponse(new GeneralRequestResponse("OK", SharedSettings.getId(), null, "Agent", "Statement  with id " + hash + " in engine " + dfw.getName() + " was processed successfully", 200));
-            }
+            success = false;
+        }
+        if (success) {
+            loggerService.info("Statement " + hash + " was successful");
 
+            response.addResponse(new GeneralRequestResponse("OK", SharedSettings.getId(), null, "Agent", "Statement  with id " + hash + " in engine " + CEPEngine.instancedEngine.getValue().getName() + " was processed successfully", 200));
         }
         return response;
     }
-
 
     public static MultiResourceResponses<Statement> parseStatement(String statementString, String id) {
         Statement statement = null;
@@ -202,20 +183,17 @@ public class StatementFeeder implements Feeder<Statement> {
             statement.setId(id);
 
         return prepareResponse(statement);
-
     }
 
     public static MultiResourceResponses<Statement> prepareResponse(Statement statement) {
 
         MultiResourceResponses<Statement> result = new MultiResourceResponses<Statement>();
 
-
         Map<String, Object> resource = new HashMap<>();
         resource.put(statement.getId(), statement);
         result.getResources().put(statement.getId(), statement);
 
         return result;
-
     }
 
     public static void processRequestInWrapper(CEPEngine dfw, MultiResourceResponses<Statement> result, Statement org) {
@@ -259,7 +237,6 @@ public class StatementFeeder implements Feeder<Statement> {
                         case REMOVE:
                             dfw.removeStatement(result.getHeadResource().getId(), result.getHeadResource());
                             break;
-
                     }
                 }
 
@@ -289,7 +266,6 @@ public class StatementFeeder implements Feeder<Statement> {
                     } else {
                         result.addResponse(createErrorMapMessage(result.getHeadResource().getId(), "Statement", 500, "Internal Server Error", dfw.getName() + ": Oops we have a problem"));
                     }
-
                 }
 
                 if (result.getResponses().isEmpty()) {
@@ -298,11 +274,9 @@ public class StatementFeeder implements Feeder<Statement> {
                     result.addResponse(createSuccessMapMessage(result.getHeadResource().getId(), "Statement", result.getHeadResource().getId(), 200, "OK", "Statement " + result.getHeadResource().getId() + " was successful", result.getHeadResource().getOutput()));
                 }
             }
-
         } catch (StatementException se) {
             result.addResponse(createErrorMapMessage(se.getErrorProducerId(), se.getErrorProducerType(), 400, "Bad Request", se.getMessage()));
             loggerService.error(se.getMessage(), se);
-
         } catch (InternalException e) {
             loggerService.error(e.getMessage(), e);
             result.addResponse(createErrorMapMessage(e.getErrorProducerId(), e.getErrorProducerType(), 500, "Intern Server Error", e.getMessage()));
@@ -319,7 +293,6 @@ public class StatementFeeder implements Feeder<Statement> {
         // creating return structures structures
         MultiResourceResponses<Statement> result = parseStatement(stringStatement, id);
 
-
         if (result.getResources() != null && !result.getResources().isEmpty())
             return addNewStatement(result.getHeadResource(), id, cepEngine, result);
         return result;
@@ -330,26 +303,23 @@ public class StatementFeeder implements Feeder<Statement> {
         if (result == null) {
             result = new MultiResourceResponses<>();
             result.addResources(statement.getId(), statement);
-
         } else {
 
             if (result.getResources().isEmpty())
                 result.addResources(statement.getId(), statement);
-
         }
 
         String id = statement.getId();
-        Set<String> workingCEPsList;
+        String workingCEP = null;
 
-        boolean update = orgID != null && CEPEngine.instancedEngines.values().stream().anyMatch(e -> e.getStatements().containsKey(orgID));
-
+        boolean update = orgID != null && CEPEngine.instancedEngine.getValue().getStatements().containsKey(orgID);
 
         // checking which wrappers exist
-        if (CEPEngine.instancedEngines.size() == 0) {
+        if (CEPEngine.instancedEngine.getValue() == null) {
             error = createErrorMapMessage(id, "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement");
             result.addResponse(error);
             loggerService.error(error.getMessage());
-        } else if (!(workingCEPsList = getCEPwithStatement(id)).isEmpty() && !update) { // if the id exists but is not an update
+        } else if (!((workingCEP = getCEPwithStatement(id)) == null) && !update) { // if the id exists but is not an update
             error = createErrorMapMessage(id, "Statement", 409, "Conflict", "The id sent in the request exists already. If want to be updated make an update/PUT request");
             result.addResponse(error);
             loggerService.error(error.getMessage());
@@ -357,13 +327,13 @@ public class StatementFeeder implements Feeder<Statement> {
 
             Statement org = null;
 
-            if (workingCEPsList.isEmpty())
+            if (workingCEP == null)
                 if (cepEngine == null || (cepEngine.equals("")))
-                    workingCEPsList = CEPEngine.instancedEngines.keySet();
+                    workingCEP = CEPEngine.instancedEngine.getKey();
                 else
-                    workingCEPsList.add(cepEngine);
+                    workingCEP = cepEngine;
             if (update) {
-                org = CEPEngine.instancedEngines.values().iterator().next().getStatements().get(orgID);
+                org = CEPEngine.instancedEngine.getValue().getStatements().get(orgID);
 
                 if (statement.equals(org)) {
                     result.addResponse(createSuccessMapMessage(id, "Statement", id, 304, "Not Modified", "Resource is identical to the update. No changes have been made", statement.getOutput()));
@@ -379,13 +349,9 @@ public class StatementFeeder implements Feeder<Statement> {
                 if (orgID != null && !id.equals(orgID))
                     statement.setId(orgID);
 
-
-                // if (!processInternStatement(statement))
-                for (String key : workingCEPsList)
-                    processRequestInWrapper(CEPEngine.instancedEngines.get(key), result, org);
-
+                processRequestInWrapper(CEPEngine.instancedEngine.getValue(), result, org);
             } catch (Exception e) {
-                if (CEPEngine.instancedEngines.containsKey(cepEngine)) {
+                if (CEPEngine.instancedEngine.getKey() == cepEngine) {
                     loggerService.error(e.getMessage(), e);
                     result.addResponse(createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
                 } else {
@@ -399,11 +365,15 @@ public class StatementFeeder implements Feeder<Statement> {
     }
 
     protected static boolean existsStatementInCep(/*@NotNull*/String id,/*@NotNull*/ String cepName) {
-        return CEPEngine.instancedEngines.containsKey(cepName) && CEPEngine.instancedEngines.get(cepName).getStatements().containsKey(id);
+        return (CEPEngine.instancedEngine.getKey() == cepName) && CEPEngine.instancedEngine.getValue().getStatements().containsKey(id);
     }
 
-    protected static Set<String> getCEPwithStatement(String id) {
-        return CEPEngine.instancedEngines.values().stream().filter(dfw -> existsStatementInCep(id, dfw.getName())).map(CEPEngine::getName).collect(Collectors.toSet());
+    protected static String getCEPwithStatement(String id) {
+        String CEP = null;
+        if (existsStatementInCep(id, CEPEngine.instancedEngine.getKey())) {
+            CEP = CEPEngine.instancedEngine.getKey();
+        }
+        return CEP;
     }
 
     public static GeneralRequestResponse createErrorMapMessage(String generatedBy, String producerType, int codeNo, String codeTxt, String message) {
@@ -441,45 +411,6 @@ public class StatementFeeder implements Feeder<Statement> {
         return new GeneralRequestResponse(codeTxt, SharedSettings.getId(), null, producerType, message, codeNo, topics);
     }
 
-
-    /* public static  MultiResourceResponses<Statement> deleteStatement(String id) {
-         MultiResourceResponses<Statement> result =new MultiResourceResponses<>();
-
-         int count = 0;
-
-         Statement statement = null;
-
-         if (CEPEngine.instancedEngines.size() == 0) {
-             result.addResponse(createErrorMapMessage(id, "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
-         }else {
-
-             for (CEPEngine dfw : CEPEngine.instancedEngines.values())
-                 try {
-                     if (statement == null && dfw.getStatements().containsKey(id)) {
-                         statement = dfw.getStatements().get(id);
-
-                         result.addResources(id, statement);
-
-                     }
-                     if (dfw.removeStatement(id))
-                         count++;
-                     else
-                         result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "In the CEP engine " + dfw.getName() + " there is no statement with ID: " + id));
-
-
-                 } catch (Exception e) {
-                     loggerService.error(e.getMessage(), e);
-                     result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
-                 }
-
-         }
-         if (count==0 && result.getResponses().isEmpty()) {
-             result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + id));
-         }else if (count!=0 )
-             result.addResponse(StatementFeeder.createSuccessMapMessage(id, "Statement", id, 200, "OK", "It was deleted the statement with ID: " + id));
-
-         return result;
-     }*/
     public static MultiResourceResponses<Statement> deleteStatement(String id, String deleteStatement) {
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
 
@@ -497,35 +428,30 @@ public class StatementFeeder implements Feeder<Statement> {
             nativeStatement.setStateLifecycle(Statement.StatementLifecycle.REMOVE);
         }
 
-        if (CEPEngine.instancedEngines.size() == 0) {
+        if (CEPEngine.instancedEngine.getValue() == null) {
             result.addResponse(createErrorMapMessage(id, "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
         } else {
 
-            for (CEPEngine dfw : CEPEngine.instancedEngines.values())
-                try {
-                    if (statement == null && dfw.getStatements().containsKey(id)) {
-                        statement = dfw.getStatements().get(id);
+            try {
+                if (statement == null && CEPEngine.instancedEngine.getValue().getStatements().containsKey(id)) {
+                    statement = CEPEngine.instancedEngine.getValue().getStatements().get(id);
 
-                        result.addResources(id, statement);
-
-                    }
-                    if (dfw.removeStatement(id, nativeStatement))
-                        count++;
-                    else
-                        result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "In the CEP engine " + dfw.getName() + " there is no statement with ID: " + id));
-
-
-                } catch (StatementException e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 400, e.getErrorProducerType(), e.getMessage()));
-                } catch (TraceableException e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 500, e.getErrorProducerType(), e.getMessage()));
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
+                    result.addResources(id, statement);
                 }
-
+                if (CEPEngine.instancedEngine.getValue().removeStatement(id, nativeStatement))
+                    count++;
+                else
+                    result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "In the CEP engine " + CEPEngine.instancedEngine.getValue().getName() + " there is no statement with ID: " + id));
+            } catch (StatementException e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 400, e.getErrorProducerType(), e.getMessage()));
+            } catch (TraceableException e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 500, e.getErrorProducerType(), e.getMessage()));
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
+            }
         }
         if (count == 0 && result.getResponses().isEmpty()) {
             result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + id));
@@ -552,25 +478,22 @@ public class StatementFeeder implements Feeder<Statement> {
             nativeStatement.setStateLifecycle(Statement.StatementLifecycle.SYNCHRONOUS);
         }
 
-        if (CEPEngine.instancedEngines.size() == 0) {
+        if (CEPEngine.instancedEngine.getValue() == null) {
             result.addResponse(createErrorMapMessage(statement.getId(), "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
         } else {
 
-            for (CEPEngine dfw : CEPEngine.instancedEngines.values())
-                try {
-                    dfw.executeStatement(statement);
-
-                } catch (StatementException e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 400, e.getErrorProducerType(), e.getMessage()));
-                } catch (TraceableException e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 500, e.getErrorProducerType(), e.getMessage()));
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(statement.getId(), "Statement", 500, "Internal Server Error", e.getMessage()));
-                }
-
+            try {
+                CEPEngine.instancedEngine.getValue().executeStatement(statement);
+            } catch (StatementException e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 400, e.getErrorProducerType(), e.getMessage()));
+            } catch (TraceableException e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(e.getErrorProducerId(), "Statement", 500, e.getErrorProducerType(), e.getMessage()));
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(statement.getId(), "Statement", 500, "Internal Server Error", e.getMessage()));
+            }
         }
         if (count == 0 && result.getResponses().isEmpty()) {
             result.addResponse(StatementFeeder.createErrorMapMessage(statement.getId(), "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + statement.getId()));
@@ -584,25 +507,21 @@ public class StatementFeeder implements Feeder<Statement> {
 
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
 
-
-        if (CEPEngine.instancedEngines.size() == 0) {
+        if (CEPEngine.instancedEngine.getValue() == null) {
             result.addResponse(createErrorMapMessage(id, "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
         } else {
 
-            for (CEPEngine dfw : CEPEngine.instancedEngines.values())
-                try {
-                    Map<String, Statement> aux = dfw.getStatements();
-                    if (!aux.isEmpty() && aux.containsKey(id)) {
-                        result.addResources(dfw.getName(), aux.get(id));
-                        result.addResponse(StatementFeeder.createSuccessMapMessage(id, "Statement", id, 200, "OK", "GET Statement ID: " + id + " result found in  'Resources' ", aux.get(id).getOutput()));
-                    }
-
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
+            try {
+                Map<String, Statement> aux = CEPEngine.instancedEngine.getValue().getStatements();
+                if (!aux.isEmpty() && aux.containsKey(id)) {
+                    result.addResources(CEPEngine.instancedEngine.getValue().getName(), aux.get(id));
+                    result.addResponse(StatementFeeder.createSuccessMapMessage(id, "Statement", id, 200, "OK", "GET Statement ID: " + id + " result found in  'Resources' ", aux.get(id).getOutput()));
                 }
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
+            }
         }
-
 
         if (result.getResources().size() == 0 && result.getResponses().isEmpty()) {
             result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + id));
@@ -615,23 +534,20 @@ public class StatementFeeder implements Feeder<Statement> {
 
         MultiResourceResponses<Object> result = new MultiResourceResponses<>();
 
-        if (CEPEngine.instancedEngines.size() == 0) {
+        if (CEPEngine.instancedEngine.getValue() == null) {
             result.addResponse(createErrorMapMessage(id, "Statement", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
         } else {
 
-            for (CEPEngine dfw : CEPEngine.instancedEngines.values())
-                try {
-                    Map<String, Statement> aux = dfw.getStatements();
-                    if (!aux.isEmpty() && aux.containsKey(id)) {
-                        result.addResources(dfw.getName(), aux.get(id).getLastOutput());
-                    }
-
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
+            try {
+                Map<String, Statement> aux = CEPEngine.instancedEngine.getValue().getStatements();
+                if (!aux.isEmpty() && aux.containsKey(id)) {
+                    result.addResources(CEPEngine.instancedEngine.getValue().getName(), aux.get(id).getLastOutput());
                 }
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 500, "Internal Server Error", e.getMessage()));
+            }
         }
-
 
         if (result.getResources().size() == 0 && result.getResponses().isEmpty()) {
             result.addResponse(StatementFeeder.createErrorMapMessage(id, "Statement", 404, "Not Found", "Provided ID doesn't exist in any CEP engine. ID:" + id));
@@ -646,20 +562,16 @@ public class StatementFeeder implements Feeder<Statement> {
 
         Map<String, Statement> resource = new Hashtable<>();
 
-        if (CEPEngine.instancedEngines.size() == 0) {
+        if (CEPEngine.instancedEngine.getValue() == null) {
             result.addResponse(createErrorMapMessage(SharedSettings.getId(), "Agent", 503, "Service Unavailable", "No CEP engine found to deploy statement"));
         } else {
+            try {
 
-            for (CEPEngine dfw : CEPEngine.instancedEngines.values())
-                try {
-
-                    resource.putAll(dfw.getStatements());
-
-                } catch (Exception e) {
-                    loggerService.error(e.getMessage(), e);
-                    result.addResponse(StatementFeeder.createErrorMapMessage(dfw.getName(), "CEPEngine", 500, "Internal Server Error", e.getMessage()));
-                }
-
+                resource.putAll(CEPEngine.instancedEngine.getValue().getStatements());
+            } catch (Exception e) {
+                loggerService.error(e.getMessage(), e);
+                result.addResponse(StatementFeeder.createErrorMapMessage(CEPEngine.instancedEngine.getValue().getName(), "CEPEngine", 500, "Internal Server Error", e.getMessage()));
+            }
         }
 
         result.setResources(resource);

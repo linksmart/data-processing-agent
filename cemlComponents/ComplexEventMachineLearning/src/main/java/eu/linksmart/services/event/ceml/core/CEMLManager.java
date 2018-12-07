@@ -1,30 +1,27 @@
 package eu.linksmart.services.event.ceml.core;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
-import eu.linksmart.api.event.types.EventBuilder;
-import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.api.event.types.impl.SchemaNode;
-import eu.linksmart.services.event.ceml.intern.Const;
-import eu.linksmart.services.event.types.PersistentRequestInstance;
-import eu.linksmart.services.event.feeders.StatementFeeder;
-import eu.linksmart.services.event.intern.SharedSettings;
 import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
-import eu.linksmart.api.event.ceml.data.DataDefinition;
-import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.ceml.LearningStatement;
+import eu.linksmart.api.event.ceml.data.DataDefinition;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
+import eu.linksmart.api.event.ceml.prediction.Prediction;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.api.event.exceptions.*;
+import eu.linksmart.api.event.types.EventBuilder;
+import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
-import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.api.event.types.impl.MultiResourceResponses;
+import eu.linksmart.api.event.types.impl.SchemaNode;
+import eu.linksmart.services.event.ceml.intern.Const;
+import eu.linksmart.services.event.feeders.StatementFeeder;
+import eu.linksmart.services.event.intern.SharedSettings;
+import eu.linksmart.services.event.types.PersistentRequestInstance;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,9 +50,9 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     @JsonProperty(value = "deploymentStreams")
     protected List<Statement> deployStatements;
     @JsonProperty(value = "settings")
-    protected Map<String,Object> settings;
+    protected Map<String, Object> settings;
     @JsonProperty(value = "isDeployed")
-    protected boolean deployed=false;
+    protected boolean deployed = false;
     @JsonIgnore
     protected Prediction lastPrediction;
 
@@ -64,7 +61,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     @JsonIgnore
     private transient Logger loggerService = LogManager.getLogger(CEMLManager.class);
     @JsonIgnore
-    private transient boolean built =false;
+    private transient boolean built = false;
     private boolean alwaysDeploy = false;
 
     @Override
@@ -75,8 +72,6 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     public void setSettings(Map<String, Object> settings) {
         this.settings = settings;
     }
-
-
 
     @Override
     public DataDescriptors getDescriptors() {
@@ -93,7 +88,6 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
         return model;
     }
 
-
     @Override
     public String getName() {
         return name;
@@ -106,7 +100,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
     @Override
     public void setLastPrediction(Prediction prediction) {
-        lastPrediction= prediction;
+        lastPrediction = prediction;
     }
 
     @JsonProperty(value = "learningStreams")
@@ -122,7 +116,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
     @JsonProperty(value = "deploymentStreams")
     @Override
-    public Collection< Statement> getDeploymentStream() {
+    public Collection<Statement> getDeploymentStream() {
         return deployStatements;
     }
 
@@ -133,7 +127,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
     @JsonProperty(value = "auxiliaryStreams")
     @Override
-    public Collection< Statement> getAuxiliaryStream() {
+    public Collection<Statement> getAuxiliaryStream() {
         return auxiliaryStreams;
     }
 
@@ -148,72 +142,68 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     }
 
     @Override
-    public void deploy()  {
-        if (!deployed){
-            loggerService.info("Request "+name+" is being deployed");
-            MultiResourceResponses<Statement> responses =StatementFeeder.startStatements(deployStatements);
-            if((deployed=(responses.containsSuccess())))
-                loggerService.info("Request "+name+" has been deployed");
-
+    public void deploy() {
+        if (!deployed) {
+            loggerService.info("Request " + name + " is being deployed");
+            MultiResourceResponses<Statement> responses = StatementFeeder.startStatements(deployStatements);
+            if ((deployed = (responses.containsSuccess())))
+                loggerService.info("Request " + name + " has been deployed");
         }
     }
 
     @Override
     public void undeploy() {
-        if(deployed&&!alwaysDeploy) {
+        if (deployed && !alwaysDeploy) {
             StatementFeeder.pauseStatements(deployStatements);
-            deployed =false;
-            loggerService.info("Request "+name+" had been removed from active deployment");
+            deployed = false;
+            loggerService.info("Request " + name + " had been removed from active deployment");
         }
     }
 
     @Override
     public void report(Object reportObject) {
         try {
-             CEML.report(name,SharedSettings.getSerializer().toString(reportObject));
-        }catch (Exception e) {
-            loggerService.error(e.getMessage(),e);
+            CEML.report(name, SharedSettings.getSerializer().toString(reportObject));
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(), e);
         }
     }
 
     @Override
     public void setName(String name) {
-        if(!built)
-            this.name=name;
+        if (!built)
+            this.name = name;
         else
-            loggerService.error("An illegal intent of changing the name of the request "+this.name+" after the building process");
+            loggerService.error("An illegal intent of changing the name of the request " + this.name + " after the building process");
     }
 
     @Override
     public JsonSerializable build() throws TraceableException, UnknownUntraceableException {
         boolean[] phasesDone = {false, false, false, false, false, false, false, false, false, false};
-        String[] phasesNames ={
+        String[] phasesNames = {
                 "pre-requisites", "descriptors building", "auxiliary statement building", "learning statement building",
                 "deployment statement building", "model building", "request insertion", "auxiliary statement creation", "learning statement creation",
                 "deployment statement creation"};
-        int[] statementsCounter ={0,0,0,0,0,0};
-        Exception exception =null;
+        int[] statementsCounter = {0, 0, 0, 0, 0, 0};
+        Exception exception = null;
         List<MultiResourceResponses<Statement>> responses = new LinkedList<>();
-
 
         // control of phase building
         int buildTill = phasesDone.length;
         if (settings.containsKey(BUILD_TILL_PHASE) && settings.get(BUILD_TILL_PHASE) instanceof String || settings.get(BUILD_TILL_PHASE) != null)
             try {
-                 buildTill = Integer.valueOf(settings.get(BUILD_TILL_PHASE).toString());
-            }catch (Exception e){
-                loggerService.error("Phase given was not number!",e);
+                buildTill = Integer.valueOf(settings.get(BUILD_TILL_PHASE).toString());
+            } catch (Exception e) {
+                loggerService.error("Phase given was not number!", e);
             }
-
-
 
         try {
 
-            if ((schema==null && descriptors == null) || model == null || learningStatements == null)
+            if ((schema == null && descriptors == null) || model == null || learningStatements == null)
                 throw new Exception("The data descriptors or schema, model and evaluator are mandatory fields!");
-            phasesDone[0] =true;
+            phasesDone[0] = true;
 
-            if(schema!=null) {
+            if (schema != null) {
                 schema.setName(name);
                 schema.build();
                 descriptors = (DataDescriptors) schema.toLegacy();
@@ -222,15 +212,14 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
             phasesDone[1] = true;
 
-
-            if(phasesDone[1] && 2 <= buildTill ) {
+            if (phasesDone[1] && 2 <= buildTill) {
                 if (auxiliaryStreams != null)
                     for (Statement statement : auxiliaryStreams) {
 
-                        if(!(boolean) settings.getOrDefault(PUBLISH_INTERMEDIATE_STEPS,false)) {
+                        if (!(boolean) settings.getOrDefault(PUBLISH_INTERMEDIATE_STEPS, false)) {
                             statement.setCEHandler("");
                             statement.setOutput(null);
-                        }else {
+                        } else {
                             statement.setOutput(Collections.singletonList(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)));
                             statement.setScope(Collections.singletonList(conf.getString(Const.CEML_MQTT_BROKER_HOST)));
                         }
@@ -246,10 +235,10 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                 if (learningStatements != null && 3 <= buildTill)
                     for (LearningStatement statement : learningStatements) {
 
-                        if(!(boolean) settings.getOrDefault(PUBLISH_INTERMEDIATE_STEPS,false)) {
+                        if (!(boolean) settings.getOrDefault(PUBLISH_INTERMEDIATE_STEPS, false)) {
                             statement.setCEHandler("");
                             statement.setOutput(null);
-                        }else
+                        } else
                             statement.setOutput(Collections.singletonList(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)));
 
                         statement.setRequest(this);
@@ -269,21 +258,20 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                         statement.setStatement(statement.getStatement().replace("<id>", name));
                         statement.build();
                         statementsCounter[2]++;
-
                     }
                 phasesDone[4] = (deployStatements == null || (deployStatements.size() == statementsCounter[2]));
             }
 
-            if(phasesDone[4] && 5 <= buildTill) {
-                if(schema!=null)
+            if (phasesDone[4] && 5 <= buildTill) {
+                if (schema != null)
                     model.setDataSchema(schema);
                 model.setDescriptors(descriptors);
-              //  model.setName(name);
+                //  model.setName(name);
                 model.build();
                 phasesDone[5] = true;
             }
 
-            if(phasesDone[5] && 6 <= buildTill) {
+            if (phasesDone[5] && 6 <= buildTill) {
                 insertInCEPEngines();
                 phasesDone[6] = true;
             }
@@ -319,59 +307,57 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                     responses.add(response);
                     if (!(phasesDone[9] = response.getOverallStatus() < 300))
                         break;
-                    if(!(alwaysDeploy=settings.containsKey(ALWAYS_DEPLOY) && (boolean)settings.get(ALWAYS_DEPLOY)))
+                    if (!(alwaysDeploy = settings.containsKey(ALWAYS_DEPLOY) && (boolean) settings.get(ALWAYS_DEPLOY)))
                         StatementFeeder.pauseStatement(statement);
                     statementsCounter[5]++;
                 }
-
             } else
                 phasesDone[9] = phasesDone[8];
-
-
-        }catch (Exception e){
-            exception =e;
+        } catch (Exception e) {
+            exception = e;
         }
-        for (int i=0; i<phasesDone.length; i++)
+        for (int i = 0; i < phasesDone.length; i++)
             phasesDone[i] = phasesDone[i] || i > buildTill;
 
-        if(!settings.containsKey(IGNORE_BUILD_FAILURES))
-            errorHandling(phasesDone,phasesNames,statementsCounter,exception, !responses.isEmpty()? responses.get(responses.size()-1): null);
+        if (!settings.containsKey(IGNORE_BUILD_FAILURES))
+            errorHandling(phasesDone, phasesNames, statementsCounter, exception, !responses.isEmpty() ? responses.get(responses.size() - 1) : null);
 
-        built=true;
+        built = true;
         return this;
     }
-/*
-    @Override
-    public void rebuild(CEMLRequest me) throws Exception {
 
-    }
-*/
-    @Override
-    public void destroy() throws Exception{
+    /*
+        @Override
+        public void rebuild(CEMLRequest me) throws Exception {
 
-        if(deployStatements!=null)
+        }
+    */
+    @Override
+    public void destroy() throws Exception {
+
+        if (deployStatements != null)
             rollbackStatements(deployStatements, deployStatements.size());
 
-        rollbackStatements(learningStatements,learningStatements.size());
+        rollbackStatements(learningStatements, learningStatements.size());
 
-        if(auxiliaryStreams !=null)
+        if (auxiliaryStreams != null)
             rollbackStatements(auxiliaryStreams, auxiliaryStreams.size());
 
         dropInCEPEngines();
 
         model.destroy();
 
-        if(schema!=null)
+        if (schema != null)
             schema.destroy();
         descriptors.destroy();
         super.destroy();
-
     }
-    private void errorHandling(boolean[] phasesDone,String[] phasesNames,int[] buildStatements, Exception exception,  MultiResourceResponses<Statement> response)throws TraceableException, UnknownUntraceableException {
-        int i =0;
-        for(; i<phasesDone.length && phasesDone[i];) i++;
 
-        if(i<10) {
+    private void errorHandling(boolean[] phasesDone, String[] phasesNames, int[] buildStatements, Exception exception, MultiResourceResponses<Statement> response) throws TraceableException, UnknownUntraceableException {
+        int i = 0;
+        for (; i < phasesDone.length && phasesDone[i]; ) i++;
+
+        if (i < 10) {
             String base = "Error in the " + phasesNames[i] + " phase (" + String.valueOf(i) + ") of CEML creation phases ";
             String message = null;
             if (exception != null)
@@ -380,7 +366,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
             if ((i < 3 || (i > 4 && i < 6)) && (exception == null))
                 message = base + ": Basic requisites for building the request have not being met";
             else if ((i > 2 && i < 5) || (i > 6 && i < 10)) {
-                base += " on statement /" + String.valueOf(buildStatements[i - (i<5? 3: 4)]) + "/ ";
+                base += " on statement /" + String.valueOf(buildStatements[i - (i < 5 ? 3 : 4)]) + "/ ";
                 if (exception != null)
                     message = base + exception.getMessage();
                 else if (i > 2 && i < 5) {
@@ -404,129 +390,124 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
             if (message != null) {
 
-                if(exception!=null) {
+                if (exception != null) {
                     if (exception instanceof StatementException || exception instanceof InternalException || exception instanceof UnknownException)
-                        if(response!=null) {
+                        if (response != null) {
                             response.getResponsesTail().setMessage(message);
                             throw new ErrorResponseException(response.getResponsesTail());
-                        }else if (exception instanceof StatementException )
+                        } else if (exception instanceof StatementException)
                             throw new StatementException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
-                        else if ( exception instanceof InternalException )
+                        else if (exception instanceof InternalException)
                             throw new InternalException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
                         else
                             throw new UnknownException(((TraceableException) exception).getErrorProducerId(), ((TraceableException) exception).getErrorProducerType(), message, exception);
                     else
                         throw new UnknownUntraceableException(message, exception);
-                }else {
-                    if (response != null){
+                } else {
+                    if (response != null) {
                         response.getResponsesTail().setMessage(message);
                         throw new ErrorResponseException(response.getResponsesTail());
-                    }else
+                    } else
                         throw new UnknownUntraceableException(message);
                 }
             }
         }
-
     }
 
-    private void rollback(int fromPhase, int[] buildStatements) throws Exception{
-        if(fromPhase>8){
-            if(deployStatements!=null && !deployStatements.isEmpty())
-                rollbackStatements(deployStatements,buildStatements[5]);
+    private void rollback(int fromPhase, int[] buildStatements) throws Exception {
+        if (fromPhase > 8) {
+            if (deployStatements != null && !deployStatements.isEmpty())
+                rollbackStatements(deployStatements, buildStatements[5]);
         }
-        if(fromPhase>7){
-            if(learningStatements!=null && !learningStatements.isEmpty()) {
+        if (fromPhase > 7) {
+            if (learningStatements != null && !learningStatements.isEmpty()) {
                 rollbackStatements(learningStatements, buildStatements[4]);
             }
         }
-        if(fromPhase>6){
-            if(auxiliaryStreams !=null && !auxiliaryStreams.isEmpty())
-                rollbackStatements(auxiliaryStreams,buildStatements[3]);
+        if (fromPhase > 6) {
+            if (auxiliaryStreams != null && !auxiliaryStreams.isEmpty())
+                rollbackStatements(auxiliaryStreams, buildStatements[3]);
         }
 
-        if(fromPhase>5){
+        if (fromPhase > 5) {
             dropInCEPEngines();
         }
-
     }
-    private void rollbackStatements(List statements, int till) throws Exception{
+
+    private void rollbackStatements(List statements, int till) throws Exception {
 
         Statement aux = null;
         try {
-            for (int i=0; i<till;i++) {
-                if(statements.get(i) instanceof Statement) {
+            for (int i = 0; i < till; i++) {
+                if (statements.get(i) instanceof Statement) {
                     aux = (Statement) statements.get(i);
                     StatementFeeder.deleteStatement(aux.getId(), null);
                 }
             }
-        }catch (Exception e){
-            if(aux!=null)
-                throw new Exception("Error while rolling back statement named "+aux.getName()+ " with ID "+aux.getId()+"; the agent may had being left in an unstable state");
+        } catch (Exception e) {
+            if (aux != null)
+                throw new Exception("Error while rolling back statement named " + aux.getName() + " with ID " + aux.getId() + "; the agent may had being left in an unstable state");
             else
                 throw new Exception("Error while rolling back statements; the agent may had being left in an unstable state");
         }
     }
-    public int insertInCEPEngines(){
-        int n=0;
-        for (CEPEngine dfw: CEPEngine.instancedEngines.values()      ) {
-            CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
-            if(extended!=null) {
-                extended.insertObject(name, this);
-                n++;
-            }
 
+    public int insertInCEPEngines() {
+        int n = 0;
+        CEPEngineAdvanced extended = CEPEngine.instancedEngine.getValue().getAdvancedFeatures();
+        if (extended != null) {
+            extended.insertObject(name, this);
+            n++;
         }
+
         return n;
     }
-    public int dropInCEPEngines(){
-        int n=0;
-        for (CEPEngine dfw: CEPEngine.instancedEngines.values()      ) {
-            CEPEngineAdvanced extended = dfw.getAdvancedFeatures();
-            if(extended!=null) {
-                extended.dropObject(name);
-                n++;
-            }
 
+    public int dropInCEPEngines() {
+        int n = 0;
+        CEPEngineAdvanced extended = CEPEngine.instancedEngine.getValue().getAdvancedFeatures();
+        if (extended != null) {
+            extended.dropObject(name);
+            n++;
         }
+
         return n;
     }
-    public EventEnvelope predict(Object input){
+
+    public EventEnvelope predict(Object input) {
         Object aux = input;
-        List<EventEnvelope> orgInput= null;
+        List<EventEnvelope> orgInput = null;
         try {
-            if(input instanceof ArrayList) {
-                List aux1= (ArrayList)input;
-                if(!aux1.isEmpty()&& aux1.get(1) instanceof EventEnvelope) {
+            if (input instanceof ArrayList) {
+                List aux1 = (ArrayList) input;
+                if (!aux1.isEmpty() && aux1.get(1) instanceof EventEnvelope) {
                     orgInput = (ArrayList<EventEnvelope>) aux1;
                     aux = orgInput.stream().map(i -> i.getValue()).collect(Collectors.toList());
-                }else
+                } else
                     aux = input;
-            }if (input instanceof EventEnvelope[]){
+            }
+            if (input instanceof EventEnvelope[]) {
                 orgInput = new ArrayList<>(Arrays.asList((EventEnvelope[]) input));
                 aux = orgInput.stream().map(i -> i.getValue()).collect(Collectors.toList());
-
-            }else if(input instanceof Object[])
-                aux=Arrays.asList((Object[])input);
+            } else if (input instanceof Object[])
+                aux = Arrays.asList((Object[]) input);
             Prediction prediction;
             try {
 
                 prediction = model.predict(aux);
-            }catch (ClassCastException ex){
-                List auxs= new ArrayList();
+            } catch (ClassCastException ex) {
+                List auxs = new ArrayList();
                 auxs.add(aux);
                 prediction = model.predict(auxs);
-
             }
             prediction.setOriginalInput(input);
 
             setLastPrediction(prediction);
 
             return EventBuilder.getBuilder().refactory(prediction);
-
         } catch (Exception e) {
-            loggerService.error(e.getMessage(),e);
-            return Observation.factory(e.getMessage(),"Error",name, SharedSettings.getId());
+            loggerService.error(e.getMessage(), e);
+            return Observation.factory(e.getMessage(), "Error", name, SharedSettings.getId());
         }
-
     }
 }

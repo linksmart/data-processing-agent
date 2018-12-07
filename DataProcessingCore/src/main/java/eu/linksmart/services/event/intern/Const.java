@@ -28,7 +28,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
 
     String PERSISTENT_EVENTS_FILE = "cep_init_bootstrapping_events_files";
 
-    String CEP_ENGINES_PATH = "cep_init_engines";
+    String CEP_ENGINE = "cep_init_engines";
 
     String DEFAULT_CONFIGURATION_FILE = "__def__agent__conf__.cfg";
 

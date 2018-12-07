@@ -3,8 +3,8 @@ package eu.linksmart.api.event.components;
 import eu.linksmart.api.event.exceptions.*;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.Statement;
+import org.apache.commons.lang3.tuple.MutablePair;
 
-import java.util.Hashtable;
 import java.util.Map;
 /**
  * Copyright [2013] [Fraunhofer-Gesellschaft]
@@ -44,7 +44,7 @@ public interface CEPEngine extends AnalyzerComponent {
      * All CEP engines that implement this interface must add themselves into this Map.
      *
      * */
-    Map<String, CEPEngine> instancedEngines = new Hashtable<>();
+    MutablePair<String, CEPEngine> instancedEngine = new MutablePair<String, CEPEngine>("ClassName",null);
 
     /**
      * Return the name of the CEP which implement the interface
