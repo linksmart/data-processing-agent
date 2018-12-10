@@ -178,25 +178,23 @@ public class Tools {
             return result;
     }
 
-    static public Object[] addAll(Object o, Object o2){
-        if(o instanceof Object[] && o2 instanceof Object[] ){
-            return ArrayUtils.addAll((Object[])o,(Object[])o2);
-        }
-        if(o instanceof List ){
-            return addAll(((List) o).toArray(),  o2);
+    static public Object[] addAll(Object o, Object o2) {
+        Object[] ret;
+        if (Object[].class.isAssignableFrom(o.getClass()) && Object[].class.isAssignableFrom(o2.getClass())) {
+            ret = ArrayUtils.addAll((Object[]) o, (Object[]) o2);
+        } else if (List.class.isAssignableFrom(o.getClass())) {
+            ret = addAll(((List) o).toArray(), o2);
 
-        }
-        if(o2 instanceof List ){
-            return addAll(o,  ((List) o2).toArray());
+        } else if (List.class.isAssignableFrom(o2.getClass())) {
+            ret = addAll(o, ((List) o2).toArray());
 
-        }
-        if(o instanceof Object[] ){
-            return ArrayUtils.addAll((Object[])o, Collections.singletonList(o2));
-        }
-        if(o2 instanceof Object[] ){
-            return ArrayUtils.addAll( new Object[]{o}, (Object[])o2) ;
-        }
-        return new Object[]{o,o2};
+        } else if (Object[].class.isAssignableFrom(o.getClass())) {
+            ret = ArrayUtils.addAll((Object[]) o, o2);
+        } else if (Object[].class.isAssignableFrom(o2.getClass())) {
+            ret = ArrayUtils.addAll(ArrayUtils.toArray(o), o2);// <- doesn't work not know why
+        } else
+            ret = ArrayUtils.toArray(o, o2);
+        return ret;
     }
     static public Object[] removeAll(Object o, Object o2){
         List<Object> list=null, list2=null, result;
@@ -354,71 +352,6 @@ public class Tools {
         }
         return map;
     }
-   static public int CompositionOrder(Object values ){
-        final Map<Object,Integer> map =new HashMap();
-        map.put("ds_1-0", 1);
-        map.put("ds_2-0", 2);
-        map.put("ds_3-0", 3);
-        map.put("ds_1-1", 4);
-        map.put("ds_2-1", 5);
-        map.put("ds_3-1", 6);
-        map.put("ds_1-2", 7);
-        map.put("ds_2-2", 8);
-        map.put("ds_3-2", 9);
-        map.put("ds_1-3", 10);
-        map.put("ds_2-3", 11);
-        map.put("ds_3-3", 12);
-        map.put("ds_1-4", 13);
-        map.put("ds_2-4", 14);
-        map.put("ds_3-4", 15);
-        map.put("ds_1-5", 16);
-        map.put("ds_2-5", 17);
-        map.put("ds_3-5", 18);
-        map.put("ds_1-6", 19);
-        map.put("ds_2-6", 20);
-        map.put("ds_3-6", 21);
-        map.put("ds_1-7", 22);
-        map.put("ds_2-7", 23);
-        map.put("ds_3-7", 24);
-        map.put("ds_1-8", 25);
-        map.put("ds_2-8", 26);
-        map.put("ds_3-8", 27);
-        map.put("ds_1-9", 28);
-        map.put("ds_2-9", 29);
-        map.put("ds_3-9", 30);
-        map.put("ds_1-10", 31);
-        map.put("ds_2-10", 32);
-        map.put("ds_3-10", 33);
-        map.put("ds_1-11", 34);
-        map.put("ds_2-11", 35);
-        map.put("ds_3-11", 36);
-        map.put("ds_1-12", 37);
-        map.put("ds_2-12", 38);
-        map.put("ds_3-12", 39);
-        map.put("ds_1-14", 40);
-        map.put("ds_2-14", 41);
-        map.put("ds_3-14", 42);
-        map.put("ds_1-15", 43);
-        map.put("ds_2-15", 44);
-        map.put("ds_3-15", 45);
-        map.put("ds_1-16", 46);
-        map.put("ds_2-16", 47);
-        map.put("ds_3-16", 48);
-        map.put("ds_1-17", 49);
-        map.put("ds_2-17", 50);
-        map.put("ds_3-17", 51);
-        map.put("ds_1-18", 52);
-        map.put("ds_2-18", 53);
-        map.put("ds_3-18", 54);
-        map.put("ds_1-19", 55);
-        map.put("ds_2-19", 56);
-        map.put("ds_3-19", 57);
-        map.put("ds_1-55", 58);
-        map.put("ds_2-55", 59);
-        map.put("ds_3-55", 60);
-       return sort(map, values);
-    }
-
 
     static public Observation[] gapFillUp(Observation[] observations, int finalSize){
         if(finalSize<=observations.length)
@@ -459,7 +392,6 @@ public class Tools {
         return ret;
     }
     static public Observation[] fillUp(Observation[] observations, int startIndex , int finalSize){
-
 
         try {
 
