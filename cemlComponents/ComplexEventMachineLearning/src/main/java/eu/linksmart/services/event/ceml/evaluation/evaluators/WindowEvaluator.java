@@ -27,7 +27,7 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
     @JsonProperty
     private double[][] confusionMatrix;
     @JsonProperty
-    private List<String> classes;
+    private List classes;
     @JsonProperty
     private long[][] sequentialConfusionMatrix;
     private long[][] initialSamplesMatrix;

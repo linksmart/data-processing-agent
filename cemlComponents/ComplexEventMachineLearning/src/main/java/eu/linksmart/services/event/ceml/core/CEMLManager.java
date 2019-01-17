@@ -187,6 +187,8 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
         int[] statementsCounter = {0, 0, 0, 0, 0, 0};
         Exception exception = null;
         List<MultiResourceResponses<Statement>> responses = new LinkedList<>();
+        if ( settings == null )
+            settings = new Hashtable<>();
 
         // control of phase building
         int buildTill = phasesDone.length;

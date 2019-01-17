@@ -144,6 +144,9 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                  processMessageLegacy(eventMap);
                  return;
             }
+            if(eventMap.size() == 1 && schema.size() !=1  &&  !schema.getProperties().containsKey(eventMap.keySet().iterator().next()) )
+                eventMap = (Map) eventMap.values().iterator().next();
+
 
         ExtractedElements elements = schema.collect(eventMap);
         if(elements!=null){
@@ -155,9 +158,9 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                 synchronized (originalRequest) {
 
                     if(retrainEvery==1) { // iterative
-                        Prediction prediction = model.predict(elements.toMappedInputs());
-                        model.learn(elements.toMappedInputs(),elements.getTargetsList());
-                        evaluate(prediction,elements.getInputsList());
+                        Prediction prediction = model.predict(elements.getInputsList());
+                        model.learn(elements.getInputsList(),elements.getTargetsList());
+                        evaluate(prediction,elements.getTargetsList());
 
                     }
                     else if (rawMaps.size()<retrainEvery) {

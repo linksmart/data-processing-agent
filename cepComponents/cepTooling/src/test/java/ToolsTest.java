@@ -21,13 +21,13 @@ public class ToolsTest {
         Assert.assertTrue("Array must be equal!",validateArray(Tools.addAll(l,o2)));
         Assert.assertTrue("Array must be equal!",validateArray(Tools.addAll(l,l2)));
         Assert.assertTrue("Array must be equal!",validateArray(Tools.addAll(o,3)));
-      //  Assert.assertTrue("Array must be equal!",validateArray(Tools.addAll(0,o3))); // <- doesn't work not know why
+        Assert.assertTrue("Array must be equal!",validateArray(Tools.addAll(0,o3))); // <- doesn't work not know why
         Assert.assertTrue("Array must be equal!",validateArray(Tools.addAll(0,1)));
 
     }
-    private boolean validateArray(Object[] union){
-        for(int i=0; i<union.length;i++)
-            if (!union[i].equals(i) )
+    private boolean validateArray(List union){
+        for(int i=0; i<union.size();i++)
+            if (!union.get(i).equals(i) )
                 return false;
 
         return true;

@@ -35,7 +35,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implement
 
     private ModelEvaluationMetric initialSamples;
 
-    private List<String> classes;
+    private List classes;
     private long[][] initialSamplesMatrix;
 
     public List<String> getClasses() {
@@ -45,7 +45,7 @@ public class DoubleTumbleWindowEvaluator extends EvaluatorBase<Number> implement
     @JsonIgnore
     private   long[][] initialConfusionMatrix = null;
 
-    public void setClasses(List<String> classes) {
+    public void setClasses(List classes) {
         this.classes = classes;
     }
     public DoubleTumbleWindowEvaluator(List<TargetRequest> targets) {

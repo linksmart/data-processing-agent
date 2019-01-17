@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -50,10 +51,10 @@ public abstract class ClassifierModel<Input,Output,LearningObject> extends Model
             // Try to get target from list of items: In this case target is only 1 element the list (the last)
             if(schema.getType().equals("array") && schema.getTargetSize() == 1 && schema.getItems().get(schema.getSize()-1).isTarget())
                 ((DoubleTumbleWindowEvaluator) evaluator).setClasses(new ArrayList<>(schema.getItems().get(schema.getSize()-1).getTargets()));
-            else if (schema.getType().equals("object") && schema.getTargets()!=null && schema.getTargets().size()==1) // Try to get target from object marked as target: In this case only one target should be marked
-                ((DoubleTumbleWindowEvaluator) evaluator).setClasses(new ArrayList<>(schema.getProperties().get(schema.getTargets().iterator().next()).getTargets()));
-            else if (schema.getType().equals("object") && schema.getTargets()!=null && schema.getTargets().size()>1) // Try to get target from object marked as target: In this case only one target should be marked
-                ((DoubleTumbleWindowEvaluator) evaluator).setClasses(new ArrayList<>(schema.getTargets()));
+            else if ( ( schema.getType().equals("object") || schema.getType().equals("map") ) && schema.getTargets()!=null && schema.getTargets().size()==1) // Try to get target from object marked as target: In this case only one target should be marked
+                ((DoubleTumbleWindowEvaluator) evaluator).setClasses(new ArrayList(schema.getTargets()));
+            else if ( ( schema.getType().equals("object") || schema.getType().equals("map") ) && schema.getTargets()!=null && schema.getTargets().size()>1) // Try to get target from object marked as target: In this case only one target should be marked
+                ((DoubleTumbleWindowEvaluator) evaluator).setClasses(new ArrayList(schema.getTargets()));
             else
                 throw new UnknownException(name,this.getClass().getCanonicalName(),"unhandled class creation for this data schema");
         }

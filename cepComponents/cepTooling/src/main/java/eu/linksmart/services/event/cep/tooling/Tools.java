@@ -14,6 +14,7 @@ import eu.linksmart.services.utils.function.Utils;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.util.Assert;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
@@ -178,22 +179,35 @@ public class Tools {
             return result;
     }
 
-    static public Object[] addAll(Object o, Object o2) {
-        Object[] ret;
-        if (Object[].class.isAssignableFrom(o.getClass()) && Object[].class.isAssignableFrom(o2.getClass())) {
-            ret = ArrayUtils.addAll((Object[]) o, (Object[]) o2);
-        } else if (List.class.isAssignableFrom(o.getClass())) {
-            ret = addAll(((List) o).toArray(), o2);
-
-        } else if (List.class.isAssignableFrom(o2.getClass())) {
-            ret = addAll(o, ((List) o2).toArray());
-
-        } else if (Object[].class.isAssignableFrom(o.getClass())) {
-            ret = ArrayUtils.addAll((Object[]) o, o2);
+    static public List addAll(Object o, Object o2) {
+        List ret = new ArrayList();
+        if (Object[].class.isAssignableFrom(o.getClass())) {
+            return addAll(Arrays.stream((Object[]) o).collect(Collectors.toCollection(ArrayList::new)), o2);
         } else if (Object[].class.isAssignableFrom(o2.getClass())) {
-            ret = ArrayUtils.addAll(ArrayUtils.toArray(o), o2);// <- doesn't work not know why
-        } else
-            ret = ArrayUtils.toArray(o, o2);
+            return addAll(o, Arrays.stream((Object[]) o2).collect(Collectors.toCollection(ArrayList::new)));
+        }
+        if (!List.class.isAssignableFrom(o.getClass()) && Collection.class.isAssignableFrom(o.getClass())) {
+            return addAll(new ArrayList((Collection) o), o2);
+
+        } else if (!List.class.isAssignableFrom(o2.getClass()) && Collection.class.isAssignableFrom(o2.getClass())) {
+            return addAll(o, new ArrayList((Collection) o2));
+
+        } else if (!List.class.isAssignableFrom(o.getClass())) {
+            ret.add(o);
+            return addAll(ret, o2);
+
+        } else if (List.class.isAssignableFrom(o.getClass()) && List.class.isAssignableFrom(o2.getClass())) {
+            ret.addAll(((List) o));
+            ret.addAll(((List) o2));
+
+        } else if (List.class.isAssignableFrom(o.getClass()) && !List.class.isAssignableFrom(o2.getClass())) {
+            ret.addAll(((List) o));
+            ret.add(o2);
+
+        }else {
+            ret.add(o);
+            ret.add(o2);
+        }
         return ret;
     }
     static public Object[] removeAll(Object o, Object o2){
@@ -391,21 +405,21 @@ public class Tools {
 
         return ret;
     }
-    static public Observation[] fillUp(Observation[] observations, int startIndex , int finalSize){
+    static public ArrayList<Observation> fillUp(ArrayList<Observation> observations, int startIndex , int finalSize){
 
         try {
 
-            if(finalSize<=observations.length || observations.length < 1)
+            if(finalSize<=observations.size()  || observations.size() < 1)
                 return observations;
-            Observation[] ret = new Observation[finalSize];
-            String idDSBase = observations[0].getDatastream().getId().toString().split("-")[0], idSBase = idDSBase.replace("ds_", "");
+            ArrayList<Observation>  ret = new ArrayList<Observation>(finalSize);
+            String idDSBase = observations.get(0).getDatastream().getId().toString().split("-")[0], idSBase = idDSBase.replace("ds_", "");
 
             int pointer = 0;
 
-            for(int i=0; i<ret.length;i++) {
+            for(int i=0; i<finalSize;i++) {
 
-                if(pointer < observations.length && observations[pointer].getDatastream().getId().equals(idDSBase+"-"+(startIndex+i))){
-                    ret[i] = observations[pointer];
+                if(pointer < observations.size() && observations.get(pointer).getDatastream().getId().equals(idDSBase+"-"+(startIndex+i))){
+                    ret.add( observations.get(pointer));
                     pointer++;
                 } else {
                     Sensor sensor = new SensorImpl();
@@ -413,11 +427,12 @@ public class Tools {
                     Datastream datastream = new DatastreamImpl();
                     datastream.setId(idDSBase + "-" + (startIndex + i));
                     Observation observation = new ObservationImpl();
-                    observation.setDate(observations[0].getDate());
+                    observation.setDate(observations.get(0).getDate());
                     observation.setResult(0);
                     observation.setDatastream(datastream);
-                    ret[i] = observation;
+                    ret.add(observation);
                 }
+                Assert.isTrue(i!=ret.size(), "Mismatch adding values in the list");
             }
 
             return ret;
@@ -429,8 +444,9 @@ public class Tools {
         }
     }
 
-    static public Observation[] singleFillUp(Observation observation, int startIndex , int finalSize){
-        Observation[] ret = {observation};
+    static public ArrayList<Observation> singleFillUp(Observation observation, int startIndex , int finalSize){
+        ArrayList<Observation> ret = new ArrayList();
+        ret.add(observation);
         return fillUp(ret,startIndex,finalSize);
     }
     static public Object[] mapToArray(Map map, List<String> order){

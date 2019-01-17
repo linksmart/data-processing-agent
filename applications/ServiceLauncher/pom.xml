@@ -36,6 +36,10 @@
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>LinearRegressionModel</artifactId>
         </dependency>
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>DummyClassifier</artifactId>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>

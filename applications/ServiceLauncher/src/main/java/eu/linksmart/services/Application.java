@@ -16,7 +16,6 @@ public class Application {
         System.setProperty("log4j.configurationFile",Const.DEFAULT_DEBUG_CONFIGURATION_FILE);
         if(args.length>0)
             confFile= args[0];
-
         DataProcessingCore.start(confFile);
 
 

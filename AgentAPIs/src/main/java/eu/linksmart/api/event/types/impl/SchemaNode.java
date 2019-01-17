@@ -51,7 +51,7 @@ public class SchemaNode implements JsonSerializable {
     private Set<String> required;
     @JsonProperty("enum")
     private Set<String> enumeration;
-    private Set<String> targets;
+    private Set targets;
     private boolean needed = true, skip=false, target=false;
     private Map<String,SchemaNode> properties;
 
@@ -103,7 +103,7 @@ public class SchemaNode implements JsonSerializable {
             return Map.class;
         else if( original ==  List.class)
             return List.class;
-        else if( List.class.isAssignableFrom(original))
+        else if( List.class.isAssignableFrom(original) || Object[].class.isAssignableFrom(original) )
             return List.class;
         else if( original ==  Enum.class)
             return Enum.class;
@@ -119,7 +119,7 @@ public class SchemaNode implements JsonSerializable {
         return null;
     }
     public boolean isSimilar(Object object){
-        return similar(object.getClass())!=null && (similar(object.getClass()) == similar(getNativeType())|| (getNativeType().isArray() && "array".equals(type)));
+        return similar(object.getClass())!=null && (similar(object.getClass()) == similar(getNativeType())|| (getNativeType().isArray() && "array".equals(type))) ;
     }
     public boolean isSimilar(Class object){
         return similar(object)!=null && (similar(object) == similar(getNativeType()) || (getNativeType().isArray() && "array".equals(type))  );
@@ -188,7 +188,7 @@ public class SchemaNode implements JsonSerializable {
                SchemaNode current = properties.get(key);
                if (map.containsKey(key)) {
                    Object element = map.get(key);
-                   if (current.isSimilar(element)) {
+                   if (current.isSimilar(element.getClass())) {
                        if (current.getNativeType() == String.class) {
                            if (current.defaultValue != null && "".equals(element.toString()) && !element.toString().equals(current.defaultValue.toString()))
                                map.put(key, defaultValue.toString());

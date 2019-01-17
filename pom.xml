@@ -244,7 +244,11 @@
                 <artifactId>LinearRegressionModel</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>DummyClassifier</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
             <!--  External  Dependencies -->
             <!-- jackson related dependencies -->
             <dependency>

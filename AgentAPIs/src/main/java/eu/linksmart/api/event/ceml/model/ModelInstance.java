@@ -158,7 +158,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
             complete.put("target",targetLabel);
             learn((Input) complete);
         }else
-            throw new InternalException(getName(),"Internal Server Error","Unsupported type of data by the default learn function. Plase use list or map");
+            throw new InternalException(getName(),"Internal Server Error","Unsupported type of data by the default learn function. Please use list or map");
 
     }
     public void batchLearn(List<Input> input, List<Input> targetLabel) throws TraceableException, UntraceableException {
