@@ -6,7 +6,7 @@
         <version>1.8.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>iot.learning.universal.agent</artifactId>
+    <artifactId>iot.learning.universal.gpl.agent</artifactId>
     <name>LinkSmart® LGPL IoT Agent</name>
     <packaging>jar</packaging>
     <dependencies>
