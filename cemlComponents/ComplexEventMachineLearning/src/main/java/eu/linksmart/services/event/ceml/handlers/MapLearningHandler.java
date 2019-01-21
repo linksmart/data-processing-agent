@@ -81,7 +81,9 @@ public  class MapLearningHandler extends BaseMapEventHandler {
 
     @Override
     protected void processMessage(Map[] events) {
-        loggerService.warn("Learning events arriving as Map[] they are process individually");
+        if(events.length > 1)
+            loggerService.warn("Learning events arriving as Map[] they are process individually");
+
         if(events!=null)
             for (Map m: events)
                 processMessage(m);
@@ -89,8 +91,11 @@ public  class MapLearningHandler extends BaseMapEventHandler {
 
     @Override
     protected void processLeavingMessage(Map[] events) {
-        loggerService.warn("Learning events arriving remove streams, they are handle as inserting streams ");
-        processMessage(events);
+        if(events.length > 1)
+            loggerService.warn("Learning events arriving remove streams, they are handle as inserting streams ");
+
+        if(events!=null)
+            processMessage(events);
     }
     @Deprecated
     private void elementsAssurance(Map rawMap, Map  withoutTarget, List measuredTargets){

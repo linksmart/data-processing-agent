@@ -210,6 +210,22 @@ public class Tools {
         }
         return ret;
     }
+    static public List flatArrayOfListToList(List[] array){
+        List ret = new ArrayList();
+        for(List subList: array)
+            ret.addAll(subList);
+
+        return ret;
+    }
+    static public List addAll(List o, Object o2) {
+        return addAll((Object) o,(Object)o2);
+    }
+    static public List addAll(List o, List o2) {
+        return addAll((Object) o,(Object)o2);
+    }
+    static public List addAll(Object o, List o2) {
+        return addAll((Object) o,(Object)o2);
+    }
     static public Object[] removeAll(Object o, Object o2){
         List<Object> list=null, list2=null, result;
         if(o instanceof Object[]){

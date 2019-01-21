@@ -94,6 +94,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
         return evaluator;
     }
 
+
     @Override
     public void setDescriptors(DataDescriptors descriptors) {
         this.descriptors = descriptors;

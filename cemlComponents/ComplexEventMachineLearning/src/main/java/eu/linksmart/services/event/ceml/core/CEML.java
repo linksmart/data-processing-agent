@@ -16,7 +16,6 @@ import eu.linksmart.api.event.exceptions.ErrorResponseException;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.types.*;
-import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
 import eu.linksmart.api.event.ceml.CEMLRequest;
 import eu.linksmart.api.event.ceml.LearningStatement;
 import eu.linksmart.api.event.ceml.data.*;
@@ -27,6 +26,9 @@ import eu.linksmart.api.event.components.AnalyzerComponent;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.ceml.api.MqttCemlAPI;
+import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
 import eu.linksmart.services.event.ceml.intern.Const;
 import org.apache.commons.math3.filter.*;
@@ -266,39 +268,23 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         result.addResponse( new GeneralRequestResponse("OK", SharedSettings.getId(),name, "Learning Request", "OK",200 ));
         return result;
     }
-    static public Observation LastPrediction(String request){
-        return Observation.factory(requests.get(request).getLastPrediction(),"Prediction",request, SharedSettings.getId());
+    static public Observation lastPrediction(String request){
+        return Observation.factory(requests.get(request).getLastPrediction(), request,conf.getString(Const.ID_CONF_PATH),((EventEnvelope)requests.get(request)).getDate().getTime());
     }
-    static public Observation PredictUsing(String request,Object input){
+    static public Observation predictUsing(String request,Object input){
         try {
-            Object aux = input;
-            List<EventEnvelope> orgInput= null;
-            if(input instanceof ArrayList) {
-                ArrayList aux1= (ArrayList)input;
-                if(!aux1.isEmpty()&& aux1.get(1) instanceof EventEnvelope) {
-                    orgInput = (ArrayList<EventEnvelope>) aux1;
-                    aux = orgInput.stream().map(i -> i.getValue()).collect(Collectors.toList());
-                }else
-                    aux = input;
-            }if (input instanceof EventEnvelope[]){
-               orgInput = new ArrayList<>(Arrays.asList((EventEnvelope[])input));
-                aux = orgInput.stream().map(i -> i.getValue()).collect(Collectors.toList());
 
-            }else if(input instanceof Object[])
-                aux=Arrays.asList((Object[])input);
 
-            Prediction prediction = requests.get(request).getModel().predict(aux);
+            Prediction prediction = requests.get(request).getModel().predict(input);
             prediction.setOriginalInput(input);
 
             requests.get(request).setLastPrediction(prediction);
-            if(orgInput==null)
-                return Observation.factory(prediction,"Prediction",request, SharedSettings.getId());
-            else {
-                return Observation.factory(prediction,"Prediction",request, SharedSettings.getId(), orgInput.get(orgInput.size()-1).getDate().getTime());
-            }
+
+            return (Observation) EventBuilder.getBuilder().refactory(requests.get(request).getLastPrediction());
+
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
-            return Observation.factory(e.getMessage(),"Error",request, SharedSettings.getId());
+            return Observation.factory(e.getMessage(), request,conf.getString(Const.ID_CONF_PATH),(new Date()).getTime());
         }
     }
     static void report(String id, String message){
@@ -335,12 +321,12 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
     static public Observation filter(String filterName,Observation measurement){
         try {
             if (measurement.getValue() instanceof Number)
-                return Observation.factory(filter(filterName, ((Number) measurement.getResultValue())), measurement.getResultType().toString(), measurement.getDatastream().getId(), measurement.getSensor().getId(),measurement.getDate().getTime());
+                return Observation.factory(filter(filterName, ((Number) measurement.getResult())), measurement.getDatastream().getId(), measurement.getDatastream().getSensor().getId(),measurement.getDate().getTime());
             if (measurement.getValue() instanceof String) {
                 Double value = null;
                 try {
                     value = Double.valueOf(((String) measurement.getValue()));
-                    return Observation.factory(filter(filterName, value), measurement.getResultType().toString(), measurement.getDatastream().getId(), measurement.getSensor().getId(),measurement.getDate().getTime());
+                    return Observation.factory(filter(filterName, value), measurement.getDatastream().getId(), measurement.getDatastream().getSensor().getId(),measurement.getDate().getTime());
                 } catch (Exception ignored) {
                 }
             }
