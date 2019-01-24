@@ -25,10 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -233,9 +230,21 @@ public class PythonPyroBase<T> extends ClassifierModel<T, Object, PyroProxy> {
         } catch (PyroException e) {
             loggerService.error(e._pyroTraceback);
             throw new InternalException(this.getName(), "Pyro", e);
-        } catch (Exception e) {
-            throw new InternalException(this.getName(), "Pyro", e);
+        } catch (UnsupportedOperationException e){
+            loggerService.error("Pyro integration: "+e.getMessage());
+            try{
+                List<Object> res = new ArrayList<>();
+                for(T i:input){
+                    res.add(learner.call("predict", i));
+                }
+                return IntStream.range(0, input.size()).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
+            }catch (Exception ex){
+                loggerService.error("Pyro integration: "+e.getMessage());
+            }
+        }catch (Exception e) {
+            loggerService.error("Pyro integration: "+e.getMessage());
         }
+        return Collections.singletonList(new PredictionInstance<>());
     }
 
     @Override

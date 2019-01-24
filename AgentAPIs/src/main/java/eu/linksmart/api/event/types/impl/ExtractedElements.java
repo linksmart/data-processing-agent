@@ -614,8 +614,13 @@ public class ExtractedElements<T> implements List<T>  {
 
         @Override
         public Set<Entry<String,T>> entrySet() {
-            // too complicated and not useful
-            throw new UnsupportedOperationException();
+            Set<Entry<String,T>> set = new HashSet<>();
+            for(String key: featureByName.keySet()){
+
+                set.add(new AbstractMap.SimpleEntry<>(key,featureSpace.get(featureByName.get(key))));
+            }
+
+            return set;
         }
     }
     public class MappedInputs implements Map<String, T>{

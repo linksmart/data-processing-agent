@@ -119,10 +119,29 @@ public class SchemaNode implements JsonSerializable {
         return null;
     }
     public boolean isSimilar(Object object){
-        return similar(object.getClass())!=null && (similar(object.getClass()) == similar(getNativeType())|| (getNativeType().isArray() && "array".equals(type))) ;
+        return similar(object.getClass())!=null && (
+                    similar(object.getClass()) == similar(getNativeType()) ||
+                    (getNativeType().isArray() && "array".equals(type)) ||
+                    ( "enum".equals(type) && enumVerify(object, this.enumeration)  )
+            );
     }
     public boolean isSimilar(Class object){
-        return similar(object)!=null && (similar(object) == similar(getNativeType()) || (getNativeType().isArray() && "array".equals(type))  );
+        return similar(object)!=null && (
+                            (similar(object) == similar(getNativeType())) ||
+                            (getNativeType().isArray() && "array".equals(type) )||
+                            ("enum".equals(type) )
+                );
+    }
+    private static boolean enumVerify(Object object, Set enumeration){
+        if(object.getClass() == String.class || String.class.isAssignableFrom(object.getClass())){
+            return enumeration.contains(object.toString());
+        }  else if(object.getClass() == Integer.class || Integer.class.isAssignableFrom(object.getClass())){
+            return enumeration.contains(String.valueOf((Integer)object)) ||  enumeration.contains(object);
+        }else if(object.getClass() == Double.class || Double.class.isAssignableFrom(object.getClass())){
+            return enumeration.contains(String.valueOf((Double)object)) ||  enumeration.contains(object);
+        } else
+            return false;
+
     }
     @JsonIgnore
    static public Class getNativeType(String type){
@@ -179,129 +198,139 @@ public class SchemaNode implements JsonSerializable {
    public boolean validate(Object object) {
        return validate(object, null);
    }
-   private boolean validate(Object object, ExtractedElements collector) {
-       if (skip)
-           return true;
-       if (object instanceof Map) {
-           Map map = ((Map) object);
-           for (String key : properties.keySet()) {
-               SchemaNode current = properties.get(key);
-               if (map.containsKey(key)) {
-                   Object element = map.get(key);
-                   if (current.isSimilar(element.getClass())) {
-                       if (current.getNativeType() == String.class) {
-                           if (current.defaultValue != null && "".equals(element.toString()) && !element.toString().equals(current.defaultValue.toString()))
-                               map.put(key, defaultValue.toString());
-                           extract(collector,current,element);
-                       } else if ((similar(current.getNativeType()) == Number.class) && (current.minValue == null || getNumber(element).doubleValue() < current.minValue.doubleValue()) && (current.maxValue == null || getNumber(element).doubleValue() > current.maxValue.doubleValue())) {
-                           if (current.ceilingValue != null && getNumber(element).doubleValue() > current.ceilingValue.doubleValue())
-                               map.put(key, current.ceilingValue);
-                           if (current.floorValue != null && getNumber(element).doubleValue() < current.floorValue.doubleValue())
-                               map.put(key, current.floorValue);
-                           extract(collector,current,element);
-                       } else if ((similar(current.getNativeType()) == Long.class) && (current.minValue == null || getNumber(element).longValue() < current.minValue.longValue()) && (current.maxValue == null || getNumber(element).longValue() > current.maxValue.longValue())) {
-                           if (current.ceilingValue != null && getNumber(element).longValue() > current.ceilingValue.longValue())
-                               map.put(key, current.ceilingValue);
-                           if (current.floorValue != null && getNumber(element).longValue() < current.floorValue.longValue())
-                               map.put(key, current.floorValue);
-                           extract(collector,current,element);
-                       } else if ((current.getNativeType() == Enum.class) && !(current.enumeration.contains(element))) {
-                           return false;
+   private boolean validateObjectAsMap(Object object, ExtractedElements collector){
+       Map map = ((Map) object);
+       for (String key : properties.keySet()) {
+           SchemaNode current = properties.get(key);
+           if (map.containsKey(key)) {
+               Object element = map.get(key);
+               if (current.isSimilar(element.getClass())) {
+                   if (current.getNativeType() == String.class) {
+                       if (current.defaultValue != null && "".equals(element.toString()) && !element.toString().equals(current.defaultValue.toString()))
+                           map.put(key, defaultValue.toString());
+                       extract(collector,current,element);
+                   } else if ((similar(current.getNativeType()) == Number.class) && (current.minValue == null || getNumber(element).doubleValue() < current.minValue.doubleValue()) && (current.maxValue == null || getNumber(element).doubleValue() > current.maxValue.doubleValue())) {
+                       if (current.ceilingValue != null && getNumber(element).doubleValue() > current.ceilingValue.doubleValue())
+                           map.put(key, current.ceilingValue);
+                       if (current.floorValue != null && getNumber(element).doubleValue() < current.floorValue.doubleValue())
+                           map.put(key, current.floorValue);
+                       extract(collector,current,element);
+                   } else if ((similar(current.getNativeType()) == Long.class) && (current.minValue == null || getNumber(element).longValue() < current.minValue.longValue()) && (current.maxValue == null || getNumber(element).longValue() > current.maxValue.longValue())) {
+                       if (current.ceilingValue != null && getNumber(element).longValue() > current.ceilingValue.longValue())
+                           map.put(key, current.ceilingValue);
+                       if (current.floorValue != null && getNumber(element).longValue() < current.floorValue.longValue())
+                           map.put(key, current.floorValue);
+                       extract(collector,current,element);
+                   } else if ((current.getNativeType() == Enum.class) && ! enumVerify(element,current.getEnumeration()) ) {
+                       return false;
 
-                       } else if (!current.validate(element,collector)) {
-                           return false;
-                       }
-
-
-                       continue;
+                   } else if (!current.validate(element,collector)) {
+                       return false;
                    }
-                   return false;
 
+
+                   continue;
+               }
+               return false;
+
+           } else if (current.isNeeded()) {
+               return false;
+           }
+       }
+
+       return true;
+
+   }
+   private boolean validateObjectAsList(Object object, ExtractedElements collector){
+       List list;
+       if (object instanceof List)
+           list = ((List) object);
+       else
+           list = Arrays.asList((Object[]) object);
+       if (items != null && minValue == null && list.size() != items.size())
+           return false;
+       if ((maxValue != null && list.size() > maxValue.intValue()) || (minValue != null && list.size() < minValue.intValue()))
+           return false;
+       if (maxValue == null && minValue == null && list.size() != size())
+           return false;
+       if (items == null && size() > 0 && list.size() > 0)
+           if (ofType != null && object.getClass().isArray() && similar(getNativeType(ofType)) != similar(object.getClass().getComponentType()))
+               return false;
+
+           else if (ofType != null && !object.getClass().isArray() && object instanceof List && similar(((List) object).get(0).getClass()) != similar(getNativeType(ofType)))
+               return false;
+
+       if (items != null && items.size() >= list.size()) {
+           int j = 0;
+           for (int i = 0; i < list.size(); i++) {
+               if (items.size() < list.size())
+                   return false;
+               SchemaNode current = items.get(i);
+               Object element = list.get(j);
+               if (current.isSimilar(element)) {
+                   if (current.getNativeType() == String.class) {
+                       if (current.defaultValue != null && "".equals(element.toString()) && !element.toString().equals(current.defaultValue.toString()))
+                           list.set(j, defaultValue.toString());
+                       extract(collector,current,element);
+                   } else if ((similar(current.getNativeType()) == Number.class) && (current.minValue == null || getNumber(element).doubleValue() < current.minValue.doubleValue()) && (current.maxValue == null || getNumber(element).doubleValue() > current.maxValue.doubleValue())) {
+                       if (current.ceilingValue != null && getNumber(element).doubleValue() > current.ceilingValue.doubleValue())
+                           list.set(j, current.ceilingValue);
+                       if (current.floorValue != null && getNumber(element).doubleValue() < current.floorValue.doubleValue())
+                           list.set(j, current.floorValue);
+                       extract(collector,current,element);
+                   } else if ((similar(current.getNativeType()) == Long.class) && (current.minValue == null || getNumber(element).longValue() < current.minValue.longValue()) && (current.maxValue == null || getNumber(element).longValue() > current.maxValue.longValue())) {
+                       if (current.ceilingValue != null && getNumber(element).longValue() > current.ceilingValue.longValue())
+                           list.set(j, current.ceilingValue);
+                       if (current.floorValue != null && getNumber(element).longValue() < current.floorValue.longValue())
+                           list.set(j, current.floorValue);
+                       extract(collector,current,element);
+                   } else if ((current.getNativeType() == Enum.class) && !(current.enumeration.contains(element))) {
+                       return false;
+
+                   } else if (!current.validate(element,collector)) {
+                       return false;
+
+                   }
+                   j++;
+
+               } else if (defaultValue != null && element.getClass().isAssignableFrom(defaultValue.getClass()) && items.size() >= list.size()) {
+                   try {
+                       list.add(i, defaultValue);
+                       j++;
+                       extract(collector,current,element);
+                   } catch (Exception e) {
+                       return false;
+                   }
+               } else if (current.defaultValue != null && element.getClass().isAssignableFrom(current.defaultValue.getClass()) && items.size() >= list.size()) {
+                   try {
+                       list.add(i, current.defaultValue);
+                       j++;
+                       extract(collector,current,element);
+                   } catch (Exception e) {
+                       return false;
+                   }
                } else if (current.isNeeded()) {
                    return false;
                }
            }
+       }
 
+
+       return true;
+   }
+   private boolean validate(Object object, ExtractedElements collector) {
+       if (skip)
            return true;
-
+       if (object instanceof Map) {
+          return validateObjectAsMap(object, collector);
 
        } else if (object instanceof List || object instanceof Object[]) {
-           List list;
-           if (object instanceof List)
-               list = ((List) object);
-           else
-               list = Arrays.asList((Object[]) object);
-           if (items != null && minValue == null && list.size() != items.size())
-               return false;
-           if ((maxValue != null && list.size() > maxValue.intValue()) || (minValue != null && list.size() < minValue.intValue()))
-               return false;
-           if (maxValue == null && minValue == null && list.size() != size())
-               return false;
-           if (items == null && size() > 0 && list.size() > 0)
-               if (ofType != null && object.getClass().isArray() && similar(getNativeType(ofType)) != similar(object.getClass().getComponentType()))
-                   return false;
+           return validateObjectAsList(object, collector);
 
-               else if (ofType != null && !object.getClass().isArray() && object instanceof List && similar(((List) object).get(0).getClass()) != similar(getNativeType(ofType)))
-                   return false;
-
-           if (items != null && items.size() >= list.size()) {
-               int j = 0;
-               for (int i = 0; i < list.size(); i++) {
-                   if (items.size() < list.size())
-                       return false;
-                   SchemaNode current = items.get(i);
-                   Object element = list.get(j);
-                   if (current.isSimilar(element)) {
-                       if (current.getNativeType() == String.class) {
-                           if (current.defaultValue != null && "".equals(element.toString()) && !element.toString().equals(current.defaultValue.toString()))
-                               list.set(j, defaultValue.toString());
-                           extract(collector,current,element);
-                       } else if ((similar(current.getNativeType()) == Number.class) && (current.minValue == null || getNumber(element).doubleValue() < current.minValue.doubleValue()) && (current.maxValue == null || getNumber(element).doubleValue() > current.maxValue.doubleValue())) {
-                           if (current.ceilingValue != null && getNumber(element).doubleValue() > current.ceilingValue.doubleValue())
-                               list.set(j, current.ceilingValue);
-                           if (current.floorValue != null && getNumber(element).doubleValue() < current.floorValue.doubleValue())
-                               list.set(j, current.floorValue);
-                           extract(collector,current,element);
-                       } else if ((similar(current.getNativeType()) == Long.class) && (current.minValue == null || getNumber(element).longValue() < current.minValue.longValue()) && (current.maxValue == null || getNumber(element).longValue() > current.maxValue.longValue())) {
-                           if (current.ceilingValue != null && getNumber(element).longValue() > current.ceilingValue.longValue())
-                               list.set(j, current.ceilingValue);
-                           if (current.floorValue != null && getNumber(element).longValue() < current.floorValue.longValue())
-                               list.set(j, current.floorValue);
-                           extract(collector,current,element);
-                       } else if ((current.getNativeType() == Enum.class) && !(current.enumeration.contains(element))) {
-                           return false;
-
-                       } else if (!current.validate(element,collector)) {
-                           return false;
-
-                       }
-                       j++;
-
-                   } else if (defaultValue != null && element.getClass().isAssignableFrom(defaultValue.getClass()) && items.size() >= list.size()) {
-                       try {
-                           list.add(i, defaultValue);
-                           j++;
-                           extract(collector,current,element);
-                       } catch (Exception e) {
-                           return false;
-                       }
-                   } else if (current.defaultValue != null && element.getClass().isAssignableFrom(current.defaultValue.getClass()) && items.size() >= list.size()) {
-                       try {
-                           list.add(i, current.defaultValue);
-                           j++;
-                           extract(collector,current,element);
-                       } catch (Exception e) {
-                           return false;
-                       }
-                   } else if (current.isNeeded()) {
-                       return false;
-                   }
-               }
-           }
-
-
+       } else if ("enum".equals(this.type) && this.enumeration !=null ) {
+           extract(collector,this, object);
            return true;
-       } else {
+       }else {
            return validatePOJO(object,collector);
        }
 
