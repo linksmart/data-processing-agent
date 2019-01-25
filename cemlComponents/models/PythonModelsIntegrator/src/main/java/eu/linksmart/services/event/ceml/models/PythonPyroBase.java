@@ -226,23 +226,26 @@ public class PythonPyroBase<T> extends ClassifierModel<T, Object, PyroProxy> {
             if (input.size() != res.size())
                 throw new InternalException(this.getName(), "Pyro", "Batch predictions are not the same size as inputs.");
 
-            return IntStream.range(0, input.size()).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
+            return IntStream.range(0, input.size()-1).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
         } catch (PyroException e) {
             loggerService.error(e._pyroTraceback);
             throw new InternalException(this.getName(), "Pyro", e);
-        } catch (UnsupportedOperationException e){
-            loggerService.error("Pyro integration: "+e.getMessage());
-            try{
+        } catch (UnsupportedOperationException e) {
+            loggerService.error("Pyro integration UnsupportedOperationException: " + e.getMessage());
+            e.printStackTrace();
+            try {
                 List<Object> res = new ArrayList<>();
-                for(T i:input){
+                for (T i : input) {
                     res.add(learner.call("predict", i));
                 }
                 return IntStream.range(0, input.size()).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
-            }catch (Exception ex){
-                loggerService.error("Pyro integration: "+e.getMessage());
+            } catch (Exception ex) {
+                loggerService.error("Pyro integration Exception: " + e.getMessage());
+                e.printStackTrace();
             }
-        }catch (Exception e) {
-            loggerService.error("Pyro integration: "+e.getMessage());
+        } catch (Exception e) {
+            loggerService.error("Pyro integration Exception: " + e.getMessage());
+            e.printStackTrace();
         }
         return Collections.singletonList(new PredictionInstance<>());
     }

@@ -41,9 +41,9 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     final protected int retrainEvery;
 
    // private List<LearningInstance> instances;
-   private List<List> targets;
-    private List<Map> rawMaps;
-    private List<Map> inputs;
+   private List<List> targets, rawMaps, inputs;
+    private List<Map> rawMapsLegacy;
+    private List<Map> inputsLegacy;
     final private Publisher publisher;
     final protected SchemaNode schema;
     List<ExtractedElements> accInput = new ArrayList<>();
@@ -170,8 +170,8 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                     }
                     else if (rawMaps.size()<retrainEvery) {
                         targets.add(elements.getTargetsList());
-                        rawMaps.add(elements.toMap());
-                        inputs.add(elements.toMappedInputs());
+                        rawMaps.add(elements);
+                        inputs.add(elements.getInputsList());
                         if (rawMaps.size() == retrainEvery)
                             retrain();
 
@@ -207,8 +207,8 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                     if(retrainEvery==1)
                         iterativeTrainingLegacy(eventMap,withoutTarget,measuredTargets);
                     else if (rawMaps.size()<retrainEvery) {
-                        rawMaps.add(eventMap);
-                        inputs.add(withoutTarget);
+                        rawMapsLegacy.add(eventMap);
+                        inputsLegacy.add(withoutTarget);
                         targets.add(measuredTargets);
                         if (rawMaps.size() == retrainEvery)
                             retrain();

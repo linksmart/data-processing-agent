@@ -477,7 +477,7 @@ public class ExtractedElements<T> implements List<T>  {
 
         @Override
         public T get(int index) {
-            return getTarget(index);
+            return featureSpace.get(inputs.get(index));
         }
 
         @Override
@@ -692,8 +692,13 @@ public class ExtractedElements<T> implements List<T>  {
 
         @Override
         public Set<Entry<String,T>> entrySet() {
-            // too complicated and not useful
-            throw new UnsupportedOperationException();
+            Set<Entry<String,T>> set = new HashSet<>();
+            for(String key: featureByInput.keySet()){
+
+                set.add(new AbstractMap.SimpleEntry<>(key,featureSpace.get(featureByInput.get(key))));
+            }
+
+            return set;
         }
     }
     public class MappedTargets implements Map<String, T>{

@@ -444,7 +444,8 @@ public class Tools {
                     datastream.setId(idDSBase + "-" + (startIndex + i));
                     Observation observation = new ObservationImpl();
                     observation.setDate(observations.get(0).getDate());
-                    observation.setResult(0);
+                    //observation.setResult(0);
+                    observation.setResult(i+40);
                     observation.setDatastream(datastream);
                     ret.add(observation);
                 }
