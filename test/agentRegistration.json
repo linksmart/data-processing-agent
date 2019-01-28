@@ -12,5 +12,5 @@
 			"type": "application/json"
 		}
 	],
-	"ttl": 0
+	"ttl": 86400
 }
