@@ -161,22 +161,23 @@ public  class MapLearningHandler extends BaseMapEventHandler {
 
             try {
                 synchronized (originalRequest) {
+                    try {
+                        if (retrainEvery == 1) { // iterative
+                            Prediction prediction = model.predict(elements.getInputsList());
+                            model.learn(elements.getInputsList(), elements.getTargetsList());
+                            evaluate(prediction, elements.getTargetsList());
 
-                    if(retrainEvery==1) { // iterative
-                        Prediction prediction = model.predict(elements.getInputsList());
-                        model.learn(elements.getInputsList(),elements.getTargetsList());
-                        evaluate(prediction,elements.getTargetsList());
+                        } else if (rawMaps.size() < retrainEvery) {
+                            targets.add(elements.getTargetsList());
+                            rawMaps.add(elements);
+                            inputs.add(elements.getInputsList());
+                            if (rawMaps.size() == retrainEvery)
+                                retrain();
 
+                        }
+                    } catch (Exception e) {
+                        loggerService.error(e.getMessage(),e);
                     }
-                    else if (rawMaps.size()<retrainEvery) {
-                        targets.add(elements.getTargetsList());
-                        rawMaps.add(elements);
-                        inputs.add(elements.getInputsList());
-                        if (rawMaps.size() == retrainEvery)
-                            retrain();
-
-                    }
-
                 }
                 if( model.getEvaluator().isDeployable())
                     originalRequest.deploy();
