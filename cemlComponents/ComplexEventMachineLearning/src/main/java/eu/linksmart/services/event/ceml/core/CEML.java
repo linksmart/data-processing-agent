@@ -287,6 +287,22 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
             return Observation.factory(e.getMessage(), request,conf.getString(Const.ID_CONF_PATH),(new Date()).getTime());
         }
     }
+    static public Observation batchPredictUsing(String request,Object input){
+        try {
+
+
+            List<Prediction> prediction = requests.get(request).getModel().batchPredict((List) input);
+            //prediction.setOriginalInput(input);
+
+            requests.get(request).setLastPrediction(prediction.get(prediction.size()-1));
+
+            return (Observation) EventBuilder.getBuilder().refactory(requests.get(request).getLastPrediction());
+
+        } catch (Exception e) {
+            loggerService.error(e.getMessage(),e);
+            return Observation.factory(e.getMessage(), request,conf.getString(Const.ID_CONF_PATH),(new Date()).getTime());
+        }
+    }
     static void report(String id, String message){
         if(conf.getBoolean(Const.CEML_GenerateReports))
             MqttCemlAPI.getMeDefault().reportFeedback(id,message);

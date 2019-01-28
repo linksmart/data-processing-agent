@@ -217,6 +217,25 @@ public class Tools {
 
         return ret;
     }
+    static public List ifNullReplaceList(Object original, int startIndex, int size, String idBase){
+        if(original!=null) {
+
+            Sensor sensor = new SensorImpl();
+            sensor.setId(idBase + "-" + (startIndex + startIndex));
+            Datastream datastream = new DatastreamImpl();
+            datastream.setId("ds_"+idBase + "-" + (startIndex + startIndex));
+            Observation observation = new ObservationImpl();
+            observation.setDate(new Date());
+            //observation.setResult(0);
+            observation.setResult(0);
+            observation.setDatastream(datastream);
+
+
+            singleFillUp(observation,startIndex,size);
+        }
+        return (List) original;
+
+    }
     static public List addAll(List o, Object o2) {
         return addAll((Object) o,(Object)o2);
     }
