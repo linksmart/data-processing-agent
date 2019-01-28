@@ -94,7 +94,8 @@ public class ServiceRegistratorService implements Observer{
                                 update();
                             }
                         },
-                        myRegistration.getTtl() / 3
+                        0,
+                        (myRegistration.getTtl() / 3)*1000
                 );
             } else
                 update();
