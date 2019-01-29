@@ -158,102 +158,117 @@ public class PythonPyroBase<T> extends ClassifierModel<T, Object, PyroProxy> {
 
     @Override
     public synchronized void learn(T input) throws TraceableException, UntraceableException {
-        try {
-            learner.call("learn", input);
-        } catch (PyroException e) {
-            loggerService.error(e._pyroTraceback);
-            throw new InternalException(this.getName(), "Pyro", e);
-        } catch (Exception e) {
-            throw new InternalException(this.getName(), "Pyro", e);
+        synchronized (learner) {
+            try {
+                learner.call("learn", input);
+            } catch (PyroException e) {
+                loggerService.error(e._pyroTraceback);
+                throw new InternalException(this.getName(), "Pyro", e);
+            } catch (Exception e) {
+                throw new InternalException(this.getName(), "Pyro", e);
+            }
         }
     }
 
     @Override
     public synchronized Prediction<Object> predict(T input) throws TraceableException, UntraceableException {
-        try {
-            return toPrediction(input, (Object) learner.call("predict", input));
-        } catch (PyroException e) {
-            loggerService.error(e._pyroTraceback);
-            throw new InternalException(this.getName(), "Pyro", e);
-        } catch (Exception e) {
-            throw new InternalException(this.getName(), "Pyro", e);
+        synchronized (learner) {
+            try {
+                return toPrediction(input, (Object) learner.call("predict", input));
+            } catch (PyroException e) {
+                loggerService.error(e._pyroTraceback);
+                throw new InternalException(this.getName(), "Pyro", e);
+            } catch (Exception e) {
+                throw new InternalException(this.getName(), "Pyro", e);
+            }
         }
     }
 
     @Override
     public void batchLearn(List<T> input, List<T> targetLabel) throws TraceableException, UntraceableException {
-        try {
-            learner.call("batchLearn", input, targetLabel);
-        } catch (PyroException e) {
-            loggerService.error(e._pyroTraceback);
-            throw new InternalException(this.getName(), "Pyro", e);
-        } catch (Exception e) {
-            throw new InternalException(this.getName(), "Pyro", e);
+        synchronized (learner) {
+            try {
+                learner.call("batchLearn", input, targetLabel);
+            } catch (PyroException e) {
+                loggerService.error(e._pyroTraceback);
+                throw new InternalException(this.getName(), "Pyro", e);
+            } catch (Exception e) {
+                throw new InternalException(this.getName(), "Pyro", e);
+            }
         }
     }
 
     @Override
     public void learn(T input, T targetLabel) throws TraceableException, UntraceableException {
-        try {
-            learner.call("learn", input, targetLabel);
-        } catch (PyroException e) {
-            loggerService.error(e._pyroTraceback);
-            throw new InternalException(this.getName(), "Pyro", e);
-        } catch (Exception e) {
-            throw new InternalException(this.getName(), "Pyro", e);
+        synchronized (learner) {
+            try {
+
+                learner.call("learn", input, targetLabel);
+
+            } catch (PyroException e) {
+                loggerService.error(e._pyroTraceback);
+                throw new InternalException(this.getName(), "Pyro", e);
+            } catch (Exception e) {
+                throw new InternalException(this.getName(), "Pyro", e);
+            }
         }
     }
 
     @Override
     public synchronized void batchLearn(List<T> input) throws TraceableException, UntraceableException {
-        try {
-            learner.call("batchLearn", input);
-        } catch (PyroException e) {
-            loggerService.error(e._pyroTraceback);
-            throw new InternalException(this.getName(), "Pyro", e);
-        } catch (Exception e) {
-            throw new InternalException(this.getName(), "Pyro", e);
+        synchronized (learner) {
+            try {
+                learner.call("batchLearn", input);
+            } catch (PyroException e) {
+                loggerService.error(e._pyroTraceback);
+                throw new InternalException(this.getName(), "Pyro", e);
+            } catch (Exception e) {
+                throw new InternalException(this.getName(), "Pyro", e);
+            }
         }
     }
 
     @Override
     public synchronized List<Prediction<Object>> batchPredict(List<T> input) throws TraceableException, UntraceableException {
         counter += (int) parameters.get("RetrainEvery");
-
-        try {
-            List<Object> res = (List<Object>) learner.call("batchPredict", input);
-
-            if (input.size() != res.size())
-                throw new InternalException(this.getName(), "Pyro", "Batch predictions are not the same size as inputs.");
-
-            return IntStream.range(0, input.size()-1).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
-        } catch (PyroException e) {
-            loggerService.error(e._pyroTraceback);
-            throw new InternalException(this.getName(), "Pyro", e);
-        } catch (UnsupportedOperationException e) {
-            loggerService.error("Pyro integration UnsupportedOperationException: " + e.getMessage());
-            e.printStackTrace();
+        synchronized (learner) {
             try {
-                List<Object> res = new ArrayList<>();
-                for (T i : input) {
-                    res.add(learner.call("predict", i));
+                List<Object> res = (List<Object>) learner.call("batchPredict", input);
+
+                if (input.size() != res.size())
+                    throw new InternalException(this.getName(), "Pyro", "Batch predictions are not the same size as inputs.");
+
+                return IntStream.range(0, input.size() - 1).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
+            } catch (PyroException e) {
+                loggerService.error(e._pyroTraceback);
+                throw new InternalException(this.getName(), "Pyro", e);
+            } catch (UnsupportedOperationException e) {
+                loggerService.error("Pyro integration UnsupportedOperationException: " + e.getMessage());
+                e.printStackTrace();
+                try {
+                    List<Object> res = new ArrayList<>();
+                    for (T i : input) {
+                        res.add(learner.call("predict", i));
+                    }
+                    return IntStream.range(0, input.size()).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
+                } catch (Exception ex) {
+                    loggerService.error("Pyro integration Exception: " + e.getMessage());
+                    e.printStackTrace();
                 }
-                return IntStream.range(0, input.size()).mapToObj(i -> toPrediction(input.get(i), res.get(i))).collect(Collectors.toList());
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 loggerService.error("Pyro integration Exception: " + e.getMessage());
                 e.printStackTrace();
             }
-        } catch (Exception e) {
-            loggerService.error("Pyro integration Exception: " + e.getMessage());
-            e.printStackTrace();
         }
         return Collections.singletonList(new PredictionInstance<>());
     }
 
     @Override
     public synchronized void destroy() throws Exception {
-        learner.call("destroy");
-        learner.close();
+        synchronized (learner) {
+            learner.call("destroy");
+            learner.close();
+        }
         if (proc != null)
             proc.destroy();
         if (pyroAdapter != null && pyroAdapter.exists())
