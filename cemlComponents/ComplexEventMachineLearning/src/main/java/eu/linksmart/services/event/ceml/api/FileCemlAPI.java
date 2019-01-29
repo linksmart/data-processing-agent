@@ -34,12 +34,12 @@ public class FileCemlAPI extends FileConnector {
 
                 Collection<GeneralRequestResponse> response = CEML.create(i).getResponses();
 
-                if(response.stream().anyMatch(r->r.getStatus()>300)&&
-                        conf.containsKeyAnywhere(eu.linksmart.services.event.intern.Const.FAIL_IF_PERSISTENCE_FAILS) && conf.getBoolean(Const.FAIL_IF_PERSISTENCE_FAILS) &&
-                        i.isEssential()){
-
-                    loggerService.error("Fail loading statement "+i.getId()+" in persistence process and the essensiality setting is enabled ("+Const.FAIL_IF_PERSISTENCE_FAILS+") exit is set");
-                    System.exit(-1);
+                if(response.stream().anyMatch(r->r.getStatus()>300)){
+                    loggerService.error("CEML bootstrapping phase failed!");
+                    if(conf.containsKeyAnywhere(eu.linksmart.services.event.intern.Const.FAIL_IF_PERSISTENCE_FAILS) && conf.getBoolean(Const.FAIL_IF_PERSISTENCE_FAILS) && i.isEssential()) {
+                        loggerService.error("Fail loading statement " + i.getId() + " in persistence process and the essensiality setting is enabled (" + Const.FAIL_IF_PERSISTENCE_FAILS + ") exit is set");
+                        System.exit(-1);
+                    }
                 }
 
                 responses.addAll(response);

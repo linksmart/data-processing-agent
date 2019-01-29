@@ -289,7 +289,8 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
     }
     static public Observation batchPredictUsing(String request,Object input){
         try {
-
+            if (input == null)
+                return new ObservationImpl();
 
             List<Prediction> prediction = requests.get(request).getModel().batchPredict((List) input);
             //prediction.setOriginalInput(input);
