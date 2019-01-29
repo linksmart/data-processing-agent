@@ -119,11 +119,13 @@ public class SchemaNode implements JsonSerializable {
         return null;
     }
     public boolean isSimilar(Object object){
-        return similar(object.getClass())!=null && (
-                    similar(object.getClass()) == similar(getNativeType()) ||
-                    (getNativeType().isArray() && "array".equals(type)) ||
-                    ( "enum".equals(type) && enumVerify(object, this.enumeration)  )
-            );
+        if (object!=null)
+            return similar(object.getClass())!=null && (
+                        similar(object.getClass()) == similar(getNativeType()) ||
+                        (getNativeType().isArray() && "array".equals(type)) ||
+                        ( "enum".equals(type) && enumVerify(object, this.enumeration)  )
+                );
+        return false;
     }
     public boolean isSimilar(Class object){
         return similar(object)!=null && (
@@ -293,15 +295,15 @@ public class SchemaNode implements JsonSerializable {
                    }
                    j++;
 
-               } else if (defaultValue != null && element.getClass().isAssignableFrom(defaultValue.getClass()) && items.size() >= list.size()) {
+               } else if (current.defaultValue != null && element.getClass().isAssignableFrom(current.defaultValue.getClass()) && items.size() == list.size()) {
                    try {
-                       list.add(i, defaultValue);
+                       list.set(i, current.defaultValue);
                        j++;
                        extract(collector,current,element);
                    } catch (Exception e) {
                        return false;
                    }
-               } else if (current.defaultValue != null && element.getClass().isAssignableFrom(current.defaultValue.getClass()) && items.size() >= list.size()) {
+               } else if (current.defaultValue != null && element.getClass().isAssignableFrom(current.defaultValue.getClass()) && items.size() > list.size()) {
                    try {
                        list.add(i, current.defaultValue);
                        j++;
