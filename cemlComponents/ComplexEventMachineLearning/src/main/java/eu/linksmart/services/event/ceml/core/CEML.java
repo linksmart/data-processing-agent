@@ -273,8 +273,10 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
     }
     static public Observation predictUsing(String request,Object input){
         try {
-
-
+            if(input==null) {
+                loggerService.error("The input for prediction it null");
+                return new ObservationImpl();
+            }
             Prediction prediction = requests.get(request).getModel().predict(input);
             prediction.setOriginalInput(input);
 

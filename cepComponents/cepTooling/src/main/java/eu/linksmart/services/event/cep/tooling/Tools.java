@@ -476,6 +476,16 @@ public class Tools {
         ret.add(observation);
         return fillUp(ret,startIndex,finalSize);
     }
+    static public ArrayList<Observation> multiFillUp(Object[] observations, int startIndex , int finalSize){
+        ArrayList<Observation> ret = new ArrayList(Arrays.asList(observations));
+
+        return fillUp(ret,startIndex,finalSize);
+    }
+    static public ArrayList<Observation> multiFillUp(Collection observations, int startIndex , int finalSize){
+        ArrayList<Observation> ret = new ArrayList(observations);
+
+        return fillUp(ret,startIndex,finalSize);
+    }
     static public Object[] mapToArray(Map map, List<String> order){
         Object[] re = new Object[order.size()];
         int i=0;

@@ -7,9 +7,11 @@ import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
+import eu.linksmart.services.utils.function.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -47,31 +49,30 @@ import java.util.*;
 public class SchemaNode implements JsonSerializable {
 
     private transient static final Logger loggerService = LogManager.getLogger(SchemaNode.class);
-    private String type, name, ofDefinition, ofType;
-    private Set<String> required;
-    @JsonProperty("enum")
-    private Set<String> enumeration;
-    private Set targets;
-    private boolean needed = true, skip=false, target=false;
-    private Map<String,SchemaNode> properties;
 
+    private boolean needed = true, skip=false, target=false, built = false;
+    private int index = -1 , targetSize=0, cardinality = 1;
+    private String type, name, ofDefinition, ofType;
+    private Number minValue, maxValue, ceilingValue, floorValue;
+    private Object defaultValue;
+
+    private Set<String> required, targets;
     private List<SchemaNode> items;
     private Map<String,SchemaNode> definition;
+    private Map<String,SchemaNode> properties;
+
+    @JsonProperty("enum")
+    private Set<String> enumeration;
     @JsonIgnore
     private Map<String, SchemaNode> resolveMap = new Hashtable<>();
     @JsonIgnore
     private List<SchemaNode> resolveList = new ArrayList<>();
-    private Number minValue, maxValue, ceilingValue, floorValue;
-    private Object defaultValue;
     @JsonIgnore
     private SchemaNode parent;
     @JsonIgnore
     private Set<String> names = new HashSet<>();
     @JsonIgnore
     private int size = -1;
-    private int index = -1 , targetSize=0;
-    private boolean built = false;
-
 
     public Class similar(Class original){
         if(original.isPrimitive()) {
@@ -417,19 +418,29 @@ public class SchemaNode implements JsonSerializable {
                     throw new UntraceableException("The definition "+properties.get(key).ofDefinition + " was given but not defined in root node!");
             }
         if(items!=null) {
-            for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).ofDefinition == null) {
+            for (int i = 0; i < items.size(); i++) { // there are items defined
+                if (items.get(i).ofDefinition == null) { // the item is not from a predefined type
+
+                    if(items.get(i).cardinality > 1) { // if there should by more than 1 of this type
+                        SchemaNode node = Utils.copyObject( items.get(i));
+                        items.get(i).cardinality = 1;
+                        node.cardinality -= 1;
+                        items.add(i+1, node);
+                    }
+
                     items.get(i).setIndex(i);
-                    if(items.get(i).name==null)
+
+                    if(items.get(i).name==null) // auto-name generation
                         items.get(i).setName(name+"["+i+"]");
 
+
                     buildSubCollection(items.get(i));
-                } else if (getRoot().getDefinition().containsKey(items.get(i).ofDefinition)) {
+                } else if (getRoot().getDefinition().containsKey(items.get(i).ofDefinition)) { // the item is of a predefined type and the type exists
                     items.set(i, getRoot().getDefinition().get(items.get(i).ofDefinition));
                     items.get(i).name = name+"["+i+"]";
 
                     buildSubCollection(items.get(i));
-                } else
+                } else // the item is of of a type that is not defined
                     throw new UntraceableException("The definition " + items.get(i).ofDefinition + " was given but not defined in root node!");
             }
         }else if(size>0 || (maxValue!=null && maxValue.intValue()>0)){
