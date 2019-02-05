@@ -5,6 +5,7 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
+import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.Sensor;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
@@ -448,16 +449,10 @@ public class Tools {
                     ret.add( observations.get(pointer));
                     pointer++;
                 } else {
-                    Sensor sensor = new SensorImpl();
-                    sensor.setId(idSBase + "-" + (startIndex + i));
-                    Datastream datastream = new DatastreamImpl();
-                    datastream.setId(idDSBase + "-" + (startIndex + i));
-                    Observation observation = new ObservationImpl();
-                    observation.setDate(observations.get(0).getDate());
                     //observation.setResult(0);
-                    observation.setResult(i+40);
-                    observation.setDatastream(datastream);
-                    ret.add(observation);
+
+                    ret.add((Observation) EventBuilder.getBuilder(Observation.class).factory(idSBase + "-" + (startIndex + i),idDSBase + "-" + (startIndex + i),i+40,observations.get(0).getDate(),"",new Hashtable<>()));
+
                 }
                 Assert.isTrue(i!=ret.size(), "Mismatch adding values in the list");
             }
@@ -471,17 +466,22 @@ public class Tools {
         }
     }
 
-    static public ArrayList<Observation> singleFillUp(Observation observation, int startIndex , int finalSize){
+
+    static public Collection<Observation> singleFillUp(Observation observation, int startIndex , int finalSize){
         ArrayList<Observation> ret = new ArrayList();
         ret.add(observation);
         return fillUp(ret,startIndex,finalSize);
     }
-    static public ArrayList<Observation> multiFillUp(Object[] observations, int startIndex , int finalSize){
+    static public Collection<Observation> multiFillUp(Object[] observations, int startIndex , int finalSize){
         ArrayList<Observation> ret = new ArrayList(Arrays.asList(observations));
 
         return fillUp(ret,startIndex,finalSize);
     }
-    static public ArrayList<Observation> multiFillUp(Collection observations, int startIndex , int finalSize){
+    static public Collection<Observation> multiFillUp(ArrayList observations, int startIndex , int finalSize){
+
+        return fillUp(observations,startIndex,finalSize);
+    }
+    static public Collection<Observation> multiFillUp(Collection observations, int startIndex , int finalSize){
         ArrayList<Observation> ret = new ArrayList(observations);
 
         return fillUp(ret,startIndex,finalSize);
@@ -519,6 +519,17 @@ public class Tools {
         stream.forEach(i->map.put(i,map.size()));
 
         return sort(map,values);
+    }
+    static public Collection<Observation> emptyListOf(Object value,String StreamBase, String SensorBase, int startIndex , int finalSize){
+        ArrayList<Observation> ret = new ArrayList<>();
+        for(int i=0; i<finalSize;i++){
+            try {
+                ret.add((Observation) EventBuilder.getBuilder(Observation.class).factory(SensorBase + "-" + (startIndex + i), StreamBase + "-" + (startIndex + i),value,(new Date()),"",new Hashtable<>()));
+            } catch (UntraceableException e) {
+                e.printStackTrace();
+            }
+        }
+        return ret;
     }
 
 }

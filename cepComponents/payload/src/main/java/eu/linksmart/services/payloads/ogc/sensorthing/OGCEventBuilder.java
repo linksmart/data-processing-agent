@@ -52,7 +52,7 @@ public class OGCEventBuilder implements EventBuilder<Object, Object,ObservationI
         return factory(event,resultType,StreamID,sensorID,(new Date()).getTime());
 
     }
-    static Observation factory(Object event, String resultType, Object StreamID, Object sensorID, long time ) {
+    private static Observation factory(Object event, String resultType, Object StreamID, Object sensorID, long time) {
         // Construct Sensor and Thing with the the Agent id.
         Sensor sen = new SensorImpl();
         sen.setId(sensorID);
