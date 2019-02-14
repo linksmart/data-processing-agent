@@ -104,6 +104,11 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonIgnore
     private boolean registrable = true;
 
+    @JsonIgnore
+    protected int logEventEvery = 10;
+
+
+
     public Object getLastOutput() {
         return lastOutput;
     }
@@ -150,9 +155,12 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     private void setGenerateID() {
-        if (((id == null || "".equals(id)) && name != null && statement != null && !"".equals(name) && !"".equals(statement))) {
+        if (((id == null || "".equals(id)) && name != null && statement != null )) {
             setId(Utils.hashIt(name + statement));
-        }
+        } else if(statement != null )
+            setId(Utils.hashIt( statement));
+        else
+            setId(Utils.hashIt( (new Date()).toString()));
     }
 
     @Override
@@ -377,6 +385,16 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @Override
     public void setResultType(String resultType) {
         this.resultType = resultType;
+    }
+
+    @Override
+    public int getLogEventEvery() {
+        return logEventEvery;
+    }
+
+    @Override
+    public void setLogEventEvery(int logEventEvery) {
+         this.logEventEvery = logEventEvery;
     }
 
     @JsonProperty("synchronousResponse")

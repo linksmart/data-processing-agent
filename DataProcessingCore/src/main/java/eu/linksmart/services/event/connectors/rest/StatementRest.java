@@ -223,8 +223,8 @@ public class StatementRest extends Component implements IncomingConnector {
             @PathVariable("id") String id
     ) {
         MultiResourceResponses<Statement> result = new MultiResourceResponses<>();
-        result.addResources(statement.getId(),statement);
         statement.setId(id);
+        result.addResources(statement.getId(),statement);
         return prepareHTTPResponse(StatementFeeder.addNewStatement(statement, statement.getId(),null,result));
 
     }

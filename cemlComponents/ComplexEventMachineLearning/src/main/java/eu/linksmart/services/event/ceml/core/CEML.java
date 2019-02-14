@@ -295,7 +295,6 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
                 return new ObservationImpl();
 
             List<Prediction> prediction = requests.get(request).getModel().batchPredict((List) input);
-            //prediction.setOriginalInput(input);
 
             requests.get(request).setLastPrediction(prediction.get(prediction.size()-1));
 

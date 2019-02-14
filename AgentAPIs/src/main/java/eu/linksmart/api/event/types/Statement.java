@@ -223,6 +223,18 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * */
     void setResultType(String type);
 
+    /**
+     *
+     * @return the number of events till a log messages is generated
+     * */
+    int getLogEventEvery();
+
+    /**
+     *
+     * @param  logEventEvery is the number of events till a log messages is generated
+     * */
+    void setLogEventEvery(int logEventEvery);
+
     enum StatementLifecycle {
         /**
          * RUN Execute the statement adding a Handler, which adds a actuate or reacts to the triggered statement.
