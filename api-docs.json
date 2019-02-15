@@ -2387,6 +2387,10 @@
         "lastOutput": {
           "type": "object"
         },
+        "logEventEvery": {
+          "type": "integer",
+          "format": "int32"
+        },
         "name": {
           "type": "string"
         },
@@ -2826,6 +2830,10 @@
         },
         "lastOutput": {
           "type": "object"
+        },
+        "logEventEvery": {
+          "type": "integer",
+          "format": "int32"
         },
         "name": {
           "type": "string"
