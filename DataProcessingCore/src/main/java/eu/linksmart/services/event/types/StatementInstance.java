@@ -155,12 +155,14 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     }
 
     private void setGenerateID() {
-        if (((id == null || "".equals(id)) && name != null && statement != null )) {
-            setId(Utils.hashIt(name + statement));
-        } else if(statement != null )
-            setId(Utils.hashIt( statement));
-        else
-            setId(Utils.hashIt( (new Date()).toString()));
+        if((id == null || "".equals(id)) ) {
+            if ((name != null && statement != null)) {
+                setId(Utils.hashIt(name + statement));
+            } else if (statement != null)
+                setId(Utils.hashIt(statement));
+            else
+                setId(Utils.hashIt((new Date()).toString()));
+        }
     }
 
     @Override
