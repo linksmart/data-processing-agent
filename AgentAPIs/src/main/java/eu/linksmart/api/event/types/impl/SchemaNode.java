@@ -399,7 +399,7 @@ public class SchemaNode implements JsonSerializable {
        } else if ("enum".equals(this.type) && this.enumeration !=null ) {
            extract(collector,this, object);
            return true;
-       }else if(type.equals("class")) {
+       }else if(type.equals("class") ||type.equals("object")) {
            return validatePOJO(object,collector);
        }
 
@@ -690,7 +690,8 @@ public class SchemaNode implements JsonSerializable {
         this.defaultValue = defaultValue;
     }
     public SchemaNode getParent() {
-        return parent;
+
+        return parent==null? this:parent;
     }
 
     public void setParent(SchemaNode parent) {
