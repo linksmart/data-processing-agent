@@ -2376,6 +2376,12 @@
         "cehandler": {
           "type": "string"
         },
+        "discardDataOnFailPolicy": {
+          "type": "boolean"
+        },
+        "discardDataOnFailPolicyOn": {
+          "type": "boolean"
+        },
         "essential": {
           "type": "boolean",
           "example": false,
@@ -2429,6 +2435,9 @@
         },
         "resultType": {
           "type": "string"
+        },
+        "schema": {
+          "$ref": "#/definitions/SchemaNode"
         },
         "scope": {
           "type": "array",
@@ -2820,6 +2829,12 @@
         "cehandler": {
           "type": "string"
         },
+        "discardDataOnFailPolicy": {
+          "type": "boolean"
+        },
+        "discardDataOnFailPolicyOn": {
+          "type": "boolean"
+        },
         "essential": {
           "type": "boolean",
           "example": false,
@@ -2871,6 +2886,9 @@
         "resultType": {
           "type": "string"
         },
+        "schema": {
+          "$ref": "#/definitions/SchemaNode"
+        },
         "scope": {
           "type": "array",
           "items": {
@@ -2905,6 +2923,14 @@
         "cehandler": {
           "type": "string",
           "description": "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean"
+        },
+        "discardDataOnFailPolicy": {
+          "type": "boolean"
+        },
+        "discardDataOnFailPolicyOn": {
+          "type": "boolean",
+          "example": false,
+          "description": "Sets if the handler should discard the data if the validation fails"
         },
         "essential": {
           "type": "boolean",
@@ -2956,6 +2982,10 @@
         "resultType": {
           "type": "string",
           "description": "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB"
+        },
+        "schema": {
+          "description": "Sets the expected result of this statement",
+          "$ref": "#/definitions/SchemaNode"
         },
         "scope": {
           "type": "array",
