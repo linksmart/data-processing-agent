@@ -12,4 +12,5 @@ public interface Const extends eu.linksmart.services.utils.constants.Const,eu.li
     String CEML_MQTT_BROKER_HOST =   "ceml_api_mqtt_broker";
     String CEML_DEFAULT_CONFIGURATION_FILE = "__def__agent__conf__.cfg";
     String CEML_INIT_BOOTSTRAPPING = "ceml_init_bootstrapping";
+    String CEML_MQTT_API_ENABLED = "ceml_api_mqtt";
 }

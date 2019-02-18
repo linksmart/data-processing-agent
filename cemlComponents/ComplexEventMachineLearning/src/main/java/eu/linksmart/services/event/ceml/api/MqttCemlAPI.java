@@ -67,12 +67,15 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
 
     protected MqttCemlAPI() throws MalformedURLException, MqttException, ClassNotFoundException {
         super(MqttCemlAPI.class.getSimpleName(), "Provides a MQTT light API to the CEML logic", "MqttCemlAPI");
-        Class.forName(CEML.class.getCanonicalName());
-        brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST), SharedSettings.getWill(), SharedSettings.getWillTopic());
-        initAddRequest();
-        initGetRequest();
-        initRemoveRequest();
-        loggerService.info("MQTT CEML API started!");
+        if(conf.getBoolean(Const.CEML_MQTT_API_ENABLED)) {
+            Class.forName(CEML.class.getCanonicalName());
+            brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST), SharedSettings.getWill(), SharedSettings.getWillTopic());
+            initAddRequest();
+            initGetRequest();
+            initRemoveRequest();
+            loggerService.info("MQTT CEML API started!");
+        }else
+            loggerService.info("MQTT CEML API deactivated!");
     }
     private byte[] prepareRquest(byte[] payload) throws IOException {
         AsyncRequest request;
