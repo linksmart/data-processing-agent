@@ -11,6 +11,7 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 import eu.linksmart.services.event.handler.ComplexEventHandler;
 import eu.linksmart.services.event.intern.AgentUtils;
 import eu.linksmart.services.event.intern.Const;
@@ -106,7 +107,12 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
 
     @JsonIgnore
     protected int logEventEvery = 10;
-
+    @ApiModelProperty(notes = "Sets the expected result of this statement")
+    @JsonProperty("schema")
+    protected SchemaNode schema;
+    @ApiModelProperty(notes = "Sets if the handler should discard the data if the validation fails")
+    @JsonProperty("discardDataOnFailPolicyOn")
+    protected boolean discardDataOnFailPolicyOn =false;
 
 
     public Object getLastOutput() {
@@ -367,6 +373,11 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         } catch (Exception e) {
             throw new StatementException(id, this.getClass().getCanonicalName(), e.getMessage());
         }
+        if(schema!=null) {
+            schema.setName("SchemaOf" + getId());
+            schema.build();
+            discardDataOnFailPolicyOn=true;
+        }
         return this;
     }
 
@@ -399,6 +410,16 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
          this.logEventEvery = logEventEvery;
     }
 
+    @Override
+    public SchemaNode getSchema() {
+        return schema;
+    }
+
+    @Override
+    public void setSchema(SchemaNode schema) {
+        this.schema = schema;
+    }
+
     @JsonProperty("synchronousResponse")
     public Object getSynchRespones() {
         return synchRespones;
@@ -415,6 +436,11 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public void setAgentID(String agentID) {
         this.agentID = agentID;
     }
-
+    public boolean isDiscardDataOnFailPolicyOn(){
+        return this.discardDataOnFailPolicyOn;
+    }
+    public void setDiscardDataOnFailPolicy(boolean value){
+        this.discardDataOnFailPolicyOn = value;
+    }
 
 }

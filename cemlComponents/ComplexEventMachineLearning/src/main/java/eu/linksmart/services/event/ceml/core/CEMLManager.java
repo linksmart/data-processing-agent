@@ -22,6 +22,7 @@ import eu.linksmart.services.event.ceml.intern.Const;
 import eu.linksmart.services.event.feeders.StatementFeeder;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.types.PersistentRequestInstance;
+import eu.linksmart.services.event.types.StatementInstance;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -219,8 +220,13 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                     for (Statement statement : auxiliaryStreams) {
 
                         if (!(boolean) settings.getOrDefault(PUBLISH_INTERMEDIATE_STEPS, false)) {
-                            statement.setCEHandler("");
-                            statement.setOutput(null);
+                            if(statement.getCEHandler() != null && !"".equals(statement.getCEHandler()) && statement.getCEHandler().equals(StatementInstance.DEFAULT_HANDLER) ) {
+                                statement.setCEHandler("");
+                                statement.setOutput(null);
+                            } else if(statement.getCEHandler() == null || "".equals(statement.getCEHandler())){
+                                statement.setCEHandler("");
+                                statement.setOutput(null);
+                            }
                         } else {
                             statement.setOutput(Collections.singletonList(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)));
                             statement.setScope(Collections.singletonList(conf.getString(Const.CEML_MQTT_BROKER_HOST)));

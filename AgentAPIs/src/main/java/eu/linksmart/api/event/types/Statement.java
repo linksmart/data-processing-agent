@@ -2,6 +2,7 @@ package eu.linksmart.api.event.types;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 
 import java.util.List;
 /**
@@ -235,6 +236,11 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * */
     void setLogEventEvery(int logEventEvery);
 
+    SchemaNode getSchema();
+    void setSchema(SchemaNode schema);
+
+    boolean isDiscardDataOnFailPolicyOn();
+    void setDiscardDataOnFailPolicy(boolean schema);
     enum StatementLifecycle {
         /**
          * RUN Execute the statement adding a Handler, which adds a actuate or reacts to the triggered statement.

@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  */
     public class ComplexEventHandler extends BaseMapEventHandler implements ComplexEventPropagationHandler {
 
-    protected Publisher publisher;
     protected Serializer serializer;
     protected EventBuilder builder;
     static final private String POSTFIX_ID = "$topic";
@@ -188,13 +187,5 @@ import java.util.stream.Collectors;
         publisher.close();
     }
 
-    @Override
-    public Publisher getPublisher() {
-        return publisher;
-    }
 
-    @Override
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
-    }
 }

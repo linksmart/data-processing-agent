@@ -456,6 +456,8 @@ public class Tools {
                 }
                 Assert.isTrue(i!=ret.size(), "Mismatch adding values in the list");
             }
+            if(ret.size()!=finalSize)
+                System.err.println("The final list expected "+ret.size()+" is "+finalSize);
 
             return ret;
         }catch (Exception e){

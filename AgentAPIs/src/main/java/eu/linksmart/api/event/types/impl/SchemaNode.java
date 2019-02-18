@@ -74,42 +74,47 @@ public class SchemaNode implements JsonSerializable {
     @JsonIgnore
     private int size = -1;
 
-    public Class similar(Class original){
-        if(original.isPrimitive()) {
-            if(original.getSimpleName().equals("int") || original.getSimpleName().equals("short"))
+    public Class similar(Class original) {
+        if (original.isPrimitive()) {
+            if (original.getSimpleName().equals("int") || original.getSimpleName().equals("short"))
                 return Number.class;
             else if (original.getSimpleName().equals("boolean"))
                 return Boolean.class;
-        }if( original ==  String.class)
+        }
+        if (original == String.class)
             return String.class;
-        else if( original ==  Number.class)
+        else if (original == Number.class)
             return Number.class;
-        else if( original ==  Double.class)
+        else if (original == Double.class)
             return Number.class;
-        else if( original ==  Float.class)
+        else if (original == Float.class)
             return Number.class;
-        else if( original ==  Integer.class)
+        else if (original == Integer.class)
             return Number.class;
-        else if( original ==  Boolean.class)
+        else if (original == Boolean.class)
             return Boolean.class;
-        else if( original ==  Date.class)
+        else if (original == Date.class)
             return Long.class;
-        else if( original ==  Long.class)
+        else if (original == Long.class)
             return Long.class;
-        else if( original ==  Object.class)
+//        else if (original == Object.class)
+//            return Map.class;
+        else if (original == Map.class)
             return Map.class;
-        else if( original ==  Map.class)
+        else if (Map.class.isAssignableFrom(original))
             return Map.class;
-        else if( Map.class.isAssignableFrom(original))
-            return Map.class;
-        else if( original ==  List.class)
+        else if (original == List.class)
             return List.class;
-        else if( List.class.isAssignableFrom(original) || Object[].class.isAssignableFrom(original) )
+        else if (List.class.isAssignableFrom(original) || Object[].class.isAssignableFrom(original))
             return List.class;
-        else if( original ==  Enum.class)
+        else if (original == Enum.class)
             return Enum.class;
-        else if( Enum.class.isAssignableFrom(original))
+        else if (Enum.class.isAssignableFrom(original))
             return Enum.class;
+        else if (Collection.class.isAssignableFrom(original) || Object[].class.isAssignableFrom(original))
+            return List.class;
+        else if (Object.class.isAssignableFrom(original))
+            return Object.class;
         else {
             return null;
         }
@@ -117,6 +122,8 @@ public class SchemaNode implements JsonSerializable {
     public static Number getNumber(Object original) {
         if (original instanceof Number)
             return (Number) original;
+        else if(original instanceof Date)
+            return ((Date)original).getTime();
         return null;
     }
     public boolean isSimilar(Object object){
@@ -178,6 +185,8 @@ public class SchemaNode implements JsonSerializable {
             return List.class;
         else if("enum".equals(type.toLowerCase()))
             return Enum.class;
+        else if("class".equals(type.toLowerCase()))
+            return Object.class;
         else {
             return null;
         }
@@ -207,36 +216,22 @@ public class SchemaNode implements JsonSerializable {
            SchemaNode current = properties.get(key);
            if (map.containsKey(key)) {
                Object element = map.get(key);
-               if (current.isSimilar(element.getClass())) {
-                   if (current.getNativeType() == String.class) {
-                       if (current.defaultValue != null && "".equals(element.toString()) && !element.toString().equals(current.defaultValue.toString()))
-                           map.put(key, defaultValue.toString());
-                       extract(collector,current,element);
-                   } else if ((similar(current.getNativeType()) == Number.class) && (current.minValue == null || getNumber(element).doubleValue() < current.minValue.doubleValue()) && (current.maxValue == null || getNumber(element).doubleValue() > current.maxValue.doubleValue())) {
-                       if (current.ceilingValue != null && getNumber(element).doubleValue() > current.ceilingValue.doubleValue())
-                           map.put(key, current.ceilingValue);
-                       if (current.floorValue != null && getNumber(element).doubleValue() < current.floorValue.doubleValue())
-                           map.put(key, current.floorValue);
-                       extract(collector,current,element);
-                   } else if ((similar(current.getNativeType()) == Long.class) && (current.minValue == null || getNumber(element).longValue() < current.minValue.longValue()) && (current.maxValue == null || getNumber(element).longValue() > current.maxValue.longValue())) {
-                       if (current.ceilingValue != null && getNumber(element).longValue() > current.ceilingValue.longValue())
-                           map.put(key, current.ceilingValue);
-                       if (current.floorValue != null && getNumber(element).longValue() < current.floorValue.longValue())
-                           map.put(key, current.floorValue);
-                       extract(collector,current,element);
-                   } else if ((current.getNativeType() == Enum.class) && ! enumVerify(element,current.getEnumeration()) ) {
-                       return false;
-
-                   } else if (!current.validate(element,collector)) {
-                       return false;
-                   }
-
-
+               if(current.skip) {
                    continue;
+               } else if (current.isSimilar(element.getClass())) {
+                   Object mapList = map;
+
+                   if (!validateElementOfMapList(current,element,mapList,key,collector))
+                       return false;
+
+
+               }else {
+                   loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" expected type "+current.getNativeType().getCanonicalName()+" got "+current.similar(element.getClass()).getCanonicalName());
+                   return false;
                }
-               return false;
 
            } else if (current.isNeeded()) {
+               loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" expected mandatory element "+key);
                return false;
            }
        }
@@ -250,18 +245,27 @@ public class SchemaNode implements JsonSerializable {
            list = ((List) object);
        else
            list = Arrays.asList((Object[]) object);
-       if (items != null && minValue == null && list.size() != items.size())
+       if (items != null && minValue == null && list.size() != items.size()) {
+           loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" expected list of size "+items.size()+" got "+ list.size());
            return false;
-       if ((maxValue != null && list.size() > maxValue.intValue()) || (minValue != null && list.size() < minValue.intValue()))
+       }
+       if ((maxValue != null && list.size() > maxValue.intValue()) || (minValue != null && list.size() < minValue.intValue())) {
+           loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" expected list of "+ (maxValue!=null?" min size "+maxValue.intValue():"")+" and "+ (minValue!=null?" min size "+maxValue.intValue():"")+" got list of size "+ list.size());
            return false;
-       if (maxValue == null && minValue == null && list.size() != size())
+       }
+       if (maxValue == null && minValue == null && list.size() != size()) {
+           loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" expected list of size "+size()+" got "+ list.size());
            return false;
+       }
        if (items == null && size() > 0 && list.size() > 0)
-           if (ofType != null && object.getClass().isArray() && similar(getNativeType(ofType)) != similar(object.getClass().getComponentType()))
+           if (ofType != null && object.getClass().isArray() && similar(getNativeType(ofType)) != similar(object.getClass().getComponentType())) {
+               loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" expected array of "+similar(getNativeType(ofType))+" got an array of "+ similar(object.getClass().getComponentType()));
                return false;
 
-           else if (ofType != null && !object.getClass().isArray() && object instanceof List && similar(((List) object).get(0).getClass()) != similar(getNativeType(ofType)))
+           }else if (ofType != null && !object.getClass().isArray() && object instanceof List && similar(((List) object).get(0).getClass()) != similar(getNativeType(ofType))) {
+               loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" expected list of "+similar(getNativeType(ofType))+" got a list of "+ similar(((List) object).get(0).getClass()));
                return false;
+           }
 
        if (items != null && items.size() >= list.size()) {
            int j = 0;
@@ -270,30 +274,16 @@ public class SchemaNode implements JsonSerializable {
                    return false;
                SchemaNode current = items.get(i);
                Object element = list.get(j);
-               if (current.isSimilar(element)) {
-                   if (current.getNativeType() == String.class) {
-                       if (current.defaultValue != null && "".equals(element.toString()) && !element.toString().equals(current.defaultValue.toString()))
-                           list.set(j, defaultValue.toString());
-                       extract(collector,current,element);
-                   } else if ((similar(current.getNativeType()) == Number.class) && (current.minValue == null || getNumber(element).doubleValue() < current.minValue.doubleValue()) && (current.maxValue == null || getNumber(element).doubleValue() > current.maxValue.doubleValue())) {
-                       if (current.ceilingValue != null && getNumber(element).doubleValue() > current.ceilingValue.doubleValue())
-                           list.set(j, current.ceilingValue);
-                       if (current.floorValue != null && getNumber(element).doubleValue() < current.floorValue.doubleValue())
-                           list.set(j, current.floorValue);
-                       extract(collector,current,element);
-                   } else if ((similar(current.getNativeType()) == Long.class) && (current.minValue == null || getNumber(element).longValue() < current.minValue.longValue()) && (current.maxValue == null || getNumber(element).longValue() > current.maxValue.longValue())) {
-                       if (current.ceilingValue != null && getNumber(element).longValue() > current.ceilingValue.longValue())
-                           list.set(j, current.ceilingValue);
-                       if (current.floorValue != null && getNumber(element).longValue() < current.floorValue.longValue())
-                           list.set(j, current.floorValue);
-                       extract(collector,current,element);
-                   } else if ((current.getNativeType() == Enum.class) && !(current.enumeration.contains(element))) {
+               if(current.skip) {
+                   j++;
+                   continue;
+               }else if (current.isSimilar(element)) {
+                   Object mapList = list;
+                   String key= String.valueOf(j);
+
+                   if (!validateElementOfMapList(current,element,mapList,key,collector))
                        return false;
 
-                   } else if (!current.validate(element,collector)) {
-                       return false;
-
-                   }
                    j++;
 
                } else if (current.defaultValue != null && element.getClass().isAssignableFrom(current.defaultValue.getClass()) && items.size() == list.size()) {
@@ -313,6 +303,7 @@ public class SchemaNode implements JsonSerializable {
                        return false;
                    }
                } else if (current.isNeeded()) {
+                   loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" missing mandatory element "+current.getName());
                    return false;
                }
            }
@@ -321,6 +312,78 @@ public class SchemaNode implements JsonSerializable {
 
        return true;
    }
+   private void setPut(Object collection, Object element, String key){
+        if( collection instanceof Map && key != null){
+            ((Map)collection).put(key,element);
+        } else if (collection instanceof List)
+            ((List)collection).set(Integer.valueOf(key),element);
+        else
+            loggerService.error("Unexpected data structure "+collection.getClass());
+
+   }
+   private boolean validateElementOfMapList(SchemaNode current, Object element, Object mapList, String key, ExtractedElements collector){
+       if (current.getNativeType() == String.class) {
+           if (current.defaultValue != null && "".equals(element.toString()) && !element.toString().equals(current.defaultValue.toString()))
+               setPut(mapList,defaultValue.toString(),key);
+           //list.set(j, defaultValue.toString());
+           //map.put(key, defaultValue.toString());
+           extract(collector,current,element);
+       } else if ((similar(current.getNativeType()) == Number.class) && (current.minValue == null || getNumber(element).doubleValue() < current.minValue.doubleValue()) && (current.maxValue == null || getNumber(element).doubleValue() > current.maxValue.doubleValue())) {
+           if (current.ceilingValue != null && getNumber(element).doubleValue() > current.ceilingValue.doubleValue())
+               setPut(mapList,current.ceilingValue,key);
+           //list.set(j, current.ceilingValue);
+           //map.put(key, current.ceilingValue);
+           if (current.floorValue != null && getNumber(element).doubleValue() < current.floorValue.doubleValue())
+               setPut(mapList,current.floorValue,key);
+               //list.set(j, current.floorValue);
+               //map.put(key, current.floorValue);
+           extract(collector,current,element);
+       } else if ((similar(current.getNativeType()) == Long.class) && (current.minValue == null || getNumber(element).longValue() < current.minValue.longValue()) && (current.maxValue == null || getNumber(element).longValue() > current.maxValue.longValue())) {
+           if (current.ceilingValue != null && getNumber(element).longValue() > current.ceilingValue.longValue())
+               setPut(mapList, current.ceilingValue,key);
+               //list.set(j, current.ceilingValue);
+               //map.put(key, current.ceilingValue);
+           if (current.floorValue != null && getNumber(element).longValue() < current.floorValue.longValue())
+               setPut(mapList, current.floorValue,key);
+               //list.set(j, current.floorValue);
+               //map.put(key, current.floorValue);
+           extract(collector,current,element);
+       } else if ((similar(current.getNativeType()) == Date.class) && (current.minValue == null || getNumber(element).longValue() < current.minValue.longValue()) && (current.maxValue == null || getNumber(element).longValue() > current.maxValue.longValue())) {
+           if (current.ceilingValue != null && getNumber(element).longValue() > current.ceilingValue.longValue())
+               setPut(mapList, new Date(current.ceilingValue.longValue()),key);
+           //list.set(j, current.ceilingValue.longValue());
+           //map.put(key, current.ceilingValue.longValue());
+           if (current.floorValue != null && getNumber(element).longValue() < current.floorValue.longValue())
+               setPut(mapList, new Date(current.floorValue.longValue()),key);
+           //list.set(j, current.floorValue.longValue());
+           //map.put(key, current.floorValue.longValue());
+           extract(collector,current,element);
+       } else if (similar(current.getNativeType()) == Boolean.class)  {
+           if (current.defaultValue != null && element == null )
+               setPut(mapList,defaultValue,key);
+               //list.set(j, defaultValue);
+               //map.put(key, defaultValue);
+           extract(collector,current,element);
+       } else if ((current.getNativeType() == Enum.class) && ! enumVerify(element,current.getEnumeration())/*!(current.enumeration.contains(element))*/) {
+
+           loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" either is not an enumeration or this element is not a valid part of the defined enumeration");
+           return false;
+
+       } else if (!current.validate(element,collector)) {
+           return false;
+
+       }
+       return true;
+   }
+    private void addPut(Collection collection, Object element, String key){
+        if( collection instanceof Map && key != null){
+            ((Map)collection).put(key,element);
+        } else if (collection instanceof List)
+            ((List)collection).add(Integer.valueOf(key),element);
+        else
+            loggerService.error("Unexpected data structure "+collection.getClass());
+
+    }
    private boolean validate(Object object, ExtractedElements collector) {
        if (skip)
            return true;
@@ -330,52 +393,64 @@ public class SchemaNode implements JsonSerializable {
        } else if (object instanceof List || object instanceof Object[]) {
            return validateObjectAsList(object, collector);
 
+       }else if (object instanceof Collection ) {
+           return validateObjectAsList(new ArrayList((Collection) object), collector);
+
        } else if ("enum".equals(this.type) && this.enumeration !=null ) {
            extract(collector,this, object);
            return true;
-       }else {
+       }else if(type.equals("class")) {
            return validatePOJO(object,collector);
        }
+
+       return false;
 
    }
 
    private boolean validatePOJO(Object object, ExtractedElements collector) { // this must be revised
 
-       if (properties == null)
+       if (properties == null) {
+
+           loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" unexpected data schema, a POJO schema needs property description");
            return false;
+       }
+       else {
+           Map<String, Method> methods = new Hashtable<>();
+           Arrays.stream(object.getClass().getMethods()).forEach(m -> methods.put(m.getName(), m));
 
-
-       Map<String, Method> methods = new Hashtable<>();
-       Arrays.stream(object.getClass().getMethods()).forEach(m -> methods.put(m.getName(), m));
-
-
-       for (String key : properties.keySet()) {
-           SchemaNode current = properties.get(key);
-           if (!methods.containsKey(key) && !methods.containsKey("get" + key) && !methods.containsKey("get" + caps(key)))
-               if (current.isNeeded()) {
-                   return false;
-               } else
+           for (String key : properties.keySet()) {
+               SchemaNode current = properties.get(key);
+               if (current.skip)
                    continue;
-           Method method = methods.getOrDefault(key, methods.getOrDefault("get" + key, methods.get("get" + caps(key))));
-           if (!current.isSimilar(method.getReturnType()))
-               return false;
-      //     if ("object".equals(current.type) || "array".equals(current.type)) {
+               if (!methods.containsKey(key) && !methods.containsKey("get" + key) && !methods.containsKey("get" + caps(key)))
+                   if (current.isNeeded()) {
+                       loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" expected mandatory get method get"+caps(key));
+                       return false;
+                   } else
+                       continue;
+               Method method = methods.getOrDefault(key, methods.getOrDefault("get" + key, methods.get("get" + caps(key))));
+               if (!current.isSimilar(method.getReturnType()) && !current.getNativeType().isAssignableFrom(method.getReturnType()) && !method.getReturnType().isAssignableFrom(current.getNativeType())) {
+                   loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name +" uncountable return type "+current.getNativeType().getCanonicalName()+" and "+method.getReturnType().getCanonicalName());
+                   return false;
+               }
 
                try {
                    Object leaf = method.invoke(object);
-                   if ("object".equals(current.type) || "array".equals(current.type))
-                        return current.validate(leaf,collector);
+                   if (!current.isSimilar(leaf)) {
+                       loggerService.warn("In in Schema: "+getParent().getName()+ " node " + name + " node " + name +" uncountable return type "+current.getNativeType().getCanonicalName()+" and "+method.getReturnType().getCanonicalName());
+                       return false;
+                   }if ("object".equals(current.type) || "array".equals(current.type))
+                       return current.validate(leaf, collector);
                    else
-                       extract(collector,current,leaf);
+                       extract(collector, current, leaf);
 
                } catch (IllegalAccessException | InvocationTargetException e) {
                    loggerService.error(e.getMessage(), e);
                    return false;
                }
-//           }
 
+           }
        }
-
        return true;
    }
     static String caps(String string){
@@ -390,7 +465,7 @@ public class SchemaNode implements JsonSerializable {
             throw new UntraceableException("All given names must be unique!");
         else
             getRoot().names.add(name);
-        if((properties==null && "object".equals(type.toLowerCase())) || ( "array".equals(type.toLowerCase()) && ((size()>0 && minValue!=null && maxValue!=null) || (size()<0 &&minValue==null && maxValue==null)) ) || (enumeration==null && "enum".equals(type.toLowerCase())))
+        if(!skip && ((properties==null && ( "object".equals(type.toLowerCase()) || "map".equals(type.toLowerCase()))) || ( "array".equals(type.toLowerCase()) && ((size()>0 && minValue!=null && maxValue!=null) || (size()<0 &&minValue==null && maxValue==null)) ) || (enumeration==null && "enum".equals(type.toLowerCase()))))
             throw new UntraceableException("If is array must have items defined! If is a object must have properties! If is a enm must have enum!");
         if ((properties!=null && items!=null) || (properties!=null && enumeration!=null) || (items!=null && enumeration!=null))
             throw new UntraceableException("A data definition cannot be object and/or array and/or enum! ");
