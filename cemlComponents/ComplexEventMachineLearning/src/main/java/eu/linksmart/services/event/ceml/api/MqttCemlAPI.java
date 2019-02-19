@@ -34,7 +34,9 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
         try {
             loggerService = LogManager.getLogger(MqttCemlAPI.class);
             conf = Configurator.getDefaultConfig();
-            me= new MqttCemlAPI();
+            if(conf.getBoolean(Const.CEML_MQTT_API_ENABLED)) {
+                me = new MqttCemlAPI();
+            }
         } catch (Exception | NoClassDefFoundError e) {
             if(conf==null || (conf!=null && !conf.getBoolean("Test")))
                 if(loggerService!=null)

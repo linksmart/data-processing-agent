@@ -35,7 +35,7 @@ public class MqttIncomingConnectorService extends IncomingSyncConnector implemen
     private static void addEventConnection(String alias, List<String> brokers){
         brokers.forEach(broker->{
             try {
-                me.addListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
+                getReference().addListener(broker, conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias), new EventMqttObserver(conf.getString(Const.EVENT_IN_TOPIC_CONF_PATH + "_" + alias)));
             } catch (Exception e) {
                 loggerService.error(e.getMessage(),e);
             }
