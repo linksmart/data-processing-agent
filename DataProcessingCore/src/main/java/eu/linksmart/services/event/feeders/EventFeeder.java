@@ -141,10 +141,10 @@ public class EventFeeder implements Feeder<EventEnvelope> {
                 throw new StatementException(SharedSettings.getId(), "Agent", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
         } catch (TraceableException | UntraceableException e) {
             loggerService.error(e.getMessage(), e);
-            throw e;
+           // throw e;
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
-            throw new UnknownUntraceableException(e.getMessage(), e);
+          //  throw new UnknownUntraceableException(e.getMessage(), e);
         }
     }
 
