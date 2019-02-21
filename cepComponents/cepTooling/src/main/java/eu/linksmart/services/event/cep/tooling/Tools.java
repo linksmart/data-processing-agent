@@ -446,10 +446,12 @@ public class Tools {
             for(int i=0; i<finalSize;i++) {
 
                 if(pointer < observations.size() && observations.get(pointer).getDatastream().getId().equals(idDSBase+"-"+(startIndex+i))){
-                    ret.add( observations.get(pointer));
+                    if(ret.size()>=startIndex+i)
+                        ret.set(i, observations.get(pointer));
+                    else
+                            ret.add(observations.get(pointer));
                     pointer++;
                 } else {
-                    //observation.setResult(0);
 
                     ret.add((Observation) EventBuilder.getBuilder(Observation.class).factory(idSBase + "-" + (startIndex + i),idDSBase + "-" + (startIndex + i),i+40,observations.get(0).getDate(),"",new Hashtable<>()));
 
@@ -533,5 +535,72 @@ public class Tools {
         }
         return ret;
     }
+    static private Date lastKnownTime = null;
+    static private Set<String> sent = new HashSet<>();
+    static synchronized public Collection<Observation> timeSegmentation(ObservationImpl[] observations) {
 
+        if (observations.length != 0) {
+            Observation first = observations[0];
+            if (lastKnownTime == null)
+                lastKnownTime = first.getPhenomenonTime();
+            else if (lastKnownTime.before(first.getPhenomenonTime())) {
+                sent = new HashSet<>();
+            }
+            ArrayList<Observation> ret = new ArrayList<>();
+            ret.add(first);
+
+            for (Observation i : observations)
+                if (i != first)
+                    if (i.getPhenomenonTime().equals(first.getPhenomenonTime())) {
+                        return ret;
+                    } else if (!sent.contains(i.getId().toString())) {
+                        ret.add(i);
+                        sent.add(i.getId().toString());
+                    }
+
+            return ret;
+        } else
+            return null;
+    }
+    static public Object test(Object observations){
+        if(observations instanceof Collection && ((Collection)observations).size()!= 196)
+            System.out.println("");
+        else if (observations instanceof Object[] && ((Collection)observations).size()!= 196)
+            System.out.println("");
+        return observations;
+    }
+
+    static public boolean validate(Collection observations) {
+        int j = 0;
+        int batchNo = -1;
+        boolean collections =false;
+        for (Object i : observations) {
+            if (i instanceof Collection) {
+                validate((Collection) i);
+                collections = true;
+            }else if (i instanceof Integer) {
+                if (!i.equals(j))
+                   return false;
+            } else if (i instanceof Double) {
+                String[] vals = i.toString().split(".");
+                if (vals.length == 2) {
+                    if (batchNo == -1)
+                        batchNo = Integer.valueOf(vals[1]);
+                    if (!Integer.valueOf(vals[1]).equals(batchNo) && !Integer.valueOf(vals[0]).equals(j))
+                        return false;
+                }
+
+            } else
+                return false;
+            if(batchNo!=-1 && j>240){
+                batchNo++;
+            }
+            if(j>240)
+                j=0;
+            else
+                j++;
+        }
+
+        return true;
+    }
 }

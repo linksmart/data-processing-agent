@@ -233,7 +233,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                         }
                         statement.isRegistrable(false);
                         statement.setName(name + "/" + "Auxiliary/" + String.valueOf(statementsCounter[0]) + "/" + id);
-                        statement.setId(name + "/" + "A/" + String.valueOf(statementsCounter[0]) + "/" + id);
+                        statement.setId(name + "/" + "A/" + String.valueOf(statementsCounter[0]));
                         statement.setStatement(statement.getStatement().replace("<id>", name));
                         statement.build();
                         statementsCounter[0]++;
@@ -250,8 +250,8 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
                             statement.setOutput(Collections.singletonList(conf.getString(Const.CEML_MQTT_OUTPUT_TOPIC)));
 
                         statement.setRequest(this);
-                        statement.setName(name + "/" + "Learning/" + String.valueOf(statementsCounter[0]) + "/" + id);
-                        statement.setId(name + "/" + "L/" + String.valueOf(statementsCounter[0]) + "/" + id);
+                        statement.setName(name + "/" + "Learning/" + String.valueOf(statementsCounter[0]) );
+                        statement.setId(name + "/" + "L/" + String.valueOf(statementsCounter[0]) );
                         statement.setStatement(statement.getStatement().replace("<id>", name));
 
                         statement.build();
@@ -261,8 +261,8 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
                 if (deployStatements != null && 4 <= buildTill)
                     for (Statement statement : deployStatements) {
-                        statement.setName(name + "/" + "Learning/" + String.valueOf(statementsCounter[0]) + "/" + id);
-                        statement.setId(name + "/" + "D/" + String.valueOf(statementsCounter[0]) + "/" + id);
+                        statement.setName(name + "/" + "Learning/" + String.valueOf(statementsCounter[0]) );
+                        statement.setId(name + "/" + "D/" + String.valueOf(statementsCounter[0]) );
                         statement.setStatement(statement.getStatement().replace("<id>", name));
                         statement.build();
                         statementsCounter[2]++;

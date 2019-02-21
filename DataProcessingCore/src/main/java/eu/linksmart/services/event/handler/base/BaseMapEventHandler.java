@@ -9,6 +9,7 @@ import eu.linksmart.services.utils.serialization.Serializer;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -26,8 +27,9 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
     }
     protected Publisher publisher;
     private Serializer  loggingSerializer = new DefaultSerializerDeserializer();
-    protected long logEveryCount = 0;
-    private boolean firstMessage = true, lastCorrect = false;
+    protected long logEveryCount = 1;
+    private boolean lastCorrect = false;
+    private Date lastMessage = null;
     public BaseMapEventHandler(Statement statement) {
         super(statement);
     }
@@ -63,12 +65,16 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
         }
     }
     protected boolean loggingValidation(Map[] events) {
+        Date current = new Date();
+        if(lastMessage == null)
+            lastMessage = current;
+
         boolean correct=true;
         if (events == null)
             loggerService.warn("The handle of statement id:" + query.getId() + " received an empty event");
         else if (query.getSchema() != null) {
 
-            if (firstMessage || !lastCorrect || Math.floorMod(logEveryCount = Math.addExact(1, logEveryCount), query.getLogEventEvery()) == 0)
+            if (logEveryCount==1 || !lastCorrect || current.after(new Date(lastMessage.getTime() + query.getLogEventEvery()*60000L))) {
                 if (!query.getSchema().validate(events))
                     try {
                         loggerService.warn("Handler of statement: " + query.getId() + " data do not expect structure below:  \n" + loggingSerializer.toString(events));
@@ -76,26 +82,26 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
                     } catch (IOException e) {
                         loggerService.error(e.getMessage());
                     } finally {
-                       correct = lastCorrect = false;
+                        correct = lastCorrect = false;
                     }
                 else {
                     lastCorrect = true;
-                    simpleLogMessage();
+                    loggerService.info("Handler of statement: " + query.getId() + " had triggered n=" + logEveryCount + " processing process");
                 }
+                lastMessage = current;
+            }
 
-        } else if(Math.floorMod(logEveryCount = Math.addExact(1, logEveryCount), query.getLogEventEvery()) == 0)
-            simpleLogMessage();
-        firstMessage = false;
+        } else if( current.after(new Date(lastMessage.getTime() + query.getLogEventEvery()*60000L)))
+            loggerService.info("Handler of statement: " + query.getId() + " had triggered n=" + logEveryCount + " processing process");
 
-        return correct;
-    }
-    private void simpleLogMessage(){
         try {
-             loggerService.info("Handler of statement: " + query.getId() + " had triggered n=" + logEveryCount + " processing process");
+            logEveryCount = Math.addExact(1, logEveryCount);
         } catch (ArithmeticException e) {
             logEveryCount = 0;
         }
+        return correct;
     }
+
     protected void processLeavingMessage(Object events){
 
         if(events!=null) {

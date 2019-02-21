@@ -105,8 +105,8 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     @JsonIgnore
     private boolean registrable = true;
 
-    @JsonIgnore
-    protected int logEventEvery = 10;
+    @JsonProperty("logEventEvery")
+    protected int logEventEvery = 1;
     @ApiModelProperty(notes = "Sets the expected result of this statement")
     @JsonProperty("schema")
     protected SchemaNode schema;
