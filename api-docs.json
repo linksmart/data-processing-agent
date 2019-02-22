@@ -1263,6 +1263,221 @@
         }
       }
     },
+    "/statement": {
+      "get": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "getStatement",
+        "operationId": "getStatement_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "changeStatement",
+        "operationId": "changeStatement_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statement",
+            "description": "statement",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatementInstance"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "ID",
+            "description": "Statement's ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Statement 'id' was successful (in case of an update of an existing statement)",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "201": {
+            "description": "Created: Statement 'id' was successful",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "207": {
+            "description": "Multi-status",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "304": {
+            "description": "Not Modified: This exact statement already exists in this agent",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "400": {
+            "description": "Syntax error: 'reason'",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "409": {
+            "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "removeStatement",
+        "operationId": "removeStatement_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Provided ID doesn't exist in any CEP engine. ID:",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
     "/statement/": {
       "get": {
         "tags": [
@@ -1448,6 +1663,69 @@
           },
           "409": {
             "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
+    "/statement/output": {
+      "get": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "getStatementLastOutput",
+        "operationId": "getStatementLastOutput_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "xpath",
+            "in": "query",
+            "description": "xpath",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
             "schema": {
               "$ref": "#/definitions/MultiResourceResponses"
             }
@@ -2961,6 +3239,10 @@
         "id": {
           "type": "string",
           "description": "Unique identifier of the statement in the agent"
+        },
+        "logEventEvery": {
+          "type": "integer",
+          "format": "int32"
         },
         "name": {
           "type": "string",
