@@ -121,14 +121,14 @@ public class EventFeeder implements Feeder<EventEnvelope> {
                 if (promiscuous) {
                     event = SharedSettings.getDeserializer().deserialize(rawEvent, RawEvent.class);
                 } else
-                    throw new StatementException(this.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+                    throw new StatementException(this.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event (see below) in topic: "+topic+" do not implements  EventEnvelope class \n"+new String(rawEvent));
             }
 
             if (event.getAttributeId() == null && event.getValue() == null)
                 if (promiscuous) {
                     event = SharedSettings.getDeserializer().deserialize(rawEvent, RawEvent.class);
                 } else
-                    throw new StatementException(this.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+                    throw new StatementException(this.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event (see below) in topic: "+topic+" do not implements  EventEnvelope class \n"+new String(rawEvent));
 
             if (event instanceof EventEnvelope) {
 
@@ -138,7 +138,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
             } else if (event != null)
                 throw new StatementException(event.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
             else
-                throw new StatementException(SharedSettings.getId(), "Agent", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+                throw new StatementException(this.getClass().getCanonicalName(), "Event", "Error while feeding the engine with events: Unknown event (see below) in topic: "+topic+" do not implements  EventEnvelope class \n"+new String(rawEvent));
         } catch (TraceableException | UntraceableException e) {
             loggerService.error(e.getMessage(), e);
            // throw e;
@@ -166,7 +166,7 @@ public class EventFeeder implements Feeder<EventEnvelope> {
                 event = SharedSettings.getDeserializer().parse(rawEvent, compiledTopicClass.get(topic));
             }
             if (!(event instanceof EventEnvelope))
-                throw new StatementException(topic, "Event", "Error while feeding the engine with events: Unknown event type, all events must implement the EventEnvelope class");
+                throw new StatementException(topic, "Event", "Error while feeding the engine with events: Unknown event (see below) in topic: "+topic+" do not implements  EventEnvelope class \n"+rawEvent);
         } catch (TraceableException e) {
             loggerService.error(e.getMessage(), e);
             throw e;
