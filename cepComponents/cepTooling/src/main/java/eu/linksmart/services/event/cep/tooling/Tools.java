@@ -453,7 +453,7 @@ public class Tools {
                     pointer++;
                 } else {
 
-                    ret.add((Observation) EventBuilder.getBuilder(Observation.class).factory(idSBase + "-" + (startIndex + i),idDSBase + "-" + (startIndex + i),i+40,observations.get(0).getDate(),"",new Hashtable<>()));
+                    ret.add((Observation) EventBuilder.getBuilder(Observation.class).factory(idSBase + "-" + (startIndex + i),idDSBase + "-" + (startIndex + i),0,observations.get(0).getDate(),"",new Hashtable<>()));
 
                 }
                 Assert.isTrue(i!=ret.size(), "Mismatch adding values in the list");
