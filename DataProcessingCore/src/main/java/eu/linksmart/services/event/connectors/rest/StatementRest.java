@@ -92,7 +92,7 @@ public class StatementRest extends Component implements IncomingConnector {
     @RequestMapping(value = "/statement/output", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getStatementLastOutputEscapeID(
             @RequestParam("id") String id,
-            @RequestParam("xpath")String xpath) {
+            @RequestParam(value = "xpath", required = false)String xpath) {
 
         MultiResourceResponses<Object> result = StatementFeeder.getStatementLastOutput(id);
 
