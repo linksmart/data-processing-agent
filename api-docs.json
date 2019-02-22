@@ -1700,7 +1700,7 @@
             "name": "xpath",
             "in": "query",
             "description": "xpath",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
