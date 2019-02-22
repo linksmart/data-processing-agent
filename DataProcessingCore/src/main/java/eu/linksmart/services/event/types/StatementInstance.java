@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.Statement;
@@ -145,6 +146,11 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.resultType = conf.getString(Const.FeederPayloadClass + "_" + conf.getString(Const.STATEMENT_DEFAULT_OUTPUT_TYPE));
         if (resultType == null)
             resultType = ObservationImpl.class.getCanonicalName();
+        try {
+            lastOutput = EventBuilder.getBuilder().factory(id, SharedSettings.getId(),new HashMap<>(), 0,null, null );
+        } catch (UntraceableException e) {
+            e.printStackTrace();
+        }
     }
 
     public StatementInstance() {
