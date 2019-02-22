@@ -146,9 +146,12 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.resultType = conf.getString(Const.FeederPayloadClass + "_" + conf.getString(Const.STATEMENT_DEFAULT_OUTPUT_TYPE));
         if (resultType == null)
             resultType = ObservationImpl.class.getCanonicalName();
+
+    }
+    private void initLastOutput(){
         try {
-            lastOutput = EventBuilder.getBuilder().factory(id, SharedSettings.getId(),new HashMap<>(), 0,null, null );
-        } catch (UntraceableException e) {
+            lastOutput = EventBuilder.getBuilder()!=null?EventBuilder.getBuilder().factory(id!=null?id:UUID.randomUUID(), SharedSettings.getId()!=null?SharedSettings.getId():UUID.randomUUID(),new HashMap<>(), 0,null, null ):new ObservationImpl();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -156,6 +159,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
     public StatementInstance() {
         initValues();
         setGenerateID();
+        initLastOutput();
     }
 
     public StatementInstance(String name, String statement, List<String> scope) {
@@ -164,6 +168,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
         this.statement = statement;
         this.scope = scope;
         setGenerateID();
+        initLastOutput();
     }
 
     private void setGenerateID() {
