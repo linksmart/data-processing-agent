@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
             serializer = SharedSettings.getSerializer();
             if(!query.isRESTOutput()) {
                 publisher = new DefaultMQTTPublisher(query, SharedSettings.getWill(), SharedSettings.getWillTopic());
-                loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") generating events for statement ID "+query.getId()+" in the broker " + query.getScope(0) + "  URL: " + publisher.getScopes().stream().map(s->BrokerConfiguration.loadConfiguration(s).getURL()).collect(Collectors.joining(",")));
+                loggerService.info("The Agent(ID:" + SharedSettings.getId() + ") generating events for statement ID "+query.getId()+" in the endpoint scoped " + query.getScope(0));
 
             }else {
 
