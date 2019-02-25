@@ -146,17 +146,17 @@ public class CemlTest {
         try {
 
             for(int i=0; i<1000;i++){
-                handler.update(new Object[][]{new Object[]{i*1.0,i*1.0}},null);
+                handler.update(new Object[][]{new Object[]{i,i}},null);
 
             }
 
             Thread.sleep(500);
-            assertEquals(3.0, (Double) ((List) (request.getModel().predict(Arrays.asList(3.0, 3.0)).getPrediction())).get(0), 0.5);
+            assertEquals(3.0, (Double) ((List) (request.getModel().predict(Arrays.asList(3, 3)).getPrediction())).get(0), 0.5);
         } catch (TraceableException | InterruptedException| UntraceableException e) {
             e.printStackTrace();
             fail();
         }
-        assertTrue((double)((EvaluationMetric<Number>) request.getModel().getEvaluator().getEvaluationAlgorithms().get("RMSE")).getResult() < 5.0);
+        assertTrue((double)((EvaluationMetric<Number>) request.getModel().getEvaluator().getEvaluationAlgorithms().get("RMSE")).getResult() < 5);
         assertTrue(request.getModel().getEvaluator().isDeployable());
     }
 
