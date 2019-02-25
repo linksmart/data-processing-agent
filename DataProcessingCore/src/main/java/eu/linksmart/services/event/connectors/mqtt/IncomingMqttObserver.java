@@ -76,7 +76,13 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     }
     @Override
     public void update(String topic, MqttMessage mqttMessage)  {
+        logging(mqttMessage);
 
+        mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
+
+        if(VALIDATION_MODE) toValidation(mqttMessage.getTopic(),  mqttMessage.getPayload());
+    }
+    private void logging(MqttMessage mqttMessage){
         debugCount=(debugCount+1)%Long.MAX_VALUE;
         try {
             if(debugCount%conf.getInt(Const.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH) == 0)
@@ -88,9 +94,6 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
                 loggerService.debug(AgentUtils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
 
         }
-         mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
-
-        if(VALIDATION_MODE) toValidation(mqttMessage.getTopic(),  mqttMessage.getPayload());
     }
 
     protected abstract void mangeEvent(String topic, byte[] payload) ;
