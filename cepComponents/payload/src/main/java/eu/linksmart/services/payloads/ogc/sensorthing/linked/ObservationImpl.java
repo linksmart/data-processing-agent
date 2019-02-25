@@ -9,6 +9,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.FeatureOfInterest;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 
@@ -110,12 +111,12 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         if(!additionalData.isEmpty()) {
             if(parameters==null)
                 parameters = new ArrayList<>();
-            additionalData.forEach((k, v) -> parameters.add(Pair.of(k, v)));
+            additionalData.forEach((k, v) -> parameters.add(MutablePair.of(k, v)));
         }
     }
 
     @JsonIgnore
-    private List<Pair<String, Object>> parameters=null;
+    private List<MutablePair<String, Object>> parameters=null;
     @JsonIgnore
     protected FeatureOfInterest featureOfInterest;
     @JsonIgnore
@@ -172,12 +173,12 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     }
 
     @Override
-    public List<Pair<String, Object>> getParameters() {
+    public List<MutablePair<String, Object>> getParameters() {
         return this.parameters;
     }
 
     @Override
-    public void setParameters(List<Pair<String, Object>> parameters) {
+    public void setParameters(List<MutablePair<String, Object>> parameters) {
         this.parameters=parameters;
     }
 
@@ -207,7 +208,7 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     @Override
     public String getURL() {
         if(parameters!=null) {
-            Optional<Pair<String,Object>> optional = parameters.stream().filter(p->"url".equals(p.getKey().toLowerCase())).findFirst();
+            Optional<MutablePair<String,Object>> optional = parameters.stream().filter(p->"url".equals(p.getKey().toLowerCase())).findFirst();
             if(optional.isPresent())
                 return optional.get().getValue().toString();
         }
@@ -219,7 +220,7 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         if(parameters==null)
              parameters = new ArrayList<>();
 
-        parameters.add(Pair.of("url", url));
+        parameters.add(MutablePair.of("url", url));
     }
 
     @Override

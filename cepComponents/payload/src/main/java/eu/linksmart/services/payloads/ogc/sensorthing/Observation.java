@@ -13,6 +13,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.DatastreamNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.FeatureOfInterestNavigationLink;
 import eu.linksmart.services.utils.function.Utils;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Period;
@@ -154,7 +155,7 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
      * */
     @JsonPropertyDescription("The time period during which the result may be used.")
     @JsonGetter(value = "parameters")
-    List<Pair<String,Object>> getParameters();
+    List<MutablePair<String,Object>> getParameters();
     /**
      * Sets the parameters time with the given Array of objects.
      * Key-value pairs showing the environmental conditions during measurement.
@@ -164,7 +165,7 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
      * */
     @JsonPropertyDescription("The time period during which the result may be used.")
     @JsonSetter(value = "parameters")
-    void setParameters(List<Pair<String,Object>> parameters);
+    void setParameters(List<MutablePair<String,Object>> parameters);
     /**
      * Gets the related FeatureOfInterest of this observation.
      *
