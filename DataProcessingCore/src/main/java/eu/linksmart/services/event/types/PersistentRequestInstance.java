@@ -1,8 +1,7 @@
 package eu.linksmart.services.event.types;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.types.PersistentRequest;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
@@ -10,9 +9,11 @@ import eu.linksmart.services.utils.configuration.Configurator;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import eu.linksmart.api.event.types.JsonSerializable;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -30,7 +31,6 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
     }
 
     private static final transient String persistentFile = conf.containsKeyAnywhere(Const.CONNECTOR_PERSISTENT_FILE) ? conf.getString(Const.CONNECTOR_PERSISTENT_FILE) + "-" + SharedSettings.getId() + ".json" : null;
-
 
     @JsonProperty("persistent")
     protected boolean persistent = false;
@@ -80,13 +80,17 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
     }
 
     public String getId() {
-        if (id == null || id.equals(""))
-            id = eu.linksmart.services.utils.function.Utils.hashIt((new Date()).toString());
+        if (id == null || id.equals("")) {
+            id = UUID.randomUUID().toString();
+            addToRequests(id);
+        }
         return id;
     }
 
     public void setId(String id) {
+        removeFromRequests(this.id);
         this.id = id;
+        addToRequests(this.id);
     }
 
     @JsonProperty("essential")
@@ -96,7 +100,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
         if (!conf.getBoolean(Const.PERSISTENT_ENABLED) &&
                 !conf.getBoolean(Const.FAIL_IF_PERSISTENCE_FAILS) &&
                 essential
-                ) {
+        ) {
             loggerService.warn("The essentiality feature cannot be held by the agent " + SharedSettings.getId() + ", due to this setting is not enabled in it");
             return;
         }
@@ -164,14 +168,11 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
                                     }
                                 }
                             }
-
-
                         }
                     },
                     60000,
                     conf.getInt(Const.PERSISTENT_STORAGE_PERIOD)
             );
         }
-
     }
 }

@@ -49,18 +49,23 @@ public class ModelDeserializer extends DeserializerMode<Model> {
 
     }
     protected String loadName(JsonNode node) throws IOException{
-        String name =  node.get("Name").textValue();
+        String name =  node.hasNonNull("Name")?node.get("Name").textValue():node.get("name").textValue();
         if(!loadClass("eu.linksmart.services.event.ceml.models."+name) && !loadClass(name))
             throw new IOException("Loaded class: "+name+" or "+"eu.linksmart.services.event.ceml.models."+name+ " do not exist!");
         return name;
     }
     protected  List<TargetRequest>  loadTargets(JsonNode node) throws IOException{
         List<TargetRequest> targetRequests;
-        if(node.hasNonNull("Targets")) {
+
+        if(node.hasNonNull("Targets"))
             targetRequests = mapper.reader(collectionType).readValue(node.get("Targets"));
 
-        }else
+        else if(node.hasNonNull("targets"))
+            targetRequests = mapper.reader(collectionType).readValue(node.get("targets"));
+
+        else
             throw new IOException("The field Targets is a mandatory field!");
+
         return targetRequests;
     }
     protected  long[][]  loadInitialConfusionMatrix(JsonNode node) throws IOException{
@@ -69,7 +74,7 @@ public class ModelDeserializer extends DeserializerMode<Model> {
             confusionMatrix = mapper.readValue(node.get("InitialConfusionMatrix").toString(),long[][].class);
 
         }else if (node.hasNonNull("initialConfusionMatrix"))
-            confusionMatrix = mapper.readValue(node.get("InitialConfusionMatrix").toString(),long[][].class);
+            confusionMatrix = mapper.readValue(node.get("initialConfusionMatrix").toString(),long[][].class);
 
         return confusionMatrix;
     }
@@ -85,10 +90,13 @@ public class ModelDeserializer extends DeserializerMode<Model> {
     }
     protected Map<String,Object> loadParameters(JsonNode node) throws IOException{
         Map<String,Object> parameters = new Hashtable<>();
-        if(node.hasNonNull("Parameters")) {
+        if(node.hasNonNull("Parameters"))
             parameters = mapper.reader(mapType).readValue(node.get("Parameters"));
 
-        }
+        else if(node.hasNonNull("parameters"))
+            parameters = mapper.reader(mapType).readValue(node.get("parameters"));
+
+
         return parameters;
     }
     protected Object loadLerner(JsonNode node, String name) throws IOException{
@@ -96,6 +104,9 @@ public class ModelDeserializer extends DeserializerMode<Model> {
         if(node.hasNonNull("Learner")) {
             JavaType learnerType = learners.get(name);
             learner = mapper.reader(learnerType).readValue(node.get("Learner"));
+        } else if(node.hasNonNull("learner")) {
+            JavaType learnerType = learners.get(name);
+            learner = mapper.reader(learnerType).readValue(node.get("learner"));
         }
         return learner;
     }
@@ -104,9 +115,9 @@ public class ModelDeserializer extends DeserializerMode<Model> {
             Model model = Model.factory(name,targetRequests,parameters,learner);
             if(model.isClassifier()) {
                 if(initialConfusionMatrix!=null)
-                    model.getParameters().put("InitialConfusionMatrix", initialConfusionMatrix);
+                    model.getParameters().put("initialConfusionMatrix", initialConfusionMatrix);
                 if(initialSamplesMatrix!=null)
-                    model.getParameters().put("InitialSamplesMatrix", initialSamplesMatrix);
+                    model.getParameters().put("initialSamplesMatrix", initialSamplesMatrix);
             }
             return model;
         } catch (Exception e) {
