@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.SimpleType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.services.utils.serialization.DefaultSerializerDeserializer;
@@ -41,17 +42,22 @@ public class ModelDeserializer extends DeserializerMode<Model> {
 
 
        String name = loadName(node);
-       return constructModel(node,name,loadTargets(node),loadParameters(node),loadLerner(node,name), loadInitialConfusionMatrix(node), loadInitialSamplesMatrix(node));
+       Object lerner = loadLerner(node,name);
+       Map<String,Object> parameter = loadParameters(node);
 
-       //else
-         //   throw new IOException("The field Parameters is a mandatory field!");
 
+       return constructModel(node,name,loadTargets(node),parameter, lerner, loadInitialConfusionMatrix(node), loadInitialSamplesMatrix(node));
 
     }
     protected String loadName(JsonNode node) throws IOException{
         String name =  node.hasNonNull("Name")?node.get("Name").textValue():node.get("name").textValue();
         if(!loadClass("eu.linksmart.services.event.ceml.models."+name) && !loadClass(name))
             throw new IOException("Loaded class: "+name+" or "+"eu.linksmart.services.event.ceml.models."+name+ " do not exist!");
+        synchronized (learners) {
+            learners.clear();
+            if (Model.loadedModels != null)
+                Model.loadedModels.forEach((k, v) -> learners.put(k, mapper.getTypeFactory().constructFromCanonical(k)));
+        }
         return name;
     }
     protected  List<TargetRequest>  loadTargets(JsonNode node) throws IOException{
@@ -100,15 +106,17 @@ public class ModelDeserializer extends DeserializerMode<Model> {
         return parameters;
     }
     protected Object loadLerner(JsonNode node, String name) throws IOException{
-        Object learner = null;
-        if(node.hasNonNull("Learner")) {
-            JavaType learnerType = learners.get(name);
-            learner = mapper.reader(learnerType).readValue(node.get("Learner"));
-        } else if(node.hasNonNull("learner")) {
-            JavaType learnerType = learners.get(name);
-            learner = mapper.reader(learnerType).readValue(node.get("learner"));
-        }
-        return learner;
+        String attributeName= node.hasNonNull("Learner")?"Learner":node.hasNonNull("learner")?"learner":null;
+
+        JavaType learnerType;
+        if(attributeName!=null)
+            if(name.equals("ExternPythonPyro")){
+                return node.get("result").binaryValue();
+            }else if( (learnerType = learners.get(name) ) != null){
+                return mapper.reader(learnerType).readValue(node.get(attributeName));
+            }
+
+        return null;
     }
     protected Model constructModel(JsonNode node, String name, List<TargetRequest> targetRequests, Map<String,Object> parameters, Object learner, long[][] initialConfusionMatrix, long[][] initialSamplesMatrix)throws IOException {
         try {
