@@ -96,7 +96,7 @@ public class CemlClassificationTest {
                     "}," +
                     "  \"Model\":{\n" +
                     "    \"Name\":\"DummyClassifier\",\n" +
-                    "      \"InitialConfusionMatrix\":[\n" +
+                    "      \"initialConfusionMatrix\":[\n" +
                     "        [26, 25, 25, 25],\n" +
                     "        [25, 25, 25, 26]\n" +
                     "      ]," +

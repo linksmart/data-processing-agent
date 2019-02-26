@@ -113,7 +113,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
     }
 
     static {
-        if (persistentFile != null) {
+        if (conf.getBoolean(Const.PERSISTENT_ENABLED) && persistentFile != null) {
 
             persistentRequestTracker.schedule(
                     new TimerTask() {
@@ -170,7 +170,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
                             }
                         }
                     },
-                    60000,
+                    conf.getInt(Const.PERSISTENT_STORAGE_PERIOD),
                     conf.getInt(Const.PERSISTENT_STORAGE_PERIOD)
             );
         }
