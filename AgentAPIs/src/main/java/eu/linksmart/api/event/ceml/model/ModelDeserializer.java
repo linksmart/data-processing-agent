@@ -56,7 +56,7 @@ public class ModelDeserializer extends DeserializerMode<Model> {
         synchronized (learners) {
             learners.clear();
             if (Model.loadedModels != null)
-                Model.loadedModels.forEach((k, v) -> learners.put(k, mapper.getTypeFactory().constructFromCanonical(k)));
+                Model.loadedModels.forEach((k, v) -> learners.put(k, mapper.getTypeFactory().constructFromCanonical(v.getCanonicalName())));
         }
         return name;
     }
