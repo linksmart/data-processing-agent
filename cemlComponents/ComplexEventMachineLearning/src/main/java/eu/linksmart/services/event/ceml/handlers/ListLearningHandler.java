@@ -47,8 +47,8 @@ public  class   ListLearningHandler extends BaseListEventHandler {
         this.statement = (LearningStatement) statement;
         this.originalRequest =((LearningStatement)statement).getRequest();
         model = originalRequest.getModel();
-        descriptors = originalRequest.getDescriptors();
-        schema = originalRequest.getDataSchema();
+        descriptors = model.getDescriptors();
+        schema = model.getDataSchema();
 
         if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
             try {

@@ -55,8 +55,8 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         this.statement = (LearningStatement) statement;
         this.originalRequest =((LearningStatement)statement).getRequest();
         model = originalRequest.getModel();
-        descriptors = originalRequest.getDescriptors();
-        schema = originalRequest.getDataSchema();
+        descriptors = model.getDescriptors();
+        schema = model.getDataSchema();
 
         if(model.getParameters().containsKey(RETRAIN_EVERY)) {
             this.retrainEvery = (int) model.getParameters().get(RETRAIN_EVERY);

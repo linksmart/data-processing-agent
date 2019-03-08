@@ -60,8 +60,14 @@ public class PythonPyroBase<T> extends ClassifierModel<T, Object, PyroProxy> {
     protected Object baseModel = null;
 
     public PythonPyroBase(List<TargetRequest> targets, Map<String, Object> parameters, Object learner) {
-        super(targets, parameters, null);
-        baseModel = learner;
+        super(targets, parameters, learner);
+    }
+
+    @Override
+    protected void initLerner(Object learner){
+        if (!(bootstrapping && bootstrapable) && learner != null)
+            baseModel = learner;
+        super.initLerner(null);
     }
 
     @Override

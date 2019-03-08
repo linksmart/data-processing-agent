@@ -15,16 +15,26 @@ import java.util.*;
  */
 public class PersistenceService extends FileConnector{
 
-    private Map<String, List<PersistentRequest>> requests = new HashMap<>();
+    private final Map<String, List<PersistentRequest>> requests = new HashMap<>();
+    private static boolean loaded = false;
+    private static final Object lock = new Object();
+
+
 
     public PersistenceService(String... filePaths) {
         super(filePaths);
     }
 
     @Override
-    public void loadFiles() {
-        super.loadFiles();
-        PersistentRequestInstance.setPersistentFileOnceExisted(true);
+    public synchronized void loadFiles() {
+        synchronized (lock) {
+            if (!loaded) {
+                super.loadFiles();
+                PersistentRequestInstance.setPersistentFileOnceExisted(true);
+                loaded = true;
+            }
+        }
+
     }
 
     @Override
@@ -32,33 +42,34 @@ public class PersistenceService extends FileConnector{
         Map<String,List<String>> raw = null;
       //  Class<T> type = ((Class<T>) ((ParameterizedType) getClass().toGenericString()).getActualTypeArguments()[0]);
         try {
-            raw = (Map<String, List<String>>) SharedSettings.getDeserializer().parse(inputStream, Map.class);
-           // List<String> strings = raw.get( type.getCanonicalName());
-            raw.forEach((k,v) -> {
-                requests.put(k,new ArrayList<>());
-                try {
-                    Class tClass = Class.forName(k);
-                    v.forEach(e->{
-                        try {
-                            requests.get(k).add((PersistentRequest)SharedSettings.getDeserializer().deserialize(Base64.getDecoder().decode(e), tClass));
-                        } catch (Exception ee) {
-                            loggerService.error(ee.getMessage(),ee);
-                            if(conf.getBoolean(Const.PERSISTENT_ENABLED)){
-                                loggerService.error("Persistence service fail! Stopping agent");
-                                System.exit(-1);
+            synchronized (PersistentRequest.synchLock) {
+                raw = (Map<String, List<String>>) SharedSettings.getDeserializer().parse(inputStream, Map.class);
+                // List<String> strings = raw.get( type.getCanonicalName());
+                raw.forEach((k, v) -> {
+                    requests.put(k, new ArrayList<>());
+                    try {
+                        Class tClass = Class.forName(k);
+                        v.forEach(e -> {
+                            try {
+                                requests.get(k).add((PersistentRequest) SharedSettings.getDeserializer().deserialize(Base64.getDecoder().decode(e), tClass));
+                            } catch (Exception ee) {
+                                loggerService.error(ee.getMessage(), ee);
+                                if (conf.getBoolean(Const.PERSISTENT_ENABLED)) {
+                                    loggerService.error("Persistence service fail! Stopping agent");
+                                    System.exit(-1);
+                                }
                             }
+                        });
+                    } catch (ClassNotFoundException e) {
+                        loggerService.error(e.getMessage(), e);
+                        if (conf.getBoolean(Const.PERSISTENT_ENABLED)) {
+                            loggerService.error("Persistence service fail! Stopping agent");
+                            System.exit(-1);
                         }
-                    });
-                } catch (ClassNotFoundException e) {
-                    loggerService.error(e.getMessage(),e);
-                    if(conf.getBoolean(Const.PERSISTENT_ENABLED)){
-                        loggerService.error("Persistence service fail! Stopping agent");
-                        System.exit(-1);
                     }
-                }
 
-            });
-
+                });
+            }
         } catch (Exception e) {
             loggerService.error(e.getMessage(),e);
             if(conf.getBoolean(Const.PERSISTENT_ENABLED)){
@@ -70,5 +81,10 @@ public class PersistenceService extends FileConnector{
     public List getRequests(String type) {
         return requests.get(type);
     }
+    public List consumeRequests(String type) {
+        List<PersistentRequest> requests = this.requests.get(type);
+        this.requests.remove(type);
 
+        return requests;
+    }
 }

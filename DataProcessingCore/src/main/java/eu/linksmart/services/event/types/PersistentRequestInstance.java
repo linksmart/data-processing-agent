@@ -51,11 +51,15 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
     }
 
     public void addToRequests(String id) {
-        requests.put(id, this);
+        synchronized (PersistentRequest.synchLock) {
+            requests.put(id, this);
+        }
     }
 
     public void removeFromRequests(String id) {
-        requests.remove(id);
+        synchronized (PersistentRequest.synchLock) {
+            requests.remove(id);
+        }
     }
 
     @JsonProperty("persistent")
@@ -100,7 +104,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
         if (!conf.getBoolean(Const.PERSISTENT_ENABLED) &&
                 !conf.getBoolean(Const.FAIL_IF_PERSISTENCE_FAILS) &&
                 essential
-        ) {
+                ) {
             loggerService.warn("The essentiality feature cannot be held by the agent " + SharedSettings.getId() + ", due to this setting is not enabled in it");
             return;
         }
@@ -119,10 +123,11 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
                     new TimerTask() {
                         @Override
                         public void run() {
-                            synchronized (persistentFile) {
+                            synchronized (PersistentRequest.synchLock) {
                                 OutputStream outputStream = null;
                                 try {
                                     Map<String, List<String>> toStore = new HashMap<>();
+
                                     requests.values().stream().filter(p -> p.persistent).forEach(r -> {
 
                                         try {
@@ -139,6 +144,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
                                             System.exit(-1);
                                         }
                                     });
+
 
                                     File f = new File(persistentFile);
                                     if (!toStore.isEmpty()) {
@@ -161,6 +167,7 @@ public abstract class PersistentRequestInstance implements PersistentRequest, Js
                                 } catch (IOException e) {
                                     loggerService.error(e.getMessage(), e);
                                 } finally {
+                                    loggerService.info("Finished with " + persistentFile);
                                     try {
                                         if (outputStream != null)
                                             outputStream.close();

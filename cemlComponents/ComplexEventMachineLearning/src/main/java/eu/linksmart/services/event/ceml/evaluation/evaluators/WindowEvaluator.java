@@ -1,9 +1,6 @@
 package eu.linksmart.services.event.ceml.evaluation.evaluators;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 
@@ -12,25 +9,30 @@ import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UnknownUntraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.ceml.evaluation.evaluators.base.GenericEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.metrics.ClassificationMetrics;
 import eu.linksmart.services.event.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.*;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import java.util.*;
 
 /**
  * Created by angel on 1/12/15.
  */
+@JsonDeserialize(as = WindowEvaluatorDeserializer.class)
 public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluator<Number> {
-
-    @JsonProperty
+    public WindowEvaluator() {
+        super();
+    }
+  //  @JsonProperty
     private double[][] confusionMatrix;
-    @JsonProperty
+ //   @JsonProperty
     private List classes;
-    @JsonProperty
+ //   @JsonProperty
     private long[][] sequentialConfusionMatrix;
     private long[][] initialSamplesMatrix;
+
+
 
     public void setInitialConfusionMatrix(long[][] initialConfusionMatrix) {
         this.initialConfusionMatrix = initialConfusionMatrix;
@@ -43,7 +45,6 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
         super(targets);
         classes = new ArrayList<>(namesClasses);
     }
-
     @Override
     public double evaluate(List<Number> predicted, List<Number> actual) {
         // The evaluation only works when the classes are mutually exclusive
@@ -178,14 +179,49 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
     }
 
+    public double[][] getConfusionMatrix() {
+        return confusionMatrix;
+    }
+
+    public void setConfusionMatrix(double[][] confusionMatrix) {
+        this.confusionMatrix = confusionMatrix;
+    }
+
+    public List getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List classes) {
+        this.classes = classes;
+    }
+
+    public long[][] getSequentialConfusionMatrix() {
+        return sequentialConfusionMatrix;
+    }
+
+    public void setSequentialConfusionMatrix(long[][] sequentialConfusionMatrix) {
+        this.sequentialConfusionMatrix = sequentialConfusionMatrix;
+    }
+
+    public long[][] getInitialSamplesMatrix() {
+        return initialSamplesMatrix;
+    }
+
+    public long[][] getInitialConfusionMatrix() {
+        return initialConfusionMatrix;
+    }
+
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
     public abstract class ModelEvaluationMetricSubBase extends ModelEvaluationMetricBase {
 
-        public ModelEvaluationMetricSubBase(EvaluationMetric.ComparisonMethod method, double target) {
-            super(method, target);
+        public ModelEvaluationMetricSubBase( double target) {
+            super(target);
 
         }
+        public ModelEvaluationMetricSubBase() {
+            super(0.5);
 
+        }
         @Override
         public Double calculate() {
             double acc = 0;
@@ -205,8 +241,12 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
 
      public class Accuracy extends ModelEvaluationMetricSubBase {
-        public Accuracy(ComparisonMethod method, double target) {
-            super(method, target);
+        public Accuracy(double target) {
+            super(target);
+        }
+
+        public Accuracy() {
+            super();
         }
 
         @Override
@@ -214,11 +254,14 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
             return ClassificationMetrics.accuracy(sequentialConfusionMatrix[i]);
         }
     }
-    /* Alias */ public class ACC extends Accuracy {public ACC(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */ public class ACC extends Accuracy {public ACC(double target) {super(target);}}
 
     public class Precision extends ModelEvaluationMetricSubBase {
-        public Precision(ComparisonMethod method, double target) {
-            super(method, target);
+        public Precision() {
+            super();
+        }
+        public Precision(double target) {
+            super(target);
         }
 
         @Override
@@ -227,12 +270,15 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
         }
     }
-    /* Alias */ public class PPV extends Precision {public PPV(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */ public class PPV extends Precision {public PPV(double target) {super(target);}}
 
 
     public class Sensitivity extends ModelEvaluationMetricSubBase {
-        public Sensitivity(ComparisonMethod method, double target) {
-            super(method, target);
+        public Sensitivity(double target) {
+            super(target);
+        }
+        public Sensitivity() {
+            super();
         }
 
         @Override
@@ -240,13 +286,21 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
             return ClassificationMetrics.sensitivity(sequentialConfusionMatrix[i]);
         }
     }
-    /* Alias */ public class TPR extends Sensitivity {public TPR(ComparisonMethod method, double target) {super(method, target);}}
-    /* Alias */ public class Recall extends Sensitivity {public Recall(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */ public class TPR extends Sensitivity {public TPR(double target) {super(target);}
+        public TPR() {
+            super();
+        }
+    }
+    /* Alias */ public class Recall extends Sensitivity {public Recall(double target) {super(target);} public Recall(){super();}}
 
 
     public class Specificity extends ModelEvaluationMetricSubBase {
-        public Specificity(ComparisonMethod method, double target) {
-            super(method, target);
+        public Specificity(double target) {
+            super(target);
+        }
+
+        public Specificity(){
+            super();
         }
 
         @Override
@@ -255,25 +309,32 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
         }
     }
-    /* Alias */ public class TNR extends Specificity {public TNR(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */ public class TNR extends Specificity {public TNR(double target) {super(target);} public TNR(){super();}}
 
     public class NegativePredictiveValue extends ModelEvaluationMetricSubBase {
-        public NegativePredictiveValue(ComparisonMethod method, double target) {
-            super(method, target);
+        public NegativePredictiveValue(double target) {
+            super(target);
         }
 
+        public NegativePredictiveValue(){
+            super();
+        }
         @Override
         public Double calculate(int i) {
             return ClassificationMetrics.negativePredictiveValue(sequentialConfusionMatrix[i]);
 
         }
     }
-    /* Alias */ public class NPV extends NegativePredictiveValue {public NPV(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */ public class NPV extends NegativePredictiveValue {public NPV(double target) {super(target);} public NPV(){super();}}
 
     public class FallOut extends ModelEvaluationMetricSubBase {
 
-        public FallOut(ComparisonMethod method, double target) {
-            super(method, target);
+        public FallOut(double target) {
+            super(target);
+        }
+
+        public FallOut(){
+            super();
         }
 
         @Override
@@ -281,13 +342,17 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
             return ClassificationMetrics.fallOut(sequentialConfusionMatrix[i]);
         }
     }
-    /* Alias */public class FPR extends FallOut {public FPR(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */public class FPR extends FallOut {public FPR(double target) {super(target);} public FPR(){super();}}
 
 
     public class FalseDiscoveryRate extends ModelEvaluationMetricSubBase {
 
-        public FalseDiscoveryRate(ComparisonMethod method, double target) {
-            super(method, target);
+        public FalseDiscoveryRate(double target) {
+            super(target);
+        }
+
+        public FalseDiscoveryRate(){
+            super();
         }
 
         @Override
@@ -295,13 +360,17 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
             return ClassificationMetrics.falseDiscoveryRate(sequentialConfusionMatrix[i]);
         }
     }
-    /* Alias */public class FDR extends FalseDiscoveryRate {public FDR(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */public class FDR extends FalseDiscoveryRate {public FDR(double target) {super(target);} public FDR(){super();}}
 
 
     public class MissRate extends ModelEvaluationMetricSubBase {
 
-        public MissRate(ComparisonMethod method, double target) {
-            super(method, target);
+        public MissRate(double target) {
+            super(target);
+        }
+
+        public MissRate(){
+            super();
         }
 
         @Override
@@ -309,14 +378,16 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
             return ClassificationMetrics.missRate(sequentialConfusionMatrix[i]);
         }
     }
-    /* Alias */public class FNR extends MissRate {public FNR(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */public class FNR extends MissRate {public FNR(double target) {super(target);} public FNR(){super();}}
 
 
     public class F1Score extends ModelEvaluationMetricSubBase {
 
-        public F1Score(ComparisonMethod method, double target) {
-            super(method, target);
+        public F1Score(double target) {
+            super(target);
         }
+
+        public F1Score(){super();}
 
         @Override
         public Double calculate(int i) {
@@ -327,8 +398,12 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
     public class MatthewsCorrelationCoefficient extends ModelEvaluationMetricSubBase {
 
-        public MatthewsCorrelationCoefficient(ComparisonMethod method, double target) {
-            super(method, target);
+        public MatthewsCorrelationCoefficient(double target) {
+            super(target);
+        }
+
+        public MatthewsCorrelationCoefficient(){
+            super();
 
         }
 
@@ -360,13 +435,15 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
             return normalizedVal;
         }
     }
-    /* Alias */public class MCC extends MatthewsCorrelationCoefficient {public MCC(ComparisonMethod method, double target) {super(method, target);}}
+    /* Alias */public class MCC extends MatthewsCorrelationCoefficient {public MCC(double target) {super(target);} public MCC(){super();}}
 
     public class Informedness extends ModelEvaluationMetricSubBase {
 
-        public Informedness(ComparisonMethod method, double target) {
-            super(method, target);
+        public Informedness(double target) {
+            super(target);
         }
+
+        public Informedness(){super();}
 
         @Override
         public Double calculate(int i) {
@@ -377,9 +454,11 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
 
     public class Markedness extends ModelEvaluationMetricSubBase {
-        public Markedness(ComparisonMethod method, double target) {
-            super(method, target);
+        public Markedness(double target) {
+            super( target);
         }
+
+        public Markedness(){super();}
 
         @Override
         public Double calculate(int i) {
@@ -389,14 +468,22 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
     public class Samples extends eu.linksmart.services.event.ceml.evaluation.metrics.Samples {
 
-        public Samples(ComparisonMethod method, double target) {
-            super(method, target);
+        public Samples(double target) {
+            super( target);
+            method = ComparisonMethod.More;
         }
+
+        public Samples(){super(0);}
     }
 
     public class SlideAfter extends eu.linksmart.services.event.ceml.evaluation.metrics.Samples {
-        public SlideAfter(ComparisonMethod method, double target) {
-            super(method, target);
+        public SlideAfter(double target) {
+            super( target);
+            method = ComparisonMethod.More;
+        }
+        public SlideAfter(){
+            super(100);
+            method = ComparisonMethod.More;
         }
         @Override
         public boolean isControlMetric() {

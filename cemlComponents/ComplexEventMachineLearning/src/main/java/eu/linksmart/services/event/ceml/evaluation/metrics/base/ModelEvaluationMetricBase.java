@@ -13,12 +13,17 @@ public abstract class ModelEvaluationMetricBase extends EvaluationMetricBase<Dou
 
 
 
-    public ModelEvaluationMetricBase(ComparisonMethod method, Double target){
-        super(method, target);
+    public ModelEvaluationMetricBase(Double target){
+        super( target);
         currentValue = 0.0;
+        method = ComparisonMethod.More;
+    }
+    public ModelEvaluationMetricBase(){
+        super(0.5);
+        currentValue = 0.0;
+        method = ComparisonMethod.More;
 
     }
-
     @Override
     public abstract Double calculate() ;
     @Override

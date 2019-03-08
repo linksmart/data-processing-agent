@@ -117,19 +117,6 @@ public interface CEMLRequest  extends JsonSerializable,PersistentRequest {
             report(getLastPrediction());
     }
     /***
-     * Description of the data expected by the model
-     *
-     * @return the description of the data as DataDescriptors
-     * */
-    @Deprecated
-    DataDescriptors getDescriptors();
-    /***
-     * Schema of the data expected by the model
-     *
-     * @return the schema of the data as root SchemaNode
-     * */
-    SchemaNode getDataSchema();
-    /***
      * Define how the data will be analysed/learned/studied.
      *
      * @return an instantiation of an Algorithm.

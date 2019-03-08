@@ -4,8 +4,9 @@ import eu.linksmart.services.event.ceml.evaluation.metrics.base.ModelEvaluationM
 
 public class Samples extends ModelEvaluationMetricBase {
 
-        public Samples(ComparisonMethod method, double target) {
-            super(method, target);
+        public Samples( double target) {
+            super( target);
+            method = ComparisonMethod.More;
         }
         @Override
         public Double calculate() {

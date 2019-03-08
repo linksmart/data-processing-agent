@@ -22,17 +22,18 @@ import com.rits.cloning.Cloner;
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public abstract class EvaluationMetricBase<T extends Object> implements EvaluationMetric<T> {
 
+    @JsonProperty("method")
     protected ComparisonMethod method= ComparisonMethod.More;
     @JsonIgnore
-    protected transient static Logger loggerService = LogManager.getLogger(EvaluationMetricBase.class);
-    @JsonProperty("name")
-    protected String name;
+    protected transient static final Logger loggerService = LogManager.getLogger(EvaluationMetricBase.class);
+    @JsonProperty("type")
+    protected String type = this.getClass().getCanonicalName();
     @JsonProperty("target")
     protected T target ;
     @JsonProperty("currentValue")
     protected T currentValue;
     @JsonIgnore
-    protected transient Cloner cloner = new Cloner();
+    protected transient final Cloner cloner = new Cloner();
 
     static public EvaluationMetric instanceEvaluationAlgorithm(String canonicalName, String method, Object target)  {
 
@@ -69,17 +70,23 @@ public abstract class EvaluationMetricBase<T extends Object> implements Evaluati
         return null;
     }
     public EvaluationMetricBase(){
-        name = this.getClass().getSimpleName();
-    }
-    public EvaluationMetricBase(ComparisonMethod method, T target){
 
-        name = this.getClass().getSimpleName();
-        if(method!=null)
-            this.method = method;
+    }
+    public EvaluationMetricBase(T target){
+
+       init(target,null);
+
+    }
+    public EvaluationMetricBase( T target, T current){
+        init(target,current);
+
+
+    }
+    private void init( T target, T current){
         this.target=cloner.deepClone(target);
-
+        if( current != null)
+            this.currentValue=cloner.deepClone(current);
     }
-
     @Override
     public void setComparisonMethod(ComparisonMethod method) {
         this.method =method;

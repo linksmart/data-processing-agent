@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Created by José Ángel Carvajal on 30.10.2017 a researcher of Fraunhofer FIT.
  */
 public interface PersistentRequest {
+    Object synchLock = new Object();
     @JsonProperty("persistent")
     @ApiModelProperty(notes = "Indicates if the request should be stored persistently")
     boolean isPersistent();

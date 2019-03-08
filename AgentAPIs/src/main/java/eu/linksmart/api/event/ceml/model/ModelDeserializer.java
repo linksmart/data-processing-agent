@@ -1,16 +1,20 @@
 package eu.linksmart.api.event.ceml.model;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
-import com.fasterxml.jackson.databind.type.SimpleType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 import eu.linksmart.services.utils.serialization.DefaultSerializerDeserializer;
 import eu.linksmart.services.utils.serialization.DeserializerMode;
 
@@ -23,30 +27,29 @@ import java.util.Map;
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
 public class ModelDeserializer extends DeserializerMode<Model> {
-    private static final ObjectMapper mapper = (ObjectMapper) new DefaultSerializerDeserializer().getParser();
+    private ObjectMapper mapper = (ObjectMapper) new DefaultSerializerDeserializer().getParser();
     private static final CollectionType collectionType =TypeFactory.defaultInstance().constructCollectionType(List.class, TargetRequest.class);
     //private static final CollectionType learnersListType =TypeFactory.defaultInstance().constructCollectionType(List.class,MultiLayerNetwork.class);
     private static final MapType mapType =TypeFactory.defaultInstance().constructMapType(Map.class, String.class,Object.class);
     protected static final Map<String,JavaType> learners = new Hashtable<>();
+    protected final EvaluatorDeserializer  evaluatorDeserializer;
 
-    static public void registerModule(Module module){
-        mapper.registerModule(module);
-    }
     static public void setLearnerType(String name, JavaType type){
         learners.put(name,type);
     }
 
+    public ModelDeserializer(EvaluatorDeserializer evaluatorDeserializer){
+        super();
+        this.evaluatorDeserializer = evaluatorDeserializer;
+    }
     @Override
     public Model deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-
+        mapper = (ObjectMapper) new DefaultSerializerDeserializer().getParser();
 
        String name = loadName(node);
-       Object lerner = loadLerner(node,name);
-       Map<String,Object> parameter = loadParameters(node);
 
-
-       return constructModel(node,name,loadTargets(node),parameter, lerner, loadInitialConfusionMatrix(node), loadInitialSamplesMatrix(node));
+       return constructModel(node,name,loadTargets(node),loadParameters(node), loadLerner(node,name), loadInitialConfusionMatrix(node), loadInitialSamplesMatrix(node), loadEvaluator(node));
 
     }
     protected String loadName(JsonNode node) throws IOException{
@@ -105,20 +108,48 @@ public class ModelDeserializer extends DeserializerMode<Model> {
 
         return parameters;
     }
+    protected Evaluator loadEvaluator(JsonNode node) throws IOException{
+        Evaluator evaluator = null;
+        try {
+            if(node.hasNonNull("evaluatorCanonicalName")) {
+                Class evaluatorClass = Class.forName(node.get("evaluatorCanonicalName").asText());
+                if (node.hasNonNull("Evaluator"))
+                    evaluator = evaluatorDeserializer.deserialize(mapper,node.get("Evaluator"));
+
+                else if (node.hasNonNull("evaluator"))
+                    evaluator = evaluatorDeserializer.deserialize(mapper,node.get("evaluator"));
+            }
+        } catch (Exception e) {
+           throw new IOException(e);
+        }
+
+
+        return evaluator;
+    }
+    protected SchemaNode loadSchema(JsonNode node) throws IOException{
+        SchemaNode schemaNode = null;
+        if(node.hasNonNull("DataSchema"))
+            schemaNode = mapper.readValue(node.get("DataSchema").toString(), SchemaNode.class);
+
+        else if(node.hasNonNull("dataSchema"))
+            schemaNode = mapper.readValue(node.get("dataSchema").toString(), SchemaNode.class);
+
+        return schemaNode;
+    }
     protected Object loadLerner(JsonNode node, String name) throws IOException{
         String attributeName= node.hasNonNull("Learner")?"Learner":node.hasNonNull("learner")?"learner":null;
 
         JavaType learnerType;
         if(attributeName!=null)
             if(name.equals("ExternPythonPyro")){
-                return node.get("result").binaryValue();
+                return node.get(attributeName).get("result").textValue();
             }else if( (learnerType = learners.get(name) ) != null){
                 return mapper.reader(learnerType).readValue(node.get(attributeName));
             }
 
         return null;
     }
-    protected Model constructModel(JsonNode node, String name, List<TargetRequest> targetRequests, Map<String,Object> parameters, Object learner, long[][] initialConfusionMatrix, long[][] initialSamplesMatrix)throws IOException {
+    protected Model constructModel(JsonNode node, String name, List<TargetRequest> targetRequests, Map<String,Object> parameters, Object learner, long[][] initialConfusionMatrix, long[][] initialSamplesMatrix, Evaluator evaluator)throws IOException {
         try {
             Model model = Model.factory(name,targetRequests,parameters,learner);
             if(model.isClassifier()) {
@@ -127,6 +158,9 @@ public class ModelDeserializer extends DeserializerMode<Model> {
                 if(initialSamplesMatrix!=null)
                     model.getParameters().put("initialSamplesMatrix", initialSamplesMatrix);
             }
+            if(evaluator!=null)
+                model.setEvaluator(evaluator);
+            model.setDataSchema(loadSchema(node));
             return model;
         } catch (Exception e) {
             throw new IOException(e);

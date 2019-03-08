@@ -45,12 +45,12 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
             throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(), "The name, CEMLRequest and statements are mandatory fields for a Statement!");
         try {
 
-            if(manager.getDataSchema()!=null){
-                if(manager.getDataSchema().getType().equals("array"))
+            if(manager.getModel().getDataSchema()!=null){
+                if(manager.getModel().getDataSchema().getType().equals("array"))
                     CEHandler = ListLearningHandler.class.getCanonicalName();
                 else
                     CEHandler = MapLearningHandler.class.getCanonicalName();
-            }else if(manager.getDescriptors().isLambdaTypeDefinition())
+            }else if(manager.getModel().getDescriptors().isLambdaTypeDefinition())
 
                 CEHandler = ListLearningHandler.class.getCanonicalName();
             else{
@@ -74,7 +74,7 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
 
         this.statement =statement;
         this.manager =manager;
-        if(manager.getDescriptors().isLambdaTypeDefinition())
+        if(manager.getModel().getDescriptors().isLambdaTypeDefinition())
             CEHandler = ListLearningHandler.class.getCanonicalName();
 
         CEHandler= MapLearningHandler.class.getCanonicalName();

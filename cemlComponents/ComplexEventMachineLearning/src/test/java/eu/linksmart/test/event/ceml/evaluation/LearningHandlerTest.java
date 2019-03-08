@@ -40,6 +40,10 @@ public class LearningHandlerTest {
 
 
     }
+    @Test
+    public void test(){
+
+    }
     private void updateTestBase(int updateSize, int inputSize, int targetSize, int groundTruth ){
         LearningStatement learningStatement = new LearningStatement();
         Model model = Mockito.mock(ModelInstance.class);
@@ -48,7 +52,7 @@ public class LearningHandlerTest {
         DataDescriptors descriptors = DataDescriptors.factory("Test",inputSize,targetSize, DataDescriptor.DescriptorTypes.NUMBER);
 
         when(request.getModel()).thenReturn(model);
-        when(request.getDescriptors()).thenReturn(descriptors);
+        when(request.getModel().getDescriptors()).thenReturn(descriptors);
         learningStatement.setStatement("");
         learningStatement.setRequest(request);
 

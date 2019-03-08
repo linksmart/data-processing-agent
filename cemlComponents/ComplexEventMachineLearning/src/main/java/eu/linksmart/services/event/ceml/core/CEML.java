@@ -2,12 +2,13 @@ package eu.linksmart.services.event.ceml.core;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
+import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.components.Feeder;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.api.FileCemlAPI;
+import eu.linksmart.services.event.ceml.evaluation.evaluators.*;
 import eu.linksmart.services.event.connectors.PersistenceService;
 import eu.linksmart.services.event.types.PersistentRequestInstance;
 import eu.linksmart.services.event.types.StatementInstance;
@@ -26,7 +27,6 @@ import eu.linksmart.api.event.components.AnalyzerComponent;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.event.ceml.api.MqttCemlAPI;
-import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
@@ -56,46 +56,54 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
         System.out.println("\n" +
                 "╔═╗ ╔═╗ ╔╦╗ ╔╦  \n" +
                 "║   ╠═  ║║║ ║  \n" +
-                "╩═╝ ╩═╝ ╩ ╩ ╩═╝ \n" );
+                "╩═╝ ╩═╝ ╩ ╩ ╩═╝ \n");
         // Add configuration file of the local package
         Configurator.addConfFile(Const.CEML_DEFAULT_CONFIGURATION_FILE);
         conf = Configurator.getDefaultConfig();
 
         SharedSettings.setLs_code("LA");
-        SharedSettings.getSerializer().addModule("Descriptors",DataDescriptors.class,new DataDescriptorSerializer());
-        SharedSettings.getDeserializer().addModule("Descriptors",DataDescriptors.class,new DataDescriptorsDeserializer());
+        SharedSettings.getSerializer().addModule("Descriptors", DataDescriptors.class, new DataDescriptorSerializer());
+        SharedSettings.getDeserializer().addModule("Descriptors", DataDescriptors.class, new DataDescriptorsDeserializer());
 
-        SharedSettings.getSerializer().addModule("Statements",Statement.class,StatementInstance.class);
-        SharedSettings.getDeserializer().addModule("Statements",Statement.class,StatementInstance.class);
+        SharedSettings.getSerializer().addModule("Statements", Statement.class, StatementInstance.class);
+        SharedSettings.getDeserializer().addModule("Statements", Statement.class, StatementInstance.class);
 
-        SharedSettings.getDeserializer().addModule("Model",Model.class, new ModelDeserializer());
+        SharedSettings.getDeserializer().addModule("Model", Model.class, new ModelDeserializer(new EvaluatorBaseDeserializer()));
 
-        SharedSettings.getSerializer().addModule("LearningStatements",LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
-        SharedSettings.getDeserializer().addModule("LearningStatements",LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
+        SharedSettings.getSerializer().addModule("LearningStatements", LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
+        SharedSettings.getDeserializer().addModule("LearningStatements", LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class);
 
 
-        SharedSettings.getDeserializer().addModule("DataDescriptor",DataDescriptor.class,new DataDescriptorDeserializer());
+        SharedSettings.getDeserializer().addModule("DataDescriptor", DataDescriptor.class, new DataDescriptorDeserializer());
+        SharedSettings.getDeserializer().addModule("EvaluatorDeserializer",Evaluator.class, new EvaluatorBaseDeserializer());
+        SharedSettings.getDeserializer().addModule("DoubleTumbleWindowEvaluator",DoubleTumbleWindowEvaluator.class, new DoubleTumbleWindowEvaluatorDeserializer());
+        SharedSettings.getDeserializer().addModule("WindowEvaluator",WindowEvaluator.class, new WindowEvaluatorDeserializer());
+        SharedSettings.getDeserializer().addModule("RegressionEvaluator",RegressionEvaluator.class, new RegressionEvaluatorDeserializer());
 
-        if(conf.containsKeyAnywhere(Const.CEML_INIT_BOOTSTRAPPING)&& SharedSettings.isFirstLoad())
+        if (conf.containsKeyAnywhere(Const.CEML_INIT_BOOTSTRAPPING) && SharedSettings.isFirstLoad())
             (new FileCemlAPI(conf.getString(Const.CEML_INIT_BOOTSTRAPPING))).loadFiles();
-        if(conf.containsKeyAnywhere(Const.PERSISTENT_ENABLED)&& conf.getBoolean(Const.PERSISTENT_ENABLED) && !SharedSettings.isFirstLoad()) {
+        if (conf.containsKeyAnywhere(Const.PERSISTENT_ENABLED) && conf.getBoolean(Const.PERSISTENT_ENABLED) && !SharedSettings.isFirstLoad()) {
             PersistenceService fileFeeder = new PersistenceService(PersistentRequestInstance.getPersistentFile());
 
             fileFeeder.loadFiles();
-            List<CEMLManager> requests = new ArrayList<>();
-            if(fileFeeder.getRequests(CEMLManager.class.getCanonicalName())!=null)
-                requests.add((CEMLManager) fileFeeder.getRequests(CEMLManager.class.getCanonicalName()));
-            if(!requests.isEmpty())
-                requests.forEach(CEML::create);
+            List<PersistentRequest> requests;
+            if ( (requests = fileFeeder.consumeRequests(CEMLManager.class.getCanonicalName())) != null)
+                requests.forEach(i ->
+                    {
+                        ((CEMLManager) i).getModel().setBootstrapping(true);
+                        CEML.create((CEMLManager) i);
+                    }
+                );
+
         }
         try {
             Class.forName(MqttCemlAPI.class.getCanonicalName());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Feeder.feeders.put(CEML.class.getCanonicalName(), new CEML());
         // bootstrap requests
-        loggerService.info("The CEML has started in the Agent with ID "+ SharedSettings.getId());
+        loggerService.info("The CEML has started in the Agent with ID " + SharedSettings.getId());
     }
 
     private CEML(){}
@@ -226,7 +234,7 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
                 switch (typeRequest) {
                     case "data":
 
-                        result.addResources(name, requests.get(name).getDescriptors());
+                        result.addResources(name, requests.get(name).getModel().getDescriptors());
                         break;
                     case "evaluation":
                         result.addResources(requests.get(name).getModel().getEvaluator().getClass().getSimpleName(), requests.get(name).getModel().getEvaluator());

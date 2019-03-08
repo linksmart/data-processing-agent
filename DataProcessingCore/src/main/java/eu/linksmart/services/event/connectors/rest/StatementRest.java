@@ -110,7 +110,7 @@ public class StatementRest extends Component implements IncomingConnector {
                 finalRes.addResponse(createErrorMapMessage(id, xpath, 404, "Not Found", "No object found in given path"));
 
 
-            return finalHTTPCreationResponse(result,null);
+            return finalHTTPCreationResponse(finalRes,null);
         }catch (Exception e){
             finalRes.addResponse(createErrorMapMessage(id, xpath, 500, "Error", e.getMessage()));
         }

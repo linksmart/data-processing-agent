@@ -30,7 +30,7 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
    }
 
     Evaluator<Output> getEvaluator();
-
+    void setEvaluator(Evaluator<Output> evaluator);
     void learn(Input input) throws TraceableException, UntraceableException;
     Prediction<Output> predict(Input input) throws TraceableException, UntraceableException;
 
@@ -58,7 +58,7 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     void setLastPrediction(Prediction<Output> value);
 
     String getName();
-
+    String getEvaluatorCanonicalName();
     void setName(String name);
 
     Class getNativeType();
@@ -76,6 +76,11 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     default boolean isClassifier() {return  false;}
     default boolean isRegressor(){return  false;}
     default boolean isClusterer(){return  false;}
+
+    boolean isBootstrapable();
+    void setBootstrapable(boolean value);
+
+    void setBootstrapping(boolean value);
 
 
 }

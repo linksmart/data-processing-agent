@@ -127,7 +127,7 @@ public class DataProcessingCore {
         active = true;
         while (active) {
             if (active) {
-                loggerService.info("The Agent with ID " + SharedSettings.getId() + " is alive");
+                loggerService.debug("The Agent with ID " + SharedSettings.getId() + " is alive");
                 int hb = 5000;
                 try {
                     hb = conf.getInt(Const.LOG_HEARTBEAT_TIME_CONF_PATH);
@@ -197,7 +197,7 @@ public class DataProcessingCore {
             PersistenceService fileFeeder = new PersistenceService(PersistentRequestInstance.getPersistentFile());
 
             fileFeeder.loadFiles();
-            List requests = fileFeeder.getRequests(StatementInstance.class.getCanonicalName());
+            List requests = fileFeeder.consumeRequests(StatementInstance.class.getCanonicalName());
             if (requests != null && !requests.isEmpty())
                 StatementFeeder.feedStatements(requests);
         }
