@@ -18,6 +18,7 @@ import java.util.Map;
 /**
  * Created by angel on 19/11/15.
  */
+@Deprecated() // this class is a candidate to refactor or archived. It has not been updated and is incompatible with the last Agent version (14.04.19)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DataStructure extends DataDefinition {
 

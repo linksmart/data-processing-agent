@@ -33,6 +33,7 @@ import java.util.Map;
 /**
  * Created by angel on 26/11/15.
  */
+@Deprecated() // this class is a candidate to refactor or archived. It has not been updated and is incompatible with the last Agent version (14.04.19)
 public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassifier> {
 
     @JsonPropertyDescription("Attributes for the model")
@@ -59,11 +60,12 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
         // TODO: do this with new API
         try {
 
+            super.build();
             initialize();
-            descriptors =new DataStructure( descriptors);
-            descriptors.build();
 
-            ((Classifier)learner).buildClassifier(((DataStructure) descriptors).getInstances());
+
+            System.err.println("TODO: do this with new API (Data Scheme");
+            System.exit(-1);
 
             return this;
         }catch (TraceableException|UntraceableException e){
@@ -215,7 +217,7 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
     public void learn(Map input)  {
         loggerService.info("Evaluating "+nativeType.getCanonicalName()+ " learner object "+System.identityHashCode(learner));
 
-         learn(learner, populateInstance(input,descriptors));
+         learn(learner, populateInstance(input,null /*TODO: do this with new API*/));
 
     }
     static public int predict(Object lerner,Instance inst){
@@ -234,7 +236,7 @@ public class GeneralWekaModel extends ModelInstance<Map,Integer,UpdateableClassi
     @Override
     public Prediction<Integer> predict(Map input)  {
 
-        int i=predict(learner,populateInstance(input,descriptors));
+        int i=predict(learner,populateInstance(input,null /*TODO: do this with new API*/));
 
 
         return new PredictionInstance<>(i, input,this.getClass().getName(),new ArrayList<>(evaluator.getEvaluationAlgorithms().values()));
