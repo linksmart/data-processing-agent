@@ -13,9 +13,13 @@ import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.configuration.Configurator;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -25,88 +29,15 @@ import static org.junit.Assert.fail;
  * Created by José Ángel Carvajal on 20.04.2017 a researcher of Fraunhofer FIT.
  */
 public class CemlTest {
-    private static final String legacy = "{\n" +
-            "  \"Name\":\"test\",\n" +
-            "  \"Descriptors\":\n" +
-            "  {\n" +
-            "    \"TargetSize\":1,\n" +
-            "    \"InputSize\":1,\n" +
-            "    \"Type\":\"NUMBER\"\n" +
-            "  },\n" +
-            "  \"Model\":{\n" +
-            "    \"Name\":\"LinearRegressionModel\",\n" +
-            "    \"Targets\":[\n" +
-            "      {\n" +
-            "        \"Name\":\"RMSE\",\n" +
-            "        \"Threshold\":5.0,\n" +
-            "        \"Method\":\"less\"\n" +
-            "      }\n" +
-            "\n" +
-            "    ]\n" +
-            "  },\n" +
-            "  \"LearningStreams\":[\n" +
-            "    {\n" +
-            "      \"statement\":\" \"\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"DeploymentStreams\":[\n" +
-            "    {\n" +
-            "      \"statement\":\"\"\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"Settings\":\n"+
-            "  {\n" +
-            "     \"BuildTillPhase\": 5,\n"+
-            "     \"ReportingEnabled\": false\n"+
-            "  }"+
-            "}";
-    private static final String current = "{\n" +
-            "  \"Name\":\"test\",\n" +
-            "  \"DataSchema\":\n" +
-                    "{" +
-                        "\"type\": \"array\"," +
-                        "\"size\": 2," +
-                        "\"targetSize\": 1," +
-                        "\"ofType\": \"int\"" +
-                    "},"+
-            "  \"Model\":{\n" +
-            "    \"Name\":\"LinearRegressionModel\",\n" +
-            "    \"Targets\":[\n" +
-            "      {\n" +
-            "        \"Name\":\"RMSE\",\n" +
-            "        \"Threshold\":5.0,\n" +
-            "        \"Method\":\"less\"\n" +
-            "      }\n" +
-            "\n" +
-            "    ]\n" +
-            "  },\n" +
-            "  \"LearningStreams\":[\n" +
-            "    {\n" +
-            "      \"statement\":\" \"\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"DeploymentStreams\":[\n" +
-            "    {\n" +
-            "      \"statement\":\"\"\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"Settings\":\n"+
-            "  {\n" +
-            "     \"BuildTillPhase\": 5,\n"+
-            "     \"ReportingEnabled\": false\n"+
-            "  }"+
-            "}";
-
     @Test
     public void testCEML() {
         Configurator conf = Configurator.getDefaultConfig();
         conf.setSetting("Test",true);
-        test(legacy);
-        test(current);
+        //test(new String(getRequest("CemlTestLegacy.json")));
+        test(new String(getRequest("CemlTestCurrent.json")));
     }
     private void test(String requestStr){
         CEMLManager request;
-        ObjectMapper mapper;
         try {
             Class.forName(CEML.class.getCanonicalName());
             Class.forName(LinearRegressionModel.class.getCanonicalName());
@@ -118,7 +49,7 @@ public class CemlTest {
 
         try {
 
-            System.out.println("Expecting unimportant exception!");
+            // System.out.println("Expecting unimportant exception!");
             // SharedSettings.getDeserializer().defineClassToInterface(Model.class, LinearRegressionModel.class);
             request = SharedSettings.getDeserializer().parse(requestStr, CEMLManager.class);
 
@@ -158,6 +89,16 @@ public class CemlTest {
         }
         assertTrue((double)((EvaluationMetric<Number>) request.getModel().getEvaluator().getEvaluationAlgorithms().get("RMSE")).getResult() < 5);
         assertTrue(request.getModel().getEvaluator().isDeployable());
+    }
+    private String getRequest(String path){
+        try {
+            return new String(Thread.currentThread().getContextClassLoader().getResourceAsStream(path).readAllBytes());
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+
+        }
+        return null;
     }
 
 }

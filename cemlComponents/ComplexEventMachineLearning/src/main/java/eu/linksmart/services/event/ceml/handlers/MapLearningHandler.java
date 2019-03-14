@@ -34,8 +34,8 @@ public  class MapLearningHandler extends BaseMapEventHandler {
     final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;
-    @Deprecated
-    final protected DataDescriptors descriptors;
+   // @Deprecated
+   // final protected DataDescriptors descriptors;
 
     // if property is different than 1, the learning handler is an batch retrainer
     final protected int retrainEvery;
@@ -55,7 +55,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         this.statement = (LearningStatement) statement;
         this.originalRequest =((LearningStatement)statement).getRequest();
         model = originalRequest.getModel();
-        descriptors = model.getDescriptors();
+       // descriptors = model.getDescriptors();
         schema = model.getDataSchema();
 
         if(model.getParameters().containsKey(RETRAIN_EVERY)) {
@@ -97,7 +97,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         if(events!=null)
             processMessage(events);
     }
-    @Deprecated
+  /*  @Deprecated
     private void elementsAssurance(Map rawMap, Map  withoutTarget, List measuredTargets){
         for (DataDescriptor descriptor : descriptors)
             if (descriptor.isTarget()) {
@@ -132,7 +132,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         model.learn(rawMap);
 
         evaluate(prediction,measuredTargets);
-    }
+    }*/
     private void evaluate(Prediction prediction, List target){
         // evaluating the current learning instance
         model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), target);
@@ -143,11 +143,6 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                 publisher.publish(SharedSettings.getSerializer().serialize(eventMap));
             } catch (IOException e) {
                 loggerService.error(e.getMessage(),e);
-            }
-
-            if(schema==null) {
-                 processMessageLegacy(eventMap);
-                 return;
             }
             if(eventMap.size() == 1 && schema.size() !=1  &&  !schema.getProperties().containsKey(eventMap.keySet().iterator().next()) )
                 eventMap = (Map) eventMap.values().iterator().next();
@@ -190,7 +185,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
             originalRequest.report();
         }
     }
-    @Deprecated
+/*    @Deprecated
     protected void processMessageLegacy(Map eventMap) {
 
         if(eventMap!=null){
@@ -227,7 +222,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
             }
             originalRequest.report();
         }
-    }
+    }*/
     private void retrain() throws TraceableException, UntraceableException {
         List<Prediction> predictions = model.batchPredict(inputs);
 

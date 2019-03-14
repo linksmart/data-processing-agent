@@ -50,8 +50,8 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
 
         return predictions;
         }
-    void setDescriptors(DataDescriptors descriptors);
-    DataDescriptors getDescriptors();
+//    void setDescriptors(DataDescriptors descriptors);
+//    DataDescriptors getDescriptors();
     SchemaNode getDataSchema();
     void setDataSchema(SchemaNode schema);
     Prediction<Output> getLastPrediction();

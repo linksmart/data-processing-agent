@@ -93,7 +93,7 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
 
                     evaluationAlgorithms.put(
                             target.getName(),
-                            (EvaluationMetricBase<Double>) instanceEvaluationAlgorithm(algorithm, target.getThreshold())
+                            (EvaluationMetricBase<Double>) instanceEvaluationAlgorithm(algorithm, target.getThreshold(), EvaluationMetric.ComparisonMethod.valueOf(target.getMethod().substring(0,1).toUpperCase()+target.getMethod().substring(1).toLowerCase()))
                     );
 
 
@@ -118,7 +118,7 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
             return this.getClass().getCanonicalName() + "$" + name;
     }
 
-    public <M extends Number> EvaluationMetric<T> instanceEvaluationAlgorithm(String name, M target)  {
+    public <M extends Number> EvaluationMetric<T> instanceEvaluationAlgorithm(String name, M target, EvaluationMetric.ComparisonMethod method)  {
 
         try {
             Class<EvaluationMetric<T>> clazz = (Class<EvaluationMetric<T>>) Class.forName(getCanonicalName(name));
@@ -136,7 +136,10 @@ public abstract class GenericEvaluator<T> extends EvaluatorBase<T> {
             }
 
 
-            return  constructor.newInstance(this,target);
+            EvaluationMetric<T> metric = constructor.newInstance(this,target);
+            metric.setComparisonMethod(method);
+
+            return metric;
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
         }

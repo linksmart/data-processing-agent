@@ -50,10 +50,7 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
                     CEHandler = ListLearningHandler.class.getCanonicalName();
                 else
                     CEHandler = MapLearningHandler.class.getCanonicalName();
-            }else if(manager.getModel().getDescriptors().isLambdaTypeDefinition())
-
-                CEHandler = ListLearningHandler.class.getCanonicalName();
-            else{
+            }else{
 
 
                 CEHandler = MapLearningHandler.class.getCanonicalName();
@@ -74,8 +71,6 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
 
         this.statement =statement;
         this.manager =manager;
-        if(manager.getModel().getDescriptors().isLambdaTypeDefinition())
-            CEHandler = ListLearningHandler.class.getCanonicalName();
 
         CEHandler= MapLearningHandler.class.getCanonicalName();
         this.name =name;

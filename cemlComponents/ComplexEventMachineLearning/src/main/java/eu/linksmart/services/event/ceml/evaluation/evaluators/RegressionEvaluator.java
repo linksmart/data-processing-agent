@@ -108,12 +108,14 @@ public class RegressionEvaluator extends GenericEvaluator<Number> {
 
     public abstract class RegressionMetricBase extends ModelEvaluationMetricBase{
         public  RegressionMetricBase(Double target){
+            super(target);
             method = ComparisonMethod.Less;
             currentValue = 100.0;
         }
         public  RegressionMetricBase(){
             method = ComparisonMethod.Less;
             currentValue = 100.0;
+            target = 0.0;
         }
 
     }
@@ -121,6 +123,13 @@ public class RegressionEvaluator extends GenericEvaluator<Number> {
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
 
+        public  RMSE(){
+            super();
+        }
+
+        public  RMSE(Double target){
+            super(target);
+        }
         @Override
         public Double calculate() {
             if(!(latestEntries.size() >0))
@@ -150,6 +159,13 @@ public class RegressionEvaluator extends GenericEvaluator<Number> {
     }
 
     public class MAE extends RegressionMetricBase{
+        public  MAE(){
+            super();
+        }
+
+        public  MAE(Double target){
+            super(target);
+        }
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
 
@@ -184,6 +200,13 @@ public class RegressionEvaluator extends GenericEvaluator<Number> {
     More can be found here :http://www.ijcaonline.org/journal/number5/pxc387242.pdf
      */
     public class AICc extends RegressionMetricBase{
+        public  AICc(){
+            super();
+        }
+
+        public  AICc(Double target){
+            super(target);
+        }
         private static final int DAYS_A_WEEK = 7 ;
         private static final int HOURS_A_DAY =24;
         private long N = 0; //fading increment

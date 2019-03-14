@@ -36,8 +36,8 @@ public  class   ListLearningHandler extends BaseListEventHandler {
     final protected LearningStatement statement;
     final protected CEMLRequest originalRequest;
     final protected Model model;
-    @Deprecated
-    final protected DataDescriptors descriptors;
+//    @Deprecated
+//    final protected DataDescriptors descriptors;
     final protected SchemaNode schema;
     final private Publisher publisher;
 
@@ -47,7 +47,7 @@ public  class   ListLearningHandler extends BaseListEventHandler {
         this.statement = (LearningStatement) statement;
         this.originalRequest =((LearningStatement)statement).getRequest();
         model = originalRequest.getModel();
-        descriptors = model.getDescriptors();
+
         schema = model.getDataSchema();
 
         if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
@@ -93,12 +93,6 @@ public  class   ListLearningHandler extends BaseListEventHandler {
     protected void learn(List input) {
         verbose(input);
 
-        // legacy or current method
-        if(schema==null) {
-            legacyLearn(input);
-            return;
-
-        }
         ExtractedElements elements = schema.collect(input);
         if(elements==null) {
             loggerService.error("Incoming data from learning statement  id " + statement.getId() + " do not match which data schema!");
@@ -167,6 +161,7 @@ public  class   ListLearningHandler extends BaseListEventHandler {
 
         originalRequest.report();
     }
+    /*
     @Deprecated
     private void legacyLearn(List input){
 
@@ -225,6 +220,6 @@ public  class   ListLearningHandler extends BaseListEventHandler {
             asses();
 
     }
-
+*/
 
 }

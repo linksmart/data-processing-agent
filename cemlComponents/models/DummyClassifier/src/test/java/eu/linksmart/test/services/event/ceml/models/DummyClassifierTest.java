@@ -52,8 +52,8 @@ public class DummyClassifierTest {
             }
             acc = acc/n;
 
-            assertEquals("Highly unprovable result of test calculated Accuracy (run again, if happens twice this is an error)",0.5, acc,0.1);
-            assertEquals("Highly unprovable result of evaluator calculated Accuracy (run again, if happens twice this is an error)",0.5, classifier.getEvaluator().getEvaluationAlgorithms().get("Accuracy").getResult().doubleValue(),0.1);
+            assertEquals("Highly unprovable result of test calculated Accuracy (run again, if happens twice this is an error)",0.5, acc,0.15);
+            assertEquals("Highly unprovable result of evaluator calculated Accuracy (run again, if happens twice this is an error)",0.5, classifier.getEvaluator().getEvaluationAlgorithms().get("Accuracy").getResult().doubleValue(),0.15);
             assertEquals("Mismatch between test acc and evaluator acc",acc, classifier.getEvaluator().getEvaluationAlgorithms().get("Accuracy").getResult().doubleValue(),0.05);
             assertEquals("Although the acc is over the threshold system do not deploy!",classifier.getEvaluator().isDeployable(),true);
         } catch (TraceableException | UntraceableException e) {

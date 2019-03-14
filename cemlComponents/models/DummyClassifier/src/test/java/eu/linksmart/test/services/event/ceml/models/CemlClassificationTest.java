@@ -38,7 +38,7 @@ public class CemlClassificationTest {
         conf.setSetting("Test",true);
         try {
             Integer ints[] = new Integer[n];
-            ListLearningHandler handler = initHandler(request = initRequest(strReq));
+            ListLearningHandler handler = initHandler(request = initRequest(getRequest("CemlDummyRequestTest.json").replace("\"<n>\"",String.valueOf(n))));
 
             double acc=0.0;
 
@@ -69,7 +69,7 @@ public class CemlClassificationTest {
             fail();
         }
     }
-    @Test
+    //@Test
     public void initITTest() {
         CEMLManager request = null;
         try {
@@ -130,47 +130,7 @@ public class CemlClassificationTest {
                     "     \"ReportingEnabled\": false\n" +
                     "  }" +
                     "}";
-    private static final String strReq = "{\n" +
-            "  \"Name\":\"test\",\n" +
-            "  \"DataSchema\":\n" +
-            "{" +
-            "\"type\": \"array\"," +
-            "\"size\": " + n + "," +
-            "\"targetSize\": 1," +
-            "\"ofType\": \"int\"" +
-            "}," +
-            "  \"Model\":{\n" +
-            "    \"Name\":\"DummyClassifier\",\n" +
-            "    \"Targets\":[\n" +
-            "      {\n" +
-            "        \"Name\":\"Accuracy\",\n" +
-            "        \"Threshold\":0.40,\n" +
-            "        \"Method\":\"more\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"Name\":\"SlideAfter\",\n" +
-            "        \"Threshold\":100,\n" +
-            "        \"Method\":\"more\"\n" +
-            "      }\n" +
-            "\n" +
-            "    ]\n" +
-            "  },\n" +
-            "  \"LearningStreams\":[\n" +
-            "    {\n" +
-            "      \"statement\":\" \"\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"DeploymentStreams\":[\n" +
-            "    {\n" +
-            "      \"statement\":\"\"\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"Settings\":\n" +
-            "  {\n" +
-            "     \"BuildTillPhase\": 5,\n" +
-            "     \"ReportingEnabled\": false\n" +
-            "  }" +
-            "}";
+
 
     private CEMLManager initRequest(String req) {
         CEMLManager request;
@@ -214,5 +174,15 @@ public class CemlClassificationTest {
 
         assertTrue(request.getModel().getClass().getSimpleName().equals("DummyClassifier"));
         return handler;
+    }
+    private String getRequest(String path){
+        try {
+            return new String(Thread.currentThread().getContextClassLoader().getResourceAsStream(path).readAllBytes());
+
+        } catch (Exception e) {
+            fail(e.getMessage());
+
+        }
+        return null;
     }
 }

@@ -196,9 +196,9 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
 
                 model.getDataSchema().setName(name);
                 model.getDataSchema().build();
-                model.setDescriptors((DataDescriptors) model.getDataSchema().toLegacy().build());
+              //  model.setDescriptors((DataDescriptors) model.getDataSchema().toLegacy().build());
             } else
-                throw new Exception("The data descriptors are a deprecated feature!");
+                throw new Exception("Missing data schema, if the data descriptors are used they are deprecated!");
 
             phasesDone[1] = true;
 

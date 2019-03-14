@@ -52,6 +52,7 @@ public class ModelDeserializer extends DeserializerMode<Model> {
        return constructModel(node,name,loadTargets(node),loadParameters(node), loadLerner(node,name), loadInitialConfusionMatrix(node), loadInitialSamplesMatrix(node), loadEvaluator(node));
 
     }
+
     protected String loadName(JsonNode node) throws IOException{
         String name =  node.hasNonNull("Name")?node.get("Name").textValue():node.get("name").textValue();
         if(!loadClass("eu.linksmart.services.event.ceml.models."+name) && !loadClass(name))

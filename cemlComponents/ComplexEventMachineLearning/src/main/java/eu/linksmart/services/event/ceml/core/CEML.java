@@ -234,7 +234,7 @@ public class CEML implements AnalyzerComponent , Feeder<CEMLRequest> {
                 switch (typeRequest) {
                     case "data":
 
-                        result.addResources(name, requests.get(name).getModel().getDescriptors());
+                        result.addResources(name, requests.get(name).getModel().getDataSchema());
                         break;
                     case "evaluation":
                         result.addResources(requests.get(name).getModel().getEvaluator().getClass().getSimpleName(), requests.get(name).getModel().getEvaluator());

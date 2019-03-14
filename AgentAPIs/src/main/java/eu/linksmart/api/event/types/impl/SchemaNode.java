@@ -453,6 +453,11 @@ public class SchemaNode implements JsonSerializable {
        }
        return true;
    }
+   private String toLowerCase(String str){
+        if(str !=null)
+            return str.toLowerCase();
+        return null;
+   }
     static String caps(String string){
         return string.substring(0,1).toUpperCase()+string.substring(1,string.length());
     }
@@ -465,7 +470,7 @@ public class SchemaNode implements JsonSerializable {
             throw new UntraceableException("All given names must be unique!");
         else
             getRoot().names.add(name);
-        if(!skip && ((properties==null && ( "object".equals(type.toLowerCase()) || "map".equals(type.toLowerCase()))) || ( "array".equals(type.toLowerCase()) && ((size()>0 && minValue!=null && maxValue!=null) || (size()<0 &&minValue==null && maxValue==null)) ) || (enumeration==null && "enum".equals(type.toLowerCase()))))
+        if(!skip && ((properties==null && ( "object".equals(toLowerCase(type)) || "map".equals(toLowerCase(type)))) || ( "array".equals(toLowerCase(type)) && ((size()>0 && minValue!=null && maxValue!=null) || (size()<0 &&minValue==null && maxValue==null)) ) || (enumeration==null && "enum".equals(toLowerCase(type)))))
             throw new UntraceableException("If is array must have items defined! If is a object must have properties! If is a enm must have enum!");
         if ((properties!=null && items!=null) || (properties!=null && enumeration!=null) || (items!=null && enumeration!=null))
             throw new UntraceableException("A data definition cannot be object and/or array and/or enum! ");

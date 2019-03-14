@@ -46,7 +46,8 @@ public abstract class ClassifierModel<Input,Output,LearningObject> extends Model
         ((DoubleTumbleWindowEvaluator)evaluator).setInitialConfusionMatrix((long[][]) parameters.getOrDefault("initialConfusionMatrix",null));
         ((DoubleTumbleWindowEvaluator)evaluator).setInitialSamplesMatrix((long[][]) parameters.getOrDefault("initialSamplesMatrix",null));
         try {// try legacy first!
-            ((DoubleTumbleWindowEvaluator) evaluator).setClasses(((ClassesDescriptor) descriptors.getTargetDescriptors().get(0)).getClasses());
+           // ((DoubleTumbleWindowEvaluator) evaluator).setClasses(((ClassesDescriptor) descriptors.getTargetDescriptors().get(0)).getClasses());
+            ((DoubleTumbleWindowEvaluator) evaluator).setClasses(new ArrayList(schema.getTargets()));
         }catch (Exception e){
             // Try to get target from list of items: In this case target is only 1 element the list (the last)
             if(schema.getType().equals("array") && schema.getTargetSize() == 1 && schema.getItems().get(schema.getSize()-1).isTarget())

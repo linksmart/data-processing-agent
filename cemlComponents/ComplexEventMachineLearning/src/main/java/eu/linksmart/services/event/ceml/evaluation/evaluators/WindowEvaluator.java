@@ -349,10 +349,12 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
         public FalseDiscoveryRate(double target) {
             super(target);
+            method = ComparisonMethod.Less;
         }
 
         public FalseDiscoveryRate(){
             super();
+            method = ComparisonMethod.Less;
         }
 
         @Override
@@ -367,10 +369,12 @@ public class WindowEvaluator extends GenericEvaluator<Number> implements Evaluat
 
         public MissRate(double target) {
             super(target);
+            method = ComparisonMethod.Less;
         }
 
         public MissRate(){
             super();
+            method = ComparisonMethod.Less;
         }
 
         @Override

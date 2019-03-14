@@ -27,9 +27,9 @@ import java.util.*;
 
 public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
-    @JsonProperty(value = "descriptors")
-    @JsonDeserialize(as = DataDefinition.class)
-    protected DataDescriptors descriptors;
+//    @JsonProperty(value = "descriptors")
+//    @JsonDeserialize(as = DataDefinition.class)
+//    protected DataDescriptors descriptors;
     @JsonProperty("name")
     protected String name;
     @JsonProperty("nativeType")
@@ -111,7 +111,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     }
 
 
-    @Override
+ /*   @Override
     public void setDescriptors(DataDescriptors descriptors) {
         this.descriptors = descriptors;
 
@@ -123,7 +123,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
             return descriptors;
 
         return null;
-    }
+    }*/
 
     @Override
     public SchemaNode getDataSchema() {
@@ -150,7 +150,7 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     @Override
     public Model<Input, Output, LearningObject> build() throws TraceableException, UntraceableException {
         final boolean schemaOK =  schema==null || !schema.isBuilt();
-        final boolean legacySchema =   ((schemaOK) && (descriptors== null || !descriptors.isEmpty() ) );
+        final boolean legacySchema =   ((schemaOK) /*&& (descriptors== null || !descriptors.isEmpty() )*/ );
         if( legacySchema || evaluator== null  || learner == null)
             throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(),"For the model the schema/descriptors, evaluator and learner are mandatory fields!");
 
