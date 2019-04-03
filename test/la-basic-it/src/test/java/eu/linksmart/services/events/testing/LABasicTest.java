@@ -101,7 +101,7 @@ public class LABasicTest {
     public void T1_0_BasicTest() {
        basicTest("");
     }
-    @Test
+    //@Test
     public void T1_1_BasicLegacyTest() {
        basicTest("legacy");
     }
