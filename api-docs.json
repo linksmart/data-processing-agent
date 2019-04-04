@@ -2369,12 +2369,6 @@
             "$ref": "#/definitions/Statement"
           }
         },
-        "descriptors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/DataDescriptor"
-          }
-        },
         "essential": {
           "type": "boolean",
           "example": false,
@@ -2418,19 +2412,10 @@
             "$ref": "#/definitions/Statement"
           }
         },
-        "dataSchema": {
-          "$ref": "#/definitions/SchemaNode"
-        },
         "deploymentStream": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Statement"
-          }
-        },
-        "descriptors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/DataDescriptor"
           }
         },
         "essential": {
@@ -2463,32 +2448,6 @@
         },
         "settings": {
           "type": "object"
-        }
-      }
-    },
-    "DataDescriptor": {
-      "type": "object",
-      "properties": {
-        "classesDescription": {
-          "type": "boolean"
-        },
-        "name": {
-          "type": "string"
-        },
-        "target": {
-          "type": "boolean"
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "NOMINAL_CLASSES",
-            "INTEGER",
-            "DOUBLE",
-            "NUMBER",
-            "BOOLEAN",
-            "OBJECT",
-            "DATE"
-          ]
         }
       }
     },
@@ -2765,6 +2724,12 @@
     "Model": {
       "type": "object",
       "properties": {
+        "bootstrapable": {
+          "type": "boolean"
+        },
+        "bootstrapping": {
+          "type": "boolean"
+        },
         "classifier": {
           "type": "boolean"
         },
@@ -2774,14 +2739,11 @@
         "dataSchema": {
           "$ref": "#/definitions/SchemaNode"
         },
-        "descriptors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/DataDescriptor"
-          }
-        },
         "evaluator": {
           "$ref": "#/definitions/Evaluator«object»"
+        },
+        "evaluatorCanonicalName": {
+          "type": "string"
         },
         "lastPrediction": {
           "$ref": "#/definitions/Prediction«object»"
