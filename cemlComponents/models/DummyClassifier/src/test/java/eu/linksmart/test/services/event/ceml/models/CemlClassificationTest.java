@@ -69,12 +69,12 @@ public class CemlClassificationTest {
             fail();
         }
     }
-    //@Test
+    @Test
     public void initITTest() {
         CEMLManager request = null;
         try {
 
-            request = initRequest(initial);
+            request = initRequest(getRequest("CemlInitialConfMatrix.json").replace("\"<n>\"",String.valueOf(n)));
             ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>> classifier = ((ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>>) request.getModel());
 
             assertTrue("Initial Confusion Matrix is deployabe!", classifier.getEvaluator().isDeployable());
@@ -84,53 +84,22 @@ public class CemlClassificationTest {
             fail();
         }
     }
-    private static final int n = 1000, tries =150;
-    private static final String initial = "{\n" +
-                    "  \"Name\":\"test\",\n" +
-                    "  \"DataSchema\":\n" +
-                    "{" +
-                    "\"type\": \"array\"," +
-                    "\"size\": " + n + "," +
-                    "\"targetSize\": 1," +
-                    "\"ofType\": \"int\"" +
-                    "}," +
-                    "  \"Model\":{\n" +
-                    "    \"Name\":\"DummyClassifier\",\n" +
-                    "      \"initialConfusionMatrix\":[\n" +
-                    "        [26, 25, 25, 25],\n" +
-                    "        [25, 25, 25, 26]\n" +
-                    "      ]," +
-                    "    \"Targets\":[\n" +
-                    "      {\n" +
-                    "        \"Name\":\"Accuracy\",\n" +
-                    "        \"Threshold\":0.40,\n" +
-                    "        \"Method\":\"more\"\n" +
-                    "      },\n" +
-                    "      {\n" +
-                    "        \"Name\":\"SlideAfter\",\n" +
-                    "        \"Threshold\":100,\n" +
-                    "        \"Method\":\"more\"\n" +
-                    "      }\n" +
-                    "\n" +
-                    "    ]\n" +
-                    "  },\n" +
-                    "  \"LearningStreams\":[\n" +
-                    "    {\n" +
-                    "      \"statement\":\" \"\n" +
-                    "    }\n" +
-                    "  ],\n" +
-                    "  \"DeploymentStreams\":[\n" +
-                    "    {\n" +
-                    "      \"statement\":\"\"\n" +
-                    "    }\n" +
-                    "  ],\n" +
-                    "  \"Settings\":\n" +
-                    "  {\n" +
-                    "     \"BuildTillPhase\": 5,\n" +
-                    "     \"ReportingEnabled\": false\n" +
-                    "  }" +
-                    "}";
+    @Test
+    public void compositionITTest() {
+        CEMLManager request = null;
+        try {
 
+            request = initRequest(getRequest("compositionIT.json"));
+            ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>> classifier = ((ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>>) request.getModel());
+
+            assertTrue("Initial Confusion Matrix is not deployabe!", classifier.getEvaluator().isDeployable());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+    private static final int n = 1000, tries =150;
 
     private CEMLManager initRequest(String req) {
         CEMLManager request;
@@ -180,7 +149,7 @@ public class CemlClassificationTest {
             return new String(Thread.currentThread().getContextClassLoader().getResourceAsStream(path).readAllBytes());
 
         } catch (Exception e) {
-            fail(e.getMessage());
+            fail("Not file found!");
 
         }
         return null;
