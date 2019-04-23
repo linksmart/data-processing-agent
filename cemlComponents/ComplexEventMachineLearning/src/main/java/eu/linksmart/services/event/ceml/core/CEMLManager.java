@@ -9,6 +9,7 @@ import eu.linksmart.api.event.ceml.data.DataDefinition;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
 import eu.linksmart.api.event.ceml.model.Model;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
+import eu.linksmart.api.event.ceml.prediction.PredictionInstance;
 import eu.linksmart.api.event.components.CEPEngine;
 import eu.linksmart.api.event.components.CEPEngineAdvanced;
 import eu.linksmart.api.event.exceptions.*;
@@ -50,7 +51,7 @@ public class CEMLManager extends PersistentRequestInstance implements CEMLReques
     @JsonProperty(value = "isDeployed")
     protected boolean deployed = false;
     @JsonIgnore
-    protected Prediction lastPrediction;
+    protected Prediction lastPrediction = new PredictionInstance();
 
     @JsonIgnore
     private transient Configurator conf = Configurator.getDefaultConfig();

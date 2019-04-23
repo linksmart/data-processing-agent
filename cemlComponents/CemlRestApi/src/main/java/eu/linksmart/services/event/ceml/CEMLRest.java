@@ -45,21 +45,7 @@ public class CEMLRest extends Component implements IncomingConnector{
     public CEMLRest() {
 
         super(CEMLRest.class.getSimpleName(), "Provides a REST API for managing the Learning request", "CEML");
-        // Add configuration file of the local package
 
-
-       // mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
-        // SimpleModule module = new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(aClass, ModelAutoregressiveNewralNetwork.class);
-
-        //.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addAbstractTypeMapping(DataDescriptors.class, DataDefinition.class))
-       /* mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer()))
-                .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
-                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class))
-                .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
-                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()))
-                .registerModule(new SimpleModule("DNNModel", Version.unknownVersion()).addDeserializer(MultiLayerNetwork.class, new NNDeserialier() ))
-                .registerModule(new SimpleModule("SNNModel", Version.unknownVersion()).addSerializer(MultiLayerNetwork.class, new NNSerialier() ));*/
 
     }
 

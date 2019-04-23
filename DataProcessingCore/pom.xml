@@ -85,7 +85,11 @@
             <artifactId>spring-boot-dependencies</artifactId>
             <type>pom</type>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
         <!-- Swagger dependencies -->
         <dependency>
             <groupId>io.springfox</groupId>
