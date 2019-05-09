@@ -178,7 +178,7 @@ public class StatementInstance extends PersistentRequestInstance implements Stat
             } else if (statement != null)
                 setId(Utils.hashIt(statement));
             else
-                setId(Utils.hashIt((new Date()).toString()));
+                setId(Utils.hashIt(UUID.randomUUID().toString()));
         }
     }
 
