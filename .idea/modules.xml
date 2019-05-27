@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CEMLWeka/ceml.weka.iml" filepath="$PROJECT_DIR$/CEMLWeka/ceml.weka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/configurations/dpaConfiguration/configuration.agent.data.processing.iml" filepath="$PROJECT_DIR$/configurations/dpaConfiguration/configuration.agent.data.processing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/configurations/laConfiguration/configuration.agent.learning.agent.iml" filepath="$PROJECT_DIR$/configurations/laConfiguration/configuration.agent.learning.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/configurations/configurations.iml" filepath="$PROJECT_DIR$/configurations/configurations.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/mqtt/IoTDataProcessingAgent/iot.data.processing.agent.iml" filepath="$PROJECT_DIR$/distributions/mqtt/IoTDataProcessingAgent/iot.data.processing.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/rest/IoTDataProcessingAgent/iot.data.processing.rest.agent.iml" filepath="$PROJECT_DIR$/distributions/rest/IoTDataProcessingAgent/iot.data.processing.rest.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/mqtt/IoTLearningAgent/iot.learning.agent.iml" filepath="$PROJECT_DIR$/distributions/mqtt/IoTLearningAgent/iot.learning.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/rest/IoTLearningAgent/iot.learning.rest.agent.iml" filepath="$PROJECT_DIR$/distributions/rest/IoTLearningAgent/iot.learning.rest.agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/mqtt/mqtt.reactor.iml" filepath="$PROJECT_DIR$/distributions/mqtt/mqtt.reactor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/parent.reactor.iml" filepath="$PROJECT_DIR$/distributions/parent.reactor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reactor.iml" filepath="$PROJECT_DIR$/reactor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distributions/rest/rest.reactor.iml" filepath="$PROJECT_DIR$/distributions/rest/rest.reactor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EsperWrapper/wrapper.esper.iml" filepath="$PROJECT_DIR$/EsperWrapper/wrapper.esper.iml" />
+    </modules>
+  </component>
+</project>

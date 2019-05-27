@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eu.linksmart.services.events.gpl</groupId>
+    <version>1.8.0</version>
+    <artifactId>reactor</artifactId>
+    <name>IoT Agent LGPL reactor</name>
+
+    <packaging>pom</packaging>
+
+    <description>Implementation of the IoT agents framework based in GPL</description>
+    <developers>
+        <developer>
+            <id>jacarvajal</id>
+            <email>jose.angel.angel.carvajal&lt;at&gt;fit.fraunhofer.de</email>
+            <name>Jose Angel Carvajal Soto</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
+        <developer>
+            <id>tavakoli</id>
+            <email>farshid.tavakolizadeh@fit.fraunhofer.de</email>
+            <name>Farshid Tavakolizadeh</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
+        <developer>
+            <id>devasya</id>
+            <email>shreekantha.devasya@fit.fraunhofer.de</email>
+            <name>Shreekantha Devasya</name>
+            <roles>
+                <role>Developer</role>
+                <role>Researcher</role>
+            </roles>
+            <organization>Fraunhofer FIT</organization>
+            <organizationUrl>http://www.fit.fraunhofer.de/</organizationUrl>
+            <url>http://www.fit.fraunhofer.de/</url>
+        </developer>
+    </developers>
+
+
+
+
+
+    <organization>
+        <name>Fraunhofer FIT Institute</name>
+        <url>http://www.fit.fraunhofer.de</url>
+    </organization>
+    <distributionManagement>
+
+        <repository>
+            <id>releases</id>
+            <name>Releases</name>
+            <url>https://nexus.linksmart.eu/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Snapshots</name>
+            <url>https://nexus.linksmart.eu/repository/maven-snapshots/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>agents</id>
+            <name>linksmart-service-agents-repository</name>
+            <url>dav:https://nexus.linksmart.eu/repository/iot-agents-site/</url>
+        </site>
+    </distributionManagement>
+    <ciManagement>
+        <system>Pipelines</system>
+        <url>https://pipelines.linksmart.eu</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <address>angel.carvajal@fit.fraunhofer.de</address>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://boards.linksmart.eu</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</connection>
+        <developerConnection>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</developerConnection>
+        <url>scm:git:https://pipelines@code.linksmart.eu/scm/la/gpl-artifacts.git</url>
+        <tag>v1.8.0</tag>
+    </scm>
+    <properties>
+        <esper.version>5.5.0</esper.version>
+        <weka.version>3.7.13</weka.version>
+        <ls.se.agents.version>1.8.0</ls.se.agents.version>
+        <!-- test dependencies versions -->
+        <java.junit.version>4.12</java.junit.version>
+        <google.gson.version>2.6.2</google.gson.version>
+        <start-class>eu.linksmart.services.Application</start-class>
+        <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
+        <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
+        <java.version>1.8</java.version>
+        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
+        <site.plugin.version>3.5.1</site.plugin.version>
+        <maven.source.version>2.2.1</maven.source.version>
+        <wagon-webdav-version>2.10</wagon-webdav-version>
+        <project-info-reports.version>2.9</project-info-reports.version>
+        <maven.javadoc.version>2.10.4</maven.javadoc.version>
+        <surefire-report.version>2.19.1</surefire-report.version>
+        <linksmart.commons.version>1.2.1-SNAPSHOT</linksmart.commons.version>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+
+        <google.guava.version>21.0</google.guava.version>
+
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Espertech -->
+            <dependency>
+                <groupId>com.espertech</groupId>
+                <artifactId>esper</artifactId>
+                <version>${esper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.linksmart.services.events.gpl</groupId>
+                <artifactId>wrapper.esper</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>data.procesing.core</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>ceml</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${java.junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- Weka -->
+            <dependency>
+                <groupId>nz.ac.waikato.cms.weka</groupId>
+                <artifactId>weka-dev</artifactId>
+                <version>${weka.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Google -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${google.gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>5.1.3.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml</groupId>
+                <artifactId>classmate</artifactId>
+                <version>1.3.4</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.linksmart.commons</groupId>
+                <artifactId>utils</artifactId>
+                <version>${linksmart.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <modules>
+        <module>cemlComponents</module>
+        <module>cepComponents</module>
+        <module>distributions</module>
+    </modules>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven.jar.plugin.version}</version>
+                    <!-- correct versioning on the manifest -->
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <!-- build embedded web spring server with dependencies -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                    <configuration>
+                        <mainClass>${start-class}</mainClass>
+                        <layout>ZIP</layout>
+                        <addResources>true</addResources>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${project-info-reports.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <!-- build sources  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- site plugin and webdav dependency for deployment of site onto Nexus repository -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${site.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-webdav-jackrabbit</artifactId>
+                        <version>${wagon-webdav-version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+
+        </plugins>
+    </build>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://nexus.linksmart.eu/repository/public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>Eclipse Paho Repo</id>
+            <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+        </repository>
+        <repository>
+            <id>WSO2 Repo</id>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
+        </repository>
+        <!-- springfox -->
+        <repository>
+            <id>jcenter-snapshots</id>
+            <name>jcenter</name>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+        <repository>
+            <id>jboss-maven2-release-repository</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${project-info-reports.version}</version>
+                <inherited>true</inherited>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>true</inherited>
+                        <reports>
+                            <report>index</report>
+                            <report>summary</report>
+                            <report>scm</report>
+                            <report>cim</report>
+                            <report>issue-tracking</report>
+                            <report>project-team</report>
+                            <report>mailing-list</report>
+                            <report>license</report>
+                            <report>modules</report>
+                            <report>distribution-management</report>
+                            <report>plugin-management</report>
+                            <report>plugins</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <!-- generate dependency reports only for the main pom -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${project-info-reports.version}</version>
+                <inherited>false</inherited>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>dependency-info</report>
+                            <report>dependency-management</report>
+                            <report>dependency-convergence</report>
+                        </reports>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <remoteRepositories>
+                                <repository>
+                                    <id>linksmart-repo</id>
+                                    <name>LinkSmart - Nexus Managed Snapshot Repository</name>
+                                    <url>https://nexus.linksmart.eu/repository/maven-snapshots/</url>
+                                    <releases>
+                                        <enabled>true</enabled>
+                                        <updatePolicy>never</updatePolicy>
+                                    </releases>
+                                    <snapshots>
+                                        <enabled>true</enabled>
+                                        <updatePolicy>daily</updatePolicy>
+                                    </snapshots>
+                                    <site>
+                                        <id>agents</id>
+                                        <name>linksmart-service-agents-repository</name>
+                                        <url>dav:https://nexus.linksmart.eu/repository/iot-agents-site/</url>
+                                    </site>
+                                </repository>
+                            </remoteRepositories>
+                        </configuration>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${surefire-report.version}</version>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.version}</version>
+                <configuration>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
+            <url>https://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>https://nexus.linksmart.eu/repository/maven-releases/</distribution>
+            <comments>LinkSmart Services: IoT Data-Processing and Learning GPL Agents is project based on the IoT Data-Processing and Learning. Differentiating from it in the Licence </comments>
+        </license>
+    </licenses>
+</project>
