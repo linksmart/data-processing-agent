@@ -32,32 +32,13 @@ import static org.junit.Assert.fail;
 public class CemlClassificationTest {
     @Test
     public void ITTest() {
-        Random random = new Random();
         CEMLManager request = null;
         Configurator conf = Configurator.getDefaultConfig();
         conf.setSetting("Test",true);
         try {
-            Integer ints[] = new Integer[n];
-            ListLearningHandler handler = initHandler(request = initRequest(getRequest("CemlDummyRequestTest.json").replace("\"<n>\"",String.valueOf(n))));
 
-            double acc=0.0;
+            double acc = feedModel(initHandler(request = initRequest(getRequest("CemlDummyRequestTest.json").replace("\"<n>\"",String.valueOf(n)))));
 
-            for (int i = 0; i < tries; i++) {
-                int r=0;
-                for (int j = 0; j < n - 1; j++) {
-                    ints[j] = random.nextInt(n);
-                    r +=ints[j];
-                }
-
-
-                acc += r % 2;
-                ints[n - 1] = 1;
-
-                handler.update(new Object[][]{ints}, null);
-                try{Thread.sleep(100);}catch (Exception ignored){}
-
-            }
-            acc=1.0 - acc/tries;
 
             ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>> classifier = ((ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>>) request.getModel());
 
@@ -68,6 +49,31 @@ public class CemlClassificationTest {
             e.printStackTrace();
             fail();
         }
+    }
+    private double feedModel(ListLearningHandler handler){
+        Random random = new Random();
+
+        Integer ints[] = new Integer[n];
+        double acc=0.0;
+
+        for (int i = 0; i < tries; i++) {
+            int r=0;
+            for (int j = 0; j < n - 1; j++) {
+                ints[j] = random.nextInt(n);
+                r +=ints[j];
+            }
+
+
+            acc += r % 2;
+            ints[n - 1] = 1;
+
+            handler.update(new Object[][]{ints}, null);
+            try{Thread.sleep(100);}catch (Exception ignored){}
+
+        }
+        return 1.0 - acc/tries;
+
+
     }
     @Test
     public void initITTest() {
@@ -99,7 +105,27 @@ public class CemlClassificationTest {
             fail();
         }
     }
-    private static final int n = 1000, tries =150;
+    @Test
+    public void batchITTest() {
+        CEMLManager request = null;
+        Configurator conf = Configurator.getDefaultConfig();
+        conf.setSetting("Test",true);
+        try {
+            n= 10;
+            double acc = feedModel(initHandler(request = initRequest(getRequest("BatchMCCTest.json").replace("\"<n>\"",String.valueOf(n)))));
+            n = 1000;
+
+            ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>> classifier = ((ClassifierModel<List<Number>, Number, Function<List<Number>, Integer>>) request.getModel());
+
+            assertEquals("Mismatch between test acc and evaluator acc", acc, classifier.getEvaluator().getEvaluationAlgorithms().get("Accuracy").getResult().doubleValue(), 0.05);
+            assertTrue("Although the acc is over the threshold system do not deploy!", classifier.getEvaluator().isDeployable());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+    private int n = 1000, tries =150;
 
     private CEMLManager initRequest(String req) {
         CEMLManager request;
