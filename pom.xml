@@ -163,6 +163,7 @@
         <module>distributions</module>
         <module>test</module>
         <module>applications</module>
+        <module>gpl-artifacts</module>
     </modules>
     <dependencyManagement>
         <dependencies>
