@@ -71,26 +71,6 @@ public  class   ListLearningHandler extends BaseListEventHandler {
 
     @Override
     protected void processMessage(List input) {
-
-        if(schema!=null)
-            learn(input);
-        else
-            learn(flattList(input));
-
-    }
-    private List<Object> flattList(List input){
-        List aux;
-        if(input.iterator().hasNext()&&input.iterator().next() instanceof List) {
-            aux= new ArrayList<>();
-            ((List<List>)input).forEach(l->aux.addAll(flattList(l)));
-
-        }else
-            aux = input;
-
-        return aux;
-    }
-
-    protected void learn(List input) {
         verbose(input);
 
         ExtractedElements elements = schema.collect(input);
@@ -121,7 +101,7 @@ public  class   ListLearningHandler extends BaseListEventHandler {
                 loggerService.error(e.getMessage(),e);
             }
 
-        // learning process with same learning input as prediction input, and learning target/ground truth and evaluation ground truth
+            // learning process with same learning input as prediction input, and learning target/ground truth and evaluation ground truth
         }else if(input!=null&&input.size()>=schema.size()){
             try {
                 synchronized (originalRequest) {
@@ -138,7 +118,10 @@ public  class   ListLearningHandler extends BaseListEventHandler {
         }
         if(input!=null&&input.size()>=schema.size())
             asses();
+
     }
+
+
     protected void verbose(Object input){
         if(input!= null && publisher != null)
             try {
@@ -161,65 +144,5 @@ public  class   ListLearningHandler extends BaseListEventHandler {
 
         originalRequest.report();
     }
-    /*
-    @Deprecated
-    private void legacyLearn(List input){
-
-        // learning process with independent learning input and learning target/ground truth, and  prediction input and evaluation ground truth
-        if(input!=null&&input.size()>=descriptors.size()+descriptors.getTargetSize()){
-            try {
-                synchronized (originalRequest) {
-
-                    List auxInput;
-                    if (input.get(0) instanceof EventEnvelope)
-                        auxInput = (List) input.stream().map(m -> ((EventEnvelope) m).getValue()).collect(Collectors.toList());
-                    else
-                        auxInput = input;
-                    List learningInput = auxInput.subList(0, descriptors.size());
-                    model.learn(learningInput);
-
-                    List groundTruth = auxInput.subList(descriptors.size(), descriptors.size() + descriptors.getTargetSize());
-                    List predictionInput = auxInput.subList(descriptors.getTargetSize(), descriptors.getTargetSize() + descriptors.getInputSize());
-                    Prediction prediction = model.predict(predictionInput);
-                    model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), groundTruth);
-
-                }
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(),e);
-            }
-
-            // learning process with same learning input as prediction input, and learning target/ground truth and evaluation ground truth
-        }else if(input!=null&&input.size()>=descriptors.size()){
-            try {
-                synchronized (originalRequest) {
-                    List auxInput;
-                    if (input.get(0) instanceof EventEnvelope)
-                        auxInput = (List) input.stream().map(m -> ((EventEnvelope) m).getValue()).collect(Collectors.toList());
-                    else
-                        auxInput = input;
-                    // it's possible that there has been an error here.
-                    List groundTruth = auxInput.subList(descriptors.getInputSize(), descriptors.getTargetSize() + descriptors.getInputSize());
-                    List learningInput = auxInput.subList(0, descriptors.size());
-                    List predictionInput = auxInput.subList(0, descriptors.getInputSize());
-
-                    Prediction prediction = model.predict(predictionInput);
-
-                    model.learn(learningInput);
-
-                    model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), groundTruth);
-
-
-
-                }
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(),e);
-            }
-
-        }
-        if(input!=null&&input.size()>=descriptors.size())
-            asses();
-
-    }
-*/
 
 }

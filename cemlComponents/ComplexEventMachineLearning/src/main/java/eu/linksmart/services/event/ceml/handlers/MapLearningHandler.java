@@ -28,44 +28,21 @@ import java.util.*;
  */
 public  class MapLearningHandler extends BaseMapEventHandler {
 
-    private static final String RETRAIN_EVERY = "RetrainEvery";
     static protected Configurator conf = Configurator.getDefaultConfig();
     static protected Logger loggerService = LogManager.getLogger(MapLearningHandler.class);
-    final protected LearningStatement statement;
-    final protected CEMLRequest originalRequest;
-    final protected Model model;
-   // @Deprecated
-   // final protected DataDescriptors descriptors;
 
-    // if property is different than 1, the learning handler is an batch retrainer
-    final protected int retrainEvery;
 
-   // private List<LearningInstance> instances;
-   private List<List> targets, rawMaps, inputs;
-    private List<Map> rawMapsLegacy;
-    private List<Map> inputsLegacy;
+
     final private Publisher publisher;
-    final protected SchemaNode schema;
     List<ExtractedElements> accInput = new ArrayList<>();
 
 
     public MapLearningHandler(Statement statement) throws TraceableException, UntraceableException {
         super(statement);
 
-        this.statement = (LearningStatement) statement;
-        this.originalRequest =((LearningStatement)statement).getRequest();
-        model = originalRequest.getModel();
        // descriptors = model.getDescriptors();
-        schema = model.getDataSchema();
 
-        if(model.getParameters().containsKey(RETRAIN_EVERY)) {
-            this.retrainEvery = (int) model.getParameters().get(RETRAIN_EVERY);
-            targets = new ArrayList<>();
-            rawMaps= new ArrayList<>();
-            inputs= new ArrayList<>();
-        }else {
-            retrainEvery = 1;
-        }
+
         if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
             try {
                 publisher = new DefaultMQTTPublisher(statement, SharedSettings.getWill(),SharedSettings.getWillTopic());
@@ -97,46 +74,7 @@ public  class MapLearningHandler extends BaseMapEventHandler {
         if(events!=null)
             processMessage(events);
     }
-  /*  @Deprecated
-    private void elementsAssurance(Map rawMap, Map  withoutTarget, List measuredTargets){
-        for (DataDescriptor descriptor : descriptors)
-            if (descriptor.isTarget()) {
-                if (descriptor.isAssignable(rawMap.get(descriptor.getName()).getClass())) {
-                    if(model.isClassifier())
-                        if (rawMap.get(descriptor.getName()) instanceof Number)
-                            measuredTargets.add(rawMap.get(descriptor.getName()));
-                        else if(descriptor instanceof ClassesDescriptor) {
-                            ClassesDescriptor aux = (ClassesDescriptor)descriptor;
-                            try {
-                                measuredTargets.add(aux.getIndexClass(rawMap.get(aux.getName())));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        else
-                            measuredTargets.add(rawMap.get(descriptor.getName()));
-                }else
-                    loggerService.error("Type mismatch between the the expected output and received one");
-            } else if (descriptor.isAssignable(rawMap.get(descriptor.getName()).getClass()))
-                withoutTarget.put(descriptor.getName(), rawMap.get(descriptor.getName()));
-            else
-                loggerService.error("Type mismatch between the the expected input and received one");
-    }
 
-    @Deprecated
-    private void iterativeTrainingLegacy(Map rawMap, Map  withoutTarget, List measuredTargets) throws TraceableException, UntraceableException {
-        // crate a prediction for evaluation proposes
-        Prediction prediction = model.predict(withoutTarget);
-
-        // learn the current learning instance
-        model.learn(rawMap);
-
-        evaluate(prediction,measuredTargets);
-    }*/
-    private void evaluate(Prediction prediction, List target){
-        // evaluating the current learning instance
-        model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), target);
-    }
     protected void processMessage(Map eventMap) {
         if(eventMap!= null && publisher != null)
             try {
@@ -162,13 +100,8 @@ public  class MapLearningHandler extends BaseMapEventHandler {
                             model.learn(elements.getInputsList(), elements.getTargetsList());
                             evaluate(prediction, elements.getTargetsList());
 
-                        } else if (rawMaps.size() < retrainEvery) {
-                            targets.add(elements.getTargetsList());
-                            rawMaps.add(elements);
-                            inputs.add(elements.getInputsList());
-                            if (rawMaps.size() == retrainEvery)
-                                retrain();
-
+                        } else {
+                            singleBatchIteration(elements);
                         }
                     } catch (Exception e) {
                         loggerService.error(e.getMessage(),e);
@@ -185,57 +118,6 @@ public  class MapLearningHandler extends BaseMapEventHandler {
             originalRequest.report();
         }
     }
-/*    @Deprecated
-    protected void processMessageLegacy(Map eventMap) {
-
-        if(eventMap!=null){
-
-            if((boolean)originalRequest.getSettings().getOrDefault(CEMLRequest.PUBLISH_INTERMEDIATE_STEPS,false))
-                originalRequest.report(eventMap);
-
-            try {
-                Map  withoutTarget= new HashMap<>();
-                List measuredTargets = new ArrayList<>();
-                synchronized (originalRequest) {
-                    // check if all elements to learn are there
-                    elementsAssurance(eventMap,withoutTarget,measuredTargets);
-
-                    if(retrainEvery==1)
-                        iterativeTrainingLegacy(eventMap,withoutTarget,measuredTargets);
-                    else if (rawMaps.size()<retrainEvery) {
-                        rawMapsLegacy.add(eventMap);
-                        inputsLegacy.add(withoutTarget);
-                        targets.add(measuredTargets);
-                        if (rawMaps.size() == retrainEvery)
-                            retrain();
-                    }
 
 
-                }
-                if( model.getEvaluator().isDeployable())
-                    originalRequest.deploy();
-                else
-                    originalRequest.undeploy();
-
-            } catch (Exception e) {
-                loggerService.error(e.getMessage(),e);
-            }
-            originalRequest.report();
-        }
-    }*/
-    private void retrain() throws TraceableException, UntraceableException {
-        List<Prediction> predictions = model.batchPredict(inputs);
-
-        model.batchLearn(rawMaps);
-
-        for (int i = 0; i < predictions.size(); i++)
-            evaluate(predictions.get(i), targets.get(i));
-
-
-        targets = new ArrayList<>();
-        rawMaps = new ArrayList<>();
-        inputs = new ArrayList<>();
-
-
-    }
 }
