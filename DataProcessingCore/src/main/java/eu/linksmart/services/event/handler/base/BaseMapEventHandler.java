@@ -29,8 +29,9 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
     public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
     }
+
     protected Publisher publisher;
-    private Serializer  loggingSerializer = new DefaultSerializerDeserializer();
+    private Serializer loggingSerializer = new DefaultSerializerDeserializer();
     protected long logEveryCount = 1;
     private boolean lastCorrect = false;
     private Date lastMessage = null;
@@ -45,29 +46,38 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
 
     public BaseMapEventHandler(Statement statement) {
         super(statement);
-        this.statement = (LearningStatement) statement;
-        this.originalRequest =((LearningStatement)statement).getRequest();
-        model = originalRequest.getModel();
-        schema = model.getDataSchema();
+        if (statement.getClass().isAssignableFrom(LearningStatement.class)) {
+            this.statement = (LearningStatement) statement;
+            this.originalRequest = ((LearningStatement) statement).getRequest();
+            model = originalRequest.getModel();
+            schema = model.getDataSchema();
 
-        if(model.getParameters().containsKey(RETRAIN_EVERY)) {
-            this.retrainEvery = (int) model.getParameters().get(RETRAIN_EVERY);
-            targets = new ArrayList<>();
-            rawMaps= new ArrayList<>();
-            inputs= new ArrayList<>();
-        }else {
+            if (model.getParameters().containsKey(RETRAIN_EVERY)) {
+                this.retrainEvery = (int) model.getParameters().get(RETRAIN_EVERY);
+                targets = new ArrayList<>();
+                rawMaps = new ArrayList<>();
+                inputs = new ArrayList<>();
+            } else {
+                retrainEvery = 1;
+            }
+        } else {
+            this.statement = null;
+            originalRequest = null;
+            model = null;
+            schema = null;
             retrainEvery = 1;
         }
     }
-    public void update(Map[] insertStream, Map[] removeStream){
+
+    public void update(Map[] insertStream, Map[] removeStream) {
         loggerService.debug(AgentUtils.getDateNowString() + " update map[] w/ handler " + this.getClass().getSimpleName() + " & query: " + query.getName());
-        if(insertStream!=null)
-           eventExecutor.insertStack(insertStream);
-        if(removeStream!=null)
+        if (insertStream != null)
+            eventExecutor.insertStack(insertStream);
+        if (removeStream != null)
             eventExecutor.removeStack(removeStream);
     }
 
-    protected void singleBatchIteration(ExtractedElements elements )throws TraceableException, UntraceableException {
+    protected void singleBatchIteration(ExtractedElements elements) throws TraceableException, UntraceableException {
         if (rawMaps.size() < retrainEvery) {
             targets.add(elements.getTargetsList());
             rawMaps.add(elements);
@@ -76,6 +86,7 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
                 retrain();
         }
     }
+
     private void retrain() throws TraceableException, UntraceableException {
         List<Prediction> predictions = model.batchPredict(inputs);
 
@@ -91,44 +102,48 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
 
 
     }
-    protected void evaluate(Prediction prediction, List target){
+
+    protected void evaluate(Prediction prediction, List target) {
         // evaluating the current learning instance
-        model.getEvaluator().evaluate(prediction.getPrediction() instanceof List?(List)prediction.getPrediction(): Collections.singletonList(prediction.getPrediction()), target);
+        model.getEvaluator().evaluate(prediction.getPrediction() instanceof List ? (List) prediction.getPrediction() : Collections.singletonList(prediction.getPrediction()), target);
     }
+
     protected abstract void processMessage(Map[] events);
 
     protected abstract void processLeavingMessage(Map[] events);
-    protected void processMessage(Object events){
 
-        if(events!=null) {
-            if (events instanceof Map){
-                if( !query.isDiscardDataOnFailPolicyOn() || (query.isDiscardDataOnFailPolicyOn() && loggingValidation(new Map[]{(Map) events}) ) )
+    protected void processMessage(Object events) {
+
+        if (events != null) {
+            if (events instanceof Map) {
+                if (!query.isDiscardDataOnFailPolicyOn() || (query.isDiscardDataOnFailPolicyOn() && loggingValidation(new Map[]{(Map) events})))
                     processMessage(new Map[]{(Map) events});
                 else
                     loggerService.warn("The handle of statement id:" + query.getId() + " discarded an event");
-            }else if (events instanceof Map[]) {
-                if( !query.isDiscardDataOnFailPolicyOn() || (query.isDiscardDataOnFailPolicyOn() && loggingValidation((Map[]) events) ) )
+            } else if (events instanceof Map[]) {
+                if (!query.isDiscardDataOnFailPolicyOn() || (query.isDiscardDataOnFailPolicyOn() && loggingValidation((Map[]) events)))
                     processMessage((Map[]) events);
                 else
                     loggerService.warn("The handle of statement id:" + query.getId() + " discarded an event");
             } else {
                 Map map = new Hashtable<>();
-                map.put(events.getClass().getName(),events);
+                map.put(events.getClass().getName(), events);
                 processMessage(map);
             }
         }
     }
+
     protected boolean loggingValidation(Map[] events) {
         Date current = new Date();
-        if(lastMessage == null)
+        if (lastMessage == null)
             lastMessage = current;
 
-        boolean correct=true;
+        boolean correct = true;
         if (events == null)
             loggerService.warn("The handle of statement id:" + query.getId() + " received an empty event");
         else if (query.getSchema() != null) {
 
-            if (logEveryCount==1 || !lastCorrect || current.after(new Date(lastMessage.getTime() + query.getLogEventEvery()*60000L))) {
+            if (logEveryCount == 1 || !lastCorrect || current.after(new Date(lastMessage.getTime() + query.getLogEventEvery() * 60000L))) {
                 if (!query.getSchema().validate(events))
                     try {
                         loggerService.warn("Handler of statement: " + query.getId() + " data do not expect structure below:  \n" + loggingSerializer.toString(events));
@@ -145,7 +160,7 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
                 lastMessage = current;
             }
 
-        } else if( current.after(new Date(lastMessage.getTime() + query.getLogEventEvery()*60000L)))
+        } else if (current.after(new Date(lastMessage.getTime() + query.getLogEventEvery() * 60000L)))
             loggerService.info("Handler of statement: " + query.getId() + " had triggered n=" + logEveryCount + " processing process");
 
         try {
@@ -156,16 +171,16 @@ public abstract class BaseMapEventHandler extends BaseEventHandler {
         return correct;
     }
 
-    protected void processLeavingMessage(Object events){
+    protected void processLeavingMessage(Object events) {
 
-        if(events!=null) {
-            if (events instanceof Map){
+        if (events != null) {
+            if (events instanceof Map) {
                 processLeavingMessage(new Map[]{(Map) events});
-            }else if (events instanceof Map[]){
-                processLeavingMessage((Map[])events);
+            } else if (events instanceof Map[]) {
+                processLeavingMessage((Map[]) events);
             } else {
                 Map map = new Hashtable<>();
-                map.put(events.getClass().getName(),events);
+                map.put(events.getClass().getName(), events);
                 processLeavingMessage(map);
             }
         }
