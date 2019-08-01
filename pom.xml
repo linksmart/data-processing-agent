@@ -79,7 +79,7 @@
         <linksmart.commons.version>1.2.1-SNAPSHOT</linksmart.commons.version>
 
         <!-- dependencies versions -->
-        <jackson.core.version>2.8.9</jackson.core.version>
+        <jackson.core.version>2.10.0.pr1</jackson.core.version>
         <jackson.version>${jackson.core.version}</jackson.version>
         <jackson.geojeson.version>1.6</jackson.geojeson.version>
         <jackson.maper.asl.version>1.9.13</jackson.maper.asl.version>
