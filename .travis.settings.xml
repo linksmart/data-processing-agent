@@ -25,4 +25,26 @@
             <password>${env.NEXUS_PASSWORD}</password>
         </server>
     </servers>
+    <profiles>
+        <profile>
+            <id>linksmart</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://nexus.linksmart.eu/repository/public/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>linksmart</activeProfile>
+    </activeProfiles>
 </settings>
