@@ -1,0 +1,58 @@
+language: java
+jdk: openjdk10
+cache:
+  directories:
+  - "$HOME/.cache"
+services:
+  - docker
+#script:
+#  - mvn clean install
+#  - cd gpl-artifacts
+#  - docker build --force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML  --build-arg engine=eu.linksmart.services.event.cep.engines.EsperEngine -t linksmart/la:experimental  -t linksmart/la:snapshot .
+#before_deploy: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#deploy:
+#  - provider: script
+#    script: docker push ingender/maven-builder
+
+jobs:
+  include:
+    - stage: "Maven Install"
+      script: mvn clean install
+    - stage: "Docker Build&Push: Snapshots & Experimental"
+      name: "DPA-ESPER:Build&Push"
+      script:
+        - docker build --force-rm -f Dockerfile-test --build-arg engine=eu.linksmart.services.event.cep.engines.EsperEngine  -t linksmart/agent:dpa-snapshot  -t linksmart/agent:dpa-experimental  .
+        - docker push linksmart/agent:dpa-experimental
+      name: "LA-ESPER:Build&Push"
+    - script:
+        - docker build ---force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML  --build-arg engine=eu.linksmart.services.event.cep.engines.EsperEngine -t linksmart/agent:la-experimental  -t linksmart/agent:la-snapshot .
+        - docker push linksmart/agent:la-experimental
+      name: "DPA-WSO2:Build&Push"
+    - script:
+        - docker build -f Dockerfile-test --build-arg engine=eu.linksmart.services.event.cep.engines.EsperEngine -t linksmart/agent:dpa-wso2-experimental -t linksmart/agent:dpa-wso2-snapshot .
+        - docker push linksmart/agent:dpa-wso2-experimental
+      name: "LA-WSO2:Build&Push"
+    - script:
+        - docker build -f Dockerfile-test --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML  --build-arg engine=eu.linksmart.services.event.cep.engines.EsperEngine -t linksmart/agent:la-wso2-experimental -t linksmart/agent:la-wso2-snapshot .
+        - docker push linksmart/agent:la-wso2-experimental
+    - stage: "Integration Test"
+      name: "DPA IT"
+      script:
+        - git clone https://github.com/linksmart/dpa-tutorials.git
+        - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/testing/docker-compose-testing.yml up --abort-on-container-exit
+      name: "LA IT"
+    - script: docker-compose -f -f test/la-basic-it/docker-compose.yml up --abort-on-container-exit
+    - stage: "Deploy Artifacts"
+      name: "Maven Deploy"
+      script: mvn deploy -B -Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
+      name: "Docker Push Images"
+    - script:
+        - docker push linksmart/agent:dpa-snapshot
+        - docker push linksmart/agent:la-snapshot
+        - docker push linksmart/agent:dpa-wso2-snapshot
+        - docker push linksmart/agent:la-wso2-snapshot
+    - stage: "Documentation"
+      name: "Javadoc"
+      script: mvn javadoc:javadoc -Dls.se.agents.version=${VERSION}-SNAPSHOT
+      name: "OpenAPI"
+    - script: echo 'in construction ...'
