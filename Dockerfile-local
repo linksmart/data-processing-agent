@@ -26,11 +26,7 @@ ENV cep_init_engines=${engine}
 # to start the LA (optional)
 ENV agent_init_extensions=${extensions}
 
-
-# mounting configuration and extra dependencies volumes
-VOLUME /config
-VOLUME /dependencies
-
+# mounting configuration ( /config) and extra dependencies (/dependencies) volumes
 
 # mounting configuration and extra dependencies volumes
 ADD distributions/IoTAgent/target/*.jar ./

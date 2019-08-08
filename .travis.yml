@@ -11,30 +11,30 @@ jobs:
     - stage: "Maven Install"
       install: true
       script: mvn clean -B install -B
-    - stage: "Docker Build&Push: Snapshots & Experimental"
+    - stage: "Docker Build & Push Experimental and Build & Push Snapshot Images"
       name: "DPA-ESPER:Build&Push"
       install: true
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build --force-rm -f Dockerfile-test --build-arg engine=eu.linksmart.services.event.cep.engines.EsperEngine  -t linksmart/dpa:snapshot  -t linksmart/dpa:experimental  .
+        - docker build --force-rm -f gpl-artifacts/Dockerfile-local --build-arg -t linksmart/dpa:snapshot  -t linksmart/dpa:experimental  .
         - docker push linksmart/dpa:experimental
       name: "LA-ESPER:Build&Push"
       install: true
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build ---force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML  --build-arg engine=eu.linksmart.services.event.cep.engines.EsperEngine -t linksmart/la:experimental  -t linksmart/la:snapshot .
+        - docker build ---force-rm -f gpl-artifacts/Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:experimental  -t linksmart/la:snapshot .
         - docker push linksmart/la:experimental
       name: "DPA-WSO2:Build&Push"
       install: true
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build --force-rm -f Dockerfile-test -t linksmart/dpa:wso2-snapshot  -t linksmart/dpa:wso2-experimental  .
+        - docker build --force-rm -f Dockerfile-local -t linksmart/dpa:wso2-snapshot  -t linksmart/dpa:wso2-experimental  .
         - docker push linksmart/dpa:wso2-experimental
       name: "LA-WSO2:Build&Push"
       install: true
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build --force-rm -f Dockerfile-test -t linksmart/dpa:wso2-snapshot  -t linksmart/la:wso2-experimental  .
+        - docker build --force-rm -f Dockerfile-local -t linksmart/dpa:wso2-snapshot  -t linksmart/la:wso2-experimental  .
         - docker push linksmart/la:wso2-experimental
     - stage: "Integration Test"
       name: "DPA IT"
