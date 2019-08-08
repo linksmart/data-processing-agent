@@ -3,6 +3,7 @@ jdk: openjdk10
 cache:
   directories:
   - "$HOME/.cache"
+  - "$HOME/.m2"
 services:
   - docker
 #script:
@@ -17,7 +18,11 @@ services:
 jobs:
   include:
     - stage: "Maven Install"
-      script: mvn clean install
+      script:
+        - mvn clean -B
+        - mvn install -B
+    - stage: "Docker login"
+      script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - stage: "Docker Build&Push: Snapshots & Experimental"
       name: "DPA-ESPER:Build&Push"
       script:
