@@ -9,6 +9,7 @@ services:
 jobs:
   include:
     - stage: "Maven Install (Unit & Integration Tests) & Docker Build & Push"
+      name: "Building"
       install: true
       script:
         - mvn clean -B install -B
@@ -21,32 +22,31 @@ jobs:
         - docker push linksmart/la:experimental
         - docker build --force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/dpa:wso2-snapshot  -t linksmart/la:wso2-experimental  .
         - docker push linksmart/la:wso2-experimental
-    - stage: "Integration Test"
-      name: "DPA IT"
+    - stage: "System Tests"
       install: true
       script:
         - git clone https://github.com/linksmart/dpa-tutorials.git
         - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/testing/docker-compose-testing.yml up --abort-on-container-exit
-      name: "LA IT"
+      name: "DPA ST"
       install: true
     - script: docker-compose -f -f test/la-basic-it/docker-compose.yml up --abort-on-container-exit
+      name: "LA ST"
     - stage: "Deploy Artifacts"
-      name: "Maven Deploy"
       script: mvn deploy -B -Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
-      name: "Docker Push Images"
+      name: "Maven Deploy"
       install: true
     - script:
         - docker push linksmart/dpa:snapshot
         - docker push linksmart/la:snapshot
         - docker push linksmart/dpa:wso2-snapshot
         - docker push linksmart/la:wso2-snapshot
-    - stage: "Documentation"
+      name: "Docker Push Images"
+    - script: mvn javadoc:javadoc -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Javadoc"
-      install: true
-      script: mvn javadoc:javadoc -Dls.se.agents.version=${VERSION}-SNAPSHOT
-      name: "OpenAPI"
       install: true
       script:
         - docker run --name broker eclipse-mosquitto:latest
         - docker run --name la --link broker dpa:snapshot
         - ./.openAPI-extractor.json
+      name: "OpenAPI"
+      install: true
