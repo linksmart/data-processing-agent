@@ -36,17 +36,17 @@ jobs:
       script: mvn deploy -B -Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Maven Deploy"
       install: true
-      script:
+    - script:
         - docker push linksmart/dpa:snapshot
         - docker push linksmart/la:snapshot
         - docker push linksmart/dpa:wso2-snapshot
         - docker push linksmart/la:wso2-snapshot
       install: true
       name: "Docker Push Images"
-      script: mvn javadoc:javadoc -Dls.se.agents.version=${VERSION}-SNAPSHOT
+    - script: mvn javadoc:javadoc -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Javadoc Deploy"
       install: true
-      script:
+    - script:
         - docker run --name broker eclipse-mosquitto:latest
         - docker run --name la --link broker dpa:snapshot
         - ./.openAPI-extractor.json
