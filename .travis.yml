@@ -14,13 +14,13 @@ jobs:
       script:
         - mvn clean -B install -B
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build --force-rm -f gpl-artifacts/Dockerfile-local -t linksmart/dpa:snapshot  -t linksmart/dpa:experimental  .
+        - docker build --force-rm -f gpl-artifacts/Dockerfile-local -t linksmart/dpa:experimental  .
         - docker push linksmart/dpa:experimental
-        - docker build --force-rm -f Dockerfile-local -t linksmart/dpa:snapshot  -t linksmart/dpa:experimental  .
+        - docker build --force-rm -f Dockerfile-local -t linksmart/dpa:experimental  .
         - docker push linksmart/dpa:experimental
-        - docker build --force-rm -f gpl-artifacts/Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:experimental  -t linksmart/la:snapshot .
+        - docker build --force-rm -f gpl-artifacts/Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:experimental .
         - docker push linksmart/la:experimental
-        - docker build --force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/dpa:wso2-snapshot  -t linksmart/la:wso2-experimental  .
+        - docker build --force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:wso2-experimental  .
         - docker push linksmart/la:wso2-experimental
     - stage: "System Tests"
       install: true
@@ -28,6 +28,8 @@ jobs:
         - git clone https://github.com/linksmart/dpa-tutorials.git
         - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/testing/docker-compose-testing.yml up --abort-on-container-exit
       name: "DPA ST"
+      git:
+        depth: false
       install: true
     - script: docker-compose -f -f test/la-basic-it/docker-compose.yml up --abort-on-container-exit
       name: "LA ST"
@@ -37,10 +39,16 @@ jobs:
       name: "Maven Deploy"
       install: true
     - script:
+        - docker tag linksmart/dpa:experimental linksmart/dpa:snapshot
+        - docker tag linksmart/la:experimental linksmart/la:snapshot
+        - docker tag linksmart/dpa:wso2-experimental linksmart/dpa:wso2-snapshot
+        - docker tag linksmart/la:wso2-experimental linksmart/la:wso2-snapshot
         - docker push linksmart/dpa:snapshot
         - docker push linksmart/la:snapshot
         - docker push linksmart/dpa:wso2-snapshot
         - docker push linksmart/la:wso2-snapshot
+      git:
+        depth: false
       install: true
       name: "Docker Push Images"
     - script: mvn javadoc:javadoc -Dls.se.agents.version=${VERSION}-SNAPSHOT
