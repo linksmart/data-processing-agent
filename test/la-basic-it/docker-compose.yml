@@ -40,6 +40,6 @@ services:
     command:
       - mvn
       - -Dsurefire.useSystemClassLoader=false
+      - -s /data-processing-agent/.travis.settings.xml
 #      - -Dversion=${AGENT_VERSION}
       - test
-      - -s /data-processing-agent/.travis.settings.xml

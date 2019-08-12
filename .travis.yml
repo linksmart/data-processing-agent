@@ -10,9 +10,9 @@ jobs:
   include:
     - stage: "Maven Install (Unit & Integration Tests) & Docker Build & Push"
       name: "Building"
-      install: true
+  #    install: true
       script:
-        - mvn clean -B install -B
+ #       - mvn clean -B install -B
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker build --force-rm -f gpl-artifacts/Dockerfile-local -t linksmart/dpa:experimental  .
         - docker push linksmart/dpa:experimental
