@@ -42,3 +42,4 @@ services:
       - -Dsurefire.useSystemClassLoader=false
 #      - -Dversion=${AGENT_VERSION}
       - test
+      - -s /data-processing-agent/.travis.settings.xml
