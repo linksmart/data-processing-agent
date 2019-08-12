@@ -10,9 +10,9 @@ jobs:
   include:
     - stage: "Maven Install (Unit & Integration Tests) & Docker Build & Push"
       name: "Building"
-  #    install: true
+      install: true
       script:
- #       - mvn clean -B install -B
+        - mvn clean -B install -B
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker build --force-rm -f gpl-artifacts/Dockerfile-local -t linksmart/dpa:experimental  .
         - docker push linksmart/dpa:experimental
@@ -22,12 +22,14 @@ jobs:
         - docker push linksmart/la:experimental
         - docker build --force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:wso2-experimental  .
         - docker push linksmart/la:wso2-experimental
+      install: true
     - stage: "System Tests"
       install: true
       script:
         - git clone https://github.com/linksmart/dpa-tutorials.git
         - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/testing/docker-compose-testing.yml up --abort-on-container-exit
       name: "DPA ST"
+      install: true
       git:
         depth: false
       install: true
