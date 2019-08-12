@@ -3,7 +3,7 @@ services:
   main_broker:
     image: eclipse-mosquitto
   sc:
-    image: docker.linksmart.eu/sc:latest
+    image: linksmart/sc:latest
     depends_on:
       - main_broker
     links:
@@ -11,7 +11,7 @@ services:
     environment:
       - SC_MQTT_CLIENT_BROKERURI=tcp://main_broker:1883
   agent:
-    image: docker.linksmart.eu/agent:la-snapshot
+    image: linksmart/la:snapshot
     hostname: agent
     depends_on:
       - sc
@@ -22,7 +22,7 @@ services:
     environment:
       - linksmart_service_catalog_endpoint=http://sc:8082
   it:
-    image: docker.linksmart.eu/ci/maven-deployer:latest
+    image: maven:3.6-jdk-10
     volumes:
       - ../../:/data/
     depends_on:

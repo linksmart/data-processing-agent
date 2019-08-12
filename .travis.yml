@@ -31,7 +31,7 @@ jobs:
       git:
         depth: false
       install: true
-    - script: docker-compose -f -f test/la-basic-it/docker-compose.yml up --abort-on-container-exit
+    - script: docker-compose -f test/la-basic-it/docker-compose.yml up --abort-on-container-exit
       name: "LA ST"
     - stage: "Deploy Artifacts"
       install: true

@@ -3,7 +3,7 @@ services:
   main_broker:
     image: eclipse-mosquitto
   sc:
-    image: docker.linksmart.eu/sc:latest
+    image: linksmart/sc:latest
     depends_on:
       - main_broker
     links:
@@ -11,7 +11,7 @@ services:
     environment:
       - SC_MQTT_CLIENT_BROKERURI=tcp://main_broker:1883
   agent:
-    image: docker.linksmart.eu/agent:la-experimental
+    image: linksmart/la:experimental
     hostname: agent
     depends_on:
       - sc
@@ -40,5 +40,5 @@ services:
     command:
       - mvn
       - -Dsurefire.useSystemClassLoader=false
-      - -Dversion=1.8.1-SNAPSHOT
+#      - -Dversion=${AGENT_VERSION}
       - test
