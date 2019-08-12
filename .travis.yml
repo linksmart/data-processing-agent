@@ -17,7 +17,7 @@ jobs:
         - docker build --force-rm -f gpl-artifacts/Dockerfile-local -t linksmart/dpa:experimental  .
         - docker push linksmart/dpa:experimental
         - docker build --force-rm -f Dockerfile-local -t linksmart/dpa:experimental  .
-        - docker push linksmart/dpa:experimental
+        - docker push linksmart/dpa:wso2-experimental
         - docker build --force-rm -f gpl-artifacts/Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:experimental .
         - docker push linksmart/la:experimental
         - docker build --force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:wso2-experimental  .
