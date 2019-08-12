@@ -280,7 +280,8 @@ public class DataProcessingCore {
     private static void initCEPEngines() {
         // loading the CEP engines
         try {
-            Class.forName(conf.getString(Const.CEP_ENGINE).toString());
+            loggerService.info("Loading CEP engine from: "+conf.getString(Const.CEP_ENGINE) );
+            Class.forName(conf.getString(Const.CEP_ENGINE));
         } catch (ClassNotFoundException e) {
             loggerService.error(e.getMessage(), e);
             System.exit(-1);
