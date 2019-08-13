@@ -4,22 +4,22 @@
 
 #cd code
 
-if [ -z ${URL} ]; then
+if [ -z "${URL}" ]; then
 	URL="http://dpa:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Learning%20Agent"
 fi
-if [ -z ${FILE} ]; then
+if [ -z "${FILE}" ]; then
 	FILE=api-docs.json
 fi
 echo "" > ${FILE}
 
 echo "calling endpoint ${URL} storeging in ${FILE} ...";
-curl -f --stderr err ${URL} | jq '.' > ${FILE};
+curl -f --stderr err "${URL}" | jq '.' > ${FILE};
 cat err;
 
 until [ -s ${FILE} ]; do
 	sleep 1;
     echo "calling endpoint ${URL} storeging in ${FILE} ...";
-	curl -f --stderr err ${URL} | jq '.' > ${FILE};
+	curl -f --stderr err "${URL}" | jq '.' > ${FILE};
 	cat err;
 done;
 
