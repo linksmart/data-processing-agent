@@ -66,19 +66,15 @@ jobs:
     - script:
         - docker run --name broker -d eclipse-mosquitto:latest
         - docker run --name la --link broker -d linksmart/dpa:snapshot
-        - apt-get install curl
-        - apt-get install jq
+#        - apt-get install curl
+#        - apt-get install jq
         - export URL="http://dpa:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Learning%20Agent"
         - export FILE=api-docs.json
         - echo "" > ${FILE}
         - echo 'calling endpoint ${URL} storeging in ${FILE} ...';
         - curl -f --stderr err "${URL}" | jq '.' > ${FILE};
         - cat err;
-        - until [ -s ${FILE} ]; do
-        -   sleep 1;
-        -     echo 'calling endpoint ${URL} storeging in ${FILE} ...';
-        -   curl -f --stderr err "${URL}" | jq '.' > ${FILE};
-        -   cat err;
+        - until [ -s ${FILE} ]; do sleep 1; echo 'calling endpoint ${URL} storeging in ${FILE} ...'; curl -f --stderr err "${URL}" | jq '.' > ${FILE}; cat err;
         - done;
         - git add ${FILE}
         - "git commit -am '[skip travis] AUTOMATIC COMMIT: updating Open API'"
