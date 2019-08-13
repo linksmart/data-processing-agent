@@ -77,7 +77,7 @@ jobs:
         - until [ -s ${FILE} ]; do sleep 1; echo 'calling endpoint ${URL} storeging in ${FILE} ...'; curl -f --stderr err "${URL}" | jq '.' > ${FILE}; cat err; done;
         - git add ${FILE}
         - "git commit -am '[skip travis] AUTOMATIC COMMIT: updating Open API'"
-        - git push
+        -  git push origin HEAD:dev
  #       - ./.openAPI-extractor.sh
       name: "OpenAPI GIT Push"
       install: true
