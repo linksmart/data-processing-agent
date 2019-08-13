@@ -10,7 +10,6 @@ jobs:
   include:
     - stage: "Maven Install (Unit & Integration Tests) & Docker Build & Push"
       name: "Building"
-      install: true
       script:
         - mvn clean -B install -B
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
@@ -24,19 +23,17 @@ jobs:
         - docker push linksmart/la:wso2-experimental
       install: true
     - stage: "System Tests"
-      install: true
       script:
         - git clone https://github.com/linksmart/dpa-tutorials.git
         - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/testing/docker-compose-testing.yml up --abort-on-container-exit
       name: "DPA ST"
-      install: true
       git:
         depth: false
       install: true
     - script: docker-compose -f test/la-basic-it/docker-compose.yml up --abort-on-container-exit
+      install: true
       name: "LA ST"
     - stage: "Deploy Artifacts"
-      install: true
       script: mvn deploy -B -Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Maven Deploy"
       install: true
