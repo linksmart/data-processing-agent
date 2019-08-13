@@ -39,10 +39,11 @@ jobs:
       install: true
       name: "LA ST"
     - stage: "Deploy Artifacts"
-      script: mvn deploy -B #-Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
+      script: mvn deploy -B -Dskip=test #-Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Maven Deploy"
       install: true
     - script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker pull linksmart/dpa:experimental
         - docker pull linksmart/la:experimental
         - docker pull linksmart/dpa:wso2-experimental
@@ -64,7 +65,7 @@ jobs:
       install: true
     - script:
         - docker run --name broker eclipse-mosquitto:latest
-        - docker run --name la --link broker dpa:snapshot
+        - docker run --name la --link -d broker dpa:snapshot
         - ./.openAPI-extractor.json
       name: "OpenAPI GIT Push"
       install: true
