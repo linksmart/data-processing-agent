@@ -65,10 +65,10 @@ jobs:
       install: true
     - script:
         - docker run --name broker -d eclipse-mosquitto:latest
-        - docker run --name la --link broker -d linksmart/dpa:snapshot
+        - docker run --name la --link broker -p "8319:8319" -d linksmart/dpa:snapshot
 #        - apt-get install curl
 #        - apt-get install jq
-        - export URL="http://dpa:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Learning%20Agent"
+        - export URL="http://localhost:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Learning%20Agent"
         - export FILE=api-docs.json
         - echo "" > ${FILE}
         - echo 'calling endpoint ${URL} storeging in ${FILE} ...';
