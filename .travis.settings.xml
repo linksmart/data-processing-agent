@@ -8,19 +8,19 @@
     <servers>
         <server>
             <id>releases</id>
-            <username>pipeline</username>
+            <username>pipelines</username>
             <password>${env.NEXUS_PASSWORD}</password>
         </server>
 
         <server>
             <id>snapshots</id>
-            <username>pipeline</username>
+            <username>pipelines</username>
             <password>${env.NEXUS_PASSWORD}</password>
         </server>
 
         <server>
             <id>central</id>
-            <username>pipeline</username>
+            <username>pipelines</username>
             <password>${env.NEXUS_PASSWORD}</password>
         </server>
     </servers>

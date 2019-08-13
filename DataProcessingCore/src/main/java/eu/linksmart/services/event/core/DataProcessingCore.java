@@ -67,7 +67,6 @@ public class DataProcessingCore {
      * Start will initialize the Agent in this thread and then start the status loop in a new thread. Finally, it will return the result of the initialization process.
      *
      * @param args the parameters provided in the console
-     * @return is the agent successfully initialized
      */
     public static void start(String args) {
         if (!started) {

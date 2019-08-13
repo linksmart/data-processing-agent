@@ -43,6 +43,10 @@ jobs:
       name: "Maven Deploy"
       install: true
     - script:
+        - docker pull linksmart/dpa:experimental
+        - docker pull linksmart/la:experimental
+        - docker pull linksmart/dpa:wso2-experimental
+        - docker pull linksmart/la:wso2-experimental
         - docker tag linksmart/dpa:experimental linksmart/dpa:snapshot
         - docker tag linksmart/la:experimental linksmart/la:snapshot
         - docker tag linksmart/dpa:wso2-experimental linksmart/dpa:wso2-snapshot
