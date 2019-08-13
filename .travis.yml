@@ -27,7 +27,7 @@ jobs:
         - git clone https://github.com/linksmart/dpa-tutorials.git
         - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml -f dpa-tutorials/testing/docker-compose-testing.yml up -d
         - cd dpa-tutorials/testing/
-        - mvn test
+        - mvn -s ../../.travis.settings.xml test
       name: "DPA ST"
       git:
         depth: false
@@ -35,7 +35,7 @@ jobs:
     - script:
       - cd  test/la-basic-it/
       - docker-compose -f docker-compose.yml up -d
-      - mvn test
+      - mvn -s ../../.travis.settings.xml test
       install: true
       name: "LA ST"
     - stage: "Deploy Artifacts"
