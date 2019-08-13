@@ -25,7 +25,7 @@ jobs:
     - stage: "System Tests"
       script:
         - git clone https://github.com/linksmart/dpa-tutorials.git
-        - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml -f dpa-tutorials/testing/docker-compose-testing.yml up
+        - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml -f dpa-tutorials/testing/docker-compose-testing.yml up -d
         - cd dpa-tutorials/testing/
         - mvn test
       name: "DPA ST"
@@ -34,12 +34,12 @@ jobs:
       install: true
     - script:
       - cd  test/la-basic-it/
-      - docker-compose -f docker-compose.yml up
+      - docker-compose -f docker-compose.yml up -d
       - mvn test
       install: true
       name: "LA ST"
     - stage: "Deploy Artifacts"
-      script: mvn deploy -B -Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
+      script: mvn deploy -B #-Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Maven Deploy"
       install: true
     - script:
@@ -55,7 +55,7 @@ jobs:
         depth: false
       install: true
       name: "Docker Push Images"
-    - script: mvn javadoc:javadoc -Dls.se.agents.version=${VERSION}-SNAPSHOT
+    - script: mvn javadoc:javadoc #-Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Javadoc Deploy"
       install: true
     - script:
