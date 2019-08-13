@@ -25,12 +25,17 @@ jobs:
     - stage: "System Tests"
       script:
         - git clone https://github.com/linksmart/dpa-tutorials.git
-        - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/testing/docker-compose-testing.yml up --abort-on-container-exit
+        - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml -f dpa-tutorials/testing/docker-compose-testing.yml up
+        - cd dpa-tutorials/testing/
+        - mvn test
       name: "DPA ST"
       git:
         depth: false
       install: true
-    - script: docker-compose -f test/la-basic-it/docker-compose.yml up --abort-on-container-exit
+    - script:
+      - cd  test/la-basic-it/
+      - docker-compose -f docker-compose.yml up
+      - mvn test
       install: true
       name: "LA ST"
     - stage: "Deploy Artifacts"

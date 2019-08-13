@@ -2,6 +2,8 @@ version: '3'
 services:
   main_broker:
     image: eclipse-mosquitto
+    ports:
+      - 1883:1883
   sc:
     image: linksmart/sc:latest
     depends_on:
@@ -10,9 +12,13 @@ services:
       - main_broker
     environment:
       - SC_MQTT_CLIENT_BROKERURI=tcp://main_broker:1883
+    ports:
+      - 8082:8082
   agent:
     image: linksmart/la:experimental
     hostname: agent
+    ports:
+      - 8319:8319
     depends_on:
       - sc
       - main_broker
@@ -20,26 +26,26 @@ services:
       - main_broker
       - sc
     environment:
-      - linksmart_service_catalog_endpoint=http://sc:808
-  it:
-    image: maven:3.6-jdk-10
-    working_dir: /data-processing-agent/test/la-basic-it
-    depends_on:
-      - main_broker
-      - sc
-      - agent
-    links:
-      - main_broker
-      - sc
-      - agent
-    volumes:
-      - "${pwd}/:/data-processing-agent"
-    environment:
-      - BROKER_URL=tcp://main_broker:1883
-      - AGENT_URL=http://agent:8319
-    command:
-      - mvn
-      - -Dsurefire.useSystemClassLoader=false
+      - linksmart_service_catalog_endpoint=http://sc:8082
+#  it:
+#    image: maven:3.6-jdk-10
+#    working_dir: /data-processing-agent/test/la-basic-it
+#    depends_on:
+#      - main_broker
+#      - sc
+#      - agent
+#    links:
+#      - main_broker
+#      - sc
+#      - agent
+#    volumes:
+#      - "../../:/data-processing-agent"
+#    environment:
+#      - BROKER_URL=tcp://main_broker:1883
+#      - AGENT_URL=http://agent:8319
+#    command:
+#      - mvn
+#      - -Dsurefire.useSystemClassLoader=false
 #      - -s /data-processing-agent/.travis.settings.xml
 #      - -Dversion=${AGENT_VERSION}
-      - test
+#      - test
