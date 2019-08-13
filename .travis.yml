@@ -66,6 +66,6 @@ jobs:
     - script:
         - docker run --name broker -d eclipse-mosquitto:latest
         - docker run --name la --link broker -d linksmart/dpa:snapshot
-        - ./.openAPI-extractor.json
+        - ./.openAPI-extractor.sh
       name: "OpenAPI GIT Push"
       install: true
