@@ -67,7 +67,6 @@ jobs:
         - docker-compose -f test/openAPI/docker-compose.yml up -d
         - export URL="http://localhost:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Data-Processing%20Agent"
         - export FILE=api-docs.json
-        - jq --help
         - echo "" > ${FILE}
         - echo 'calling endpoint ${URL} storeging in ${FILE} ...';
         - curl -f --stderr err "${URL}" | jq '.' > ${FILE};
