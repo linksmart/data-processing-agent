@@ -76,6 +76,6 @@ jobs:
         - "git commit -am '[skip travis] AUTOMATIC COMMIT: updating Open API'"
         - "git config --global user.email 'travis@travis-ci.org'"
         - "git config --global user.name 'Travis CI'"
-        - "git push https://${GH_TOKEN}@github.com/linksmart/data-processing-agent.git"
+        - "git push https://${GH_TOKEN}@github.com/linksmart/data-processing-agent.git origin HEAD:dev"
       name: "OpenAPI GIT Push"
       install: true
