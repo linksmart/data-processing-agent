@@ -3,9 +3,9 @@
   "info": {
     "description": "A complex analytic service that offers Machine Learning and other complex analytics as a service",
     "version": "1.8.1-SNAPSHOT",
-    "title": "LinkSmart (R) IoT Learning Agent",
+    "title": "LinkSmart (R) IoT Data-Processing Agent",
     "contact": {
-      "name": "LinkSmart (R) IoT Learning Agent",
+      "name": "LinkSmart (R) IoT Data-Processing Agent",
       "url": "https://fit.fraunhofer.de",
       "email": "carvaja@fit.fhg.de"
     },
@@ -14,9 +14,13 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "dpa:8319",
+  "host": "localhost:8319",
   "basePath": "/",
   "tags": [
+    {
+      "name": "web-mvc-endpoint-handler-mapping",
+      "description": "Web Mvc Endpoint Handler Mapping"
+    },
     {
       "name": "broker-management",
       "description": "Broker Management"
@@ -24,6 +28,10 @@
     {
       "name": "statement-rest",
       "description": "Statement Rest"
+    },
+    {
+      "name": "operation-handler",
+      "description": "Operation Handler"
     },
     {
       "name": "event-rest",
@@ -61,6 +69,891 @@
             "description": "OK",
             "schema": {
               "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator": {
+      "get": {
+        "tags": [
+          "web-mvc-endpoint-handler-mapping"
+        ],
+        "summary": "links",
+        "operationId": "linksUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/definitions/Link"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/auditevents": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/beans": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/conditions": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/configprops": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_3",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/env": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_5",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/env/{toMatch}": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_4",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/health": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_6",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/heapdump": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_7",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/octet-stream"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/httptrace": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_8",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/info": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_9",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/loggers": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_11",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/loggers/{name}": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_10",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingPOST",
+        "consumes": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/mappings": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_12",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/metrics": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_14",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/metrics/{requiredMetricName}": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_13",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/scheduledtasks": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_15",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/threaddump": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_16",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
             }
           },
           "401": {
@@ -882,22 +1775,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingGET",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingGET",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "401": {
@@ -915,22 +1805,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingHEAD",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingHEAD",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "204": {
@@ -948,22 +1835,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingPOST",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingPOST",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "201": {
@@ -984,22 +1868,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingPUT",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingPUT",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "201": {
@@ -1020,22 +1901,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingDELETE",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingDELETE",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "204": {
@@ -1053,22 +1931,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingOPTIONS",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingOPTIONS",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "204": {
@@ -1086,22 +1961,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingPATCH",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingPATCH",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "204": {
@@ -2719,6 +3591,23 @@
         "synchronousResponse": {
           "type": "object"
         }
+      }
+    },
+    "Link": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "templated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Map«string,Link»": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Link"
       }
     },
     "Model": {
