@@ -2,7 +2,6 @@ language: java
 jdk: openjdk10
 cache:
   directories:
-  - "$HOME/.cache"
   - "$HOME/.m2"
 services:
   - docker
@@ -76,6 +75,7 @@ jobs:
         - git branch tmp
         - git checkout dev
         - git merge tmp
+        - git branch -d tmp
         - "git commit -am '[skip travis] AUTOMATIC COMMIT: updating Open API'"
         - "git config --global user.email 'travis@travis-ci.org'"
         - "git config --global user.name 'Travis CI'"
