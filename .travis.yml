@@ -26,6 +26,7 @@ jobs:
         - docker push linksmart/la:wso2-${DISTRO}
       install: true
       name: "Building"
+      
     - stage: "System Tests"
       script:
         - set -e
@@ -38,20 +39,25 @@ jobs:
       git:
         depth: false
       install: true
-    - script:
+      
+    - if: branch != release
+      script:
         - set -e
         - cd  test/la-basic-it/
         - docker-compose -f docker-compose.yml up -d
         - mvn -s ../../.travis.settings.xml test
       install: true
       name: "LA ST"
-      if: branch != release
-    - stage: "Deploy Artifacts"
+      stage: "my new stage"
+      
+    - if: branch != release
+      stage: "Deploy Artifacts"
       script: mvn -Dskip=test deploy -B #-Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Snapshot Artifacts"
       install: true
-      if: branch != release
-    - script:
+      
+    - if: branch = release
+      script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
         - chmod +x ci-preparation.sh
@@ -59,7 +65,7 @@ jobs:
         - . ./maven-release.sh
       name: "Release Artifacts"
       install: true
-      if: branch = release
+      
     - script:
         - set -e
         - if [ "$TRAVIS_BRANCH" = "release" ] ; then export DISTRO="pre-release"; else export DISTRO="experimental"; fi
@@ -81,19 +87,22 @@ jobs:
         depth: false
       install: true
       name: "Docker Push Images"
-    - script: mvn javadoc:javadoc #-Dls.se.agents.version=${VERSION}-SNAPSHOT
+      
+    - if: branch != release
+      script: mvn javadoc:javadoc #-Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Javadoc Deploy"
       install: true
-      if: branch != release
-    - script:
+      
+    - if: branch = release
+      script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
         - chmod +x ci-preparation.sh
         - . ./ci-preparation.sh
         - mvn site
-      if: branch = release
       name: "Javadoc Deploy"
       install: true
+      
     - script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/git-realocate-head.sh
