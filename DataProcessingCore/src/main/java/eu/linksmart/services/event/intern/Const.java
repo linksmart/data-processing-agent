@@ -10,7 +10,8 @@ import eu.linksmart.services.event.handler.HandlerConst;
  * Created by José Ángel Carvajal on 06.08.2015 a researcher of Fraunhofer FIT.
  */
 public interface Const extends eu.linksmart.services.utils.constants.Const, eu.linksmart.services.event.feeders.Const, HandlerConst {
-
+	int EMAIL_DISPATCHER_QUEUE_CAPACITY = 256; 
+	long EMAIL_DISPATCHER_JOIN_INTERVAL = 5000;
 
     String STATEMENT_INOUT_BROKER_CONF_PATH ="api_statements_mqtt_broker";
     String STATEMENT_INOUT_BASE_TOPIC_CONF_PATH ="api_statements_mqtt_topic_base";
@@ -27,7 +28,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
 
     String PERSISTENT_EVENTS_FILE = "cep_init_bootstrapping_events_files";
 
-    String CEP_ENGINES_PATH = "cep_init_engines";
+    String CEP_ENGINE = "cep_init_engines";
 
     String DEFAULT_CONFIGURATION_FILE = "__def__agent__conf__.cfg";
 
@@ -41,8 +42,15 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
 
 
     String AdditionalImportPackage ="cep_init_additionalImportPackage";
-
+    // legacy equivalent before feeders
     String ADDITIONAL_CLASS_TO_BOOTSTRAPPING = "agent_init_extensions";
+
+    String PRE_CEP_EXTENSIONS = "agent_init_after_conf_before_CEP";
+    String PRE_TYPES_EXTENSIONS = "agent_init_after_CEP_before_types";
+    String PRE_FEEDERS_EXTENSIONS = "agent_init_after_types_before_feeders";
+    String PRE_CONNECTORS_EXTENSIONS = "agent_init_after_feeders_before_connectors";
+    String PRE_BOOTSTRAP_EXTENSIONS = "agent_init_after_connectors_before_bootstrapping";
+    String PRE_END_EXTENSIONS = "agent_init_end";
 
     String START_MQTT_STATEMENT_API = "api_statements_mqtt_enable";
     String MONITOR_TOPICS = "connector_monitoring_mqtt_events_report_topics";
@@ -57,6 +65,7 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String OGC_REGISTRATION_TOPIC_WILL = "ogc_topic_will";
 
     String LINKSMART_SERVICE_CATALOG_ENDPOINT = "linksmart_service_catalog_endpoint";
+    String GOST_API_ENDPOINT = "gost_api_endpoint";
     String LINKSMART_SERVICE_WILL_TOPIC = "linksmart_service_will_topic";
     String LINKSMART_REGISTRATION_TOPIC = "linksmart_service_registration_topic";
     String FAIL_IF_PERSISTENCE_FAILS = "fails_if_persistence_fails";
@@ -68,4 +77,6 @@ public interface Const extends eu.linksmart.services.utils.constants.Const, eu.l
     String STATEMENT_DEFAULT_OUTPUT_TYPE = "api_statements_default_output_type";
     String PROMISCUOUS_EVENT_PARSING = "api_events_promiscuous";
     String TRANSLATOR_MODE = "api_events_translator";
+    String PYTHON_PATH = "python_path";
+    String LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP = "linksmart_service_catalog_in_registration_fail_stop";
 }

@@ -23,6 +23,8 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Reference implementation of a response.
@@ -69,15 +71,18 @@ public class GeneralRequestResponse implements JsonSerializable{
     /**
      * topic where the response should be publish or relative URL.
      * */
-    private String topic="" ;
+    private List<String> topics = new ArrayList<String>(); // =""
 
-    public GeneralRequestResponse(String headline, String agentID, String producerID, String producerName, String message, int status, String topic) {
+    public GeneralRequestResponse(String headline, String agentID, String producerID, String producerName, String message, int status, List<String> topics) {
 
+        this();
         setterStatementResponse( headline,  agentID,  producerID,  producerName,  message,  status);
-        this.topic = topic;
+        this.topics.clear();
+        this.topics.addAll(topics);
     }
     public GeneralRequestResponse(String headline, String agentID, String producerID, String producerName, String message, int status) {
 
+        this();
         setterStatementResponse( headline,  agentID,  producerID,  producerName,  message,  status);
     }
     private void setterStatementResponse(String headline, String agentID, String producerID, String producerName, String message, int status) {
@@ -91,6 +96,7 @@ public class GeneralRequestResponse implements JsonSerializable{
 
     }
     public GeneralRequestResponse() {
+        topics.add("");
 
     }
     @ApiModelProperty(notes = "Provide the content title of the response", required = true)
@@ -163,37 +169,39 @@ public class GeneralRequestResponse implements JsonSerializable{
         this.messageType = messageType;
     }
 
-    @ApiModelProperty(notes = "Topic of the response. Used as URI", required = true)
+    @ApiModelProperty(notes = "Topics of the response. Used as URI", required = true)
     @JsonProperty
-    public String getTopic() {
-        if(topic== null || topic.equals("")){
-            topic="";
-
+    public List<String> getTopics() {
+        String topic = "";
+        if(topics.get(0).equals(topic)){
+            topics.clear();
             if(agentID!=null){
                 topic+=agentID+"/";
             }
             if(producerID!=null){
                 topic+=producerID+"/";
             }
+            topics.add(topic);
         }
-        return topic;
+        return topics;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
+//    public void setTopic(String topic) {
+//        this.topic = topic;
+//    }
 
     @Override
     public GeneralRequestResponse build() throws TraceableException, UntraceableException {
-        if(topic== null || topic.equals("")){
-            topic="";
-
+        String topic = "";
+        if(this.topics.get(0).equals(topic)){
+            topics.clear();
             if(agentID!=null){
                 topic+=agentID+"/";
             }
             if(producerID!=null){
                 topic+=producerID+"/";
             }
+            this.topics.add(topic);
         }
         return this;
     }

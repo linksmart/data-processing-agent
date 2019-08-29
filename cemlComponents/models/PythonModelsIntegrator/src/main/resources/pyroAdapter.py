@@ -3,13 +3,42 @@
  PyroAdapter exposes an external learning module via Pyro4
 """
 import Pyro4
-import sys, imp, os
+import sys, imp, importlib, os, logging
 from optparse import OptionParser
 
+logging.basicConfig(format='%(asctime)s %(levelname)s %(name)s: %(message)s', level=logging.DEBUG)
+logger = logging.getLogger(__file__)
 
+@Pyro4.behavior(instance_mode="single")
 class PyroAdapter(object):
     def __init__(self):
-        self.backend = backendModule
+        logger.info("Initializing Pyro object.")
+        # TODO: move this to build(...) to support different backends on one pyro server
+        if sys.version_info.major < 3:
+            try:
+                module = imp.load_source(OPTIONS.bname, OPTIONS.bpath)
+                self.backend = getattr(module, OPTIONS.bname)()
+            except Exception as e:
+                logger.error(e)
+        else:
+            myclass = PyroAdapter.dynamic_importer(OPTIONS.bpath,OPTIONS.bname)
+            self.backend = myclass
+
+    def dynamic_importer(path, class_name):
+        """
+        Dynamically imports modules / classes
+        """
+
+        try:
+            spec = importlib.util.spec_from_file_location(class_name, path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+        except Exception as e:
+            print(e)
+
+        myclass=getattr(module,OPTIONS.bname)
+        return myclass()
 
     @Pyro4.expose
     def build(self, classifier):
@@ -20,20 +49,12 @@ class PyroAdapter(object):
         self.backend.learn(datapoint)
 
     @Pyro4.expose
-    def learn(self, datapoint, label):
-        self.backend.learn(datapoint, label)
-
-    @Pyro4.expose
     def predict(self, datapoint):
         return self.backend.predict(datapoint)
 
     @Pyro4.expose
     def batchLearn(self, datapoints):
         self.backend.batchLearn(datapoints)
-
-    @Pyro4.expose
-    def batchLearn(self, datapoints, labels):
-        self.backend.batchLearn(datapoints, labels)
 
     @Pyro4.expose
     def batchPredict(self, datapoints):
@@ -54,7 +75,7 @@ class PyroAdapter(object):
 
 def startPyro(options):
     Pyro4.config.SERIALIZER = 'pickle'
-    daemon = Pyro4.Daemon(host=options.host, port=options.port)
+    daemon = Pyro4.Daemon(host=options.host, port=options.port, nathost=options.nathost, natport=options.natport)
     uri = daemon.register(PyroAdapter)
     # e.g. uri: PYRO:obj_73fcc95930ed45caacba17be6bdbce74@localhost:43210
     print(uri)  # NOTE: This is read by the parent process.
@@ -64,7 +85,7 @@ def startPyro(options):
             ns = Pyro4.locateNS()
             ns.register(options.rname, uri)
         except Exception as e:
-            print("Exception: {}".format(e))
+            logger.error(e)
             raise SystemExit
 
     daemon.requestLoop()
@@ -77,13 +98,15 @@ def parseArgs():
     parser.add_option("--bpath", help="path to backend module (python script)")
     parser.add_option("--host", default="localhost", help="hostname to bind server on")
     parser.add_option("--port", type="int", default=0, help="port to bind server on (0=random)")
+    parser.add_option("--nathost", help="the external host name to use in case of NAT")
+    parser.add_option("--natport", type="int", help="the external port use in case of NAT")
     parser.add_option("--ns", dest="nameserver", action="store_true", default=False, help="register the server into pyro nameserver")
     parser.add_option("--rname", default="python-agent-0", help="name used for registration into pyro nameserver")
     options, args = parser.parse_args()
     # check mangatory args
     for opt in mandatoryArgs:
         if not getattr(options, opt):
-            print("Argument `{}` not given.".format(opt))
+            logger.error("Argument `{}` not given.".format(opt))
             parser.print_help()
             sys.exit(2)
 
@@ -95,9 +118,8 @@ def main(options):
     backendDir = os.path.dirname(options.bpath)
     sys.path.append(backendDir)
 
-    module = imp.load_source(options.bname, options.bpath)
-    global backendModule
-    backendModule = getattr(module, options.bname)()
+    global OPTIONS
+    OPTIONS = options
 
     startPyro(options)
 

@@ -6,6 +6,7 @@
         * LinkSmart Service registration 2.2
         * new /execute/ endpoint to run statement that don't run continuously.
         * Add /broker-conf/ and /broker-connections/ to dynamically change broker configurations
+		* Add emial notification handler. Now the results of a statement can be send as email.
     DEV:
         * LA-SC IT added
     FIX:

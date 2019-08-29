@@ -29,6 +29,7 @@ import java.util.Set;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
+@Deprecated
 public class ObservedProperty extends OGCSensorThingsAPIDataModelEntry
 {
 	/**

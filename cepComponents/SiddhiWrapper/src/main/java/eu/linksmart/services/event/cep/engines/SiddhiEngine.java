@@ -52,7 +52,8 @@ public class SiddhiEngine extends Component implements CEPEngine {
     static SiddhiEngine init(){
         SiddhiEngine SE= new SiddhiEngine();
 
-        instancedEngines.put(SE.getName(),SE);
+        instancedEngine.setLeft(SE.getName());
+        instancedEngine.setValue(SE);
 
         return SE;
     }
@@ -200,6 +201,13 @@ public class SiddhiEngine extends Component implements CEPEngine {
     public boolean removeStatement(String id, Statement statement)  {
 
         loggerService.error("removeStatement(String id, Statement statement) function not implemented");
+        return false;
+    }
+
+    @Override
+    public boolean updateHandler(Statement statement)  {
+
+        loggerService.error("updateHandler(Statement statement) function not implemented");
         return false;
     }
 

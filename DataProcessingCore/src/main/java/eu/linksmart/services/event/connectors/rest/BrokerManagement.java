@@ -173,7 +173,7 @@ public class BrokerManagement extends Component {
             if(MqttIncomingConnectorService.getReference().getListeners().containsKey(alias))
                 return  new ResponseEntity<>("{\"error\":\"The connection already exist\", \"code\":409}", new HttpHeaders(), HttpStatus.CONFLICT);
 
-            DataProcessingCore.addEventConnection(Arrays.asList(alias));
+            MqttIncomingConnectorService.addEventConnection(Arrays.asList(alias));
             Map<String,String> ret = new HashMap<>();
             ret.put("alias",alias);
             return new ResponseEntity<>(ret, new HttpHeaders(), HttpStatus.OK) ;

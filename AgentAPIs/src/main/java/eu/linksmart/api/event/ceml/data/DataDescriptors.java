@@ -55,6 +55,7 @@ import java.util.List;
  * @see eu.linksmart.api.event.ceml.data.DataDescriptor
  *
  * */
+@Deprecated
 public interface DataDescriptors extends List<DataDescriptor>,DataDescriptor, JsonSerializable{
 
     /**

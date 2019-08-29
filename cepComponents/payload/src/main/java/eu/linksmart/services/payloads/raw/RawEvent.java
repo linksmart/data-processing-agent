@@ -8,6 +8,7 @@ import eu.linksmart.api.event.types.EventEnvelope;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.services.utils.function.Utils;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -29,7 +30,18 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
 
     @Override
     public Date getDate() {
-        return (Date) this.getOrDefault("date", this.getOrDefault("Date",this.getOrDefault("time",this.getOrDefault("Time", this.getOrDefault("phenomenonTime",this.getOrDefault("phenomenontime",null))))));
+        Object rawDate=this.getOrDefault("date", this.getOrDefault("Date",this.getOrDefault("time",this.getOrDefault("Time", this.getOrDefault("phenomenonTime",this.getOrDefault("phenomenontime",new Date()))))));
+        if(rawDate instanceof Date)
+            return (Date) rawDate;
+        else if(rawDate instanceof String)
+            try {
+                return Utils.formISO8601((String) rawDate);
+            } catch (IOException e) {
+                // nothing
+            }
+
+        setDate(new Date());
+        return getDate();
     }
 
     @Override
@@ -39,7 +51,7 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
 
     @Override
     public Object getId() {
-        return this.getOrDefault("id",this.getOrDefault("ID",this.getOrDefault("Id",this.getOrDefault("@iot.id",this.getOrDefault("bn",null))))).toString();
+        return this.getOrDefault("id",this.getOrDefault("ID",this.getOrDefault("Id",this.getOrDefault("@iot.id",this.getOrDefault("bn","Auto:"+UUID.randomUUID().toString()))))).toString();
     }
 
     @Override
@@ -89,6 +101,19 @@ public class RawEvent extends ConcurrentHashMap implements EventEnvelope<Object,
     @Override
     public void setClassTopic(String topic) {
         defaultTopic = topic;
+    }
+
+    @Override
+    public String getURL() {
+        Object ret = this.getOrDefault("url", this.getOrDefault("URL", this.get("Url")));
+        if(ret!=null)
+            return ret.toString();
+        return null;
+    }
+
+    @Override
+    public void setURL(String URL) {
+        this.put("url",URL);
     }
 
     @Override

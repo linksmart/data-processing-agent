@@ -3,10 +3,10 @@ package eu.linksmart.services.event.ceml.evaluation.evaluators;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
-import eu.linksmart.services.event.ceml.evaluation.evaluators.base.GenericEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.metrics.base.ModelEvaluationMetricBase;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 import eu.linksmart.api.event.ceml.evaluation.metrics.ModelEvaluationMetric;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import java.util.*;
 
@@ -14,8 +14,33 @@ import java.util.*;
  * Created by devasya on 7/20/2016.
  * For evaluating regression
  */
-public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
+@JsonDeserialize(as = RegressionEvaluator.class)
+public class RegressionEvaluator extends GenericEvaluator<Number> {
 
+
+    public LinkedList<Map.Entry<Number, Number>> getFixedSizeList() {
+        return fixedSizeList;
+    }
+
+    public void setFixedSizeList(LinkedList<Map.Entry<Number, Number>> fixedSizeList) {
+        this.fixedSizeList = fixedSizeList;
+    }
+
+    public List<Map.Entry<Number, Number>> getLatestEntries() {
+        return latestEntries;
+    }
+
+    public void setLatestEntries(List<Map.Entry<Number, Number>> latestEntries) {
+        this.latestEntries = latestEntries;
+    }
+
+    public int getMaxQueueSize() {
+        return maxQueueSize;
+    }
+
+    public void setMaxQueueSize(int maxQueueSize) {
+        this.maxQueueSize = maxQueueSize;
+    }
 
     LinkedList<Map.Entry<Number,Number>> fixedSizeList = new LinkedList<>();
     List<Map.Entry<Number,Number>> latestEntries = new LinkedList<>();
@@ -48,11 +73,13 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
 
     @Override
-    public double evaluate(Collection<Number> predicted, Collection<Number>  actual) { // O(n*m) -> O(n^2)
+    public double evaluate(List<Number> predicted, List<Number>  actual) { // O(n*m) -> O(n^2)
         latestEntries.clear();
 
         Iterator<Number> iteratorPredicted = predicted.iterator();
-        for (Number actualEntry : actual) { // O(n)
+        for (int i=0; i<actual.size();i++) { // O(n)
+            List<Number> list = new ArrayList<>(actual);
+            Number actualEntry = list.get(i);
             Number predictedEntry = iteratorPredicted.next();
             if(actualEntry.equals(Double.NaN) || predictedEntry.equals(Double.NaN))
                 continue;
@@ -79,15 +106,30 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         return accumulateMetric/(i);
     }
 
-
-    public class RMSE extends ModelEvaluationMetricBase{
-        private static final int MAX_NUMBER_FOR_AVG = 10000;
-        private long N = 0; //fading increment
-        public RMSE(ComparisonMethod method, Double target) {
-            super(ComparisonMethod.Less, target);
+    public abstract class RegressionMetricBase extends ModelEvaluationMetricBase{
+        public  RegressionMetricBase(Double target){
+            super(target);
+            method = ComparisonMethod.Less;
             currentValue = 100.0;
         }
+        public  RegressionMetricBase(){
+            method = ComparisonMethod.Less;
+            currentValue = 100.0;
+            target = 0.0;
+        }
 
+    }
+    public class RMSE extends RegressionMetricBase{
+        private static final int MAX_NUMBER_FOR_AVG = 10000;
+        private long N = 0; //fading increment
+
+        public  RMSE(){
+            super();
+        }
+
+        public  RMSE(Double target){
+            super(target);
+        }
         @Override
         public Double calculate() {
             if(!(latestEntries.size() >0))
@@ -97,8 +139,8 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
             double squaredSum = 0.0;
             for(Map.Entry entry:latestEntries){
 //                Map.Entry entry = latestEntries.get(latestEntries.size()-1);
-                Double predicted = (Double) entry.getKey();
-                Double actual = (Double) entry.getValue();
+                Double predicted = ((Number) entry.getKey()).doubleValue();
+                Double actual = ((Number) entry.getValue()).doubleValue();
                 double diff =  actual-predicted;
                 squaredSum += diff * diff;
             }
@@ -116,13 +158,16 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
     }
 
-    public class MAE extends ModelEvaluationMetricBase{
+    public class MAE extends RegressionMetricBase{
+        public  MAE(){
+            super();
+        }
+
+        public  MAE(Double target){
+            super(target);
+        }
         private static final int MAX_NUMBER_FOR_AVG = 10000;
         private long N = 0; //fading increment
-        public MAE(ComparisonMethod method, Double target) {
-            super(ComparisonMethod.Less, target);
-            currentValue = 100.0;
-        }
 
         @Override
         public Double calculate() {
@@ -131,8 +176,8 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
 
             double absErrorSum = 0.0;
             for(Map.Entry entry:latestEntries){
-                Double predicted = (Double) entry.getKey();
-                Double actual = (Double) entry.getValue();
+                Double predicted = ((Number) entry.getKey()).doubleValue();
+                Double actual = ((Number) entry.getValue()).doubleValue();
                 double diff =  actual-predicted;
                 absErrorSum += Math.abs(diff);
 
@@ -154,7 +199,14 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
     Overal Picture: https://en.wikipedia.org/wiki/Akaike_information_criterion
     More can be found here :http://www.ijcaonline.org/journal/number5/pxc387242.pdf
      */
-    public class AICc extends ModelEvaluationMetricBase{
+    public class AICc extends RegressionMetricBase{
+        public  AICc(){
+            super();
+        }
+
+        public  AICc(Double target){
+            super(target);
+        }
         private static final int DAYS_A_WEEK = 7 ;
         private static final int HOURS_A_DAY =24;
         private long N = 0; //fading increment
@@ -165,11 +217,6 @@ public class RegressionEvaluator extends GenericEvaluator<Collection<Number>> {
         int numHidden= (Integer) parameters.get("numHiddenNodes");
 
         int freeParamCount =((prev+prevSeasonal*24)*numHidden+ numHidden* HOURS_A_DAY)*DAYS_A_WEEK;
-
-        public AICc(ComparisonMethod method, Double target) {
-            super(ComparisonMethod.Less, target);
-            avgResidualSquare = 0;
-        }
 
         @Override
         public Double calculate() {

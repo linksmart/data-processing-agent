@@ -37,7 +37,6 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     protected final boolean VALIDATION_MODE;
     private final MessageValidator validator;
 
-    private final ConcurrentMap<String,Boolean> myKnownTopics = new ConcurrentHashMap();
 
     //End of code made for testing performance
 
@@ -77,7 +76,13 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     }
     @Override
     public void update(String topic, MqttMessage mqttMessage)  {
+        logging(mqttMessage);
 
+        mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
+
+        if(VALIDATION_MODE) toValidation(mqttMessage.getTopic(),  mqttMessage.getPayload());
+    }
+    private void logging(MqttMessage mqttMessage){
         debugCount=(debugCount+1)%Long.MAX_VALUE;
         try {
             if(debugCount%conf.getInt(Const.LOG_DEBUG_NUM_IN_EVENTS_REPORTED_CONF_PATH) == 0)
@@ -89,12 +94,6 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
                 loggerService.debug(AgentUtils.getDateNowString() + " message arrived with topic: " +  mqttMessage.getTopic());
 
         }
-        // check if message is mine (true) or not (false)
-        myKnownTopics.putIfAbsent(topic,topic.contains(ThingsRegistrationService.getReference().getThing().getId().toString()));
-        if(!myKnownTopics.get(topic))
-            mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());
-
-        if(VALIDATION_MODE) toValidation(mqttMessage.getTopic(),  mqttMessage.getPayload());
     }
 
     protected abstract void mangeEvent(String topic, byte[] payload) ;
@@ -111,7 +110,9 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
     }
     protected void publishFeedback(ErrorResponseException e){
         try {
-            brokerService.publish(e.getRequestResponse().getTopic(), e.getMessage());
+            List<String> topics = e.getRequestResponse().getTopics();
+            for(String topic : topics)
+            brokerService.publish(topic, e.getMessage());
         } catch (Exception ex) {
 
             loggerService.error(e.getMessage(), e);

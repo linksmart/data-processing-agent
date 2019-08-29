@@ -82,7 +82,8 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
 
         if(bt!=null && bt instanceof Long)
             event.setBt((Long) bt);
-
+        else if(bt!=null && bt instanceof Integer)
+            event.setBt( Long.valueOf((Integer) bt));
         if(bu!=null && bu instanceof String)
             event.setBu((String)bu);
 
@@ -90,7 +91,17 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
             event.setVer((Short) ver);
 
         if(n!=null || v!=null || sv!=null|| bv!=null|| s!=null|| t!=null|| ut!=null){
-            Measurement m = new Measurement();
+            event.setE(factory(n, u, v, sv, bv, s, t, ut));
+        }
+
+        return event;
+
+
+    }
+    static public Measurement factory(Object n, Object u, Object v, Object sv, Object bv, Object s, Object t, Object ut){
+        Measurement m = new Measurement();
+        if(n!=null || v!=null || sv!=null|| bv!=null|| s!=null|| t!=null|| ut!=null){
+
             if(n!=null && n instanceof String)
                 m.setN((String) n);
             if(u!=null && u instanceof String)
@@ -105,14 +116,16 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
                 m.setS((Double) s);
             if(t!=null && t instanceof Long)
                 m.setT((Long) t);
+            else if(t!=null && t instanceof Integer)
+                m.setT( Long.valueOf((Integer) t));
+
             if(ut!=null && ut instanceof Long)
                 m.setUt((Long) ut);
-            event.setE(m);
+            else if(ut!=null && ut instanceof Integer)
+                m.setUt( Long.valueOf((Integer) ut));
+
         }
-
-        return event;
-
-
+        return m;
     }
     static public SenML factory(Object bn, Object n, Object autoValue){
 
@@ -143,6 +156,7 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
         bu = null;
         ver = null;
         value = new Vector<>();
+        date=new Date(0L);
     }
 
     @Override
@@ -163,7 +177,8 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
     public void setAttributeId(String value) {
         if(this.value ==null)
             this.value = new Vector<>();
-
+        if(this.value.isEmpty())
+            this.value.add(new Measurement());
         this.getLast().setAttributeId(value);
     }
 
@@ -253,6 +268,8 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
     public void addValue(Object value) {
         this.value.add(new Measurement());
         this.value.lastElement().setAutoValue(value);
+        if(date!= null && date.getTime()!= 0L && this.value.lastElement().getDate()!=null && this.value.lastElement().getDate().getTime()!=0L)
+            this.value.lastElement().setDate(new Date(0));
 
     }
     @JsonIgnore
@@ -356,6 +373,12 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
     @Override
     public void setClassTopic(String topic) {
         defaultTopic = topic;
+    }
+    @JsonIgnore
+    public SenML addMeasurement(Object n, Object u, Object v, Object sv, Object bv, Object s, Object t, Object ut){
+
+        value.addElement(factory(n, u, v, sv, bv, s, t, ut));
+        return this;
     }
 
     /**
@@ -545,35 +568,43 @@ public class SenML extends Event<String,Vector<SenML.Measurement>> implements Ev
 
         @JsonIgnore
         public void setAutoValue(Object value){
-             if (value instanceof Long){
-                setT((Long)value);
-            }else if (value instanceof Number){
-                this.value = (Number)value;
+            if(value!=null) {
+                if (Double.class.isAssignableFrom(value.getClass()) || value instanceof Double || value instanceof Float || value.getClass() == double.class || value.getClass() == float.class ) {
+                    this.value = (double) value;
 
-            } else if (value instanceof Boolean){
-                bv = (Boolean)value;
+                }else if (Integer.class.isAssignableFrom(value.getClass()) || value instanceof Integer || value instanceof Short || value.getClass() == int.class || value.getClass() == short.class ) {
+                    this.value = (int) value;
 
-            }else if (value instanceof String){
-                sv = value.toString();
+                }else if (Long.class.isAssignableFrom(value.getClass()) || value instanceof Long || value.getClass() == long.class ) {
+                    this.value = (long) value;
 
-            }else if( value instanceof Map || value instanceof Collection){
-                 ObjectMapper mapper = new ObjectMapper();
-                 try {
-                     sv = mapper.writeValueAsString(value);
-                 } catch (JsonProcessingException e) {
-                     SenML.loggerService.error(e.getMessage(),e);
-                 }
+                }else if (Number.class.isAssignableFrom(value.getClass()) || value instanceof Number) {
+                    this.value = (Number) value;
 
-             }else {
-                 ObjectMapper mapper = new ObjectMapper();
-                 try {
-                     sv = mapper.writeValueAsString(value);
-                 } catch (JsonProcessingException e) {
-                     SenML.loggerService.error(e.getMessage(),e);
-                 }
-             }
+                } else if (Boolean.class.isAssignableFrom(value.getClass()) || value instanceof Boolean) {
+                    bv = (Boolean) value;
 
+                } else if (String.class.isAssignableFrom(value.getClass()) || value instanceof String) {
+                    sv = value.toString();
 
+                } else if (Map.class.isAssignableFrom(value.getClass()) || value instanceof Map || value instanceof Collection) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        sv = mapper.writeValueAsString(value);
+                    } catch (JsonProcessingException e) {
+                        SenML.loggerService.error(e.getMessage(), e);
+                    }
+
+                } else {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        sv = mapper.writeValueAsString(value);
+                    } catch (JsonProcessingException e) {
+                        SenML.loggerService.error(e.getMessage(), e);
+                    }
+                }
+
+            }
         }
 
         @JsonIgnore

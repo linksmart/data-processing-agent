@@ -1,14 +1,21 @@
 package eu.linksmart.services.event.cep.tooling;
 
-import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTEntityEvent;
-import eu.almanac.event.datafusion.utils.payload.IoTPayload.IoTProperty;
-import eu.almanac.ogc.sensorthing.api.datamodel.Observation;
+
+import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
+import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
+import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
+import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
+import eu.linksmart.services.payloads.ogc.sensorthing.Sensor;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.DatastreamImpl;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
+import eu.linksmart.services.payloads.ogc.sensorthing.linked.SensorImpl;
 import eu.linksmart.services.utils.function.Utils;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.util.Assert;
 //import eu.almanac.ogc.sensorthing.api.datamodel.*;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Observation;
 //import it.ismb.pertlab.ogc.sensorthings.api.datamodel.Sensor;
@@ -19,6 +26,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,37 +39,12 @@ public class Tools {
     }
 
 
-    static public String lastObservationOfProperty(IoTEntityEvent entity, String property ){
-
-      return  entity.getProperties(property).getIoTStateObservation(0).getValue();
-    }
-    static public String lastObservationLikeProperty(IoTEntityEvent entity, String property ){
-
-        for (IoTProperty p: entity.getProperties())
-            if(p.getAbout().contains(property)) {
-
-                return p.getIoTStateObservation().get(0).getValue();
-            }
-
-        return null;
-    }
     static public String generateRandomAbout(){
 
         return UUID.randomUUID().toString().replace("-","_").replace("#","_");
     }
 
-    static public Observation ObservationFactory(Object event, String resultType, String StreamID, String sensorID, long time){
-        Observation ob = Observation.factory(event,resultType,StreamID,sensorID,time);
-         /*if(Configurator.getDefaultConfig().getBoolean(Const.SIMULATION_EXTERNAL_CLOCK))
-           try {
-                if(ob.getPhenomenonTime().after(getDateNow()))
-                    EsperEngine.getEngine().setEngineTimeTo(ob.getDate());
-            } catch (Exception e) {
-                LogManager.getLogger(Tools.class).error(e.getMessage(),e.getCause());
-            }*/
-        return ob;
 
-    }
 
     static public String getIsoTimeFormat(){
         return Utils.isoFormatMSTZ.toString();
@@ -87,9 +70,23 @@ public class Tools {
         return dateFormat;
 
     }
+    static public EventEnvelope randomEvent(String thingId, String streamID,int min, int max){
+        try {
+            return EventBuilder.getBuilder().factory(thingId, streamID,  ThreadLocalRandom.current().nextInt(min, max + 1),(new Date()).getTime(),null, new Hashtable<>());
+        } catch (UntraceableException e) {
+            return null;
+        }
+    }
+
     static public String getDateNowString(){
         return getDateFormat(getIsoTimeFormat(), "UTC").format(new Date());
     }
+
+    //give current timestamp in a format that GOST server understands
+    static public String getDateNowWithoutTimeZone() {
+        return Utils.isoFormatMSWTZ.format(Date.from(java.time.Instant.now()));
+    }
+
     static private String toTimestamp(Date date){
 
         return getDateFormat(getEsperTimeFormat(), "UTC").format(date);
@@ -183,25 +180,62 @@ public class Tools {
             return result;
     }
 
-    static public Object[] addAll(Object o, Object o2){
-        if(o instanceof Object[] && o2 instanceof Object[] ){
-            return ArrayUtils.addAll((Object[])o,(Object[])o2);
+    static public List addAll(Object o, Object o2) {
+        List ret = new ArrayList();
+        if (Object[].class.isAssignableFrom(o.getClass())) {
+            return addAll(Arrays.stream((Object[]) o).collect(Collectors.toCollection(ArrayList::new)), o2);
+        } else if (Object[].class.isAssignableFrom(o2.getClass())) {
+            return addAll(o, Arrays.stream((Object[]) o2).collect(Collectors.toCollection(ArrayList::new)));
         }
-        if(o instanceof List ){
-            return addAll(((List) o).toArray(),  o2);
+        if (!List.class.isAssignableFrom(o.getClass()) && Collection.class.isAssignableFrom(o.getClass())) {
+            return addAll(new ArrayList((Collection) o), o2);
 
-        }
-        if(o2 instanceof List ){
-            return addAll(o,  ((List) o2).toArray());
+        } else if (!List.class.isAssignableFrom(o2.getClass()) && Collection.class.isAssignableFrom(o2.getClass())) {
+            return addAll(o, new ArrayList((Collection) o2));
 
+        } else if (!List.class.isAssignableFrom(o.getClass())) {
+            ret.add(o);
+            return addAll(ret, o2);
+
+        } else if (List.class.isAssignableFrom(o.getClass()) && List.class.isAssignableFrom(o2.getClass())) {
+            ret.addAll(((List) o));
+            ret.addAll(((List) o2));
+
+        } else if (List.class.isAssignableFrom(o.getClass()) && !List.class.isAssignableFrom(o2.getClass())) {
+            ret.addAll(((List) o));
+            ret.add(o2);
+
+        }else {
+            ret.add(o);
+            ret.add(o2);
         }
-        if(o instanceof Object[] ){
-            return ArrayUtils.addAll((Object[])o, Collections.singletonList(o2));
+        return ret;
+    }
+    static public List flatArrayOfListToList(List[] array){
+        List ret = new ArrayList();
+        for(List subList: array)
+            ret.addAll(subList);
+
+        return ret;
+    }
+    static public List ifNullReplaceList(Object original, int size){
+        if(original==null) {
+
+
+            return new ArrayList<Integer>(Collections.nCopies(size, 0));
         }
-        if(o2 instanceof Object[] ){
-            return ArrayUtils.addAll( new Object[]{o}, (Object[])o2) ;
-        }
-        return new Object[]{o,o2};
+        return new ArrayList((Collection) original);
+
+    }
+    static public List addAll(List o, Object o2) {
+        return addAll((Object) o,(Object)o2);
+    }
+    static public List addAll(List o, List o2) {
+        return addAll((Object) o,(Object)o2);
+    }
+
+    static public List addAll(Object o, List o2) {
+        return addAll((Object) o,(Object)o2);
     }
     static public Object[] removeAll(Object o, Object o2){
         List<Object> list=null, list2=null, result;
@@ -359,72 +393,115 @@ public class Tools {
         }
         return map;
     }
-   static public int CompositionOrder(Object values ){
-        final Map<Object,Integer> map =new HashMap();
-        map.put("ds_1-0", 1);
-        map.put("ds_2-0", 2);
-        map.put("ds_3-0", 3);
-        map.put("ds_1-1", 4);
-        map.put("ds_2-1", 5);
-        map.put("ds_3-1", 6);
-        map.put("ds_1-2", 7);
-        map.put("ds_2-2", 8);
-        map.put("ds_3-2", 9);
-        map.put("ds_1-3", 10);
-        map.put("ds_2-3", 11);
-        map.put("ds_3-3", 12);
-        map.put("ds_1-4", 13);
-        map.put("ds_2-4", 14);
-        map.put("ds_3-4", 15);
-        map.put("ds_1-5", 16);
-        map.put("ds_2-5", 17);
-        map.put("ds_3-5", 18);
-        map.put("ds_1-6", 19);
-        map.put("ds_2-6", 20);
-        map.put("ds_3-6", 21);
-        map.put("ds_1-7", 22);
-        map.put("ds_2-7", 23);
-        map.put("ds_3-7", 24);
-        map.put("ds_1-8", 25);
-        map.put("ds_2-8", 26);
-        map.put("ds_3-8", 27);
-        map.put("ds_1-9", 28);
-        map.put("ds_2-9", 29);
-        map.put("ds_3-9", 30);
-        map.put("ds_1-10", 31);
-        map.put("ds_2-10", 32);
-        map.put("ds_3-10", 33);
-        map.put("ds_1-11", 34);
-        map.put("ds_2-11", 35);
-        map.put("ds_3-11", 36);
-        map.put("ds_1-12", 37);
-        map.put("ds_2-12", 38);
-        map.put("ds_3-12", 39);
-        map.put("ds_1-14", 40);
-        map.put("ds_2-14", 41);
-        map.put("ds_3-14", 42);
-        map.put("ds_1-15", 43);
-        map.put("ds_2-15", 44);
-        map.put("ds_3-15", 45);
-        map.put("ds_1-16", 46);
-        map.put("ds_2-16", 47);
-        map.put("ds_3-16", 48);
-        map.put("ds_1-17", 49);
-        map.put("ds_2-17", 50);
-        map.put("ds_3-17", 51);
-        map.put("ds_1-18", 52);
-        map.put("ds_2-18", 53);
-        map.put("ds_3-18", 54);
-        map.put("ds_1-19", 55);
-        map.put("ds_2-19", 56);
-        map.put("ds_3-19", 57);
-        map.put("ds_1-55", 58);
-        map.put("ds_2-55", 59);
-        map.put("ds_3-55", 60);
-       return sort(map, values);
+
+    static public Observation[] gapFillUp(Observation[] observations, int finalSize){
+        if(finalSize<=observations.length)
+            return observations;
+
+        Observation[] ret = new Observation[finalSize];
+        int pointer =0;
+
+        for (int i=0; i < observations.length-1;i++){
+            int diff=0;
+            if(( diff = (Integer.valueOf(observations[i+1].getDatastream().getId().toString().split("-")[1]) - Integer.valueOf(observations[i].getDatastream().getId().toString().split("-")[1]) ) )> 1) {
+                for (int j = 0; j < diff; j++) {
+                    if (pointer + j > ret.length)
+                        return ret;
+                    else {
+                        Sensor sensor = new SensorImpl();
+                        sensor.setId(observations[i].getDatastream().getSensor().getId().toString().split("-")[0]+"-"+observations[i].getDatastream().getSensor().getId().toString().split("-")[1]+j);
+                        Datastream datastream = new DatastreamImpl();
+                        datastream.setId(observations[i].getDatastream().getId().toString().split("-")[0]+"-"+observations[i].getDatastream().getId().toString().split("-")[1]+j);
+                        Observation observation = new ObservationImpl();
+                        observation.setDate(observations[i].getDate());
+                        observation.setResult(0);
+                        observations[pointer] = observation;
+                        pointer++;
+                    }
+                }
+
+
+            }
+
+            ret[pointer] = observations[i];
+            pointer++;
+
+        }
+
+        ret[pointer] = observations[observations.length-1];
+
+        return ret;
+    }
+    static public ArrayList<Observation> fillUp(ArrayList<Observation> observations, int startIndex , int finalSize){
+
+        try {
+
+            if(finalSize<=observations.size()  || observations.size() < 1)
+                return observations;
+            ArrayList<Observation>  ret = new ArrayList<Observation>(finalSize);
+            String idDSBase = observations.get(0).getDatastream().getId().toString().split("-")[0], idSBase = idDSBase.replace("ds_", "");
+
+            int pointer = 0;
+
+            for(int i=0; i<finalSize;i++) {
+
+                if(pointer < observations.size() && observations.get(pointer).getDatastream().getId().equals(idDSBase+"-"+(startIndex+i))){
+                    if(ret.size()>=startIndex+i)
+                        ret.set(i, observations.get(pointer));
+                    else
+                            ret.add(observations.get(pointer));
+                    pointer++;
+                } else {
+
+                    ret.add((Observation) EventBuilder.getBuilder(Observation.class).factory(idSBase + "-" + (startIndex + i),idDSBase + "-" + (startIndex + i),0,observations.get(0).getDate(),"",new Hashtable<>()));
+
+                }
+                Assert.isTrue(i!=ret.size(), "Mismatch adding values in the list");
+            }
+            if(ret.size()!=finalSize)
+                System.err.println("The final list expected "+ret.size()+" is "+finalSize);
+
+            return ret;
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+            return observations;
+        }
     }
 
+
+    static public Collection<Observation> singleFillUp(Observation observation, int startIndex , int finalSize){
+        ArrayList<Observation> ret = new ArrayList();
+        ret.add(observation);
+        return fillUp(ret,startIndex,finalSize);
+    }
+    static public Collection<Observation> multiFillUp(Object[] observations, int startIndex , int finalSize){
+        ArrayList<Observation> ret = new ArrayList(Arrays.asList(observations));
+
+        return fillUp(ret,startIndex,finalSize);
+    }
+    static public Collection<Observation> multiFillUp(ArrayList observations, int startIndex , int finalSize){
+
+        return fillUp(observations,startIndex,finalSize);
+    }
+    static public Collection<Observation> multiFillUp(Collection observations, int startIndex , int finalSize){
+        ArrayList<Observation> ret = new ArrayList(observations);
+
+        return fillUp(ret,startIndex,finalSize);
+    }
+    static public Object[] mapToArray(Map map, List<String> order){
+        Object[] re = new Object[order.size()];
+        int i=0;
+        for(String key: order ){
+            re[i]=map.get(key);
+            i++;
+        }
+
+        return re;
+    }
     static private int sort(Map<Object,Integer> map, Object values ){
+
 
         if(values instanceof ObservationImpl){
             return map.get(((ObservationImpl) values).getDatastream().getId().toString());
@@ -447,5 +524,83 @@ public class Tools {
 
         return sort(map,values);
     }
+    static public Collection<Observation> emptyListOf(Object value,String StreamBase, String SensorBase, int startIndex , int finalSize){
+        ArrayList<Observation> ret = new ArrayList<>();
+        for(int i=0; i<finalSize;i++){
+            try {
+                ret.add((Observation) EventBuilder.getBuilder(Observation.class).factory(SensorBase + "-" + (startIndex + i), StreamBase + "-" + (startIndex + i),value,(new Date()),"",new Hashtable<>()));
+            } catch (UntraceableException e) {
+                e.printStackTrace();
+            }
+        }
+        return ret;
+    }
+    static private Date lastKnownTime = null;
+    static private Set<String> sent = new HashSet<>();
+    static synchronized public Collection<Observation> timeSegmentation(ObservationImpl[] observations) {
 
+        if (observations.length != 0) {
+            Observation first = observations[0];
+            if (lastKnownTime == null)
+                lastKnownTime = first.getPhenomenonTime();
+            else if (lastKnownTime.before(first.getPhenomenonTime())) {
+                sent = new HashSet<>();
+            }
+            ArrayList<Observation> ret = new ArrayList<>();
+            ret.add(first);
+
+            for (Observation i : observations)
+                if (i != first)
+                    if (i.getPhenomenonTime().equals(first.getPhenomenonTime())) {
+                        return ret;
+                    } else if (!sent.contains(i.getId().toString())) {
+                        ret.add(i);
+                        sent.add(i.getId().toString());
+                    }
+
+            return ret;
+        } else
+            return null;
+    }
+    static public Object test(Object observations){
+        if(observations instanceof Collection && ((Collection)observations).size()!= 196)
+            System.out.println("");
+        else if (observations instanceof Object[] && ((Collection)observations).size()!= 196)
+            System.out.println("");
+        return observations;
+    }
+
+    static public boolean validate(Collection observations) {
+        int j = 0;
+        int batchNo = -1;
+        boolean collections =false;
+        for (Object i : observations) {
+            if (i instanceof Collection) {
+                validate((Collection) i);
+                collections = true;
+            }else if (i instanceof Integer) {
+                if (!i.equals(j))
+                   return false;
+            } else if (i instanceof Double) {
+                String[] vals = i.toString().split(".");
+                if (vals.length == 2) {
+                    if (batchNo == -1)
+                        batchNo = Integer.valueOf(vals[1]);
+                    if (!Integer.valueOf(vals[1]).equals(batchNo) && !Integer.valueOf(vals[0]).equals(j))
+                        return false;
+                }
+
+            } else
+                return false;
+            if(batchNo!=-1 && j>240){
+                batchNo++;
+            }
+            if(j>240)
+                j=0;
+            else
+                j++;
+        }
+
+        return true;
+    }
 }

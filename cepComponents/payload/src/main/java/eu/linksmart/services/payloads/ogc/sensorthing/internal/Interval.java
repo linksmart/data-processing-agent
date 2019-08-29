@@ -2,15 +2,15 @@ package eu.linksmart.services.payloads.ogc.sensorthing.internal;
 
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import eu.linksmart.services.utils.function.Utils;
-import org.apache.sis.io.IO;
+//import org.apache.sis.io.IO;
 
-import javax.xml.bind.DatatypeConverter;
+//import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
+//import java.text.ParseException;
+//import java.text.SimpleDateFormat;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
+//import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
 /**

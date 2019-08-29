@@ -91,7 +91,11 @@ public  class MultiResourceResponses<ResourceObject> implements HTTPResponses<Ma
     @Override
     @JsonIgnore
     public int getOverallStatus() {
+
+        if(overallStatus==0 && !generalRequestResponses.isEmpty())
+            generalRequestResponses.forEach(response->overallStatus=response.getStatus()>overallStatus?response.getStatus():overallStatus);
         return overallStatus;
+
     }
 
     @Override

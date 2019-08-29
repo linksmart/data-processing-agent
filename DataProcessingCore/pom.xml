@@ -4,7 +4,7 @@
     <parent>
         <groupId>eu.linksmart.services.events</groupId>
         <artifactId>parent</artifactId>
-        <version>1.8.0</version>
+        <version>1.9.0-SNAPSHOT</version>
     </parent>
     <artifactId>data.procesing.core</artifactId>
 
@@ -24,7 +24,11 @@
             <artifactId>utils</artifactId>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>2.4.0</version>
+        </dependency>
         <dependency>
             <groupId>eu.linksmart.services.events</groupId>
             <artifactId>payload</artifactId>
@@ -38,6 +42,17 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+
+        <dependency>
+  	    <groupId>org.apache.commons</groupId>
+    	    <artifactId>commons-email</artifactId>
+        </dependency>
+
+	<dependency>
+	    <groupId>commons-validator</groupId>
+	    <artifactId>commons-validator</artifactId>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/cglib/cglib-nodep -->
         <dependency>
             <groupId>cglib</groupId>
@@ -70,7 +85,11 @@
             <artifactId>spring-boot-dependencies</artifactId>
             <type>pom</type>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
         <!-- Swagger dependencies -->
         <dependency>
             <groupId>io.springfox</groupId>

@@ -5,6 +5,7 @@ import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.ceml.evaluation.metrics.EvaluationMetric;
 
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,8 +13,7 @@ import java.util.Map;
  */
 //@JsonDeserialize(as = DoubleTumbleWindowEvaluator.class)
 public interface Evaluator<T> extends JsonSerializable {
-     double evaluate(T predicted, T actual);
-
+     double evaluate(List<T> predicted, List<T> actual);
      boolean isDeployable();
 
     //void build(DataDescriptors classesNames) throws Exception;

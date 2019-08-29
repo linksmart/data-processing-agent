@@ -39,6 +39,7 @@ import java.util.function.Function;
  * @see eu.linksmart.api.event.types.JsonSerializable
  *
  * */
+@Deprecated
 public interface ClassesDescriptor extends DataDescriptor {
     /**
      * Creates an DataDescriptor of the reference implementation of a ClassesDescriptorInstance

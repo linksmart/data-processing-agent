@@ -1,0 +1,46 @@
+version: '3'
+services:
+  main_broker:
+    image: eclipse-mosquitto
+  sc:
+    image: linksmart/sc:latest
+    depends_on:
+      - main_broker
+    links:
+      - main_broker
+    environment:
+      - SC_MQTT_CLIENT_BROKERURI=tcp://main_broker:1883
+  agent:
+    image: linksmart/la:snapshot
+    hostname: agent
+    depends_on:
+      - sc
+      - main_broker
+    links:
+      - main_broker
+      - sc
+    environment:
+      - linksmart_service_catalog_endpoint=http://sc:8082
+  it:
+    image: maven:3.6-jdk-10
+    volumes:
+      - ../../:/data/
+    depends_on:
+      - main_broker
+      - sc
+      - agent
+    links:
+      - main_broker
+      - sc
+      - agent
+    environment:
+      - filename=/data/agent/test/agentRegistration.json
+      - base_url=http://sc:8082
+      - service_url=http://agent:8319
+    working_dir: /data/sc/integration-test/registration3rdService
+    command:
+      - mvn
+      - -B
+      - -Dtest=*
+      - -D'ls.sc.version'=`jq -r .info.version /data/sc/apidoc/swagger.json`
+      - test

@@ -1,8 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.linksmart.api.event.exceptions.TraceableException;
@@ -15,6 +13,7 @@ import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.DatastreamNavigationLink;
 import eu.linksmart.services.payloads.ogc.sensorthing.links.FeatureOfInterestNavigationLink;
 import eu.linksmart.services.utils.function.Utils;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Period;
@@ -57,6 +56,10 @@ import java.util.UUID;
 @JsonSerialize(as = ObservationImpl.class)
 public interface Observation extends EventEnvelope<Object,Object>, CommonControlInfo, FeatureOfInterestNavigationLink,DatastreamNavigationLink {
 
+
+    static Observation factory(Object event, Object StreamID, Object sensorID, long time){
+        return ObservationImpl.factory((Object)event,(Object)StreamID,sensorID,time);
+    }
     /**
      * Gets the phenomenon time as a Date.
      * The phenomenon time is the time instant or period of when the Observation happens.
@@ -152,7 +155,7 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
      * */
     @JsonPropertyDescription("The time period during which the result may be used.")
     @JsonGetter(value = "parameters")
-    List<Pair<String,Object>> getParameters();
+    List<MutablePair<String,Object>> getParameters();
     /**
      * Sets the parameters time with the given Array of objects.
      * Key-value pairs showing the environmental conditions during measurement.
@@ -162,7 +165,7 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
      * */
     @JsonPropertyDescription("The time period during which the result may be used.")
     @JsonSetter(value = "parameters")
-    void setParameters(List<Pair<String,Object>> parameters);
+    void setParameters(List<MutablePair<String,Object>> parameters);
     /**
      * Gets the related FeatureOfInterest of this observation.
      *
@@ -171,6 +174,7 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
      * @return FeatureOfInterest of this observation
      *
      * */
+    @JsonIgnore
     @JsonGetter("featureOfInterest")
     @JsonPropertyDescription("An Observation observes on one-and-only-one FeatureOfInterest. One FeatureOfInterest could be observed by zero-to-many Observations.")
     FeatureOfInterest getFeatureOfInterest();
@@ -264,6 +268,24 @@ public interface Observation extends EventEnvelope<Object,Object>, CommonControl
     default void destroy() throws Exception {
 
     }
+
+    @Override
+    @JsonIgnore
+    @JsonPropertyDescription("id is the system-generated identifier of an entity.")
+    @JsonSetter(value = "@iot.id")
+    Object getId();
+
+    /**
+     * Sets the ID of the specific model entry instance, as a String
+     *
+     * @param id
+     *            the id to set
+     */
+
+    @Override
+    @JsonProperty(value = "@iot.id")
+    @JsonSetter(value = "@iot.id")
+    void setId(Object id);
 
 
     /*

@@ -11,24 +11,25 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDescriptors{
-    @JsonProperty("InputSize")
+    @JsonProperty("inputSize")
     protected   int inputSize=-1;
-    @JsonProperty("TargetSize")
+    @JsonProperty("targetSize")
     protected   int targetSize=-1;
-    @JsonProperty("TotalInputSize")
+    @JsonProperty("totalInputSize")
     protected   int totalInputSize=-1;
     protected  List<DataDescriptor> input= new ArrayList<>(), targets= new ArrayList<>();
     protected  boolean lambdaTypes = false;
-    @JsonProperty("Name")
+    @JsonProperty("name")
     protected String name = "noSet";
-    @JsonProperty("NativeType")
+    @JsonProperty("nativeType")
     protected Class javaType=DataDefinition.class;
 
     @JsonProperty("isTarget")
     protected boolean target =false;
 
-    @JsonProperty("Type")
+    @JsonProperty("type")
     protected DescriptorTypes type= DescriptorTypes.NUMBER;
 
     public DataDefinition(){
@@ -174,6 +175,7 @@ public class DataDefinition extends ArrayList<DataDescriptor>  implements DataDe
         return javaType;
     }
 
+    @JsonProperty("name")
     @Override
     public String getName() {
         return name;

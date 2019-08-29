@@ -24,6 +24,7 @@ package eu.almanac.ogc.sensorthing.api.datamodel;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
+@Deprecated
 public abstract class OGCSensorThingsAPIDataModelEntry
 {
 	// the unique identifier associated to any data model entry

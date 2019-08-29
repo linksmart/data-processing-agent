@@ -13,7 +13,7 @@ import java.util.Map;
 public interface EventBuilder<IDType, ValueType, Event extends EventEnvelope<IDType,ValueType>> {
 
     @JsonIgnore
-    default EventEnvelope factory(Object id, Object attributeID, Object value, long time, Map<String, Object> additionalAttributes) throws UntraceableException {
+    default EventEnvelope factory(Object id, Object attributeID, Object value, long time,Object url, Map<String, Object> additionalAttributes) throws UntraceableException {
         EventEnvelope event;
         try {
             event = BuilderOf().newInstance();
@@ -37,8 +37,8 @@ public interface EventBuilder<IDType, ValueType, Event extends EventEnvelope<IDT
 
     }
     @JsonIgnore
-    default EventEnvelope factory(String id, String attributeID, Object value, long time, Map<String, Object> additionalAttributes) throws UntraceableException {
-        return factory((Object)id, (Object)attributeID,value,time,additionalAttributes);
+    default EventEnvelope factory(String id, String attributeID, Object value, long time,String url, Map<String, Object> additionalAttributes) throws UntraceableException {
+        return factory((Object)id, (Object)attributeID,value,time,url,additionalAttributes);
 
     }
 
@@ -56,6 +56,7 @@ public interface EventBuilder<IDType, ValueType, Event extends EventEnvelope<IDT
             ret.setId( event.getId());
             ret.setUnsafeValue(event.getValue());
             ret.setAttributeId(event.getAttributeId());
+            ret.setURL(event.getURL());
             ret.setAdditionalData(event.getAdditionalData());
         }
 
@@ -69,8 +70,8 @@ public interface EventBuilder<IDType, ValueType, Event extends EventEnvelope<IDT
     }
 
     @JsonIgnore
-    default EventEnvelope factory(Object id, Object attributeID, Object value, Date date, Map<String, Object> additionalAttributes) throws UntraceableException {
-        return factory( id, attributeID, value, date.getTime(),additionalAttributes);
+    default EventEnvelope factory(Object id, Object attributeID, Object value, Date date,String url, Map<String, Object> additionalAttributes) throws UntraceableException {
+        return factory( id, attributeID, value, date.getTime(),url,additionalAttributes);
     }
     static <T> void registerBuilder(Class<T> to, EventBuilder builder){
         EventEnvelope.builders.put(to.getCanonicalName(),builder);

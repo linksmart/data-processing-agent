@@ -1,0 +1,43 @@
+{
+  "Name":"test",
+  "Model":{
+    "DataSchema":
+    {"type": "array","size": 86347,"targetSize": 1,"ofType": "int"},    "Name":"DummyClassifier",
+    "initialConfusionMatrix":[
+      [84834, 105, 1382, 26],
+      [84834, 105, 1382, 26]
+    ],    "Targets":[
+      {
+        "Name":"Accuracy",
+        "Threshold":0.90,
+        "Method":"more"
+      },
+      {
+        "Name":"MCC",
+        "Threshold":0.2,
+        "Method":"more"
+      },
+      {
+        "Name":"SlideAfter",
+        "Threshold":100,
+        "Method":"more"
+      }
+
+    ]
+  },
+  "LearningStreams":[
+    {
+      "statement":" "
+    }
+  ],
+  "DeploymentStreams":[
+    {
+      "statement":""
+    }
+  ],
+  "Settings":
+  {
+    "BuildTillPhase": 5,
+    "ReportingEnabled": false
+  }
+}

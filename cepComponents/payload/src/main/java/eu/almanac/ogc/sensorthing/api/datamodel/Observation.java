@@ -37,6 +37,7 @@ import java.util.Date;
  * @author <a href="mailto:bonino@ismb.it">Dario Bonino</a>
  *
  */
+@Deprecated
 public class Observation extends OGCSensorThingsAPIDataModelEntry implements EventEnvelope<String,Object>
 {
 	public static String defaultTopic = null;
@@ -330,8 +331,18 @@ public class Observation extends OGCSensorThingsAPIDataModelEntry implements Eve
 
 	}
 
+	@Override
+	public String getURL() {
+		return null;
+	}
 
-    public static Observation factory(Object event, String resultType, String StreamID, String sensorID) {
+	@Override
+	public void setURL(String URL) {
+
+	}
+
+
+	public static Observation factory(Object event, String resultType, String StreamID, String sensorID) {
        return factory(event,resultType,sensorID,sensorID,(new Date()).getTime());
 
     }

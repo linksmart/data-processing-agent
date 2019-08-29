@@ -2,6 +2,7 @@ package eu.linksmart.services.event.ceml;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.linksmart.api.event.components.IncomingConnector;
+import eu.linksmart.services.event.ceml.core.CEMLManager;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.api.event.types.impl.GeneralRequestResponse;
 
@@ -26,6 +27,8 @@ import java.net.URISyntaxException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by angel on 13/11/15.
@@ -42,21 +45,7 @@ public class CEMLRest extends Component implements IncomingConnector{
     public CEMLRest() {
 
         super(CEMLRest.class.getSimpleName(), "Provides a REST API for managing the Learning request", "CEML");
-        // Add configuration file of the local package
 
-
-       // mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
-        // SimpleModule module = new SimpleModule("Model", Version.unknownVersion()).addAbstractTypeMapping(aClass, ModelAutoregressiveNewralNetwork.class);
-
-        //.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addAbstractTypeMapping(DataDescriptors.class, DataDefinition.class))
-       /* mapper.registerModule(new SimpleModule("Descriptors", Version.unknownVersion()).addDeserializer(DataDescriptors.class, new DataDescriptorsDeserializer()).addSerializer(DataDescriptors.class, new DataDescriptorSerializer()))
-                .registerModule(new SimpleModule("Statements", Version.unknownVersion()).addAbstractTypeMapping(Statement.class, StatementInstance.class))
-                .registerModule(new SimpleModule("LearningStatements", Version.unknownVersion()).addAbstractTypeMapping(LearningStatement.class, eu.linksmart.services.event.ceml.statements.LearningStatement.class))
-                .registerModule(new SimpleModule("Model", Version.unknownVersion()).addDeserializer(Model.class, new ModelDeserializer()))
-                .registerModule(new SimpleModule("DataDescriptor", Version.unknownVersion()).addDeserializer(DataDescriptor.class, new DataDescriptorDeserializer()))
-                .registerModule(new SimpleModule("DNNModel", Version.unknownVersion()).addDeserializer(MultiLayerNetwork.class, new NNDeserialier() ))
-                .registerModule(new SimpleModule("SNNModel", Version.unknownVersion()).addSerializer(MultiLayerNetwork.class, new NNSerialier() ));*/
 
     }
 
@@ -129,9 +118,10 @@ public class CEMLRest extends Component implements IncomingConnector{
     @RequestMapping(value="/ceml/{name}", method=  RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createRequest(
             @PathVariable("name") String name,
-            @RequestBody() String body
+            @RequestBody CEMLManager cemlRequest
     ){
-        return prepareHTTPResponse(CEML.create(name, body, ""));
+        cemlRequest.setName(name);
+        return prepareHTTPResponse(CEML.create(cemlRequest));
     }
     @RequestMapping(value="/ceml/{name}", method=  RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteRequest(
@@ -151,7 +141,9 @@ public class CEMLRest extends Component implements IncomingConnector{
 
         // returning error in case neither an error was produced nor success. This case theoretical cannot happen, if it does there is a program error.
         if(result.getResponses().isEmpty()) {
-            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, "Unknown status"));
+            List<String> topics = new ArrayList<String>();
+            topics.add("Unknown status");
+            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, topics));
             loggerService.error("Impossible state reached");
         }
         // preparing location header
@@ -161,8 +153,9 @@ public class CEMLRest extends Component implements IncomingConnector{
                 uri = new URI("/ceml/"+statementID);
         } catch (URISyntaxException e) {
             loggerService.error(e.getMessage(),e);
-
-            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, e.getMessage()));
+            List<String> topics = new ArrayList<String>();
+            topics.add(e.getMessage());
+            result.addResponse(new GeneralRequestResponse("Error", SharedSettings.getId(),statementID, "Agent", "Intern Server Error", 500, topics));
         }
         // creating HTTP response
 

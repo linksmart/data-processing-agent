@@ -34,12 +34,15 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
         try {
             loggerService = LogManager.getLogger(MqttCemlAPI.class);
             conf = Configurator.getDefaultConfig();
-            me= new MqttCemlAPI();
-        } catch (Exception e) {
-            if(loggerService!=null)
-                loggerService.error(e.getMessage(),e);
-            else
-                e.printStackTrace();
+            if(conf.getBoolean(Const.CEML_MQTT_API_ENABLED)) {
+                me = new MqttCemlAPI();
+            }
+        } catch (Exception | NoClassDefFoundError e) {
+            if(conf==null || (conf!=null && !conf.getBoolean("Test")))
+                if(loggerService!=null)
+                    loggerService.error(e.getMessage(),e);
+                else
+                    e.printStackTrace();
         }
     }
 
@@ -66,14 +69,17 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
 
     protected MqttCemlAPI() throws MalformedURLException, MqttException, ClassNotFoundException {
         super(MqttCemlAPI.class.getSimpleName(), "Provides a MQTT light API to the CEML logic", "MqttCemlAPI");
-        Class.forName(CEML.class.getCanonicalName());
-        brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST), SharedSettings.getWill(), SharedSettings.getWillTopic());
-        initAddRequest();
-        initGetRequest();
-        initRemoveRequest();
-        loggerService.info("MQTT CEML API started!");
+        if(conf.getBoolean(Const.CEML_MQTT_API_ENABLED)) {
+            Class.forName(CEML.class.getCanonicalName());
+            brokerService = new StaticBroker(conf.getString(Const.CEML_MQTT_BROKER_HOST), SharedSettings.getWill(), SharedSettings.getWillTopic());
+            initAddRequest();
+            initGetRequest();
+            initRemoveRequest();
+            loggerService.info("MQTT CEML API started!");
+        }else
+            loggerService.info("MQTT CEML API deactivated!");
     }
-    private byte[] prepareRquest(byte[] payload) throws IOException {
+    private byte[] prepareRequest(byte[] payload) throws IOException {
         AsyncRequest request;
 
             request = SharedSettings.getDeserializer().deserialize(payload,AsyncRequest.class);
@@ -96,7 +102,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                                 byte[] rawEvent;
                                 try {
 
-                                    if( (rawEvent = prepareRquest(payload) )== null) // not for me
+                                    if( (rawEvent = prepareRequest(payload) )== null) // not for me
                                         return;
                                 }catch (Exception e){
                                     loggerService.error(e.getMessage(),e);
@@ -134,7 +140,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                             try {
                                 try {
 
-                                    if( (prepareRquest(payload) )== null) // not for me
+                                    if( (prepareRequest(payload) )== null) // not for me
                                         return;
                                 }catch (Exception e){
                                     loggerService.error(e.getMessage(),e);
@@ -179,7 +185,7 @@ public class MqttCemlAPI extends Component implements IncomingConnector {
                             try {
                                 try {
 
-                                    if( (prepareRquest(payload) )== null) // not for me
+                                    if( (prepareRequest(payload) )== null) // not for me
                                         return;
                                 }catch (Exception e){
                                     loggerService.error(e.getMessage(),e);

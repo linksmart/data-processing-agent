@@ -1,4 +1,4 @@
-FROM java:8-jre-alpine
+FROM openjdk:10-jre
 
 LABEL project="Linksmart(R) IoT Agents"
 LABEL "project.code"=LA
@@ -27,15 +27,11 @@ ENV cep_init_engines=${engine}
 # to start the LA (optional)
 ENV agent_init_extensions=${extensions}
 
-
-# mounting configuration and extra dependencies volumes
-VOLUME /config
-VOLUME /dependencies
-
+# mounting configuration ( /config) and extra dependencies (/dependencies) volumes
 
 # mounting configuration and extra dependencies volumes
 ADD https://nexus.linksmart.eu/repository/maven-releases/eu/linksmart/services/events/distributions/iot.learning.universal.agent/${version}/iot.learning.universal.agent-${version}.jar agent.jar
 
 
 # starting the agent
-ENTRYPOINT ["java", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]
+ENTRYPOINT ["java","--add-modules", "java.xml.bind", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]

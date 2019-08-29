@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.linksmart.services.events.gpl</groupId>
+        <artifactId>cepComponents</artifactId>
+        <version>1.9.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>wrapper.esper</artifactId>
+    <description>Esper Engine Wrapper - EsperWrapper implements the DataFusionWrapper for Esper CEP Engine </description>
+    <name>Esper CEP Engine Wrapper</name>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.espertech</groupId>
+            <artifactId>esper</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>api.agents</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.linksmart.commons</groupId>
+            <artifactId>utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>payload</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.linksmart.services.events</groupId>
+            <artifactId>cepTooling</artifactId>
+            <version>${ls.se.agents.version}</version>
+        </dependency>
+
+
+    </dependencies>
+
+
+
+</project>

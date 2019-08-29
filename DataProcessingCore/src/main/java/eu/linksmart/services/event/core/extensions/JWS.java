@@ -27,9 +27,9 @@ public class JWS {
 
     static  {
         try {
-            serializer = new JWSSerializer(SharedSettings.getSerializer());
+            serializer = new JWSSerializer(SharedSettings.getSerializerDeserializer());
             publicKey = serializer.getPublicKeyInBase64String();
-            deserializer = new JWSDeserializer(serializer.getPublicKeyInBase64String(),SharedSettings.getDeserializer());
+            deserializer = new JWSDeserializer(serializer.getPublicKeyInBase64String(),SharedSettings.getSerializerDeserializer());
 
 
 

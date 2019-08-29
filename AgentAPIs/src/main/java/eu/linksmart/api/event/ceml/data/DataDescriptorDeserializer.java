@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import eu.linksmart.services.utils.serialization.DeserializerMode;
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ import java.util.List;
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class DataDescriptorDeserializer extends DeserializerMode<DataDescriptor> {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final CollectionType collectionType =
@@ -29,10 +29,12 @@ public class DataDescriptorDeserializer extends DeserializerMode<DataDescriptor>
     @Override
     public DataDescriptor deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        String name =  node.get("Name").textValue();
+        String name =  node.hasNonNull("Name")? node.get("Name").textValue():node.get("name").textValue();
         DataDescriptor.DescriptorTypes type = DataDescriptor.DescriptorTypes.NUMBER;
         if(node.hasNonNull("Type"))
             type= DataDescriptor.DescriptorTypes.valueOf(node.get("Type").textValue());
+        else if(node.hasNonNull("type"))
+            type= DataDescriptor.DescriptorTypes.valueOf(node.get("type").textValue());
 
         boolean isTarget =  node.hasNonNull("isTarget");
         if(isTarget)
@@ -40,6 +42,9 @@ public class DataDescriptorDeserializer extends DeserializerMode<DataDescriptor>
         List<String> classes= null;
         if(node.hasNonNull("Classes")) {
             classes = mapper.reader(collectionType).readValue(node.get("Classes"));
+            type = DataDescriptor.DescriptorTypes.NOMINAL_CLASSES;
+        } else if(node.hasNonNull("classes")) {
+            classes = mapper.reader(collectionType).readValue(node.get("classes"));
             type = DataDescriptor.DescriptorTypes.NOMINAL_CLASSES;
         }
 

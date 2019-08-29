@@ -3,7 +3,7 @@ services:
   mqtt-broker:
     image: eclipse-mosquitto
   dpa:
-    image: docker.linksmart.eu/agent:dpa-snapshot
+    image: linksmart/dpa:snapshot
     depends_on:
       - mqtt-broker
     environment:

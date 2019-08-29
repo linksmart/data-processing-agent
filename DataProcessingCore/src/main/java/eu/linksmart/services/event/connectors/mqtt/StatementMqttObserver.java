@@ -14,6 +14,7 @@ import eu.linksmart.services.event.types.StatementInstance;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -93,7 +94,7 @@ public class StatementMqttObserver extends IncomingMqttObserver {
 
             } else if (nParts == 2 && getN(op, -1).equals(conf.getString(Const.STATEMENT_IN_TOPIC_ADD_CONF_PATH))) { //  BASE/<targetCEP>/add/ or
                 responses = StatementFeeder.addNewStatement(new String(request.getResource()), null, getN(op, -2)); // BASE/<targetCEP>/add/
-            }else if ((nParts == 3 && CEPEngine.instancedEngines.containsKey(targetCEP = getN(topic, -3)))) { //  BASE/<targetCEP>/<discriminator>/ID/
+            }else if ((nParts == 3 && CEPEngine.instancedEngine.getKey() == (targetCEP = getN(topic, -3)))) { //  BASE/<targetCEP>/<discriminator>/ID/
 
                 String des = getN(op, -2);
                 String id = getN(op, -1);
@@ -117,6 +118,8 @@ public class StatementMqttObserver extends IncomingMqttObserver {
             publishFeedback(request.getReturnEndpoint(),responses);
 
     } catch (Exception e) {
+        List<String> topics = new ArrayList<String>();
+        topics.add(request.getReturnErrorEndpoint());
         publishFeedback(
                 new ErrorResponseException(
                         new GeneralRequestResponse(
@@ -125,7 +128,7 @@ public class StatementMqttObserver extends IncomingMqttObserver {
                                 StatementMqttObserver.class.getCanonicalName(),
                                 e.getMessage(),
                                 500,
-                                request.getReturnErrorEndpoint())
+                                topics)
                 )
         );
     }

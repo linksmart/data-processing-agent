@@ -4,7 +4,7 @@
 	<groupId>eu.linksmart.services.events</groupId>
 	<artifactId>parent</artifactId>
 
-	<version>1.8.0</version>
+	<version><!--VerNo-->1.9.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -70,21 +70,23 @@
     </licenses>
     <properties>
         <!-- main version -->
-        <ls.se.agents.version>1.8.0</ls.se.agents.version>
+        <ls.se.agents.version><!--VerNo-->1.9.0-SNAPSHOT</ls.se.agents.version>
         <!-- LS version -->
         <linksmart.major.version>2</linksmart.major.version>
         <linksmart.minor.version>2</linksmart.minor.version>
         <linksmart.patch.version>1</linksmart.patch.version>
         <linksmart.version>${linksmart.major.version}.${linksmart.minor.version}</linksmart.version>
-        <linksmart.commons.version>1.2.1-SNAPSHOT</linksmart.commons.version>
+        <linksmart.commons.version>1.4.0-SNAPSHOT</linksmart.commons.version>
 
         <!-- dependencies versions -->
         <jackson.core.version>2.10.0.pr1</jackson.core.version>
         <jackson.version>${jackson.core.version}</jackson.version>
         <jackson.geojeson.version>1.6</jackson.geojeson.version>
         <jackson.maper.asl.version>1.9.13</jackson.maper.asl.version>
-        <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
+        <spring.boot.version>2.0.3.RELEASE</spring.boot.version>
         <eclipse.paho.mqtt.version>1.2.0</eclipse.paho.mqtt.version>
+	<apache.commons.email.version>1.5</apache.commons.email.version>
+        <apache.commons.validator.version>1.6</apache.commons.validator.version>
         <apache.commons.configuration.version>1.10</apache.commons.configuration.version>
         <apache.commons.beanutils.version>1.9.3</apache.commons.beanutils.version>
         <apache.commons.lang.version>3.1</apache.commons.lang.version>
@@ -93,16 +95,16 @@
         <org.json.version>20160212</org.json.version>
 
         <wso2.siddhi.version>3.0.2</wso2.siddhi.version>
-        <antlr.version>4.5.3</antlr.version>
+        <antlr.version>4.7</antlr.version>
         <apache.commons.io.version>2.4</apache.commons.io.version>
         <lmax.disruptor.version>3.3.4</lmax.disruptor.version>
         <apache.sis.version>0.6</apache.sis.version>
         <apache.commons.math3.version>3.6.1</apache.commons.math3.version>
         <mockito.version>1.9.5</mockito.version>
-        <hibernate.version>5.1.3.Final</hibernate.version>
+        <hibernate.version>6.0.10.Final</hibernate.version>
         <apache.commons.configuration2.version>2.2</apache.commons.configuration2.version>
 
-        <cglib.version>3.2.4</cglib.version>
+        <cglib.version>3.2.7</cglib.version>
         <apache.fluent.hc.version>4.5.2</apache.fluent.hc.version>
         <springfox.version>2.7.0</springfox.version>
         <javax.servelet.version>2.5</javax.servelet.version>
@@ -131,7 +133,7 @@
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <java.version>1.10</java.version>
         <start-class>eu.linksmart.services.Application</start-class>
         <maven.version>3.0.4</maven.version>
 
@@ -148,18 +150,17 @@
         <jjwt.version>3.2.0</jjwt.version>
     </properties>
 
-    <prerequisites>
-        <maven>${maven.version}</maven>
-    </prerequisites>
 	<modules>
         <module>AgentAPIs</module>
         <module>configurations</module>
         <module>cepComponents</module>
         <module>DataProcessingCore</module>
 		<module>cemlComponents</module>
+        <module>PyroBackendManager</module>
         <module>distributions</module>
         <module>test</module>
         <module>applications</module>
+        <module>gpl-artifacts</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -241,7 +242,11 @@
                 <artifactId>LinearRegressionModel</artifactId>
                 <version>${ls.se.agents.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>eu.linksmart.services.events</groupId>
+                <artifactId>DummyClassifier</artifactId>
+                <version>${ls.se.agents.version}</version>
+            </dependency>
             <!--  External  Dependencies -->
             <!-- jackson related dependencies -->
             <dependency>
@@ -309,6 +314,16 @@
                 <version>${eclipse.paho.mqtt.version}</version>
             </dependency>
             <!-- Apache -->
+            <dependency>
+  		<groupId>org.apache.commons</groupId>
+    		<artifactId>commons-email</artifactId>
+                <version>${apache.commons.email.version}</version>
+            </dependency>
+	    <dependency>
+	        <groupId>commons-validator</groupId>
+	        <artifactId>commons-validator</artifactId>
+	        <version>${apache.commons.validator.version}</version>
+            </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
@@ -429,17 +444,17 @@
 
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
+                <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
+                <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator-annotation-processor</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
+                <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator-cdi</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
@@ -788,7 +803,7 @@
         <connection>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</connection>
         <developerConnection>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</developerConnection>
         <url>scm:git:https://code.linksmart.eu/scm/la/data-processing-agent.git</url>
-      <tag>v1.8.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <!-- maven Site related configuration -->

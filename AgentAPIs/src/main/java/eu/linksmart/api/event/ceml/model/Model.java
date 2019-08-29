@@ -8,6 +8,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.api.event.ceml.data.DataDescriptors;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -29,7 +30,7 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
    }
 
     Evaluator<Output> getEvaluator();
-
+    void setEvaluator(Evaluator<Output> evaluator);
     void learn(Input input) throws TraceableException, UntraceableException;
     Prediction<Output> predict(Input input) throws TraceableException, UntraceableException;
 
@@ -49,13 +50,15 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
 
         return predictions;
         }
-    void setDescriptors(DataDescriptors descriptors);
-    DataDescriptors getDescriptors();
+//    void setDescriptors(DataDescriptors descriptors);
+//    DataDescriptors getDescriptors();
+    SchemaNode getDataSchema();
+    void setDataSchema(SchemaNode schema);
     Prediction<Output> getLastPrediction();
     void setLastPrediction(Prediction<Output> value);
 
     String getName();
-
+    String getEvaluatorCanonicalName();
     void setName(String name);
 
     Class getNativeType();
@@ -73,6 +76,11 @@ public interface Model<Input,Output,LearningObject> extends JsonSerializable{
     default boolean isClassifier() {return  false;}
     default boolean isRegressor(){return  false;}
     default boolean isClusterer(){return  false;}
+
+    boolean isBootstrapable();
+    void setBootstrapable(boolean value);
+
+    void setBootstrapping(boolean value);
 
 
 }

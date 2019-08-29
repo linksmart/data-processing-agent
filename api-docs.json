@@ -2,10 +2,10 @@
   "swagger": "2.0",
   "info": {
     "description": "A complex analytic service that offers Machine Learning and other complex analytics as a service",
-    "version": "1.8.0",
-    "title": "LinkSmart (R) IoT Learning Agent",
+    "version": "1.9.0-SNAPSHOT",
+    "title": "LinkSmart (R) IoT Data-Processing Agent",
     "contact": {
-      "name": "LinkSmart (R) IoT Learning Agent",
+      "name": "LinkSmart (R) IoT Data-Processing Agent",
       "url": "https://fit.fraunhofer.de",
       "email": "carvaja@fit.fhg.de"
     },
@@ -14,9 +14,13 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "dpa:8319",
+  "host": "localhost:8319",
   "basePath": "/",
   "tags": [
+    {
+      "name": "web-mvc-endpoint-handler-mapping",
+      "description": "Web Mvc Endpoint Handler Mapping"
+    },
     {
       "name": "broker-management",
       "description": "Broker Management"
@@ -24,6 +28,10 @@
     {
       "name": "statement-rest",
       "description": "Statement Rest"
+    },
+    {
+      "name": "operation-handler",
+      "description": "Operation Handler"
     },
     {
       "name": "event-rest",
@@ -61,6 +69,891 @@
             "description": "OK",
             "schema": {
               "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator": {
+      "get": {
+        "tags": [
+          "web-mvc-endpoint-handler-mapping"
+        ],
+        "summary": "links",
+        "operationId": "linksUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/definitions/Link"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/auditevents": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/beans": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/conditions": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/configprops": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_3",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/env": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_5",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/env/{toMatch}": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_4",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/health": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_6",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/heapdump": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_7",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/octet-stream"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/httptrace": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_8",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/info": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_9",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/loggers": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_11",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/loggers/{name}": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_10",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingPOST",
+        "consumes": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/mappings": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_12",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/metrics": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_14",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/metrics/{requiredMetricName}": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_13",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/scheduledtasks": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_15",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/actuator/threaddump": {
+      "get": {
+        "tags": [
+          "operation-handler"
+        ],
+        "summary": "handle",
+        "operationId": "handleUsingGET_16",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.spring-boot.actuator.v2+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
             }
           },
           "401": {
@@ -562,11 +1455,11 @@
           },
           {
             "in": "body",
-            "name": "body",
-            "description": "body",
+            "name": "cemlRequest",
+            "description": "cemlRequest",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/CEMLManager"
             }
           }
         ],
@@ -882,22 +1775,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingGET",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingGET",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "401": {
@@ -915,22 +1805,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingHEAD",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingHEAD",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "204": {
@@ -948,22 +1835,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingPOST",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingPOST",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "201": {
@@ -984,22 +1868,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingPUT",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingPUT",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "201": {
@@ -1020,22 +1901,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingDELETE",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingDELETE",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "204": {
@@ -1053,22 +1931,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingOPTIONS",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingOPTIONS",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "204": {
@@ -1086,22 +1961,19 @@
         "tags": [
           "basic-error-controller"
         ],
-        "summary": "error",
-        "operationId": "errorUsingPATCH",
+        "summary": "errorHtml",
+        "operationId": "errorHtmlUsingPATCH",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/html"
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ModelAndView"
             }
           },
           "204": {
@@ -1244,6 +2116,221 @@
           },
           "409": {
             "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
+    "/statement": {
+      "get": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "getStatement",
+        "operationId": "getStatement_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "changeStatement",
+        "operationId": "changeStatement_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "statement",
+            "description": "statement",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatementInstance"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "ID",
+            "description": "Statement's ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Statement 'id' was successful (in case of an update of an existing statement)",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "201": {
+            "description": "Created: Statement 'id' was successful",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "207": {
+            "description": "Multi-status",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "304": {
+            "description": "Not Modified: This exact statement already exists in this agent",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "400": {
+            "description": "Syntax error: 'reason'",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "409": {
+            "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "removeStatement",
+        "operationId": "removeStatement_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Provided ID doesn't exist in any CEP engine. ID:",
             "schema": {
               "$ref": "#/definitions/MultiResourceResponses"
             }
@@ -1448,6 +2535,69 @@
           },
           "409": {
             "description": "Conflict: The id sent in the request exists already. If want to be updated make an update/PUT request",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "500": {
+            "description": "General Error: Any internal error produced by the engine. Usually uncontrolled/unexpected errors",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable: No CEP engine found to deploy statement",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          }
+        }
+      }
+    },
+    "/statement/output": {
+      "get": {
+        "tags": [
+          "statement-rest"
+        ],
+        "summary": "getStatementLastOutput",
+        "operationId": "getStatementLastOutput_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "xpath",
+            "in": "query",
+            "description": "xpath",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Statement's ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MultiResourceResponses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found: The given ID doesn't exists",
             "schema": {
               "$ref": "#/definitions/MultiResourceResponses"
             }
@@ -1947,8 +3097,22 @@
     "BrokerConfiguration": {
       "type": "object",
       "properties": {
+        "_port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "_securePort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "acceptAllCerts": {
+          "type": "boolean"
+        },
         "alias": {
           "type": "string"
+        },
+        "autoBlacklisting": {
+          "type": "boolean"
         },
         "automaticReconnect": {
           "type": "boolean"
@@ -1980,6 +3144,9 @@
           "type": "integer",
           "format": "int32"
         },
+        "password": {
+          "type": "string"
+        },
         "port": {
           "type": "integer",
           "format": "int32"
@@ -1987,6 +3154,9 @@
         "pubQoS": {
           "type": "integer",
           "format": "int32"
+        },
+        "realProfile": {
+          "type": "string"
         },
         "reconnectWaitingTime": {
           "type": "integer",
@@ -2010,7 +3180,13 @@
           "type": "integer",
           "format": "int32"
         },
+        "tls": {
+          "type": "boolean"
+        },
         "url": {
+          "type": "string"
+        },
+        "user": {
           "type": "string"
         },
         "version": {
@@ -2033,23 +3209,236 @@
     "BrokerSecurityConfiguration": {
       "type": "object",
       "properties": {
-        "capassword": {
+        "keyStorePassword": {
           "type": "string"
         },
-        "capath": {
+        "keyStorePath": {
           "type": "string"
         },
-        "clientCertificatePassword": {
+        "trustStorePassword": {
           "type": "string"
         },
-        "clientCertificatePath": {
+        "trustStorePath": {
+          "type": "string"
+        }
+      }
+    },
+    "CEMLManager": {
+      "type": "object",
+      "properties": {
+        "alwaysDeploy": {
+          "type": "boolean"
+        },
+        "auxiliaryStreams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "deploymentStreams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the statement in the agent"
+        },
+        "isDeployed": {
+          "type": "boolean"
+        },
+        "learningStreams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LearningStatement"
+          }
+        },
+        "model": {
+          "$ref": "#/definitions/Model"
+        },
+        "name": {
           "type": "string"
         },
-        "keyPassword": {
+        "persistent": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "settings": {
+          "type": "object"
+        }
+      }
+    },
+    "CEMLRequest": {
+      "type": "object",
+      "properties": {
+        "auxiliaryStream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "deploymentStream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        },
+        "essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
+        "id": {
           "type": "string"
         },
-        "keyPath": {
+        "lastPrediction": {
+          "$ref": "#/definitions/Prediction"
+        },
+        "learningStream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LearningStatement"
+          }
+        },
+        "model": {
+          "$ref": "#/definitions/Model"
+        },
+        "name": {
           "type": "string"
+        },
+        "persistent": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "settings": {
+          "type": "object"
+        }
+      }
+    },
+    "EvaluationMetric": {
+      "type": "object",
+      "properties": {
+        "comparisonMethod": {
+          "type": "string",
+          "enum": [
+            "Equal",
+            "More",
+            "MoreEqual",
+            "Less",
+            "LessEqual"
+          ]
+        },
+        "controlMetric": {
+          "type": "boolean"
+        },
+        "extended": {
+          "$ref": "#/definitions/ModelEvaluationAlgorithmExtended"
+        },
+        "normalizedResult": {
+          "type": "number",
+          "format": "double"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "object"
+        },
+        "target": {
+          "type": "object"
+        }
+      }
+    },
+    "EvaluationMetric«Number»": {
+      "type": "object",
+      "properties": {
+        "comparisonMethod": {
+          "type": "string",
+          "enum": [
+            "Equal",
+            "More",
+            "MoreEqual",
+            "Less",
+            "LessEqual"
+          ]
+        },
+        "controlMetric": {
+          "type": "boolean"
+        },
+        "extended": {
+          "$ref": "#/definitions/ModelEvaluationAlgorithmExtended"
+        },
+        "normalizedResult": {
+          "type": "number",
+          "format": "double"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "result": {
+          "$ref": "#/definitions/Number"
+        },
+        "target": {
+          "$ref": "#/definitions/Number"
+        }
+      }
+    },
+    "EvaluationMetric«object»": {
+      "type": "object",
+      "properties": {
+        "comparisonMethod": {
+          "type": "string",
+          "enum": [
+            "Equal",
+            "More",
+            "MoreEqual",
+            "Less",
+            "LessEqual"
+          ]
+        },
+        "controlMetric": {
+          "type": "boolean"
+        },
+        "extended": {
+          "$ref": "#/definitions/ModelEvaluationAlgorithmExtended"
+        },
+        "normalizedResult": {
+          "type": "number",
+          "format": "double"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "object"
+        },
+        "target": {
+          "type": "object"
+        }
+      }
+    },
+    "Evaluator«object»": {
+      "type": "object",
+      "properties": {
+        "deployable": {
+          "type": "boolean"
+        },
+        "evaluationAlgorithms": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/EvaluationMetric«Number»"
+          }
+        },
+        "parameters": {
+          "type": "object"
         }
       }
     },
@@ -2063,7 +3452,7 @@
         "producerID",
         "producerName",
         "status",
-        "topic"
+        "topics"
       ],
       "properties": {
         "agentID": {
@@ -2102,15 +3491,175 @@
           "format": "int32",
           "description": "Code of the response"
         },
-        "topic": {
+        "topics": {
+          "type": "array",
+          "description": "Topics of the response. Used as URI",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "LearningStatement": {
+      "type": "object",
+      "properties": {
+        "cehandler": {
+          "type": "string"
+        },
+        "discardDataOnFailPolicy": {
+          "type": "boolean"
+        },
+        "discardDataOnFailPolicyOn": {
+          "type": "boolean"
+        },
+        "essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lastOutput": {
+          "type": "object"
+        },
+        "logEventEvery": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "persistent": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "publisher": {
           "type": "string",
-          "description": "Topic of the response. Used as URI"
+          "enum": [
+            "MQTT",
+            "MQTT_PUB",
+            "REST",
+            "HTTP",
+            "REST_POST",
+            "HTTP_POST",
+            "REST_GET",
+            "HTTP_GET"
+          ]
+        },
+        "registrable": {
+          "type": "boolean"
+        },
+        "request": {
+          "$ref": "#/definitions/CEMLRequest"
+        },
+        "restoutput": {
+          "type": "boolean"
+        },
+        "resultType": {
+          "type": "string"
+        },
+        "schema": {
+          "$ref": "#/definitions/SchemaNode"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stateLifecycle": {
+          "type": "string",
+          "enum": [
+            "RUN",
+            "ONCE",
+            "SYNCHRONOUS",
+            "PAUSE",
+            "REMOVE"
+          ]
+        },
+        "statement": {
+          "type": "string"
+        },
+        "synchronousResponse": {
+          "type": "object"
+        }
+      }
+    },
+    "Link": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "templated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Map«string,Link»": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Link"
+      }
+    },
+    "Model": {
+      "type": "object",
+      "properties": {
+        "bootstrapable": {
+          "type": "boolean"
+        },
+        "bootstrapping": {
+          "type": "boolean"
+        },
+        "classifier": {
+          "type": "boolean"
+        },
+        "clusterer": {
+          "type": "boolean"
+        },
+        "dataSchema": {
+          "$ref": "#/definitions/SchemaNode"
+        },
+        "evaluator": {
+          "$ref": "#/definitions/Evaluator«object»"
+        },
+        "evaluatorCanonicalName": {
+          "type": "string"
+        },
+        "lastPrediction": {
+          "$ref": "#/definitions/Prediction«object»"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "regressor": {
+          "type": "boolean"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TargetRequest"
+          }
         }
       }
     },
     "ModelAndView": {
       "type": "object",
       "properties": {
+        "cleared": {
+          "type": "boolean"
+        },
         "empty": {
           "type": "boolean"
         },
@@ -2203,6 +3752,37 @@
         }
       }
     },
+    "ModelEvaluationAlgorithmExtended": {
+      "type": "object",
+      "properties": {
+        "confusionMatrix": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "totalFalseNegatives": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalFalsePositives": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalTrueNegatives": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalTruePositives": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
     "MultiResourceResponses": {
       "type": "object",
       "required": [
@@ -2223,26 +3803,250 @@
         }
       }
     },
-    "StatementInstance": {
+    "Number": {
+      "type": "object"
+    },
+    "Prediction": {
       "type": "object",
       "properties": {
-        "AgentID": {
-          "type": "string",
-          "description": "Indicates the agent ID where this Statement was created"
+        "acceptedPrediction": {
+          "type": "boolean"
         },
-        "Essential": {
+        "certaintyDegree": {
+          "type": "number",
+          "format": "double"
+        },
+        "evaluationMetrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EvaluationMetric"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "madeAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "originalInput": {
+          "type": "object"
+        },
+        "predictedBy": {
+          "type": "string"
+        },
+        "prediction": {
+          "type": "object"
+        }
+      }
+    },
+    "Prediction«object»": {
+      "type": "object",
+      "properties": {
+        "acceptedPrediction": {
+          "type": "boolean"
+        },
+        "certaintyDegree": {
+          "type": "number",
+          "format": "double"
+        },
+        "evaluationMetrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EvaluationMetric«object»"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "madeAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "originalInput": {
+          "type": "object"
+        },
+        "predictedBy": {
+          "type": "string"
+        },
+        "prediction": {
+          "type": "object"
+        }
+      }
+    },
+    "SchemaNode": {
+      "type": "object",
+      "properties": {
+        "built": {
+          "type": "boolean"
+        },
+        "cardinality": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ceilingValue": {
+          "$ref": "#/definitions/Number"
+        },
+        "defaultValue": {
+          "type": "object"
+        },
+        "definition": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/SchemaNode"
+          }
+        },
+        "enum": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "floorValue": {
+          "$ref": "#/definitions/Number"
+        },
+        "index": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "input": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SchemaNode"
+          }
+        },
+        "maxValue": {
+          "$ref": "#/definitions/Number"
+        },
+        "minValue": {
+          "$ref": "#/definitions/Number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "needed": {
+          "type": "boolean"
+        },
+        "ofDefinition": {
+          "type": "string"
+        },
+        "ofType": {
+          "type": "string"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/SchemaNode"
+          }
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "skip": {
+          "type": "boolean"
+        },
+        "target": {
+          "type": "boolean"
+        },
+        "targetSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Statement": {
+      "type": "object",
+      "properties": {
+        "cehandler": {
+          "type": "string"
+        },
+        "discardDataOnFailPolicy": {
+          "type": "boolean"
+        },
+        "discardDataOnFailPolicyOn": {
+          "type": "boolean"
+        },
+        "essential": {
           "type": "boolean",
           "example": false,
           "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
         },
-        "Persistent": {
+        "id": {
+          "type": "string"
+        },
+        "lastOutput": {
+          "type": "object"
+        },
+        "logEventEvery": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "persistent": {
           "type": "boolean",
           "example": false,
           "description": "Indicates if the request should be stored persistently"
         },
-        "StateLifecycle": {
+        "publisher": {
           "type": "string",
-          "description": "Statement's Lifecycle.",
+          "enum": [
+            "MQTT",
+            "MQTT_PUB",
+            "REST",
+            "HTTP",
+            "REST_POST",
+            "HTTP_POST",
+            "REST_GET",
+            "HTTP_GET"
+          ]
+        },
+        "registrable": {
+          "type": "boolean"
+        },
+        "restoutput": {
+          "type": "boolean"
+        },
+        "resultType": {
+          "type": "string"
+        },
+        "schema": {
+          "$ref": "#/definitions/SchemaNode"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stateLifecycle": {
+          "type": "string",
           "enum": [
             "RUN",
             "ONCE",
@@ -2251,24 +4055,45 @@
             "REMOVE"
           ]
         },
-        "SynchronousResponse": {
-          "type": "object",
-          "description": "In case of a synchronous request, the response will be sent here."
+        "statement": {
+          "type": "string"
         },
-        "TargetAgents": {
-          "type": "array",
-          "description": "Indicates the agent ID which should process the statement. Not used for REST API",
-          "items": {
-            "type": "string"
-          }
+        "synchronousResponse": {
+          "type": "object"
+        }
+      }
+    },
+    "StatementInstance": {
+      "type": "object",
+      "properties": {
+        "agentID": {
+          "type": "string",
+          "description": "Indicates the agent ID where this Statement was created"
         },
         "cehandler": {
           "type": "string",
           "description": "The handler that manage the streams. Don't overwrite the value if is not understand fully what its mean"
         },
+        "discardDataOnFailPolicy": {
+          "type": "boolean"
+        },
+        "discardDataOnFailPolicyOn": {
+          "type": "boolean",
+          "example": false,
+          "description": "Sets if the handler should discard the data if the validation fails"
+        },
+        "essential": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting"
+        },
         "id": {
           "type": "string",
           "description": "Unique identifier of the statement in the agent"
+        },
+        "logEventEvery": {
+          "type": "integer",
+          "format": "int32"
         },
         "name": {
           "type": "string",
@@ -2281,14 +4106,40 @@
             "type": "string"
           }
         },
-        "rest": {
+        "persistent": {
           "type": "boolean",
           "example": false,
-          "description": "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB"
+          "description": "Indicates if the request should be stored persistently"
+        },
+        "publisher": {
+          "type": "string",
+          "description": "Indicates which publisher will be used (MQTT_PUB default)",
+          "enum": [
+            "MQTT",
+            "MQTT_PUB",
+            "REST",
+            "HTTP",
+            "REST_POST",
+            "HTTP_POST",
+            "REST_GET",
+            "HTTP_GET"
+          ]
+        },
+        "registrable": {
+          "type": "boolean",
+          "example": false,
+          "description": "if the statement should or should not be register outside agent (some catalog)"
+        },
+        "restoutput": {
+          "type": "boolean"
         },
         "resultType": {
           "type": "string",
           "description": "Indicates that the pushed events should be sent as REST POST and not as MQTT PUB"
+        },
+        "schema": {
+          "description": "Sets the expected result of this statement",
+          "$ref": "#/definitions/SchemaNode"
         },
         "scope": {
           "type": "array",
@@ -2297,12 +4148,46 @@
             "type": "string"
           }
         },
+        "stateLifecycle": {
+          "type": "string",
+          "description": "Statement's Lifecycle.",
+          "enum": [
+            "RUN",
+            "ONCE",
+            "SYNCHRONOUS",
+            "PAUSE",
+            "REMOVE"
+          ]
+        },
         "statement": {
           "type": "string",
           "description": "Statement or Query in the underlying implementation of the CEP engine. For most of the cases is mandatory"
         },
         "synchronousResponse": {
-          "type": "object"
+          "type": "object",
+          "description": "In case of a synchronous request, the response will be sent here."
+        }
+      }
+    },
+    "TargetRequest": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "threshold": {
+          "type": "number",
+          "format": "double"
+        },
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "double"
+          }
         }
       }
     },

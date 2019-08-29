@@ -9,11 +9,15 @@ import eu.linksmart.api.event.components.Publisher;
 import eu.linksmart.api.event.types.Statement;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
+import eu.linksmart.services.utils.mqtt.broker.BrokerConfiguration;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
+import io.swagger.client.ApiClient;
+import io.swagger.client.api.ScApi;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.apache.logging.log4j.Logger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.lang.UnsupportedOperationException;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
@@ -31,16 +35,28 @@ public class DefaultMQTTPublisher implements Publisher {
     private String will=null;
     private Map<String, StaticBroker> brokers = new Hashtable<>();
     private transient Logger loggerService = LogManager.getLogger(this.getClass());
-    private transient Configurator conf = Configurator.getDefaultConfig();
+    private static transient Configurator conf = Configurator.getDefaultConfig();
+    // using host, port and protocol form Service Catalog
+    static private transient ScApi SCclient = null;
+    static {
+
+        if(Utils.isRestAvailable(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))){
+            ApiClient apiClient = new ApiClient();
+            apiClient.setBasePath(conf.getString(eu.linksmart.services.utils.constants.Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
+            SCclient = new ScApi(apiClient);
+        }
+
+
+    }
     /***
      * Location are the brokers unknown with an alias by the Handlers
      * */
-    public final static Set<String> knownInstances= new HashSet<>();
+    public final static Set<String> knownInstances= BrokerConfiguration.knownBrokers();
     private String willTopic;
 
     public static boolean addKnownLocations(String statement) throws StatementException {
         // todo need to define how we add new locations into the Agent configuration
-       throw new NotImplementedException();
+       throw new UnsupportedOperationException();
     }
 
     public static boolean removeKnownLocations(String alias) throws StatementException {
@@ -51,13 +67,7 @@ public class DefaultMQTTPublisher implements Publisher {
 
         return true;
     }
-    static {
-        String[] alias = Configurator.getDefaultConfig().getStringArray(Const.BROKERS_ALIAS);
 
-        if(alias!=null)
-            knownInstances.addAll(Arrays.stream(alias).map(Object::toString).collect(Collectors.toList()));
-
-    }
 
     public DefaultMQTTPublisher(Statement statement,String will, String willTopic) throws TraceableException, UntraceableException{
 
@@ -131,8 +141,14 @@ public class DefaultMQTTPublisher implements Publisher {
             }
 
             for(String scope: scopes) {
-                if (!knownInstances.contains(scope.toLowerCase()))
-                    throw new StatementException( id,"Statement", "The selected scope (" + scopes.get(0) + ") is unknown");
+                if (!knownInstances.contains(scope.toLowerCase()) )
+                    try {
+                        if( SCclient!=null ) {
+                            SCclient.idGet(scope);
+                        }
+                    }catch (Exception e){
+                        throw new StatementException( id,"Statement", "The selected scope (" + scopes.get(0) + ") is unknown");
+                    }
 
                 brokers.put(scope, new StaticBroker(scope,will,willTopic));
             }

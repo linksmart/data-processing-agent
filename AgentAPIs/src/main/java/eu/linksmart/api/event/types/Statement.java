@@ -2,6 +2,7 @@ package eu.linksmart.api.event.types;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.linksmart.api.event.types.impl.SchemaNode;
 
 import java.util.List;
 /**
@@ -86,12 +87,7 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * @return  the handler cannonic name of ComplexEventHandler of the statement, @Default ComplexEventHandlerImpl..
      * */
     String getCEHandler();
-    /***
-     * Return the IDs selected to agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
-     *
-     * @return  List of targeted Agents address to process the statement, otherwise empty (all available agents):
-     * */
-    List<String> getTargetAgents();
+
     /***
      * Return the state of the Statement, which determines how the statement will be at runtime.
      *
@@ -170,35 +166,41 @@ public interface Statement extends JsonSerializable, PersistentRequest {
     void setSynchronousResponse(Object response) ;
 
     /***
-     * setts the IDs of the selected agents which are targeted to process this statement. If the array is empty means all receivers @Default Empty String[].
      *
-     * @param targetAgents is the list of targeted agents address to process the statement, otherwise empty (all available agents):
+     *
+     * @param registrable if the statement should or should not be register outside agent (some catalog)
      * */
-    void setTargetAgents(List<String> targetAgents);
+    void isRegistrable(boolean registrable);
     /***
      *
      *
-     * @param registrable if the statement should or should not be register outside agent
-     * */
-    void toRegister(boolean registrable);
-    /***
-     *
-     *
-     * @return if the statement should be register outside agent
+     * @return if the statement should be register outside agent (some catalog)
      * */
     boolean isRegistrable();
     /***
      *
-     *
-     * @return if the output of the statement are REST endpoints instead of MQTT topics
+     * @return This value is true if getPublisher returns HTTP_GET, REST_GET, HTTP, REST, HTTP_POST, REST_POST, false otherwise.
      * */
     boolean isRESTOutput();
     /***
-     * setts if the output of the statement are REST endpoints instead of MQTT topics
+     * This doesn't do anything. This value is set using setPublisher (isRESTOutput)
      *
-     * @param active true the outputs are REST endpoints, false the outputs are topics
+     * @param active means nothing
      * */
+    @Deprecated
     void isRESTOutput(boolean active);
+    /***
+     *
+     *
+     * @return if the output of the statement are REST (GET,POST) endpoints or MQTT (PUB) topics
+     * */
+    Publisher getPublisher();
+    /***
+     * setts if the output of the statement are REST (GET,POST) endpoints or MQTT (PUB) topics
+     *
+     * @param publisher define the output according to the possibilities in Publisher enum @see Publisher
+     * */
+    void setPublisher(Publisher publisher);
     /***
      * Returns the last compound event result of this statement
      *
@@ -222,6 +224,23 @@ public interface Statement extends JsonSerializable, PersistentRequest {
      * */
     void setResultType(String type);
 
+    /**
+     *
+     * @return the number of events till a log messages is generated
+     * */
+    int getLogEventEvery();
+
+    /**
+     *
+     * @param  logEventEvery is the number of events till a log messages is generated
+     * */
+    void setLogEventEvery(int logEventEvery);
+
+    SchemaNode getSchema();
+    void setSchema(SchemaNode schema);
+
+    boolean isDiscardDataOnFailPolicyOn();
+    void setDiscardDataOnFailPolicy(boolean schema);
     enum StatementLifecycle {
         /**
          * RUN Execute the statement adding a Handler, which adds a actuate or reacts to the triggered statement.
@@ -244,6 +263,40 @@ public interface Statement extends JsonSerializable, PersistentRequest {
          * This will remove the Statement form the CEP engine realising all other resources related to it
          */
         REMOVE
+    }
+    enum Publisher{
+        /**
+         * MQTT or MQTT_PUB will use @see eu.linksmart.services.event.handler.DefaultMQTTPublisher to publish the events in a broker
+         */
+        MQTT,
+        /**
+         * MQTT or MQTT_PUB will use @see eu.linksmart.services.event.handler.DefaultMQTTPublisher to publish the events in a broker
+         */
+        MQTT_PUB,
+        /**
+         * HTTP, REST, HTTP_POST, REST_POST will use @see eu.linksmart.services.event.handler.HTTPPublisher to post the events in a HTTP server
+         */
+        REST,
+        /**
+         * HTTP, REST, HTTP_POST, REST_POST will use @see eu.linksmart.services.event.handler.HTTPPublisher to post the events in a HTTP server
+         */
+        HTTP,
+        /**
+         * HTTP, REST, HTTP_POST, REST_POST will use @see eu.linksmart.services.event.handler.HTTPPublisher to post the events in a HTTP server
+         */
+        REST_POST,
+        /**
+         * HTTP, REST, HTTP_POST, REST_POST will use @see eu.linksmart.services.event.handler.HTTPPublisher to post the events in a HTTP server
+         */
+        HTTP_POST,
+        /**
+         * REST_GET, HTTP_GET will use @see eu.linksmart.services.event.handler.HTTPPublisher to get the events from a HTTP server and inserted into the CEPEngine
+         */
+        REST_GET,
+        /**
+         * REST_GET, HTTP_GET will use @see eu.linksmart.services.event.handler.HTTPPublisher to get the events from a HTTP server and inserted into the CEPEngine
+         */
+        HTTP_GET,
     }
 
 }

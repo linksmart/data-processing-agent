@@ -10,16 +10,17 @@ import java.util.Date;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class DataDescriptorInstance implements DataDescriptor {
-    @JsonProperty("Name")
+    @JsonProperty("name")
      protected String name = null;
-    @JsonProperty("NativeType")
+    @JsonProperty("nativeType")
     protected Class javaType=null;
 
     @JsonProperty("isTarget")
     protected boolean target =false ;
 
-    @JsonProperty("Type")
+    @JsonProperty("type")
     protected DescriptorTypes type= DescriptorTypes.NUMBER;
 
     protected DataDescriptorInstance(String name, Class clazz,boolean isTarget) throws TraceableException, UntraceableException {

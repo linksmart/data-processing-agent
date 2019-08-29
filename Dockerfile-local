@@ -1,0 +1,24 @@
+FROM  openjdk:10-jre
+
+ARG engine
+ARG extensions
+
+# enabling environmental variables configuration
+ENV env_var_enabled=true
+
+# force the REST API port to the default one
+ENV server_port=8319
+
+# selecting the ESPER as CEP engine
+ENV cep_init_engines=${engine}
+
+# to start the LA (optional)
+ENV agent_init_extensions=${extensions}
+
+# mounting configuration ( /config) and extra dependencies (/dependencies) volumes
+
+# mounting configuration and extra dependencies volumes
+ADD distributions/IoTAgent/target/*.jar ./
+
+# starting the agent
+ENTRYPOINT ["java","--add-modules", "java.xml.bind", "-cp","./*:/dependencies/*", "org.springframework.boot.loader.PropertiesLauncher"]

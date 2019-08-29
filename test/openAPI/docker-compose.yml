@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto
+  agent:
+    image: linksmart/dpa:snapshot
+    depends_on:
+      - mqtt-broker
+    links:
+      - mqtt-broker
+    environment:
+      - connection_broker_mqtt_hostname=mqtt-broker
+    ports:
+      - "8319:8319"

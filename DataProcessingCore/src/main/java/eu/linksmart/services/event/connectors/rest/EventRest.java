@@ -45,7 +45,7 @@ public class EventRest extends Component implements IncomingConnector {
             @RequestBody String rawEvent, HttpServletRequest request
     ) {
         // todo update this this API to return MultiResourceResponses
-        if(  CEPEngine.instancedEngines.size()==0)
+        if(  CEPEngine.instancedEngine.getValue()==null)
             return new ResponseEntity<>("Service Unavailable: No CEP engine has been deployed", HttpStatus.SERVICE_UNAVAILABLE);
         try {
             EventFeeder.getFeeder().feed(

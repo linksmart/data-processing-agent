@@ -14,11 +14,17 @@ import eu.linksmart.api.event.types.JsonSerializable;
 import eu.linksmart.services.event.types.StatementInstance;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
 public class LearningStatement extends StatementInstance implements eu.linksmart.api.event.ceml.LearningStatement {
+
+    public LearningStatement(String name, String statement, List<String> scope) {
+        super(name, statement, scope);
+        logEventEvery = 1;
+    }
     @JsonIgnore
     @Override
     public CEMLRequest getRequest() {
@@ -36,13 +42,15 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
     public JsonSerializable build() throws TraceableException, UntraceableException{
 
         if(manager==null||name==null||statement==null)
-            throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(), "The name, CEMLRequest and statements are mandatory fields for a Statment!");
+            throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(), "The name, CEMLRequest and statements are mandatory fields for a Statement!");
         try {
 
-            if(manager.getDescriptors().isLambdaTypeDefinition())
-
-                CEHandler = ListLearningHandler.class.getCanonicalName();
-            else{
+            if(manager.getModel().getDataSchema()!=null){
+                if(manager.getModel().getDataSchema().getType().equals("array"))
+                    CEHandler = ListLearningHandler.class.getCanonicalName();
+                else
+                    CEHandler = MapLearningHandler.class.getCanonicalName();
+            }else{
 
 
                 CEHandler = MapLearningHandler.class.getCanonicalName();
@@ -52,7 +60,7 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
             throw new UnknownUntraceableException(e.getMessage(),e);
         }
 
-        toRegister(false);
+        isRegistrable(false);
         return this;
 
     }
@@ -63,14 +71,13 @@ public class LearningStatement extends StatementInstance implements eu.linksmart
 
         this.statement =statement;
         this.manager =manager;
-        if(manager.getDescriptors().isLambdaTypeDefinition())
-            CEHandler = ListLearningHandler.class.getCanonicalName();
 
         CEHandler= MapLearningHandler.class.getCanonicalName();
         this.name =name;
     }
     public LearningStatement(){
         super();
+        logEventEvery = 1;
     }
 
 }

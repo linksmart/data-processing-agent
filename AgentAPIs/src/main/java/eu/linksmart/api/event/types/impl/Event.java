@@ -20,7 +20,8 @@ public abstract class Event<IDType, ValueType> implements EventEnvelope<IDType,V
     protected IDType attributeId;
     @JsonIgnore
     protected ValueType value;
-
+    @JsonIgnore
+    protected String url;
     protected Event(){
         date = new Date();
         id = null;
@@ -77,6 +78,16 @@ public abstract class Event<IDType, ValueType> implements EventEnvelope<IDType,V
     @Override
     public void setValue(ValueType value) {
         this.value=value;
+    }
+
+    @Override
+    public String getURL() {
+        return url;
+    }
+
+    @Override
+    public void setURL(String URL) {
+        url = URL;
     }
 
 

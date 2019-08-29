@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.linksmart.services.event.intern.Const;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.event.intern.AgentUtils;
+import eu.linksmart.services.utils.EditableService;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.Utils;
 import eu.linksmart.services.utils.mqtt.broker.StaticBroker;
 import eu.linksmart.services.utils.mqtt.broker.StaticBrokerService;
+import io.swagger.client.api.ScApi;
 import io.swagger.client.model.Service;
 import io.swagger.client.model.ServiceDocs;
 import org.apache.logging.log4j.LogManager;
@@ -28,12 +31,23 @@ public class ServiceRegistratorService implements Observer{
     private transient final static Logger loggerService = LogManager.getLogger(ServiceRegistratorService.class);
     private transient final static Configurator conf = Configurator.getDefaultConfig();
     public static ConcurrentMap<String,Object> meta = new ConcurrentHashMap<>();
-    private final StaticBroker broker;
     private final Timer updater = new Timer();
 
     public final transient static ServiceRegistratorService registrator = new ServiceRegistratorService();
+    private ScApi SCclient=null;
+
     private ServiceRegistratorService() {
         myRegistration = new EditableService();
+        if(!conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT) || !Utils.isRestAvailable(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))) {
+            loggerService.warn("Service catalog not found"+ ( conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT) ? " in " +Utils.isRestAvailable(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT)) : "")+"!");
+            if(conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP) && conf.getBoolean(Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP)){
+                loggerService.error("Registration failed, and  "+Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP + " set to true. Now agent is stopping!");
+                System.exit(-1);
+            }
+            loggerService.warn("Registration failed, and  "+Const.LINKSMART_SERVICE_CATALOG_IN_REGISTRATION_FAIL_STOP + " set to false");
+            return;
+        }
+
         myRegistration.setId(SharedSettings.getId());
         myRegistration.setDescription(conf.getString(Const.AGENT_DESCRIPTION));
         myRegistration.setName("_linksmart-"+SharedSettings.getLs_code().toLowerCase()+".tcp_");
@@ -68,31 +82,24 @@ public class ServiceRegistratorService implements Observer{
                 myRegistration.getApis().put("Agent MQTT API", url.getBrokerURL())
         );
 
-        StaticBroker intent = null;
-        try {
-            intent = new StaticBroker(conf.getString(Const.LINKSMART_BROKER), SharedSettings.getSerializer().toString(myRegistration), AgentUtils.topicReplace(conf.getString(Const.LINKSMART_SERVICE_WILL_TOPIC), ""));
+        if(conf.containsKeyAnywhere(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT) && Utils.isRestAvailable(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT))) {
+            SCclient = Utils.getServiceCatalogClient(conf.getString(Const.LINKSMART_SERVICE_CATALOG_ENDPOINT));
 
 
-        } catch (Exception e) {
-            loggerService.error(e.getMessage(), e);
-            System.exit(-1);
+            if (myRegistration.getTtl() > -1) {
+                updater.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                update();
+                            }
+                        },
+                        0,
+                        (myRegistration.getTtl() / 3)*1000
+                );
+            } else
+                update();
         }
-
-        broker = intent;
-        broker.addConnectionListener(this);
-
-        if(myRegistration.getTtl()>-1){
-            updater.schedule(
-                    new TimerTask() {
-                        @Override
-                        public void run() {
-                            update();
-                        }
-                    },
-                    myRegistration.getTtl()/3
-            );
-        }else
-            update();
     }
 
     public static ServiceRegistratorService getRegistrator() {
@@ -101,7 +108,7 @@ public class ServiceRegistratorService implements Observer{
     public void update(){
         try {
             loggerService.info("Sending registration message to topic: "+ AgentUtils.topicReplace(conf.getString(Const.LINKSMART_REGISTRATION_TOPIC), SharedSettings.getId() )+ " message: " +SharedSettings.getSerializer().toString(myRegistration));
-            broker.publish(AgentUtils.topicReplace(conf.getString(Const.LINKSMART_REGISTRATION_TOPIC), SharedSettings.getId()), SharedSettings.getSerializer().serialize(myRegistration));
+            SCclient.idPut(myRegistration.getId(),myRegistration);
         } catch (Exception e) {
             loggerService.error(e.getMessage(), e);
         }
@@ -114,17 +121,5 @@ public class ServiceRegistratorService implements Observer{
 
     }
 
-    private class EditableService extends Service {
-        @JsonProperty("id")
-        protected String id;
-        @Override
-        public String getId() {
-            return id;
-        }
 
-        public void setId(String id){
-            this.id=id;
-        }
-
-    }
 }

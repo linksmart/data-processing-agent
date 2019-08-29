@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.*;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.EventBuilder;
 import eu.linksmart.api.event.types.EventEnvelope;
-import eu.linksmart.api.event.types.impl.Event;
-import eu.linksmart.services.payloads.SenML.SenML;
 import eu.linksmart.services.payloads.ogc.sensorthing.Datastream;
 import eu.linksmart.services.payloads.ogc.sensorthing.FeatureOfInterest;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.base.CommonControlInfoImpl;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
 
 import java.time.Period;
 import java.util.*;
@@ -40,7 +40,7 @@ import java.util.*;
  * Created by José Ángel Carvajal on 04.04.2016 a researcher of Fraunhofer FIT.
  */
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Observation.class)
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "@iot.id", scope = Observation.class)
 public class ObservationImpl extends CommonControlInfoImpl implements Observation, EventEnvelope<Object,Object> {
     static {
         try {
@@ -51,8 +51,18 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
             e.printStackTrace();
         }
     }
+    public static Observation factory(Object event, Object StreamID, Object sensorID, long time){
+        try {
+            return (Observation) EventBuilder.getBuilder(ObservationImpl.class).factory(event,StreamID,sensorID,time,null,new Hashtable<>());
+        } catch (UntraceableException e) {
+            LogManager.getLogger(ObservationImpl.class).error(e.getMessage(),e);
+            return null;
+        }
+    }
+    @JsonIgnore
+    public static String classTopic = "LS/sensor/"+UUID.randomUUID().toString()+"/OGC/1.0/Datastreams/";
 
-    public static String defaultTopic = "LS/sensor/"+UUID.randomUUID().toString()+"/OGC/1.0/Datastreams/";
+
 
     @Override
     public void setUnsafeValue(Object value) {
@@ -68,12 +78,12 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
 
     @Override
     public String getClassTopic() {
-        return defaultTopic;
+        return classTopic;
     }
 
     @Override
     public void setClassTopic(String topic) {
-        defaultTopic = topic;
+        classTopic = topic;
     }
 
     @Override
@@ -101,12 +111,12 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         if(!additionalData.isEmpty()) {
             if(parameters==null)
                 parameters = new ArrayList<>();
-            additionalData.forEach((k, v) -> parameters.add(Pair.of(k, v)));
+            additionalData.forEach((k, v) -> parameters.add(MutablePair.of(k, v)));
         }
     }
 
     @JsonIgnore
-    private List<Pair<String, Object>> parameters=null;
+    private List<MutablePair<String, Object>> parameters=null;
     @JsonIgnore
     protected FeatureOfInterest featureOfInterest;
     @JsonIgnore
@@ -119,8 +129,6 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     protected Object result;
     @JsonIgnore
     protected Period validTime;
-    @JsonIgnore
-    protected String topic;
 
     /*
     * First the implementation of the Observation Interface.
@@ -165,12 +173,12 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
     }
 
     @Override
-    public List<Pair<String, Object>> getParameters() {
+    public List<MutablePair<String, Object>> getParameters() {
         return this.parameters;
     }
 
     @Override
-    public void setParameters(List<Pair<String, Object>> parameters) {
+    public void setParameters(List<MutablePair<String, Object>> parameters) {
         this.parameters=parameters;
     }
 
@@ -197,6 +205,39 @@ public class ObservationImpl extends CommonControlInfoImpl implements Observatio
         this.datastream.addObservation(this);
     }
 
+    @Override
+    public String getURL() {
+        if(parameters!=null) {
+            Optional<MutablePair<String,Object>> optional = parameters.stream().filter(p->"url".equals(p.getKey().toLowerCase())).findFirst();
+            if(optional.isPresent())
+                return optional.get().getValue().toString();
+        }
+        return null;
+    }
+    @Override
+    public void setURL(String url) {
 
+        if(parameters==null)
+             parameters = new ArrayList<>();
+
+        parameters.add(MutablePair.of("url", url));
+    }
+
+    @Override
+    public Object getId(){
+        return super.getId();
+    }
+
+    /**
+     * Sets the ID of the specific model entry instance, as a String
+     *
+     * @param id
+     *            the id to set
+     */
+    @Override
+    public void setId(Object id){
+        super.setId(id);
+
+    }
 
 }

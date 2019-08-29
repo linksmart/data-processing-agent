@@ -13,6 +13,7 @@ import java.util.function.Function;
 /**
  * Created by José Ángel Carvajal on 18.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class ClassesDescriptorInstance extends DataDescriptorInstance implements ClassesDescriptor {
 
     @JsonProperty("Classes")

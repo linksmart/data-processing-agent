@@ -1,8 +1,8 @@
 package eu.linksmart.api.event.ceml.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.*;
+import eu.linksmart.api.event.ceml.data.DataDefinition;
+import eu.linksmart.api.event.ceml.evaluation.ClassificationEvaluationValue;
 import eu.linksmart.api.event.ceml.evaluation.Evaluator;
 import eu.linksmart.api.event.ceml.evaluation.TargetRequest;
 import eu.linksmart.api.event.ceml.prediction.Prediction;
@@ -12,6 +12,8 @@ import eu.linksmart.api.event.exceptions.InternalException;
 import eu.linksmart.api.event.exceptions.StatementException;
 import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
+import eu.linksmart.api.event.types.impl.SchemaNode;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 
 import java.util.*;
@@ -25,33 +27,41 @@ import java.util.*;
 
 public abstract class ModelInstance<Input,Output,LearningObject> implements Model<Input,Output,LearningObject>{
 
-    @JsonProperty("Descriptors")
-    protected DataDescriptors descriptors;
-    @JsonProperty("Name")
+//    @JsonProperty(value = "descriptors")
+//    @JsonDeserialize(as = DataDefinition.class)
+//    protected DataDescriptors descriptors;
+    @JsonProperty("name")
     protected String name;
-    @JsonProperty("NativeType")
+    @JsonProperty("nativeType")
     protected Class<LearningObject> nativeType;
     @JsonPropertyDescription("Algorithm use to build the model")
-    @JsonProperty(value = "Type")
+    @JsonProperty(value = "type")
     protected String type;
     //@JsonProperty(value = "Evaluator")
-    @JsonProperty(value = "Evaluator")
+    @JsonProperty(value = "evaluator")
     protected  Evaluator<Output> evaluator ;
 
-    @JsonProperty(value = "Targets")
+    @JsonProperty(value = "targets")
     protected  List<TargetRequest> targets;
 
-    @JsonProperty(value = "Parameters")
+
+    @JsonProperty(value = "parameters")
     protected  Map<String,Object> parameters;
-    @JsonProperty(value = "Prediction")
+    @JsonProperty(value = "prediction")
     protected Prediction<Output> lastPrediction;
 
-    @JsonProperty(value = "Learner")
+    @JsonProperty(value = "learner")
     protected LearningObject learner;
+    @JsonProperty(value = "dataSchema")
+    protected SchemaNode schema;
 
     public String getType() {
         return type;
     }
+    @JsonProperty("bootstrapable")
+    protected boolean bootstrapable = true;
+    @JsonIgnore
+    protected boolean bootstrapping = false;
 
     public void setType(String type) {
         this.type = type;
@@ -80,7 +90,13 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
         this.evaluator = evaluator;
         this.evaluator.setParameters(parameters);
         this.lastPrediction = new PredictionInstance<>();
-        this.learner = (LearningObject) learner;
+        initLerner(learner);
+    }
+
+    protected void initLerner(Object learner){
+        if (!(bootstrapping && bootstrapable))
+            this.learner = (LearningObject) learner;
+        bootstrapping = false;
     }
 
 
@@ -90,6 +106,12 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     }
 
     @Override
+    public void setEvaluator(Evaluator<Output> evaluator) {
+        this.evaluator = evaluator;
+    }
+
+
+ /*   @Override
     public void setDescriptors(DataDescriptors descriptors) {
         this.descriptors = descriptors;
 
@@ -97,7 +119,21 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     @Override
     public DataDescriptors getDescriptors() {
-        return descriptors;
+        if( schema == null )
+            return descriptors;
+
+        return null;
+    }*/
+
+    @Override
+    public SchemaNode getDataSchema() {
+        return schema;
+    }
+
+    @Override
+    public void setDataSchema(SchemaNode schema) {
+        this.schema=schema;
+
     }
 
     @Override
@@ -113,8 +149,10 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
     @Override
     public Model<Input, Output, LearningObject> build() throws TraceableException, UntraceableException {
-        if(descriptors== null || !descriptors.isEmpty() ||evaluator== null  || learner == null)
-            throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(),"For the model the descriptors, evaluator and learner are mandatory fields!");
+        final boolean schemaOK =  schema==null || !schema.isBuilt();
+        final boolean legacySchema =   ((schemaOK) /*&& (descriptors== null || !descriptors.isEmpty() )*/ );
+        if( legacySchema || evaluator== null  || learner == null)
+            throw new StatementException(this.getClass().getName(),this.getClass().getCanonicalName(),"For the model the schema/descriptors, evaluator and learner are mandatory fields!");
 
         nativeType = (Class<LearningObject>) learner.getClass();
 
@@ -122,18 +160,24 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
 
         return this;
     }
+
     public void learn(Input input, Input targetLabel) throws TraceableException, UntraceableException {
         if (input instanceof List) {
+            List complete = new ArrayList((List)input);
             if (targetLabel instanceof List)
-                ((List) input).addAll((List) targetLabel);
+                complete.addAll((List) targetLabel);
             else
-                ((List) input).add(targetLabel);
-        }else if (input instanceof Map) {
-            ((Map) input).put("target",targetLabel);
-        }else
-            throw new InternalException(getName(),"Internal Server Error","Unsuported type of data by the default learn function. Plase use list or map");
+                complete.add(targetLabel);
 
-        learn(input);
+            learn((Input)complete);
+
+        }else if (input instanceof Map) {
+            Map complete = new Hashtable((Map)input);
+            complete.put("target",targetLabel);
+            learn((Input) complete);
+        }else
+            throw new InternalException(getName(),"Internal Server Error","Unsupported type of data by the default learn function. Please use list or map");
+
     }
     public void batchLearn(List<Input> input, List<Input> targetLabel) throws TraceableException, UntraceableException {
         if(input != null && !input.isEmpty() && targetLabel != null && !targetLabel.isEmpty() && input.size() == targetLabel.size()) {
@@ -145,20 +189,6 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
         }
     }
 
-/*
-    @Override
-    public void rebuild(Model<Input, Output, LearningObject> me) throws Exception {
-        if(me.getTargets()!=null)
-            this.targets = me.getTargets();
-        if(me.getParameters()!=null)
-            this.parameters =me.getParameters();
-
-        if(me.getEvaluator()!=null || me.getParameters()!=null)
-            this.evaluator.rebuild(me.getEvaluator());
-        if(me.getLastPrediction()!=null)
-            this.lastPrediction = me.getLastPrediction();
-    }
-*/
 
     @Override
     public void destroy() throws Exception {
@@ -168,6 +198,13 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     public String getName() {
         return name;
     }
+
+    @JsonGetter("evaluatorCanonicalName")
+    @Override
+    public String getEvaluatorCanonicalName() {
+        return evaluator.getClass().getCanonicalName();
+    }
+
     @Override
     public void setName(String name) {
         this.name = name;
@@ -196,6 +233,21 @@ public abstract class ModelInstance<Input,Output,LearningObject> implements Mode
     @Override
     public void setTargets(List<TargetRequest> targets) {
         this.targets = targets;
+    }
+
+    @Override
+    public boolean isBootstrapable() {
+        return bootstrapable;
+    }
+
+    @Override
+    public void setBootstrapable(boolean value) {
+        bootstrapable = value;
+    }
+
+    @Override
+    public void setBootstrapping(boolean value) {
+        bootstrapping = value;
     }
 
 

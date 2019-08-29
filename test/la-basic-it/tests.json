@@ -1,0 +1,114 @@
+{
+  "linear_regression_legacy": {
+    "Descriptors": {
+      "TargetSize": 1,
+      "InputSize": 1,
+      "Type": "NUMBER"
+    },
+    "Model": {
+      "Name": "LinearRegressionModel",
+      "Targets": [
+        {
+          "Name": "RMSE",
+          "Threshold": 5.0,
+          "Method": "less"
+        }
+      ]
+    },
+    "LearningStreams": [
+      {
+        "statement": "select result as x, result as y from Observation"
+      }
+    ],
+    "DeploymentStreams": [
+      {
+        "statement": "select <id>.predict(result) from Observation"
+      }
+    ],
+    "Settings": {
+      "ReportingEnabled": true
+    }
+  },
+  "linear_regression": {
+    "Model": {
+      "DataSchema": {
+        "type": "array",
+        "size": 2,
+        "targetSize": 1,
+        "ofType": "int"
+      },
+      "Name": "LinearRegressionModel",
+      "Targets": [
+        {
+          "Name": "RMSE",
+          "Threshold": 5.0,
+          "Method": "less"
+        }
+      ]
+    },
+    "LearningStreams": [
+      {
+        "statement": "select result as x, result as y from Observation"
+      }
+    ],
+    "DeploymentStreams": [
+      {
+        "statement": "select <id>.predict(result) from Observation"
+      }
+    ],
+    "Settings": {
+      "ReportingEnabled": true
+    }
+  },
+  "dummy_classification": {
+    "Name": "test"
+  },
+  "Model": {
+    "DataSchema": {
+      "type": "array",
+      "size": 1000,
+      "targetSize": 1,
+      "ofType": "int",
+      "Name": "DummyClassifier",
+      "initialConfusionMatrix": [
+        [
+          26,
+          25,
+          25,
+          25
+        ],
+        [
+          25,
+          25,
+          25,
+          26
+        ]
+      ],
+      "Targets": [
+        {
+          "Name": "Accuracy",
+          "Threshold": 0.40,
+          "Method": "more"
+        },
+        {
+          "Name": "SlideAfter",
+          "Threshold": 100,
+          "Method": "more"
+        }
+      ]
+    },
+    "LearningStreams": [
+      {
+        "statement": "select window(result) from Observation#length(1000)"
+      }
+    ],
+    "DeploymentStreams": [
+      {
+        "statement": "select <id>.predict(window(result)) from Observation#length(1000"
+      }
+    ],
+    "Settings": {
+      "ReportingEnabled": true
+    }
+  }
+}

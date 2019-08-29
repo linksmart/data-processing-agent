@@ -1,0 +1,33 @@
+{
+    "Name": "test",
+    "Model": {
+      "Name": "LinearRegressionModel",
+      "DataSchema": {
+        "type": "array",
+        "size": 2,
+        "targetSize": 1,
+        "ofType": "int"
+      },
+      "Targets": [
+        {
+          "Name": "RMSE",
+          "Threshold": 5.0,
+          "Method": "less"
+        }
+      ]
+    },
+    "LearningStreams": [
+      {
+        "statement": " "
+      }
+    ],
+    "DeploymentStreams": [
+      {
+        "statement": ""
+      }
+    ],
+    "Settings": {
+      "BuildTillPhase": 5,
+      "ReportingEnabled": false
+    }
+}

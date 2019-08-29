@@ -1,8 +1,6 @@
 package eu.linksmart.services.payloads.ogc.sensorthing;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.linksmart.services.payloads.ogc.sensorthing.internal.Interval;
@@ -210,6 +208,7 @@ public interface Datastream extends CommonControlInfoDescription, ThingNavigatio
      * */
     @JsonPropertyDescription("A Datastream has zero-to-many Observations. One Observation SHALL occur in one-and-only-one Datastream.")
     @JsonGetter("observations")
+    @JsonIgnore
     List<Observation> getObservations();
     /**
      * Sets the observations as a List of observations {@link Observation}.
@@ -230,6 +229,7 @@ public interface Datastream extends CommonControlInfoDescription, ThingNavigatio
      * */
     @JsonPropertyDescription("The Observations in a Datastream are performed by one-and-only-one Sensor. One Sensor MAY produce zero-to-many Observations in different Datastreams.")
     @JsonGetter(value = "sensor")
+    @JsonIgnore
     Sensor getSensor();
     /**
      * Sets the sensor as a Sensor {@link Sensor}.
@@ -250,6 +250,7 @@ public interface Datastream extends CommonControlInfoDescription, ThingNavigatio
      * */
     @JsonPropertyDescription("A Thing has zero-to-many Datastreams. A Datastream entity SHALL only link to a Thing as a collection of Observations.")
     @JsonGetter("thing")
+    @JsonIgnore
     Thing getThing();
     /**
      *  Sets the sensor as a Thing {@link Thing}.
@@ -262,6 +263,21 @@ public interface Datastream extends CommonControlInfoDescription, ThingNavigatio
     @JsonSetter(value = "thing")
     void setThing(Thing thing);
 
+    @Override
+    @JsonPropertyDescription("id is the system-generated identifier of an entity.")
+    @JsonSetter(value = "@iot.id")
+    Object getId();
 
+    /**
+     * Sets the ID of the specific model entry instance, as a String
+     *
+     * @param id
+     *            the id to set
+     */
+
+    @Override
+    @JsonProperty(value = "@iot.id")
+    @JsonSetter(value = "@iot.id")
+    void setId(Object id);
 
 }

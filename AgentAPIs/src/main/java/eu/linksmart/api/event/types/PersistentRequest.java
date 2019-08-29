@@ -1,6 +1,7 @@
 package eu.linksmart.api.event.types;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -8,17 +9,18 @@ import io.swagger.annotations.ApiModelProperty;
  * Created by José Ángel Carvajal on 30.10.2017 a researcher of Fraunhofer FIT.
  */
 public interface PersistentRequest {
-    @JsonGetter("Persistent")
+    Object synchLock = new Object();
+    @JsonProperty("persistent")
     @ApiModelProperty(notes = "Indicates if the request should be stored persistently")
     boolean isPersistent();
-    @JsonGetter("Essential")
+    @JsonProperty("essential")
     @ApiModelProperty(notes = "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting")
     boolean isEssential();
 
-    @JsonSetter("Persistent")
+    @JsonProperty("persistent")
     @ApiModelProperty(notes = "Indicates if the request should be stored persistently")
     void isPersistent(boolean isPersistent);
-    @JsonSetter("Essential")
+    @JsonProperty("essential")
     @ApiModelProperty(notes = "Indicates if the request fails to be loaded the service should be crash or not. Note: if the agent is not configured to crash, it will not crash regardless of this setting")
     void isEssential(boolean isEssential);
     /***

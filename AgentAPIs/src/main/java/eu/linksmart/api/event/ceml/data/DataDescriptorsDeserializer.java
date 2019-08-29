@@ -10,6 +10,7 @@ import java.util.UUID;
 /**
  * Created by José Ángel Carvajal on 19.07.2016 a researcher of Fraunhofer FIT.
  */
+@Deprecated
 public class DataDescriptorsDeserializer extends DeserializerMode<DataDescriptors> {
 
     @Override

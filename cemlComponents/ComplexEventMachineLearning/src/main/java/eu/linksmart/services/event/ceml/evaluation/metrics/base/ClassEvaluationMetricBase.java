@@ -15,7 +15,7 @@ public abstract class ClassEvaluationMetricBase<T extends  Comparable<T>> extend
         super();
     }
     public ClassEvaluationMetricBase(ComparisonMethod method, T[] targets){
-        super(method,targets);
+        super(targets);
         @SuppressWarnings("unchecked")
         final T[] a = (T[]) Array.newInstance(target.getClass(), targets.length);
         target = a;
