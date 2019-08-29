@@ -27,11 +27,11 @@ jobs:
       name: "Building"
     - stage: "System Tests"
       script:
-        - git clone https://github.com/linksmart/dpa-tutorials.git
-        - [ "$TRAVIS_BRANCH" != "release"] && export SNAPSHOT_IMG=-f dpa-tutorials/testing/docker-compose-testing.yml
-        - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml ${SNAPSHOT_IMG} up -d
-        - cd dpa-tutorials/testing/
-        - mvn -s ../../.travis.settings.xml test
+      - git clone https://github.com/linksmart/dpa-tutorials.git
+      - "[ \"$TRAVIS_BRANCH\" != \"release\"] && export SNAPSHOT_IMG=-f dpa-tutorials/testing/docker-compose-testing.yml"
+      - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml ${SNAPSHOT_IMG} up -d
+      - cd dpa-tutorials/testing/
+      - mvn -s ../../.travis.settings.xml test
       name: "DPA ST "
       git:
         depth: false
@@ -57,21 +57,21 @@ jobs:
       install: true
       if: branch = release
     - script:
-        - if [ "$TRAVIS_BRANCH" = "release" ] ; then export DISTRO="pre-release"; else export DISTRO="experimental"; fi
-        - if [ "$TRAVIS_BRANCH" = "release" ] ; then export DISTRO_RELEASE="latest"; else export DISTRO_RELEASE="snapshot"; fi
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker pull linksmart/dpa:${DISTRO}
-        - docker pull linksmart/la:${DISTRO}
-        - docker pull linksmart/dpa:wso2-${DISTRO}
-        - docker pull linksmart/la:wso2-${DISTRO}
-        - docker tag linksmart/dpa:${DISTRO} linksmart/dpa:${DISTRO_RELEASE}
-        - docker tag linksmart/la:${DISTRO} linksmart/la:${DISTRO_RELEASE}
-        - docker tag linksmart/dpa:wso2-${DISTRO} linksmart/dpa:wso2-${DISTRO_RELEASE}
-        - docker tag linksmart/la:wso2-${DISTRO} linksmart/la:wso2-${DISTRO_RELEASE}
-        - docker push linksmart/dpa:${DISTRO_RELEASE}
-        - docker push linksmart/la:${DISTRO_RELEASE}
-        - docker push linksmart/dpa:wso2-${DISTRO_RELEASE}
-        - docker push linksmart/la:wso2-${DISTRO_RELEASE}
+      - if [ "$TRAVIS_BRANCH" = "release" ] ; then export DISTRO="pre-release"; else export DISTRO="experimental"; fi
+      - if [ "$TRAVIS_BRANCH" = "release" ] ; then export DISTRO_RELEASE="latest"; else export DISTRO_RELEASE="snapshot"; fi
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker pull linksmart/dpa:${DISTRO}
+      - docker pull linksmart/la:${DISTRO}
+      - docker pull linksmart/dpa:wso2-${DISTRO}
+      - docker pull linksmart/la:wso2-${DISTRO}
+      - docker tag linksmart/dpa:${DISTRO} linksmart/dpa:${DISTRO_RELEASE}
+      - docker tag linksmart/la:${DISTRO} linksmart/la:${DISTRO_RELEASE}
+      - docker tag linksmart/dpa:wso2-${DISTRO} linksmart/dpa:wso2-${DISTRO_RELEASE}
+      - docker tag linksmart/la:wso2-${DISTRO} linksmart/la:wso2-${DISTRO_RELEASE}
+      - docker push linksmart/dpa:${DISTRO_RELEASE}
+      - docker push linksmart/la:${DISTRO_RELEASE}
+      - docker push linksmart/dpa:wso2-${DISTRO_RELEASE}
+      - docker push linksmart/la:wso2-${DISTRO_RELEASE}
       git:
         depth: false
       install: true
@@ -89,22 +89,22 @@ jobs:
       name: "Javadoc Deploy"
       install: true
     - script:
-        - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/git-realocate-head.sh
-        - chmod +x git-realocate-head.sh
-        - . ./git-realocate-head.sh
-        - docker-compose -f test/openAPI/docker-compose.yml up -d
-        - export URL="http://localhost:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Data-Processing%20Agent"
-        - export FILE=api-docs.json
-        - echo "" > ${FILE}
-        - echo 'calling endpoint ${URL} storeging in ${FILE} ...';
-        - curl -f --stderr err "${URL}" | jq '.' > ${FILE};
-        - cat err;
-        - until [ -s ${FILE} ]; do sleep 1; echo 'calling endpoint ${URL} storeging in ${FILE} ...'; curl -f --stderr err "${URL}" | jq '.' > ${FILE}; cat err; done;
-        - git add ${FILE}
-        - "git commit -am '[skip travis] AUTOMATIC COMMIT: updating Open API'"
-        - "git config --global user.email 'travis@travis-ci.org'"
-        - "git config --global user.name 'Travis CI'"
-        - "git push https://${GH_TOKEN}@github.com/linksmart/data-processing-agent.git --all"
+      - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/git-realocate-head.sh
+      - chmod +x git-realocate-head.sh
+      - . ./git-realocate-head.sh
+      - docker-compose -f test/openAPI/docker-compose.yml up -d
+      - export URL="http://localhost:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Data-Processing%20Agent"
+      - export FILE=api-docs.json
+      - echo "" > ${FILE}
+      - echo 'calling endpoint ${URL} storeging in ${FILE} ...';
+      - curl -f --stderr err "${URL}" | jq '.' > ${FILE};
+      - cat err;
+      - until [ -s ${FILE} ]; do sleep 1; echo 'calling endpoint ${URL} storeging in ${FILE} ...'; curl -f --stderr err "${URL}" | jq '.' > ${FILE}; cat err; done;
+      - git add ${FILE}
+      - "git commit -am '[skip travis] AUTOMATIC COMMIT: updating Open API'"
+      - "git config --global user.email 'travis@travis-ci.org'"
+      - "git config --global user.name 'Travis CI'"
+      - "git push https://${GH_TOKEN}@github.com/linksmart/data-processing-agent.git --all"
       name: "OpenAPI GIT Push"
       install: true
 
