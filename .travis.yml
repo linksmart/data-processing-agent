@@ -7,6 +7,7 @@ services:
   - docker
 jobs:
   include:
+  ###########################################################################
     - stage: "Maven Install (Unit & Integration Tests) & Docker Build & Push"
       script:
         - set -e
@@ -26,7 +27,7 @@ jobs:
         - docker push linksmart/la:wso2-${DISTRO}
       install: true
       name: "Building"
-      
+  #########################
     - stage: "System Tests"
       script:
         - set -e
@@ -47,11 +48,10 @@ jobs:
         - docker-compose -f docker-compose.yml up -d
         - mvn -s ../../.travis.settings.xml test
       install: true
-      name: "LA ST"
-      stage: "my new stage"
-      
-    - if: branch != release
-      stage: "Deploy Artifacts"
+      name: "LA ST" 
+  ##############################        
+    - stage: "Deploy Artifacts"
+      if: branch != release
       script: mvn -Dskip=test deploy -B #-Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Snapshot Artifacts"
       install: true
@@ -102,7 +102,7 @@ jobs:
         - mvn site
       name: "Javadoc Deploy"
       install: true
-      
+       
     - script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/git-realocate-head.sh
