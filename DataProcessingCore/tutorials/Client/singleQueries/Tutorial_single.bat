@@ -1,9 +1,0 @@
-java -jar D:\workspaces\git\almanac\platform\Eventing\Client\target\.\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "binA" -e "_5fb87cdf_24d2_3f96_8620_f108de542c2f_fake" -f D:\queries\Client\singleQueries\BinA.sql
-java -jar D:\workspaces\git\almanac\platform\Eventing\Client\target\.\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "binB" -e "_239d094b_7d77_3f32_8f43_7079a5634af3_fake" -f D:\queries\Client\singleQueries\BinB.sql
-java -jar D:\workspaces\git\almanac\platform\Eventing\Client\target\.\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "binC" -e "_21cec1c6_3b8e_3d84_901e_3aaae1655c4b_fake" -f D:\queries\Client\singleQueries\BinC.sql
-java -jar D:\workspaces\git\almanac\platform\Eventing\Client\target\.\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "binD" -e "_2ee611f1_a0f5_3f59_8aa7_a7ccaf7409a4_fake" -f D:\queries\Client\singleQueries\BinD.sql
-timeout 5 > nul
-java -jar D:\workspaces\git\almanac\platform\Eventing\Client\target\.\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "binALevelAlert" -e "_5fb87cdf_24d2_3f96_8620_f108de542c2f_fake" -f D:\queries\Client\singleQueries\BinALevelAlert.sql
-java -jar D:\workspaces\git\almanac\platform\Eventing\Client\target\.\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "binBLevelAlert" -e "_239d094b_7d77_3f32_8f43_7079a5634af3_fake" -f D:\queries\Client\singleQueries\BinBLevelAlert.sql
-java -jar D:\workspaces\git\almanac\platform\Eventing\Client\target\.\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "binCLevelAlert" -e "_21cec1c6_3b8e_3d84_901e_3aaae1655c4b_fake" -f D:\queries\Client\singleQueries\BinCLevelAlert.sql
-java -jar D:\workspaces\git\almanac\platform\Eventing\Client\target\.\DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -n "binDLevelAlert" -e "_2ee611f1_a0f5_3f59_8aa7_a7ccaf7409a4_fake" -f D:\queries\Client\singleQueries\BinDLevelAlert.sql

@@ -1,1 +1,0 @@
-select cast(phenomenonTime.getTime(), long) from federation1.trn.v2.observation.hash.win:time(10 seconds) output every 10 seconds

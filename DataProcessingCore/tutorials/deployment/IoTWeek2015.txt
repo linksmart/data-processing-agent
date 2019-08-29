@@ -1,6 +1,0 @@
-cd D:\workspaces\git\almanac\platform\Eventing\Client\target
-java -jar DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -f "D:\workspaces\git\almanac\platform\Eventing\DataFusionManagerAS\tutorials\deployment\persitent.sql" -n persistent  -o /federation1/trn/v2/persistent/
-java -jar DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -h almanac -f "D:\workspaces\git\almanac\platform\Eventing\DataFusionManagerAS\tutorials\deployment\IoTWeek2015\waste_query_full.sql" -n full_bins
-java -jar DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -h almanac -q "remove" -n full_bins
-java -jar DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -h almanac -f "D:\workspaces\git\almanac\platform\Eventing\DataFusionManagerAS\tutorials\deployment\IoTWeek2015\waste_query_empty.sql" -n empty_bins
-java -jar DataFusionClient-1.0.0-SNAPSHOT-jar-with-dependencies.jar -h almanac -q "remove" -n empty_bins
