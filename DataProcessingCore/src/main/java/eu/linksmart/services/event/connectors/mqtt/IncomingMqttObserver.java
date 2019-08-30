@@ -75,7 +75,7 @@ public abstract class IncomingMqttObserver implements MqttMessageObserver {
         return topics;
     }
     @Override
-    public void update(String topic, MqttMessage mqttMessage)  {
+    public void update(MqttMessage mqttMessage)  {
         logging(mqttMessage);
 
         mangeEvent( mqttMessage.getTopic(), mqttMessage.getPayload());

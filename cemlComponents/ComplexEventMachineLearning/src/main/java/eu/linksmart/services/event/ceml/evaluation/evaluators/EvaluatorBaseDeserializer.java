@@ -47,11 +47,7 @@ public class EvaluatorBaseDeserializer extends EvaluatorDeserializer {
                     evaluator.setTargets(mapper.readValue(node.get("targets").toString(),new TypeReference<List<TargetRequest>>(){}));
 
                 if(node.hasNonNull("parameters") )
-                    evaluator.setTargets(mapper.readValue(node.get("parameters").toString(),new TypeReference<Map<String, Object>>(){}));
-
-
-                if(node.hasNonNull("parameters") )
-                    evaluator.setTargets(mapper.readValue(node.get("parameters").toString(),new TypeReference<Map<String, Object>>(){}));
+                    evaluator.setParameters(mapper.readValue(node.get("parameters").toString(),new TypeReference<Map<String, Object>>(){}));
 
                 if(evaluator instanceof WindowEvaluator){
                     WindowEvaluator windowEvaluator = (WindowEvaluator)evaluator;
