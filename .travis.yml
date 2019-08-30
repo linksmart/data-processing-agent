@@ -12,7 +12,6 @@ jobs:
       script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
-        - chmod +x ci-preparation.sh
         - . ./ci-preparation.sh
         - mvn clean -B install -B
         - if [ "$TRAVIS_BRANCH" = "release" ] ; then export DISTRO="pre-release"; else export DISTRO="experimental"; fi
@@ -35,7 +34,9 @@ jobs:
         - "[ \"$TRAVIS_BRANCH\" != \"release\"] && export SNAPSHOT_IMG=-f dpa-tutorials/testing/docker-compose-testing.yml"
         - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml ${SNAPSHOT_IMG} up -d
         - cd dpa-tutorials/testing/
-        - mvn -s ../../.travis.settings.xml test
+        - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
+        - . ./ci-preparation.sh
+        - mvn test
       name: "DPA ST "
       git:
         depth: false
@@ -45,14 +46,19 @@ jobs:
       script:
         - set -e
         - cd  test/la-basic-it/
+        - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
+        - . ./ci-preparation.sh
         - docker-compose -f docker-compose.yml up -d
-        - mvn -s ../../.travis.settings.xml test
+        - mvn test
       install: true
       name: "LA ST" 
   ##############################        
     - stage: "Deploy Artifacts"
       if: branch != release
-      script: mvn -Dskip=test deploy -B #-Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
+      script:
+        - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
+        - . ./ci-preparation.sh
+        - mvn -Dskip=test deploy -B #-Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Snapshot Artifacts"
       install: true
       
@@ -60,7 +66,6 @@ jobs:
       script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
-        - chmod +x ci-preparation.sh
         - . ./ci-preparation.sh
         - . ./maven-release.sh
       name: "Release Artifacts"
@@ -97,7 +102,6 @@ jobs:
       script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
-        - chmod +x ci-preparation.sh
         - . ./ci-preparation.sh
         - mvn site
       name: "Javadoc Deploy"
