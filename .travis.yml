@@ -46,7 +46,9 @@ jobs:
       git:
         depth: false
       install: true
-    - if: branch != release
+      
+    - stage: "System Tests"
+      if: branch != release
       script:
         - set -e
         - cd  test/la-basic-it/
@@ -66,7 +68,8 @@ jobs:
       name: "Snapshot Artifacts"
       install: true
       
-    - if: branch = release
+    - stage: "Deploy Artifacts"
+      if: branch = release
       script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
@@ -75,7 +78,8 @@ jobs:
       name: "Release Artifacts"
       install: true
       
-    - script:
+    - stage: "Deploy Artifacts"
+      script:
         - set -e
         - if [ "$TRAVIS_BRANCH" = "release" ] ; then export DISTRO="pre-release"; else export DISTRO="experimental"; fi
         - if [ "$TRAVIS_BRANCH" = "release" ] ; then export DISTRO_RELEASE="latest"; else export DISTRO_RELEASE="snapshot"; fi
@@ -97,7 +101,8 @@ jobs:
       install: true
       name: "Docker Push Images"
       
-    - if: branch != release
+    - stage: "Deploy Artifacts"
+      if: branch != release
       script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
@@ -106,7 +111,8 @@ jobs:
       name: "Javadoc Deploy"
       install: true
       
-    - if: branch = release
+    - stage: "Deploy Artifacts"
+      if: branch = release
       script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
@@ -115,7 +121,8 @@ jobs:
       name: "Javadoc Deploy"
       install: true
        
-    - script:
+    - stage: "Deploy Artifacts"
+      script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/git-realocate-head.sh
         - . ./git-realocate-head.sh
