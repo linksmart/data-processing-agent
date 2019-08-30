@@ -4,7 +4,7 @@
     <parent>
         <groupId>eu.linksmart.services.events</groupId>
         <artifactId>parent</artifactId>
-	<version><!--VerNo-->1.9.0-SNAPSHOT</version>
+		<version><!--VerNo-->1.9.0-SNAPSHOT</version>
     </parent>
     <artifactId>data.procesing.core</artifactId>
 
