@@ -11,6 +11,7 @@ jobs:
     - stage: "Maven Install (Unit & Integration Tests) & Docker Build & Push"
       script:
         - set -e
+        - python3 --version
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
         - . ./ci-preparation.sh
         - mvn clean -B install -B
