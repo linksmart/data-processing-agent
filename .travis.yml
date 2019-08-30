@@ -31,15 +31,12 @@ jobs:
       script:
         - set -e
         - git clone https://github.com/linksmart/dpa-tutorials.git
- #       - "[ \"$TRAVIS_BRANCH\" != \"release\"] && export SNAPSHOT_IMG=-f dpa-tutorials/testing/docker-compose-testing.yml"
         - |
           if [ "$TRAVIS_BRANCH" != "release" ]; then
             docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml -f dpa-tutorials/testing/docker-compose-testing.yml up -d
           else
             docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml  up -d
           fi
-#        - "if [ \"$TRAVIS_BRANCH\" != \"release\" ]; then  docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml -f dpa-tutorials/testing/docker-compose-testing.yml up -d; else docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml  up -d; fi; "
-#        - docker-compose -f dpa-tutorials/docker-compose.yml -f dpa-tutorials/docker-compose.tutorial.yml ${SNAPSHOT_IMG} up -d
         - cd dpa-tutorials/testing/
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
         - . ./ci-preparation.sh
@@ -48,7 +45,6 @@ jobs:
       git:
         depth: false
       install: true
-      
     - if: branch != release
       script:
         - set -e
