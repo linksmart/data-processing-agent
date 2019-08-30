@@ -101,7 +101,11 @@ jobs:
       name: "Docker Push Images"
       
     - if: branch != release
-      script: mvn javadoc:javadoc #-Dls.se.agents.version=${VERSION}-SNAPSHOT
+      script:
+        - set -e
+        - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
+        - . ./ci-preparation.sh
+        - mvn javadoc:javadoc #-Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Javadoc Deploy"
       install: true
       
@@ -117,7 +121,6 @@ jobs:
     - script:
         - set -e
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/git-realocate-head.sh
-        - chmod +x git-realocate-head.sh
         - . ./git-realocate-head.sh
         - docker-compose -f test/openAPI/docker-compose.yml up -d
         - export URL="http://localhost:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Data-Processing%20Agent"
