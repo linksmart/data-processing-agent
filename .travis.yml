@@ -22,7 +22,7 @@ jobs:
         - docker build --force-rm -f Dockerfile-local -t linksmart/dpa:wso2-${DISTRO} .
         - docker push linksmart/dpa:wso2-${DISTRO}
         - docker build --force-rm -f gpl-artifacts/Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:${DISTRO} .
-        - docker push linksmart/la:experimental
+        - docker push linksmart/la:${DISTRO}
         - docker build --force-rm -f Dockerfile-local --build-arg extensions=eu.linksmart.services.event.ceml.core.CEML -t linksmart/la:wso2-${DISTRO} .
         - docker push linksmart/la:wso2-${DISTRO}
       install: true
