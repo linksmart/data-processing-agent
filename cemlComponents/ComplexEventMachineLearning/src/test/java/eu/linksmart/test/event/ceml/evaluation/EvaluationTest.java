@@ -9,6 +9,7 @@ import eu.linksmart.services.event.ceml.evaluation.evaluators.DoubleTumbleWindow
 import eu.linksmart.services.event.ceml.evaluation.evaluators.RegressionEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.evaluators.WindowEvaluator;
 import eu.linksmart.services.event.ceml.evaluation.metrics.ClassificationMetrics;
+import eu.linksmart.services.utils.function.CI;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -25,6 +26,7 @@ public class EvaluationTest {
 
     @Test
     public void classificationMetricsTest(){
+        CI.ciCollapseMark("classificationMetricsTest");
         long[] confusionMatrix = {5,17,2,3}; // https://en.wikipedia.org/wiki/Confusion_matrix#Table_of_confusion
         // {TP, TN, FP, FN}
         assertEquals("Testing Accuracy with confusion matrix [[TP, FN],[FP, TN]] -> ACC([[5, 3], [2, 17]])*100 == ",81L,Math.round(ClassificationMetrics.accuracy(confusionMatrix)*100));
@@ -49,10 +51,11 @@ public class EvaluationTest {
         assertEquals("Testing informedness with confusion matrix [[TP, FN],[FP, TN]] -> BM([[5, 3], [2, 17]])*100 ==",52L,Math.round(ClassificationMetrics.informedness(confusionMatrix)*100));
         assertEquals("Testing markedness with confusion matrix [[TP, FN],[FP, TN]] -> MK([[5, 3], [2, 17]])*100 == ",56L,Math.round(ClassificationMetrics.markedness(confusionMatrix)*100));
 
-
+        CI.ciCollapseMark("classificationMetricsTest");
     }
     @Test
     public void windowEvaluatorTest(){
+        CI.ciCollapseMark("windowEvaluatorTest");
 
 
         WindowEvaluator evaluator = new WindowEvaluator(Arrays.asList("Cat","Dog","Rabbit"),Arrays.asList(new TargetRequest(0.8,"Accuracy","More"), new TargetRequest(26,"SlideAfter","More")));
@@ -68,11 +71,12 @@ public class EvaluationTest {
 
         assertTrue("Testing WindowEvaluator with (Accuracy > 0.8 && SlideAfter > 26 ) == ", evaluator.isDeployable());
 
-
+        CI.ciCollapseMark("windowEvaluatorTest");
     }
 
     @Test
     public void doubleWindowEvaluatorTest() {
+        CI.ciCollapseMark("doubleWindowEvaluatorTest");
 
         DoubleTumbleWindowEvaluator evaluator = new DoubleTumbleWindowEvaluator(Arrays.asList(
                 new TargetRequest(0.8, "Accuracy", "More"),
@@ -156,6 +160,8 @@ public class EvaluationTest {
         assertEquals("Testing DoubleTumbleWindowEvaluator.SlideAfter.isReady() == ", true, evaluator.getEvaluationAlgorithms().get("SlideAfter").isReady());
         assertEquals("Testing DoubleTumbleWindowEvaluator.isReady() == ", true, evaluator.isDeployable());
         assertEquals("Testing DoubleTumbleWindowEvaluator.readyToSlide() == ", false, evaluator.readyToSlide());
+
+        CI.ciCollapseMark("doubleWindowEvaluatorTest");
     }
     private void feedClassificationEvaluator(Evaluator evaluator){
         // https://en.wikipedia.org/wiki/Confusion_matrix#Example
@@ -175,6 +181,7 @@ public class EvaluationTest {
 
     @Test
     public void regressionEvaluatorTest(){
+        CI.ciCollapseMark("regressionEvaluatorTest");
         RegressionEvaluator regressionEvaluator = new RegressionEvaluator(Arrays.asList(new TargetRequest(37, "RMSE", "less"), new TargetRequest(35, "MAE", "less")));
         try {
             regressionEvaluator.build();
@@ -201,5 +208,6 @@ public class EvaluationTest {
         assertEquals("Testing RegressionEvaluator.RMSE.isReady() == ", true, regressionEvaluator.getEvaluationAlgorithms().get("RMSE").isReady());
         assertEquals("Testing regressionEvaluator.MAE.isReady() == ", true, regressionEvaluator.getEvaluationAlgorithms().get("MAE").isReady());
 
+        CI.ciCollapseMark("regressionEvaluatorTest");
     }
 }

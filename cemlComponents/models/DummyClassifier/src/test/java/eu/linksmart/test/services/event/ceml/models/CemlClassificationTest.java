@@ -16,6 +16,7 @@ import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.CI;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ import static org.junit.Assert.fail;
 public class CemlClassificationTest {
     @Test
     public void ITTest() {
+        CI.ciCollapseMark("ITTest");
         CEMLManager request = null;
         Configurator conf = Configurator.getDefaultConfig();
         conf.setSetting("Test",true);
@@ -49,6 +51,7 @@ public class CemlClassificationTest {
             e.printStackTrace();
             fail();
         }
+        CI.ciCollapseMark("ITTest");
     }
     private double feedModel(ListLearningHandler handler){
         Random random = new Random();
@@ -77,6 +80,7 @@ public class CemlClassificationTest {
     }
     @Test
     public void initITTest() {
+        CI.ciCollapseMark("initITTest");
         CEMLManager request = null;
         try {
 
@@ -89,9 +93,11 @@ public class CemlClassificationTest {
             e.printStackTrace();
             fail();
         }
+        CI.ciCollapseMark("initITTest");
     }
     @Test
     public void compositionITTest() {
+        CI.ciCollapseMark("compositionITTest");
         CEMLManager request = null;
         try {
 
@@ -104,9 +110,11 @@ public class CemlClassificationTest {
             e.printStackTrace();
             fail();
         }
+        CI.ciCollapseMark("compositionITTest");
     }
     @Test
     public void batchITTest() {
+        CI.ciCollapseMark("batchITTest");
         CEMLManager request = null;
         Configurator conf = Configurator.getDefaultConfig();
         conf.setSetting("Test",true);
@@ -124,6 +132,7 @@ public class CemlClassificationTest {
             e.printStackTrace();
             fail();
         }
+        CI.ciCollapseMark("batchITTest");
     }
     private int n = 1000, tries =150;
 

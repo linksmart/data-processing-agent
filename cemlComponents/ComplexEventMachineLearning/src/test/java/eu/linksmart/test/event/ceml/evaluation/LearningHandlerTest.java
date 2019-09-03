@@ -12,6 +12,7 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.impl.SchemaNode;
 import eu.linksmart.services.event.ceml.handlers.ListLearningHandler;
 import eu.linksmart.services.event.ceml.statements.LearningStatement;
+import eu.linksmart.services.utils.function.CI;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -30,6 +31,8 @@ public class LearningHandlerTest {
     @Test
     public void listLearningHandling(){
 
+        CI.ciCollapseMark("listLearningHandling");
+
         System.err.println("Unit test skipped. The test is not working. It must be improved");
         // simple test
         //updateTestBase(2,1,1,0);
@@ -41,6 +44,7 @@ public class LearningHandlerTest {
         // todo: fail test?
 
 
+        CI.ciCollapseMark("listLearningHandling");
     }
 
     private void updateTestBase(int updateSize, int inputSize, int targetSize, int groundTruth ){

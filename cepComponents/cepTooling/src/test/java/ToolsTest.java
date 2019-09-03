@@ -1,5 +1,6 @@
 
 import eu.linksmart.services.event.cep.tooling.Tools;
+import eu.linksmart.services.utils.function.CI;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import java.util.List;
 public class ToolsTest {
     @Test
     public void addAll(){
+        CI.ciCollapseMark("ToolsTest");
+
         Object[] o={0,1,2}, o2= {3,4},o3= {1,2}, test = ArrayUtils.addAll(ArrayUtils.toArray(0), o3);
         List<Integer> l = Arrays.asList(0,1,2), l2 = Arrays.asList(3,4);
 
@@ -24,6 +27,7 @@ public class ToolsTest {
         Assert.assertTrue("Array must be equal!",validateArray(Tools.addAll(0,o3))); // <- doesn't work not know why
         Assert.assertTrue("Array must be equal!",validateArray(Tools.addAll(0,1)));
 
+        CI.ciCollapseMark("ToolsTest");
     }
     private boolean validateArray(List union){
         for(int i=0; i<union.size();i++)

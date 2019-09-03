@@ -5,6 +5,7 @@ import eu.linksmart.api.event.exceptions.TraceableException;
 import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.services.event.ceml.models.LinearRegressionModel;
 import eu.linksmart.services.event.ceml.models.RegressorModel;
+import eu.linksmart.services.utils.function.CI;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.junit.Test;
 
@@ -21,6 +22,7 @@ import static org.junit.Assert.fail;
 public class LinearRegressionTest {
     @Test
     public void linearRegressionTest(){
+        CI.ciCollapseMark("linearRegressionTest");
         RegressorModel<List<Integer>,List<Number>,SimpleRegression> regressor = new LinearRegressionModel(Arrays.asList(new TargetRequest(0.5,"RMSE","less")), new Hashtable<>(),new SimpleRegression());
 
         try {
@@ -34,5 +36,6 @@ public class LinearRegressionTest {
             fail();
         }
 
+        CI.ciCollapseMark("linearRegressionTest");
     }
 }

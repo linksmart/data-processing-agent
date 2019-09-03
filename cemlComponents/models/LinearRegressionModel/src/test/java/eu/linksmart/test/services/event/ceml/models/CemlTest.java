@@ -11,6 +11,7 @@ import eu.linksmart.services.event.ceml.handlers.ListLearningHandler;
 import eu.linksmart.services.event.ceml.models.LinearRegressionModel;
 import eu.linksmart.services.event.intern.SharedSettings;
 import eu.linksmart.services.utils.configuration.Configurator;
+import eu.linksmart.services.utils.function.CI;
 import org.junit.Test;
 
 import java.io.File;
@@ -31,10 +32,12 @@ import static org.junit.Assert.fail;
 public class CemlTest {
     @Test
     public void testCEML() {
+        CI.ciCollapseMark("testCEML");
         Configurator conf = Configurator.getDefaultConfig();
         conf.setSetting("Test",true);
         //test(new String(getRequest("CemlTestLegacy.json")));
         test(new String(getRequest("CemlTestCurrent.json")));
+        CI.ciCollapseMark("testCEML");
     }
     private void test(String requestStr){
         CEMLManager request;

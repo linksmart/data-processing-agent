@@ -8,6 +8,7 @@ import eu.linksmart.api.event.exceptions.UntraceableException;
 import eu.linksmart.api.event.types.impl.SchemaNode;
 import eu.linksmart.services.event.ceml.models.ClassifierModel;
 import eu.linksmart.services.event.ceml.models.DummyClassifier;
+import eu.linksmart.services.utils.function.CI;
 import org.junit.Test;
 
 import java.util.*;
@@ -24,6 +25,7 @@ import static org.junit.Assert.fail;
 public class DummyClassifierTest {
     @Test
     public void BasicTest(){
+        CI.ciCollapseMark("BasicTest");
         ClassifierModel<List<Number>,Number,Function<List<Number>,Integer>> classifier = new DummyClassifier(Arrays.asList(new TargetRequest(0.4,"Accuracy","more"), new TargetRequest(100,"SlideAfter","more")), new Hashtable<>(),new Object());
         classifier.setName("Test");
 
@@ -59,7 +61,9 @@ public class DummyClassifierTest {
         } catch (TraceableException | UntraceableException e) {
             e.printStackTrace();
             fail();
-        }    }
+        }
+        CI.ciCollapseMark("BasicTest");
+    }
 
 
 }

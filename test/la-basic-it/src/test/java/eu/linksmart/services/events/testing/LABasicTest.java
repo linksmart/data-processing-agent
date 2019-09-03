@@ -12,6 +12,7 @@ import eu.linksmart.api.event.types.impl.MultiResourceResponses;
 import eu.linksmart.services.payloads.ogc.sensorthing.OGCEventBuilder;
 import eu.linksmart.services.payloads.ogc.sensorthing.Observation;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.ObservationImpl;
+import eu.linksmart.services.utils.function.CI;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Content;
@@ -56,6 +57,7 @@ public class LABasicTest {
 
     @Before
     public void initialization(){
+        CI.ciCollapseMark("LABasicTestInit");
         String url = System.getenv().getOrDefault("BROKER_URL", "tcp://localhost:1883");
 
         agentURL = System.getenv().getOrDefault("AGENT_URL", "http://localhost:8319/");
@@ -77,10 +79,12 @@ public class LABasicTest {
             e.printStackTrace();
             fail(e.getMessage());
         }
+        CI.ciCollapseMark("LABasicTestInit");
 
     }
     @Test
     public void T00_CEMLHello(){
+        CI.ciCollapseMark("T00_CEMLHello");
         upkeep();
 
         Response response = execute(Request.Get(testURL(agentURL)));
@@ -96,10 +100,15 @@ public class LABasicTest {
         MultiResourceResponses<Statement> root = processResponse(execute(Request.Get(testURL(agentURL+"/ceml/"))),200);
 
         ending();
+        CI.ciCollapseMark("T00_CEMLHello");
     }
     @Test
     public void T1_0_BasicTest() {
-       basicTest("");
+
+        CI.ciCollapseMark("T1_0_BasicTest");
+        basicTest("");
+
+        CI.ciCollapseMark("T1_0_BasicTest");
     }
     //@Test
     public void T1_1_BasicLegacyTest() {

@@ -7,6 +7,8 @@ import eu.linksmart.api.event.types.impl.SchemaNode;
 import org.junit.Assert;
 import org.junit.Test;
 
+import eu.linksmart.services.utils.function.CI;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.fail;
  * Created by José Ángel Carvajal on 05.06.2018 a researcher of Fraunhofer FIT.
  */
 public class SchemaTest {
-
     private ObjectMapper objectMapper = new ObjectMapper();
     private void test(String schema, Object o, boolean test){
 
@@ -198,6 +199,7 @@ public class SchemaTest {
     }
     @Test
     public void simpleMapTest(){
+        CI.ciCollapseMark("simpleMapTest");
         // test
         Map map = createSimpleMap();
         Object o = new TestOnly1();
@@ -229,10 +231,13 @@ public class SchemaTest {
 
         };
         contraTest(toString(getStatement("simpleMapSchema")),o);
+
+        CI.ciCollapseMark("simpleMapTest");
     }
 
     @Test
     public void advancedMapTest(){
+        CI.ciCollapseMark("advancedMapTest");
         // test
         Map map = createSimpleMap();
         Object o = new TestOnly1();
@@ -250,6 +255,8 @@ public class SchemaTest {
         test(toString(getStatement("advancedMapSchema")),o);
 
         extract(toString(getStatement("advancedMapSchema")),o);
+
+        CI.ciCollapseMark("advancedMapTest");
     }
 
     private void extract(String advancedMapSchema, Object o) {
@@ -267,6 +274,7 @@ public class SchemaTest {
 
     @Test
     public void simpleListArrayTest(){
+        CI.ciCollapseMark("simpleListArrayTest");
         List list = createSimpleList();
 
         Object[] o =createSimpleArray();
@@ -284,10 +292,11 @@ public class SchemaTest {
         contraTest(toString(getStatement("simpleListArraySchema")),list);
         contraTest(toString(getStatement("simpleListArraySchema")),o);
 
-
+        CI.ciCollapseMark("simpleListArrayTest");
     }
     @Test
     public void defArrayTest(){
+        CI.ciCollapseMark("defArrayTest");
         List list = createSimpleList();
         Map map = createSimpleMap();
         List root = new ArrayList();
@@ -296,9 +305,11 @@ public class SchemaTest {
 
 
         test(toString(getStatement("listDefTest")),root);
+        CI.ciCollapseMark("defArrayTest");
     }
     @Test
     public void defMapTest(){
+        CI.ciCollapseMark("defMapTest");
         List list = createSimpleList();
         Map map = createSimpleMap();
         Map root = new Hashtable();
@@ -307,10 +318,11 @@ public class SchemaTest {
 
 
         test(toString(getStatement("mapDefTest")),root);
-
+        CI.ciCollapseMark("defMapTest");
     }
     @Test
     public void deepArrayTest(){
+        CI.ciCollapseMark("deepArrayTest");
         List list = createSimpleList();
         Map map = createSimpleMap();
         List root = new ArrayList();
@@ -319,9 +331,12 @@ public class SchemaTest {
 
 
         test(toString(getStatement("deepListArraySchema")),root);
+        CI.ciCollapseMark("deepArrayTest");
     }
     @Test
     public void deepMapTest(){
+        CI.ciCollapseMark("deepMapTest");
+
         List list = createSimpleList();
         Map map = createSimpleMap();
         Map root = new Hashtable();
@@ -333,9 +348,11 @@ public class SchemaTest {
         test(toString(getStatement("deepMapTest")),root);
         extract(toString(getStatement("deepMapTest")),root);
 
+        CI.ciCollapseMark("deepMapTest");
     }
     @Test
     public void simpleAnonymousListTest(){
+        CI.ciCollapseMark("simpleAnonymousListTest");
 
         List<Integer> list = new ArrayList();
 
@@ -364,11 +381,11 @@ public class SchemaTest {
         contraTest(toString(getStatement("simpleAnonymousSchema")),list);
         contraTest(toString(getStatement("simpleAnonymousSchema")),o);
 
-
-
+        CI.ciCollapseMark("simpleAnonymousListTest");
     }
     @Test
     public void boundedAnonymousListTest(){
+        CI.ciCollapseMark("boundedAnonymousListTest");
 
         List<Integer> list = new ArrayList();
 
@@ -399,6 +416,8 @@ public class SchemaTest {
         }
         contraTest(toString(getStatement("boundedAnonymousSchema")),list);
         contraTest(toString(getStatement("boundedAnonymousSchema")),o);
+
+        CI.ciCollapseMark("boundedAnonymousListTest");
     }
     // the class below could be anonymous but then is not accessible from reflection outside this package, which brakes the test.
     // Therefore, this dummy test class had been made to test the code. They need to be public!

@@ -6,6 +6,7 @@ package eu.linksmart.services.payloads.ogc.sensorthing.testing;
 
 import eu.linksmart.services.payloads.ogc.sensorthing.*;
 import eu.linksmart.services.payloads.ogc.sensorthing.linked.*;
+import eu.linksmart.services.utils.function.CI;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -186,9 +187,12 @@ public class OGCSensorThingLinkedUnitTest {
     @Test
     public void TestParsingObservation() {
 
+        CI.ciCollapseMark("OGCTestParsingObservation");
+
       //  UtilsLinked.testParsing(observationJSON, Observation.class, UtilsLinked.constructObservation(false));
         Utils.testParsing(observationChildJSON, Observation.class, UtilsLinked.constructObservation());
 
+        CI.ciCollapseMark("OGCTestParsingObservation");
     }
     String observedPropertyJSON =
                     "{\n" +
