@@ -54,6 +54,8 @@ jobs:
         - set -e
         - cd  test/la-basic-it/
         - docker-compose -f docker-compose.yml up -d
+        - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
+        - . ./ci-preparation.sh skipHeadRealocation
         - mvn test
       install: true
       name: "LA ST" 
