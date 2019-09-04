@@ -134,7 +134,7 @@ jobs:
         - cat err;
         - until [ -s ${FILE} ]; do sleep 1; echo 'calling endpoint ${URL} storeging in ${FILE} ...'; curl -f --stderr err "${URL}" | jq '.' > ${FILE}; cat err; done;
         - git add ${FILE}
-        - "git commit -am '[skip travis] AUTOMATIC COMMIT: updating Open API'"
+        - "git diff-index --quiet HEAD || git commit -m '[skip travis] AUTOMATIC COMMIT: updating Open API'"
         - "git config --global user.email 'travis@travis-ci.org'"
         - "git config --global user.name 'Travis CI'"
         - "git push https://${GH_TOKEN}@github.com/linksmart/data-processing-agent.git --all"
