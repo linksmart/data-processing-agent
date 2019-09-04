@@ -1,7 +1,14 @@
 IoT Agents
-===================
+======================
+[![GitHub tag (latest release)](https://img.shields.io/github/tag/linksmartdata-processing-agent.svg?label=release)](https://github.com/linksmart/linksmart-java-utils/tags)
+[![Build Status](https://img.shields.io/travis/com/linksmart/data-processing-agent/master?label=master)](https://travis-ci.com/linksmart/linksmart-java-utils)
+[![Build Status](https://img.shields.io/travis/com/linksmart/data-processing-agent/release?label=release)](https://travis-ci.com/linksmart/linksmart-java-utils)
 
-Implementation of the [IoT Agents](https://docs.linksmart.eu/display/LA).
+The IoT agents where developed for all kind of store-less data processing, from simple data annotation or aggregation to complex data machine learning techniques. The agents fulfill the task of a LinkSmart® Processor and a bit of a Message Handler (see LinkSmart® Specification), and they are ideal for intelligent on-demand data management or analysis in IoT environments, from edge computing to cloud computing. The Agents can be used as edge standalone service or as a computational node in the cloud.
+
+The IoT agents are services that offer Complex-Event Processing as service and Real-time Machine Learning as a service. The agent provides three APIs, the Stream Mining API (Statement API), the Learning API (CEML API) and the IO API. The Statement and CEML APIs are CRUD (Create, Read, Update, Delete) and JSON based, while the IO are write-only (for Input) or read-only (for Output). The APIs are implemented as HTTPs RESTful and MQTT. 
+
+For more documentation please see [IoT Agents](https://docs.linksmart.eu/display/LA).
 
 ## Code structure
 
