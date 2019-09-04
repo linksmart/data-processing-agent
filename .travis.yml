@@ -64,7 +64,7 @@ jobs:
       if: branch != release
       script:
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
-        - . ./ci-preparation.sh
+        - . ./ci-preparation.sh skipHeadRealocation
         - mvn -Dskip=test deploy -B #-Dlinksmart.commons.version=${LS_COMMONS_VERSION}-SNAPSHOT -Dskip=test -Dls.se.agents.version=${VERSION}-SNAPSHOT
       name: "Snapshot Artifacts"
       install: true
