@@ -42,7 +42,7 @@ jobs:
         - . ./ci-preparation.sh skipHeadRealocation
         - mvn test
         - "git commit -am \"[ skip travis ] update version of parent pom\""
-        - "git push https://${GH_TOKEN}@github.com/linksmart/data-processing-agent.git --all"
+        - "git push https://${GH_TOKEN}@github.com/linksmart/dpa-tutorials.git --all"
       name: "DPA ST "
       git:
         depth: false
