@@ -39,8 +39,10 @@ jobs:
           fi
         - cd dpa-tutorials/testing/
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
-        - . ./ci-preparation.sh
+        - . ./ci-preparation.sh skipHeadRealocation
         - mvn test
+        - "git commit -am \"[ skip travis ] update version of parent pom\""
+        - "git push https://${GH_TOKEN}@github.com/linksmart/dpa-tutorials.git --all"
       name: "DPA ST "
       git:
         depth: false
@@ -51,8 +53,6 @@ jobs:
       script:
         - set -e
         - cd  test/la-basic-it/
-        - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/java/ci-preparation.sh
-        - . ./ci-preparation.sh
         - docker-compose -f docker-compose.yml up -d
         - mvn test
       install: true
