@@ -1,6 +1,6 @@
-IoT Data-Processing Agent and Learning Agent
+IoT Learning Agent
 ======================
-[![GitHub tag (latest release)](https://img.shields.io/github/tag/linksmartdata-processing-agent.svg?label=release)](https://github.com/linksmart/linksmart-java-utils/tags)
+[![GitHub tag (latest release)](https://img.shields.io/github/tag/linksmart/data-processing-agent.svg?label=release)](https://github.com/linksmart/linksmart-java-utils/tags)
 [![Build Status](https://img.shields.io/travis/com/linksmart/data-processing-agent/master?label=master)](https://travis-ci.com/linksmart/linksmart-java-utils)
 [![Build Status](https://img.shields.io/travis/com/linksmart/data-processing-agent/release?label=release)](https://travis-ci.com/linksmart/linksmart-java-utils)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linksmart/la?label=docker%20linksmart%2Fla)](https://hub.docker.com/r/linksmart/la/tags)
@@ -28,7 +28,7 @@ For more documentation please see [IoT Data-Processing Agent and Learning Agent]
 # Compile from source
 
 ```bash
-  git clone https://code.linksmart.eu/scm/la/data-processing-agent.git code
+  git clone https://github.com/linksmart/data-processing-agent.git code
   cd code
   mvn install 
 ```
