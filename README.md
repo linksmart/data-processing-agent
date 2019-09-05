@@ -31,7 +31,7 @@ For more documentation please see [IoT Agents](https://docs.linksmart.eu/display
   git clone https://code.linksmart.eu/scm/la/data-processing-agent.git code
   cd code
   mvn install 
-```bash
+```
 
 ## Dependencies
 To install maven in Linux:
