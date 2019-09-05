@@ -7,9 +7,9 @@
 
     <artifactId>la-basic-it</artifactId>
     <groupId>eu.linksmart.services.events</groupId>
-		<version><!--VerNo-->1.8.2-SNAPSHOT</version>
+		<version><!--VerNo-->1.9.0-SNAPSHOT</version>
     <properties>
-		<version><!--VerNo-->1.8.2-SNAPSHOT</version>
+		<version><!--VerNo-->1.9.0-SNAPSHOT</version>
         <java.version>1.8</java.version>
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
     </properties>
