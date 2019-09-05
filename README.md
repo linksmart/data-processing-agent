@@ -10,7 +10,7 @@ The IoT agents where developed for all kind of store-less data processing, from 
 
 The IoT agents are services that offer Complex-Event Processing as service and Real-time Machine Learning as a service. The agent provides three APIs, the Stream Mining API (Statement API), the Learning API (CEML API) and the IO API. The Statement and CEML APIs are CRUD (Create, Read, Update, Delete) and JSON based, while the IO are write-only (for Input) or read-only (for Output). The APIs are implemented as HTTPs RESTful and MQTT. 
 
-For more documentation please see [IoT Agents](https://docs.linksmart.eu/display/LA).
+For more documentation please see [IoT Data-Processing Agent and Learning Agent](https://docs.linksmart.eu/display/LA).
 
 # Usage
 
@@ -57,7 +57,7 @@ For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven
   java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
 ```
 # Documentation 
-For more please see: [IoT Agents](https://docs.linksmart.eu/display/LA).
+For more please see: [IoT Data-Processing Agent and Learning Agent](https://docs.linksmart.eu/display/LA).
 
 ## Code structure
 
