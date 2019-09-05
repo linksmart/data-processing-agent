@@ -1,4 +1,4 @@
-IoT Agents
+IoT Data-Processing Agent and Learning Agent
 ======================
 [![GitHub tag (latest release)](https://img.shields.io/github/tag/linksmartdata-processing-agent.svg?label=release)](https://github.com/linksmart/linksmart-java-utils/tags)
 [![Build Status](https://img.shields.io/travis/com/linksmart/data-processing-agent/master?label=master)](https://travis-ci.com/linksmart/linksmart-java-utils)
