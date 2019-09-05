@@ -1,3 +1,4 @@
+# Getting Started
 version: '2'
 services:
   mqtt-broker:
@@ -5,12 +6,7 @@ services:
     ports:
       - "1883:1883"
   agent:
-    build:
-      context: .
-      dockerfile: Dockerfile
-#    volumes:
-#      - ./config:/config:ro
-#      - ./dependencies:/dependencies:ro
+    image: linksmart/la:latest
     depends_on:
       - mqtt-broker
     links:
