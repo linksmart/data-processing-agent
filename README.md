@@ -12,6 +12,53 @@ The IoT agents are services that offer Complex-Event Processing as service and R
 
 For more documentation please see [IoT Agents](https://docs.linksmart.eu/display/LA).
 
+# Usage
+
+```bash
+  docker run linksmart/la:latest  
+```
+```bash
+  curl -O eu/linksmart/services/events/gpl/distributions/iot.learning.universal.gpl.agent/1.8.2/iot.learning.universal.gpl.agent-<current.version>.jar
+  export env_var_enabled=true
+  export cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
+  export agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
+  java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
+  
+```
+# Compile from source
+
+```bash
+  git clone https://code.linksmart.eu/scm/la/data-processing-agent.git code
+  cd code
+  mvn install 
+```bash
+
+## Dependencies
+To install maven in Linux:
+
+```bash
+  apt-get install maven
+```
+
+For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven/)
+
+## Run DPA
+```bash
+  export env_var_enabled=true
+  export cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
+  java -jar distributions/IoTAgent/target/iot.learning.universal.agent-<current.version>.jar
+```
+
+## Run LA
+```bash
+  export env_var_enabled=true
+  export cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
+  export agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
+  java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
+```
+# Documentation 
+For more please see: [IoT Agents](https://docs.linksmart.eu/display/LA).
+
 ## Code structure
 
 The code structure is the following:
@@ -37,33 +84,7 @@ The code structure is the following:
 * `/test/dpa-rest-integration` - Integration Test of the DPA.
 * `/Utils` - Generic code used in several places.
 
-## Compile from source
 
-```
-git clone https://code.linksmart.eu/scm/la/data-processing-agent.git code
-cd code
-mvn install 
-```
+## Contribute
 
-## Dependencies
-To install maven in Linux:
-
-```
-apt-get install maven
-```
-
-For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven/)
-
-## Run DPA
-```
-java -jar distributions/IoTAgent/target/iot.learning.universal.agent-<current.version>.jar
-```
-
-## Run LA
-```
-export env_var_enabled=true
-export agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
-java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
-```
-# Documentation 
-For more please see: [IoT Agents](https://docs.linksmart.eu/display/LA).
+Feel free to create an issue or pull request in GitHub in case you want to contribute to the software.
