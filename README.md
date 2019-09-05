@@ -1,16 +1,63 @@
-IoT Agents
+IoT Data-Processing Agent and Learning Agent
 ======================
 [![GitHub tag (latest release)](https://img.shields.io/github/tag/linksmartdata-processing-agent.svg?label=release)](https://github.com/linksmart/linksmart-java-utils/tags)
 [![Build Status](https://img.shields.io/travis/com/linksmart/data-processing-agent/master?label=master)](https://travis-ci.com/linksmart/linksmart-java-utils)
 [![Build Status](https://img.shields.io/travis/com/linksmart/data-processing-agent/release?label=release)](https://travis-ci.com/linksmart/linksmart-java-utils)
-[![Docker Pulls](https://img.shields.io/docker/pulls/linksmart/la.svg)](https://hub.docker.com/r/linksmart/la/tags)
-[![Docker Pulls](https://img.shields.io/docker/pulls/linksmart/dpa.svg)](https://hub.docker.com/r/linksmart/la/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/linksmart/la?label=docker%20linksmart%2Fla)](https://hub.docker.com/r/linksmart/la/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/linksmart/dpa?label=docker%20linksmart%2Fdpa)](https://hub.docker.com/r/linksmart/dpa/tags)
 
 The IoT agents where developed for all kind of store-less data processing, from simple data annotation or aggregation to complex data machine learning techniques. The agents fulfill the task of a LinkSmart® Processor and a bit of a Message Handler (see LinkSmart® Specification), and they are ideal for intelligent on-demand data management or analysis in IoT environments, from edge computing to cloud computing. The Agents can be used as edge standalone service or as a computational node in the cloud.
 
 The IoT agents are services that offer Complex-Event Processing as service and Real-time Machine Learning as a service. The agent provides three APIs, the Stream Mining API (Statement API), the Learning API (CEML API) and the IO API. The Statement and CEML APIs are CRUD (Create, Read, Update, Delete) and JSON based, while the IO are write-only (for Input) or read-only (for Output). The APIs are implemented as HTTPs RESTful and MQTT. 
 
-For more documentation please see [IoT Agents](https://docs.linksmart.eu/display/LA).
+For more documentation please see [IoT Data-Processing Agent and Learning Agent](https://docs.linksmart.eu/display/LA).
+
+# Usage
+
+```bash
+  docker run linksmart/la:latest  
+```
+```bash
+  curl -O eu/linksmart/services/events/gpl/distributions/iot.learning.universal.gpl.agent/1.8.2/iot.learning.universal.gpl.agent-<current.version>.jar
+  export env_var_enabled=true
+  export cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
+  export agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
+  java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
+  
+```
+# Compile from source
+
+```bash
+  git clone https://code.linksmart.eu/scm/la/data-processing-agent.git code
+  cd code
+  mvn install 
+```
+
+## Dependencies
+To install maven in Linux:
+
+```bash
+  apt-get install maven
+```
+
+For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven/)
+
+## Run DPA
+```bash
+  export env_var_enabled=true
+  export cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
+  java -jar distributions/IoTAgent/target/iot.learning.universal.agent-<current.version>.jar
+```
+
+## Run LA
+```bash
+  export env_var_enabled=true
+  export cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
+  export agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
+  java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
+```
+# Documentation 
+For more please see: [IoT Data-Processing Agent and Learning Agent](https://docs.linksmart.eu/display/LA).
 
 ## Code structure
 
@@ -37,33 +84,7 @@ The code structure is the following:
 * `/test/dpa-rest-integration` - Integration Test of the DPA.
 * `/Utils` - Generic code used in several places.
 
-## Compile from source
 
-```
-git clone https://code.linksmart.eu/scm/la/data-processing-agent.git code
-cd code
-mvn install 
-```
+## Contribute
 
-## Dependencies
-To install maven in Linux:
-
-```
-apt-get install maven
-```
-
-For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven/)
-
-## Run DPA
-```
-java -jar distributions/IoTAgent/target/iot.learning.universal.agent-<current.version>.jar
-```
-
-## Run LA
-```
-export env_var_enabled=true
-export agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
-java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
-```
-# Documentation 
-For more please see: [IoT Agents](https://docs.linksmart.eu/display/LA).
+Feel free to create an issue or pull request in GitHub in case you want to contribute to the software.
