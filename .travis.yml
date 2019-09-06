@@ -126,8 +126,7 @@ jobs:
         - curl -O https://raw.githubusercontent.com/linksmart/ci-scripts/master/git-realocate-head.sh
         - . ./git-realocate-head.sh
         - docker-compose -f test/openAPI/docker-compose.yml up -d
-        - export URL="http://localhost:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Data-Processing%20Agent"
-        - export FILE=api-docs.json
+        - export URL="http://localhost:8319/v2/api-docs?group=LinkSmart%20(R)%20IoT%20Data-Processing%20Agent" FILE=api-docs.json
         - echo "" > ${FILE}
         - echo 'calling endpoint ${URL} storeging in ${FILE} ...';
         - curl -f --stderr err "${URL}" | jq '.' > ${FILE};
@@ -135,8 +134,6 @@ jobs:
         - until [ -s ${FILE} ]; do sleep 1; echo 'calling endpoint ${URL} storeging in ${FILE} ...'; curl -f --stderr err "${URL}" | jq '.' > ${FILE}; cat err; done;
         - git add ${FILE}
         - "git diff-index --quiet HEAD || git commit -m '[skip travis] AUTOMATIC COMMIT: updating Open API'"
-        - "git config --global user.email 'travis@travis-ci.org'"
-        - "git config --global user.name 'Travis CI'"
         - "git push https://${GH_TOKEN}@github.com/linksmart/data-processing-agent.git --all"
       name: "OpenAPI GIT Push"
       install: true
