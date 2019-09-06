@@ -44,14 +44,14 @@ For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven
 
 ## Run DPA
 ```bash
-   cd gpl-artifacts/distribution/IoTAgent/target
+  cd gpl-artifacts/distribution/IoTAgent/target
   env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine java -cp ./* "org.springframework.boot.loader.PropertiesLauncher"
 ```
 
 ## Run LA
 ```bash
   
-   cd gpl-artifacts/distribution/IoTAgent/target
+  cd gpl-artifacts/distribution/IoTAgent/target
   env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine java -cp ./* "org.springframework.boot.loader.PropertiesLauncher"
 ```
 
