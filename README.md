@@ -61,3 +61,20 @@ For more please see: [IoT Learning Agent](https://docs.linksmart.eu/display/LA).
 ## Contribute
 
 Feel free to create an issue or pull request in GitHub in case you want to contribute to the software.
+
+## Acknowledgements 
+
+This work was applied and supported by the European Commission through:
+ * The [ALMANAC FP7 project](https://www.fit.fraunhofer.de/en/fb/ucc/projects/almanac.html) under grant no. 609081.
+ * The [IMPReSS H2020 project](https://www.fit.fraunhofer.de/en/fb/ucc/projects/impress.html) under grant no. 614100.
+ * The [EXCELL H2020 project](https://www.fit.fraunhofer.de/en/fb/ucc/projects/excell.html) under grant no. 691829.
+ * The [COMPOSITION H2020 project](https://www.fit.fraunhofer.de/en/fb/ucc/projects/composition.html) under grant no. 723145.
+
+## Publications
+ * [An online machine learning framework for early detection of product failures in an Industry 4.0 context](https://www.tandfonline.com/doi/abs/10.1080/0951192X.2019.1571238)
+ * [Optimization Framework for Short-Term Control of Energy Storage Systems](https://ieeexplore.ieee.org/abstract/document/8571722) 
+ * [Enabling Smart Cities through IoT: The ALMANAC Way](https://www.taylorfrancis.com/books/9781315156026/chapters/10.1201/9781315156026-8) 
+ * [Industry 4.0: Mining Physical Defects in Production of Surface-Mount Devices](http://eprints.sztaki.hu/9288/1/Tavakolizadeh_146_3306416_ny.pdf) 
+ * [CEML: Mixing and moving complex event processing and machine learning to the edge of the network for IoT applications](https://dl.acm.org/citation.cfm?id=2991575) 
+ * [ALMANAC: Internet of Things for Smart Cities](https://ieeexplore.ieee.org/abstract/document/7300833) 
+ 
