@@ -17,15 +17,13 @@ For more documentation please see [IoT Learning Agent](https://docs.linksmart.eu
 Using Docker
 
 ```bash
-  docker run linksmart/la:latest  
+  docker run -p "8319:8319" linksmart/la:latest  
 ```
 Without docker
  
 ```bash
   curl -O eu/linksmart/services/events/gpl/distributions/iot.learning.universal.gpl.agent/1.8.2/iot.learning.universal.gpl.agent-<current.version>.jar
-  export env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
-  java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
-  
+   env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine java -cp ./* "org.springframework.boot.loader.PropertiesLauncher"  
 ```
 # Compile from source
 
@@ -46,15 +44,17 @@ For use maven in docker see: [Maven Docker Image](https://hub.docker.com/_/maven
 
 ## Run DPA
 ```bash
-  export env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine
-  java -jar distributions/IoTAgent/target/iot.learning.universal.agent-<current.version>.jar
+   cd gpl-artifacts/distribution/IoTAgent/target
+  env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine java -cp ./* "org.springframework.boot.loader.PropertiesLauncher"
 ```
 
 ## Run LA
 ```bash
-  export env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine agent_init_extensions=eu.linksmart.services.event.ceml.core.CEML
-  java -jar distributions/IoTAgents/target/iot.learning.universal.agent-<current.version>.jar
+  
+   cd gpl-artifacts/distribution/IoTAgent/target
+  env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine env_var_enabled=true cep_init_engines=eu.linksmart.services.event.cep.engines.EsperEngine java -cp ./* "org.springframework.boot.loader.PropertiesLauncher"
 ```
+
 # Documentation 
 For more please see: [IoT Learning Agent](https://docs.linksmart.eu/display/LA).
 
