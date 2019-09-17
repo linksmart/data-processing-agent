@@ -84,7 +84,7 @@
         <jackson.geojeson.version>1.6</jackson.geojeson.version>
         <jackson.maper.asl.version>1.9.13</jackson.maper.asl.version>
         <spring.boot.version>2.0.3.RELEASE</spring.boot.version>
-        <eclipse.paho.mqtt.version>1.2.0</eclipse.paho.mqtt.version>
+        <eclipse.paho.mqtt.version>1.2.1</eclipse.paho.mqtt.version>
 	<apache.commons.email.version>1.5</apache.commons.email.version>
         <apache.commons.validator.version>1.6</apache.commons.validator.version>
         <apache.commons.configuration.version>1.10</apache.commons.configuration.version>
