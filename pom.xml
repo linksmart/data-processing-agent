@@ -101,7 +101,7 @@
         <apache.sis.version>0.6</apache.sis.version>
         <apache.commons.math3.version>3.6.1</apache.commons.math3.version>
         <mockito.version>1.9.5</mockito.version>
-        <hibernate.version>6.0.10.Final</hibernate.version>
+        <hibernate.version>6.1.1.Final</hibernate.version>
         <apache.commons.configuration2.version>2.2</apache.commons.configuration2.version>
 
         <cglib.version>3.2.7</cglib.version>
