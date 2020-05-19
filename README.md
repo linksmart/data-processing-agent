@@ -10,7 +10,7 @@ The IoT Learning Agent (**LA**) is bing developed for all kind of store-less dat
 
 The LA is a service that offer Complex-Event Processing as service and Real-time Machine Learning as a service. The agent provides three APIs, the Stream Mining API (Statement API), the Learning API (CEML API) and the IO API. The Statement and CEML APIs are CRUD (Create, Read, Update, Delete) and JSON based, while the IO are write-only (for Input) or read-only (for Output). The APIs are implemented as HTTPs RESTful and MQTT. There is a lightweight version of the LA without the learning API, named **Data-Processing Agent** (**DPA**) 
 
-For more documentation please see [IoT Learning Agent](https://docs.linksmart.eu/display/LA).
+For more documentation please see [IoT Learning Agent Wiki](https://github.com/linksmart/data-processing-agent/wiki).
 
 # Deployment
 
