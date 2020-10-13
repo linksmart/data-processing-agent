@@ -110,7 +110,7 @@
         <javax.servelet.version>2.5</javax.servelet.version>
 
         <!-- test dependencies versions -->
-        <java.junit.version>4.12</java.junit.version>
+        <java.junit.version>4.13.1</java.junit.version>
 
         <!-- plug-in versions -->
         <build.plugins.plugin.version>3.5</build.plugins.plugin.version>
