@@ -96,7 +96,7 @@
 
         <wso2.siddhi.version>3.0.2</wso2.siddhi.version>
         <antlr.version>4.7</antlr.version>
-        <apache.commons.io.version>2.4</apache.commons.io.version>
+        <apache.commons.io.version>2.7</apache.commons.io.version>
         <lmax.disruptor.version>3.3.4</lmax.disruptor.version>
         <apache.sis.version>0.6</apache.sis.version>
         <apache.commons.math3.version>3.6.1</apache.commons.math3.version>
